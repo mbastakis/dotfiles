@@ -1,0 +1,36 @@
+# Brewfile.dev - Development tools
+
+# Languages and runtimes
+brew "node"             # JavaScript runtime
+brew "python"           # Python language
+brew "go"               # Go language
+brew "rust"             # Rust language
+brew "openjdk"          # Java Development Kit
+
+# Version control
+brew "gh"               # GitHub CLI
+brew "glab"             # GitLab CLI
+brew "git-lfs"          # Git Large File Storage
+brew "lazygit"          # Terminal UI for git
+
+# Containers
+brew "docker"           # Containerization
+brew "kubectl"          # Kubernetes CLI
+brew "kubectx"          # Kubernetes context switcher
+brew "k9s"             # Kubernetes CLI UI
+brew "helm"            # Kubernetes package manager
+brew "kind"            # Kubernetes in Docker
+
+# Cloud tools
+brew "awscli"           # AWS CLI
+brew "azure-cli"        # Azure CLI
+brew "terraform"        # Infrastructure as code
+
+# Database tools
+brew "postgresql"       # PostgreSQL database
+brew "mysql"            # MySQL database
+
+# Development utilities
+brew "jq"               # JSON processor
+brew "yq"               # YAML processor
+brew "httpie"           # HTTP client

@@ -1,0 +1,41 @@
+# Brewfile.apps - GUI applications
+
+# Taps - External repositories
+tap "felixkratz/formulae"   # For sketchybar
+
+# Productivity
+cask "raycast"          # Spotlight alternative
+cask "rectangle"        # Window manager
+brew "sketchybar"      # Custom macOS menubar
+cask "font-sketchybar-app-font" # Font for sketchybar
+cask "nikitabobko/tap/aerospace" # Window manager
+cask "obsidian"         # Note-taking app
+cask "steermouse"        # Mouse customization
+cask "hiddenbar"         # Hide menu bar
+
+# Development
+cask "visual-studio-code" # Code editor
+cask "visual-studio-code@insiders" # Insiders version of VSCode
+cask "iterm2"               # Terminal emulator
+cask "karabiner-elements"   # Keyboard customizer
+cask "warp"                 # Terminal emulator
+cask "docker-desktop"       # Docker GUI
+brew "gitlab-runner"        # GitLab CI/CD runner
+brew "yamllint"             # YAML linter
+
+# AI
+cask "chatgpt"          # ChatGPT desktop app
+cask "claude"           # Claude AI desktop app
+
+# Browsers
+cask "vivaldi"          # Web browser
+
+# Communication
+cask "discord"          # Chat application
+
+# Media
+cask "spotify"          # Music streaming
+
+# Utilities
+cask "the-unarchiver"   # Archive extractor
+cask "appcleaner"       # App uninstaller

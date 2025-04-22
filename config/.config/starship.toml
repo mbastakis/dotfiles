@@ -1,0 +1,21 @@
+# Configure directory display
+[directory]
+truncation_length = 3
+truncation_symbol = "…/"
+
+# Configure Git branch display
+[git_branch]
+format = "[$symbol$branch]($style) "
+symbol = "🌿 "
+style = "bold purple"
+
+# Configure Node.js display
+[nodejs]
+format = "via [$symbol($version )]($style)"
+symbol = "⬢ "
+style = "bold green"
+detect_extensions = ["js", "mjs", "cjs", "ts", "mts", "cts", "jsx", "tsx", "package.json", "node_modules"]
+detect_files = ["package.json", ".node-version", ".nvmrc"]
+detect_folders = ["node_modules"]
+version_format = "v${raw}"
+disabled = false

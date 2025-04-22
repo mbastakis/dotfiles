@@ -1,0 +1,20 @@
+# Core utilities
+brew "stow"        # Symlink manager for dotfiles
+brew "git"         # Version control
+brew "starship"    # Terminal prompt
+brew "coreutils"   # GNU core utilities
+brew "gnu-sed"     # GNU sed
+brew "grep"        # GNU grep
+brew "wget"        # File downloader
+brew "curl"        # URL transfer utility
+brew "fzf"         # Fuzzy finder
+brew "ripgrep"     # Fast search tool
+brew "mas"        # Mac App Store CLI
+brew "zinit"       # Zinit for Zsh
+brew "autojump"    # Directory navigation
+brew "diff-so-fancy" # Improved diff output
+brew "jq"          # JSON processor
+brew "navi"        # Interactive cheat sheets
+
+# Fonts
+cask "font-jetbrains-mono" # JetBrains Mono font

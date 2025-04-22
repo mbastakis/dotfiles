@@ -1,0 +1,12 @@
+# local.zsh - Machine-specific ZSH configurations
+# This file is intended for machine-specific configurations that shouldn't be tracked in git
+# It will be loaded by your .zshrc if it exists
+
+# Example: Add a machine-specific PATH directory
+# export PATH="$HOME/specific-to-this-machine/bin:$PATH"
+
+# Example: Set machine-specific environment variables
+# export WORK_PROJECT_DIR="$HOME/projects/work"
+
+# Example: Create machine-specific aliases
+# alias work="cd $WORK_PROJECT_DIR"

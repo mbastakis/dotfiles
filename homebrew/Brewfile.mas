@@ -1,0 +1,7 @@
+# Brewfile.mas - Mac App Store applications
+# Format: mas "App Name", id: APP_ID
+# To find app IDs, use: mas search "App Name"
+
+mas "Amphetamine", id: 937984704     # Keep your Mac awake
+# Add more Mac App Store applications below:
+# mas "App Name", id: APP_ID

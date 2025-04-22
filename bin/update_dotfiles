@@ -1,0 +1,37 @@
+#!/bin/bash
+# update_dotfiles.sh - Script to update the dotfiles repository
+
+# Get the directory of this script
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+# Source utility functions
+source "$DOTFILES_DIR/scripts/utils.sh"
+
+log_section "Updating Dotfiles Repository"
+
+# Navigate to dotfiles directory
+cd "$DOTFILES_DIR" || exit
+
+# Pull latest changes from git
+log_info "Pulling latest changes from git repository"
+git pull
+
+# Re-stow all configurations
+log_info "Re-stowing configuration files"
+
+configs=(
+    "config"
+    "shell"
+)
+
+for config in "${configs[@]}"; do
+    if [ -d "$config" ]; then
+        log_info "Restowing $config"
+        stow -v --restow --no-folding -t "$HOME" "$config"
+    else
+        log_warning "Directory $config does not exist, skipping"
+    fi
+done
+
+log_info "Dotfiles update complete!"
