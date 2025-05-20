@@ -1,3 +1,8 @@
+# CMD duration
+[cmd_duration]
+min_time = 3_000  # Show command duration over 10,000 milliseconds (=10 sec)
+format = " took [$duration]($style)"
+
 # Configure directory display
 [directory]
 truncation_length = 3
@@ -8,6 +13,27 @@ truncation_symbol = "…/"
 format = "[$symbol$branch]($style) "
 symbol = "🌿 "
 style = "bold purple"
+
+[git_commit]
+commit_hash_length = 8
+style = "bold white"
+
+[git_state]
+format = '[\($state( $progress_current of $progress_total)\)]($style) '
+
+[git_status]
+conflicted = "⚔️ "
+ahead = "🏎️ 💨 ×${count} "
+behind = "🐢 ×${count} "
+diverged = "🔱 🏎️ 💨 ×${ahead_count} 🐢 ×${behind_count} "
+untracked = "🛤️  ×${count} "
+stashed = "📦 "
+modified = "📝 ×${count} "
+staged = "🗃️  ×${count} "
+renamed = "📛 ×${count} "
+deleted = "🗑️  ×${count} "
+style = "bright-white"
+format = "$all_status$ahead_behind"
 
 # Configure Node.js display
 [nodejs]

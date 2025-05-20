@@ -47,10 +47,6 @@ if.app-name-regex-substring = 'Discord'
 run = 'move-node-to-workspace e'
 
 [[on-window-detected]]
-if.app-name-regex-substring = 'Franz'
-run = 'move-node-to-workspace e'
-
-[[on-window-detected]]
 if.app-name-regex-substring = 'Messages'
 run = 'move-node-to-workspace e'
 
@@ -59,9 +55,9 @@ run = 'move-node-to-workspace e'
 if.app-name-regex-substring = 'Outlook'
 run = 'move-node-to-workspace u'
 
-# [[on-window-detected]]
-# if.app-name-regex-substring = 'ChatGPT'
-# run = 'move-node-to-workspace u'
+[[on-window-detected]]
+if.app-name-regex-substring = 'ChatGPT'
+run = 'move-node-to-workspace u'
 
 [[on-window-detected]]
 if.app-name-regex-substring = 'Microsoft Teams'
