@@ -71,6 +71,10 @@ run = 'move-node-to-workspace u'
 if.app-name-regex-substring = 'Claude'
 run = 'move-node-to-workspace u'
 
+[[on-window-detected]]
+if.app-name-regex-substring = 'Gemini'
+run = 'move-node-to-workspace u'
+
 # Floating windows
 
 [[on-window-detected]]
