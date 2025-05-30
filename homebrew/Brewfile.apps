@@ -12,6 +12,7 @@ cask "nikitabobko/tap/aerospace" # Window manager
 cask "obsidian"         # Note-taking app
 cask "steermouse"        # Mouse customization
 cask "hiddenbar"         # Hide menu bar
+cask "finicky"           # Default browser manager
 
 # Development
 cask "visual-studio-code" # Code editor
@@ -19,7 +20,6 @@ cask "visual-studio-code@insiders" # Insiders version of VSCode
 cask "iterm2"               # Terminal emulator
 cask "karabiner-elements"   # Keyboard customizer
 cask "warp"                 # Terminal emulator
-cask "docker-desktop"       # Docker GUI
 brew "gitlab-runner"        # GitLab CI/CD runner
 brew "yamllint"             # YAML linter
 
