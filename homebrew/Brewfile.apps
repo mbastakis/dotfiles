@@ -13,6 +13,7 @@ cask "obsidian"         # Note-taking app
 cask "steermouse"        # Mouse customization
 cask "hiddenbar"         # Hide menu bar
 cask "finicky"           # Default browser manager
+cask "brainfm"         # Brain.fm music for focus
 
 # Development
 cask "visual-studio-code" # Code editor
