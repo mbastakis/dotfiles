@@ -28,7 +28,7 @@ configs=(
 for config in "${configs[@]}"; do
     if [ -d "$config" ]; then
         log_info "Restowing $config"
-        stow -v --restow --no-folding -t "$HOME" "$config"
+        stow -v --adopt --restow --no-folding -t "$HOME" "$config"
     else
         log_warning "Directory $config does not exist, skipping"
     fi
