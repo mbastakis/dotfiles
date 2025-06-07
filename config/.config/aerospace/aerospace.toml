@@ -50,6 +50,10 @@ run = 'move-node-to-workspace e'
 if.app-name-regex-substring = 'Mail'
 run = 'move-node-to-workspace e'
 
+[[on-window-detected]]
+if.app-name-regex-substring = 'Bitwarden'
+run = 'move-node-to-workspace e'
+
 # Workspace U
 [[on-window-detected]]
 if.app-name-regex-substring = 'Outlook'
