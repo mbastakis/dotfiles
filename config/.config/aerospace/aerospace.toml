@@ -47,7 +47,7 @@ if.app-name-regex-substring = 'Discord'
 run = 'move-node-to-workspace e'
 
 [[on-window-detected]]
-if.app-name-regex-substring = 'Messages'
+if.app-name-regex-substring = 'Mail'
 run = 'move-node-to-workspace e'
 
 # Workspace U
