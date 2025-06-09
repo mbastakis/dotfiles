@@ -1,0 +1,224 @@
+{
+  "main": {
+    "id": "5324373015726ba8",
+    "type": "split",
+    "children": [
+      {
+        "id": "458ccf396baaa07a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "307e77f85877441b",
+            "type": "leaf",
+            "state": {
+              "type": "obsidian-projects",
+              "state": {},
+              "icon": "projects-icon",
+              "title": "Projects"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "8c31224aa27687b5",
+    "type": "split",
+    "children": [
+      {
+        "id": "e030507488c54e2a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1b9875d61959b663",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "34e5f59774e11b2f",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "```",
+                "matchingCase": true,
+                "explainSearch": false,
+                "collapseAll": true,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "444b15853621c1ac",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 235.5010757446289
+  },
+  "right": {
+    "id": "45a4c33d2d217b48",
+    "type": "split",
+    "children": [
+      {
+        "id": "549649fefd6df736",
+        "type": "tabs",
+        "dimension": 68.26394344069128,
+        "children": [
+          {
+            "id": "4f8f385ea32358a8",
+            "type": "leaf",
+            "state": {
+              "type": "google-calendar-view-schedule",
+              "state": {},
+              "icon": "layout-list",
+              "title": "GCal Schedule View"
+            }
+          }
+        ]
+      },
+      {
+        "id": "014043c44890df20",
+        "type": "tabs",
+        "dimension": 31.736056559308718,
+        "children": [
+          {
+            "id": "891fa13d3b582d57",
+            "type": "leaf",
+            "state": {
+              "type": "timer-view",
+              "state": {},
+              "icon": "timer",
+              "title": "Timer"
+            }
+          },
+          {
+            "id": "f1049f826872d3e5",
+            "type": "leaf",
+            "state": {
+              "type": "google-calendar-view-month",
+              "state": {},
+              "icon": "calendar-days",
+              "title": "GCal Month View"
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "horizontal",
+    "width": 326.5
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "workspaces:Manage workspace layouts": true,
+      "pexels-banner:🚩 Pixel Banner Menu": true,
+      "templates:Insert template": true,
+      "pinned-notes:Homepage": false,
+      "cmdr:Files: Show file explorer": false,
+      "ribbon-divider:ribbon-divider-d6836d41-e02e-4707-a8f9-d737fd521486": false,
+      "obsidian-projects:Open projects": false,
+      "obsidian-excalidraw-plugin:New drawing": false,
+      "dashboard-navigator:Open dashboard navigator": false,
+      "switcher:Open quick switcher": true,
+      "graph:Open graph view": true,
+      "command-palette:Open command palette": true,
+      "daily-notes:Open today's daily note": true,
+      "zk-prefixer:Create new unique note": true,
+      "table-editor-obsidian:Advanced Tables Toolbar": true,
+      "audio-recorder:Start/stop recording": false,
+      "ribbon-divider:ribbon-divider-85cc4e1d-da95-446b-b237-e4e9a8fc7834": false,
+      "darlal-switcher-plus:Open in Headings Mode": true,
+      "darlal-switcher-plus:Open Symbols for the active editor": true,
+      "templater-obsidian:Templater": true,
+      "quick-tagger:Add tag to current note": true,
+      "quick-tagger:Remove tag from current note": true,
+      "cmdr:Google Calendar: Open gCal week view": false,
+      "pinned-notes:Pomodoro": false,
+      "pinned-notes:Read It Later": false,
+      "pinned-notes:Logistics": false,
+      "ribbon-divider:ribbon-divider-cb86a7cb-7e64-467d-b89d-2c69120994bf": false,
+      "ribbon-divider:ribbon-divider-36ef3d98-08ff-4dc5-ae9e-d9b4d0ebc3c9": true,
+      "meld-encrypt:New encrypted note": true,
+      "meld-encrypt:Convert to or from an Encrypted note": true,
+      "pomodoro-timer:Toggle timer panel": true,
+      "cmdr:Workspaces: Load workspace layout": false,
+      "cmdr:Workspaces: Save layout": false,
+      "meld-encrypt:Encrypt/Decrypt In-place": false,
+      "janitor:Janitor: scan vault": false,
+      "markdown-importer:Open format converter": true,
+      "custom-sort:Toggle custom sorting": true,
+      "canvas:Create new canvas": true,
+      "omnisearch:Omnisearch": true
+    }
+  },
+  "active": "4f8f385ea32358a8",
+  "lastOpenFiles": [
+    "Resources/Kanban Tasks/fitness dashboard.md",
+    "Resources/Kanban Tasks/iPad.md",
+    "Resources/Calendar Events/Hermetica check compliance.md",
+    "Resources/Calendar Events/Hermetica check presentation tools and setup.md",
+    "Extras/Templates/Calendar/calendar-event.md.tmp",
+    "Resources/Kanban Tasks/test-report.md",
+    "Untitled.md",
+    "Extras/Images/adv_2 1.png",
+    "Extras/Images/19852122_6195005 1.jpg",
+    "Extras/Images/Pasted image 20230123152247 1.png",
+    "Extras/Images/DT-mike-1742554599291 1.webp",
+    "Extras/Images/adv_3 1.png",
+    "Extras/Unkown/hermetica use case, first iteration.md",
+    "Extras/Unkown/1st iteration specification digestion compononent.md",
+    "Extras/Unkown/1st iteration internal diagram view.excalidraw.md",
+    "Extras/Unkown/1st iteration internal architecture.excalidraw.md",
+    "Projects/mike-hermetica.md",
+    "Extras/Unkown/mike-dashboard.md",
+    "Extras/Images/DSC00848 1.jpg",
+    "Extras/Images/DSC00898 1.jpg",
+    "Extras/Images/DSC00844 1.jpg",
+    "Extras/Images/DSC00849 1.jpg",
+    "Extras/Images/DSC00901 1.jpg",
+    "Resources/daily-note-template v.0.0.1.md",
+    "Resources/Sticky Notes/Testfrom phone.md",
+    "Pictures",
+    "Resources/Calendar Events/sample event note test.md",
+    "sample event note test.md",
+    "Resources/Calendar Events/test-this-note.md",
+    "Resources/Calendar Events/test (5).md",
+    "Resources/Calendar Events/test (4).md",
+    "Resources/Calendar Events/test (3).md",
+    "Resources/Calendar Events/test (2).md",
+    "Resources/Calendar Events/test.md",
+    "Extras/Unkown/Event-Note.md",
+    "Resources/Calendar Events/Cloud Core & SRE Meeting.md",
+    "Areas/mike-workflow.md",
+    "Resources/Calendar Events",
+    "Extras/Templates/Calendar/calendar-event.md",
+    "Extras/Templates/Calendar",
+    "Extras/Templates/Projects/DT-AICC",
+    "Resources/Kanban Tasks",
+    "Extras/Templates/Projects",
+    "Extras/Templates/Special",
+    "Extras/Templates/Scripts",
+    "Extras/Encrypted"
+  ]
+}

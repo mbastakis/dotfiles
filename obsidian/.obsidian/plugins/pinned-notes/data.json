@@ -1,0 +1,28 @@
+{
+  "pinnedNotes": [
+    {
+      "id": "e6875dab-37cd-427b-9592-2c46049b7b1c",
+      "icon": "circle-dollar-sign",
+      "path": "Logistics",
+      "title": "Logistics"
+    },
+    {
+      "id": "dad731a2-d1b4-46b1-b9ed-f27717982289",
+      "icon": "eye",
+      "path": "mike-readitlater/mike-readitlater",
+      "title": "Read It Later"
+    },
+    {
+      "id": "e811afc6-e2f1-4d1c-a048-25f5c90a7a97",
+      "icon": "timer",
+      "path": "mike-pomodoro",
+      "title": "Pomodoro"
+    },
+    {
+      "id": "57ec01ae-ff4d-4db9-a3f5-ad67d87477ef",
+      "icon": "home",
+      "path": "mike-dashboard",
+      "title": "Homepage"
+    }
+  ]
+}

@@ -101,6 +101,14 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     bash "$SCRIPT_DIR/scripts/mac_settings.sh"
 fi
 
+# Setup Obsidian configuration
+log_section "Setting up Obsidian Configuration"
+read -p "Do you want to setup Obsidian vault configuration syncing? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    bash "$SCRIPT_DIR/scripts/setup_obsidian.sh"
+fi
+
 log_section "Setup Complete!"
 log_info "Your Mac has been configured successfully."
 log_info "You may need to restart your Mac for some changes to take effect."

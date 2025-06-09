@@ -37,3 +37,6 @@ export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
 
 # Exa path
 export PATH="$HOME/.local/share/zinit/plugins/ogham---exa/bin:$PATH"
+
+# Dotfiles path
+export DOTFILES_PATH="$HOME/dev/dotfiles"

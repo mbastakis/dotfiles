@@ -1,0 +1,305 @@
+{
+  "version": 2,
+  "projects": [
+    {
+      "fieldConfig": {
+        "status": {
+          "options": [
+            "Done",
+            "ToDo",
+            "InProgress"
+          ]
+        }
+      },
+      "defaultName": "",
+      "templates": [
+        "Extras/Templates/Projects/kanban-card.md"
+      ],
+      "excludedNotes": [
+        "Extras/Templates/Projects/kanban-card.md"
+      ],
+      "isDefault": true,
+      "dataSource": {
+        "kind": "tag",
+        "config": {
+          "tag": "#arcane-default",
+          "hierarchy": false
+        }
+      },
+      "newNotesFolder": "Resources/Kanban Tasks",
+      "views": [
+        {
+          "config": {
+            "groupByField": "status",
+            "includeFields": [],
+            "columns": {
+              "Event": {
+                "weight": 0,
+                "records": [
+                  "👖 Laundry - recurring-18t2kit0.md",
+                  "Cloud Core & SRE Meeting - recurring-76dq5d66.md",
+                  "Hermetica -- Olympia discussion - 2025-05-26 - _60q30c1.md",
+                  "KAN-20- Send Money Trading 212 - recurring-26cuvtos.md",
+                  "Lukas birthday - recurring-_6oqjgh9.md",
+                  "Manos Kalozumis birthday - recurring-_8d134hi.md",
+                  "Γενέθλια Γιώργο Μάνος - recurring-_85336gh.md",
+                  "Γενέθλια Εβελίνας Σφακ - recurring-_60qj6gh.md",
+                  "Γενέθλια Κωνσταντίνα Σφίγγα - recurring-_6kpjid9.md"
+                ],
+                "collapse": true
+              },
+              "ToBuy": {
+                "weight": 1,
+                "records": [
+                  "new toothbrush.md",
+                  "pouf gia ta podia.md",
+                  "Protein.md",
+                  "xali gia to krebati.md"
+                ],
+                "collapse": true
+              },
+              "Done": {
+                "weight": 2,
+                "records": [
+                  "Add Collapse in board.md",
+                  "Polish Obsidian setup Desktop.md",
+                  "Woman in Black - 2025-05-12 - _6sq36d3.md",
+                  "Add google calendar to Projects.md",
+                  "Add google calendar to Projects - 2025-06-04 - p2vphf8t.md",
+                  "Create Project for DT-AICC.md"
+                ],
+                "collapse": true
+              },
+              "ToDo": {
+                "weight": 3,
+                "records": [
+                  "Add search query to data view.md",
+                  "checkout browser use.md",
+                  "configure glove80.md",
+                  "Test vscode models.md",
+                  "get drivers license.md",
+                  "setup neovim.md",
+                  "write first blog post.md",
+                  "create clothing style doc.md",
+                  "Polish Obsidian setup Mobile.md",
+                  "Architect the new Obsidian Vault.md",
+                  "Check LangChain, LLamaIndex.md",
+                  "Refine and polish the Projects plugin.md",
+                  "solution for auto-fill out in forms.md",
+                  "test.md"
+                ],
+                "collapse": false
+              },
+              "InProgress": {
+                "weight": 4,
+                "records": [
+                  "Extras/Unkown/Download DT Repos.md",
+                  "Resources/Calendar Events/Hermetica check presentation tools and setup.md",
+                  "Resources/Calendar Events/Hermetica check compliance.md",
+                  "Extras/Unkown/How Platform engineers support Data Scientist.md"
+                ],
+                "collapse": false
+              },
+              "null": {
+                "collapse": false
+              },
+              "No status": {
+                "records": []
+              }
+            }
+          },
+          "filter": {
+            "conjunction": "and",
+            "conditions": []
+          },
+          "colors": {
+            "conditions": [
+              {
+                "color": "#b873bf",
+                "condition": {
+                  "field": "priority",
+                  "operator": "is",
+                  "enabled": true,
+                  "value": "medium"
+                }
+              },
+              {
+                "color": "#6fd1d3",
+                "condition": {
+                  "field": "priority",
+                  "operator": "is",
+                  "enabled": true,
+                  "value": "low"
+                }
+              },
+              {
+                "color": "#e16060",
+                "condition": {
+                  "field": "priority",
+                  "operator": "is",
+                  "enabled": true,
+                  "value": "high"
+                }
+              },
+              {
+                "color": "#ff0000",
+                "condition": {
+                  "field": "priority",
+                  "operator": "is",
+                  "enabled": true,
+                  "value": "urgent"
+                }
+              }
+            ]
+          },
+          "sort": {
+            "criteria": []
+          },
+          "id": "de41a472-2c86-4c4e-8304-b50e2528be1b",
+          "name": "Board",
+          "type": "board"
+        }
+      ],
+      "id": "824b0507-3776-47dd-a6c1-f2bddec493f4",
+      "name": "Default"
+    },
+    {
+      "fieldConfig": {
+        "status": {
+          "options": [
+            "ToDo",
+            "InProgress",
+            "ToReport",
+            "Done"
+          ]
+        }
+      },
+      "defaultName": "",
+      "templates": [
+        "Extras/Templates/Projects/DT-AICC/kanban-card.md"
+      ],
+      "excludedNotes": [
+        "Extras/Templates/Projects/DT-AICC/kanban-card.md"
+      ],
+      "isDefault": false,
+      "dataSource": {
+        "kind": "tag",
+        "config": {
+          "tag": "#dt-aicc",
+          "hierarchy": false
+        }
+      },
+      "newNotesFolder": "Resources/Kanban Tasks",
+      "views": [
+        {
+          "config": {
+            "groupByField": "status",
+            "columns": {
+              "ToDo": {
+                "weight": 0,
+                "records": []
+              },
+              "InProgress": {
+                "weight": 1,
+                "records": []
+              },
+              "ToReport": {
+                "weight": 2
+              },
+              "Done": {
+                "weight": 3,
+                "records": [
+                  "Documentation.md",
+                  "Communicate with AICC people.md"
+                ]
+              }
+            }
+          },
+          "filter": {
+            "conjunction": "and",
+            "conditions": []
+          },
+          "colors": {
+            "conditions": [
+              {
+                "color": "#b873bf",
+                "condition": {
+                  "field": "priority",
+                  "operator": "is",
+                  "enabled": true,
+                  "value": "medium"
+                }
+              },
+              {
+                "color": "#64e6f7",
+                "condition": {
+                  "field": "priority",
+                  "operator": "is",
+                  "enabled": true,
+                  "value": "low"
+                }
+              },
+              {
+                "color": "#f43e50",
+                "condition": {
+                  "field": "priority",
+                  "operator": "is",
+                  "enabled": true,
+                  "value": "urgent"
+                }
+              },
+              {
+                "color": "#f43e51",
+                "condition": {
+                  "field": "priority",
+                  "operator": "is",
+                  "enabled": true,
+                  "value": "high"
+                }
+              }
+            ]
+          },
+          "sort": {
+            "criteria": []
+          },
+          "id": "710d4d76-16c6-4a1b-b839-139147d55162",
+          "name": "Board",
+          "type": "board"
+        }
+      ],
+      "id": "0dd85664-dad4-4770-885c-b7e354b37736",
+      "name": "DT-AICC"
+    }
+  ],
+  "archives": [],
+  "preferences": {
+    "projectSizeLimit": 1000,
+    "frontmatter": {
+      "quoteStrings": "PLAIN"
+    },
+    "locale": {
+      "firstDayOfWeek": "default"
+    },
+    "commands": [
+      {
+        "project": "824b0507-3776-47dd-a6c1-f2bddec493f4",
+        "view": "de41a472-2c86-4c4e-8304-b50e2528be1b"
+      },
+      {
+        "project": "0dd85664-dad4-4770-885c-b7e354b37736",
+        "view": "710d4d76-16c6-4a1b-b839-139147d55162"
+      }
+    ],
+    "linkBehavior": "open-note",
+    "googleCalendar": {
+      "enabled": false,
+      "clientId": "",
+      "clientSecret": "",
+      "autoSyncInterval": 0,
+      "accessToken": "",
+      "refreshToken": "",
+      "calendarId": "",
+      "redirectUri": ""
+    }
+  }
+}

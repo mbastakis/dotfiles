@@ -1,2 +1,5 @@
 local.zsh
 .DS_Store
+
+# google calendar
+obsidian/.obsidian/plugins/google-calendar/data.json

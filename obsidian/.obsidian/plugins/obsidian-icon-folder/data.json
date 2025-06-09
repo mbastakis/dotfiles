@@ -1,0 +1,226 @@
+{
+  "settings": {
+    "migrated": 6,
+    "iconPacksPath": ".obsidian/icons",
+    "fontSize": 16,
+    "emojiStyle": "native",
+    "iconColor": null,
+    "recentlyUsedIcons": [
+      "LiCalendar",
+      "CoCalendarEvent",
+      "TiCalendarEvent",
+      "TiBriefcase",
+      "OcTasklist24"
+    ],
+    "recentlyUsedIconsSize": 5,
+    "rules": [
+      {
+        "rule": "DT-Ticket-*",
+        "icon": "LiTicket",
+        "for": "everything",
+        "order": 0
+      },
+      {
+        "rule": "Youtube ",
+        "icon": "LiYoutube",
+        "for": "everything",
+        "order": 1
+      },
+      {
+        "rule": "Note ",
+        "icon": "LiStickyNote",
+        "for": "everything",
+        "order": 2
+      },
+      {
+        "rule": "CLCO-*",
+        "icon": "LiTicket",
+        "for": "everything",
+        "order": 3
+      }
+    ],
+    "extraMargin": {
+      "top": 0,
+      "right": 4,
+      "bottom": 0,
+      "left": 0
+    },
+    "iconInTabsEnabled": true,
+    "iconInTitleEnabled": true,
+    "iconInTitlePosition": "inline",
+    "iconInFrontmatterEnabled": true,
+    "iconInFrontmatterFieldName": "icon",
+    "iconColorInFrontmatterFieldName": "iconColor",
+    "iconsBackgroundCheckEnabled": false,
+    "iconsInNotesEnabled": true,
+    "iconsInLinksEnabled": true,
+    "iconIdentifier": ":",
+    "lucideIconPackType": "native",
+    "debugMode": false,
+    "useInternalPlugins": false
+  },
+  "Projects": "OcProject16",
+  "Areas": "BoBxCollection",
+  "Resources": "TiNotes",
+  "Archives": "LiArchive",
+  "Dashboards": "IbDashboard",
+  "Extras": "SiMeta",
+  "Extras/Excalidraw": "SiExcalidraw",
+  "Extras/Images": "LiImages",
+  "Extras/PDF": "FarFilePdf",
+  "Extras/Templates": "TiTemplate",
+  "Resources/Sticky Notes": "RiStickyNoteFill",
+  "Resources/Snippets": "RiTextSnippet",
+  "Resources/Snippets/Code": "TiCode",
+  "Resources/Snippets/Commands": "RiSlashCommands",
+  "Resources/Weblist": "LiLink",
+  "Extras/Unkown": "RiFolderUnknowLine",
+  "Resources/Shortcuts": "SiQuicklook",
+  "Extras/Encrypted": "FasLock",
+  "Extras/Unkown/mike-dashboard.md": {
+    "iconName": "LiHome"
+  },
+  "Extras/Unkown/date-ideas.md": "LiWine",
+  "Extras/Unkown/Logistics.md": {
+    "iconName": "FasDollarSign"
+  },
+  "Extras/Unkown/Exercise.md": {
+    "iconName": "LiDumbbell"
+  },
+  "Areas/mike-workflow.md": {
+    "iconName": "LiWorkflow"
+  },
+  "Areas/mike-software.md": {
+    "iconName": "SiPaloaltosoftware"
+  },
+  "Areas/mike-readitlater.md": {
+    "iconName": "LiEye"
+  },
+  "Areas/mike-people.md": {
+    "iconName": "OcPeople16"
+  },
+  "Areas/mike-logistics.md": {
+    "iconName": "FasDollarSign"
+  },
+  "Areas/mike-kanban.md": {
+    "iconName": "LiSquareKanban"
+  },
+  "Areas/DT-mike.md": {
+    "iconName": "SiWorkplace"
+  },
+  "Areas/DT-AICC.md": "FasRobot",
+  "Projects/the-obsidian-setup.md": {
+    "iconName": "SiObsidian"
+  },
+  "Projects/My-Kanban-Plugin.md": {
+    "iconName": "TiLayoutKanban"
+  },
+  "Resources/Shortcuts/warp-shortcuts.md": {
+    "iconName": "SiWarp"
+  },
+  "Resources/Shortcuts/vscode-shortcuts.md": {
+    "iconName": "SiShortcut"
+  },
+  "Resources/Shortcuts/Shortcuts.md": {
+    "iconName": "SiShortcut"
+  },
+  "Resources/xara-notes.md": "👩",
+  "Resources/warp.md": "SiWarp",
+  "Resources/vscode.md": "TiBrandVscode",
+  "Resources/to-be-packaged.md": "LiPlane",
+  "Resources/neovim.md": "SiNeovim",
+  "Resources/mac.md": {
+    "iconName": "RiMacbookLine"
+  },
+  "Resources/mac-setup.md": {
+    "iconName": "RiMacbookLine"
+  },
+  "Resources/kyverno-presentation.md": {
+    "iconName": "SiSlides"
+  },
+  "Resources/kyverno-destruction-job.md": {
+    "iconName": "RiTaskLine"
+  },
+  "Resources/kyverno argocd fix, from docs.md": {
+    "iconName": "RiTaskLine"
+  },
+  "Resources/iTerm2.md": "SiIterm2",
+  "Resources/dt-task-template.md": {
+    "iconName": "RiTaskLine"
+  },
+  "Resources/dt-question-template.md": {
+    "iconName": "FasQuestion"
+  },
+  "Resources/dt-info-template.md": {
+    "iconName": "LiInfo"
+  },
+  "Resources/daily-note-template.md": {
+    "iconName": "LiNotebookPen"
+  },
+  "Resources/ca certificates.md": {
+    "iconName": "FasQuestion"
+  },
+  "Resources/Vivaldi.md": "SiVivaldi",
+  "Resources/Setup kyverno to pull from artifactory.md": {
+    "iconName": "RiTaskLine"
+  },
+  "Resources/Raycast.md": "SiRaycast",
+  "Resources/Quick Sticky Notes.md": "LiStickyNote",
+  "Resources/Perplexity.md": "SiPerplexity",
+  "Resources/Obsidian Web Clipper.md": "LiClipboardPaste",
+  "Resources/Obsidian Clipper VScode Extension.md": "LiClipboardPlus",
+  "Resources/Google Calendar.md": "LiCalendar",
+  "Resources/GitOps transition.md": {
+    "iconName": "RiTaskLine"
+  },
+  "Resources/Fix gitlab runner deprecated keys.md": {
+    "iconName": "RiTaskLine"
+  },
+  "Resources/Edge Browser.md": "FabEdge",
+  "Resources/Call with Philipe.md": {
+    "iconName": "RiTaskLine"
+  },
+  "Resources/AWS SSA Certification Info.md": {
+    "iconName": "LiInfo"
+  },
+  "Resources/AICC meetup.md": {
+    "iconName": "RiTaskLine"
+  },
+  "Resources/AI - Documentation.md": "RiAiGenerate",
+  "Resources/OCR.md": {
+    "iconName": "FasMagnifyingGlassPlus"
+  },
+  "Resources/Screen Recording.md": {
+    "iconName": "TiPlayerRecord"
+  },
+  "Resources/Shortcuts/mac-shortcuts.md": {
+    "iconName": "SiShortcut"
+  },
+  "Projects/mike-hermetica.md": {
+    "iconName": "CoFileDocument"
+  },
+  "Resources/Kanban Tasks": "RiTaskLine",
+  "Extras/Templates/Projects/kanban-card.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Extras/Templates/Projects/DT-AICC/kanban-card.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Extras/Templates/Calendar/calendar-event.md": {
+    "iconName": "CoCalendarEvent"
+  },
+  "Resources/Calendar Events": "LiCalendar",
+  "Resources/Shortcuts/Obsidian.md": "SiObsidian",
+  "Resources/Calendar Events/Hermetica check compliance.md": {
+    "iconName": "CoCalendarEvent"
+  },
+  "Resources/Calendar Events/Hermetica check presentation tools and setup.md": {
+    "iconName": "CoCalendarEvent"
+  },
+  "Resources/Kanban Tasks/iPad.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Resources/Kanban Tasks/fitness dashboard.md": {
+    "iconName": "OcTasklist24"
+  }
+}

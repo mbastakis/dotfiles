@@ -9,6 +9,7 @@ This repository contains my personal dotfiles and automation scripts for setting
 - **macOS Settings**: Sensible defaults for macOS
 - **Homebrew**: Package installation automation
 - **App Configurations**: Settings for Raycast, Karabiner, and other tools
+- **Obsidian Configuration**: Synced Obsidian vault settings across machines
 - **Custom Fonts**: JetBrains Mono and other typography
 - **Development Environment**: Configuration for development tools
 
@@ -94,6 +95,25 @@ Edit the appropriate Brewfile:
 1. Create a directory for your app in `config/.config/`
 2. Add configuration files
 3. Run `stow -v --target="$HOME" config` to create symlinks
+
+### Setting up Obsidian Configuration
+
+To sync your Obsidian settings across machines:
+
+1. **Automatic Setup** (recommended):
+   ```bash
+   ./bin/setup_obsidian
+   ```
+
+2. **Manual Setup**:
+   ```bash
+   # Replace with your actual vault path
+   ln -sf ~/.dotfiles/obsidian/.obsidian /path/to/your/vault/.obsidian
+   ```
+
+Your Obsidian configuration will be symlinked to your vault, so any changes made in Obsidian's settings will be automatically tracked in your dotfiles. You can then commit and push these changes to keep your settings synchronized across machines.
+
+**Multiple Vaults**: You can link the same configuration to multiple vaults for consistent settings across all your Obsidian vaults.
 
 ### Customizing ZSH
 
