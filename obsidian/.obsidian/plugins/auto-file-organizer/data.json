@@ -1,5 +1,5 @@
 {
-  "tagEnabled": true,
+  "tagEnabled": false,
   "extensionEnabled": true,
   "priority": "tag",
   "extensionMapping": {

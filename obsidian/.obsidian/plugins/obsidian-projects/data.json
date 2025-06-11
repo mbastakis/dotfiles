@@ -16,7 +16,8 @@
         "Extras/Templates/Projects/kanban-card.md"
       ],
       "excludedNotes": [
-        "Extras/Templates/Projects/kanban-card.md"
+        "Extras/Templates/Projects/kanban-card.md",
+        "Extras/Templates/Calendar/calendar-event.md"
       ],
       "isDefault": true,
       "dataSource": {
@@ -46,7 +47,7 @@
                   "Γενέθλια Εβελίνας Σφακ - recurring-_60qj6gh.md",
                   "Γενέθλια Κωνσταντίνα Σφίγγα - recurring-_6kpjid9.md"
                 ],
-                "collapse": true
+                "collapse": false
               },
               "ToBuy": {
                 "weight": 1,
@@ -73,30 +74,29 @@
               "ToDo": {
                 "weight": 3,
                 "records": [
-                  "Add search query to data view.md",
-                  "checkout browser use.md",
-                  "configure glove80.md",
-                  "Test vscode models.md",
-                  "get drivers license.md",
-                  "setup neovim.md",
-                  "write first blog post.md",
-                  "create clothing style doc.md",
-                  "Polish Obsidian setup Mobile.md",
-                  "Architect the new Obsidian Vault.md",
-                  "Check LangChain, LLamaIndex.md",
-                  "Refine and polish the Projects plugin.md",
-                  "solution for auto-fill out in forms.md",
-                  "test.md"
+                  "Extras/Unkown/Add search query to data view.md",
+                  "Extras/Unkown/Architect the new Obsidian Vault.md",
+                  "Extras/Unkown/Check LangChain, LLamaIndex.md",
+                  "Extras/Unkown/checkout browser use.md",
+                  "Extras/Unkown/create clothing style doc.md",
+                  "Extras/Unkown/get drivers license.md",
+                  "Extras/Unkown/Polish Obsidian setup Mobile.md",
+                  "Extras/Unkown/Refine and polish the Projects plugin.md",
+                  "Extras/Unkown/setup neovim.md",
+                  "Extras/Unkown/solution for auto-fill out in forms.md",
+                  "Extras/Unkown/Test vscode models.md",
+                  "Extras/Unkown/write first blog post.md"
                 ],
                 "collapse": false
               },
               "InProgress": {
                 "weight": 4,
                 "records": [
-                  "Extras/Unkown/Download DT Repos.md",
                   "Resources/Calendar Events/Hermetica check presentation tools and setup.md",
                   "Resources/Calendar Events/Hermetica check compliance.md",
-                  "Extras/Unkown/How Platform engineers support Data Scientist.md"
+                  "Resources/Sticky Notes/Capture Ideas.md",
+                  "Extras/Unkown/How Platform engineers support Data Scientist.md",
+                  "Extras/Unkown/configure glove80.md"
                 ],
                 "collapse": false
               },
@@ -167,10 +167,10 @@
       "fieldConfig": {
         "status": {
           "options": [
+            "Done",
             "ToDo",
             "InProgress",
-            "ToReport",
-            "Done"
+            "ToReport"
           ]
         }
       },
@@ -195,22 +195,36 @@
           "config": {
             "groupByField": "status",
             "columns": {
-              "ToDo": {
-                "weight": 0,
-                "records": []
-              },
-              "InProgress": {
-                "weight": 1,
-                "records": []
-              },
-              "ToReport": {
-                "weight": 2
-              },
               "Done": {
-                "weight": 3,
+                "weight": 0,
                 "records": [
                   "Documentation.md",
                   "Communicate with AICC people.md"
+                ],
+                "collapse": true
+              },
+              "ToDo": {
+                "weight": 1,
+                "records": [
+                  "Extras/Unkown/Learn about Image Generation Infra Setup.md"
+                ]
+              },
+              "InProgress": {
+                "weight": 2,
+                "records": [
+                  "Resources/Kanban Tasks/Ask for Perplexity Pro subscription.md",
+                  "Resources/Kanban Tasks/Meeting with Bali Dimitra.md",
+                  "Extras/Unkown/Meeting with Vasiliki at Tuesday.md",
+                  "Extras/Unkown/Get Access to Slack.md",
+                  "Extras/Unkown/Schedule Meeting with Aayush.md"
+                ]
+              },
+              "ToReport": {
+                "weight": 3,
+                "records": [
+                  "Extras/Unkown/Get Access to Tools Account.md",
+                  "Resources/Kanban Tasks/Ask for a DTTL Teams Account, and ask for accesses.md",
+                  "Extras/Unkown/Get Access to TelekomWiki.md"
                 ]
               }
             }
