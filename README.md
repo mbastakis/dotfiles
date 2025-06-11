@@ -5,6 +5,7 @@ This repository contains my personal dotfiles and automation scripts for setting
 ## 📦 What's Included
 
 - **Shell Configuration**: ZSH setup with custom aliases, functions, and prompt
+- **Git Configuration**: Automatic Git user switching based on repository location
 - **Plugin Management**: Zinit for managing ZSH plugins and extensions
 - **macOS Settings**: Sensible defaults for macOS
 - **Homebrew**: Package installation automation
@@ -55,7 +56,7 @@ If you want to set up specific components only:
 5. **Apply Configuration Files**:
 
    ```bash
-   stow -v --target="$HOME" config shell bin
+   stow -v --target="$HOME" config shell git
    ```
 
 6. **Set macOS Defaults**:
@@ -114,6 +115,32 @@ To sync your Obsidian settings across machines:
 Your Obsidian configuration will be symlinked to your vault, so any changes made in Obsidian's settings will be automatically tracked in your dotfiles. You can then commit and push these changes to keep your settings synchronized across machines.
 
 **Multiple Vaults**: You can link the same configuration to multiple vaults for consistent settings across all your Obsidian vaults.
+
+### Git Configuration
+
+This dotfiles setup includes automatic Git user switching based on repository location:
+
+- **Work repositories** (`~/dev/work/`): Uses work email and settings
+- **Personal repositories** (`~/dev/personal/`): Uses personal email and settings  
+- **Other repositories**: Uses default email and settings
+
+The configuration files are automatically symlinked:
+- `.gitconfig` - Main configuration with conditional includes
+- `.gitconfig-work` - Work-specific settings  
+- `.gitconfig-personal` - Personal settings
+
+**Testing the setup**:
+```bash
+# Test work configuration
+cd ~/dev/work/some-repo
+git config user.email  # Shows work email
+
+# Test personal configuration  
+cd ~/dev/personal/some-repo
+git config user.email  # Shows personal email
+```
+
+See `git/README.md` for detailed configuration information.
 
 ### Customizing ZSH
 
