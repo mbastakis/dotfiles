@@ -31,6 +31,7 @@ cd "$SCRIPT_DIR" || exit
 configs=(
     "config"
     "shell"
+    "git"
 )
 
 for config in "${configs[@]}"; do
