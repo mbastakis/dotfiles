@@ -10,6 +10,7 @@ export default {
       match: [
         "*yam-united*",
         "*yam-united.telekom.com/*",
+        "*yo-digital.com/*",
       ],
       browser: "Microsoft Edge",
     }
