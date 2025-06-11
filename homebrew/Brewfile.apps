@@ -15,7 +15,7 @@ cask "steermouse"        # Mouse customization
 cask "hiddenbar"         # Hide menu bar
 cask "finicky"           # Default browser manager
 cask "brainfm"         # Brain.fm music for focus
-cask "tesseract"        # OCR tool
+
 # Development
 cask "visual-studio-code" # Code editor
 cask "visual-studio-code@insiders" # Insiders version of VSCode
