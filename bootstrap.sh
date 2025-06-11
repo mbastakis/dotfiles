@@ -32,6 +32,7 @@ configs=(
     "config"
     "shell"
     "git"
+    "docker"
 )
 
 for config in "${configs[@]}"; do

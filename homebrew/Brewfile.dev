@@ -15,6 +15,10 @@ brew "lazygit"          # Terminal UI for git
 
 # Containers
 brew "docker"           # Containerization
+brew "docker-credential-helper" # Docker credential helper
+brew "colima"            # Container management tool
+
+# Kubernetes tools
 brew "kubectl"          # Kubernetes CLI
 brew "kubectx"          # Kubernetes context switcher
 brew "k9s"             # Kubernetes CLI UI
