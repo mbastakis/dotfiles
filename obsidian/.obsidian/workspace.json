@@ -8,12 +8,22 @@
         "type": "tabs",
         "children": [
           {
-            "id": "7e55b7c4a915342a",
+            "id": "70008d7ec34fdc89",
             "type": "leaf",
+            "pinned": true,
             "state": {
-              "type": "beautitab-react-view",
-              "state": {},
-              "title": "New tab"
+              "type": "canvas",
+              "state": {
+                "file": "Dashboards/Dashboards.canvas",
+                "viewState": {
+                  "x": 365.5,
+                  "y": -777.5,
+                  "zoom": -0.4533242952789738
+                }
+              },
+              "pinned": true,
+              "icon": "lucide-layout-dashboard",
+              "title": "Dashboards"
             }
           }
         ]
@@ -69,8 +79,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "horizontal",
@@ -122,7 +131,8 @@
               "title": "GCal Month View"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -171,46 +181,49 @@
       "omnisearch:Omnisearch": true
     }
   },
-  "active": "444b15853621c1ac",
+  "active": "70008d7ec34fdc89",
   "lastOpenFiles": [
+    "Dashboards/Dashboards.canvas",
+    "Resources/Tutorials/MetaBind Tutorial.md",
+    "Dashboards/PARA.canvas",
+    "Dashboards/Fitness.canvas",
+    "Dashboards/Discovery.canvas",
+    "Dashboards/Global Tasks.canvas",
+    "Extras/Filters/Tasks.md",
+    "Projects/Tasks/Kanban Tasks/testing.md",
+    "Extras/Filters/sticky-notes.base",
+    "Archives/mike-kanban.md",
+    "Projects/Tasks/Kanban Tasks/True Barbers Barbershop - 03 Απρ 2025 17-00.md",
+    "Archives/daily-note-template v.0.0.1.md",
+    "Archives/daily-note-template v.0.0.1 1.md",
+    "Resources/MCP.md",
+    "Resources/AI vs ML.md",
+    "Resources/SSL (Self Supervised Learning).md",
+    "Resources/Deep Learning.md",
+    "Resources/Generative AI.md",
+    "Resources/Midjourney Cheatsheet.md",
+    "Areas/Documentation/AI - Documentation.md",
+    "Areas/Documentation",
+    "Resources/RAG.md",
+    "Resources/ChatGPT Cheatsheet.md",
+    "Resources/SL (Supervised Learning).md",
+    "Extras/Images/MCP-1749725660370.webp",
+    "Calendar/Calendar Events/Hermetica check compliance.md",
+    "Extras/Unkown/hermetica use case, first iteration.md",
+    "Projects/mike-hermetica.md",
+    "Resources/LLM Compliance.md",
+    "Projects/Tasks/Kanban Tasks/Sync obsidian, CouchDB.md",
+    "Extras/Unkown/Architect the new Obsidian Vault.md",
+    "Extras/Unkown/Add search query to data view.md",
     "mike-readitlater/mike-readitlater.md",
     "mike-readitlater",
-    "Resources/This is a test resource.md",
-    "Resources/test-2.md",
-    "test.md",
-    "Extras/Templates/PARA/project.md",
-    "Extras/Templates/PARA/area.md",
-    "Dashboards/PARA.canvas",
-    "Extras/Templates/PARA/archive.md",
-    "Extras/Templates/PARA/resource copy 3.md",
-    "Extras/Templates/PARA/resource copy 2.md",
-    "Extras/Templates/PARA/resource copy.md",
-    "Extras/Templates/PARA/resource.md",
     "Extras/Templates/PARA",
-    "Projects/Tasks/Go to std.md",
-    "Extras/Bases/PARA-Archives.base",
-    "Resources/Shortcuts/050_Shortcuts.md",
-    "Extras/Bases/PARA-Resources.base",
-    "Extras/Bases/PARA-Areas.base",
-    "Extras/Bases/PARA-Projects.base",
-    "Projects/mike-hermetica.md",
-    "Dashboards/Discovery.canvas",
-    "Extras/Bases/sticky-notes.base",
-    "Extras/Bases/readitlater.base",
-    "Extras/Bases",
-    "Resources/life-ideas.md",
-    "Areas/mike-people.md",
-    "Archives/mike-kanban.md",
-    "Archives/mike-dashboard-archive.md",
-    "Resources/Work Tasks.md",
-    "Resources/Work.md",
-    "Resources/Nightly Routine Tasks.md",
-    "Resources/Morning Routine Tasks.md",
-    "Resources/monthly-event-note-template.md",
-    "Resources/Monthly Habits.md",
-    "Projects/Tasks/Kanban Tasks/True Barbers Barbershop - 03 Απρ 2025 17-00.md",
-    "Resources/People",
-    "Dashboards/Fitness.canvas",
+    "Extras/Filters/PARA-Archives.base",
+    "Extras/Filters/PARA-Resources.base",
+    "Extras/Filters/PARA-Areas.base",
+    "Extras/Filters/PARA-Projects.base",
+    "Extras/Filters/readitlater.base",
+    "Extras/Filters",
     "Extras/Images/AI - Documentation-1749650022821.webp",
     "Extras/Images/Meeting with Vasiliki at Tuesday-1749638933998.webp",
     "Extras/Unkown/image-6.png",
@@ -219,7 +232,6 @@
     "Extras/Unkown/image-3.png",
     "Extras/Unkown/image-2.png",
     "Extras/Unkown/image-1 1.png",
-    "Extras/Unkown/image 1.png",
-    "Extras/Unkown/image.png"
+    "Extras/Unkown/image 1.png"
   ]
 }

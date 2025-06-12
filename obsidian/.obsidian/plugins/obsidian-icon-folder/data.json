@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
-      "RiOrganizationChart",
-      "RiStickyNoteFill",
-      "FasMagnifyingGlass",
-      "LiEye",
-      "LiFilter"
+      "IbDashboard",
+      "BoBxTask",
+      "OcTasklist16",
+      "LiFiles",
+      "OcTasklist24"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [
@@ -162,7 +162,6 @@
   "Resources/AWS SSA Certification Info.md": {
     "iconName": "LiInfo"
   },
-  "Resources/AI - Documentation.md": "RiAiGenerate",
   "Resources/OCR.md": {
     "iconName": "FasMagnifyingGlassPlus"
   },
@@ -313,9 +312,17 @@
   "Archives/mike-kanban.md": {
     "iconName": "LiSquareKanban"
   },
-  "Extras/Bases": "LiFilter",
-  "Extras/Bases/readitlater.base": "LiEye",
   "Dashboards/Discovery.canvas": "FasMagnifyingGlass",
-  "Extras/Bases/sticky-notes.base": "RiStickyNoteFill",
-  "Dashboards/PARA.canvas": "RiOrganizationChart"
+  "Dashboards/PARA.canvas": "RiOrganizationChart",
+  "Extras/Filters": "LiFilter",
+  "Extras/Filters/readitlater.base": "LiEye",
+  "Extras/Filters/sticky-notes.base": "RiStickyNoteFill",
+  "Projects/Tasks/Kanban Tasks/Sync obsidian, CouchDB.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Areas/Documentation": "LiFiles",
+  "Areas/Documentation/AI - Documentation.md": "RiAiGenerate",
+  "Extras/Filters/Tasks.md": "OcTasklist16",
+  "Dashboards/Global Tasks.canvas": "BoBxTask",
+  "Dashboards/Dashboards.canvas": "IbDashboard"
 }

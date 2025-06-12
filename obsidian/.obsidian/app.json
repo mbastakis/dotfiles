@@ -13,5 +13,5 @@
   "spellcheck": true,
   "propertiesInDocument": "visible",
   "showLineNumber": false,
-  "focusNewTab": false
+  "focusNewTab": true
 }

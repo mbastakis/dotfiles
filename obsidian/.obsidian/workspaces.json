@@ -10,12 +10,22 @@
             "type": "tabs",
             "children": [
               {
-                "id": "7e55b7c4a915342a",
+                "id": "70008d7ec34fdc89",
                 "type": "leaf",
+                "pinned": true,
                 "state": {
-                  "type": "beautitab-react-view",
-                  "state": {},
-                  "title": "New tab"
+                  "type": "canvas",
+                  "state": {
+                    "file": "Dashboards/Dashboards.canvas",
+                    "viewState": {
+                      "x": 365.5,
+                      "y": -777.5,
+                      "zoom": -0.4533242952789738
+                    }
+                  },
+                  "pinned": true,
+                  "icon": "lucide-layout-dashboard",
+                  "title": "Dashboards"
                 }
               }
             ]
@@ -123,7 +133,8 @@
                   "title": "GCal Month View"
                 }
               }
-            ]
+            ],
+            "currentTab": 1
           }
         ],
         "direction": "horizontal",
@@ -172,8 +183,8 @@
           "omnisearch:Omnisearch": true
         }
       },
-      "active": "7e55b7c4a915342a",
-      "mtime": "2025-06-12T11:54:52+03:00"
+      "active": "70008d7ec34fdc89",
+      "mtime": "2025-06-12T14:45:47+03:00"
     },
     "loukas-workspace": {
       "main": {

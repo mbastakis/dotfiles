@@ -74,31 +74,29 @@
               "ToDo": {
                 "weight": 3,
                 "records": [
-                  "Extras/Unkown/Add search query to data view.md",
-                  "Extras/Unkown/Architect the new Obsidian Vault.md",
                   "Extras/Unkown/Check LangChain, LLamaIndex.md",
                   "Extras/Unkown/checkout browser use.md",
-                  "Extras/Unkown/create clothing style doc.md",
-                  "Extras/Unkown/get drivers license.md",
                   "Extras/Unkown/Polish Obsidian setup Mobile.md",
                   "Extras/Unkown/Refine and polish the Projects plugin.md",
-                  "Extras/Unkown/setup neovim.md",
                   "Extras/Unkown/solution for auto-fill out in forms.md",
                   "Extras/Unkown/Test vscode models.md",
-                  "Extras/Unkown/write first blog post.md"
+                  "Extras/Unkown/write first blog post.md",
+                  "Projects/Tasks/Kanban Tasks/Sync obsidian, CouchDB.md",
+                  "Extras/Unkown/create clothing style doc.md",
+                  "Extras/Unkown/setup neovim.md",
+                  "Extras/Unkown/get drivers license.md"
                 ],
                 "collapse": false
               },
               "InProgress": {
                 "weight": 4,
                 "records": [
-                  "Resources/Kanban Tasks/Check Atlas and ACE Systems.md",
-                  "Resources/Calendar Events/Hermetica check presentation tools and setup.md",
-                  "Resources/Calendar Events/Hermetica check compliance.md",
+                  "Projects/Tasks/Kanban Tasks/Make global Tasks dashboard.md",
                   "Resources/Sticky Notes/Capture Ideas.md",
                   "Extras/Unkown/How Platform engineers support Data Scientist.md",
                   "Extras/Unkown/configure glove80.md",
-                  "Resources/Kanban Tasks/Tool for easy context to llm.md"
+                  "Calendar/Calendar Events/Hermetica check presentation tools and setup.md",
+                  "Projects/Tasks/Kanban Tasks/Tool for easy context to llm.md"
                 ],
                 "collapse": false
               },
