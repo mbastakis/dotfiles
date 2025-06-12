@@ -1,20 +1,15 @@
 {
   "items": [
     {
-      "type": "file",
-      "ctime": 1749200033050,
-      "path": "Extras/Unkown/Sticky Note.md",
-      "title": "Sticky Note"
-    },
-    {
-      "type": "folder",
-      "ctime": 1749275779819,
-      "path": "mike-templates"
-    },
-    {
       "type": "group",
       "ctime": 1749276294149,
       "items": [
+        {
+          "type": "group",
+          "ctime": 1749432934302,
+          "items": [],
+          "title": "Dashboards"
+        },
         {
           "type": "group",
           "ctime": 1749432896537,
@@ -41,9 +36,9 @@
         },
         {
           "type": "group",
-          "ctime": 1749432934302,
+          "ctime": 1749629196580,
           "items": [],
-          "title": "Dashboards"
+          "title": "Calendar"
         },
         {
           "type": "group",

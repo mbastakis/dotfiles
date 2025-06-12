@@ -4,60 +4,19 @@
     "type": "split",
     "children": [
       {
-        "id": "1a24e28b175f387e",
+        "id": "b9a820138ac51770",
         "type": "tabs",
         "children": [
           {
-            "id": "3b2089be102dc40f",
+            "id": "7e55b7c4a915342a",
             "type": "leaf",
             "state": {
               "type": "beautitab-react-view",
               "state": {},
               "title": "New tab"
             }
-          },
-          {
-            "id": "42c83d948974b330",
-            "type": "leaf",
-            "state": {
-              "type": "obsidian-projects",
-              "state": {},
-              "icon": "projects-icon",
-              "title": "Projects"
-            }
-          },
-          {
-            "id": "981b7026f1601eec",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Resources/Kanban Tasks/Meeting with Bali Dimitra.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": false
-              },
-              "icon": "lucide-file",
-              "title": "Meeting with Bali Dimitra"
-            }
-          },
-          {
-            "id": "a46d896337f501e1",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Extras/Unkown/How Platform engineers support Data Scientist.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": false
-              },
-              "icon": "lucide-file",
-              "title": "How Platform engineers support Data Scientist"
-            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -110,7 +69,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "horizontal",
@@ -162,8 +122,7 @@
               "title": "GCal Month View"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -189,14 +148,13 @@
       "table-editor-obsidian:Advanced Tables Toolbar": true,
       "audio-recorder:Start/stop recording": false,
       "ribbon-divider:ribbon-divider-85cc4e1d-da95-446b-b237-e4e9a8fc7834": false,
+      "cmdr:Google Calendar: Open gCal week view": false,
       "darlal-switcher-plus:Open in Headings Mode": true,
       "darlal-switcher-plus:Open Symbols for the active editor": true,
       "templater-obsidian:Templater": true,
       "quick-tagger:Add tag to current note": true,
       "quick-tagger:Remove tag from current note": true,
-      "cmdr:Google Calendar: Open gCal week view": false,
       "pinned-notes:Pomodoro": false,
-      "pinned-notes:Read It Later": false,
       "pinned-notes:Logistics": false,
       "ribbon-divider:ribbon-divider-cb86a7cb-7e64-467d-b89d-2c69120994bf": false,
       "ribbon-divider:ribbon-divider-36ef3d98-08ff-4dc5-ae9e-d9b4d0ebc3c9": true,
@@ -213,54 +171,55 @@
       "omnisearch:Omnisearch": true
     }
   },
-  "active": "42c83d948974b330",
+  "active": "444b15853621c1ac",
   "lastOpenFiles": [
-    "Extras/Unkown/How Platform engineers support Data Scientist.md",
-    "Resources/Sticky Notes/Capture Ideas.md",
-    "Resources/Kanban Tasks/Meeting with Bali Dimitra.md",
-    "Extras/Unkown/DT-AICC Leivadara Vasiliki.md",
-    "Extras/Unkown/DT-AICC Bali Dimitra.md",
-    "Areas/DT-AICC.md",
-    "Extras/Unkown/mike-dashboard.md",
-    "Extras/Unkown/Login n8n, argocd, langfuse, litellm.md",
-    "Extras/Unkown/DT-AICC Paul.md",
-    "Untitled.md",
-    "Resources/Kanban Tasks/Ask for Perplexity Pro subscription.md",
-    "Resources/Calendar Events/Hermetica check presentation tools and setup.md",
-    "Extras/Unkown/image.png",
-    "Extras/Unkown/tattoo-pain-tricks.md",
-    "Resources/Calendar Events/Hermetica check compliance.md",
-    "Extras/Unkown/hermetica use case, first iteration.md",
-    "Extras/Unkown/1st iteration internal architecture.excalidraw.md",
-    "Extras/Unkown/Hermetica Use case AI-Powered Analysis of Board Materials.md",
+    "mike-readitlater/mike-readitlater.md",
+    "mike-readitlater",
+    "Resources/This is a test resource.md",
+    "Resources/test-2.md",
+    "test.md",
+    "Extras/Templates/PARA/project.md",
+    "Extras/Templates/PARA/area.md",
+    "Dashboards/PARA.canvas",
+    "Extras/Templates/PARA/archive.md",
+    "Extras/Templates/PARA/resource copy 3.md",
+    "Extras/Templates/PARA/resource copy 2.md",
+    "Extras/Templates/PARA/resource copy.md",
+    "Extras/Templates/PARA/resource.md",
+    "Extras/Templates/PARA",
+    "Projects/Tasks/Go to std.md",
+    "Extras/Bases/PARA-Archives.base",
+    "Resources/Shortcuts/050_Shortcuts.md",
+    "Extras/Bases/PARA-Resources.base",
+    "Extras/Bases/PARA-Areas.base",
+    "Extras/Bases/PARA-Projects.base",
     "Projects/mike-hermetica.md",
-    "Resources/Kanban Tasks/Tool for easy context to llm.md",
+    "Dashboards/Discovery.canvas",
+    "Extras/Bases/sticky-notes.base",
+    "Extras/Bases/readitlater.base",
+    "Extras/Bases",
+    "Resources/life-ideas.md",
+    "Areas/mike-people.md",
+    "Archives/mike-kanban.md",
+    "Archives/mike-dashboard-archive.md",
+    "Resources/Work Tasks.md",
+    "Resources/Work.md",
+    "Resources/Nightly Routine Tasks.md",
+    "Resources/Morning Routine Tasks.md",
+    "Resources/monthly-event-note-template.md",
+    "Resources/Monthly Habits.md",
+    "Projects/Tasks/Kanban Tasks/True Barbers Barbershop - 03 Απρ 2025 17-00.md",
+    "Resources/People",
     "Dashboards/Fitness.canvas",
-    "Extras/Unkown/image-1.png",
-    "Archives/Recurring Tasks.md",
-    "Extras/Exercises/Push-Ups.md",
-    "Areas/mike-fitness-progress.md",
-    "Extras/Exercises/Bicep Curl.md",
-    "Extras/Exercises/Squats.md",
-    "Extras/Exercises/Burpees.md",
-    "Extras/Exercises/Hanging Leg Raise.md",
-    "Extras/Exercises",
-    "Recording 20250610172530.m4a",
-    "Extras/Images/image-1 2.png",
-    "Extras/Images/image 2.png",
-    "Untitled.base",
-    "Extras/Templates/Calendar/calendar-event.md.tmp",
-    "Extras/Images/adv_2 1.png",
-    "Extras/Images/19852122_6195005 1.jpg",
-    "Extras/Images/Pasted image 20230123152247 1.png",
-    "Extras/Images/DT-mike-1742554599291 1.webp",
-    "Extras/Images/adv_3 1.png",
-    "Extras/Images/DSC00848 1.jpg",
-    "Pictures",
-    "Resources/Calendar Events",
-    "Extras/Templates/Calendar",
-    "Extras/Templates/Projects/DT-AICC",
-    "Resources/Kanban Tasks",
-    "Extras/Templates/Projects"
+    "Extras/Images/AI - Documentation-1749650022821.webp",
+    "Extras/Images/Meeting with Vasiliki at Tuesday-1749638933998.webp",
+    "Extras/Unkown/image-6.png",
+    "Extras/Unkown/image-5.png",
+    "Extras/Unkown/image-4.png",
+    "Extras/Unkown/image-3.png",
+    "Extras/Unkown/image-2.png",
+    "Extras/Unkown/image-1 1.png",
+    "Extras/Unkown/image 1.png",
+    "Extras/Unkown/image.png"
   ]
 }

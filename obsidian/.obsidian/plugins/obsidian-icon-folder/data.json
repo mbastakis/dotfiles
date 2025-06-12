@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
-      "OcTasklist24",
-      "TiGymnastics",
-      "TiRun",
-      "LiDumbbell",
-      "LiCalendar"
+      "RiOrganizationChart",
+      "RiStickyNoteFill",
+      "FasMagnifyingGlass",
+      "LiEye",
+      "LiFilter"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [
@@ -59,12 +59,30 @@
     "debugMode": false,
     "useInternalPlugins": false
   },
-  "Projects": "OcProject16",
-  "Areas": "BoBxCollection",
-  "Resources": "TiNotes",
-  "Archives": "LiArchive",
-  "Dashboards": "IbDashboard",
-  "Extras": "SiMeta",
+  "Projects": {
+    "iconName": "OcProject16",
+    "iconColor": "#6af081"
+  },
+  "Areas": {
+    "iconName": "BoBxCollection",
+    "iconColor": "#6af081"
+  },
+  "Resources": {
+    "iconName": "TiNotes",
+    "iconColor": "#6af08a"
+  },
+  "Archives": {
+    "iconName": "LiArchive",
+    "iconColor": "#6af08a"
+  },
+  "Dashboards": {
+    "iconName": "IbDashboard",
+    "iconColor": "#7f8cf0"
+  },
+  "Extras": {
+    "iconName": "SiMeta",
+    "iconColor": "#f06a7f"
+  },
   "Extras/Excalidraw": "SiExcalidraw",
   "Extras/Images": "LiImages",
   "Extras/PDF": "FarFilePdf",
@@ -102,9 +120,6 @@
   "Areas/mike-logistics.md": {
     "iconName": "FasDollarSign"
   },
-  "Areas/mike-kanban.md": {
-    "iconName": "LiSquareKanban"
-  },
   "Areas/DT-mike.md": {
     "iconName": "SiWorkplace"
   },
@@ -124,7 +139,6 @@
   "Resources/Shortcuts/Shortcuts.md": {
     "iconName": "SiShortcut"
   },
-  "Resources/xara-notes.md": "👩",
   "Resources/warp.md": "SiWarp",
   "Resources/vscode.md": "TiBrandVscode",
   "Resources/to-be-packaged.md": "LiPlane",
@@ -135,56 +149,18 @@
   "Resources/mac-setup.md": {
     "iconName": "RiMacbookLine"
   },
-  "Resources/kyverno-presentation.md": {
-    "iconName": "SiSlides"
-  },
-  "Resources/kyverno-destruction-job.md": {
-    "iconName": "RiTaskLine"
-  },
-  "Resources/kyverno argocd fix, from docs.md": {
-    "iconName": "RiTaskLine"
-  },
+  "Resources/kyverno-presentation.md": "SiSlides",
   "Resources/iTerm2.md": "SiIterm2",
-  "Resources/dt-task-template.md": {
-    "iconName": "RiTaskLine"
-  },
-  "Resources/dt-question-template.md": {
-    "iconName": "FasQuestion"
-  },
-  "Resources/dt-info-template.md": {
-    "iconName": "LiInfo"
-  },
-  "Resources/daily-note-template.md": {
-    "iconName": "LiNotebookPen"
-  },
-  "Resources/ca certificates.md": {
-    "iconName": "FasQuestion"
-  },
   "Resources/Vivaldi.md": "SiVivaldi",
-  "Resources/Setup kyverno to pull from artifactory.md": {
-    "iconName": "RiTaskLine"
-  },
   "Resources/Raycast.md": "SiRaycast",
   "Resources/Quick Sticky Notes.md": "LiStickyNote",
   "Resources/Perplexity.md": "SiPerplexity",
   "Resources/Obsidian Web Clipper.md": "LiClipboardPaste",
   "Resources/Obsidian Clipper VScode Extension.md": "LiClipboardPlus",
   "Resources/Google Calendar.md": "LiCalendar",
-  "Resources/GitOps transition.md": {
-    "iconName": "RiTaskLine"
-  },
-  "Resources/Fix gitlab runner deprecated keys.md": {
-    "iconName": "RiTaskLine"
-  },
   "Resources/Edge Browser.md": "FabEdge",
-  "Resources/Call with Philipe.md": {
-    "iconName": "RiTaskLine"
-  },
   "Resources/AWS SSA Certification Info.md": {
     "iconName": "LiInfo"
-  },
-  "Resources/AICC meetup.md": {
-    "iconName": "RiTaskLine"
   },
   "Resources/AI - Documentation.md": "RiAiGenerate",
   "Resources/OCR.md": {
@@ -199,7 +175,6 @@
   "Projects/mike-hermetica.md": {
     "iconName": "CoFileDocument"
   },
-  "Resources/Kanban Tasks": "RiTaskLine",
   "Extras/Templates/Projects/kanban-card.md": {
     "iconName": "OcTasklist24"
   },
@@ -208,22 +183,6 @@
   },
   "Extras/Templates/Calendar/calendar-event.md": {
     "iconName": "CoCalendarEvent"
-  },
-  "Resources/Calendar Events": "LiCalendar",
-  "Resources/Calendar Events/Hermetica check compliance.md": {
-    "iconName": "CoCalendarEvent"
-  },
-  "Resources/Calendar Events/Hermetica check presentation tools and setup.md": {
-    "iconName": "CoCalendarEvent"
-  },
-  "Resources/Kanban Tasks/iPad.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Resources/Kanban Tasks/fitness dashboard.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Resources/Kanban Tasks/Ask for a DTTL Teams Account, and ask for accesses.md": {
-    "iconName": "OcTasklist24"
   },
   "Resources/Obsidian.md": "SiObsidian",
   "Dashboards/Fitness.canvas": "TiRun",
@@ -261,13 +220,102 @@
   "Extras/Exercises/Handstand.md": {
     "iconName": "LiDumbbell"
   },
-  "Resources/Kanban Tasks/Tool for easy context to llm.md": {
+  "Calendar": {
+    "iconName": "LiCalendar",
+    "iconColor": "#6af0ee"
+  },
+  "Calendar/Calendar Events": "LiCalendar",
+  "Calendar/Calendar Events/Hermetica check compliance.md": {
+    "iconName": "CoCalendarEvent"
+  },
+  "Calendar/Calendar Events/Hermetica check presentation tools and setup.md": {
+    "iconName": "CoCalendarEvent"
+  },
+  "Projects/Tasks": "OcTasklist16",
+  "Projects/Tasks/Kanban Tasks": "RiTaskLine",
+  "Projects/Tasks/Kanban Tasks/Ask for Perplexity Pro subscription.md": {
     "iconName": "OcTasklist24"
   },
-  "Resources/Kanban Tasks/Ask for Perplexity Pro subscription.md": {
+  "Projects/Tasks/Kanban Tasks/Ask for a DTTL Teams Account, and ask for accesses.md": {
     "iconName": "OcTasklist24"
   },
-  "Resources/Kanban Tasks/Meeting with Bali Dimitra.md": {
+  "Projects/Tasks/Kanban Tasks/Check Atlas and ACE Systems.md": {
     "iconName": "OcTasklist24"
-  }
+  },
+  "Projects/Tasks/Kanban Tasks/Meeting with Bali Dimitra.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/Tool for easy context to llm.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/fitness dashboard.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/iPad.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/DT Tasks": "RiTaskLine",
+  "Projects/Tasks/Kanban Tasks/Refactor Resources, Make atomic notes.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/Make global Tasks dashboard.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/DT Tasks/Get access to the Kanban Board.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/DT Tasks/Go to aws Playground.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/DT Tasks/2 Jul Abishek check .md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/DT Tasks/Contact Nickel get kanban board access.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/DT Tasks/Create an onboarding ticket.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/DT Tasks/Azure & GCP contact dimitra.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/DT Tasks/Ask Paul the script for aws login.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/DT Tasks/AICC meetup.md": {
+    "iconName": "RiTaskLine"
+  },
+  "Projects/Tasks/DT Tasks/ca certificates.md": {
+    "iconName": "FasQuestion"
+  },
+  "Projects/Tasks/DT Tasks/Call with Philipe.md": {
+    "iconName": "RiTaskLine"
+  },
+  "Projects/Tasks/DT Tasks/GitOps transition.md": {
+    "iconName": "RiTaskLine"
+  },
+  "Projects/Tasks/DT Tasks/Fix gitlab runner deprecated keys.md": {
+    "iconName": "RiTaskLine"
+  },
+  "Projects/Tasks/DT Tasks/kyverno-destruction-job.md": {
+    "iconName": "RiTaskLine"
+  },
+  "Projects/Tasks/DT Tasks/kyverno argocd fix, from docs.md": {
+    "iconName": "RiTaskLine"
+  },
+  "Resources/Tutorials/MetaBind Tutorial.md": "CoNote",
+  "Resources/Tutorials": "TiInfoSquare",
+  "Projects/Tasks/DT Tasks/Setup kyverno to pull from artifactory.md": {
+    "iconName": "RiTaskLine"
+  },
+  "Resources/People": "OcPeople16",
+  "Resources/People/xara-notes.md": "👩",
+  "Archives/mike-kanban.md": {
+    "iconName": "LiSquareKanban"
+  },
+  "Extras/Bases": "LiFilter",
+  "Extras/Bases/readitlater.base": "LiEye",
+  "Dashboards/Discovery.canvas": "FasMagnifyingGlass",
+  "Extras/Bases/sticky-notes.base": "RiStickyNoteFill",
+  "Dashboards/PARA.canvas": "RiOrganizationChart"
 }

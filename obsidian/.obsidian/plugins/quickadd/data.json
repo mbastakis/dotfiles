@@ -3,7 +3,7 @@
   "macros": [],
   "inputPrompt": "single-line",
   "devMode": false,
-  "templateFolderPath": "",
+  "templateFolderPath": "Extras/Templates",
   "announceUpdates": true,
   "version": "1.13.3",
   "disableOnlineFeatures": true,

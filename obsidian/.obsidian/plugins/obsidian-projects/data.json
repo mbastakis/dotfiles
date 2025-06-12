@@ -27,7 +27,7 @@
           "hierarchy": false
         }
       },
-      "newNotesFolder": "Resources/Kanban Tasks",
+      "newNotesFolder": "Projects/Tasks/Kanban Tasks",
       "views": [
         {
           "config": {
@@ -92,11 +92,13 @@
               "InProgress": {
                 "weight": 4,
                 "records": [
+                  "Resources/Kanban Tasks/Check Atlas and ACE Systems.md",
                   "Resources/Calendar Events/Hermetica check presentation tools and setup.md",
                   "Resources/Calendar Events/Hermetica check compliance.md",
                   "Resources/Sticky Notes/Capture Ideas.md",
                   "Extras/Unkown/How Platform engineers support Data Scientist.md",
-                  "Extras/Unkown/configure glove80.md"
+                  "Extras/Unkown/configure glove80.md",
+                  "Resources/Kanban Tasks/Tool for easy context to llm.md"
                 ],
                 "collapse": false
               },
@@ -189,7 +191,7 @@
           "hierarchy": false
         }
       },
-      "newNotesFolder": "Resources/Kanban Tasks",
+      "newNotesFolder": "Projects/Tasks/DT Tasks",
       "views": [
         {
           "config": {
@@ -212,11 +214,10 @@
               "InProgress": {
                 "weight": 2,
                 "records": [
-                  "Resources/Kanban Tasks/Ask for Perplexity Pro subscription.md",
-                  "Resources/Kanban Tasks/Meeting with Bali Dimitra.md",
+                  "Projects/Tasks/Kanban Tasks/Meeting with Bali Dimitra.md",
                   "Extras/Unkown/Meeting with Vasiliki at Tuesday.md",
                   "Extras/Unkown/Get Access to Slack.md",
-                  "Extras/Unkown/Schedule Meeting with Aayush.md"
+                  "Projects/Tasks/Kanban Tasks/Ask for Perplexity Pro subscription.md"
                 ]
               },
               "ToReport": {
@@ -224,7 +225,8 @@
                 "records": [
                   "Extras/Unkown/Get Access to Tools Account.md",
                   "Resources/Kanban Tasks/Ask for a DTTL Teams Account, and ask for accesses.md",
-                  "Extras/Unkown/Get Access to TelekomWiki.md"
+                  "Extras/Unkown/Get Access to TelekomWiki.md",
+                  "Extras/Unkown/Schedule Meeting with Aayush.md"
                 ]
               }
             }
