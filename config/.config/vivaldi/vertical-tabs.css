@@ -1,5 +1,5 @@
 :root {
-  --tabs-collapsed-width: 32px;     /* Width when collapsed (matches your default) */
+  --tabs-collapsed-width: 40px;     /* Width when collapsed (matches your default) */
   --tabs-expanded-width: 250px;     /* Width when expanded on hover */
   --tabs-transition-speed: 0.25s;   /* Animation speed for smooth transition */
 }
