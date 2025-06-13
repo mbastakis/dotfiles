@@ -4,29 +4,47 @@
     "type": "split",
     "children": [
       {
-        "id": "b9a820138ac51770",
+        "id": "9a70cbf34068b745",
         "type": "tabs",
         "children": [
           {
-            "id": "70008d7ec34fdc89",
+            "id": "3e5b4a3cef3d8257",
             "type": "leaf",
-            "pinned": true,
+            "state": {
+              "type": "beautitab-react-view",
+              "state": {},
+              "title": "New tab"
+            }
+          },
+          {
+            "id": "17bc39562037bef6",
+            "type": "leaf",
             "state": {
               "type": "canvas",
               "state": {
-                "file": "Dashboards/Dashboards.canvas",
+                "file": "Dashboards/Home.canvas",
                 "viewState": {
                   "x": 365.5,
-                  "y": -777.5,
-                  "zoom": -0.4533242952789738
+                  "y": -817.5,
+                  "zoom": -0.3479860946612851
                 }
               },
-              "pinned": true,
               "icon": "lucide-layout-dashboard",
-              "title": "Dashboards"
+              "title": "Home"
+            }
+          },
+          {
+            "id": "d785e8630b34c246",
+            "type": "leaf",
+            "state": {
+              "type": "obsidian-projects",
+              "state": {},
+              "icon": "projects-icon",
+              "title": "Projects"
             }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -181,14 +199,35 @@
       "omnisearch:Omnisearch": true
     }
   },
-  "active": "70008d7ec34fdc89",
+  "active": "d785e8630b34c246",
   "lastOpenFiles": [
-    "Dashboards/Dashboards.canvas",
-    "Resources/Tutorials/MetaBind Tutorial.md",
-    "Dashboards/PARA.canvas",
+    "Resources/Sticky Notes/Capture Ideas.md",
+    "Extras/Images/Capture Ideas-1749848813433.webp",
+    "Extras/Images/Capture Ideas-1749848781338.webp",
+    "Extras/Images/2025/06/image",
+    "Extras/Images/2025/06",
+    "Extras/Images/2025",
+    "Resources/xara-notes.md",
+    "Extras/Images/image 3.png",
+    "Projects/Tasks/Kanban Tasks/Find a good prompt versioning and testing system.md",
+    "Dashboards/Home.canvas",
+    "Resources/Weblist/RAG  IBM.md",
+    "Resources/RAG.md",
     "Dashboards/Fitness.canvas",
-    "Dashboards/Discovery.canvas",
     "Dashboards/Global Tasks.canvas",
+    "Dashboards/Discovery.canvas",
+    "Archives/bootstrap-obsidian-guidelines.md",
+    "Extras/Unkown/Obsidian Workflow Organization.md",
+    "Extras/Unkown/readitlater_template.md",
+    "Resources/Simple RAG Architecture.md",
+    "Projects/Tasks/Kanban Tasks/Make global Tasks dashboard.md",
+    "Projects/Tasks/Kanban Tasks/Create command to start and stop all local AI.md",
+    "Projects/Tasks/Kanban Tasks/Add warp workflows to .dotfiles.md",
+    "Extras/Unkown/Dashboard.md",
+    "Dashboards/PARA.canvas",
+    "Resources/Shortcuts/obsidian-shortcuts.md",
+    "Extras/Unkown/mike-dashboard.md",
+    "Resources/Tutorials/MetaBind Tutorial.md",
     "Extras/Filters/Tasks.md",
     "Projects/Tasks/Kanban Tasks/testing.md",
     "Extras/Filters/sticky-notes.base",
@@ -199,39 +238,18 @@
     "Resources/MCP.md",
     "Resources/AI vs ML.md",
     "Resources/SSL (Self Supervised Learning).md",
-    "Resources/Deep Learning.md",
-    "Resources/Generative AI.md",
-    "Resources/Midjourney Cheatsheet.md",
-    "Areas/Documentation/AI - Documentation.md",
     "Areas/Documentation",
-    "Resources/RAG.md",
-    "Resources/ChatGPT Cheatsheet.md",
-    "Resources/SL (Supervised Learning).md",
     "Extras/Images/MCP-1749725660370.webp",
-    "Calendar/Calendar Events/Hermetica check compliance.md",
-    "Extras/Unkown/hermetica use case, first iteration.md",
-    "Projects/mike-hermetica.md",
-    "Resources/LLM Compliance.md",
-    "Projects/Tasks/Kanban Tasks/Sync obsidian, CouchDB.md",
-    "Extras/Unkown/Architect the new Obsidian Vault.md",
-    "Extras/Unkown/Add search query to data view.md",
-    "mike-readitlater/mike-readitlater.md",
     "mike-readitlater",
     "Extras/Templates/PARA",
     "Extras/Filters/PARA-Archives.base",
     "Extras/Filters/PARA-Resources.base",
     "Extras/Filters/PARA-Areas.base",
-    "Extras/Filters/PARA-Projects.base",
-    "Extras/Filters/readitlater.base",
-    "Extras/Filters",
     "Extras/Images/AI - Documentation-1749650022821.webp",
     "Extras/Images/Meeting with Vasiliki at Tuesday-1749638933998.webp",
     "Extras/Unkown/image-6.png",
     "Extras/Unkown/image-5.png",
     "Extras/Unkown/image-4.png",
-    "Extras/Unkown/image-3.png",
-    "Extras/Unkown/image-2.png",
-    "Extras/Unkown/image-1 1.png",
-    "Extras/Unkown/image 1.png"
+    "Extras/Unkown/image-3.png"
   ]
 }

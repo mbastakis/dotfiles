@@ -70,10 +70,10 @@
     "canvas"
   ],
   "matchPriorityAdjustments": {
-    "isEnabled": false,
+    "isEnabled": true,
     "adjustments": {
       "isOpenInEditor": {
-        "value": 0,
+        "value": -0.1,
         "label": "Open items"
       },
       "isBookmarked": {
@@ -81,7 +81,7 @@
         "label": "Bookmarked items"
       },
       "isRecent": {
-        "value": 0,
+        "value": 0.2,
         "label": "Recent items"
       },
       "isAttachment": {
@@ -107,7 +107,7 @@
     },
     "fileExtAdjustments": {
       "canvas": {
-        "value": 0,
+        "value": 1,
         "label": "Canvas files"
       }
     }
@@ -421,5 +421,32 @@
       ],
       "key": "f"
     }
+  },
+  "openInBackground": {
+    "isEnabled": true,
+    "openKeys": [
+      {
+        "openType": "tab",
+        "hotkey": {
+          "modifiers": [
+            "Mod",
+            "Shift"
+          ],
+          "key": "t"
+        }
+      },
+      {
+        "openType": "vertical",
+        "hotkey": null
+      },
+      {
+        "openType": "horizontal",
+        "hotkey": null
+      },
+      {
+        "openType": "window",
+        "hotkey": null
+      }
+    ]
   }
 }

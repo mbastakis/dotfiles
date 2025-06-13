@@ -324,5 +324,14 @@
   "Areas/Documentation/AI - Documentation.md": "RiAiGenerate",
   "Extras/Filters/Tasks.md": "OcTasklist16",
   "Dashboards/Global Tasks.canvas": "BoBxTask",
-  "Dashboards/Dashboards.canvas": "IbDashboard"
+  "Dashboards/Home.canvas": "IbDashboard",
+  "Projects/Tasks/Kanban Tasks/Add warp workflows to .dotfiles.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/Create command to start and stop all local AI.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/Find a good prompt versioning and testing system.md": {
+    "iconName": "OcTasklist24"
+  }
 }

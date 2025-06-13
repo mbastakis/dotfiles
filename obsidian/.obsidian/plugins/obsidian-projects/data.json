@@ -91,7 +91,9 @@
               "InProgress": {
                 "weight": 4,
                 "records": [
-                  "Projects/Tasks/Kanban Tasks/Make global Tasks dashboard.md",
+                  "Projects/Tasks/Kanban Tasks/Add warp workflows to .dotfiles.md",
+                  "Projects/Tasks/Kanban Tasks/Create command to start and stop all local AI.md",
+                  "Projects/Tasks/Kanban Tasks/Find a good prompt versioning and testing system.md",
                   "Resources/Sticky Notes/Capture Ideas.md",
                   "Extras/Unkown/How Platform engineers support Data Scientist.md",
                   "Extras/Unkown/configure glove80.md",

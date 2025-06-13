@@ -58,14 +58,6 @@
     }
   ],
   "switcher:open": [],
-  "darlal-switcher-plus:switcher-plus:open": [
-    {
-      "modifiers": [
-        "Mod"
-      ],
-      "key": "O"
-    }
-  ],
   "app:open-settings": [
     {
       "modifiers": [
@@ -160,6 +152,23 @@
         "Shift"
       ],
       "key": "E"
+    }
+  ],
+  "darlal-switcher-plus:switcher-plus:open-editors": [
+    {
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ],
+      "key": "O"
+    }
+  ],
+  "darlal-switcher-plus:switcher-plus:open-headings": [
+    {
+      "modifiers": [
+        "Mod"
+      ],
+      "key": "O"
     }
   ]
 }
