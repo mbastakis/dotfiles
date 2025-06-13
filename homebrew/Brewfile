@@ -15,6 +15,7 @@ brew "autojump"    # Directory navigation
 brew "diff-so-fancy" # Improved diff output
 brew "jq"          # JSON processor
 brew "navi"        # Interactive cheat sheets
+brew "yamllint"             # YAML linter
 
 # Fonts
 cask "font-jetbrains-mono" # JetBrains Mono font

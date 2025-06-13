@@ -1,5 +1,4 @@
 # Brewfile.apps - GUI applications
-# TODO: I should split this to MAC and Linux specific apps
 
 # Taps - External repositories
 tap "felixkratz/formulae"   # For sketchybar
@@ -22,8 +21,6 @@ cask "visual-studio-code@insiders" # Insiders version of VSCode
 cask "iterm2"               # Terminal emulator
 cask "karabiner-elements"   # Keyboard customizer
 cask "warp"                 # Terminal emulator
-brew "gitlab-runner"        # GitLab CI/CD runner
-brew "yamllint"             # YAML linter
 
 # AI
 cask "chatgpt"          # ChatGPT desktop app
