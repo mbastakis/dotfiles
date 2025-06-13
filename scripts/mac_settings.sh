@@ -222,7 +222,7 @@ main() {
     parse_arguments "$@"
     
     # Apply settings
-    set_computer_name
+    # set_computer_name
     configure_dock
     configure_finder
     configure_screenshots
