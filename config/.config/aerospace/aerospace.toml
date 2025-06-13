@@ -69,6 +69,14 @@ if.app-name-regex-substring = 'Microsoft Teams'
 run = 'move-node-to-workspace u'
 
 [[on-window-detected]]
+if.app-name-regex-substring = 'Slack'
+run = 'move-node-to-workspace u'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Tome'
+run = 'move-node-to-workspace u'
+
+[[on-window-detected]]
 if.app-name-regex-substring = 'ChatGPT'
 run = 'move-node-to-workspace u'
 
