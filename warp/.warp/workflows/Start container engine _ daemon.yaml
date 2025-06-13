@@ -1,0 +1,10 @@
+---
+name: Start container engine / daemon
+command: colima start
+description: "This command starts colima, a container engine"
+arguments: []
+tags: []
+source_url: ~
+author: ~
+author_url: ~
+shells: []

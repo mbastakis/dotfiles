@@ -1,0 +1,10 @@
+---
+name: k9s
+command: ""
+description: Opens k9s dashboard. This dashboard is used to visualize kubernetes clusters
+arguments: []
+tags: []
+source_url: ~
+author: ~
+author_url: ~
+shells: []

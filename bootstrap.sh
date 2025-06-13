@@ -33,6 +33,7 @@ configs=(
     "shell"
     "git"
     "docker"
+    "warp"
 )
 
 for config in "${configs[@]}"; do
