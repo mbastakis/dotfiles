@@ -182,7 +182,7 @@
   "generalSettings": {},
   "headingOpened": {
     "Core Statuses": false,
-    "Custom Statuses": false
+    "Custom Statuses": true
   },
   "debugSettings": {
     "ignoreSortInstructions": false,

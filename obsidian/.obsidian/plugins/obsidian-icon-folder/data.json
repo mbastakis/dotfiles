@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "CoCalendarEvent",
       "IbDashboard",
       "BoBxTask",
       "OcTasklist16",
-      "LiFiles",
-      "OcTasklist24"
+      "LiFiles"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [
@@ -227,9 +227,6 @@
   "Calendar/Calendar Events/Hermetica check compliance.md": {
     "iconName": "CoCalendarEvent"
   },
-  "Calendar/Calendar Events/Hermetica check presentation tools and setup.md": {
-    "iconName": "CoCalendarEvent"
-  },
   "Projects/Tasks": "OcTasklist16",
   "Projects/Tasks/Kanban Tasks": "RiTaskLine",
   "Projects/Tasks/Kanban Tasks/Ask for Perplexity Pro subscription.md": {
@@ -333,5 +330,11 @@
   },
   "Projects/Tasks/Kanban Tasks/Find a good prompt versioning and testing system.md": {
     "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/Check opencode.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Calendar/Calendar Events/Hermetic presentation tools, setup, slides.md": {
+    "iconName": "CoCalendarEvent"
   }
 }

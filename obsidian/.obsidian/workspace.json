@@ -8,32 +8,6 @@
         "type": "tabs",
         "children": [
           {
-            "id": "3e5b4a3cef3d8257",
-            "type": "leaf",
-            "state": {
-              "type": "beautitab-react-view",
-              "state": {},
-              "title": "New tab"
-            }
-          },
-          {
-            "id": "17bc39562037bef6",
-            "type": "leaf",
-            "state": {
-              "type": "canvas",
-              "state": {
-                "file": "Dashboards/Home.canvas",
-                "viewState": {
-                  "x": 365.5,
-                  "y": -817.5,
-                  "zoom": -0.3479860946612851
-                }
-              },
-              "icon": "lucide-layout-dashboard",
-              "title": "Home"
-            }
-          },
-          {
             "id": "d785e8630b34c246",
             "type": "leaf",
             "state": {
@@ -41,6 +15,36 @@
               "state": {},
               "icon": "projects-icon",
               "title": "Projects"
+            }
+          },
+          {
+            "id": "2ecb49e8216f09b1",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Calendar/Calendar Events/Hermetic presentation tools, setup, slides.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "Hermetic presentation tools, setup, slides"
+            }
+          },
+          {
+            "id": "b61ae711802c4bf7",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Extras/Unkown/hermetica use case, first iteration.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "hermetica use case, first iteration"
             }
           }
         ],
@@ -101,7 +105,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 235.5010757446289
+    "width": 235.5010757446289,
+    "collapsed": true
   },
   "right": {
     "id": "45a4c33d2d217b48",
@@ -199,9 +204,22 @@
       "omnisearch:Omnisearch": true
     }
   },
-  "active": "d785e8630b34c246",
+  "active": "b61ae711802c4bf7",
   "lastOpenFiles": [
+    "Calendar/Calendar Events/Hermetic presentation tools, setup, slides.md",
+    "Dashboards/Home.canvas",
+    "Extras/Unkown/hermetica use case, first iteration.md",
+    "Extras/Images/Hermetic presentation tools, setup, slides-1749887996610.webp",
+    "Extras/Images/Hermetic presentation tools, setup, slides-1749867487892.webp",
+    "Extras/Images/Hermetic presentation tools, setup, slides-1749867477836.webp",
+    "Extras/Images/Hermetic presentation tools, setup, slides-1749867463743.webp",
+    "Resources/ChatGPT Cheatsheet.md",
+    "Projects/mike-hermetica.md",
     "Resources/Sticky Notes/Capture Ideas.md",
+    "Calendar/Calendar Events/Hermetica check compliance.md",
+    "Projects/Tasks/Kanban Tasks/Check opencode.md",
+    "Projects/Tasks/Kanban Tasks/Add warp workflows to .dotfiles.md",
+    "k9s.yaml",
     "Extras/Images/Capture Ideas-1749848813433.webp",
     "Extras/Images/Capture Ideas-1749848781338.webp",
     "Extras/Images/2025/06/image",
@@ -210,7 +228,6 @@
     "Resources/xara-notes.md",
     "Extras/Images/image 3.png",
     "Projects/Tasks/Kanban Tasks/Find a good prompt versioning and testing system.md",
-    "Dashboards/Home.canvas",
     "Resources/Weblist/RAG  IBM.md",
     "Resources/RAG.md",
     "Dashboards/Fitness.canvas",
@@ -222,7 +239,6 @@
     "Resources/Simple RAG Architecture.md",
     "Projects/Tasks/Kanban Tasks/Make global Tasks dashboard.md",
     "Projects/Tasks/Kanban Tasks/Create command to start and stop all local AI.md",
-    "Projects/Tasks/Kanban Tasks/Add warp workflows to .dotfiles.md",
     "Extras/Unkown/Dashboard.md",
     "Dashboards/PARA.canvas",
     "Resources/Shortcuts/obsidian-shortcuts.md",
@@ -232,24 +248,13 @@
     "Projects/Tasks/Kanban Tasks/testing.md",
     "Extras/Filters/sticky-notes.base",
     "Archives/mike-kanban.md",
-    "Projects/Tasks/Kanban Tasks/True Barbers Barbershop - 03 Απρ 2025 17-00.md",
-    "Archives/daily-note-template v.0.0.1.md",
-    "Archives/daily-note-template v.0.0.1 1.md",
-    "Resources/MCP.md",
-    "Resources/AI vs ML.md",
-    "Resources/SSL (Self Supervised Learning).md",
     "Areas/Documentation",
     "Extras/Images/MCP-1749725660370.webp",
     "mike-readitlater",
     "Extras/Templates/PARA",
     "Extras/Filters/PARA-Archives.base",
     "Extras/Filters/PARA-Resources.base",
-    "Extras/Filters/PARA-Areas.base",
     "Extras/Images/AI - Documentation-1749650022821.webp",
-    "Extras/Images/Meeting with Vasiliki at Tuesday-1749638933998.webp",
-    "Extras/Unkown/image-6.png",
-    "Extras/Unkown/image-5.png",
-    "Extras/Unkown/image-4.png",
-    "Extras/Unkown/image-3.png"
+    "Extras/Images/Meeting with Vasiliki at Tuesday-1749638933998.webp"
   ]
 }
