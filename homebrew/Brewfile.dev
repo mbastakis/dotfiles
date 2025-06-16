@@ -4,7 +4,7 @@ tap "oven-sh/bun" # Tap for Bun JavaScript runtime
 
 # Languages and runtimes
 brew "node"             # JavaScript runtime
-brew "bun" # Bun JavaScript runtime
+brew "bun"              # Bun JavaScript runtime
 brew "python"           # Python language
 brew "go"               # Go language
 brew "rust"             # Rust language
@@ -42,3 +42,5 @@ brew "mysql"            # MySQL database
 brew "jq"               # JSON processor
 brew "yq"               # YAML processor
 brew "httpie"           # HTTP client
+brew "uv"               # Universal version manager
+brew "pyenv"            # Python version management
