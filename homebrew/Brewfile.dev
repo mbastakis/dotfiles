@@ -1,7 +1,10 @@
 # Brewfile.dev - Development tools
 
+tap "oven-sh/bun" # Tap for Bun JavaScript runtime
+
 # Languages and runtimes
 brew "node"             # JavaScript runtime
+brew "bun" # Bun JavaScript runtime
 brew "python"           # Python language
 brew "go"               # Go language
 brew "rust"             # Rust language
@@ -15,6 +18,7 @@ brew "lazygit"          # Terminal UI for git
 
 # Containers
 brew "docker"           # Containerization
+brew "docker-compose"    # Docker Compose for multi-container applications
 brew "docker-credential-helper" # Docker credential helper
 brew "colima"            # Container management tool
 
