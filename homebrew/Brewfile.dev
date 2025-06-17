@@ -12,6 +12,7 @@ brew "openjdk"          # Java Development Kit
 brew "lua"              # Lua programming language
 
 # Version control
+brew "git-filter-repo"  # Tool to filter repo history
 brew "gh"               # GitHub CLI
 brew "glab"             # GitLab CLI
 brew "git-lfs"          # Git Large File Storage
