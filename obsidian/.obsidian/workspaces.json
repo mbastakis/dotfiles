@@ -10,25 +10,32 @@
             "type": "tabs",
             "children": [
               {
-                "id": "70008d7ec34fdc89",
+                "id": "0702aa6b6d7cc896",
                 "type": "leaf",
-                "pinned": true,
                 "state": {
-                  "type": "canvas",
+                  "type": "obsidian-projects",
+                  "state": {},
+                  "icon": "projects-icon",
+                  "title": "Projects"
+                }
+              },
+              {
+                "id": "77bbea16c6261fc6",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
                   "state": {
-                    "file": "Dashboards/Dashboards.canvas",
-                    "viewState": {
-                      "x": 365.5,
-                      "y": -777.5,
-                      "zoom": -0.4533242952789738
-                    }
+                    "file": "Calendar/Calendar Events/Hermetic presentation tools, setup, slides.md",
+                    "mode": "source",
+                    "source": false,
+                    "backlinks": false
                   },
-                  "pinned": true,
-                  "icon": "lucide-layout-dashboard",
-                  "title": "Dashboards"
+                  "icon": "lucide-file",
+                  "title": "Hermetic presentation tools, setup, slides"
                 }
               }
-            ]
+            ],
+            "currentTab": 1
           }
         ],
         "direction": "vertical"
@@ -105,8 +112,19 @@
                   "icon": "layout-list",
                   "title": "GCal Schedule View"
                 }
+              },
+              {
+                "id": "4b8fa998d836d332",
+                "type": "leaf",
+                "state": {
+                  "type": "copilot-chat-view",
+                  "state": {},
+                  "icon": "message-square",
+                  "title": "Copilot"
+                }
               }
-            ]
+            ],
+            "currentTab": 1
           },
           {
             "id": "014043c44890df20",
@@ -138,8 +156,7 @@
           }
         ],
         "direction": "horizontal",
-        "width": 326.5,
-        "collapsed": true
+        "width": 326.5
       },
       "left-ribbon": {
         "hiddenItems": {
@@ -150,6 +167,7 @@
           "cmdr:Files: Show file explorer": false,
           "ribbon-divider:ribbon-divider-d6836d41-e02e-4707-a8f9-d737fd521486": false,
           "obsidian-projects:Open projects": false,
+          "copilot:Open Copilot Chat": false,
           "obsidian-excalidraw-plugin:New drawing": false,
           "dashboard-navigator:Open dashboard navigator": false,
           "switcher:Open quick switcher": true,
@@ -183,8 +201,8 @@
           "omnisearch:Omnisearch": true
         }
       },
-      "active": "70008d7ec34fdc89",
-      "mtime": "2025-06-12T14:45:47+03:00"
+      "active": "4b8fa998d836d332",
+      "mtime": "2025-06-16T13:09:05+03:00"
     },
     "loukas-workspace": {
       "main": {

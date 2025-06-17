@@ -40,5 +40,7 @@
   "fold-properties-by-default",
   "omnisearch",
   "beautitab",
-  "obsidian-meta-bind-plugin"
+  "obsidian-meta-bind-plugin",
+  "copilot",
+  "obsidian-local-rest-api"
 ]

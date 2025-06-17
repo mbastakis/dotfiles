@@ -4,30 +4,44 @@
     "type": "split",
     "children": [
       {
-        "id": "478b88c3bdb3860f",
+        "id": "b9a820138ac51770",
         "type": "tabs",
         "children": [
           {
-            "id": "c0525b70e4bdd2d1",
+            "id": "0702aa6b6d7cc896",
             "type": "leaf",
             "state": {
-              "type": "beautitab-react-view",
-              "state": {},
-              "title": "New tab"
+              "type": "canvas",
+              "state": {
+                "file": "Dashboards/Fitness.canvas",
+                "viewState": {
+                  "x": -2330,
+                  "y": -2010,
+                  "zoom": -0.5808180134098715
+                }
+              },
+              "icon": "lucide-layout-dashboard",
+              "title": "Fitness"
             }
           },
           {
-            "id": "a6ba6dee71ed2156",
+            "id": "dad758ee35deccc3",
             "type": "leaf",
             "state": {
-              "type": "obsidian-projects",
-              "state": {},
-              "icon": "projects-icon",
-              "title": "Projects"
+              "type": "canvas",
+              "state": {
+                "file": "Dashboards/Fitness.canvas",
+                "viewState": {
+                  "x": -2330,
+                  "y": -2010,
+                  "zoom": -0.450329411530045
+                }
+              },
+              "icon": "lucide-layout-dashboard",
+              "title": "Fitness"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -84,8 +98,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 235.5010757446289,
-    "collapsed": true
+    "width": 235.5010757446289
   },
   "right": {
     "id": "45a4c33d2d217b48",
@@ -104,6 +117,16 @@
               "state": {},
               "icon": "layout-list",
               "title": "GCal Schedule View"
+            }
+          },
+          {
+            "id": "4b8fa998d836d332",
+            "type": "leaf",
+            "state": {
+              "type": "copilot-chat-view",
+              "state": {},
+              "icon": "message-square",
+              "title": "Copilot"
             }
           }
         ]
@@ -143,11 +166,14 @@
   },
   "left-ribbon": {
     "hiddenItems": {
+      "workspaces:Manage workspace layouts": true,
       "pexels-banner:🚩 Pixel Banner Menu": true,
       "templates:Insert template": true,
       "pinned-notes:Homepage": false,
+      "cmdr:Files: Show file explorer": false,
       "ribbon-divider:ribbon-divider-d6836d41-e02e-4707-a8f9-d737fd521486": false,
       "obsidian-projects:Open projects": false,
+      "copilot:Open Copilot Chat": false,
       "obsidian-excalidraw-plugin:New drawing": false,
       "dashboard-navigator:Open dashboard navigator": false,
       "switcher:Open quick switcher": true,
@@ -158,6 +184,7 @@
       "table-editor-obsidian:Advanced Tables Toolbar": true,
       "audio-recorder:Start/stop recording": false,
       "ribbon-divider:ribbon-divider-85cc4e1d-da95-446b-b237-e4e9a8fc7834": false,
+      "cmdr:Google Calendar: Open gCal week view": false,
       "darlal-switcher-plus:Open in Headings Mode": true,
       "darlal-switcher-plus:Open Symbols for the active editor": true,
       "templater-obsidian:Templater": true,
@@ -171,47 +198,48 @@
       "meld-encrypt:Convert to or from an Encrypted note": true,
       "pomodoro-timer:Toggle timer panel": true,
       "cmdr:Workspaces: Load workspace layout": false,
+      "cmdr:Workspaces: Save layout": false,
       "meld-encrypt:Encrypt/Decrypt In-place": false,
       "janitor:Janitor: scan vault": false,
       "markdown-importer:Open format converter": true,
       "custom-sort:Toggle custom sorting": true,
       "canvas:Create new canvas": true,
-      "omnisearch:Omnisearch": true,
-      "cmdr:Files: Show file explorer": false,
-      "cmdr:Workspaces: Save layout": false,
-      "cmdr:Google Calendar: Open gCal week view": false
+      "omnisearch:Omnisearch": true
     }
   },
-  "active": "a6ba6dee71ed2156",
+  "active": "0702aa6b6d7cc896",
   "lastOpenFiles": [
-    "Calendar/Calendar Events/Hermetic presentation tools, setup, slides.md",
-    "Extras/Unkown/hermetica use case, first iteration.md",
-    "Extras/Images/photoshop-architecture-diagrams-hermetica-1749989367188.webp",
-    "photoshop-architecture-diagrams-hermetica.md",
-    "timers-stats.md",
-    "Areas/area.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md",
-    "Areas/area.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md",
-    "Areas/area.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md",
-    "Areas/area.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md",
-    "Areas/area.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md",
-    "Areas/area.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md",
-    "Areas/area.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md",
-    "Areas/area.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md",
-    "Areas/area.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md",
-    "Areas/area.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md",
-    "Areas/area.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md",
-    "Areas/area.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md",
-    "Areas/area.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md",
-    "Areas/area.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md",
-    "Areas/area.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md",
-    "Areas/area.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md",
-    "Areas/area.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md",
-    "Areas/area.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md",
-    "Areas/area.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md",
-    "Areas/area.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md",
-    "Areas/area.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md",
-    "Areas/area.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md.md",
+    "Projects/Tasks/Kanban Tasks/agentic tool for revolut api, track finance.md",
+    "Projects/Tasks/Kanban Tasks/Obsidian MCP for task cration.md",
+    "Projects/Tasks/Kanban Tasks/Add agent tool, check emails and create obsidian tasks.md",
+    "Dashboards/Fitness.canvas",
     "Dashboards/Home.canvas",
+    "Resources/LangChain.md",
+    "Areas/Documentation/AI - Documentation.md",
+    "Resources/LlamaIndex.md",
+    "Extras/Unkown/Check LangChain, LLamaIndex.md",
+    "Extras/Templates/PARA/area.md",
+    "Extras/Templates/PARA/resource.md",
+    "Extras/Templates/PARA/project.md",
+    "Extras/Templates/PARA/project copy.md",
+    "LangChain.md",
+    "Dashboards/Dashboards.canvas",
+    "Extras/Unkown/core-352-prompt.md",
+    "Resources/LLM Compliance.md",
+    "Calendar/Calendar Events/Hermetic presentation tools, setup, slides.md",
+    "presentation-context.md",
+    "Dashboards/PARA.canvas",
+    "Areas/area.md.md.md.md",
+    "Areas/area.md.md",
+    "Projects/project.md.md",
+    "Areas/area.md.md.md",
+    "Areas/DT-AICC.md",
+    "Projects/project.md.md.md.md.md",
+    "Projects/Tasks/Kanban Tasks/Ask for a DTTL Teams Account, and ask for accesses.md",
+    "Projects/Tasks/DT Tasks/Get access to the Kanban Board.md",
+    "Extras/Unkown/Get Access to TelekomWiki.md",
+    "Projects/Tasks/Kanban Tasks/Create command to start and stop all local AI.md",
+    "Extras/Images/photoshop-architecture-diagrams-hermetica-1749989367188.webp",
     "Extras/Images/Hermetic presentation tools, setup, slides-1749887996610.webp",
     "Extras/Images/Hermetic presentation tools, setup, slides-1749867487892.webp",
     "Extras/Images/Hermetic presentation tools, setup, slides-1749867477836.webp",
@@ -223,10 +251,8 @@
     "Extras/Images/2025/06",
     "Extras/Images/2025",
     "Extras/Images/image 3.png",
-    "Dashboards/Fitness.canvas",
     "Dashboards/Global Tasks.canvas",
     "Dashboards/Discovery.canvas",
-    "Dashboards/PARA.canvas",
     "Extras/Filters/sticky-notes.base",
     "Areas/Documentation",
     "Extras/Images/MCP-1749725660370.webp",
