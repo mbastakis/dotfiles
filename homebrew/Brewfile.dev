@@ -9,6 +9,7 @@ brew "python"           # Python language
 brew "go"               # Go language
 brew "rust"             # Rust language
 brew "openjdk"          # Java Development Kit
+brew "lua"              # Lua programming language
 
 # Version control
 brew "gh"               # GitHub CLI
@@ -44,3 +45,4 @@ brew "yq"               # YAML processor
 brew "httpie"           # HTTP client
 brew "uv"               # Universal version manager
 brew "pyenv"            # Python version management
+brew "neovim"           # Neovim text editor

@@ -1,5 +1,8 @@
 local.zsh
 .DS_Store
 
-# google calendar
+# Obsidian
+## google calendar
 obsidian/.obsidian/plugins/google-calendar/data.json
+## copilot index
+obsidian/.obsidian/copilot-index*

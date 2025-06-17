@@ -26,3 +26,7 @@ alias reload="source ~/.zshrc"
 alias brewup="brew update && brew upgrade && brew cleanup"
 alias dotfiles="cd ~/.dotfiles"
 
+# Vim
+alias v="nvim"
+alias vi="nvim"
+alias vim="nvim"
