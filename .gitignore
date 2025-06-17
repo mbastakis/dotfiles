@@ -6,3 +6,4 @@ local.zsh
 obsidian/.obsidian/plugins/google-calendar/data.json
 ## copilot index
 obsidian/.obsidian/copilot-index*
+obsidian/.obsidian/plugins/copilot/data.json
