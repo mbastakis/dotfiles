@@ -4,23 +4,24 @@
 tap "felixkratz/formulae"   # For sketchybar
 
 # Productivity
-cask "raycast"          # Spotlight alternative
-cask "rectangle"        # Window manager
-brew "sketchybar"      # Custom macOS menubar
-cask "font-sketchybar-app-font" # Font for sketchybar
-cask "nikitabobko/tap/aerospace" # Window manager
-cask "obsidian"         # Note-taking app
-cask "steermouse"        # Mouse customization
-cask "hiddenbar"         # Hide menu bar
-cask "finicky"           # Default browser manager
-cask "brainfm"         # Brain.fm music for focus
+cask "raycast"                              # Spotlight alternative
+cask "rectangle"                            # Window manager
+brew "sketchybar"                           # Custom macOS menubar
+cask "font-sketchybar-app-font"             # Font for sketchybar
+cask "nikitabobko/tap/aerospace"            # Window manager
+cask "obsidian"                             # Note-taking app
+cask "steermouse"                           # Mouse customization
+cask "hiddenbar"                            # Hide menu bar
+cask "finicky"                              # Default browser manager
+cask "brainfm"                              # Brain.fm music for focus
+cask "stats"                                # System monitor
 
 # Development
-cask "visual-studio-code" # Code editor
-cask "visual-studio-code@insiders" # Insiders version of VSCode
-cask "iterm2"               # Terminal emulator
-cask "karabiner-elements"   # Keyboard customizer
-cask "warp"                 # Terminal emulator
+cask "visual-studio-code"                   # Code editor
+cask "visual-studio-code@insiders"          # Insiders version of VSCode
+cask "iterm2"                               # Terminal emulator
+cask "karabiner-elements"                   # Keyboard customizer
+cask "warp"                                 # Terminal emulator
 
 # AI
 cask "chatgpt"          # ChatGPT desktop app
