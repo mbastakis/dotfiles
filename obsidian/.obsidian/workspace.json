@@ -4,41 +4,16 @@
     "type": "split",
     "children": [
       {
-        "id": "b9a820138ac51770",
+        "id": "e5f06048a139bf2b",
         "type": "tabs",
         "children": [
           {
-            "id": "0702aa6b6d7cc896",
+            "id": "737d97ef7714003c",
             "type": "leaf",
             "state": {
-              "type": "canvas",
-              "state": {
-                "file": "Dashboards/Fitness.canvas",
-                "viewState": {
-                  "x": -2330,
-                  "y": -2010,
-                  "zoom": -0.5808180134098715
-                }
-              },
-              "icon": "lucide-layout-dashboard",
-              "title": "Fitness"
-            }
-          },
-          {
-            "id": "dad758ee35deccc3",
-            "type": "leaf",
-            "state": {
-              "type": "canvas",
-              "state": {
-                "file": "Dashboards/Fitness.canvas",
-                "viewState": {
-                  "x": -2330,
-                  "y": -2010,
-                  "zoom": -0.450329411530045
-                }
-              },
-              "icon": "lucide-layout-dashboard",
-              "title": "Fitness"
+              "type": "beautitab-react-view",
+              "state": {},
+              "title": "New tab"
             }
           }
         ]
@@ -207,12 +182,12 @@
       "omnisearch:Omnisearch": true
     }
   },
-  "active": "0702aa6b6d7cc896",
+  "active": "737d97ef7714003c",
   "lastOpenFiles": [
+    "Dashboards/Fitness.canvas",
     "Projects/Tasks/Kanban Tasks/agentic tool for revolut api, track finance.md",
     "Projects/Tasks/Kanban Tasks/Obsidian MCP for task cration.md",
     "Projects/Tasks/Kanban Tasks/Add agent tool, check emails and create obsidian tasks.md",
-    "Dashboards/Fitness.canvas",
     "Dashboards/Home.canvas",
     "Resources/LangChain.md",
     "Areas/Documentation/AI - Documentation.md",
@@ -238,7 +213,6 @@
     "Projects/Tasks/Kanban Tasks/Ask for a DTTL Teams Account, and ask for accesses.md",
     "Projects/Tasks/DT Tasks/Get access to the Kanban Board.md",
     "Extras/Unkown/Get Access to TelekomWiki.md",
-    "Projects/Tasks/Kanban Tasks/Create command to start and stop all local AI.md",
     "Extras/Images/photoshop-architecture-diagrams-hermetica-1749989367188.webp",
     "Extras/Images/Hermetic presentation tools, setup, slides-1749887996610.webp",
     "Extras/Images/Hermetic presentation tools, setup, slides-1749867487892.webp",
