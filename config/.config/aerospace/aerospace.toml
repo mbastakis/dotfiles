@@ -1,4 +1,10 @@
-after-startup-command = ['exec-and-forget sketchybar']
+after-startup-command = [
+  'exec-and-forget sketchybar',
+  # Uncomment the lines below to auto-launch apps in workspace u in order
+  # 'exec-and-forget open -a "Slack"',
+  # 'exec-and-forget open -a "Microsoft Teams"', 
+  # 'exec-and-forget open -a "Outlook"'
+]
 
 # Notify Sketchybar about workspace change
 exec-on-workspace-change = ['/bin/bash', '-c',
@@ -55,17 +61,19 @@ if.app-name-regex-substring = 'Mail'
 run = 'move-node-to-workspace e'
 
 [[on-window-detected]]
+if.app-name-regex-substring = 'Calendar'
+run = 'move-node-to-workspace e'
+
+[[on-window-detected]]
 if.app-name-regex-substring = 'Bitwarden'
 run = 'move-node-to-workspace e'
 
 # Workspace U
+# Apps are ordered by priority - first in config = first position
 
+# Communication & Work Tools (highest priority)
 [[on-window-detected]]
-if.app-name-regex-substring = 'Spotify'
-run = 'move-node-to-workspace u'
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'Outlook'
+if.app-name-regex-substring = 'Slack'
 run = 'move-node-to-workspace u'
 
 [[on-window-detected]]
@@ -73,13 +81,15 @@ if.app-name-regex-substring = 'Microsoft Teams'
 run = 'move-node-to-workspace u'
 
 [[on-window-detected]]
-if.app-name-regex-substring = 'Slack'
+if.app-name-regex-substring = 'Outlook'
 run = 'move-node-to-workspace u'
 
+# Development Tools
 [[on-window-detected]]
-if.app-name-regex-substring = 'Tome'
+if.app-name-regex-substring = 'GitHub'
 run = 'move-node-to-workspace u'
 
+# AI Tools
 [[on-window-detected]]
 if.app-name-regex-substring = 'ChatGPT'
 run = 'move-node-to-workspace u'
@@ -89,19 +99,24 @@ if.app-name-regex-substring = 'Claude'
 run = 'move-node-to-workspace u'
 
 [[on-window-detected]]
-if.app-name-regex-substring = 'Gemini'
+if.app-name-regex-substring = 'Perplexity'
 run = 'move-node-to-workspace u'
 
 [[on-window-detected]]
-if.app-name-regex-substring = 'GitHub'
+if.app-name-regex-substring = 'Gemini'
 run = 'move-node-to-workspace u'
 
 [[on-window-detected]]
 if.app-name-regex-substring = 'Grok'
 run = 'move-node-to-workspace u'
 
+# Presentation & Media
 [[on-window-detected]]
-if.app-name-regex-substring = 'Perplexity'
+if.app-name-regex-substring = 'Tome'
+run = 'move-node-to-workspace u'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Spotify'
 run = 'move-node-to-workspace u'
 
 # Floating windows
