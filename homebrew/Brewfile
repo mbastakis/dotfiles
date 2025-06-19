@@ -16,6 +16,7 @@ brew "diff-so-fancy" # Improved diff output
 brew "jq"          # JSON processor
 brew "navi"        # Interactive cheat sheets
 brew "yamllint"             # YAML linter
+brew "iproute2mac" # IP routing utility for macOS
 
 # Fonts
 cask "font-jetbrains-mono" # JetBrains Mono font
