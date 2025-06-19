@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "TiBooks",
       "OcTasklist24",
       "CoCalendarEvent",
       "IbDashboard",
-      "BoBxTask",
-      "OcTasklist16"
+      "BoBxTask"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [
@@ -110,9 +110,6 @@
   },
   "Areas/mike-software.md": {
     "iconName": "SiPaloaltosoftware"
-  },
-  "Areas/mike-readitlater.md": {
-    "iconName": "LiEye"
   },
   "Areas/mike-people.md": {
     "iconName": "OcPeople16"
@@ -354,5 +351,9 @@
   },
   "Projects/Tasks/Kanban Tasks/agentic tool for revolut api, track finance.md": {
     "iconName": "OcTasklist24"
+  },
+  "Resources/Books": "TiBooks",
+  "Archives/mike-readitlater.md": {
+    "iconName": "LiEye"
   }
 }
