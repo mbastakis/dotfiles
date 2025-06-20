@@ -7,7 +7,7 @@
 	path = ~/.gitconfig-personal
 [core]
 	pager = diff-so-fancy | less --tabs=4 -RF
-	editor = code-insiders --wait
+	editor = code --wait
 [interactive]
 	diffFilter = diff-so-fancy --patch
 [color]

@@ -1,5 +1,5 @@
 # editor
-git config --global core.editor "code-insiders --wait"
+git config --global core.editor "code --wait"
 
 # diff-so-fancy git configuration
 git config --global core.pager "diff-so-fancy | less --tabs=4 -RF"
