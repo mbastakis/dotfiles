@@ -40,6 +40,3 @@ export PATH="$HOME/.local/share/zinit/plugins/ogham---exa/bin:$PATH"
 
 # Dotfiles path
 export DOTFILES_PATH="$HOME/dev/dotfiles"
-
-# Froggit Path
-export PATH="$HOME/dev/personal/froggit/bin:$PATH"
