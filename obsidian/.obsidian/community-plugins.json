@@ -42,5 +42,6 @@
   "beautitab",
   "obsidian-meta-bind-plugin",
   "copilot",
-  "obsidian-local-rest-api"
+  "obsidian-local-rest-api",
+  "js-engine"
 ]

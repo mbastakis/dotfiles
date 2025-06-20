@@ -355,5 +355,8 @@
   "Resources/Books": "TiBooks",
   "Archives/mike-readitlater.md": {
     "iconName": "LiEye"
+  },
+  "Projects/Tasks/DT Tasks/Help BFL Dev Team.md": {
+    "iconName": "OcTasklist24"
   }
 }

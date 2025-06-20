@@ -8,15 +8,49 @@
         "type": "tabs",
         "children": [
           {
-            "id": "cfc6629323be3f85",
+            "id": "a8f2b9f79d31fc02",
             "type": "leaf",
             "state": {
-              "type": "beautitab-react-view",
+              "type": "canvas",
+              "state": {
+                "file": "Dashboards/Fitness.canvas",
+                "viewState": {
+                  "x": -2330,
+                  "y": -2010,
+                  "zoom": -0.7575878176205223
+                }
+              },
+              "icon": "lucide-layout-dashboard",
+              "title": "Fitness"
+            }
+          },
+          {
+            "id": "e6dec129349767e5",
+            "type": "leaf",
+            "state": {
+              "type": "obsidian-projects",
               "state": {},
-              "title": "New tab"
+              "icon": "projects-icon",
+              "title": "Projects"
+            }
+          },
+          {
+            "id": "a1d6b01779c75704",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Areas/DT-AICC.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "DT-AICC"
             }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -216,21 +250,32 @@
         "direction": "vertical",
         "x": 5119,
         "y": 1412,
-        "width": 1672,
+        "width": 2547,
         "height": 1394,
         "maximize": false,
         "zoom": 0.5
       }
     ]
   },
-  "active": "cfc6629323be3f85",
+  "active": "a1d6b01779c75704",
   "lastOpenFiles": [
-    "Resources/Weblist/RAG  IBM.md",
+    "Extras/Unkown/DT-AICC Bali Dimitra.md",
     "Areas/DT-AICC.md",
+    "Extras/Unkown/DT-AICC Paul.md",
+    "Extras/Unkown/DT-AICC Leivadara Vasiliki.md",
+    "Extras/Unkown/DT-AICC Giannikis Stylianos.md",
+    "Projects/Tasks/DT Tasks/Help BFL Dev Team.md",
+    "Dashboards/Fitness.canvas",
+    "Extras/Unkown/chara tries bandit wargame.md",
+    "Extras/Exercises/Dips.md",
+    "Extras/Exercises/Bicep Curl.md",
+    "Extras/Exercises/Push-Ups.md",
+    "Dashboards/Home.canvas",
+    "Resources/Sticky Notes/Market List.md",
+    "Resources/Weblist/RAG  IBM.md",
     "Areas/DT-mike.md",
     "Archives/mike-readitlater.md",
     "Dashboards/Discovery.canvas",
-    "Extras/Unkown/chara tries bandit wargame.md",
     "Untitled.md",
     "Untitled 1.md",
     "Untitled 3.md",
@@ -240,23 +285,12 @@
     "Untitled 6.md",
     "Untitled 5.md",
     "Untitled 4.md",
-    "Resources/Sticky Notes/Market List.md",
     "Resources/xara-notes.md",
     "Resources/Books/Build a Large Language Model (From Scratch) (Sebastian Raschka) (Z-Library).pdf",
     "Areas/Documentation/AI - Documentation.md",
     "Extras/PDF/Build a Large Language Model (From Scratch) (Sebastian Raschka) (Z-Library).pdf",
     "Resources/Books",
     "Resources/LangGraph.md",
-    "Areas/mike-logistics.md",
-    "Dashboards/Home.canvas",
-    "Extras/Unkown/devops-project.md",
-    "Dashboards/Fitness.canvas",
-    "Resources/People/xara-notes.md",
-    "Resources/People/xara-notes 1.md",
-    "Extras/Unkown/core-354-secrets.md",
-    "Untitled 12.md",
-    "Untitled 11.md",
-    "Untitled 10.md",
     "Extras/Images/indian-spirit-1750286229254.webp",
     "Extras/PDF/purchase-summary-indian-spirit.pdf",
     "Extras/Images/indian-spirit-1750284559682.webp",
