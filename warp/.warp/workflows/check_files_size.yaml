@@ -1,0 +1,10 @@
+---
+name: "Get Files Size in Directory"
+command: "du -sh * | sort -hr"
+description: "Get the size of files in the current directory, sorted by size"
+arguments: []
+tags: []
+source_url: ~
+author: ~
+author_url: ~
+shells: []
