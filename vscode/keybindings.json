@@ -44,5 +44,18 @@
     {
         "key": "ctrl+n",
         "command": "welcome.showNewFileEntries"
+    },
+    {
+        "key": "shift+enter",
+        "command": "workbench.action.terminal.sendSequence",
+        "args": {
+            "text": "\\\r\n"
+        },
+        "when": "terminalFocus"
+    },
+    {
+        "key": "shift+cmd+c",
+        "command": "claude-code.runClaude.keyboard",
+        "when": "claude-code.hasClaudeInPath"
     }
 ]
