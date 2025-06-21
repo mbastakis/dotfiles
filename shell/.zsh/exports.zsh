@@ -1,9 +1,9 @@
 # exports.zsh - Environment variables
 
 # Default programs
-export EDITOR="vim"
-export VISUAL="code"
-export PAGER="less"
+export EDITOR="nvim"
+export VISUAL="code --wait"
+export PAGER="bat"
 
 # Path configuration
 # Add your custom paths here
