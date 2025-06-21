@@ -4,11 +4,20 @@
     "type": "split",
     "children": [
       {
-        "id": "dcec144d6237326f",
+        "id": "918c5c5e05ecf1bc",
         "type": "tabs",
         "children": [
           {
-            "id": "e6dec129349767e5",
+            "id": "f7afd0d1a1106ed3",
+            "type": "leaf",
+            "state": {
+              "type": "beautitab-react-view",
+              "state": {},
+              "title": "New tab"
+            }
+          },
+          {
+            "id": "0f4bfeea9099f58c",
             "type": "leaf",
             "state": {
               "type": "obsidian-projects",
@@ -18,7 +27,7 @@
             }
           },
           {
-            "id": "9a80bfb2f8b2a9ee",
+            "id": "1f6c7c7354cace11",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -86,7 +95,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -201,74 +211,36 @@
       "omnisearch:Omnisearch": true
     }
   },
-  "floating": {
-    "id": "cd6cf1d723a530f9",
-    "type": "floating",
-    "children": [
-      {
-        "id": "2101e905be0bc533",
-        "type": "window",
-        "children": [
-          {
-            "id": "232698edd7dacf13",
-            "type": "tabs",
-            "children": [
-              {
-                "id": "6c4621af86bb5d90",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "Extras/Unkown/chara tries bandit wargame.md",
-                    "mode": "source",
-                    "source": false,
-                    "backlinks": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "chara tries bandit wargame"
-                }
-              }
-            ]
-          }
-        ],
-        "direction": "vertical",
-        "x": 5119,
-        "y": 1412,
-        "width": 1672,
-        "height": 1394,
-        "maximize": false,
-        "zoom": 0.5
-      }
-    ]
-  },
-  "active": "9a80bfb2f8b2a9ee",
+  "active": "0f4bfeea9099f58c",
   "lastOpenFiles": [
-    "Untitled 505.md",
-    "Untitled 504.md",
-    "Untitled 503.md",
-    "Untitled 502.md",
-    "Untitled 501.md",
-    "Untitled 500.md",
-    "Untitled 499.md",
-    "Untitled 498.md",
-    "Untitled 497.md",
-    "Untitled 496.md",
-    "Untitled 495.md",
-    "Untitled 494.md",
-    "Untitled 493.md",
-    "Untitled 492.md",
-    "Untitled 491.md",
-    "Untitled 490.md",
-    "Untitled 489.md",
-    "Untitled 488.md",
-    "Untitled 487.md",
-    "Untitled 486.md",
-    "Untitled 485.md",
-    "Untitled 484.md",
-    "Untitled 483.md",
-    "Untitled 482.md",
-    "Untitled 481.md",
-    "Untitled 480.md",
+    "Resources/Shortcuts/vscode-shortcuts.md",
+    "task1/1.JPG.md",
+    "task1",
+    "Calendar/Calendar Events/Go to Chara.md",
+    "Untitled 11.md",
+    "Untitled 110.md",
+    "Untitled 228.md",
+    "Untitled 349.md",
+    "Untitled 371.md",
+    "Untitled 430.md",
+    "Untitled 422.md",
+    "Untitled 423.md",
+    "Untitled 434.md",
+    "Untitled 431.md",
+    "Untitled 463.md",
+    "Untitled 464.md",
+    "Untitled 468.md",
+    "Untitled 472.md",
+    "Untitled 471.md",
+    "Untitled 470.md",
+    "Untitled 469.md",
+    "Untitled 473.md",
+    "Untitled 474.md",
+    "Untitled 475.md",
+    "Untitled 476.md",
+    "Untitled 477.md",
+    "Untitled 478.md",
+    "Resources/Books/How to Win at Chess The Ultimate Guide for Beginners and Beyond (Levy Rozman) (Z-Library).epub",
     "Dashboards/Fitness.canvas",
     "Dashboards/Home.canvas",
     "Dashboards/Discovery.canvas",
@@ -292,8 +264,6 @@
     "Extras/Images/Hermetic presentation tools, setup, slides-1749887996610.webp",
     "Extras/Images/Hermetic presentation tools, setup, slides-1749867487892.webp",
     "k9s.yaml",
-    "Dashboards/Global Tasks.canvas",
-    "Extras/Filters/sticky-notes.base",
-    "Areas/Documentation"
+    "Dashboards/Global Tasks.canvas"
   ]
 }

@@ -10,7 +10,6 @@
     "svg": "Extras/Images",
     "gif": "Extras/Images",
     "avif": "Extras/Images",
-    "pdf": "Extras/PDF",
     "mdenc": "Extras/Encrypted"
   },
   "tagMapping": {

@@ -34,8 +34,30 @@
             "groupByField": "status",
             "includeFields": [],
             "columns": {
-              "Event": {
+              "ToBuy": {
                 "weight": 0,
+                "records": [
+                  "new toothbrush.md",
+                  "pouf gia ta podia.md",
+                  "Protein.md",
+                  "xali gia to krebati.md"
+                ],
+                "collapse": true
+              },
+              "Done": {
+                "weight": 1,
+                "records": [
+                  "Add Collapse in board.md",
+                  "Polish Obsidian setup Desktop.md",
+                  "Woman in Black - 2025-05-12 - _6sq36d3.md",
+                  "Add google calendar to Projects.md",
+                  "Add google calendar to Projects - 2025-06-04 - p2vphf8t.md",
+                  "Create Project for DT-AICC.md"
+                ],
+                "collapse": true
+              },
+              "Event": {
+                "weight": 2,
                 "records": [
                   "👖 Laundry - recurring-18t2kit0.md",
                   "Cloud Core & SRE Meeting - recurring-76dq5d66.md",
@@ -48,28 +70,6 @@
                   "Γενέθλια Κωνσταντίνα Σφίγγα - recurring-_6kpjid9.md"
                 ],
                 "collapse": false
-              },
-              "ToBuy": {
-                "weight": 1,
-                "records": [
-                  "new toothbrush.md",
-                  "pouf gia ta podia.md",
-                  "Protein.md",
-                  "xali gia to krebati.md"
-                ],
-                "collapse": true
-              },
-              "Done": {
-                "weight": 2,
-                "records": [
-                  "Add Collapse in board.md",
-                  "Polish Obsidian setup Desktop.md",
-                  "Woman in Black - 2025-05-12 - _6sq36d3.md",
-                  "Add google calendar to Projects.md",
-                  "Add google calendar to Projects - 2025-06-04 - p2vphf8t.md",
-                  "Create Project for DT-AICC.md"
-                ],
-                "collapse": true
               },
               "ToDo": {
                 "weight": 3,
@@ -100,12 +100,6 @@
                   "Projects/Tasks/Kanban Tasks/Add agent tool, check emails and create obsidian tasks.md"
                 ],
                 "collapse": false
-              },
-              "null": {
-                "collapse": false
-              },
-              "No status": {
-                "records": []
               }
             }
           },

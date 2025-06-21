@@ -11,14 +11,9 @@
     {
       "type": "CURRENT",
       "name": "Same folder as current note"
-    },
-    {
-      "name": "Image Folder",
-      "type": "CUSTOM",
-      "customTemplate": "Extras/Images/{YYYY}/{MM}/{imagename}"
     }
   ],
-  "selectedFolderPreset": "Image Folder",
+  "selectedFolderPreset": "Default (Obsidian setting)",
   "filenamePresets": [
     {
       "name": "Keep original name",

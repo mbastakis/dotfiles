@@ -358,5 +358,8 @@
   },
   "Projects/Tasks/DT Tasks/Help BFL Dev Team.md": {
     "iconName": "OcTasklist24"
+  },
+  "Calendar/Calendar Events/Go to Chara.md": {
+    "iconName": "CoCalendarEvent"
   }
 }
