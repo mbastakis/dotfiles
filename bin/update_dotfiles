@@ -20,6 +20,15 @@ git pull
 # Re-stow all configurations
 log_info "Re-stowing configuration files"
 
+# Update VS Code extensions list if code command exists
+if command -v code &> /dev/null; then
+    log_info "Updating VS Code extensions list"
+    code --list-extensions > "$DOTFILES_DIR/vscode/extensions.txt"
+    log_success "VS Code extensions list updated"
+else
+    log_warning "VS Code CLI not found. Skipping extensions update."
+fi
+
 configs=(
     "config"
     "shell"

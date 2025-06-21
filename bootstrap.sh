@@ -112,6 +112,21 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     bash "$SCRIPT_DIR/scripts/setup_obsidian.sh"
 fi
 
+# Setup VS Code configuration
+log_section "Setting up VS Code Configuration"
+read -p "Do you want to setup VS Code dotfiles? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    bash "$SCRIPT_DIR/bin/setup_vscode" sync
+    
+    # Install extensions
+    read -p "Do you want to install VS Code extensions? (y/n) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        bash "$SCRIPT_DIR/bin/setup_vscode" extensions install
+    fi
+fi
+
 log_section "Setup Complete!"
 log_info "Your Mac has been configured successfully."
 log_info "You may need to restart your Mac for some changes to take effect."
