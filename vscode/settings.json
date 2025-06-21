@@ -266,6 +266,7 @@
 
   // Docker
   "docker.extension.enableComposeLanguageServer": false,
+  "containers.containerClient": "com.microsoft.visualstudio.containers.docker",
 
   // Svelte
   "svelte.enable-ts-plugin": true,
@@ -276,32 +277,32 @@
   // ----------------------------------------------------------------------
   // MCP (Multi-Cloud Platform) Settings
   // ----------------------------------------------------------------------
-  "mcp": {
-    "servers": {
-      "Exa Search": {
-        "command": "npx",
-        "args": [
-          "-y",
-          "@smithery/cli@latest",
-          "run",
-          "exa",
-          "--key",
-          "6813c168-d8c2-4097-a5ff-00adfef8b522"
-        ]
-      },
-      "Context7": {
-        "command": "npx",
-        "args": [
-          "-y",
-          "@smithery/cli@latest",
-          "run",
-          "@upstash/context7-mcp",
-          "--key",
-          "6813c168-d8c2-4097-a5ff-00adfef8b522"
-        ]
-      }
-    }
-  },
+  // "mcp": {
+  //   "servers": {
+  //     "Exa Search": {
+  //       "command": "npx",
+  //       "args": [
+  //         "-y",
+  //         "@smithery/cli@latest",
+  //         "run",
+  //         "exa",
+  //         "--key",
+  //         "6813c168-d8c2-4097-a5ff-00adfef8b522"
+  //       ]
+  //     },
+  //     "Context7": {
+  //       "command": "npx",
+  //       "args": [
+  //         "-y",
+  //         "@smithery/cli@latest",
+  //         "run",
+  //         "@upstash/context7-mcp",
+  //         "--key",
+  //         "6813c168-d8c2-4097-a5ff-00adfef8b522"
+  //       ]
+  //     }
+  //   }
+  // },
   // ----------------------------------------------------------------------
   // END OF MCP Settings
   // ----------------------------------------------------------------------
