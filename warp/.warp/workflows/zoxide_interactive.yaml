@@ -1,0 +1,10 @@
+---
+name: "Zoxide Interactive"
+command: "cdi"
+description: "Change directory interactively using zoxide"
+arguments: []
+tags: []
+source_url: ~
+author: ~
+author_url: ~
+shells: []
