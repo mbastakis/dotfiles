@@ -1,0 +1,44 @@
+// Place your key bindings in this file to override the defaults
+[
+    {
+        "key": "cmd+p",
+        "command": "workbench.action.showCommands"
+    },
+    {
+        "key": "cmd+o",
+        "command": "workbench.action.quickOpen"
+    },
+    {
+        "key": "cmd+t",
+        "command": "projectManager.listProjects"
+    },
+    {
+        "key": "ctrl+cmd+o",
+        "command": "fzf-quick-open.runFzfFile"
+    },
+    {
+        "key": "ctrl+shift+pagedown",
+        "command": "editor.gotoNextFold"
+    },
+    {
+        "key": "ctrl+shift+pageup",
+        "command": "editor.gotoPreviousFold"
+    },
+    {
+        "key": "shift+cmd+o",
+        "command": "find-it-faster.findFiles"
+    },
+    {
+        "key": "shift+cmd+f",
+        "command": "find-it-faster.findWithinFiles"
+    },
+    {
+        "key": "cmd+l",
+        "command": "editor.toggleFold",
+        "when": "editorTextFocus && foldingEnabled"
+    },
+    {
+        "key": "cmd+g",
+        "command": "lazygit.openLazygit"
+    }
+]

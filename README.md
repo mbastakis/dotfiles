@@ -10,6 +10,7 @@ This repository contains my personal dotfiles and automation scripts for setting
 - **macOS Settings**: Sensible defaults for macOS
 - **Homebrew**: Package installation automation
 - **App Configurations**: Settings for Raycast, Karabiner, and other tools
+- **VS Code Configuration**: Settings, keybindings, and extensions management
 - **Obsidian Configuration**: Synced Obsidian vault settings across machines
 - **Custom Fonts**: JetBrains Mono and other typography
 - **Development Environment**: Configuration for development tools
@@ -71,6 +72,13 @@ If you want to set up specific components only:
    brew bundle --file=./homebrew/Brewfile.mas
    ```
 
+8. **Set up VS Code Configuration**:
+
+   ```bash
+   ./bin/setup_vscode sync
+   ./bin/setup_vscode extensions install
+   ```
+
 ## 🛠 Customization
 
 ### How Stow Works
@@ -115,6 +123,33 @@ To sync your Obsidian settings across machines:
 Your Obsidian configuration will be symlinked to your vault, so any changes made in Obsidian's settings will be automatically tracked in your dotfiles. You can then commit and push these changes to keep your settings synchronized across machines.
 
 **Multiple Vaults**: You can link the same configuration to multiple vaults for consistent settings across all your Obsidian vaults.
+
+### Setting up VS Code Configuration
+
+VS Code settings, keybindings, and extensions are managed through symbolic links:
+
+1. **Set up VS Code dotfiles**:
+   ```bash
+   ./bin/setup_vscode sync
+   ```
+
+2. **Install extensions from list**:
+   ```bash
+   ./bin/setup_vscode extensions install
+   ```
+
+3. **Update extensions list**:
+   ```bash
+   ./bin/setup_vscode extensions update
+   ```
+
+**How it works**: The setup creates symlinks from VS Code's configuration directory to your dotfiles, so any changes made through VS Code's settings UI are automatically reflected in your dotfiles repository.
+
+**Location**: 
+- macOS: `~/Library/Application Support/Code/User/`
+- Linux: `~/.config/Code/User/`
+
+See [`vscode/README.md`](vscode/README.md) for detailed information.
 
 ### Git Configuration
 
