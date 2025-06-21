@@ -116,6 +116,10 @@ if.app-name-regex-substring = 'Tome'
 run = 'move-node-to-workspace u'
 
 [[on-window-detected]]
+if.app-name-regex-substring = 'Docker Desktop'
+run = 'move-node-to-workspace u'
+
+[[on-window-detected]]
 if.app-name-regex-substring = 'Spotify'
 run = 'move-node-to-workspace u'
 
