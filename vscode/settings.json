@@ -23,6 +23,7 @@
   "explorer.confirmDelete": false,
   // Zoom Level
   "window.zoomLevel": 3,
+  "window.customTitleBarVisibility": "never",
   "window.titleBarStyle": "native",
   "custom-ui-style.electron": {
     "titleBarStyle": "hiddenInset",
@@ -45,7 +46,7 @@
     ".monaco-workbench .part.editor > .content .editor-group-container > .title > .label-container > .title-label": "padding-left: 70px !important; box-shadow: none !important;",
     ".monaco-scrollable-element > .scrollbar> .slider": "border-radius: 35rem !important;  height: 6px !important; background: rgba(255, 255, 255, 0.2) !important;",
     ".monaco-editor .scroll-decoration": "box-shadow: none !important;",
-    ".monaco-editor .sticky-widget": "box-shadow: none !important;",
+    ".monaco-editor .sticky-widget": "box-shadow: none !important;"
   },
   // Cursor
   "editor.cursorBlinking": "solid",
@@ -205,7 +206,7 @@
   // ----------------------------------------------------------------------
   "remote.defaultExtensionsIfInstalledLocally": [
     "GitHub.copilot",
-    "GitHub.copilot-chat",
+    "GitHub.copilot-chat"
   ],
   // Live Server
   "liveServer.settings.donotShowInfoMsg": true,
@@ -312,6 +313,7 @@
     "acrmagentahome",
     "acrmhsandbox",
     "appcleaner",
+    "autofetch",
     "autogen",
     "autohide",
     "bitnami",
@@ -319,16 +321,24 @@
     "cerebro",
     "chflags",
     "cicd",
+    "codeclipper",
+    "codesearch",
     "Configurator",
+    "copilotmd",
     "crds",
     "customizer",
     "debconf",
     "dind",
     "dockerhub",
+    "donot",
     "DTSP",
+    "esbenp",
+    "factorypath",
     "felixkratz",
+    "frontmatter",
     "Hermetica",
     "hiddenbar",
+    "ipynb",
     "iterm",
     "karabiner",
     "Karabiner",
@@ -340,6 +350,7 @@
     "lsregister",
     "magentacicd",
     "magentazuhause",
+    "mcode",
     "menuextra",
     "mineffect",
     "minversion",
@@ -351,6 +362,7 @@
     "preprod",
     "recents",
     "restow",
+    "rgba",
     "screencapture",
     "sketchybar",
     "steermouse",
@@ -362,6 +374,7 @@
     "unarchiver",
     "unhide",
     "universalaccess",
+    "Vuillamy",
     "wildlcard"
   ],
   // ----------------------------------------------------------------------
@@ -373,6 +386,6 @@
   // OTHER SETTINGS
   // ----------------------------------------------------------------------
   // ----------------------------------------------------------------------
-  "dummy-value": "dummy-value", 
+  "dummy-value": "dummy-value"
 
 }
