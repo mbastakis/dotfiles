@@ -11,7 +11,7 @@ brew "fzf"         # Fuzzy finder
 brew "ripgrep"     # Fast search tool
 brew "mas"        # Mac App Store CLI
 brew "zinit"       # Zinit for Zsh
-brew "autojump"    # Directory navigation
+brew "zoxide"      # Directory navigation
 brew "diff-so-fancy" # Improved diff output
 brew "jq"          # JSON processor
 brew "navi"        # Interactive cheat sheets
