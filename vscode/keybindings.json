@@ -40,5 +40,9 @@
     {
         "key": "cmd+g",
         "command": "lazygit.openLazygit"
+    },
+    {
+        "key": "ctrl+n",
+        "command": "welcome.showNewFileEntries"
     }
 ]
