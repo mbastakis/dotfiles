@@ -165,7 +165,6 @@
     "*.copilotmd": "vscode.markdown.preview.editor",
     "*.ipynb": "jupyter-notebook",
     "*.xlsx": "default",
-    "{git,gitlens,git-graph}:/**/*.{md,csv,svg}": "default",
     "{git,gitlens}:/**/*.{md,csv,svg}": "default"
   },
   "files.exclude": {
