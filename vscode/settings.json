@@ -161,6 +161,7 @@
   // ----------------------------------------------------------------------
   "files.autoSave": "afterDelay",
   "accessibility.signalOptions.volume": 5,
+  "security.promptForLocalFileProtocolHandling": false,
   "workbench.editorAssociations": {
     "*.copilotmd": "vscode.markdown.preview.editor",
     "*.ipynb": "jupyter-notebook",
