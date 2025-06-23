@@ -35,10 +35,6 @@ if [[ -f "${HOME}/.local/share/zinit/zinit.git/zinit.zsh" ]]; then
     # Load Kubectl plugin from Oh-My-Zsh
     zinit snippet OMZ::plugins/kubectl/kubectl.plugin.zsh
 
-    # Load exa (modern replacement for ls)
-    zinit ice wait"0" lucid from"gh-r" as"program" mv"bin/exa* -> exa" 
-    zinit light ogham/exa
-
     # History substring search
     # Function to configure history substring search
     _history_substring_search_config() {

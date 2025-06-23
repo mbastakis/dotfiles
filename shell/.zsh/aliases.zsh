@@ -6,20 +6,12 @@ alias ...="cd ../.."
 alias ....="cd ../../.."
 
 # Listing
-# Using exa if available, fallback to standard ls if not
-if (( $+commands[exa] )); then
-    alias ls="exa"
-    alias ll="exa -la"
-    alias la="exa -a"
-    alias l="exa -l"
-    alias lt="exa -T"  # Tree view
-    alias lg="exa -l --git"  # Show git status
-else
-    alias ls="ls -G"
-    alias ll="ls -la"
-    alias la="ls -a"
-    alias l="ls -lh"
-fi
+alias l="eza --color=always --no-user"
+alias ls="eza --long --color=always --icons=always --no-user"
+alias lsa="eza --long --color=always --icons=always --no-user --all"
+alias lsd="eza --long --color=always --icons=always --no-user --group-directories-first --tree"
+alias lsda="eza --long --color=always --icons=always --no-user --group-directories-first --tree --all"
+alias lsg="eza --long --color=always --icons=always --no-user --git"
 
 # Utilities
 alias reload="source ~/.zshrc"
