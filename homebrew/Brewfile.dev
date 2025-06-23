@@ -44,6 +44,7 @@ brew "mysql"            # MySQL database
 brew "jq"               # JSON processor
 brew "yq"               # YAML processor
 brew "httpie"           # HTTP client
+brew "hx"               # Curl with JSON support
 brew "uv"               # Universal version manager
 brew "pyenv"            # Python version management
 brew "neovim"           # Neovim text editor

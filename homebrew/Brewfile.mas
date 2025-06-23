@@ -2,5 +2,7 @@
 # Format: mas "App Name", id: APP_ID
 # To find app IDs, use: mas search "App Name"
 
-mas "Amphetamine", id: 937984704     # Keep your Mac awake
-mas "Quick Sticky Notes", id: 6740142714 # Sticky notes app
+mas "Amphetamine", id: 937984704          # Keep your Mac awake
+mas "Hidden Bar", id: 1452453066          # Hide menu bar icons
+mas "Quick Sticky Notes", id: 6740142714  # Sticky notes app
+mas "Microsoft Outlook", id: 985367838    # Email client
