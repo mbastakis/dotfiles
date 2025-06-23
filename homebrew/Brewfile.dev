@@ -48,3 +48,4 @@ brew "uv"               # Universal version manager
 brew "pyenv"            # Python version management
 brew "neovim"           # Neovim text editor
 brew "sops"             # Secrets management
+brew "opencode"         # OpenCode CLI
