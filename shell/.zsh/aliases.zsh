@@ -7,7 +7,8 @@ alias ....="cd ../../.."
 
 # Listing
 alias l="eza --color=always --no-user"
-alias ls="eza --long --color=always --icons=always --no-user"
+alias ls="eza --color=always --icons=always --no-user"
+alias ll="eza --long --color=always --icons=always --no-user"
 alias la="eza --long --color=always --icons=always --no-user --all"
 alias ld="eza --long --color=always --icons=always --no-user --group-directories-first --tree"
 alias lda="eza --long --color=always --icons=always --no-user --group-directories-first --tree --all"
