@@ -57,5 +57,22 @@
         "key": "shift+cmd+c",
         "command": "claude-code.runClaude.keyboard",
         "when": "claude-code.hasClaudeInPath"
+    },
+    {
+        "key": "cmd+e",
+        "command": "yazi-vscode.toggle"
+    },
+    {
+        "key": "shift+cmd+y",
+        "command": "-yazi-vscode.toggle"
+    },
+    {
+        "key": "cmd+e",
+        "command": "-actions.findWithSelection"
+    },
+    {
+        "key": "cmd+e",
+        "command": "-editor.action.toggleScreenReaderAccessibilityMode",
+        "when": "accessibilityHelpIsShown"
     }
 ]
