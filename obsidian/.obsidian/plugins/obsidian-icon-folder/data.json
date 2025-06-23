@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "SiShortcut",
       "TiBooks",
       "OcTasklist24",
       "CoCalendarEvent",
-      "IbDashboard",
-      "BoBxTask"
+      "IbDashboard"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [
@@ -361,5 +361,20 @@
   },
   "Calendar/Calendar Events/Go to Chara.md": {
     "iconName": "CoCalendarEvent"
+  },
+  "Projects/Tasks/Kanban Tasks/Check Claude + Docker MCP and remove Copilot in obsidian if not needed.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/Check Hyperbrowser.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/make terminal shortcuts-commands ?.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/Maybe Replace Warp with Ghostty.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Extras/Unkown/vivaldi-shortcuts.md": {
+    "iconName": "SiShortcut"
   }
 }

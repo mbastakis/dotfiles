@@ -1,0 +1,1 @@
+{"path":"Extras/Images/Pasted image 20241110185540 1.png","text":"1. The Service selector should match the label of the Pod 2. The Service targetPort should match the containerPort 3. The Service port can be any number 4. The service.port of the Ingress should match the port in the Service O 1 RGBT ) o R VT o VT G g E Y ool oI o O 1 e R =R BT","libVersion":"0.5.0","langs":"eng"}

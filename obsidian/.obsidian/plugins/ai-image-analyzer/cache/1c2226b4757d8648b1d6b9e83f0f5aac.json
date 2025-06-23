@@ -1,0 +1,1 @@
+{"path":"Extras/Images/Pasted image 20241110190643 1.png","text":"1. Start button\n2. Stop button\n3. CrashLoopBackoff\n4. RunContainerError\n5. KillContainerError\n6. VerifyNonRootError\n7. RunInitializationError\n8. CreatePodSandboxError\n9. ConfigureSandBoxError\n10. SetupNetworkError\n11. TeardownNetworkError","libVersion":"0.2.0"}

@@ -1,0 +1,1 @@
+{"path":"Extras/Images/Pasted image 20240903002424 1.png","text":"* AWS PrivateLink /VPC Endpoint Services: » Connect services privately from your service VPC to customers VPC * Doesn't need VPC Peering, public Internet, NAT Gateway, Route Tables * Must be used with Network Load Balancer & ENI","libVersion":"0.5.0","langs":"eng"}

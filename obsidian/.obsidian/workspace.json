@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "918c5c5e05ecf1bc",
+        "id": "38677f07e3998ffc",
         "type": "tabs",
         "children": [
           {
-            "id": "f7afd0d1a1106ed3",
+            "id": "c402baa3a499ba50",
             "type": "leaf",
             "state": {
               "type": "beautitab-react-view",
@@ -17,17 +17,22 @@
             }
           },
           {
-            "id": "0f4bfeea9099f58c",
+            "id": "6a8ca481c16e7406",
             "type": "leaf",
             "state": {
-              "type": "obsidian-projects",
-              "state": {},
-              "icon": "projects-icon",
-              "title": "Projects"
+              "type": "markdown",
+              "state": {
+                "file": "Resources/Shortcuts/obsidian-shortcuts.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "obsidian-shortcuts"
             }
           },
           {
-            "id": "1f6c7c7354cace11",
+            "id": "3efa303d4b61b73b",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -40,9 +45,19 @@
               "icon": "lucide-file",
               "title": "vscode-shortcuts"
             }
+          },
+          {
+            "id": "9ff4c5e0abf64fec",
+            "type": "leaf",
+            "state": {
+              "type": "obsidian-projects",
+              "state": {},
+              "icon": "projects-icon",
+              "title": "Projects"
+            }
           }
         ],
-        "currentTab": 1
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -95,8 +110,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -121,19 +135,8 @@
               "icon": "layout-list",
               "title": "GCal Schedule View"
             }
-          },
-          {
-            "id": "4b8fa998d836d332",
-            "type": "leaf",
-            "state": {
-              "type": "copilot-chat-view",
-              "state": {},
-              "icon": "message-square",
-              "title": "Copilot"
-            }
           }
-        ],
-        "currentTab": 1
+        ]
       },
       {
         "id": "014043c44890df20",
@@ -177,7 +180,6 @@
       "cmdr:Files: Show file explorer": false,
       "ribbon-divider:ribbon-divider-d6836d41-e02e-4707-a8f9-d737fd521486": false,
       "obsidian-projects:Open projects": false,
-      "copilot:Open Copilot Chat": false,
       "obsidian-excalidraw-plugin:New drawing": false,
       "dashboard-navigator:Open dashboard navigator": false,
       "switcher:Open quick switcher": true,
@@ -211,40 +213,42 @@
       "omnisearch:Omnisearch": true
     }
   },
-  "active": "0f4bfeea9099f58c",
+  "active": "9ff4c5e0abf64fec",
   "lastOpenFiles": [
+    "Resources/ChatGPT Cheatsheet.md",
+    "Extras/Unkown/vivaldi-shortcuts.md",
+    "Extras/Images/Pasted image 20250121101821.png",
+    "Resources/Shortcuts/Shortcuts.md",
     "Resources/Shortcuts/vscode-shortcuts.md",
-    "task1/1.JPG.md",
+    "Projects/Tasks/Kanban Tasks/Maybe Replace Warp with Ghostty.md",
+    "Resources/Shortcuts/obsidian-shortcuts.md",
+    "Extras/Unkown/Self Improvement.md",
+    "Untitled 789.md",
+    "Resources/Books/Build a Large Language Model (From Scratch) (Sebastian Raschka) (Z-Library).pdf",
+    "Extras/Unkown/Omnisearch.md",
+    "Resources/Sticky Notes/Sticky stuff.md",
+    "Untitled 788.md",
+    "Untitled 787.md",
+    "Untitled 786.md",
+    "Untitled 785.md",
+    "Untitled 784.md",
+    "Untitled 783.md",
+    "Untitled 782.md",
+    "Untitled 781.md",
+    "Untitled 780.md",
+    "Untitled 779.md",
+    "Untitled 778.md",
+    "Untitled 777.md",
+    "Untitled 776.md",
+    "Untitled 775.md",
+    "Untitled 774.md",
+    "Untitled 773.md",
+    "Dashboards/Home.canvas",
+    "Dashboards/Dashboards.canvas",
     "task1",
-    "Calendar/Calendar Events/Go to Chara.md",
-    "Untitled 11.md",
-    "Untitled 110.md",
-    "Untitled 228.md",
-    "Untitled 349.md",
-    "Untitled 371.md",
-    "Untitled 430.md",
-    "Untitled 422.md",
-    "Untitled 423.md",
-    "Untitled 434.md",
-    "Untitled 431.md",
-    "Untitled 463.md",
-    "Untitled 464.md",
-    "Untitled 468.md",
-    "Untitled 472.md",
-    "Untitled 471.md",
-    "Untitled 470.md",
-    "Untitled 469.md",
-    "Untitled 473.md",
-    "Untitled 474.md",
-    "Untitled 475.md",
-    "Untitled 476.md",
-    "Untitled 477.md",
-    "Untitled 478.md",
     "Resources/Books/How to Win at Chess The Ultimate Guide for Beginners and Beyond (Levy Rozman) (Z-Library).epub",
     "Dashboards/Fitness.canvas",
-    "Dashboards/Home.canvas",
     "Dashboards/Discovery.canvas",
-    "Resources/Books/Build a Large Language Model (From Scratch) (Sebastian Raschka) (Z-Library).pdf",
     "Extras/PDF/Build a Large Language Model (From Scratch) (Sebastian Raschka) (Z-Library).pdf",
     "Resources/Books",
     "Extras/Images/indian-spirit-1750286229254.webp",
@@ -258,11 +262,9 @@
     "Extras/Images/2025/06/image",
     "Extras/Images/2025/06",
     "Extras/Images/2025",
-    "Dashboards/Dashboards.canvas",
     "Dashboards/PARA.canvas",
     "Extras/Images/photoshop-architecture-diagrams-hermetica-1749989367188.webp",
     "Extras/Images/Hermetic presentation tools, setup, slides-1749887996610.webp",
-    "Extras/Images/Hermetic presentation tools, setup, slides-1749867487892.webp",
     "k9s.yaml",
     "Dashboards/Global Tasks.canvas"
   ]

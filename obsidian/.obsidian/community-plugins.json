@@ -41,7 +41,8 @@
   "omnisearch",
   "beautitab",
   "obsidian-meta-bind-plugin",
-  "copilot",
   "obsidian-local-rest-api",
-  "js-engine"
+  "js-engine",
+  "text-extractor",
+  "ai-image-analyzer"
 ]
