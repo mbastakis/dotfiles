@@ -53,3 +53,6 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 # zoxide
 eval "$(zoxide init zsh)"
+
+# Atuin shell history
+eval "$(atuin init zsh)"
