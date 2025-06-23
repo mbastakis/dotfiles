@@ -24,6 +24,8 @@ brew "tree"                 # Directory tree viewer
 brew "eza"                  # Modern replacement for 'ls'
 brew "yazi"                 # Terminal file manager
 brew "atuin"                # Command history manager
+brew "sshs"                 # SSH client
+brew "age"                  # Simple, modern encryption tool
 
 # Fonts
 cask "font-jetbrains-mono"  # JetBrains Mono font
