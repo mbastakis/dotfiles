@@ -18,6 +18,7 @@
   "workbench.tree.enableStickyScroll": true,
   "workbench.tree.renderIndentGuides": "always",
   "workbench.tree.indent": 8,
+  "explorer.autoReveal": false,
   "explorer.compactFolders": false,
   "explorer.confirmDragAndDrop": false,
   "explorer.confirmDelete": false,
@@ -192,6 +193,7 @@
   "git.ignoreMissingGitWarning": true,
   "git.blame.editorDecoration.enabled": true,
   // Terminal Settings
+  "terminal.integrated.hideOnStartup": "whenEmpty",
   "terminal.integrated.inheritEnv": false,
   "terminal.integrated.gpuAcceleration": "off",
   "terminal.external.osxExec": "Warp.app",
@@ -208,6 +210,11 @@
     "GitHub.copilot",
     "GitHub.copilot-chat"
   ],
+  // FindItFaster
+  "find-it-faster.general.useTerminalInEditor": true,
+  "find-it-faster.general.showMaximizedTerminal": true,
+  "find-it-faster.general.hideTerminalAfterFail": false,
+  "find-it-faster.general.restoreFocusTerminal": true,
   // Live Server
   "liveServer.settings.donotShowInfoMsg": true,
   "liveServer.settings.multiRootWorkspaceName": "",
@@ -217,7 +224,6 @@
   "liveServer.settings.AdvanceCustomBrowserCmdLine": "",
   "liveServer.settings.donotVerifyTags": true,
   "liveServer.settings.host": "",
-
   // GitHub Copilot
   "github.copilot.nextEditSuggestions.enabled": true,
   "github.copilot.advanced": {},
@@ -277,32 +283,10 @@
   // ----------------------------------------------------------------------
   // MCP (Multi-Cloud Platform) Settings
   // ----------------------------------------------------------------------
-  // "mcp": {
-  //   "servers": {
-  //     "Exa Search": {
-  //       "command": "npx",
-  //       "args": [
-  //         "-y",
-  //         "@smithery/cli@latest",
-  //         "run",
-  //         "exa",
-  //         "--key",
-  //         "6813c168-d8c2-4097-a5ff-00adfef8b522"
-  //       ]
-  //     },
-  //     "Context7": {
-  //       "command": "npx",
-  //       "args": [
-  //         "-y",
-  //         "@smithery/cli@latest",
-  //         "run",
-  //         "@upstash/context7-mcp",
-  //         "--key",
-  //         "6813c168-d8c2-4097-a5ff-00adfef8b522"
-  //       ]
-  //     }
-  //   }
-  // },
+  "mcp": {
+    "servers": {
+    }
+  },
   // ----------------------------------------------------------------------
   // END OF MCP Settings
   // ----------------------------------------------------------------------
@@ -389,5 +373,5 @@
   // OTHER SETTINGS
   // ----------------------------------------------------------------------
   // ----------------------------------------------------------------------
-  "dummy-value": "dummy-value"
+  "dummy-value": "dummy-value"  
 }
