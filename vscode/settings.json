@@ -54,11 +54,12 @@
   "editor.cursorSmoothCaretAnimation": "on",
   "editor.cursorStyle": "block",
   // Fonts
+  "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font Mono",
+  "terminal.integrated.fontSize": 16,
   "editor.fontSize": 16,
   "editor.lineHeight": 1.6,
   "editor.fontLigatures": true,
   "editor.fontFamily": "JetBrains Mono",
-  "terminal.integrated.fontFamily": "JetBrains Mono",
   "editor.inlayHints.fontFamily": "JetBrains Mono",
   "debug.console.fontFamily": "JetBrains Mono",
   "scm.inputFontFamily": "JetBrains Mono",
@@ -373,5 +374,5 @@
   // OTHER SETTINGS
   // ----------------------------------------------------------------------
   // ----------------------------------------------------------------------
-  "dummy-value": "dummy-value"  
+  "dummy-value": "dummy-value"
 }
