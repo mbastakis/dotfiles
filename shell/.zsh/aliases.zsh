@@ -8,10 +8,10 @@ alias ....="cd ../../.."
 # Listing
 alias l="eza --color=always --no-user"
 alias ls="eza --long --color=always --icons=always --no-user"
-alias lsa="eza --long --color=always --icons=always --no-user --all"
-alias lsd="eza --long --color=always --icons=always --no-user --group-directories-first --tree"
-alias lsda="eza --long --color=always --icons=always --no-user --group-directories-first --tree --all"
-alias lsg="eza --long --color=always --icons=always --no-user --git"
+alias la="eza --long --color=always --icons=always --no-user --all"
+alias ld="eza --long --color=always --icons=always --no-user --group-directories-first --tree"
+alias lda="eza --long --color=always --icons=always --no-user --group-directories-first --tree --all"
+alias lg="eza --long --color=always --icons=always --no-user --git"
 
 # Utilities
 alias reload="source ~/.zshrc"
@@ -22,3 +22,6 @@ alias dotfiles="cd ~/.dotfiles"
 alias v="nvim"
 alias vi="nvim"
 alias vim="nvim"
+
+# Bat
+alias cat="bat"
