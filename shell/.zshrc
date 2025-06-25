@@ -47,12 +47,9 @@ autoload -Uz _zinit
 # bun completions
 [ -s "/Users/A200407315/.bun/_bun" ] && source "/Users/A200407315/.bun/_bun"
 
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
-# zoxide
-eval "$(zoxide init zsh)"
 
 # Atuin shell history
 eval "$(atuin init zsh)"
+
+# Zoxide
+eval "$(zoxide init zsh)"

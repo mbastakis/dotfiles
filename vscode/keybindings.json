@@ -1,78 +1,144 @@
 // Place your key bindings in this file to override the defaults
 [
-    {
-        "key": "cmd+p",
-        "command": "workbench.action.showCommands"
-    },
-    {
-        "key": "cmd+o",
-        "command": "workbench.action.quickOpen"
-    },
-    {
-        "key": "cmd+t",
-        "command": "projectManager.listProjects"
-    },
-    {
-        "key": "ctrl+cmd+o",
-        "command": "fzf-quick-open.runFzfFile"
-    },
-    {
-        "key": "ctrl+shift+pagedown",
-        "command": "editor.gotoNextFold"
-    },
-    {
-        "key": "ctrl+shift+pageup",
-        "command": "editor.gotoPreviousFold"
-    },
-    {
-        "key": "shift+cmd+o",
-        "command": "find-it-faster.findFiles"
-    },
-    {
-        "key": "shift+cmd+f",
-        "command": "find-it-faster.findWithinFiles"
-    },
-    {
-        "key": "cmd+l",
-        "command": "editor.toggleFold",
-        "when": "editorTextFocus && foldingEnabled"
-    },
-    {
-        "key": "cmd+g",
-        "command": "lazygit.openLazygit"
-    },
-    {
-        "key": "ctrl+n",
-        "command": "welcome.showNewFileEntries"
-    },
-    {
-        "key": "shift+enter",
-        "command": "workbench.action.terminal.sendSequence",
-        "args": {
-            "text": "\\\r\n"
-        },
-        "when": "terminalFocus"
-    },
-    {
-        "key": "shift+cmd+c",
-        "command": "claude-code.runClaude.keyboard",
-        "when": "claude-code.hasClaudeInPath"
-    },
-    {
-        "key": "cmd+e",
-        "command": "yazi-vscode.toggle"
-    },
-    {
-        "key": "shift+cmd+y",
-        "command": "-yazi-vscode.toggle"
-    },
-    {
-        "key": "cmd+e",
-        "command": "-actions.findWithSelection"
-    },
-    {
-        "key": "cmd+e",
-        "command": "-editor.action.toggleScreenReaderAccessibilityMode",
-        "when": "accessibilityHelpIsShown"
+  // Command Palette
+  {
+    "key": "cmd+p",
+    "command": "workbench.action.showCommands"
+  },
+  // Open file or show all editors
+  {
+    "key": "cmd+o",
+    "command": "workbench.action.quickOpen"
+  },
+  {
+    "key": "cmd+o",
+    "command": "workbench.action.showAllEditors",
+    "when": "editorIsOpen"
+  },
+  // File Explorer
+  {
+    "key": "ctrl+n",
+    "command": "welcome.showNewFileEntries"
+  },
+  // Editor
+  {
+    "key": "ctrl+shift+pagedown",
+    "command": "editor.gotoNextFold"
+  },
+  {
+    "key": "ctrl+shift+pageup",
+    "command": "editor.gotoPreviousFold"
+  },
+  {
+    "key": "cmd+l",
+    "command": "editor.toggleFold",
+    "when": "editorTextFocus && foldingEnabled"
+  },
+  // Lazygit
+  {
+    "key": "cmd+g",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "workbench.action.createTerminalEditor",
+        {
+          "command": "workbench.action.terminal.sendSequence",
+          "args": {
+            "text": "lazygit && exit\n"
+          }
+        }
+      ]
     }
+  },
+  // Yazi
+  {
+    "key": "cmd+e",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "workbench.action.createTerminalEditor",
+        {
+          "command": "workbench.action.terminal.sendSequence",
+          "args": {
+            "text": "y && exit\n"
+          }
+        }
+      ]
+    }
+  },
+  // k9s
+  {
+    "key": "cmd+k",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "workbench.action.createTerminalEditor",
+        {
+          "command": "workbench.action.terminal.sendSequence",
+          "args": {
+            "text": "k9s && exit\n"
+          }
+        }
+      ]
+    }
+  },
+  // Opencode
+  {
+    "key": "cmd+shift+g",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "workbench.action.createTerminalEditor",
+        {
+          "command": "workbench.action.terminal.sendSequence",
+          "args": {
+            "text": "opencode && exit\n"
+          }
+        }
+      ]
+    }
+  },
+  // Claude Code
+  {
+    "key": "shift+cmd+c",
+    "command": "claude-code.runClaude.keyboard",
+    "when": "claude-code.hasClaudeInPath"
+  },
+  // Terminal
+  {
+    "key": "shift+enter",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+      "text": "\\\r\n"
+    },
+    "when": "terminalFocus"
+  },
+  {
+    "key": "ctrl+t",
+    "command": "workbench.action.createTerminalEditor",
+    "when": "!terminalFocus"
+  },
+  {
+    "key": "ctrl+shift+t",
+    "command": "workbench.action.createTerminalEditor"
+  },
+  {
+    "key": "ctrl+t",
+    "command": "-editor.action.transposeLetters",
+    "when": "textInputFocus && !editorReadonly"
+  },
+  // Extension Projects
+  {
+    "key": "cmd+t",
+    "command": "projectManager.listProjects"
+  },
+  // Extension Find It Faster
+  {
+    "key": "shift+cmd+f",
+    "command": "find-it-faster.findWithinFiles"
+  },
+  {
+    "key": "shift+cmd+o",
+    "command": "find-it-faster.findFiles"
+  }
 ]

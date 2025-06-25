@@ -37,3 +37,7 @@ export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
 
 # Dotfiles path
 export DOTFILES_PATH="$HOME/dev/dotfiles"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

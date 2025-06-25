@@ -1,0 +1,277 @@
+#!/usr/bin/env bash
+#
+# Comprehensive dotfiles management script
+#
+# Author: mbastakis
+# Last updated: $(date '+%Y-%m-%d')
+#
+
+set -euo pipefail
+IFS=$'\n\t'
+
+# Get script directory and source utils
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_ROOT="$(dirname "$SCRIPT_DIR")"
+source "$DOTFILES_ROOT/scripts/utils.sh"
+
+# Initialize utils
+init_utils
+
+# Main function
+main() {
+    local command=""
+    
+    # Parse arguments
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            bootstrap|setup|install)
+                command="bootstrap"
+                shift
+                break  # Let bootstrap handle remaining args
+                ;;
+            update|sync)
+                command="update"
+                shift
+                break  # Let update handle remaining args
+                ;;
+            stow|link)
+                command="stow"
+                shift
+                break  # Let stow handle remaining args
+                ;;
+            brew|homebrew)
+                command="brew"
+                shift
+                break  # Let brew handle remaining args
+                ;;
+            vscode|code)
+                command="vscode"
+                shift
+                break  # Let vscode handle remaining args
+                ;;
+            obsidian)
+                command="obsidian"
+                shift
+                break  # Let obsidian handle remaining args
+                ;;
+            macos|settings)
+                command="macos"
+                shift
+                break  # Let macos handle remaining args
+                ;;
+            status|info)
+                command="status"
+                shift
+                ;;
+            clean|cleanup)
+                command="clean"
+                shift
+                ;;
+            -v|--verbose)
+                VERBOSE=true
+                shift
+                ;;
+            -y|--yes)
+                FORCE_YES=true
+                shift
+                ;;
+            --dry-run)
+                DRY_RUN=true
+                shift
+                ;;
+            -h|--help)
+                show_help
+                exit 0
+                ;;
+            *)
+                log_error "Unknown command: $1"
+                show_help
+                exit 1
+                ;;
+        esac
+    done
+    
+    # Validate command
+    if [ -z "$command" ]; then
+        log_error "Command is required"
+        show_help
+        exit 1
+    fi
+    
+    # Execute command
+    case "$command" in
+        "bootstrap")
+            exec "$DOTFILES_ROOT/bootstrap.sh" "$@"
+            ;;
+        "update")
+            exec "$DOTFILES_ROOT/bin/update_dotfiles" "$@"
+            ;;
+        "stow")
+            exec "$DOTFILES_ROOT/bin/manage_stow" "$@"
+            ;;
+        "brew")
+            exec "$DOTFILES_ROOT/bin/manage_brew" "$@"
+            ;;
+        "vscode")
+            exec "$DOTFILES_ROOT/bin/setup_vscode" "$@"
+            ;;
+        "obsidian")
+            exec "$DOTFILES_ROOT/scripts/setup_obsidian.sh" "$@"
+            ;;
+        "macos")
+            exec "$DOTFILES_ROOT/scripts/mac_settings.sh" "$@"
+            ;;
+        "status")
+            show_status
+            ;;
+        "clean")
+            clean_dotfiles
+            ;;
+        *)
+            log_error "Unknown command: $command"
+            exit 1
+            ;;
+    esac
+}
+
+# Show dotfiles status
+show_status() {
+    log_section "Dotfiles Status"
+    
+    # Git status
+    log_subsection "Git Repository"
+    cd "$DOTFILES_ROOT" || exit 1
+    if git status --porcelain | grep -q .; then
+        echo -e "${YELLOW}Repository has uncommitted changes${NC}"
+        git status --short
+    else
+        echo -e "${GREEN}Repository is clean${NC}"
+    fi
+    echo "Current branch: $(git branch --show-current)"
+    echo "Last commit: $(git log -1 --format='%h - %s (%cr)')"
+    echo ""
+    
+    # Stow status
+    log_subsection "Stow Packages"
+    "$DOTFILES_ROOT/bin/manage_stow" list
+    
+    # Homebrew status
+    log_subsection "Homebrew"
+    if command_exists brew; then
+        echo -e "${GREEN}Homebrew is installed${NC}"
+        echo "Version: $(brew --version | head -1)"
+        echo "Outdated packages: $(brew outdated | wc -l | tr -d ' ')"
+    else
+        echo -e "${RED}Homebrew is not installed${NC}"
+    fi
+    echo ""
+    
+    # VS Code status
+    log_subsection "VS Code"
+    if command_exists code; then
+        echo -e "${GREEN}VS Code CLI is available${NC}"
+        local extensions_file="$DOTFILES_ROOT/vscode/extensions.txt"
+        if [ -f "$extensions_file" ]; then
+            echo "Extensions in dotfiles: $(wc -l < "$extensions_file" | tr -d ' ')"
+        fi
+        echo "Currently installed: $(code --list-extensions | wc -l | tr -d ' ')"
+    else
+        echo -e "${YELLOW}VS Code CLI not available${NC}"
+    fi
+    echo ""
+    
+    # System info
+    log_subsection "System Information"
+    echo "OS: $(sw_vers -productName) $(sw_vers -productVersion)"
+    echo "Shell: $SHELL"
+    echo "Dotfiles location: $DOTFILES_ROOT"
+}
+
+# Clean dotfiles
+clean_dotfiles() {
+    log_section "Cleaning Dotfiles"
+    
+    if ! ask_yes_no "This will clean up backup files and temporary data. Continue?" "n"; then
+        log_info "Cleanup cancelled"
+        return 0
+    fi
+    
+    # Clean backup files
+    log_info "Removing backup files"
+    if [[ "$DRY_RUN" != "true" ]]; then
+        find "$HOME" -name "*.backup.*" -type f -mtime +30 -delete 2>/dev/null || true
+        log_success "Old backup files removed"
+    else
+        log_info "[DRY RUN] Would remove old backup files"
+    fi
+    
+    # Clean Homebrew
+    if command_exists brew; then
+        log_info "Cleaning Homebrew cache"
+        if [[ "$DRY_RUN" != "true" ]]; then
+            brew cleanup --prune=all
+            log_success "Homebrew cache cleaned"
+        else
+            log_info "[DRY RUN] Would clean Homebrew cache"
+        fi
+    fi
+    
+    # Clean VS Code extensions cache
+    local vscode_cache="$HOME/Library/Caches/com.microsoft.VSCode"
+    if [ -d "$vscode_cache" ]; then
+        log_info "Cleaning VS Code cache"
+        if [[ "$DRY_RUN" != "true" ]]; then
+            rm -rf "$vscode_cache"
+            log_success "VS Code cache cleaned"
+        else
+            log_info "[DRY RUN] Would clean VS Code cache"
+        fi
+    fi
+    
+    log_success "Cleanup complete"
+}
+
+# Help function
+show_help() {
+    cat << EOF
+Comprehensive Dotfiles Management Script
+
+Usage: $0 COMMAND [OPTIONS]
+
+Commands:
+    bootstrap, setup, install    Bootstrap new system with dotfiles
+    update, sync                Update dotfiles and configurations
+    stow, link                  Manage stow package linking
+    brew, homebrew              Manage Homebrew packages
+    vscode, code                Manage VS Code configuration
+    obsidian                    Manage Obsidian configuration
+    macos, settings             Apply macOS system settings
+    status, info                Show dotfiles status and information
+    clean, cleanup              Clean up backup files and caches
+
+Global Options:
+    -v, --verbose               Enable verbose output
+    -y, --yes                  Answer yes to all prompts
+    --dry-run                  Show what would be done without executing
+    -h, --help                 Show this help message
+
+Examples:
+    $0 bootstrap --all          # Full system setup
+    $0 update                   # Update all components
+    $0 stow -a                  # Link all stow packages
+    $0 brew install -c dev      # Install development tools
+    $0 vscode sync              # Sync VS Code configuration
+    $0 status                   # Show current status
+    $0 clean                    # Clean up old files
+
+For command-specific help, use:
+    $0 COMMAND --help
+
+Dotfiles Location: $DOTFILES_ROOT
+EOF
+}
+
+# Run main function if script is executed directly
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    main "$@"
+fi

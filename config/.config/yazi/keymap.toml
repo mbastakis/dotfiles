@@ -59,7 +59,7 @@ keymap = [
 	{ on = "<Tab>", run = "spot", desc = "Spot hovered file" },
 
 	# Operation
-	{ on = "o",         run = "open",                        desc = "Open selected files" },
+	# { on = "o",         run = "open",                        desc = "Open selected files" },
 	{ on = "O",         run = "open --interactive",          desc = "Open selected files interactively" },
 	{ on = "<Enter>",   run = "open",                        desc = "Open selected files" },
 	{ on = "<S-Enter>", run = "open --interactive",          desc = "Open selected files interactively" },
@@ -79,11 +79,11 @@ keymap = [
 	{ on = ";",         run = "shell --interactive",         desc = "Run a shell command" },
 	{ on = ":",         run = "shell --block --interactive", desc = "Run a shell command (block until finishes)" },
 	{ on = ".",         run = "hidden toggle",               desc = "Toggle the visibility of hidden files" },
-	{ on = "s",         run = "search --via=fd",             desc = "Search files by name via fd" },
-	{ on = "S",         run = "search --via=rg",             desc = "Search files by content via ripgrep" },
+	# { on = "s",         run = "search --via=fd",             desc = "Search files by name via fd" },
+	{ on = "f",         run = "search --via=rg",             desc = "Search files by content via ripgrep" },
 	{ on = "<C-s>",     run = "escape --search",             desc = "Cancel the ongoing search" },
-	{ on = "z",         run = "plugin fzf",                  desc = "Jump to a file/directory via fzf" },
-	{ on = "Z",         run = "plugin zoxide",               desc = "Jump to a directory via zoxide" },
+	{ on = "o",         run = "plugin fzf",                  desc = "Jump to a file/directory via fzf" },
+	{ on = "z",         run = "plugin zoxide",               desc = "Jump to a directory via zoxide" },
 
 	# Linemode
 	{ on = [ "m", "s" ], run = "linemode size",        desc = "Linemode: size" },
@@ -100,7 +100,7 @@ keymap = [
 	{ on = [ "c", "n" ], run = "copy name_without_ext", desc = "Copy the filename without extension" },
 
 	# Filter
-	{ on = "f", run = "filter --smart", desc = "Filter files" },
+	# { on = "f", run = "filter --smart", desc = "Filter files" },
 
 	# Find
 	{ on = "/", run = "find --smart",            desc = "Find next file" },
@@ -368,5 +368,5 @@ keymap = [
 	{ on = "<Down>", run = "arrow next", desc = "Next line" },
 
 	# Filtering
-	{ on = "f", run = "filter", desc = "Filter help items" },
+	# { on = "f", run = "filter", desc = "Filter help items" },
 ]

@@ -30,7 +30,7 @@ ueberzug_offset = [ 0, 0, 0, 0 ]
 
 [opener]
 edit = [
-	{ run = '${VISUAL:-vi} "$@"', desc = "$VISUAL", block = true, for = "unix" },
+	{ run = 'code "$@"', orphan = true, desc = "VS Code", for = "unix" },
 	{ run = 'code %*',    orphan = true, desc = "code",           for = "windows" },
 	{ run = 'code -w %*', block = true,  desc = "code (block)",   for = "windows" },
 ]
@@ -91,6 +91,17 @@ fetchers = [
 	# Mimetype
 	{ id = "mime", name = "*", run = "mime", prio = "high" },
 ]
+
+[[plugin.prepend_fetchers]]
+id   = "git"
+name = "*"
+run  = "git"
+
+[[plugin.prepend_fetchers]]
+id   = "git"
+name = "*/"
+run  = "git"
+
 spotters = [
 	{ name = "*/", run = "folder" },
 	# Code

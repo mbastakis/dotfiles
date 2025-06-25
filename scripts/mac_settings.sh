@@ -22,13 +22,22 @@ source "$SCRIPT_DIR/utils.sh"
 # Computer name to set
 COMPUTER_NAME="cerebro"
 
+# Initialize utils
+init_utils
+
 # Execute command with error handling
 execute() {
     local cmd="$1"
     local msg="${2:-Executing command}"
     
     log_info "$msg"
+    if [[ "$DRY_RUN" == "true" ]]; then
+        log_info "[DRY RUN] Would execute: $cmd"
+        return 0
+    fi
+    
     if eval "$cmd"; then
+        log_debug "Command succeeded: $cmd"
         return 0
     else
         local exit_code=$?
@@ -167,31 +176,45 @@ apply_changes() {
 
 # Show help information
 show_help() {
-    echo "Usage: $0 [OPTIONS]"
-    echo ""
-    echo "Script to configure macOS system preferences and settings"
-    echo ""
-    echo "Options:"
-    echo "  -h, --help          Show this help message and exit"
-    echo "  -n, --name NAME     Set computer name to NAME"
-    echo "  --no-restart        Don't restart system processes"
-    echo ""
-    echo "Examples:"
-    echo "  $0                  Apply all settings with default values"
-    echo "  $0 -n macbook-pro   Apply all settings and set computer name to macbook-pro"
-    echo "  $0 --no-restart     Apply all settings without restarting system processes"
+    cat << EOF
+macOS System Settings Configuration Script
+
+Usage: $0 [OPTIONS]
+
+Options:
+    -n, --name NAME     Set computer name to NAME (default: $COMPUTER_NAME)
+    --no-restart        Don't restart system processes after applying settings
+    -v, --verbose       Enable verbose output
+    -y, --yes          Answer yes to all prompts
+    --dry-run          Show what would be done without executing
+    -h, --help         Show this help message
+
+Examples:
+    $0                          # Apply all settings with default values
+    $0 -n macbook-pro          # Set computer name and apply settings
+    $0 --no-restart            # Apply settings without restarting processes
+    $0 --dry-run               # Preview what settings would be applied
+    $0 -v -y                   # Verbose output with auto-confirmation
+
+Settings Applied:
+    - Computer name and hostname
+    - Dock configuration (auto-hide, position, etc.)
+    - Finder preferences (show extensions, default view, etc.)
+    - Screenshot settings (location, format, etc.)
+    - Bluetooth and trackpad settings
+    - Keyboard and display preferences
+    - UI/UX improvements
+    - Date/time format
+    - Accessibility features
+EOF
 }
 
 # Parse command line arguments
 parse_arguments() {
-    RESTART=true
+    local restart=true
     
     while [[ $# -gt 0 ]]; do
         case "$1" in
-            -h|--help)
-                show_help
-                exit 0
-                ;;
             -n|--name)
                 if [[ -z "$2" ]]; then
                     log_error "Computer name not provided"
@@ -202,8 +225,24 @@ parse_arguments() {
                 shift 2
                 ;;
             --no-restart)
-                RESTART=false
+                restart=false
                 shift
+                ;;
+            -v|--verbose)
+                VERBOSE=true
+                shift
+                ;;
+            -y|--yes)
+                FORCE_YES=true
+                shift
+                ;;
+            --dry-run)
+                DRY_RUN=true
+                shift
+                ;;
+            -h|--help)
+                show_help
+                exit 0
                 ;;
             *)
                 log_error "Unknown option: $1"
@@ -212,6 +251,9 @@ parse_arguments() {
                 ;;
         esac
     done
+    
+    # Export restart flag
+    export RESTART="$restart"
 }
 
 # Main function

@@ -9,7 +9,7 @@
   "workbench.editor.showTabs": "single",
   "workbench.sideBar.location": "right",
   "workbench.activityBar.location": "top",
-  "workbench.startupEditor": "terminal",
+  "workbench.startupEditor": "none",
   "workbench.statusBar.visible": false,
   "workbench.tips.enabled": false,
   "editor.minimap.enabled": false,
@@ -23,7 +23,7 @@
   "explorer.confirmDragAndDrop": false,
   "explorer.confirmDelete": false,
   // Zoom Level
-  "window.zoomLevel": 3,
+  "window.zoomLevel": 1,
   "window.customTitleBarVisibility": "never",
   "window.titleBarStyle": "native",
   "custom-ui-style.electron": {
@@ -44,7 +44,7 @@
     ".sidebar": "border: none !important; box-shadow: none !important",
     ".title-actions": "display: none !important",
     ".title.show-file-icons .label-container .monaco-icon-label.file-icon": "justify-content: center !important;",
-    ".monaco-workbench .part.editor > .content .editor-group-container > .title > .label-container > .title-label": "padding-left: 70px !important; box-shadow: none !important;",
+    ".monaco-workbench .part.editor > .content .editor-group-container > .title > .label-container > .title-label": "padding-left: 70px !important; box-shadow: none !important; justify-content: center;",
     ".monaco-scrollable-element > .scrollbar> .slider": "border-radius: 35rem !important;  height: 6px !important; background: rgba(255, 255, 255, 0.2) !important;",
     ".monaco-editor .scroll-decoration": "box-shadow: none !important;",
     ".monaco-editor .sticky-widget": "box-shadow: none !important;"
@@ -194,9 +194,11 @@
   "git.ignoreMissingGitWarning": true,
   "git.blame.editorDecoration.enabled": true,
   // Terminal Settings
+  "terminal.integrated.defaultLocation": "editor",
+  "terminal.integrated.defaultProfile.linux": "editor",
+  "terminal.integrated.defaultProfile.osx": "zsh",
   "terminal.integrated.hideOnStartup": "whenEmpty",
   "terminal.integrated.inheritEnv": false,
-  "terminal.integrated.gpuAcceleration": "off",
   "terminal.external.osxExec": "Warp.app",
   // ----------------------------------------------------------------------
   // END OF DEFAULT SETTINGS
@@ -336,6 +338,7 @@
     "killall",
     "kyverno",
     "kyvernopre",
+    "Lazygit",
     "lscleanup",
     "lsregister",
     "magentacicd",
@@ -348,6 +351,7 @@
     "Nlsv",
     "nohidden",
     "noninteractive",
+    "opencode",
     "Pathbar",
     "preprod",
     "recents",
@@ -365,7 +369,8 @@
     "unhide",
     "universalaccess",
     "Vuillamy",
-    "wildlcard"
+    "wildlcard",
+    "Yazi"
   ],
   // ----------------------------------------------------------------------
   // END OF DICTIONARY
