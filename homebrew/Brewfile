@@ -26,8 +26,8 @@ brew "yazi"                 # Terminal file manager
 brew "atuin"                # Command history manager
 brew "sshs"                 # SSH client
 brew "age"                  # Simple, modern encryption tool
-brew "btop"                  # Resource monitor
-
+brew "btop"                 # Resource monitor
+brew "git-delta"            # Syntax-highlighting pager for git
 # Fonts
 cask "font-jetbrains-mono"  # JetBrains Mono font
 cask "font-jetbrains-mono-nerd-font"  # JetBrains Mono Nerd Font
