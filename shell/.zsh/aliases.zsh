@@ -25,3 +25,6 @@ alias vim="nvim"
 
 # Bat
 alias cat="bat --paging=always --color=always --style=plain --line-range=1:1000 --decorations=always"
+
+# Atuin
+alias r="atuin search -i"

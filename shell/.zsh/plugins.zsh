@@ -35,22 +35,6 @@ if [[ -f "${HOME}/.local/share/zinit/zinit.git/zinit.zsh" ]]; then
     # Load Kubectl plugin from Oh-My-Zsh
     zinit snippet OMZ::plugins/kubectl/kubectl.plugin.zsh
 
-    # History substring search
-    # Function to configure history substring search
-    _history_substring_search_config() {
-        # Bind up and down arrows
-        bindkey '^[[A' history-substring-search-up
-        bindkey '^[[B' history-substring-search-down
-        
-        # Bind k and j in vi mode
-        bindkey -M vicmd 'k' history-substring-search-up
-        bindkey -M vicmd 'j' history-substring-search-down
-    }
-    
-    # Load history substring search with configuration
-    zinit ice wait lucid atload'_history_substring_search_config'
-    zinit load zsh-users/zsh-history-substring-search
-
     # Load autosuggestions (should be before syntax highlighting)
     zinit ice wait lucid atload'!_zsh_autosuggest_start'
     zinit load zsh-users/zsh-autosuggestions
