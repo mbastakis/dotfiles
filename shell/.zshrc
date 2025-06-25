@@ -47,7 +47,6 @@ autoload -Uz _zinit
 # bun completions
 [ -s "/Users/A200407315/.bun/_bun" ] && source "/Users/A200407315/.bun/_bun"
 
-
 # Atuin shell history
 eval "$(atuin init zsh)"
 
