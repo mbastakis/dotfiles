@@ -37,98 +37,37 @@
   // Lazygit
   {
     "key": "cmd+g",
-    "command": "runCommands",
-    "args": {
-      "commands": [
-        "workbench.action.createTerminalEditor",
-        {
-          "command": "workbench.action.terminal.sendSequence",
-          "args": {
-            "text": "lazygit && exit\n"
-          }
-        }
-      ]
-    }
+    "command": "tui-manager.openLazygit"
   },
   // Lazydocker
   {
     "key": "cmd+shift+d",
-    "command": "runCommands",
-    "args": {
-      "commands": [
-        "workbench.action.createTerminalEditor",
-        {
-          "command": "workbench.action.terminal.sendSequence",
-          "args": {
-            "text": "lazydocker && exit\n"
-          }
-        }
-      ]
-    }
+    "command": "tui-manager.openLazydocker"
   },
   // Yazi
   {
     "key": "cmd+e",
-    "command": "runCommands",
-    "args": {
-      "commands": [
-        "workbench.action.createTerminalEditor",
-        {
-          "command": "workbench.action.terminal.sendSequence",
-          "args": {
-            "text": "y && exit\n"
-          }
-        }
-      ]
-    }
+    "command": "tui-manager.openYazi"
   },
   // Btop
   {
     "key": "cmd+shift+b",
-    "command": "runCommands",
-    "args": {
-      "commands": [
-        "workbench.action.createTerminalEditor",
-        {
-          "command": "workbench.action.terminal.sendSequence",
-          "args": {
-            "text": "btop && exit\n"
-          }
-        }
-      ]
-    }
+    "command": "tui-manager.openBtop"
   },
   // k9s
   {
     "key": "cmd+k",
-    "command": "runCommands",
-    "args": {
-      "commands": [
-        "workbench.action.createTerminalEditor",
-        {
-          "command": "workbench.action.terminal.sendSequence",
-          "args": {
-            "text": "k9s && exit\n"
-          }
-        }
-      ]
-    }
+    "command": "tui-manager.openK9s"
   },
   // Opencode
   {
     "key": "cmd+shift+g",
-    "command": "runCommands",
-    "args": {
-      "commands": [
-        "workbench.action.createTerminalEditor",
-        {
-          "command": "workbench.action.terminal.sendSequence",
-          "args": {
-            "text": "opencode && exit\n"
-          }
-        }
-      ]
-    }
+    "command": "tui-manager.openOpencode"
+  },
+  // Terminal
+  {
+    "key": "ctrl+t",
+    "command": "tui-manager.openBasicTerminal"
   },
   // Claude Code
   {
@@ -146,18 +85,8 @@
     "when": "terminalFocus"
   },
   {
-    "key": "ctrl+t",
-    "command": "workbench.action.createTerminalEditor",
-    "when": "!terminalFocus"
-  },
-  {
     "key": "ctrl+shift+t",
     "command": "workbench.action.createTerminalEditor"
-  },
-  {
-    "key": "ctrl+t",
-    "command": "-editor.action.transposeLetters",
-    "when": "textInputFocus && !editorReadonly"
   },
   // Extension Projects
   {
@@ -172,5 +101,10 @@
   {
     "key": "shift+cmd+o",
     "command": "find-it-faster.findFiles"
+  },
+  {
+    "key": "ctrl+t",
+    "command": "-editor.action.transposeLetters",
+    "when": "textInputFocus && !editorReadonly"
   }
 ]

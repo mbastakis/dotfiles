@@ -1,0 +1,65 @@
+{
+  "name": "tui-manager",
+  "displayName": "TUI Manager",
+  "description": "Manage and launch TUI applications in VS Code terminals",
+  "version": "1.0.0",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "tui-manager.openLazygit",
+        "title": "Open Lazygit",
+        "category": "TUI Manager"
+      },
+      {
+        "command": "tui-manager.openLazydocker",
+        "title": "Open Lazydocker",
+        "category": "TUI Manager"
+      },
+      {
+        "command": "tui-manager.openYazi",
+        "title": "Open Yazi",
+        "category": "TUI Manager"
+      },
+      {
+        "command": "tui-manager.openBtop",
+        "title": "Open Btop",
+        "category": "TUI Manager"
+      },
+      {
+        "command": "tui-manager.openK9s",
+        "title": "Open K9s",
+        "category": "TUI Manager"
+      },
+      {
+        "command": "tui-manager.openOpencode",
+        "title": "Open Opencode",
+        "category": "TUI Manager"
+      },
+      {
+        "command": "tui-manager.openBasicTerminal",
+        "title": "Open Terminal",
+        "category": "TUI Manager"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/node": "16.x",
+    "typescript": "^4.9.4"
+  }
+}

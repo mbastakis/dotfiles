@@ -128,6 +128,9 @@ setup_vscode_dotfiles() {
         create_vscode_symlink "snippets" "directory"
     fi
     
+    # Setup TUI Manager extension
+    setup_tui_manager_extension
+    
     log_success "VS Code dotfiles setup completed"
 }
 
@@ -289,6 +292,49 @@ Paths:
     VS Code config: $VSCODE_USER_DIR
     Dotfiles:       $DOTFILES_VSCODE_DIR
 EOF
+}
+
+# Setup TUI Manager extension
+setup_tui_manager_extension() {
+    local extension_dir="$DOTFILES_VSCODE_DIR/extensions/tui-manager"
+    local vscode_extensions_dir="$HOME/.vscode/extensions"
+    local target_link="$vscode_extensions_dir/tui-manager"
+    
+    log_info "Setting up TUI Manager extension"
+    
+    # Check if extension directory exists
+    if [ ! -d "$extension_dir" ]; then
+        log_error "TUI Manager extension directory not found: $extension_dir"
+        return 1
+    fi
+    
+    if [[ "$DRY_RUN" != "true" ]]; then
+        # Ensure VS Code extensions directory exists
+        ensure_dir "$vscode_extensions_dir"
+        
+        # Remove existing symlink if it exists
+        if [ -L "$target_link" ]; then
+            rm "$target_link"
+        fi
+        
+        # Create symlink to install extension
+        ln -sf "$extension_dir" "$target_link"
+        
+        # Compile the extension if TypeScript source exists
+        if [ -f "$extension_dir/tsconfig.json" ]; then
+            log_info "Compiling TUI Manager extension"
+            if command_exists npm; then
+                (cd "$extension_dir" && npm run compile 2>/dev/null || log_warning "Failed to compile extension")
+            else
+                log_warning "npm not available, extension may need manual compilation"
+            fi
+        fi
+        
+        log_success "TUI Manager extension installed: $target_link -> $extension_dir"
+        log_info "Please reload VS Code for the extension to take effect"
+    else
+        log_info "[DRY RUN] Would install TUI Manager extension"
+    fi
 }
 
 # Run main function if script is executed directly
