@@ -6,8 +6,8 @@ alias ...="cd ../.."
 alias ....="cd ../../.."
 
 # Listing
-alias l="eza --color=always --no-user"
-alias ls="eza --color=always --icons=always --no-user"
+alias l="eza --color=always --icons=always --no-user"
+alias ls="eza --color=always --no-user"
 alias ll="eza --long --color=always --icons=always --no-user"
 alias la="eza --long --color=always --icons=always --no-user --all"
 alias ld="eza --long --color=always --icons=always --no-user --group-directories-first --tree"
@@ -17,7 +17,6 @@ alias lg="eza --long --color=always --icons=always --no-user --git"
 # Utilities
 alias reload="source ~/.zshrc"
 alias brewup="brew update && brew upgrade && brew cleanup"
-alias dotfiles="cd ~/.dotfiles"
 
 # Vim
 alias v="nvim"
@@ -25,4 +24,4 @@ alias vi="nvim"
 alias vim="nvim"
 
 # Bat
-alias cat="bat"
+alias cat="bat --paging=always --color=always --style=plain --line-range=1:1000 --decorations=always"

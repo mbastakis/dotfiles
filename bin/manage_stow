@@ -1,0 +1,220 @@
+#!/usr/bin/env bash
+#
+# Stow configuration management script
+#
+# Author: mbastakis
+# Last updated: $(date '+%Y-%m-%d')
+#
+
+set -euo pipefail
+IFS=$'\n\t'
+
+# Get script directory and source utils
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_ROOT="$(dirname "$SCRIPT_DIR")"
+source "$DOTFILES_ROOT/scripts/utils.sh"
+
+# Initialize utils
+init_utils
+
+# Available stow packages
+AVAILABLE_PACKAGES=("config" "shell" "git" "docker" "warp")
+
+# Main function
+main() {
+    local action=""
+    local packages=()
+    local target="$HOME"
+    
+    # Parse arguments
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            stow|link|install)
+                action="stow"
+                shift
+                ;;
+            restow|relink|update)
+                action="restow"
+                shift
+                ;;
+            unstow|unlink|remove)
+                action="unstow"
+                shift
+                ;;
+            list|status)
+                action="list"
+                shift
+                ;;
+            -p|--packages)
+                IFS=',' read -ra packages <<< "$2"
+                shift 2
+                ;;
+            -t|--target)
+                target="$2"
+                shift 2
+                ;;
+            -a|--all)
+                packages=("${AVAILABLE_PACKAGES[@]}")
+                shift
+                ;;
+            -v|--verbose)
+                VERBOSE=true
+                shift
+                ;;
+            -y|--yes)
+                FORCE_YES=true
+                shift
+                ;;
+            --dry-run)
+                DRY_RUN=true
+                shift
+                ;;
+            -h|--help)
+                show_help
+                exit 0
+                ;;
+            *)
+                log_error "Unknown option: $1"
+                show_help
+                exit 1
+                ;;
+        esac
+    done
+    
+    # Validate action
+    if [ -z "$action" ]; then
+        log_error "Action is required"
+        show_help
+        exit 1
+    fi
+    
+    # Set default packages if none specified
+    if [ ${#packages[@]} -eq 0 ]; then
+        packages=("${AVAILABLE_PACKAGES[@]}")
+    fi
+    
+    log_section "Stow Management - $action"
+    
+    # Check if stow is installed
+    if ! command_exists stow; then
+        log_error "GNU Stow is not installed"
+        log_info "Install it with: brew install stow"
+        exit 1
+    fi
+    
+    # Execute action
+    case "$action" in
+        "stow"|"restow"|"unstow")
+            manage_packages "$action" "${packages[@]}"
+            ;;
+        "list")
+            list_packages "${packages[@]}"
+            ;;
+        *)
+            log_error "Unknown action: $action"
+            exit 1
+            ;;
+    esac
+    
+    log_section "Stow Management Complete"
+}
+
+# Manage packages with specified action
+manage_packages() {
+    local action="$1"
+    shift
+    local packages=("$@")
+    
+    for package in "${packages[@]}"; do
+        if printf '%s\n' "${AVAILABLE_PACKAGES[@]}" | grep -q "^$package$"; then
+            stow_package "$package" "$target" "$action"
+        else
+            log_error "Unknown package: $package"
+            log_info "Available packages: ${AVAILABLE_PACKAGES[*]}"
+            exit 1
+        fi
+    done
+}
+
+# List package status
+list_packages() {
+    local packages=("$@")
+    
+    log_subsection "Package Status"
+    
+    for package in "${packages[@]}"; do
+        if printf '%s\n' "${AVAILABLE_PACKAGES[@]}" | grep -q "^$package$"; then
+            local package_dir="$DOTFILES_ROOT/$package"
+            
+            if [ -d "$package_dir" ]; then
+                echo -n "📦 $package: "
+                
+                # Check if package is stowed by looking for symlinks
+                local stowed=false
+                if [ -d "$package_dir" ]; then
+                    while IFS= read -r -d '' file; do
+                        local relative_path="${file#$package_dir/}"
+                        local target_path="$target/$relative_path"
+                        
+                        if [ -L "$target_path" ] && [ "$(readlink "$target_path")" = "$file" ]; then
+                            stowed=true
+                            break
+                        fi
+                    done < <(find "$package_dir" -type f -print0 2>/dev/null)
+                fi
+                
+                if [[ "$stowed" == "true" ]]; then
+                    echo -e "${GREEN}STOWED${NC}"
+                else
+                    echo -e "${YELLOW}NOT STOWED${NC}"
+                fi
+            else
+                echo -e "📦 $package: ${RED}MISSING${NC}"
+            fi
+        else
+            log_warning "Unknown package: $package"
+        fi
+    done
+    
+    echo ""
+    log_info "Target directory: $target"
+    log_info "Dotfiles root: $DOTFILES_ROOT"
+}
+
+# Help function
+show_help() {
+    cat << EOF
+Stow Configuration Management Script
+
+Usage: $0 ACTION [OPTIONS]
+
+Actions:
+    stow, link, install     Create symlinks for packages
+    restow, relink, update  Update existing symlinks
+    unstow, unlink, remove  Remove symlinks for packages
+    list, status           Show package status
+
+Options:
+    -p, --packages LIST    Comma-separated list of packages
+                          Available: ${AVAILABLE_PACKAGES[*]}
+    -a, --all             Process all available packages
+    -t, --target DIR      Target directory (default: \$HOME)
+    -v, --verbose         Enable verbose output
+    -y, --yes            Answer yes to all prompts
+    --dry-run            Show what would be done without executing
+    -h, --help           Show this help message
+
+Examples:
+    $0 stow                              # Stow all packages
+    $0 stow -p config,shell             # Stow specific packages
+    $0 restow -a                        # Restow all packages
+    $0 unstow -p git                    # Remove git package symlinks
+    $0 list                             # Show status of all packages
+    $0 stow --dry-run                   # Preview stow operation
+EOF
+}
+
+# Run main function if script is executed directly
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    main "$@"
+fi

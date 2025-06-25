@@ -6,9 +6,7 @@ alexcvzz.vscode-sqlite
 anthropic.claude-code
 bradlc.vscode-tailwindcss
 britesnow.vscode-toggle-quotes
-chaitanyashahare.lazygit
 charliermarsh.ruff
-dautroc.yazi-vscode
 docker.docker
 donjayamanne.githistory
 dotjoshjohnson.xml

@@ -1,0 +1,218 @@
+#!/usr/bin/env bash
+#
+# Homebrew package management script
+#
+# Author: mbastakis
+# Last updated: $(date '+%Y-%m-%d')
+#
+
+set -euo pipefail
+IFS=$'\n\t'
+
+# Get script directory and source utils
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_ROOT="$(dirname "$SCRIPT_DIR")"
+source "$DOTFILES_ROOT/scripts/utils.sh"
+
+# Initialize utils
+init_utils
+
+# Available Brewfile categories
+declare -A BREWFILES=(
+    ["core"]="$DOTFILES_ROOT/homebrew/Brewfile"
+    ["apps"]="$DOTFILES_ROOT/homebrew/Brewfile.apps"
+    ["dev"]="$DOTFILES_ROOT/homebrew/Brewfile.dev"
+    ["mas"]="$DOTFILES_ROOT/homebrew/Brewfile.mas"
+)
+
+# Main function
+main() {
+    local action=""
+    local categories=()
+    local update_first=false
+    
+    # Parse arguments
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            install|update|upgrade|cleanup|bundle|list)
+                action="$1"
+                shift
+                ;;
+            -c|--categories)
+                IFS=',' read -ra categories <<< "$2"
+                shift 2
+                ;;
+            -u|--update-first)
+                update_first=true
+                shift
+                ;;
+            -v|--verbose)
+                VERBOSE=true
+                shift
+                ;;
+            -y|--yes)
+                FORCE_YES=true
+                shift
+                ;;
+            --dry-run)
+                DRY_RUN=true
+                shift
+                ;;
+            -h|--help)
+                show_help
+                exit 0
+                ;;
+            *)
+                log_error "Unknown option: $1"
+                show_help
+                exit 1
+                ;;
+        esac
+    done
+    
+    # Validate action
+    if [ -z "$action" ]; then
+        log_error "Action is required"
+        show_help
+        exit 1
+    fi
+    
+    # Set default categories if none specified
+    if [ ${#categories[@]} -eq 0 ]; then
+        categories=("core")
+    fi
+    
+    log_section "Homebrew Management - $action"
+    
+    # Install Homebrew if needed
+    install_homebrew
+    
+    # Update Homebrew first if requested
+    if [[ "$update_first" == "true" ]]; then
+        update_homebrew
+    fi
+    
+    # Execute action
+    case "$action" in
+        "install"|"bundle")
+            install_packages "${categories[@]}"
+            ;;
+        "update"|"upgrade")
+            update_homebrew
+            ;;
+        "cleanup")
+            cleanup_homebrew
+            ;;
+        "list")
+            list_packages "${categories[@]}"
+            ;;
+        *)
+            log_error "Unknown action: $action"
+            exit 1
+            ;;
+    esac
+    
+    log_section "Homebrew Management Complete"
+}
+
+# Install packages from specified categories
+install_packages() {
+    local categories=("$@")
+    
+    for category in "${categories[@]}"; do
+        if [[ -n "${BREWFILES[$category]:-}" ]]; then
+            local brewfile="${BREWFILES[$category]}"
+            
+            # Special handling for MAS
+            if [[ "$category" == "mas" ]]; then
+                if ! check_mas_signin; then
+                    log_warning "Skipping Mac App Store apps (not signed in)"
+                    continue
+                fi
+            fi
+            
+            install_brew_bundle "$brewfile" "$category packages"
+        else
+            log_error "Unknown category: $category"
+            log_info "Available categories: ${!BREWFILES[*]}"
+            exit 1
+        fi
+    done
+}
+
+# List packages from Brewfiles
+list_packages() {
+    local categories=("$@")
+    
+    for category in "${categories[@]}"; do
+        if [[ -n "${BREWFILES[$category]:-}" ]]; then
+            local brewfile="${BREWFILES[$category]}"
+            
+            if [ -f "$brewfile" ]; then
+                log_subsection "$category packages"
+                grep -E '^(brew|cask|mas)' "$brewfile" | head -20
+                echo ""
+            else
+                log_warning "Brewfile not found: $brewfile"
+            fi
+        else
+            log_error "Unknown category: $category"
+            exit 1
+        fi
+    done
+}
+
+# Cleanup Homebrew
+cleanup_homebrew() {
+    if ! command_exists brew; then
+        log_warning "Homebrew not installed"
+        return 1
+    fi
+    
+    log_info "Cleaning up Homebrew"
+    if [[ "$DRY_RUN" != "true" ]]; then
+        brew cleanup --prune=all
+        brew autoremove
+        log_success "Homebrew cleanup complete"
+    else
+        log_info "[DRY RUN] Would cleanup Homebrew"
+    fi
+}
+
+# Help function
+show_help() {
+    cat << EOF
+Homebrew Package Management Script
+
+Usage: $0 ACTION [OPTIONS]
+
+Actions:
+    install, bundle    Install packages from Brewfiles
+    update, upgrade    Update Homebrew and all packages
+    cleanup           Clean up old packages and cache
+    list              List packages in Brewfiles
+
+Options:
+    -c, --categories LIST    Comma-separated list of categories (default: core)
+                            Available: ${!BREWFILES[*]}
+    -u, --update-first      Update Homebrew before installing packages
+    -v, --verbose           Enable verbose output
+    -y, --yes              Answer yes to all prompts
+    --dry-run              Show what would be done without executing
+    -h, --help             Show this help message
+
+Examples:
+    $0 install                           # Install core packages
+    $0 install -c core,apps,dev         # Install multiple categories
+    $0 install -c mas -y                # Install Mac App Store apps (auto-yes)
+    $0 update                           # Update Homebrew and packages
+    $0 cleanup                          # Clean up old packages
+    $0 list -c all                      # List all packages
+    $0 install --dry-run                # Preview installation
+EOF
+}
+
+# Run main function if script is executed directly
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    main "$@"
+fi
