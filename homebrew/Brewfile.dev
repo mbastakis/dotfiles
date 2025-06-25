@@ -23,6 +23,7 @@ brew "docker"           # Containerization
 brew "docker-compose"    # Docker Compose for multi-container applications
 brew "docker-credential-helper" # Docker credential helper
 brew "colima"            # Container management tool
+brew "lazydocker"        # Terminal UI for Docker
 
 # Kubernetes tools
 brew "kubectl"          # Kubernetes CLI

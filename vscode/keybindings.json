@@ -50,6 +50,22 @@
       ]
     }
   },
+  // Lazydocker
+  {
+    "key": "cmd+shift+d",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "workbench.action.createTerminalEditor",
+        {
+          "command": "workbench.action.terminal.sendSequence",
+          "args": {
+            "text": "lazydocker && exit\n"
+          }
+        }
+      ]
+    }
+  },
   // Yazi
   {
     "key": "cmd+e",
