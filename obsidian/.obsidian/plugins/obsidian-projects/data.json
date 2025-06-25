@@ -89,6 +89,8 @@
               "InProgress": {
                 "weight": 4,
                 "records": [
+                  "Projects/Tasks/Kanban Tasks/Add plugins to yazi.md",
+                  "Projects/Tasks/Kanban Tasks/document yazi, fix vscode fzf, zoxide.md",
                   "Projects/Tasks/Kanban Tasks/Tool for easy context to llm.md",
                   "Projects/Tasks/Kanban Tasks/Track Subscriptions.md",
                   "Extras/Unkown/checkout browser use.md",
@@ -97,7 +99,8 @@
                   "Extras/Unkown/Check LangChain, LLamaIndex.md",
                   "Extras/Unkown/configure glove80.md",
                   "Projects/Tasks/Kanban Tasks/Obsidian MCP for task cration.md",
-                  "Projects/Tasks/Kanban Tasks/Add agent tool, check emails and create obsidian tasks.md"
+                  "Projects/Tasks/Kanban Tasks/Add agent tool, check emails and create obsidian tasks.md",
+                  "Projects/Tasks/Kanban Tasks/agentic tool for revolut api, track finance.md"
                 ],
                 "collapse": false
               }
