@@ -106,5 +106,13 @@
     "key": "ctrl+t",
     "command": "-editor.action.transposeLetters",
     "when": "textInputFocus && !editorReadonly"
+  },
+  {
+    "key": "ctrl+shift+w",
+    "command": "workbench.action.closeAllEditors"
+  },
+  {
+    "key": "cmd+k cmd+w",
+    "command": "-workbench.action.closeAllEditors"
   }
 ]
