@@ -5,11 +5,15 @@
 	path = ~/.gitconfig-work
 [includeIf "gitdir:~/dev/personal/"]
 	path = ~/.gitconfig-personal
+
 [core]
-	pager = diff-so-fancy | less --tabs=4 -RF
+	pager = delta
 	editor = code --wait
 [interactive]
-	diffFilter = diff-so-fancy --patch
+	diffFilter = delta --color-only
+[delta]
+	navigate = true  # use n and N to move between diff sections
+	dark = true      # or light = true, or omit for auto-detection
 [color]
 	ui = true
 [color "diff-highlight"]
@@ -27,3 +31,5 @@
 	whitespace = red reverse
 [init]
 	defaultBranch = master
+[merge]
+    conflictstyle = zdiff3
