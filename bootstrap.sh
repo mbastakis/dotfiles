@@ -26,6 +26,8 @@ INSTALL_MAS=false
 SETUP_MACOS=false
 SETUP_VSCODE=false
 SETUP_OBSIDIAN=false
+SETUP_YAZI=false
+SETUP_NPM_GLOBALS=true
 
 # Main function
 main() {
@@ -72,6 +74,8 @@ parse_bootstrap_args() {
                 SETUP_MACOS=true
                 SETUP_VSCODE=true
                 SETUP_OBSIDIAN=true
+                SETUP_YAZI=true
+                SETUP_NPM_GLOBALS=true
                 shift
                 ;;
             --core)
@@ -100,6 +104,14 @@ parse_bootstrap_args() {
                 ;;
             --obsidian)
                 SETUP_OBSIDIAN=true
+                shift
+                ;;
+            --yazi)
+                SETUP_YAZI=true
+                shift
+                ;;
+            --npm-globals)
+                SETUP_NPM_GLOBALS=true
                 shift
                 ;;
             --no-homebrew)
@@ -145,6 +157,8 @@ show_config_summary() {
     echo "macOS settings:  $([ "$SETUP_MACOS" = true ] && echo "✓ Apply" || echo "✗ Skip")"
     echo "VS Code:         $([ "$SETUP_VSCODE" = true ] && echo "✓ Setup" || echo "✗ Skip")"
     echo "Obsidian:        $([ "$SETUP_OBSIDIAN" = true ] && echo "✓ Setup" || echo "✗ Skip")"
+    echo "Yazi:            $([ "$SETUP_YAZI" = true ] && echo "✓ Setup" || echo "✗ Skip")"
+    echo "NPM Globals:     $([ "$SETUP_NPM_GLOBALS" = true ] && echo "✓ Install" || echo "✗ Skip")"
     echo "Stow configs:    $([ "$SETUP_STOW" = true ] && echo "✓ Link" || echo "✗ Skip")"
     echo ""
 }
@@ -185,6 +199,16 @@ execute_installation() {
     
     if [[ "$SETUP_OBSIDIAN" == "true" ]]; then
         setup_obsidian_config
+    fi
+    
+    # Setup Yazi file manager
+    if [[ "$SETUP_YAZI" == "true" ]]; then
+        setup_yazi_config
+    fi
+    
+    # Install NPM global tools
+    if [[ "$SETUP_NPM_GLOBALS" == "true" ]]; then
+        setup_npm_globals
     fi
 }
 
@@ -258,6 +282,18 @@ setup_obsidian_config() {
     "$SCRIPT_DIR/scripts/setup_obsidian.sh"
 }
 
+# Setup Yazi file manager
+setup_yazi_config() {
+    log_section "Setting up Yazi File Manager"
+    "$SCRIPT_DIR/scripts/setup_yazi.sh" setup
+}
+
+# Setup NPM global tools
+setup_npm_globals() {
+    log_section "Installing NPM Global Tools"
+    "$SCRIPT_DIR/scripts/setup_npm_globals.sh" install
+}
+
 # Help function
 show_help() {
     cat << EOF
@@ -275,6 +311,8 @@ Options:
     --macos             Apply macOS system settings
     --vscode            Setup VS Code configuration and extensions
     --obsidian          Setup Obsidian vault configuration
+    --yazi              Setup Yazi file manager plugins and themes
+    --npm-globals       Install global NPM tools (Claude Code, etc.)
     --no-homebrew       Skip Homebrew installation
     --no-stow           Skip stow configuration linking
     -v, --verbose       Enable verbose output
@@ -286,6 +324,7 @@ Examples:
     $0 -y --all                 # Non-interactive full installation
     $0 --dev --vscode          # Install only dev tools and VS Code setup
     $0 --apps --mas --macos    # Install GUI apps, MAS apps, and apply macOS settings
+    $0 --yazi --npm-globals    # Setup Yazi and install global NPM tools
     $0 --dry-run --all         # Preview full installation without executing
 
 Component Details:
@@ -296,6 +335,8 @@ Component Details:
     macos     - System preferences and settings
     vscode    - VS Code settings, keybindings, and extensions
     obsidian  - Obsidian vault configuration syncing
+    yazi      - Yazi file manager plugins and themes setup
+    npm-glob  - Global NPM tools (Claude Code, ni, ncu, etc.)
     stow      - Symlink dotfiles configurations to home directory
 EOF
 }
