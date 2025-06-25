@@ -20,6 +20,7 @@ init_utils
 # Global NPM packages to install
 declare -A NPM_PACKAGES=(
     ["@anthropic-ai/claude-code"]="Claude Code CLI - AI-powered coding assistant"
+    ["@google/gemini-cli"]="Gemini CLI - Google Gemini command line interface"
     ["@antfu/ni"]="Package manager agnostic commands"
     ["npm-check-updates"]="Update package.json dependencies to latest versions"
     ["http-server"]="Simple HTTP server for local development"
