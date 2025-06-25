@@ -26,6 +26,7 @@ brew "yazi"                 # Terminal file manager
 brew "atuin"                # Command history manager
 brew "sshs"                 # SSH client
 brew "age"                  # Simple, modern encryption tool
+brew "btop"                  # Resource monitor
 
 # Fonts
 cask "font-jetbrains-mono"  # JetBrains Mono font

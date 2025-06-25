@@ -82,6 +82,22 @@
       ]
     }
   },
+  // Btop
+  {
+    "key": "cmd+shift+b",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "workbench.action.createTerminalEditor",
+        {
+          "command": "workbench.action.terminal.sendSequence",
+          "args": {
+            "text": "btop && exit\n"
+          }
+        }
+      ]
+    }
+  },
   // k9s
   {
     "key": "cmd+k",
