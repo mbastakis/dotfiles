@@ -37,37 +37,47 @@
   // Lazygit
   {
     "key": "cmd+g",
-    "command": "tui-manager.openLazygit"
+    "command": "tui-manager.lazygit"
   },
   // Lazydocker
   {
     "key": "cmd+shift+d",
-    "command": "tui-manager.openLazydocker"
+    "command": "tui-manager.lazydocker"
   },
   // Yazi
   {
     "key": "cmd+e",
-    "command": "tui-manager.openYazi"
+    "command": "tui-manager.yazi"
   },
   // Btop
   {
     "key": "cmd+shift+b",
-    "command": "tui-manager.openBtop"
+    "command": "tui-manager.btop"
   },
   // k9s
   {
     "key": "cmd+k",
-    "command": "tui-manager.openK9s"
+    "command": "tui-manager.k9s"
+  },
+  // Claude Code
+  {
+    "key": "cmd+shift+6",
+    "command": "tui-manager.claudecode"
   },
   // Opencode
   {
-    "key": "cmd+shift+g",
-    "command": "tui-manager.openOpencode"
+    "key": "cmd+shift+7",
+    "command": "tui-manager.opencode"
+  },
+  // Open Gemini
+  {
+    "key": "cmd+shift+8",
+    "command": "tui-manager.gemini"
   },
   // Terminal
   {
-    "key": "ctrl+t",
-    "command": "tui-manager.openBasicTerminal"
+    "key": "ctrl+`",
+    "command": "tui-manager.basicterminal"
   },
   // Claude Code
   {

@@ -295,6 +295,69 @@
   // ----------------------------------------------------------------------
 
   // ----------------------------------------------------------------------
+  // TUI Manager Settings
+  // ----------------------------------------------------------------------
+  "tuiManager.apps": [
+    {
+      "id": "lazygit",
+      "name": "Lazygit",
+      "command": "lazygit && exit",
+      "terminalName": "Lazygit"
+    },
+    {
+      "id": "lazydocker",
+      "name": "Lazydocker", 
+      "command": "lazydocker && exit",
+      "terminalName": "Lazydocker"
+    },
+    {
+      "id": "yazi",
+      "name": "Yazi",
+      "command": "y && exit",
+      "terminalName": "Yazi"
+    },
+    {
+      "id": "btop",
+      "name": "Btop",
+      "command": "btop && exit",
+      "terminalName": "Btop"
+    },
+    {
+      "id": "k9s",
+      "name": "K9s",
+      "command": "k9s && exit",
+      "terminalName": "K9s"
+    },
+    {
+      "id": "opencode",
+      "name": "Opencode",
+      "command": "opencode && exit",
+      "terminalName": "Opencode"
+    },
+    {
+      "id": "claudecode",
+      "name": "Claudecode",
+      "command": "claude && exit",
+      "terminalName": "Claudecode"
+    },
+    {
+      "id": "gemini",
+      "name": "Gemini",
+      "command": "gemini && exit",
+      "terminalName": "Gemini"
+    },
+    {
+      "id": "basicterminal",
+      "name": "Basic Terminal",
+      "command": "",
+      "terminalName": "Basic Terminal"
+    }
+  ],
+  // ----------------------------------------------------------------------
+  // END OF TUI Manager Settings
+  // ----------------------------------------------------------------------
+
+  // ----------------------------------------------------------------------
   // ----------------------------------------------------------------------
   // DICTIONARY
   // ----------------------------------------------------------------------
