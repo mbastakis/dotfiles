@@ -320,7 +320,7 @@ setup_yazi_config() {
 # Setup NPM global tools
 setup_npm_globals() {
     log_section "Installing NPM Global Tools"
-    "$SCRIPT_DIR/scripts/setup_npm_globals.sh" install
+    "$SCRIPT_DIR/scripts/setup_npm_globals.sh" update
 }
 
 # Help function
