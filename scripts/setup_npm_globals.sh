@@ -21,6 +21,7 @@ init_utils
 declare -A NPM_PACKAGES=(
     ["@anthropic-ai/claude-code"]="Claude Code CLI - AI-powered coding assistant"
     ["@google/gemini-cli"]="Gemini CLI - Google Gemini command line interface"
+    ["@vscode/vsce"]="VSCE - Visual Studio Code Extension Manager"
     ["@antfu/ni"]="Package manager agnostic commands"
     ["npm-check-updates"]="Update package.json dependencies to latest versions"
     ["http-server"]="Simple HTTP server for local development"

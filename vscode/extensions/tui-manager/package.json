@@ -11,46 +11,42 @@
     "Other"
   ],
   "activationEvents": [
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "tui-manager.openLazygit",
-        "title": "Open Lazygit",
-        "category": "TUI Manager"
-      },
-      {
-        "command": "tui-manager.openLazydocker",
-        "title": "Open Lazydocker",
-        "category": "TUI Manager"
-      },
-      {
-        "command": "tui-manager.openYazi",
-        "title": "Open Yazi",
-        "category": "TUI Manager"
-      },
-      {
-        "command": "tui-manager.openBtop",
-        "title": "Open Btop",
-        "category": "TUI Manager"
-      },
-      {
-        "command": "tui-manager.openK9s",
-        "title": "Open K9s",
-        "category": "TUI Manager"
-      },
-      {
-        "command": "tui-manager.openOpencode",
-        "title": "Open Opencode",
-        "category": "TUI Manager"
-      },
-      {
-        "command": "tui-manager.openBasicTerminal",
-        "title": "Open Terminal",
-        "category": "TUI Manager"
+    "configuration": {
+      "title": "TUI Manager",
+      "properties": {
+        "tuiManager.apps": {
+          "type": "array",
+          "default": [],
+          "description": "List of TUI applications to manage",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique identifier for the TUI app"
+              },
+              "name": {
+                "type": "string",
+                "description": "Display name of the TUI app"
+              },
+              "command": {
+                "type": "string",
+                "description": "Command to execute in the terminal"
+              },
+              "terminalName": {
+                "type": "string",
+                "description": "Name of the terminal tab"
+              }
+            },
+            "required": ["id", "name", "command", "terminalName"]
+          }
+        }
       }
-    ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

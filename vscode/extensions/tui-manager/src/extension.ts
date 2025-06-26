@@ -1,61 +1,18 @@
 import * as vscode from 'vscode';
 
 interface TuiApp {
+    id: string;
     name: string;
     command: string;
     terminalName: string;
 }
 
-const TUI_APPS: { [key: string]: TuiApp } = {
-    lazygit: {
-        name: 'lazygit',
-        command: 'lazygit && exit',
-        terminalName: 'Lazygit'
-    },
-    lazydocker: {
-        name: 'lazydocker',
-        command: 'lazydocker && exit',
-        terminalName: 'Lazydocker'
-    },
-    yazi: {
-        name: 'yazi',
-        command: 'y && exit',
-        terminalName: 'Yazi'
-    },
-    btop: {
-        name: 'btop',
-        command: 'btop && exit',
-        terminalName: 'Btop'
-    },
-    k9s: {
-        name: 'k9s',
-        command: 'k9s && exit',
-        terminalName: 'K9s'
-    },
-    opencode: {
-        name: 'opencode',
-        command: 'opencode && exit',
-        terminalName: 'Opencode'
-    },
-    basicterminal: {
-        name: 'basicterminal',
-        command: '',
-        terminalName: 'Basic Terminal'
-    }
-};
-
 class TuiManager {
     private terminals: Map<string, vscode.Terminal> = new Map();
 
-    async openTuiApp(appKey: string): Promise<void> {
-        const app = TUI_APPS[appKey];
-        if (!app) {
-            vscode.window.showErrorMessage(`Unknown TUI app: ${appKey}`);
-            return;
-        }
-
-        // Look for existing terminal with this name
-        let existingTerminal = this.terminals.get(appKey);
+    async openTuiApp(app: TuiApp): Promise<void> {
+        // Look for existing terminal with this app id
+        let existingTerminal = this.terminals.get(app.id);
 
         // Check if the terminal still exists (user might have closed it)
         if (existingTerminal) {
@@ -65,7 +22,7 @@ class TuiManager {
             
             if (!stillExists) {
                 // Terminal was closed, remove from our map
-                this.terminals.delete(appKey);
+                this.terminals.delete(app.id);
                 existingTerminal = undefined;
             }
         }
@@ -87,7 +44,7 @@ class TuiManager {
             });
             
             // Store reference
-            this.terminals.set(appKey, terminal);
+            this.terminals.set(app.id, terminal);
             
             // Show terminal first
             terminal.show();
@@ -102,20 +59,41 @@ class TuiManager {
 
 export function activate(context: vscode.ExtensionContext) {
     const tuiManager = new TuiManager();
+    
+    // Register commands based on current configuration
+    registerCommandsFromConfig(context, tuiManager);
 
-    // Register commands for each TUI app
-    const commands = [
-        vscode.commands.registerCommand('tui-manager.openBasicTerminal', () => tuiManager.openTuiApp('basicterminal')),
-        vscode.commands.registerCommand('tui-manager.openLazygit', () => tuiManager.openTuiApp('lazygit')),
-        vscode.commands.registerCommand('tui-manager.openLazydocker', () => tuiManager.openTuiApp('lazydocker')),
-        vscode.commands.registerCommand('tui-manager.openYazi', () => tuiManager.openTuiApp('yazi')),
-        vscode.commands.registerCommand('tui-manager.openBtop', () => tuiManager.openTuiApp('btop')),
-        vscode.commands.registerCommand('tui-manager.openK9s', () => tuiManager.openTuiApp('k9s')),
-        vscode.commands.registerCommand('tui-manager.openOpencode', () => tuiManager.openTuiApp('opencode')),
-    ];
+    // Listen for configuration changes
+    const configListener = vscode.workspace.onDidChangeConfiguration(event => {
+        if (event.affectsConfiguration('tuiManager.apps')) {
+            // Re-register commands when configuration changes
+            registerCommandsFromConfig(context, tuiManager);
+        }
+    });
 
-    // Add all commands to the extension context
-    commands.forEach(command => context.subscriptions.push(command));
+    context.subscriptions.push(configListener);
+}
+
+function registerCommandsFromConfig(context: vscode.ExtensionContext, tuiManager: TuiManager) {
+    // Get TUI apps from configuration
+    const config = vscode.workspace.getConfiguration('tuiManager');
+    const apps: TuiApp[] = config.get('apps', []);
+
+    // Register a command for each configured TUI app
+    apps.forEach(app => {
+        const commandId = `tui-manager.${app.id}`;
+        
+        const disposable = vscode.commands.registerCommand(commandId, () => {
+            tuiManager.openTuiApp(app);
+        });
+
+        context.subscriptions.push(disposable);
+    });
+
+    // Show a status message about registered apps (optional)
+    if (apps.length > 0) {
+        console.log(`TUI Manager: Registered ${apps.length} TUI applications`);
+    }
 }
 
 export function deactivate() {}

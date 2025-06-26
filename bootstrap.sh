@@ -266,11 +266,40 @@ setup_macos_settings() {
 setup_vscode_config() {
     log_section "Setting up VS Code Configuration"
     
+    local extensions_file="$SCRIPT_DIR/vscode/extensions.txt"
+    local should_install_extensions=false
+    
+    # Always sync configuration (settings, keybindings, TUI Manager)
     "$SCRIPT_DIR/bin/setup_vscode" sync
     
-    # Install extensions if VS Code is available
+    # Determine if we should install extensions
     if command_exists code; then
-        "$SCRIPT_DIR/bin/setup_vscode" extensions install
+        # Check if extensions.txt is newer than last installation
+        # or if this is first time setup (no extensions installed)
+        local installed_extensions
+        installed_extensions=$(code --list-extensions | wc -l | tr -d ' ')
+        
+        if [ "$installed_extensions" -eq 0 ]; then
+            log_info "No extensions currently installed, will install from dotfiles"
+            should_install_extensions=true
+        elif [ -f "$extensions_file" ]; then
+            # Check if we have significantly fewer extensions than listed
+            local expected_extensions
+            expected_extensions=$(grep -v "^#" "$extensions_file" | grep -v "^$" | wc -l | tr -d ' ')
+            
+            # Install if we have less than 80% of expected extensions
+            local threshold=$((expected_extensions * 80 / 100))
+            if [ "$installed_extensions" -lt "$threshold" ]; then
+                log_info "Only $installed_extensions of $expected_extensions extensions installed, updating..."
+                should_install_extensions=true
+            else
+                log_info "Extensions appear up-to-date ($installed_extensions installed), skipping installation"
+            fi
+        fi
+        
+        if [ "$should_install_extensions" = true ]; then
+            "$SCRIPT_DIR/bin/setup_vscode" extensions install
+        fi
     else
         log_warning "VS Code CLI not available, skipping extensions installation"
     fi

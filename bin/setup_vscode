@@ -70,6 +70,10 @@ main() {
                 DRY_RUN=true
                 shift
                 ;;
+            --force-reinstall)
+                FORCE_REINSTALL=true
+                shift
+                ;;
             -h|--help)
                 show_help
                 exit 0
@@ -212,6 +216,10 @@ handle_extensions() {
                 subaction="list"
                 shift
                 ;;
+            --force-reinstall)
+                FORCE_REINSTALL=true
+                shift
+                ;;
             *)
                 log_error "Unknown extensions subcommand: $1"
                 show_help
@@ -279,6 +287,7 @@ Options:
     -v, --verbose        Enable verbose output
     -y, --yes           Answer yes to all prompts
     --dry-run           Show what would be done without executing
+    --force-reinstall   Reinstall all extensions even if already installed
     -h, --help          Show this help message
 
 Examples:
@@ -294,11 +303,156 @@ Paths:
 EOF
 }
 
-# Setup TUI Manager extension
+# Sync VS Code extensions to dotfiles (marketplace extensions only)
+sync_vscode_extensions() {
+    local extensions_file="$DOTFILES_VSCODE_DIR/extensions.txt"
+    
+    log_info "Syncing VS Code extensions to dotfiles"
+    
+    if command_exists code; then
+        if [[ "$DRY_RUN" != "true" ]]; then
+            # Export only marketplace extensions (exclude local extensions starting with "local.")
+            code --list-extensions | grep -v "^local\." > "$extensions_file"
+            log_success "Extensions list updated: $extensions_file"
+            
+            # Show summary
+            local count
+            count=$(wc -l < "$extensions_file" | tr -d ' ')
+            log_info "Exported $count marketplace extensions"
+        else
+            log_info "[DRY RUN] Would sync extensions to $extensions_file"
+        fi
+    else
+        log_error "VS Code CLI not available"
+        return 1
+    fi
+}
+
+# Check if a VS Code extension is installed
+is_extension_installed() {
+    local extension_id="$1"
+    
+    if ! command_exists code; then
+        return 1
+    fi
+    
+    code --list-extensions | grep -q "^${extension_id}$"
+}
+
+# Get installed extension version (returns empty if not installed)
+get_extension_version() {
+    local extension_id="$1"
+    
+    if ! command_exists code; then
+        return 1
+    fi
+    
+    # VS Code doesn't provide version info via CLI easily, so we just check if installed
+    if is_extension_installed "$extension_id"; then
+        echo "installed"
+    else
+        echo ""
+    fi
+}
+
+# Check if TUI Manager extension is installed
+is_tui_manager_installed() {
+    if is_extension_installed "local.tui-manager"; then
+        return 0
+    elif code --list-extensions | grep -q "tui-manager"; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Install VS Code extensions from dotfiles
+install_vscode_extensions() {
+    local extensions_file="$DOTFILES_VSCODE_DIR/extensions.txt"
+    
+    log_info "Installing VS Code extensions from dotfiles"
+    
+    if [ ! -f "$extensions_file" ]; then
+        log_warning "Extensions file not found: $extensions_file"
+        log_info "Run 'sync_vscode_extensions' first to create the file"
+        return 1
+    fi
+    
+    if ! command_exists code; then
+        log_error "VS Code CLI not available"
+        return 1
+    fi
+    
+    # Install marketplace extensions from file
+    local installed_count=0
+    local skipped_count=0
+    local failed_count=0
+    local force_reinstall=false
+    
+    # Check for force reinstall flag
+    if [[ "${FORCE_REINSTALL:-}" == "true" ]]; then
+        force_reinstall=true
+        log_info "Force reinstall mode enabled - will reinstall all extensions"
+    fi
+    
+    # Count total extensions for progress reporting
+    local total_extensions
+    total_extensions=$(grep -v "^#" "$extensions_file" | grep -v "^$" | wc -l | tr -d ' ')
+    local current_extension=0
+    
+    log_info "Processing $total_extensions extensions..."
+    
+    while IFS= read -r extension || [[ -n "$extension" ]]; do
+        # Skip empty lines and comments
+        if [[ -z "$extension" || "$extension" =~ ^[[:space:]]*# ]]; then
+            continue
+        fi
+        
+        ((current_extension++))
+        
+        # Check if extension is already installed
+        if [[ "$force_reinstall" == "false" ]] && is_extension_installed "$extension"; then
+            log_info "[$current_extension/$total_extensions] Already installed: $extension"
+            ((skipped_count++))
+            continue
+        fi
+        
+        log_info "[$current_extension/$total_extensions] Installing: $extension"
+        
+        if [[ "$DRY_RUN" != "true" ]]; then
+            if code --install-extension "$extension" --force >/dev/null 2>&1; then
+                ((installed_count++))
+                log_success "[$current_extension/$total_extensions] Installed: $extension"
+            else
+                ((failed_count++))
+                log_error "[$current_extension/$total_extensions] Failed: $extension"
+            fi
+        else
+            log_info "[$current_extension/$total_extensions] [DRY RUN] Would install: $extension"
+            ((installed_count++))
+        fi
+    done < "$extensions_file"
+    
+    # Install local extensions separately
+    setup_tui_manager_extension
+    
+    if [[ "$DRY_RUN" != "true" ]]; then
+        log_success "Extension installation complete"
+        log_info "Summary: $installed_count newly installed, $skipped_count already installed, $failed_count failed"
+        
+        if [ "$failed_count" -gt 0 ]; then
+            log_warning "Some extensions failed to install. Check the output above for details."
+        fi
+    else
+        log_info "Summary: Would install $installed_count extensions, $skipped_count already installed"
+    fi
+}
+
+# Setup TUI Manager extension using VSIX packaging
 setup_tui_manager_extension() {
     local extension_dir="$DOTFILES_VSCODE_DIR/extensions/tui-manager"
-    local vscode_extensions_dir="$HOME/.vscode/extensions"
-    local target_link="$vscode_extensions_dir/tui-manager"
+    local vsix_file="$extension_dir/tui-manager.vsix"
+    local needs_rebuild=false
     
     log_info "Setting up TUI Manager extension"
     
@@ -308,32 +462,71 @@ setup_tui_manager_extension() {
         return 1
     fi
     
-    if [[ "$DRY_RUN" != "true" ]]; then
-        # Ensure VS Code extensions directory exists
-        ensure_dir "$vscode_extensions_dir"
+    # Check if TUI Manager is already installed and up-to-date
+    if is_tui_manager_installed && [ -f "$vsix_file" ]; then
+        log_info "TUI Manager extension already installed"
         
-        # Remove existing symlink if it exists
-        if [ -L "$target_link" ]; then
-            rm "$target_link"
+        # Check if source files are newer than VSIX
+        if [ "$extension_dir/src" -nt "$vsix_file" ] || [ "$extension_dir/package.json" -nt "$vsix_file" ]; then
+            log_info "Source files are newer than installed version, rebuilding..."
+            needs_rebuild=true
+        else
+            log_info "TUI Manager extension is up-to-date, skipping rebuild"
+            return 0
         fi
-        
-        # Create symlink to install extension
-        ln -sf "$extension_dir" "$target_link"
-        
-        # Compile the extension if TypeScript source exists
-        if [ -f "$extension_dir/tsconfig.json" ]; then
-            log_info "Compiling TUI Manager extension"
-            if command_exists npm; then
-                (cd "$extension_dir" && npm run compile 2>/dev/null || log_warning "Failed to compile extension")
+    else
+        log_info "TUI Manager extension not installed or VSIX missing, building..."
+        needs_rebuild=true
+    fi
+    
+    if [[ "$DRY_RUN" != "true" ]]; then
+        if [[ "$needs_rebuild" == "true" ]]; then
+            # Compile the extension first
+            if [ -f "$extension_dir/tsconfig.json" ]; then
+                log_info "Compiling TUI Manager extension"
+                if command_exists npm; then
+                    (cd "$extension_dir" && npm run compile 2>/dev/null || log_warning "Failed to compile extension")
+                else
+                    log_warning "npm not available, extension may need manual compilation"
+                fi
+            fi
+            
+            # Package the extension into VSIX
+            log_info "Packaging TUI Manager extension"
+            if command_exists vsce; then
+                (cd "$extension_dir" && vsce package --out tui-manager.vsix --no-yarn 2>/dev/null || log_warning "Failed to package extension")
             else
-                log_warning "npm not available, extension may need manual compilation"
+                log_error "vsce not available, cannot package extension"
+                log_info "Install vsce with: npm install -g @vscode/vsce"
+                return 1
             fi
         fi
         
-        log_success "TUI Manager extension installed: $target_link -> $extension_dir"
-        log_info "Please reload VS Code for the extension to take effect"
+        # Install the VSIX file if it exists and we need to install
+        if [ -f "$vsix_file" ] && ([[ "$needs_rebuild" == "true" ]] || ! is_tui_manager_installed); then
+            log_info "Installing TUI Manager extension from VSIX"
+            if command_exists code; then
+                if code --install-extension "$vsix_file" --force; then
+                    log_success "TUI Manager extension installed successfully"
+                    log_info "Please reload VS Code for the extension to take effect"
+                else
+                    log_error "Failed to install TUI Manager extension"
+                    return 1
+                fi
+            else
+                log_error "VS Code CLI not available"
+                return 1
+            fi
+        elif [ ! -f "$vsix_file" ]; then
+            log_error "VSIX file not found: $vsix_file"
+            return 1
+        fi
     else
-        log_info "[DRY RUN] Would install TUI Manager extension"
+        if [[ "$needs_rebuild" == "true" ]]; then
+            log_info "[DRY RUN] Would package and install TUI Manager extension"
+        else
+            log_info "[DRY RUN] TUI Manager extension is up-to-date"
+        fi
     fi
 }
 
