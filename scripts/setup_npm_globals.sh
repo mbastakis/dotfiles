@@ -20,6 +20,7 @@ init_utils
 # Global NPM packages to install
 declare -A NPM_PACKAGES=(
     ["@anthropic-ai/claude-code"]="Claude Code CLI - AI-powered coding assistant"
+    ["@mariozechner/snap-happy"]="Cross-platform screenshot tool for AI assistants"
     ["@google/gemini-cli"]="Gemini CLI - Google Gemini command line interface"
     ["@vscode/vsce"]="VSCE - Visual Studio Code Extension Manager"
     ["@antfu/ni"]="Package manager agnostic commands"
