@@ -89,8 +89,7 @@
               "InProgress": {
                 "weight": 4,
                 "records": [
-                  "Projects/Tasks/Kanban Tasks/Add plugins to yazi.md",
-                  "Projects/Tasks/Kanban Tasks/document yazi, fix vscode fzf, zoxide.md",
+                  "Projects/Tasks/Kanban Tasks/notes from the aicc meeting.md",
                   "Projects/Tasks/Kanban Tasks/Tool for easy context to llm.md",
                   "Projects/Tasks/Kanban Tasks/Track Subscriptions.md",
                   "Extras/Unkown/checkout browser use.md",
