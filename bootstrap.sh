@@ -206,6 +206,7 @@ execute_installation() {
         setup_yazi_config
     fi
     
+    
     # Install NPM global tools
     if [[ "$SETUP_NPM_GLOBALS" == "true" ]]; then
         setup_npm_globals
@@ -317,6 +318,7 @@ setup_yazi_config() {
     "$SCRIPT_DIR/scripts/setup_yazi.sh" setup
 }
 
+
 # Setup NPM global tools
 setup_npm_globals() {
     log_section "Installing NPM Global Tools"
@@ -341,7 +343,7 @@ Options:
     --vscode            Setup VS Code configuration and extensions
     --obsidian          Setup Obsidian vault configuration
     --yazi              Setup Yazi file manager plugins and themes
-    --npm-globals       Install global NPM tools (Claude Code, etc.)
+    --npm-globals       Install global NPM tools (Claude Code, OpenCode, etc.)
     --no-homebrew       Skip Homebrew installation
     --no-stow           Skip stow configuration linking
     -v, --verbose       Enable verbose output
@@ -365,7 +367,7 @@ Component Details:
     vscode    - VS Code settings, keybindings, and extensions
     obsidian  - Obsidian vault configuration syncing
     yazi      - Yazi file manager plugins and themes setup
-    npm-glob  - Global NPM tools (Claude Code, ni, ncu, etc.)
+    npm-glob  - Global NPM tools (Claude Code, OpenCode, ni, ncu, etc.)
     stow      - Symlink dotfiles configurations to home directory
 EOF
 }
