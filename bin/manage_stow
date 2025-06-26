@@ -18,7 +18,7 @@ source "$DOTFILES_ROOT/scripts/utils.sh"
 init_utils
 
 # Available stow packages
-AVAILABLE_PACKAGES=("config" "shell" "git" "docker" "warp")
+AVAILABLE_PACKAGES=("config" "shell" "git" "docker" "warp" "claude")
 
 # Main function
 main() {
