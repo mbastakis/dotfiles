@@ -33,6 +33,9 @@
         "qwen2.5": {
           "name": "Qwen 2.5 (Local)"
         },
+        "qwen2.5-coder": {
+          "name": "Qwen 2.5 Coder (Local)"
+        },
         "deepseek-r1": {
           "name": "DeepSeek R1 (Local)"
         },

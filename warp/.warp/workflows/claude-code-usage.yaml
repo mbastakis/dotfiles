@@ -1,0 +1,10 @@
+---
+name: "Claude Code Usage"
+command: "npx ccusage@latest"
+description: Analyzes code usage for Claude models
+arguments: []
+tags: []
+source_url: ~
+author: ~
+author_url: ~
+shells: []
