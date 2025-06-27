@@ -10,8 +10,8 @@ alias l="eza --color=always --icons=always --no-user"
 alias ls="eza --color=always --no-user"
 alias ll="eza --long --color=always --icons=always --no-user"
 alias la="eza --long --color=always --icons=always --no-user --all"
-alias ld="eza --long --color=always --icons=always --no-user --group-directories-first --tree"
-alias lda="eza --long --color=always --icons=always --no-user --group-directories-first --tree --all"
+alias ld="eza --long --color=always --no-user --no-permissions --no-filesize --no-time --no-git --group-directories-first --tree"
+alias lda="ld --git-ignore --all"
 alias lg="eza --long --color=always --icons=always --no-user --git"
 
 # Utilities
