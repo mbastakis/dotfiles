@@ -4,11 +4,11 @@ command: "GITLAB_HOST={{glab-host}} glab repo clone -g {{group-id}} --archived=f
 description: ~
 arguments:
   - name: glab-host
-    arg_type: Text
+    type: Text
     description: The self-hosted domain of gitlab
     default_value: gitlab.devops.telekom.de
   - name: group-id
-    arg_type: Text
+    type: Text
     description: The group id of the group I want to clone
     default_value: "325453"
 tags: []
