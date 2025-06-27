@@ -44,5 +44,6 @@
   "obsidian-local-rest-api",
   "js-engine",
   "text-extractor",
-  "ai-image-analyzer"
+  "ai-image-analyzer",
+  "context-gather-plugin"
 ]

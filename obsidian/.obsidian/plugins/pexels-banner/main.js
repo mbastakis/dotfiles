@@ -602,16 +602,19 @@ async function updateNoteFrontmatter(imagePath, plugin, usedField = null) {
         const fieldRegex = new RegExp(`${field}:\\s*.+\\n?`, "g");
         cleanedFrontmatter = cleanedFrontmatter.replace(fieldRegex, "");
       });
-      cleanedFrontmatter = cleanedFrontmatter.trim();
-      const newFrontmatter = `${bannerField}: "![[${imageReference}]]"${cleanedFrontmatter ? "\n" + cleanedFrontmatter : ""}`;
+      const format = plugin.settings.imagePropertyFormat;
+      const bannerValue = format === "[[image]]" ? `[[${imageReference}]]` : `![[${imageReference}]]`;
+      const newFrontmatter = `${bannerField}: "${bannerValue}"${cleanedFrontmatter ? "\n" + cleanedFrontmatter : ""}`;
       return `---
 ${newFrontmatter}
 ---`;
     });
   } else {
     const cleanContent = fileContent.replace(/^\s+/, "");
+    const format = plugin.settings.imagePropertyFormat;
+    const bannerValue = format === "[[image]]" ? `[[${imageReference}]]` : `![[${imageReference}]]`;
     updatedContent = `---
-${bannerField}: "![[${imageReference}]]"
+${bannerField}: "${bannerValue}"
 ---
 
 ${cleanContent}`;
@@ -670,7 +673,7 @@ async function saveImageLocally(arrayBuffer, plugin, suggestedFilename = null) {
   if (!await vault.adapter.exists(folderPath)) {
     await vault.createFolder(folderPath);
   }
-  const suggestedName = (suggestedFilename == null ? void 0 : suggestedFilename.toLowerCase()) || "pixel-banner-image";
+  const suggestedName = (suggestedFilename == null ? void 0 : suggestedFilename.toLowerCase()) || plugin.settings.pinnedImageFilename;
   const userInput = await new Promise((resolve) => {
     const modal = new SaveImageModal(plugin.app, suggestedName, (name, useAsBanner) => {
       resolve({ name, useAsBanner });
@@ -976,7 +979,9 @@ var init_selectPixelBannerModal = __esm({
               if (activeFile2) {
                 await this.plugin.app.fileManager.processFrontMatter(activeFile2, (frontmatter) => {
                   const bannerField = this.plugin.settings.customBannerField[0];
-                  frontmatter[bannerField] = `![[${file.path}]]`;
+                  const format = this.plugin.settings.imagePropertyFormat;
+                  const bannerValue = format === "[[image]]" ? `[[${file.path}]]` : `![[${file.path}]]`;
+                  frontmatter[bannerField] = bannerValue;
                 });
                 if (this.plugin.settings.openTargetingModalAfterSelectingBannerOrIcon) {
                   new TargetPositionModal(this.app, this.plugin).open();
@@ -8235,6 +8240,8 @@ var init_iconImageSelectionModal = __esm({
           const url = `${PIXEL_BANNER_PLUS.API_URL}${PIXEL_BANNER_PLUS.ENDPOINTS.BANNER_ICONS_ID.replace(":id", icon.id)}?key=${PIXEL_BANNER_PLUS.BANNER_ICON_KEY}`;
           const response = await fetch(url, {
             headers: {
+              "x-user-email": this.plugin.settings.pixelBannerPlusEmail,
+              "X-Pixel-Banner-Version": this.plugin.settings.lastVersion,
               "Accept": "application/json"
             }
           });
@@ -30127,7 +30134,7 @@ module.exports = __toCommonJS(main_exports);
 var import_obsidian30 = require("obsidian");
 
 // virtual-module:virtual:release-notes
-var releaseNotes = '<a href="https://www.youtube.com/watch?v=fwvVX7to7-4">\n  <img src="https://pixel-banner.online/img/pixel-banner-v3.5.jpg" alt="Pixel Banner" style="max-width: 400px;">\n</a>\n\n<h2>\u{1F389} What&#39;s New</h2>\n<h3>v3.5.5 - 2025-05-30</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>New AI Image Model, <code>FLUX Kontext (pro)</code>, allows for uploading images and editing them via text prompts<ul>\n<li>example: type in a prompt &quot;Make this a Studio Ghible cartoon&quot;, select the &quot;FLUX Kontext&quot; model, upload an image, then click Generate</li>\n</ul>\n</li>\n</ul>\n<h3>v3.5.4 - 2025-05-27</h3>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>Resolve issue with not evaluating all defined custom field names for &quot;banner&quot; frontmatter</li>\n<li>Revert aggresive css change impacting the background color of some theme variations and plugins</li>\n</ul>\n<h3>v3.5.3 - 2025-05-23</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>New <code>Icon Image Size Multiplier</code> control:<br>allows for changing the icon image size relative to the Banner Icon elements size (perfect to when you want the image to be larger or smaller than any accompanying icon text)</li>\n<li>New <code>Icon Text Vertical Offset</code> control:<br>allows for adjusting the vertical offset of the Icon Text relative to the Icon Image if set (perfect for fine-tuning center alignment of text)</li>\n</ul>\n<h4>\u{1F4E6} Updated</h4>\n<ul>\n<li>Updated some labels on the &quot;Position, Size &amp; Style&quot; modal for clarity</li>\n</ul>\n<h3>v3.5.2 - 2025-05-21</h3>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>Updated styles to remove overflow on images for mobile devices</li>\n<li>Resolved issue with icon image selection modal not using the correct extension for non-svg images</li>\n</ul>\n<h3>v3.5.1 - 2025-05-19</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>Added Command Palette command for selecting a <code>Banner Icon Image</code></li>\n</ul>\n<h3>v3.5.0 - 2025-05-18</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>New &quot;Banner Icon Rotation&quot; option to rotate the banner icon from 0 to 360 degrees</li>\n<li>New &quot;Icon Image&quot; support to allow banner icons to contain both text/emojis and an image</li>\n<li>Added Banner Icon Image controls to the Position, Size &amp; Style Modal (image source and alignment)</li>\n<li>Banner Icon Image sources include:<ul>\n<li>Local images</li>\n<li>Web URL</li>\n<li>Online Collections (FREE downloadable icons)</li>\n</ul>\n</li>\n<li>Banner Icon Image alignment options include:<ul>\n<li>Left or Right (set the position of the icon image relative to the text/emojis)</li>\n</ul>\n</li>\n<li>New Border Radius slider control available in the Position, Size &amp; Style Modal</li>\n<li>Four new AI Models to choose from when generating an image for a banner</li>\n</ul>\n<h4>\u{1F4E6} Updated</h4>\n<ul>\n<li>Embedded notes now respect custom frontmatter settings (border radius, banner height, etc.)</li>\n<li>Any system action that sets the frontmatter value for a Banner or Icon Image now uses <code>![[image]]</code> format vs <code>[[image]]</code></li>\n<li>Updated Token currency to allow for fractional tokens (e.g. 0.5 tokens) for better pricing where applicable</li>\n</ul>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>Resolved issue with content being pushed down when banner was present in embedded notes</li>\n<li>Resolved issue with max-width slider being disabled even when a custom max-width was set in frontmatter</li>\n<li>Addressed background color preventing banner from showing in reading mode for some themes</li>\n</ul>\n<a href="https://www.youtube.com/watch?v=pJFsMfrWak4">\n  <img src="https://pixel-banner.online/img/pixel-banner-transparent-bg.png" alt="Pixel Banner" style="max-width: 400px;">\n</a>';
+var releaseNotes = '<a href="https://www.youtube.com/watch?v=fwvVX7to7-4">\n  <img src="https://pixel-banner.online/img/pixel-banner-v3.5.jpg" alt="Pixel Banner" style="max-width: 400px;">\n</a>\n\n<h2>\u{1F389} What&#39;s New</h2>\n<h3>v3.5.6 - 2025-06-26</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>New <code>image property format</code> setting allows for specifying banner image format as <code>[[image]]</code> or <code>![[image]]</code></li>\n<li>Introduced <code>pinnedImageFilename</code> setting for default filename when pinning 3rd party API images</li>\n</ul>\n<h3>v3.5.5 - 2025-05-30</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>New AI Image Model, <code>FLUX Kontext (pro)</code>, allows for uploading images and editing them via text prompts<ul>\n<li>example: type in a prompt &quot;Make this a Studio Ghible cartoon&quot;, select the &quot;FLUX Kontext&quot; model, upload an image, then click Generate</li>\n</ul>\n</li>\n</ul>\n<h3>v3.5.4 - 2025-05-27</h3>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>Resolve issue with not evaluating all defined custom field names for &quot;banner&quot; frontmatter</li>\n<li>Revert aggresive css change impacting the background color of some theme variations and plugins</li>\n</ul>\n<h3>v3.5.3 - 2025-05-23</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>New <code>Icon Image Size Multiplier</code> control:<br>allows for changing the icon image size relative to the Banner Icon elements size (perfect to when you want the image to be larger or smaller than any accompanying icon text)</li>\n<li>New <code>Icon Text Vertical Offset</code> control:<br>allows for adjusting the vertical offset of the Icon Text relative to the Icon Image if set (perfect for fine-tuning center alignment of text)</li>\n</ul>\n<h4>\u{1F4E6} Updated</h4>\n<ul>\n<li>Updated some labels on the &quot;Position, Size &amp; Style&quot; modal for clarity</li>\n</ul>\n<h3>v3.5.2 - 2025-05-21</h3>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>Updated styles to remove overflow on images for mobile devices</li>\n<li>Resolved issue with icon image selection modal not using the correct extension for non-svg images</li>\n</ul>\n<h3>v3.5.1 - 2025-05-19</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>Added Command Palette command for selecting a <code>Banner Icon Image</code></li>\n</ul>\n<h3>v3.5.0 - 2025-05-18</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>New &quot;Banner Icon Rotation&quot; option to rotate the banner icon from 0 to 360 degrees</li>\n<li>New &quot;Icon Image&quot; support to allow banner icons to contain both text/emojis and an image</li>\n<li>Added Banner Icon Image controls to the Position, Size &amp; Style Modal (image source and alignment)</li>\n<li>Banner Icon Image sources include:<ul>\n<li>Local images</li>\n<li>Web URL</li>\n<li>Online Collections (FREE downloadable icons)</li>\n</ul>\n</li>\n<li>Banner Icon Image alignment options include:<ul>\n<li>Left or Right (set the position of the icon image relative to the text/emojis)</li>\n</ul>\n</li>\n<li>New Border Radius slider control available in the Position, Size &amp; Style Modal</li>\n<li>Four new AI Models to choose from when generating an image for a banner</li>\n</ul>\n<h4>\u{1F4E6} Updated</h4>\n<ul>\n<li>Embedded notes now respect custom frontmatter settings (border radius, banner height, etc.)</li>\n<li>Any system action that sets the frontmatter value for a Banner or Icon Image now uses <code>![[image]]</code> format vs <code>[[image]]</code></li>\n<li>Updated Token currency to allow for fractional tokens (e.g. 0.5 tokens) for better pricing where applicable</li>\n</ul>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>Resolved issue with content being pushed down when banner was present in embedded notes</li>\n<li>Resolved issue with max-width slider being disabled even when a custom max-width was set in frontmatter</li>\n<li>Addressed background color preventing banner from showing in reading mode for some themes</li>\n</ul>\n<a href="https://www.youtube.com/watch?v=pJFsMfrWak4">\n  <img src="https://pixel-banner.online/img/pixel-banner-transparent-bg.png" alt="Pixel Banner" style="max-width: 400px;">\n</a>';
 
 // src/settings/settings.js
 var import_obsidian6 = require("obsidian");
@@ -30345,6 +30352,15 @@ function createAPISettings(containerEl, plugin) {
     });
     return text;
   });
+  new import_obsidian.Setting(containerEl).setName("Pinned Image Filename").setDesc("Set the default filename for pinned images.").addText((text) => text.setPlaceholder("pixel-banner-image").setValue(plugin.settings.pinnedImageFilename).onChange(async (value) => {
+    plugin.settings.pinnedImageFilename = value;
+    await plugin.saveSettings();
+  })).addExtraButton((button) => button.setIcon("reset").setTooltip("Reset to default").onClick(async () => {
+    plugin.settings.pinnedImageFilename = DEFAULT_SETTINGS.pinnedImageFilename;
+    await plugin.saveSettings();
+    const textInput = button.extraSettingsEl.parentElement.querySelector("input");
+    textInput.value = DEFAULT_SETTINGS.pinnedImageFilename;
+  }));
   const refreshIconSetting = new import_obsidian.Setting(containerEl).setName("Show Refresh Icon").setDesc("Show a refresh icon on random banner images that allows fetching a new random image.").addToggle((toggle) => toggle.setValue(plugin.settings.showRefreshIcon).onChange(async (value) => {
     plugin.settings.showRefreshIcon = value;
     await plugin.saveSettings();
@@ -31530,6 +31546,15 @@ function createGeneralSettings(containerEl, plugin) {
     }
     plugin.updateAllBanners();
   }));
+  new import_obsidian4.Setting(containerEl).setName("Image Property Format").setDesc("Set the format for the banner property value.").addDropdown((dropdown) => dropdown.addOption("![[image]]", "![[image]]").addOption("[[image]]", "[[image]]").setValue(plugin.settings.imagePropertyFormat).onChange(async (value) => {
+    plugin.settings.imagePropertyFormat = value;
+    await plugin.saveSettings();
+  })).addExtraButton((button) => button.setIcon("reset").setTooltip("Reset to default").onClick(async () => {
+    plugin.settings.imagePropertyFormat = DEFAULT_SETTINGS.imagePropertyFormat;
+    await plugin.saveSettings();
+    const dropdown = button.extraSettingsEl.parentElement.querySelector("select");
+    dropdown.value = DEFAULT_SETTINGS.imagePropertyFormat;
+  }));
   const hideSettingsGroup = containerEl.createDiv({ cls: "setting-group" });
   const hidePixelBannerFieldsSetting = new import_obsidian4.Setting(hideSettingsGroup).setName("Hide Pixel Banner Fields").setDesc("Hide banner-related frontmatter fields in Reading mode").addToggle((toggle) => toggle.setValue(plugin.settings.hidePixelBannerFields).onChange(async (value) => {
     plugin.settings.hidePixelBannerFields = value;
@@ -31718,6 +31743,41 @@ function createGeneralSettings(containerEl, plugin) {
       toggleComponent.setValue(DEFAULT_SETTINGS.showReleaseNotes);
     }
   }));
+  const promotionalLinks = containerEl.createDiv({
+    cls: "pixel-banner-promotional-links",
+    attr: {
+      style: `
+                display: flex;
+                gap: 10px;
+                justify-content: center;
+                margin-top: 30px;
+                padding-top: 20px;
+                border-top: 1px solid var(--background-modifier-border);
+            `
+    }
+  });
+  const discordLink = promotionalLinks.createEl("a", {
+    href: "https://discord.gg/sp8AQQhMJ7",
+    target: "discord"
+  });
+  discordLink.createEl("img", {
+    attr: {
+      height: "36",
+      src: "https://raw.githubusercontent.com/jparkerweb/pixel-banner/refs/heads/main/img/discord.png?raw=true",
+      alt: "Discord"
+    }
+  });
+  const kofiLink = promotionalLinks.createEl("a", {
+    href: "https://ko-fi.com/Z8Z212UMBI",
+    target: "kofi"
+  });
+  kofiLink.createEl("img", {
+    attr: {
+      height: "36",
+      src: "https://raw.githubusercontent.com/jparkerweb/pixel-banner/refs/heads/main/img/support.png?raw=true",
+      alt: "Buy Me a Coffee at ko-fi.com"
+    }
+  });
 }
 
 // src/settings/tabs/settingsTabPixelBannerPlus.js
@@ -32035,6 +32095,8 @@ var DEFAULT_SETTINGS = {
   borderRadius: 17,
   showPinIcon: false,
   pinnedImageFolder: "pixel-banner-images",
+  pinnedImageFilename: "pixel-banner-image",
+  imagePropertyFormat: "![[image]]",
   showReleaseNotes: true,
   lastVersion: null,
   showRefreshIcon: false,
@@ -34197,16 +34259,19 @@ async function handleSelectImage() {
             const fieldRegex = new RegExp(`${field}:\\s*.+\\n?`, "g");
             cleanedFrontmatter = cleanedFrontmatter.replace(fieldRegex, "");
           });
-          cleanedFrontmatter = cleanedFrontmatter.trim();
-          const newFrontmatter = `${bannerField}: "![[${imageReference}]]"${cleanedFrontmatter ? "\n" + cleanedFrontmatter : ""}`;
+          const format = this.settings.imagePropertyFormat;
+          const bannerValue = format === "[[image]]" ? `[[${imageReference}]]` : `![[${imageReference}]]`;
+          const newFrontmatter = `${bannerField}: "${bannerValue}"${cleanedFrontmatter ? "\n" + cleanedFrontmatter : ""}`;
           return `---
 ${newFrontmatter}
 ---`;
         });
       } else {
         const cleanContent = fileContent.replace(/^\s+/, "");
+        const format = this.settings.imagePropertyFormat;
+        const bannerValue = format === "[[image]]" ? `[[${imageReference}]]` : `![[${imageReference}]]`;
         updatedContent = `---
-${bannerField}: "![[${imageReference}]]"
+${bannerField}: "${bannerValue}"
 ---
 
 ${cleanContent}`;
