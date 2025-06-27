@@ -384,10 +384,55 @@
   "Projects/Tasks/Kanban Tasks/document yazi, fix vscode fzf, zoxide.md": {
     "iconName": "OcTasklist24"
   },
-  "yazi-shortcuts.md": {
+  "Projects/Tasks/Kanban Tasks/notes from the aicc meeting.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/create good claude code configuration, global commands dotfiles config.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/create warp workflows with claude code.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/use the agentic loop to create more warp workflows.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/check if I can download bitnet huggingface to ollama, check dotfiles.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/check llmstudio vs ollama.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/Create good dir structure for work using warp workflows.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/use local models, maybe with langgraph to index and structure obsidian notes.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Resources/Shortcuts/yazi-shortcuts.md": {
     "iconName": "SiShortcut"
   },
-  "Projects/Tasks/Kanban Tasks/notes from the aicc meeting.md": {
+  "Projects/Tasks/Kanban Tasks/fix list height, kanban.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/dotfiles tui.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/ollama tui.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/add parllama to dotfiles, add uv tools to dotfiles.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/obsidian in git.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/add ai_docs.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/add specs dir.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/start using cline, free, with gemini cli, claude code.md": {
     "iconName": "OcTasklist24"
   }
 }
