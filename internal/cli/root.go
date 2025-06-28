@@ -35,28 +35,7 @@ Features:
 - 🎨 Themeable: Customize the interface to match your style
 - ⚡ Fast & Reliable: Written in Go for performance and reliability`,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-		if err := initConfig(); err != nil {
-			return err
-		}
-		// Add tool commands after config is loaded
-		if registry != nil && !commandsAdded {
-			for _, tool := range registry.List() {
-				// Check if command already exists
-				exists := false
-				for _, existing := range cmd.Root().Commands() {
-					if existing.Name() == tool.Name() {
-						exists = true
-						break
-					}
-				}
-				if !exists {
-					toolCmd := createToolCommand(tool)
-					cmd.Root().AddCommand(toolCmd)
-				}
-			}
-			commandsAdded = true
-		}
-		return nil
+		return initConfig()
 	},
 }
 
@@ -67,9 +46,6 @@ func Execute() {
 		os.Exit(1)
 	}
 }
-
-// commandsAdded tracks if dynamic commands have been added
-var commandsAdded bool
 
 func init() {
 	// Global flags
@@ -84,6 +60,9 @@ func init() {
 	viper.BindPFlag("global.verbose", rootCmd.PersistentFlags().Lookup("verbose"))
 	viper.BindPFlag("global.auto_confirm", rootCmd.PersistentFlags().Lookup("yes"))
 	viper.BindPFlag("global.no_color", rootCmd.PersistentFlags().Lookup("no-color"))
+
+	// Register tool commands statically
+	registerToolCommands()
 }
 
 // initConfig reads in config file and ENV variables
@@ -170,7 +149,46 @@ func initConfig() error {
 	return nil
 }
 
-// createToolCommand creates a command for a specific tool
+// registerToolCommands registers all known tool commands statically
+func registerToolCommands() {
+	// List of all known tools
+	toolNames := []string{"stow", "rsync", "homebrew", "npm", "uv", "apps"}
+	
+	for _, toolName := range toolNames {
+		toolCmd := createLazyToolCommand(toolName)
+		rootCmd.AddCommand(toolCmd)
+	}
+}
+
+// createLazyToolCommand creates a command for a tool that loads config lazily
+func createLazyToolCommand(toolName string) *cobra.Command {
+	toolCmd := &cobra.Command{
+		Use:   toolName,
+		Short: fmt.Sprintf("Manage %s operations", toolName),
+		Long:  fmt.Sprintf("Commands for managing %s tool operations", toolName),
+		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+			// Ensure config is loaded
+			if cfg == nil || registry == nil {
+				if err := initConfig(); err != nil {
+					return fmt.Errorf("failed to initialize configuration: %w", err)
+				}
+			}
+			return nil
+		},
+	}
+
+	// Add common subcommands for each tool
+	toolCmd.AddCommand(createLazyStatusCommand(toolName))
+	toolCmd.AddCommand(createLazyListCommand(toolName))
+	toolCmd.AddCommand(createLazyInstallCommand(toolName))
+	toolCmd.AddCommand(createLazyUpdateCommand(toolName))
+	toolCmd.AddCommand(createLazyRemoveCommand(toolName))
+	toolCmd.AddCommand(createLazySyncCommand(toolName))
+
+	return toolCmd
+}
+
+// createToolCommand creates a command for a specific tool (legacy - keeping for compatibility)
 func createToolCommand(tool tools.Tool) *cobra.Command {
 	toolCmd := &cobra.Command{
 		Use:   tool.Name(),
