@@ -1,6 +1,6 @@
 ---
 name: "Obsidian Sync Settings"
-command: 'cd ~/dev/dotfiles && ga obsidian && gc -m "update: sync obsidian settings" && gp && cd -'
+command: 'cd ~/dev/dotfiles && ga config/obsidian && gc -m "update: sync obsidian settings" && gp && cd -'
 description: Sync settings for Obsidian
 arguments: []
 tags: ["obsidian", "sync", "settings"]
