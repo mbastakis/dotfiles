@@ -161,11 +161,3 @@ Also in dotfiles tui the status of rsync is "failed" but the files are there.
 The ai_docs and specs directories are not included in the config.yaml file.
 They exist in the config/ai_docs and config/specs directories.
 They should be added to the config.yaml file in the stow tool.
-
-#TODO: dotfiles TUI main menu order issue
-The main menu of the dotfiles TUI is changing the order of the tools: stow, rsync, homebrew, apps, npm, uv
-every time I run the dotfiles TUI, the order of the tools is different.
-REFLECT on this issue and try to find a solution.
-CORRECT order should be: stow, rsync, homebrew, apps, npm, uv as defined in the config.yaml file.
-
-#
