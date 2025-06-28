@@ -18,7 +18,6 @@ import (
 type StowTool struct {
 	config       *config.StowConfig
 	dotfilesPath string
-	backupSuffix string
 	enabled      bool
 	dryRun       bool
 }
@@ -28,7 +27,6 @@ func NewStowTool(cfg *config.Config) *StowTool {
 	return &StowTool{
 		config:       &cfg.Stow,
 		dotfilesPath: cfg.Global.DotfilesPath,
-		backupSuffix: cfg.Global.BackupSuffix,
 		enabled:      true,
 		dryRun:       cfg.Global.DryRun,
 	}
@@ -223,15 +221,16 @@ func (s *StowTool) linkPackage(pkg config.StowPackage) error {
 		return err
 	}
 
-	// Check for conflicts and create backups if needed
-	if err := s.handleConflicts(pkg, target); err != nil {
-		return err
-	}
-
-	// Build stow command
+	// Build stow command - use --adopt to handle existing files
 	args := []string{
+		"--adopt",           // Move existing files into package instead of reporting conflicts
 		"--target=" + target,
 		pkg.Name,
+	}
+	
+	// For config package, use --no-folding to avoid replacing entire ~/.config directory
+	if pkg.Name == "config" {
+		args = append([]string{"--no-folding"}, args...)
 	}
 
 	if s.dryRun {
@@ -259,6 +258,11 @@ func (s *StowTool) unlinkPackage(pkg config.StowPackage) error {
 		"--target=" + target,
 		pkg.Name,
 	}
+	
+	// For config package, use --no-folding to match linking behavior
+	if pkg.Name == "config" {
+		args = append([]string{"--no-folding"}, args...)
+	}
 
 	if s.dryRun {
 		args = append([]string{"--simulate"}, args...)
@@ -272,17 +276,13 @@ func (s *StowTool) unlinkPackage(pkg config.StowPackage) error {
 		return fmt.Errorf("stow delete failed: %w\nOutput: %s", err, string(output))
 	}
 
-	// Restore backups if they exist
-	if !s.dryRun {
-		s.restoreBackups(pkg, target)
-	}
-
 	return nil
 }
 
 // isPackageLinked checks if a package is currently linked
 func (s *StowTool) isPackageLinked(pkg config.StowPackage) (bool, error) {
 	target := s.resolveTarget(pkg.Target)
+	
 	packagePath := filepath.Join(s.dotfilesPath, "config", pkg.Name)
 
 	// Check if package directory exists
@@ -323,6 +323,7 @@ func (s *StowTool) isPackageLinked(pkg config.StowPackage) (bool, error) {
 	return linked && err == nil, err
 }
 
+
 // validatePackage validates a package configuration
 func (s *StowTool) validatePackage(pkg config.StowPackage) error {
 	if pkg.Name == "" {
@@ -332,6 +333,7 @@ func (s *StowTool) validatePackage(pkg config.StowPackage) error {
 	if pkg.Target == "" {
 		return fmt.Errorf("package target cannot be empty")
 	}
+
 
 	// Check if package directory exists
 	packagePath := filepath.Join(s.dotfilesPath, "config", pkg.Name)
@@ -382,68 +384,6 @@ func (s *StowTool) ensureTargetDir(target string) error {
 	return nil
 }
 
-// handleConflicts checks for conflicts and creates backups
-func (s *StowTool) handleConflicts(pkg config.StowPackage, target string) error {
-	if s.backupSuffix == "" {
-		return nil // Backups disabled
-	}
 
-	packagePath := filepath.Join(s.dotfilesPath, "config", pkg.Name)
-	
-	return filepath.Walk(packagePath, func(path string, info os.FileInfo, err error) error {
-		if err != nil || path == packagePath {
-			return err
-		}
 
-		relPath, err := filepath.Rel(packagePath, path)
-		if err != nil {
-			return err
-		}
 
-		targetPath := filepath.Join(target, relPath)
-		
-		// Check if target exists and is not already a symlink to our package
-		if _, err := os.Lstat(targetPath); err == nil {
-			if linkTarget, err := os.Readlink(targetPath); err != nil || linkTarget != path {
-				// File exists and is not our symlink - create backup
-				backupPath := targetPath + s.backupSuffix
-				
-				if s.dryRun {
-					fmt.Printf("Would backup %s to %s\n", targetPath, backupPath)
-				} else {
-					if err := os.Rename(targetPath, backupPath); err != nil {
-						return fmt.Errorf("failed to backup %s: %w", targetPath, err)
-					}
-				}
-			}
-		}
-
-		return nil
-	})
-}
-
-// restoreBackups restores backup files when unlinking
-func (s *StowTool) restoreBackups(pkg config.StowPackage, target string) {
-	if s.backupSuffix == "" {
-		return
-	}
-
-	packagePath := filepath.Join(s.dotfilesPath, "config", pkg.Name)
-	
-	filepath.Walk(packagePath, func(path string, info os.FileInfo, err error) error {
-		if err != nil || path == packagePath {
-			return err
-		}
-
-		relPath, _ := filepath.Rel(packagePath, path)
-		targetPath := filepath.Join(target, relPath)
-		backupPath := targetPath + s.backupSuffix
-
-		// If backup exists, restore it
-		if _, err := os.Stat(backupPath); err == nil {
-			os.Rename(backupPath, targetPath)
-		}
-
-		return nil
-	})
-}

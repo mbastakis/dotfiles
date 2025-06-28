@@ -1,0 +1,12 @@
+# Ignore dynamic Docker state files
+\.lock$
+current$
+activity$
+instances$
+defaults$
+
+# Common ignore patterns (since we're overriding defaults)
+\.git
+\.gitignore
+README\.md
+\.DS_Store
