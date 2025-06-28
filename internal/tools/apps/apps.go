@@ -41,7 +41,7 @@ func (a *AppsTool) IsEnabled() bool {
 
 // Priority returns the tool priority
 func (a *AppsTool) Priority() int {
-	return 60 // Run last after all other tools
+	return 40 // Run after homebrew, before npm and uv
 }
 
 // Validate checks if all app scripts exist and are executable

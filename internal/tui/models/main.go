@@ -96,7 +96,7 @@ func NewMainModel(cfg *config.Config, registry *tools.ToolRegistry, themeManager
 	})
 
 	// Add tool-specific items
-	for _, tool := range registry.ListEnabled() {
+	for _, tool := range registry.GetByPriority() {
 		var icon string
 		var desc string
 		

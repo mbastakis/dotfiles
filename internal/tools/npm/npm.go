@@ -47,7 +47,7 @@ func (n *NPMTool) IsEnabled() bool {
 
 // Priority returns the tool priority
 func (n *NPMTool) Priority() int {
-	return 40 // Run after system tools
+	return 50 // Run after apps
 }
 
 // Validate checks if npm is available and packages are valid

@@ -45,7 +45,7 @@ func (u *UVTool) IsEnabled() bool {
 
 // Priority returns the tool priority
 func (u *UVTool) Priority() int {
-	return 50 // Run after other package managers
+	return 60 // Run last after all other tools
 }
 
 // Validate checks if uv is available and tools are valid
