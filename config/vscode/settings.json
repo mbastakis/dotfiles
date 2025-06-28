@@ -24,6 +24,7 @@
   "explorer.confirmDelete": false,
   // Zoom Level
   "window.zoomLevel": 1,
+  "window.customTitleBarVisibility": "never",
   "window.titleBarStyle": "native",
   "custom-ui-style.electron": {
     "titleBarStyle": "hiddenInset",
@@ -279,6 +280,9 @@
 
   // Svelte
   "svelte.enable-ts-plugin": true,
+
+  // Makefile Tools
+  "makefile.configureOnOpen": true,
   // ----------------------------------------------------------------------
   // END OF EXTENSIONS
   // ----------------------------------------------------------------------
