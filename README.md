@@ -1,293 +1,321 @@
-# 🚀 Mac Dotfiles
+# Dotfiles TUI Manager
 
-This repository contains my personal dotfiles and automation scripts for setting up a new macOS machine quickly and efficiently. Using GNU Stow, this repo creates symlinks from the home directory to the configuration files in this repo, allowing easy version control and synchronization across machines.
+A modern, interactive Terminal User Interface (TUI) for managing your dotfiles with advanced features including theming, performance optimization, and comprehensive tool integration.
 
-## 📦 What's Included
+## ✨ Features
 
-- **Shell Configuration**: ZSH setup with custom aliases, functions, and prompt
-- **Git Configuration**: Automatic Git user switching based on repository location
-- **Plugin Management**: Zinit for managing ZSH plugins and extensions
-- **macOS Settings**: Sensible defaults for macOS
-- **Homebrew**: Package installation automation
-- **App Configurations**: Settings for Raycast, Karabiner, and other tools
-- **VS Code Configuration**: Settings, keybindings, and extensions management
-- **Obsidian Configuration**: Synced Obsidian vault settings across machines
-- **Custom Fonts**: JetBrains Mono and other typography
-- **Development Environment**: Configuration for development tools
+- **🖥️ Interactive TUI**: Modern terminal interface with intuitive navigation
+- **📦 Package Management**: GNU Stow integration with dependency handling
+- **🛠️ Tool Integration**: Support for Homebrew, NPM, APT, Pip, and more
+- **🎨 Advanced Theming**: Customizable color schemes with live preview
+- **⚡ Performance Optimized**: Object pooling, caching, and memory monitoring
+- **🧪 Comprehensive Testing**: Full test coverage with unit and integration tests
+- **📚 Rich Documentation**: Complete guides and API documentation
+- **🔄 Migration Tools**: Easy migration from existing dotfiles setups
 
-## 🔧 Installation
+## 🚀 Quick Start
 
-### Quick Install (Full Setup)
+### Installation
 
 ```bash
-git clone https://github.com/yourusername/.dotfiles.git ~/.dotfiles
+# Clone the repository
+git clone https://github.com/yourusername/dotfiles ~/.dotfiles
 cd ~/.dotfiles
-chmod +x bootstrap.sh
-./bootstrap.sh
+
+# Build the application
+go build -o dotfiles cmd/main.go
+
+# Make it available globally
+sudo mv dotfiles /usr/local/bin/
+
+# Initialize configuration
+dotfiles init
 ```
 
-### Manual Installation (Pick and Choose)
-
-If you want to set up specific components only:
-
-1. **Install Homebrew**:
-
-   ```bash
-   ./scripts/install_brew.sh
-   ```
-
-2. **Install Core Packages**:
-
-   ```bash
-   brew bundle --file=./homebrew/Brewfile
-   ```
-
-3. **Install GUI Applications**:
-
-   ```bash
-   brew bundle --file=./homebrew/Brewfile.apps
-   ```
-
-4. **Install Development Tools**:
-
-   ```bash
-   brew bundle --file=./homebrew/Brewfile.dev
-   ```
-
-5. **Apply Configuration Files**:
-
-   ```bash
-   stow -v --target="$HOME" config shell git
-   ```
-
-6. **Set macOS Defaults**:
-
-   ```bash
-   ./scripts/mac_settings.sh
-   ```
-
-7. **Install Mac App Store Applications**:
-
-   ```bash
-   brew bundle --file=./homebrew/Brewfile.mas
-   ```
-
-8. **Set up VS Code Configuration**:
-
-   ```bash
-   ./bin/setup_vscode sync
-   ./bin/setup_vscode extensions install
-   ```
-
-## 🛠 Customization
-
-### How Stow Works
-
-GNU Stow creates symlinks from your home directory to the files in this repository. The directory structure within each package (config, shell, bin) mirrors the structure that would exist in your home directory.
-
-For example:
-
-- `~/.dotfiles/config/.config/starship/starship.toml` becomes `~/.config/starship/starship.toml`
-- `~/.dotfiles/shell/.zshrc` becomes `~/.zshrc`
-- `~/.dotfiles/bin/update_dotfiles` becomes `~/bin/update_dotfiles`
-
-### Adding Homebrew Packages
-
-Edit the appropriate Brewfile:
-
-- `homebrew/Brewfile` for essential utilities
-- `homebrew/Brewfile.apps` for GUI applications
-- `homebrew/Brewfile.dev` for development tools
-
-### Adding App Configurations
-
-1. Create a directory for your app in `config/.config/`
-2. Add configuration files
-3. Run `stow -v --target="$HOME" config` to create symlinks
-
-### Setting up Obsidian Configuration
-
-To sync your Obsidian settings across machines:
-
-1. **Automatic Setup** (recommended):
-   ```bash
-   ./bin/setup_obsidian
-   ```
-
-2. **Manual Setup**:
-   ```bash
-   # Replace with your actual vault path
-   ln -sf ~/.dotfiles/obsidian/.obsidian /path/to/your/vault/.obsidian
-   ```
-
-Your Obsidian configuration will be symlinked to your vault, so any changes made in Obsidian's settings will be automatically tracked in your dotfiles. You can then commit and push these changes to keep your settings synchronized across machines.
-
-**Multiple Vaults**: You can link the same configuration to multiple vaults for consistent settings across all your Obsidian vaults.
-
-### Setting up VS Code Configuration
-
-VS Code settings, keybindings, and extensions are managed through symbolic links:
-
-1. **Set up VS Code dotfiles**:
-   ```bash
-   ./bin/setup_vscode sync
-   ```
-
-2. **Install extensions from list**:
-   ```bash
-   ./bin/setup_vscode extensions install
-   ```
-
-3. **Update extensions list**:
-   ```bash
-   ./bin/setup_vscode extensions update
-   ```
-
-**How it works**: The setup creates symlinks from VS Code's configuration directory to your dotfiles, so any changes made through VS Code's settings UI are automatically reflected in your dotfiles repository.
-
-**Location**: 
-- macOS: `~/Library/Application Support/Code/User/`
-- Linux: `~/.config/Code/User/`
-
-See [`vscode/README.md`](vscode/README.md) for detailed information.
-
-### Git Configuration
-
-This dotfiles setup includes automatic Git user switching based on repository location:
-
-- **Work repositories** (`~/dev/work/`): Uses work email and settings
-- **Personal repositories** (`~/dev/personal/`): Uses personal email and settings  
-- **Other repositories**: Uses default email and settings
-
-The configuration files are automatically symlinked:
-- `.gitconfig` - Main configuration with conditional includes
-- `.gitconfig-work` - Work-specific settings  
-- `.gitconfig-personal` - Personal settings
-
-**Testing the setup**:
-```bash
-# Test work configuration
-cd ~/dev/work/some-repo
-git config user.email  # Shows work email
-
-# Test personal configuration  
-cd ~/dev/personal/some-repo
-git config user.email  # Shows personal email
-```
-
-See `git/README.md` for detailed configuration information.
-
-### Customizing ZSH
-
-- Add aliases to `shell/.zsh/aliases.zsh`
-- Add exports to `shell/.zsh/exports.zsh`
-- Add functions to `shell/.zsh/functions.zsh`
-- Modify main configuration in `shell/.zshrc`
-- Add ZSH plugins to `shell/.zsh/plugins.zsh`
-
-### Managing ZSH Plugins with Zinit
-
-This repository uses [Zinit](https://github.com/zdharma-continuum/zinit) for ZSH plugin management. Zinit is a flexible and fast plugin manager that offers features like turbo mode, completions management, and plugin analytics.
-
-#### Adding New Plugins
-
-To add a new plugin, edit `shell/.zsh/plugins.zsh` and add your plugin using one of these patterns:
+### First Launch
 
 ```bash
-# Simple plugin loading
-zinit load username/repository
-
-# Light mode (faster, without reporting or tracking)
-zinit light username/repository
-
-# Turbo mode (deferred loading for faster shell startup)
-zinit wait lucid for username/repository
-
-# More complex loading with ice modifiers
-zinit ice wait"0" lucid
-zinit load username/repository
+# Start the interactive TUI
+dotfiles tui
 ```
 
-#### Example Plugins
+Follow the setup wizard to configure your dotfiles directory, package preferences, and theme selection.
 
-The configuration includes several useful plugins by default:
+## 📖 Documentation
 
-- Fast syntax highlighting
-- ZSH completions
-- Auto-suggestions
-- History search multi-word
+- **[User Guide](docs/USER_GUIDE.md)** - Complete guide to using the TUI manager
+- **[Configuration Reference](docs/CONFIGURATION.md)** - Detailed configuration options
+- **[Migration Guide](docs/MIGRATION.md)** - Migrate from existing dotfiles setups
+- **[Performance Guide](docs/PERFORMANCE.md)** - Optimization features and best practices
 
-### Customizing Starship Prompt
+## 🖼️ Screenshots
 
-Edit `config/.config/starship/starship.toml`
+### Main Overview
+The main dashboard provides a comprehensive view of your dotfiles status:
 
-### Adding Custom Scripts
+```
+┌─ Dotfiles Manager ─────────────────────────────────────────────────────────┐
+│                                                                            │
+│  📊 System Overview                     🎯 Quick Actions                   │
+│  ├─ Packages: 12 enabled, 3 disabled   ├─ [S] Sync All Packages          │
+│  ├─ Tools: 5 healthy, 0 errors         ├─ [U] Update Tools               │
+│  ├─ Theme: cyberpunk                    ├─ [T] Change Theme               │
+│  └─ Last Sync: 2 hours ago              └─ [C] Configuration              │
+│                                                                            │
+│  📈 Performance Metrics                 📋 Recent Activity                │
+│  ├─ Memory: 45.2 MB                     ├─ vim package synced             │
+│  ├─ Cache Hit: 94%                      ├─ homebrew updated               │
+│  └─ Operations: 156 total               └─ theme changed to cyberpunk     │
+│                                                                            │
+└────────────────────────────────────────────────────────────────────────────┘
+```
 
-1. Add your script to the `bin/` directory
-2. Make it executable with `chmod +x bin/your-script`
-3. Run `stow -v --target="$HOME" bin` to create symlinks
+### Package Management
+Intuitive package management with real-time status:
 
-### Adding macOS Settings
+```
+┌─ Package Management ───────────────────────────────────────────────────────┐
+│                                                                            │
+│  Package Name     Status    Priority   Dependencies    Last Modified       │
+│  ├─ [✓] git       enabled   1          -               2 days ago         │
+│  ├─ [✓] vim       enabled   2          git             1 hour ago         │
+│  ├─ [✓] zsh       enabled   3          git             3 hours ago        │
+│  ├─ [ ] tmux      disabled  4          -               1 week ago         │
+│  └─ [✓] homebrew  enabled   5          -               2 days ago         │
+│                                                                            │
+│  [Space] Toggle   [Enter] Configure   [D] Details   [R] Remove             │
+│                                                                            │
+└────────────────────────────────────────────────────────────────────────────┘
+```
 
-Edit `scripts/mac_settings.sh` to add or modify macOS defaults commands
+### Theme Selection
+Live theme preview with real-time updates:
 
-## 🔄 Updating
+```
+┌─ Theme Selection ──────────────────────────────────────────────────────────┐
+│                                                                            │
+│  Available Themes               Preview                                    │
+│  ├─ [ ] default                 ┌─ Preview Window ─────────────────────┐  │
+│  ├─ [ ] light                   │ Primary Color: ████                  │  │
+│  ├─ [●] cyberpunk               │ Secondary: ████                      │  │
+│  ├─ [ ] dark                    │ Success: ████ Warning: ████         │  │
+│  └─ [ ] minimal                 │ Error: ████   Background: ████      │  │
+│                                 └──────────────────────────────────────┘  │
+│                                                                            │
+│  [Enter] Apply Theme   [C] Customize   [I] Import   [E] Export             │
+│                                                                            │
+└────────────────────────────────────────────────────────────────────────────┘
+```
 
-To update your configuration after making changes:
+## 🏗️ Architecture
+
+The project is organized into several key modules:
+
+### Core Components
+
+- **`internal/tui/`** - Terminal user interface implementation
+- **`internal/config/`** - Configuration management system
+- **`internal/theme/`** - Theme and styling system
+- **`internal/tools/`** - Tool integration framework
+- **`internal/perf/`** - Performance optimization utilities
+
+### Key Features
+
+#### Package Management (`internal/stow/`)
+- GNU Stow integration for symlink management
+- Dependency resolution and conflict detection
+- Priority-based installation ordering
+- File filtering with include/exclude patterns
+
+#### Tool Integration (`internal/tools/`)
+- Modular tool plugin system
+- Support for popular package managers
+- Health monitoring and status checking
+- Bulk operations and synchronization
+
+#### Performance System (`internal/perf/`)
+- Object pooling for memory efficiency
+- Multi-level caching with TTL
+- Real-time performance monitoring
+- Automatic profiling and optimization
+
+#### Theme System (`internal/theme/`)
+- Live theme switching and preview
+- Custom color scheme creation
+- Component-specific styling
+- Import/export functionality
+
+## 🧪 Testing
+
+The project includes comprehensive testing with multiple levels:
+
+### Running Tests
 
 ```bash
-cd ~/.dotfiles
-git pull                           # Get latest changes
-~/bin/update_dotfiles              # Re-stow all configurations
+# Run all tests
+go test ./...
+
+# Run with coverage
+go test -cover ./...
+
+# Run integration tests
+go test -tags=integration ./test/integration/
+
+# Run benchmarks
+go test -bench=. ./internal/perf/
+
+# Run stress tests
+go test -run=TestStress ./internal/perf/
 ```
 
-Alternatively, you can manually re-stow specific packages:
+### Test Structure
+
+- **Unit Tests**: `*_test.go` files alongside source code
+- **Integration Tests**: `test/integration/` directory
+- **Benchmarks**: Performance benchmarks in `internal/perf/`
+- **Test Utilities**: Shared testing utilities in `test/testutil/`
+
+## ⚡ Performance
+
+The system is optimized for efficiency and responsiveness:
+
+### Optimization Features
+
+- **Object Pooling**: Reduces allocations for frequently used objects
+- **Intelligent Caching**: Multi-level caching with automatic cleanup
+- **String Optimization**: Efficient string operations with minimal allocations
+- **Memory Monitoring**: Real-time tracking of memory usage and GC behavior
+- **Concurrent Operations**: Parallel execution where safe and beneficial
+
+### Benchmarks
 
 ```bash
-cd ~/.dotfiles
-stow -v --restow --target="$HOME" config  # Refresh just config symlinks
+# Example benchmark results
+BenchmarkStringBuilder-8         1000000    1205 ns/op     256 B/op    1 allocs/op
+BenchmarkCache-8                 2000000     823 ns/op       0 B/op    0 allocs/op
+BenchmarkObjectPool-8            5000000     312 ns/op       0 B/op    0 allocs/op
 ```
 
-## 📂 Repository Structure
+## 🔧 Configuration
 
-```txt
-.dotfiles/
-├── README.md                  # Main documentation
-├── bootstrap.sh               # Main installation script
-├── bin/                       # Custom executable scripts
-│   └── update_dotfiles        # Script to update dotfiles
-├── config/                    # Directories organized by application
-│   └── .config/
-│       ├── aerospace/         # Aerospace window manager configuration
-│       ├── karabiner/         # Karabiner keyboard customization
-│       ├── raycast/           # Raycast launcher configuration
-│       └── starship/          # Starship terminal prompt
-│       └── .../               # Other ...
-├── homebrew/
-│   ├── Brewfile               # Core/essential applications
-│   ├── Brewfile.apps          # GUI applications
-│   ├── Brewfile.dev           # Development tools
-│   └── Brewfile.mas           # Mac App Store
-├── scripts/
-│   ├── install_brew.sh        # Install Homebrew
-│   ├── mac_settings.sh        # Configure macOS
-│   └── utils.sh               # Shared utility functions
-└── shell/
-    ├── .zshrc                 # Main ZSH configuration
-    └── .zsh/                  # ZSH component files
-        ├── aliases.zsh        # Shell aliases
-        ├── exports.zsh        # Environment variables
-        ├── plugins.zsh        # Plugins for zsh
-        └── functions.zsh      # Custom shell functions
+### Basic Configuration
+
+```yaml
+global:
+  dotfiles_path: "/Users/username/.dotfiles"
+  log_level: "info"
+  backup_enabled: true
+
+tui:
+  color_scheme: "cyberpunk"
+  animations: true
+  vim_mode: false
+
+stow:
+  packages:
+    - name: "vim"
+      enabled: true
+      priority: 1
+    - name: "git"
+      enabled: true
+      priority: 2
+
+tools:
+  homebrew:
+    enabled: true
+    auto_update: false
+  npm:
+    enabled: true
+    global_packages: true
 ```
 
-## ⚠️ Warning
+### Environment Variables
 
-These dotfiles are personalized to my workflow. Review the code before installing, and modify to suit your needs.
+```bash
+export DOTFILES_LOG_LEVEL=debug
+export DOTFILES_THEME=cyberpunk
+export DOTFILES_DRY_RUN=true
+```
 
-## 📚 Resources
+## 🛠️ Development
 
-- [GNU Stow Documentation](https://www.gnu.org/software/stow/manual/stow.html)
-- [Homebrew Documentation](https://docs.brew.sh)
-- [Defaults documentation](https://macos-defaults.com/) - A comprehensive guide to macOS `defaults` commands
-- [Defaults forum](https://www.defaults-write.com/) - Users sharing their defaults automation
+### Prerequisites
+
+- Go 1.19 or later
+- Terminal with Unicode support
+- Git for version control
+
+### Building from Source
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/dotfiles
+cd dotfiles
+
+# Install dependencies
+go mod download
+
+# Build the application
+go build -o dotfiles cmd/main.go
+
+# Run tests
+go test ./...
+
+# Build with optimizations
+go build -ldflags "-s -w" -o dotfiles cmd/main.go
+```
+
+### Development Setup
+
+```bash
+# Enable development mode
+export DOTFILES_DEV_MODE=true
+export DOTFILES_LOG_LEVEL=debug
+
+# Enable profiling (optional)
+export DOTFILES_PROFILE_ENABLED=true
+
+# Run with hot reload (if using air)
+air
+```
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+### Development Process
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes with tests
+4. Run the test suite
+5. Submit a pull request
+
+### Code Standards
+
+- Follow Go best practices and idioms
+- Include unit tests for new functionality
+- Update documentation for user-facing changes
+- Use conventional commit messages
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [Bubble Tea](https://github.com/charmbracelet/bubbletea) for the excellent TUI framework
+- [GNU Stow](https://www.gnu.org/software/stow/) for dotfiles management inspiration
+- [Cobra](https://github.com/spf13/cobra) for CLI interface
+- The Go community for excellent tooling and libraries
+
+## 📞 Support
+
+- **Documentation**: [User Guide](docs/USER_GUIDE.md) and [FAQ](docs/FAQ.md)
+- **Issues**: [GitHub Issues](https://github.com/yourusername/dotfiles/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/yourusername/dotfiles/discussions)
+- **Wiki**: [Community Wiki](https://github.com/yourusername/dotfiles/wiki)
+
+---
+
+Made with ❤️ for developers who love well-organized dotfiles and beautiful terminal interfaces.
