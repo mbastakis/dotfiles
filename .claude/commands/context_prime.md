@@ -1,1 +1,1 @@
-READ README.md, THEN run `git ls-files` to understand the context of the project.
+READ README.md, THEN run `git ls-files` to understand the context of the project, THEN run `eza . --tree --level 4 --git-ignore --all` to visualize the directory structure and identify relevant files.
