@@ -54,10 +54,7 @@ rsync:
       target: "~/"
       enabled: true
       priority: 1
-    - name: "vscode_extensions"
-      target: "~/Library/Application Support/Code/User/extensions" # macOS default
-      enabled: false
-      priority: 2
+
 # Homebrew configuration - Manages package installation
 homebrew:
   auto_update: true
@@ -76,11 +73,6 @@ homebrew:
       brewfile: "homebrew/Brewfile.mas"
 # Custom Applications - Manages script execution
 apps:
-  vscode_extensions:
-    enabled: true
-    scripts:
-      - "data/scripts/build_vscode_extensions.sh"
-      - "data/scripts/list_vscode_extensions.sh"
   macos_settings:
     enabled: false
     scripts:

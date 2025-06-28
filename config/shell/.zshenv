@@ -21,3 +21,6 @@ fi
 if [[ -d "$HOME/.local/bin" ]] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
+
+# Set PATH for dotfiles bin
+PATH="$DOTFILES_PATH/bin:$PATH"
