@@ -82,9 +82,13 @@ apps:
       - "data/scripts/build_vscode_extensions.sh"
       - "data/scripts/list_vscode_extensions.sh"
   macos_settings:
-    enabled: true
+    enabled: false
     scripts:
       - "data/scripts/mac_settings.sh"
+  yazi_packages:
+    enabled: true
+    scripts:
+      - "data/scripts/setup_yazi_packages.sh"
 # Global NPM packages - Manages Node.js tools
 npm:
   auto_install: true

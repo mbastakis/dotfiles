@@ -155,7 +155,18 @@ func DefaultConfig() *Config {
 		Apps: AppsConfig{
 			"vscode_extensions": {
 				Enabled: true,
-				Scripts: []string{"data/scripts/build_vscode_extensions.sh"},
+				Scripts: []string{
+					"data/scripts/build_vscode_extensions.sh",
+					"data/scripts/list_vscode_extensions.sh",
+				},
+			},
+			"macos_settings": {
+				Enabled: false,
+				Scripts: []string{"data/scripts/mac_settings.sh"},
+			},
+			"yazi_packages": {
+				Enabled: true,
+				Scripts: []string{"data/scripts/setup_yazi_packages.sh"},
 			},
 		},
 	}
@@ -349,22 +360,38 @@ func (c *Config) Validate() error {
 	return nil
 }
 
-// ExpandVariables expands environment variables in configuration values
+// ExpandVariables expands environment variables and tildes in configuration values
 func (c *Config) ExpandVariables() error {
 	// Expand variables in stow packages
 	for i := range c.Stow.Packages {
-		c.Stow.Packages[i].Target = os.ExpandEnv(c.Stow.Packages[i].Target)
+		c.Stow.Packages[i].Target = expandPath(c.Stow.Packages[i].Target)
 	}
 
 	// Expand variables in rsync sources
 	for i := range c.Rsync.Sources {
-		c.Rsync.Sources[i].Target = os.ExpandEnv(c.Rsync.Sources[i].Target)
+		c.Rsync.Sources[i].Target = expandPath(c.Rsync.Sources[i].Target)
 	}
 
 	// Expand dotfiles path
-	c.Global.DotfilesPath = os.ExpandEnv(c.Global.DotfilesPath)
+	c.Global.DotfilesPath = expandPath(c.Global.DotfilesPath)
 
 	return nil
+}
+
+// expandPath expands environment variables and tildes in a path
+func expandPath(path string) string {
+	// First expand environment variables
+	expanded := os.ExpandEnv(path)
+	
+	// Then expand tilde if present
+	if strings.HasPrefix(expanded, "~/") {
+		homeDir, err := os.UserHomeDir()
+		if err == nil {
+			expanded = filepath.Join(homeDir, expanded[2:])
+		}
+	}
+	
+	return expanded
 }
 
 // setDefaults sets default values for missing configuration fields
