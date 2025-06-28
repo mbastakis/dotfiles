@@ -173,7 +173,7 @@ func (s *StowTool) List(ctx context.Context) ([]types.ToolItem, error) {
 
 	for _, pkg := range s.config.Packages {
 		linked, _ := s.isPackageLinked(pkg)
-		
+
 		item := types.ToolItem{
 			Name:      pkg.Name,
 			Enabled:   pkg.Enabled,
@@ -181,7 +181,7 @@ func (s *StowTool) List(ctx context.Context) ([]types.ToolItem, error) {
 			Target:    pkg.Target,
 			Priority:  pkg.Priority,
 		}
-		
+
 		items = append(items, item)
 	}
 
@@ -215,7 +215,7 @@ func (s *StowTool) Configure(cfg interface{}) error {
 func (s *StowTool) linkPackage(pkg config.StowPackage) error {
 	// Resolve target path with environment variables
 	target := s.resolveTarget(pkg.Target)
-	
+
 	// Validate target directory exists or can be created
 	if err := s.ensureTargetDir(target); err != nil {
 		return err
@@ -223,11 +223,11 @@ func (s *StowTool) linkPackage(pkg config.StowPackage) error {
 
 	// Build stow command - use --adopt to handle existing files
 	args := []string{
-		"--adopt",           // Move existing files into package instead of reporting conflicts
+		"--adopt", // Move existing files into package instead of reporting conflicts
 		"--target=" + target,
 		pkg.Name,
 	}
-	
+
 	// For config package, use --no-folding to avoid replacing entire ~/.config directory
 	if pkg.Name == "config" {
 		args = append([]string{"--no-folding"}, args...)
@@ -240,7 +240,7 @@ func (s *StowTool) linkPackage(pkg config.StowPackage) error {
 	// Execute stow command from config directory
 	cmd := exec.Command("stow", args...)
 	cmd.Dir = filepath.Join(s.dotfilesPath, "config")
-	
+
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		return fmt.Errorf("stow failed: %w\nOutput: %s", err, string(output))
@@ -258,7 +258,7 @@ func (s *StowTool) unlinkPackage(pkg config.StowPackage) error {
 		"--target=" + target,
 		pkg.Name,
 	}
-	
+
 	// For config package, use --no-folding to match linking behavior
 	if pkg.Name == "config" {
 		args = append([]string{"--no-folding"}, args...)
@@ -270,7 +270,7 @@ func (s *StowTool) unlinkPackage(pkg config.StowPackage) error {
 
 	cmd := exec.Command("stow", args...)
 	cmd.Dir = filepath.Join(s.dotfilesPath, "config")
-	
+
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		return fmt.Errorf("stow delete failed: %w\nOutput: %s", err, string(output))
@@ -282,7 +282,7 @@ func (s *StowTool) unlinkPackage(pkg config.StowPackage) error {
 // isPackageLinked checks if a package is currently linked
 func (s *StowTool) isPackageLinked(pkg config.StowPackage) (bool, error) {
 	target := s.resolveTarget(pkg.Target)
-	
+
 	packagePath := filepath.Join(s.dotfilesPath, "config", pkg.Name)
 
 	// Check if package directory exists
@@ -290,8 +290,11 @@ func (s *StowTool) isPackageLinked(pkg config.StowPackage) (bool, error) {
 		return false, tools.ErrPackageNotFound
 	}
 
-	// Walk through package directory and check if files are linked
-	linked := true
+	// Check if package is linked by finding at least one correctly linked file
+	// This approach avoids issues with files that Stow ignores (README.md, etc.)
+	foundLinkedFile := false
+	foundProblematicFile := false
+
 	err := filepath.Walk(packagePath, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -299,6 +302,13 @@ func (s *StowTool) isPackageLinked(pkg config.StowPackage) (bool, error) {
 
 		// Skip the package root directory
 		if path == packagePath {
+			return nil
+		}
+
+		// Skip common files that Stow ignores by default
+		baseName := filepath.Base(path)
+		if baseName == "README.md" || baseName == ".gitignore" || baseName == ".stow-local-ignore" ||
+			strings.HasPrefix(baseName, ".#") || strings.HasSuffix(baseName, "~") {
 			return nil
 		}
 
@@ -311,18 +321,60 @@ func (s *StowTool) isPackageLinked(pkg config.StowPackage) (bool, error) {
 		// Calculate target path
 		targetPath := filepath.Join(target, relPath)
 
-		// Check if target is a symlink pointing to the package file
-		if linkTarget, err := os.Readlink(targetPath); err != nil || linkTarget != path {
-			linked = false
-			return filepath.SkipDir // Stop walking, we know it's not fully linked
+		// Check if target exists and is a symlink
+		linkTarget, err := os.Readlink(targetPath)
+		if err != nil {
+			// Target doesn't exist or is not a symlink
+			if info.IsDir() {
+				return nil // Directories might not be symlinked if using --no-folding or --adopt
+			}
+
+			// Check if the file exists but is not a symlink (might be adopted but not re-linked)
+			if _, statErr := os.Stat(targetPath); statErr == nil {
+				// File exists but is not a symlink - might be an adopted file
+				// For now, don't mark as problematic since the file is in the right place
+				return nil
+			}
+
+			// File doesn't exist at all - this might indicate an issue for non-ignored files
+			foundProblematicFile = true
+			return nil
+		}
+
+		// Resolve the symlink target to absolute path for comparison
+		var absLinkTarget string
+		if filepath.IsAbs(linkTarget) {
+			absLinkTarget = linkTarget
+		} else {
+			// Resolve relative symlink relative to the directory containing the symlink
+			absLinkTarget = filepath.Join(filepath.Dir(targetPath), linkTarget)
+		}
+
+		// Get absolute path and clean both for comparison
+		absLinkTarget, err = filepath.Abs(absLinkTarget)
+		if err != nil {
+			foundProblematicFile = true
+			return nil
+		}
+
+		absPath, err := filepath.Abs(path)
+		if err != nil {
+			foundProblematicFile = true
+			return nil
+		}
+
+		if absLinkTarget == absPath {
+			foundLinkedFile = true
+		} else {
+			foundProblematicFile = true
 		}
 
 		return nil
 	})
 
-	return linked && err == nil, err
+	// Package is considered linked if we found at least one linked file and no problematic files
+	return foundLinkedFile && !foundProblematicFile && err == nil, err
 }
-
 
 // validatePackage validates a package configuration
 func (s *StowTool) validatePackage(pkg config.StowPackage) error {
@@ -333,7 +385,6 @@ func (s *StowTool) validatePackage(pkg config.StowPackage) error {
 	if pkg.Target == "" {
 		return fmt.Errorf("package target cannot be empty")
 	}
-
 
 	// Check if package directory exists
 	packagePath := filepath.Join(s.dotfilesPath, "config", pkg.Name)
@@ -358,7 +409,7 @@ func (s *StowTool) findPackage(name string) *config.StowPackage {
 func (s *StowTool) resolveTarget(target string) string {
 	// Expand environment variables
 	expanded := os.ExpandEnv(target)
-	
+
 	// Expand tilde to home directory
 	if strings.HasPrefix(expanded, "~/") {
 		if homeDir, err := os.UserHomeDir(); err == nil {
@@ -376,14 +427,10 @@ func (s *StowTool) ensureTargetDir(target string) error {
 			fmt.Printf("Would create directory: %s\n", target)
 			return nil
 		}
-		
+
 		if err := os.MkdirAll(target, 0755); err != nil {
 			return fmt.Errorf("failed to create target directory %s: %w", target, err)
 		}
 	}
 	return nil
 }
-
-
-
-
