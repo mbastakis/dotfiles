@@ -47,19 +47,19 @@ type Monitor struct {
 	maxHistorySize   int
 	operationCounts  map[string]int64
 	operationLatency map[string]time.Duration
-	cacheStats       map[string]*CacheStats
+	cacheStats       map[string]*MonitorCacheStats
 	stopCh           chan struct{}
 	doneCh           chan struct{}
 }
 
-// CacheStats tracks cache hit/miss statistics
-type CacheStats struct {
+// MonitorCacheStats tracks cache hit/miss statistics
+type MonitorCacheStats struct {
 	Hits   int64
 	Misses int64
 }
 
 // HitRatio returns the cache hit ratio
-func (cs *CacheStats) HitRatio() float64 {
+func (cs *MonitorCacheStats) HitRatio() float64 {
 	total := cs.Hits + cs.Misses
 	if total == 0 {
 		return 0
@@ -76,7 +76,7 @@ func NewMonitor(interval time.Duration, maxHistorySize int) *Monitor {
 		maxHistorySize:   maxHistorySize,
 		operationCounts:  make(map[string]int64),
 		operationLatency: make(map[string]time.Duration),
-		cacheStats:       make(map[string]*CacheStats),
+		cacheStats:       make(map[string]*MonitorCacheStats),
 		stopCh:           make(chan struct{}),
 		doneCh:           make(chan struct{}),
 	}
@@ -212,7 +212,7 @@ func (m *Monitor) RecordCacheHit(cacheName string) {
 	if stats, exists := m.cacheStats[cacheName]; exists {
 		stats.Hits++
 	} else {
-		m.cacheStats[cacheName] = &CacheStats{Hits: 1, Misses: 0}
+		m.cacheStats[cacheName] = &MonitorCacheStats{Hits: 1, Misses: 0}
 	}
 }
 
@@ -224,7 +224,7 @@ func (m *Monitor) RecordCacheMiss(cacheName string) {
 	if stats, exists := m.cacheStats[cacheName]; exists {
 		stats.Misses++
 	} else {
-		m.cacheStats[cacheName] = &CacheStats{Hits: 0, Misses: 1}
+		m.cacheStats[cacheName] = &MonitorCacheStats{Hits: 0, Misses: 1}
 	}
 }
 

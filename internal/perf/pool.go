@@ -88,8 +88,8 @@ func PutStatusResult(result *StatusResult) {
 	statusResultPool.Put(result)
 }
 
-// ViewCache represents a cached view string with metadata
-type ViewCache struct {
+// CachedView represents a cached view string with metadata
+type CachedView struct {
 	Content    string
 	Width      int
 	Height     int
@@ -98,7 +98,7 @@ type ViewCache struct {
 }
 
 // Reset clears the view cache for reuse
-func (vc *ViewCache) Reset() {
+func (vc *CachedView) Reset() {
 	vc.Content = ""
 	vc.Width = 0
 	vc.Height = 0
@@ -109,17 +109,17 @@ func (vc *ViewCache) Reset() {
 // Pool for view cache objects
 var viewCachePool = sync.Pool{
 	New: func() interface{} {
-		return &ViewCache{}
+		return &CachedView{}
 	},
 }
 
 // GetViewCache gets a view cache from the pool
-func GetViewCache() *ViewCache {
-	return viewCachePool.Get().(*ViewCache)
+func GetViewCache() *CachedView {
+	return viewCachePool.Get().(*CachedView)
 }
 
 // PutViewCache returns a view cache to the pool
-func PutViewCache(cache *ViewCache) {
+func PutViewCache(cache *CachedView) {
 	cache.Reset()
 	viewCachePool.Put(cache)
 }
