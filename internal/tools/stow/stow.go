@@ -238,9 +238,9 @@ func (s *StowTool) linkPackage(pkg config.StowPackage) error {
 		args = append([]string{"--simulate"}, args...)
 	}
 
-	// Execute stow command
+	// Execute stow command from config directory
 	cmd := exec.Command("stow", args...)
-	cmd.Dir = s.dotfilesPath
+	cmd.Dir = filepath.Join(s.dotfilesPath, "config")
 	
 	output, err := cmd.CombinedOutput()
 	if err != nil {
@@ -265,7 +265,7 @@ func (s *StowTool) unlinkPackage(pkg config.StowPackage) error {
 	}
 
 	cmd := exec.Command("stow", args...)
-	cmd.Dir = s.dotfilesPath
+	cmd.Dir = filepath.Join(s.dotfilesPath, "config")
 	
 	output, err := cmd.CombinedOutput()
 	if err != nil {

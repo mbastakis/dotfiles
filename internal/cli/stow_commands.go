@@ -8,9 +8,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func init() {
-	rootCmd.AddCommand(stowCmd)
-}
+// func init() {
+//	rootCmd.AddCommand(stowCmd)
+// }
 
 // stowCmd represents the stow command
 var stowCmd = &cobra.Command{
