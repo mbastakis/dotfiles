@@ -8,7 +8,12 @@ import (
 	"github.com/spf13/viper"
 	"github.com/yourusername/dotfiles/internal/config"
 	"github.com/yourusername/dotfiles/internal/tools"
+	"github.com/yourusername/dotfiles/internal/tools/apps"
+	"github.com/yourusername/dotfiles/internal/tools/homebrew"
+	"github.com/yourusername/dotfiles/internal/tools/npm"
+	"github.com/yourusername/dotfiles/internal/tools/rsync"
 	"github.com/yourusername/dotfiles/internal/tools/stow"
+	"github.com/yourusername/dotfiles/internal/tools/uv"
 )
 
 var (
@@ -120,10 +125,35 @@ func initConfig() error {
 	// Initialize tool registry
 	registry = tools.NewToolRegistry()
 	
-	// Register tools
+	// Register all tools
 	stowTool := stow.NewStowTool(cfg)
 	if err := registry.Register(stowTool); err != nil {
 		return fmt.Errorf("failed to register stow tool: %w", err)
+	}
+
+	rsyncTool := rsync.NewRsyncTool(cfg)
+	if err := registry.Register(rsyncTool); err != nil {
+		return fmt.Errorf("failed to register rsync tool: %w", err)
+	}
+
+	homebrewTool := homebrew.NewHomebrewTool(cfg)
+	if err := registry.Register(homebrewTool); err != nil {
+		return fmt.Errorf("failed to register homebrew tool: %w", err)
+	}
+
+	npmTool := npm.NewNPMTool(cfg)
+	if err := registry.Register(npmTool); err != nil {
+		return fmt.Errorf("failed to register npm tool: %w", err)
+	}
+
+	uvTool := uv.NewUVTool(cfg)
+	if err := registry.Register(uvTool); err != nil {
+		return fmt.Errorf("failed to register uv tool: %w", err)
+	}
+
+	appsTool := apps.NewAppsTool(cfg)
+	if err := registry.Register(appsTool); err != nil {
+		return fmt.Errorf("failed to register apps tool: %w", err)
 	}
 
 	return nil
