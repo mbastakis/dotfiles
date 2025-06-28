@@ -161,21 +161,58 @@ func DefaultConfig() *Config {
 	}
 }
 
-// Load loads configuration from file
-func Load(path string) (*Config, error) {
-	// Expand tilde in path
-	if strings.HasPrefix(path, "~/") {
-		homeDir, err := os.UserHomeDir()
-		if err != nil {
-			return nil, fmt.Errorf("failed to get home directory: %w", err)
-		}
-		path = filepath.Join(homeDir, path[2:])
+// LoadWithBootstrap loads configuration with bootstrap-friendly fallback logic
+func LoadWithBootstrap(primaryPath string) (*Config, error) {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get home directory: %w", err)
 	}
 
+	// Define the search order for configuration files
+	searchPaths := []string{}
+	
+	// 1. CLI flag path (if provided and not empty)
+	if primaryPath != "" {
+		expandedPath := primaryPath
+		if strings.HasPrefix(primaryPath, "~/") {
+			expandedPath = filepath.Join(homeDir, primaryPath[2:])
+		}
+		searchPaths = append(searchPaths, expandedPath)
+	}
+	
+	// 2. ~/.config/dotfiles/config.yaml (current standard location)
+	standardPath := filepath.Join(homeDir, ".config", "dotfiles", "config.yaml")
+	searchPaths = append(searchPaths, standardPath)
+	
+	// 3. Stow-managed location (bootstrap fallback)
+	// Find dotfiles directory by looking for go.mod or other indicators
+	dotfilesPath := findDotfilesDirectory()
+	if dotfilesPath != "" {
+		stowPath := filepath.Join(dotfilesPath, "config", "config", ".config", "dotfiles", "config.yaml")
+		searchPaths = append(searchPaths, stowPath)
+	}
+
+	// Try each path in order
+	for _, path := range searchPaths {
+		if config, err := loadFromPath(path); err == nil {
+			return config, nil
+		}
+	}
+
+	// Final fallback: return default config
+	return DefaultConfig(), nil
+}
+
+// Load loads configuration from file (maintains backward compatibility)
+func Load(path string) (*Config, error) {
+	return LoadWithBootstrap(path)
+}
+
+// loadFromPath attempts to load configuration from a specific path
+func loadFromPath(path string) (*Config, error) {
 	// Check if file exists
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		// Return default config if file doesn't exist
-		return DefaultConfig(), nil
+		return nil, fmt.Errorf("config file does not exist: %s", path)
 	}
 
 	// Read config file
@@ -196,6 +233,64 @@ func Load(path string) (*Config, error) {
 	}
 
 	return &config, nil
+}
+
+// findDotfilesDirectory attempts to find the dotfiles repository directory
+func findDotfilesDirectory() string {
+	// Try common locations and look for indicators
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return ""
+	}
+	
+	// Common dotfiles locations to check
+	candidates := []string{
+		filepath.Join(homeDir, "dev", "dotfiles"),
+		filepath.Join(homeDir, "dotfiles"),
+		filepath.Join(homeDir, ".dotfiles"),
+		filepath.Join(homeDir, "Projects", "dotfiles"),
+		filepath.Join(homeDir, "Code", "dotfiles"),
+	}
+	
+	// Add current working directory if it looks like dotfiles repo
+	if cwd, err := os.Getwd(); err == nil {
+		candidates = append([]string{cwd}, candidates...)
+	}
+	
+	// Check each candidate for dotfiles indicators
+	for _, candidate := range candidates {
+		if isDotfilesDirectory(candidate) {
+			return candidate
+		}
+	}
+	
+	return ""
+}
+
+// isDotfilesDirectory checks if a directory appears to be a dotfiles repository
+func isDotfilesDirectory(path string) bool {
+	// Check for go.mod (our Go-based dotfiles tool)
+	if _, err := os.Stat(filepath.Join(path, "go.mod")); err == nil {
+		// Also check for our specific structure
+		if _, err := os.Stat(filepath.Join(path, "internal", "config")); err == nil {
+			return true
+		}
+	}
+	
+	// Check for other common dotfiles indicators
+	indicators := []string{
+		"config",
+		"homebrew",
+		"templates/config.yaml",
+	}
+	
+	for _, indicator := range indicators {
+		if _, err := os.Stat(filepath.Join(path, indicator)); err == nil {
+			return true
+		}
+	}
+	
+	return false
 }
 
 // Save saves configuration to file
