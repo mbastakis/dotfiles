@@ -3,18 +3,20 @@ package models
 import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/yourusername/dotfiles/internal/config"
+	"github.com/yourusername/dotfiles/internal/theme"
 	"github.com/yourusername/dotfiles/internal/tools"
 	"github.com/yourusername/dotfiles/internal/tui/screens"
 )
 
 // AppModel represents the root application model that handles navigation
 type AppModel struct {
-	config     *config.Config
-	registry   *tools.ToolRegistry
+	config       *config.Config
+	registry     *tools.ToolRegistry
+	themeManager *theme.ThemeManager
 	currentScreen Screen
-	screenStack []Screen
-	width      int
-	height     int
+	screenStack  []Screen
+	width        int
+	height       int
 }
 
 // Screen represents a screen in the application
@@ -42,14 +44,15 @@ type NavigateMsg struct {
 type BackMsg struct{}
 
 // NewAppModel creates a new application model
-func NewAppModel(cfg *config.Config, registry *tools.ToolRegistry) AppModel {
-	mainModel := NewMainModel(cfg, registry)
+func NewAppModel(cfg *config.Config, registry *tools.ToolRegistry, themeManager *theme.ThemeManager) AppModel {
+	mainModel := NewMainModel(cfg, registry, themeManager)
 	
 	return AppModel{
-		config:       cfg,
-		registry:     registry,
+		config:        cfg,
+		registry:      registry,
+		themeManager:  themeManager,
 		currentScreen: mainModel,
-		screenStack:  make([]Screen, 0),
+		screenStack:   make([]Screen, 0),
 	}
 }
 
@@ -139,20 +142,20 @@ func (a AppModel) navigateToScreen(menuItem MenuItem) (tea.Model, tea.Cmd) {
 
 	if menuItem.tool != nil {
 		// Navigate to tool-specific screen
-		toolScreen := screens.NewToolScreen(menuItem.tool, a.width, a.height)
+		toolScreen := screens.NewToolScreen(menuItem.tool, a.themeManager, a.width, a.height)
 		newScreen = toolScreen
 	} else {
 		// Handle special screens based on title
 		switch menuItem.title {
 		case "🏠 Overview":
-			// TODO: Create overview screen
-			return a, tea.Printf("Overview screen not implemented yet")
+			overviewScreen := screens.NewOverviewScreen(a.config, a.registry, a.themeManager, a.width, a.height)
+			newScreen = overviewScreen
 		case "🎨 Themes":
-			// TODO: Create themes screen
-			return a, tea.Printf("Themes screen not implemented yet")
+			themesScreen := screens.NewThemesScreen(a.config, a.themeManager, a.width, a.height)
+			newScreen = themesScreen
 		case "⚙️  Settings":
-			// TODO: Create settings screen
-			return a, tea.Printf("Settings screen not implemented yet")
+			settingsScreen := screens.NewSettingsScreen(a.config, a.themeManager, a.width, a.height)
+			newScreen = settingsScreen
 		default:
 			return a, tea.Printf("Unknown screen: %s", menuItem.title)
 		}

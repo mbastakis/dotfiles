@@ -9,18 +9,20 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/yourusername/dotfiles/internal/config"
+	"github.com/yourusername/dotfiles/internal/theme"
 	"github.com/yourusername/dotfiles/internal/tools"
 )
 
 // MainModel represents the main TUI model
 type MainModel struct {
-	config     *config.Config
-	registry   *tools.ToolRegistry
-	list       list.Model
-	keys       keyMap
-	width      int
-	height     int
-	ready      bool
+	config       *config.Config
+	registry     *tools.ToolRegistry
+	themeManager *theme.ThemeManager
+	list         list.Model
+	keys         keyMap
+	width        int
+	height       int
+	ready        bool
 }
 
 // MenuItem represents a menu item
@@ -82,7 +84,7 @@ var keys = keyMap{
 }
 
 // NewMainModel creates a new main model
-func NewMainModel(cfg *config.Config, registry *tools.ToolRegistry) MainModel {
+func NewMainModel(cfg *config.Config, registry *tools.ToolRegistry, themeManager *theme.ThemeManager) MainModel {
 	// Create menu items for enabled tools
 	var items []list.Item
 	
@@ -142,29 +144,26 @@ func NewMainModel(cfg *config.Config, registry *tools.ToolRegistry) MainModel {
 		tool:        nil,
 	})
 
-	// Create list with custom delegate
+	// Get theme styles
+	styles := themeManager.GetStyles()
+	
+	// Create list with themed delegate
 	delegate := list.NewDefaultDelegate()
-	delegate.Styles.SelectedTitle = delegate.Styles.SelectedTitle.
-		Foreground(lipgloss.Color("#25A065")).
-		Bold(true)
-	delegate.Styles.SelectedDesc = delegate.Styles.SelectedDesc.
-		Foreground(lipgloss.Color("#626262"))
+	delegate.Styles.SelectedTitle = styles.ActiveButton
+	delegate.Styles.SelectedDesc = styles.Info
 
 	l := list.New(items, delegate, 0, 0)
 	l.Title = "Dotfiles Manager"
 	l.SetShowStatusBar(false)
 	l.SetFilteringEnabled(false)
-	l.Styles.Title = lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#FFFDF5")).
-		Background(lipgloss.Color("#25A065")).
-		Padding(0, 1).
-		Bold(true)
+	l.Styles.Title = styles.Title
 
 	return MainModel{
-		config:   cfg,
-		registry: registry,
-		list:     l,
-		keys:     keys,
+		config:       cfg,
+		registry:     registry,
+		themeManager: themeManager,
+		list:         l,
+		keys:         keys,
 	}
 }
 
@@ -242,7 +241,6 @@ func (m MainModel) helpView() string {
 		"Use ↑/↓ or j/k to navigate, s for status",
 	}
 	
-	return lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#626262")).
-		Render(strings.Join(help, " • "))
+	styles := m.themeManager.GetStyles()
+	return styles.Help.Render(strings.Join(help, " • "))
 }

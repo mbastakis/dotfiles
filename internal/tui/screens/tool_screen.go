@@ -8,6 +8,7 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/yourusername/dotfiles/internal/theme"
 	"github.com/yourusername/dotfiles/internal/tools"
 	"github.com/yourusername/dotfiles/internal/tui/components"
 	"github.com/yourusername/dotfiles/internal/types"
@@ -15,62 +16,25 @@ import (
 
 // ToolScreen represents a tool-specific screen
 type ToolScreen struct {
-	tool     tools.Tool
-	list     list.Model
-	progress components.ProgressComponent
-	width    int
-	height   int
-	loading  bool
-	error    error
-	styles   ToolScreenStyles
+	tool         tools.Tool
+	themeManager *theme.ThemeManager
+	list         list.Model
+	progress     components.ProgressComponent
+	width        int
+	height       int
+	loading      bool
+	error        error
 }
 
-type ToolScreenStyles struct {
-	Title       lipgloss.Style
-	Header      lipgloss.Style
-	Footer      lipgloss.Style
-	Error       lipgloss.Style
-	Help        lipgloss.Style
-	StatusGood  lipgloss.Style
-	StatusBad   lipgloss.Style
-}
 
 // NewToolScreen creates a new tool screen
-func NewToolScreen(tool tools.Tool, width, height int) ToolScreen {
+func NewToolScreen(tool tools.Tool, themeManager *theme.ThemeManager, width, height int) ToolScreen {
 	return ToolScreen{
-		tool:     tool,
-		progress: components.NewProgressComponent(width),
-		width:    width,
-		height:   height,
-		styles: ToolScreenStyles{
-			Title: lipgloss.NewStyle().
-				Foreground(lipgloss.Color("62")).
-				Bold(true).
-				Padding(0, 1),
-			Header: lipgloss.NewStyle().
-				Foreground(lipgloss.Color("246")).
-				Bold(true).
-				BorderStyle(lipgloss.NormalBorder()).
-				BorderBottom(true).
-				BorderForeground(lipgloss.Color("240")).
-				Padding(0, 1, 1, 1),
-			Footer: lipgloss.NewStyle().
-				Foreground(lipgloss.Color("240")).
-				BorderStyle(lipgloss.NormalBorder()).
-				BorderTop(true).
-				BorderForeground(lipgloss.Color("240")).
-				Padding(1, 1, 0, 1),
-			Error: lipgloss.NewStyle().
-				Foreground(lipgloss.Color("196")).
-				Bold(true).
-				Padding(0, 1),
-			Help: lipgloss.NewStyle().
-				Foreground(lipgloss.Color("241")),
-			StatusGood: lipgloss.NewStyle().
-				Foreground(lipgloss.Color("42")),
-			StatusBad: lipgloss.NewStyle().
-				Foreground(lipgloss.Color("196")),
-		},
+		tool:         tool,
+		themeManager: themeManager,
+		progress:     components.NewProgressComponent(width),
+		width:        width,
+		height:       height,
 	}
 }
 
@@ -172,7 +136,8 @@ func (ts ToolScreen) View() string {
 		content := ts.progress.View()
 		sections = append(sections, content)
 	} else if ts.error != nil {
-		content := ts.styles.Error.Render(fmt.Sprintf("Error: %v", ts.error))
+		styles := ts.themeManager.GetStyles()
+		content := styles.Error.Render(fmt.Sprintf("Error: %v", ts.error))
 		sections = append(sections, content)
 	} else {
 		content := ts.list.View()
@@ -187,17 +152,18 @@ func (ts ToolScreen) View() string {
 }
 
 func (ts ToolScreen) renderHeader() string {
+	styles := ts.themeManager.GetStyles()
 	title := fmt.Sprintf("%s Tool Management", strings.Title(ts.tool.Name()))
 	
 	var status string
 	if ts.tool.IsEnabled() {
-		status = ts.styles.StatusGood.Render("● Enabled")
+		status = styles.Healthy.Render("● Enabled")
 	} else {
-		status = ts.styles.StatusBad.Render("● Disabled")
+		status = styles.Disabled.Render("● Disabled")
 	}
 
 	headerContent := fmt.Sprintf("%s %s", title, status)
-	return ts.styles.Header.Width(ts.width - 2).Render(headerContent)
+	return styles.Header.Width(ts.width - 2).Render(headerContent)
 }
 
 func (ts ToolScreen) renderFooter() string {
@@ -215,8 +181,9 @@ func (ts ToolScreen) renderFooter() string {
 		)
 	}
 
-	helpText := ts.styles.Help.Render(strings.Join(help, " • "))
-	return ts.styles.Footer.Width(ts.width - 2).Render(helpText)
+	styles := ts.themeManager.GetStyles()
+	helpText := styles.Help.Render(strings.Join(help, " • "))
+	return styles.Footer.Width(ts.width - 2).Render(helpText)
 }
 
 func (ts ToolScreen) loadToolStatus() tea.Cmd {
