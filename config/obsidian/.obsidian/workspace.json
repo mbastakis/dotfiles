@@ -1,0 +1,241 @@
+{
+  "main": {
+    "id": "5324373015726ba8",
+    "type": "split",
+    "children": [
+      {
+        "id": "d4458c147a24eeec",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "075323891d6c1123",
+            "type": "leaf",
+            "state": {
+              "type": "beautitab-react-view",
+              "state": {},
+              "title": "New tab"
+            }
+          },
+          {
+            "id": "b7c4f4bc7b5f67b0",
+            "type": "leaf",
+            "state": {
+              "type": "obsidian-projects",
+              "state": {},
+              "icon": "projects-icon",
+              "title": "Projects"
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "8c31224aa27687b5",
+    "type": "split",
+    "children": [
+      {
+        "id": "e030507488c54e2a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1b9875d61959b663",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "34e5f59774e11b2f",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": true,
+                "explainSearch": false,
+                "collapseAll": true,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "444b15853621c1ac",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 249.5010757446289,
+    "collapsed": true
+  },
+  "right": {
+    "id": "45a4c33d2d217b48",
+    "type": "split",
+    "children": [
+      {
+        "id": "549649fefd6df736",
+        "type": "tabs",
+        "dimension": 68.26394344069128,
+        "children": [
+          {
+            "id": "4f8f385ea32358a8",
+            "type": "leaf",
+            "state": {
+              "type": "google-calendar-view-schedule",
+              "state": {},
+              "icon": "layout-list",
+              "title": "GCal Schedule View"
+            }
+          }
+        ]
+      },
+      {
+        "id": "014043c44890df20",
+        "type": "tabs",
+        "dimension": 31.736056559308718,
+        "children": [
+          {
+            "id": "891fa13d3b582d57",
+            "type": "leaf",
+            "state": {
+              "type": "timer-view",
+              "state": {},
+              "icon": "timer",
+              "title": "Timer"
+            }
+          },
+          {
+            "id": "f1049f826872d3e5",
+            "type": "leaf",
+            "state": {
+              "type": "google-calendar-view-month",
+              "state": {},
+              "icon": "calendar-days",
+              "title": "GCal Month View"
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "horizontal",
+    "width": 326.5,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "workspaces:Manage workspace layouts": true,
+      "pexels-banner:🚩 Pixel Banner Menu": true,
+      "templates:Insert template": true,
+      "pinned-notes:Homepage": false,
+      "cmdr:Files: Show file explorer": false,
+      "ribbon-divider:ribbon-divider-d6836d41-e02e-4707-a8f9-d737fd521486": false,
+      "obsidian-projects:Open projects": false,
+      "obsidian-excalidraw-plugin:New drawing": false,
+      "dashboard-navigator:Open dashboard navigator": false,
+      "switcher:Open quick switcher": true,
+      "graph:Open graph view": true,
+      "command-palette:Open command palette": true,
+      "daily-notes:Open today's daily note": true,
+      "zk-prefixer:Create new unique note": true,
+      "table-editor-obsidian:Advanced Tables Toolbar": true,
+      "audio-recorder:Start/stop recording": false,
+      "ribbon-divider:ribbon-divider-85cc4e1d-da95-446b-b237-e4e9a8fc7834": false,
+      "cmdr:Google Calendar: Open gCal week view": false,
+      "darlal-switcher-plus:Open in Headings Mode": true,
+      "darlal-switcher-plus:Open Symbols for the active editor": true,
+      "templater-obsidian:Templater": true,
+      "quick-tagger:Add tag to current note": true,
+      "quick-tagger:Remove tag from current note": true,
+      "pinned-notes:Pomodoro": false,
+      "pinned-notes:Logistics": false,
+      "ribbon-divider:ribbon-divider-cb86a7cb-7e64-467d-b89d-2c69120994bf": false,
+      "ribbon-divider:ribbon-divider-36ef3d98-08ff-4dc5-ae9e-d9b4d0ebc3c9": true,
+      "meld-encrypt:New encrypted note": true,
+      "meld-encrypt:Convert to or from an Encrypted note": true,
+      "pomodoro-timer:Toggle timer panel": true,
+      "cmdr:Workspaces: Load workspace layout": false,
+      "cmdr:Workspaces: Save layout": false,
+      "meld-encrypt:Encrypt/Decrypt In-place": false,
+      "janitor:Janitor: scan vault": false,
+      "markdown-importer:Open format converter": true,
+      "custom-sort:Toggle custom sorting": true,
+      "canvas:Create new canvas": true,
+      "omnisearch:Omnisearch": true
+    }
+  },
+  "active": "b7c4f4bc7b5f67b0",
+  "lastOpenFiles": [
+    "Resources/Sticky Notes/Untitled.md",
+    "Resources/Sticky Notes/New Note.md",
+    "Projects/Tasks/Kanban Tasks/create git-tree default specs.md",
+    "Projects/Tasks/Kanban Tasks/create default feat specs.md",
+    "Projects/Tasks/Kanban Tasks/Create default refactor specs.md",
+    "Projects/Tasks/Kanban Tasks/start using cline, free, with gemini cli, claude code.md",
+    "Projects/Tasks/Kanban Tasks/add specs dir.md",
+    "Projects/Tasks/Kanban Tasks/add ai_docs.md",
+    "Projects/Tasks/Kanban Tasks/obsidian in git.md",
+    "Projects/Tasks/Kanban Tasks/add parllama to dotfiles, add uv tools to dotfiles.md",
+    "Projects/Tasks/Kanban Tasks/ollama tui.md",
+    "Projects/Tasks/Kanban Tasks/dotfiles tui.md",
+    "Projects/Tasks/Kanban Tasks/fix list height, kanban.md",
+    "Daily/Quotes of the Day - 1-2-3 Magic.md",
+    "Resources/Shortcuts/yazi-shortcuts.md",
+    "Untitled.md",
+    "My Resume.pdf",
+    "().md",
+    "Projects/Tasks/Kanban Tasks/use local models, maybe with langgraph to index and structure obsidian notes.md",
+    "Projects/Tasks/Kanban Tasks/Create good dir structure for work using warp workflows.md",
+    "Projects/Tasks/Kanban Tasks/check llmstudio vs ollama.md",
+    "Projects/Tasks/Kanban Tasks/check if I can download bitnet huggingface to ollama, check dotfiles.md",
+    "Projects/Tasks/Kanban Tasks/use the agentic loop to create more warp workflows.md",
+    "Projects/Tasks/Kanban Tasks/create warp workflows with claude code.md",
+    "Projects/Tasks/Kanban Tasks/create good claude code configuration, global commands dotfiles config.md",
+    "Extras/Unkown/lrecipes-and-cooking-moc.md",
+    "Extras/Unkown/lrecipes-and-cooking.md",
+    "Dashboards/Fitness.canvas",
+    "loukas-mertzanis-cv 1.pdf",
+    "loukas-mertzanis-cv.pdf",
+    "03_lresources",
+    "Untitled 1",
+    "02_lareas",
+    "01_lprojects",
+    "04_larchive",
+    "larchive",
+    "Untitled",
+    "Extras/Images/Pasted Image 20250623201118_415.png",
+    "Extras/Images/Pasted image 20250121101821.png",
+    "Dashboards/Home.canvas",
+    "Dashboards/Dashboards.canvas",
+    "Dashboards/Discovery.canvas",
+    "Extras/Images/indian-spirit-1750286229254.webp",
+    "Extras/Images/indian-spirit-1750284559682.webp",
+    "Extras/Images/indian-spirit-1750284217180.webp",
+    "Extras/Images/indian-spirit-1750283960793.webp",
+    "Extras/Images/indian-spirit-1750283154794.webp",
+    "Extras/Images/AI Articulate - The Collaborative AI Guessing Game-1750263010541.webp",
+    "Extras/Images/AI Articulate - The Collaborative AI Guessing Game-1750262986970.webp",
+    "Dashboards/PARA.canvas",
+    "Extras/Images/photoshop-architecture-diagrams-hermetica-1749989367188.webp",
+    "Dashboards/Global Tasks.canvas"
+  ]
+}

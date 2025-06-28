@@ -1,1 +1,0 @@
-{"path":"Extras/Images/Pasted image 20241019175718.png","text":"stable canary nginx.ingress.kubernetes.io/canary: \"true\" nginx.ingress.kubernetes.io/canary-weight: \"40\" deploy deploy","libVersion":"0.5.0","langs":"eng"}

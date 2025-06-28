@@ -1,1 +1,0 @@
-{"path":"Extras/Images/Pasted image 20250122210755.png","text":"jobs: : Yoot Create parallel jobs for these strategy: CHEVS matrix: os: [windows-latest, macos-latest] node_version: [14, 16] runs-on: ${{ matrix.os }} steps: - ... test steps using the matrix values ...","libVersion":"0.5.0","langs":"eng"}

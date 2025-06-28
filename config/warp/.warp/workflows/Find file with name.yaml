@@ -1,0 +1,18 @@
+---
+name: Find file with name
+command: "find . -name {{name_pattern}} -type {{file_type}}"
+description: Returns files that match the argument. Argument is regex
+arguments:
+  - name: name_pattern
+    arg_type: Text
+    description: "a wildcard pattern to match filenames containing 'i18n'"
+    default_value: ~
+  - name: file_type
+    arg_type: Text
+    description: indicates that only regular files should be included in the search results
+    default_value: f
+tags: []
+source_url: ~
+author: ~
+author_url: ~
+shells: []

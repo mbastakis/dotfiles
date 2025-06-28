@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Write",
+      "MultiEdit",
+      "Edit",
+      "Bash",
+      "Bash(brew search:*)",
+      "Bash(npm run compile:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "WebFetch(domain:code.visualstudio.com)",
+      "WebFetch(domain:opencode.ai)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:docs.anthropic.com)",
+      "WebFetch(domain:docs.anthropic.com)"
+    ],
+    "deny": []
+  }
+}

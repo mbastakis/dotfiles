@@ -1,0 +1,128 @@
+// Place your key bindings in this file to override the defaults
+[
+  // Command Palette
+  {
+    "key": "cmd+p",
+    "command": "workbench.action.showCommands"
+  },
+  // Open file or show all editors
+  {
+    "key": "cmd+o",
+    "command": "workbench.action.quickOpen"
+  },
+  {
+    "key": "cmd+o",
+    "command": "workbench.action.showAllEditors",
+    "when": "editorIsOpen"
+  },
+  // File Explorer
+  {
+    "key": "ctrl+n",
+    "command": "welcome.showNewFileEntries"
+  },
+  // Editor
+  {
+    "key": "ctrl+shift+pagedown",
+    "command": "editor.gotoNextFold"
+  },
+  {
+    "key": "ctrl+shift+pageup",
+    "command": "editor.gotoPreviousFold"
+  },
+  {
+    "key": "cmd+l",
+    "command": "editor.toggleFold",
+    "when": "editorTextFocus && foldingEnabled"
+  },
+  // Lazygit
+  {
+    "key": "cmd+g",
+    "command": "tui-manager.lazygit"
+  },
+  // Lazydocker
+  {
+    "key": "cmd+shift+d",
+    "command": "tui-manager.lazydocker"
+  },
+  // Yazi
+  {
+    "key": "cmd+e",
+    "command": "tui-manager.yazi"
+  },
+  // Btop
+  {
+    "key": "cmd+shift+b",
+    "command": "tui-manager.btop"
+  },
+  // k9s
+  {
+    "key": "cmd+k",
+    "command": "tui-manager.k9s"
+  },
+  // Claude Code
+  {
+    "key": "cmd+shift+6",
+    "command": "tui-manager.claudecode"
+  },
+  // Opencode
+  {
+    "key": "cmd+shift+7",
+    "command": "tui-manager.opencode"
+  },
+  // Open Gemini
+  {
+    "key": "cmd+shift+8",
+    "command": "tui-manager.gemini"
+  },
+  // Terminal
+  {
+    "key": "ctrl+`",
+    "command": "tui-manager.basicterminal"
+  },
+  // Claude Code
+  {
+    "key": "shift+cmd+c",
+    "command": "claude-code.runClaude.keyboard",
+    "when": "claude-code.hasClaudeInPath"
+  },
+  // Terminal
+  {
+    "key": "shift+enter",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+      "text": "\\\r\n"
+    },
+    "when": "terminalFocus"
+  },
+  {
+    "key": "ctrl+shift+t",
+    "command": "workbench.action.createTerminalEditor"
+  },
+  // Extension Projects
+  {
+    "key": "cmd+t",
+    "command": "projectManager.listProjects"
+  },
+  // Extension Find It Faster
+  {
+    "key": "shift+cmd+f",
+    "command": "find-it-faster.findWithinFiles"
+  },
+  {
+    "key": "shift+cmd+o",
+    "command": "find-it-faster.findFiles"
+  },
+  {
+    "key": "ctrl+t",
+    "command": "-editor.action.transposeLetters",
+    "when": "textInputFocus && !editorReadonly"
+  },
+  {
+    "key": "ctrl+shift+w",
+    "command": "workbench.action.closeAllEditors"
+  },
+  {
+    "key": "cmd+k cmd+w",
+    "command": "-workbench.action.closeAllEditors"
+  }
+]

@@ -1,0 +1,7 @@
+#!/bin/bash
+# Update Obsidian vault configurations
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_DIR="$(dirname "$SCRIPT_DIR")"
+
+exec bash "$DOTFILES_DIR/scripts/setup_obsidian.sh" "$@"

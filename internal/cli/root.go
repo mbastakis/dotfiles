@@ -35,7 +35,28 @@ Features:
 - 🎨 Themeable: Customize the interface to match your style
 - ⚡ Fast & Reliable: Written in Go for performance and reliability`,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-		return initConfig()
+		if err := initConfig(); err != nil {
+			return err
+		}
+		// Add tool commands after config is loaded
+		if registry != nil && !commandsAdded {
+			for _, tool := range registry.List() {
+				// Check if command already exists
+				exists := false
+				for _, existing := range cmd.Root().Commands() {
+					if existing.Name() == tool.Name() {
+						exists = true
+						break
+					}
+				}
+				if !exists {
+					toolCmd := createToolCommand(tool)
+					cmd.Root().AddCommand(toolCmd)
+				}
+			}
+			commandsAdded = true
+		}
+		return nil
 	},
 }
 
@@ -47,18 +68,8 @@ func Execute() {
 	}
 }
 
-// AddDynamicCommands adds tool-specific commands after configuration is loaded
-func AddDynamicCommands() {
-	if registry != nil {
-		for _, tool := range registry.ListEnabled() {
-			// Check if command already exists
-			if _, _, err := rootCmd.Find([]string{tool.Name()}); err != nil {
-				toolCmd := createToolCommand(tool)
-				rootCmd.AddCommand(toolCmd)
-			}
-		}
-	}
-}
+// commandsAdded tracks if dynamic commands have been added
+var commandsAdded bool
 
 func init() {
 	// Global flags

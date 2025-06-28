@@ -1,0 +1,35 @@
+[user]
+	email = mbastakis@gmail.com
+	name = Michail Bastakis
+[includeIf "gitdir:~/dev/work/"]
+	path = ~/.gitconfig-work
+[includeIf "gitdir:~/dev/personal/"]
+	path = ~/.gitconfig-personal
+
+[core]
+	pager = delta
+	editor = code --wait
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true  # use n and N to move between diff sections
+	dark = true      # or light = true, or omit for auto-detection
+[color]
+	ui = true
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+[color "diff"]
+	meta = 11
+	frag = magenta bold
+	func = 146 bold
+	commit = yellow bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+[init]
+	defaultBranch = master
+[merge]
+    conflictstyle = zdiff3

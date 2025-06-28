@@ -16,6 +16,7 @@ func init() {
 	rootCmd.AddCommand(configCmd)
 }
 
+
 // statusCmd shows overall system status
 var statusCmd = &cobra.Command{
 	Use:   "status",

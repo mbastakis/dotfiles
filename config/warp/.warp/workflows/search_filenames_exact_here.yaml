@@ -1,0 +1,10 @@
+---
+name: "Search files here by exact filename match using fzf"
+command: "find . -type f 2>/dev/null | fzf --exact --preview 'bat --color=always --style=header,grid --line-range :100 {} 2>/dev/null || head -100 {}' --preview-window=right:50%:wrap"
+description: "Search all files in current directory by exact filename match using fzf. This will search all files in the current directory for exact string matches (case-insensitive) and display them in an interactive fzf interface."
+arguments: []
+tags: ["search", "fzf", "files", "find", "current", "here", "exact"]
+source_url: ~
+author: ~
+author_url: ~
+shells: []

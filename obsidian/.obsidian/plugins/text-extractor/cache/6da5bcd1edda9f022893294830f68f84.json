@@ -1,1 +1,0 @@
-{"path":"Extras/Images/image-54.png","text":"v def Fetch_github_runner_netrics (ORG_NAME, access_token): try: response = requests.get( F\"https://api. github. con/orgs/{ORG_NANE} /actions /runners”, headers={\"Authorization\": f'Bearer {access_token}\", \"Accept': “application/und.github.v3+json\"},| \\","libVersion":"0.5.0","langs":"eng"}
