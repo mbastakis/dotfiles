@@ -124,5 +124,15 @@
   {
     "key": "cmd+k cmd+w",
     "command": "-workbench.action.closeAllEditors"
+  },
+  {
+    "key": "cmd+right",
+    "command": "cursorLineEnd",
+    "when": "textInputFocus"
+  },
+  {
+    "key": "cmd+left",
+    "command": "cursorLineStart",
+    "when": "textInputFocus"
   }
 ]
