@@ -1,0 +1,11 @@
+# Brewfile.tap - Homebrew taps (external repositories)
+# This file manages external Homebrew taps that provide additional formulae and casks
+
+# felixkratz/formulae - Provides sketchybar formula
+tap "felixkratz/formulae"
+
+# nikitabobko/tap - Provides aerospace window manager
+tap "nikitabobko/tap"
+
+# oven-sh/bun - Provides Bun JavaScript runtime
+tap "oven-sh/bun"

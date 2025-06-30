@@ -79,6 +79,9 @@ homebrew:
     mas:
       enabled: true
       brewfile: "homebrew/Brewfile.mas"
+    taps:
+      enabled: true
+      brewfile: "homebrew/Brewfile.tap"
 # Custom Applications - Manages script execution
 apps:
   macos_settings:
