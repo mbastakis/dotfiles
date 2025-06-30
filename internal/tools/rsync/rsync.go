@@ -267,24 +267,9 @@ func (r *RsyncTool) findSource(name string) *config.RsyncSource {
 }
 
 func (r *RsyncTool) needsSync(sourcePath, targetPath string) bool {
-	// Simple check: if target doesn't exist, needs sync
-	if _, err := os.Stat(targetPath); os.IsNotExist(err) {
-		return true
-	}
-
-	// For now, assume needs sync if source is newer
-	// In a more sophisticated implementation, we'd compare directory contents
-	sourceInfo, err := os.Stat(sourcePath)
-	if err != nil {
-		return false
-	}
-
-	targetInfo, err := os.Stat(targetPath)
-	if err != nil {
-		return true
-	}
-
-	return sourceInfo.ModTime().After(targetInfo.ModTime())
+	// Use the same verification logic as sync verification
+	// This ensures consistency between sync and status checks
+	return !r.verifySync(sourcePath+"/", targetPath)
 }
 
 func (r *RsyncTool) syncSource(sourceName string) error {
@@ -324,9 +309,81 @@ func (r *RsyncTool) syncSource(sourceName string) error {
 
 	// Execute rsync
 	cmd := exec.Command("rsync", args...)
-	if output, err := cmd.CombinedOutput(); err != nil {
+	output, err := cmd.CombinedOutput()
+	
+	if err != nil {
+		// Check if this is an acceptable rsync exit code
+		if exitErr, ok := err.(*exec.ExitError); ok {
+			exitCode := exitErr.ExitCode()
+			
+			// Handle specific rsync exit codes
+			switch exitCode {
+			case 23:
+				// Partial transfer due to error (often permission warnings on macOS)
+				// Check if the intended files were actually synced successfully
+				if r.verifySync(sourcePath, targetPath) {
+					// Files were synced successfully despite warnings
+					return nil
+				}
+				// If verification failed, treat as real error
+				return fmt.Errorf("rsync partial failure - intended files not synced: %w\nOutput: %s", err, string(output))
+			case 24:
+				// Partial transfer due to vanished source files (usually acceptable)
+				if r.verifySync(sourcePath, targetPath) {
+					return nil
+				}
+				return fmt.Errorf("rsync failed - source files vanished: %w\nOutput: %s", err, string(output))
+			default:
+				// Other exit codes are treated as errors
+				return fmt.Errorf("rsync failed: %w\nOutput: %s", err, string(output))
+			}
+		}
+		// Non-exit errors (e.g., command not found) are always errors
 		return fmt.Errorf("rsync failed: %w\nOutput: %s", err, string(output))
 	}
 
 	return nil
+}
+
+// verifySync checks if the source files were successfully synced to the target
+func (r *RsyncTool) verifySync(sourcePath, targetPath string) bool {
+	// Remove trailing slash for consistent comparison
+	sourcePath = strings.TrimSuffix(sourcePath, "/")
+	
+	// Walk through source directory and verify each file exists in target
+	return filepath.Walk(sourcePath, func(srcFile string, srcInfo os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		
+		// Calculate relative path from source
+		relPath, err := filepath.Rel(sourcePath, srcFile)
+		if err != nil {
+			return err
+		}
+		
+		// Skip if this is the source directory itself
+		if relPath == "." {
+			return nil
+		}
+		
+		// Calculate corresponding target path
+		targetFile := filepath.Join(targetPath, relPath)
+		
+		// Check if target file/dir exists
+		targetInfo, err := os.Stat(targetFile)
+		if err != nil {
+			// Target file doesn't exist - sync failed
+			return fmt.Errorf("target file missing: %s", targetFile)
+		}
+		
+		// For files, verify size and modification time are reasonable
+		if srcInfo.Mode().IsRegular() && targetInfo.Mode().IsRegular() {
+			if srcInfo.Size() != targetInfo.Size() {
+				return fmt.Errorf("file size mismatch: %s", targetFile)
+			}
+		}
+		
+		return nil
+	}) == nil
 }
