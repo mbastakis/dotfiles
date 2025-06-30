@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/yourusername/dotfiles/internal/config"
-	"github.com/yourusername/dotfiles/internal/types"
+	"github.com/mbastakis/dotfiles/internal/config"
+	"github.com/mbastakis/dotfiles/internal/types"
 )
 
 // NPMTool implements the Tool interface for NPM global package management

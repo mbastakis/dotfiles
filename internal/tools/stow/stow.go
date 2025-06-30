@@ -9,9 +9,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/yourusername/dotfiles/internal/config"
-	"github.com/yourusername/dotfiles/internal/tools"
-	"github.com/yourusername/dotfiles/internal/types"
+	"github.com/mbastakis/dotfiles/internal/config"
+	"github.com/mbastakis/dotfiles/internal/tools"
+	"github.com/mbastakis/dotfiles/internal/types"
 )
 
 // StowTool implements the Tool interface for GNU Stow operations

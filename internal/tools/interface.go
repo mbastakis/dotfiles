@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/yourusername/dotfiles/internal/types"
+	"github.com/mbastakis/dotfiles/internal/types"
 )
 
 // Tool interface that all tools must implement

@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/yourusername/dotfiles/internal/tui"
+	"github.com/mbastakis/dotfiles/internal/tui"
 )
 
 func init() {

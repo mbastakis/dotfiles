@@ -19,7 +19,7 @@ A modern, interactive Terminal User Interface (TUI) for managing your dotfiles w
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/dotfiles ~/.dotfiles
+git clone https://github.com/mbastakis/dotfiles ~/.dotfiles
 cd ~/.dotfiles
 
 # Build the application
@@ -249,7 +249,7 @@ export DOTFILES_DRY_RUN=true
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/dotfiles
+git clone https://github.com/mbastakis/dotfiles
 cd dotfiles
 
 # Install dependencies
@@ -312,9 +312,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 - **Documentation**: [User Guide](docs/USER_GUIDE.md) and [FAQ](docs/FAQ.md)
-- **Issues**: [GitHub Issues](https://github.com/yourusername/dotfiles/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/dotfiles/discussions)
-- **Wiki**: [Community Wiki](https://github.com/yourusername/dotfiles/wiki)
+- **Issues**: [GitHub Issues](https://github.com/mbastakis/dotfiles/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/mbastakis/dotfiles/discussions)
+- **Wiki**: [Community Wiki](https://github.com/mbastakis/dotfiles/wiki)
 
 ---
 

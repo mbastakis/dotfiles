@@ -8,9 +8,9 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/yourusername/dotfiles/internal/config"
-	"github.com/yourusername/dotfiles/internal/theme"
-	"github.com/yourusername/dotfiles/internal/tools"
+	"github.com/mbastakis/dotfiles/internal/config"
+	"github.com/mbastakis/dotfiles/internal/theme"
+	"github.com/mbastakis/dotfiles/internal/tools"
 )
 
 // MainModel represents the main TUI model

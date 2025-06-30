@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/yourusername/dotfiles/internal/cli"
+	"github.com/mbastakis/dotfiles/internal/cli"
 )
 
 func main() {

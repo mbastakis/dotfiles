@@ -7,7 +7,7 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/yourusername/dotfiles/internal/types"
+	"github.com/mbastakis/dotfiles/internal/types"
 )
 
 // StatusItem represents a status item in the list

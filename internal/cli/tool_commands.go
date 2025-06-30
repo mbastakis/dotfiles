@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/yourusername/dotfiles/internal/tools"
+	"github.com/mbastakis/dotfiles/internal/tools"
 )
 
 // createStatusCommand creates a status command for a tool

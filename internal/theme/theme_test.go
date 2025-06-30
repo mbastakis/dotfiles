@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/yourusername/dotfiles/test/testutil"
+	"github.com/mbastakis/dotfiles/test/testutil"
 )
 
 func TestNewThemeManager(t *testing.T) {

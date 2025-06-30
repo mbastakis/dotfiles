@@ -5,13 +5,13 @@ import (
 	"testing"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/yourusername/dotfiles/internal/config"
-	"github.com/yourusername/dotfiles/internal/theme"
-	"github.com/yourusername/dotfiles/internal/tools"
-	"github.com/yourusername/dotfiles/internal/tui/models"
-	"github.com/yourusername/dotfiles/internal/tui/screens"
-	"github.com/yourusername/dotfiles/internal/types"
-	"github.com/yourusername/dotfiles/test/testutil"
+	"github.com/mbastakis/dotfiles/internal/config"
+	"github.com/mbastakis/dotfiles/internal/theme"
+	"github.com/mbastakis/dotfiles/internal/tools"
+	"github.com/mbastakis/dotfiles/internal/tui/models"
+	"github.com/mbastakis/dotfiles/internal/tui/screens"
+	"github.com/mbastakis/dotfiles/internal/types"
+	"github.com/mbastakis/dotfiles/test/testutil"
 )
 
 // TestTUIIntegration tests the overall TUI integration

@@ -9,8 +9,8 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/yourusername/dotfiles/internal/config"
-	"github.com/yourusername/dotfiles/internal/theme"
+	"github.com/mbastakis/dotfiles/internal/config"
+	"github.com/mbastakis/dotfiles/internal/theme"
 )
 
 // SettingsScreen manages configuration options
