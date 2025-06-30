@@ -7,11 +7,6 @@ USE the vsce command to install each extension.
 The script should be executable.
 This script should be added in the config: config/config/dotfiles/config.yaml at the app tool.
 
-#TODO: Add ai_docs and specs to the config
-The ai_docs and specs directories are not included in the config.yaml file.
-They exist in the config/ai_docs and config/specs directories.
-They should be added to the config.yaml file in the stow tool.
-
 #TODO: Fix progress in tui view
 Currently, when we run tools in the TUI view, we don't see any progress so we don't know if anything is running.
 We need to fix this so that we can see the progress of the tools in the TUI
