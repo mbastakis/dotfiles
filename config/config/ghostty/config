@@ -1,0 +1,51 @@
+# Ghostty Terminal Configuration
+# https://ghostty.org/docs/config/reference
+
+# Appearance & Theming
+theme = catppuccin-mocha
+background-opacity = 0.7
+background-blur = true
+
+# Font Configuration
+font-family = JetBrains Mono
+font-size = 20
+font-feature = liga=1
+font-feature = calt=1
+
+# Window Management
+window-padding-x = 10
+window-padding-y = 10
+window-save-state = never
+
+# Cursor Configuration
+cursor-style = block
+cursor-style-blink = true
+
+# Mouse Behavior
+mouse-hide-while-typing = true
+mouse-shift-capture = true
+
+# Shell Integration
+shell-integration = detect
+shell-integration-features = cursor,sudo,title
+
+# Security & Privacy
+clipboard-paste-bracketed-safe = true
+clipboard-paste-protection = true
+
+# macOS-specific Settings
+macos-option-as-alt = true
+macos-titlebar-style = tabs
+
+# Keybindings for splits and tabs
+keybind = cmd+d=new_split:right
+keybind = cmd+shift+d=new_split:down
+keybind = cmd+t=new_tab
+keybind = cmd+w=close_surface
+
+# Split navigation
+keybind = ctrl+h=goto_split:left
+keybind = ctrl+t=goto_split:down
+keybind = ctrl+n=goto_split:up
+keybind = ctrl+s=goto_split:right
+keybind = global:cmd+ctrl+t=toggle_quick_terminal
