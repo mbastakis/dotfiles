@@ -23,6 +23,8 @@ type ToolItem struct {
 	Version     string            `json:"version,omitempty"`
 	Target      string            `json:"target,omitempty"`
 	Priority    int               `json:"priority,omitempty"`
+	Category    string            `json:"category,omitempty"`    // Category this item belongs to (e.g., "core", "apps")
+	PackageType string            `json:"package_type,omitempty"` // Type of package (e.g., "brew", "cask", "mas")
 	Metadata    map[string]interface{} `json:"metadata,omitempty"`
 }
 

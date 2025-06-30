@@ -29,6 +29,16 @@ type Tool interface {
 	Configure(config interface{}) error
 }
 
+// CategoryTool interface for tools that support category-level operations
+type CategoryTool interface {
+	Tool
+	
+	// Category-level operations
+	ListCategoryItems(ctx context.Context, category string) ([]types.ToolItem, error)
+	InstallCategoryItem(ctx context.Context, category string, item string) (*types.OperationResult, error)
+	SupportsCategories() bool
+}
+
 // ToolRegistry manages all available tools
 type ToolRegistry struct {
 	mu    sync.RWMutex

@@ -11,10 +11,12 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/yourusername/dotfiles/internal/theme"
 	"github.com/yourusername/dotfiles/internal/tools"
+	"github.com/yourusername/dotfiles/internal/common"
 	"github.com/yourusername/dotfiles/internal/tui/components"
 	"github.com/yourusername/dotfiles/internal/tui/keys"
 	"github.com/yourusername/dotfiles/internal/types"
 )
+
 
 // ToolScreen represents a tool-specific screen
 type ToolScreen struct {
@@ -117,6 +119,28 @@ func (ts ToolScreen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case key.Matches(msg, ts.keys.Select):
 				// Toggle selection for batch operations (future enhancement)
 				// For now, just move cursor
+				var cmd tea.Cmd
+				ts.list, cmd = ts.list.Update(msg)
+				cmds = append(cmds, cmd)
+			case key.Matches(msg, ts.navKeys.Enter):
+				// Handle Enter key for category navigation (homebrew only)
+				if categoryTool, ok := ts.tool.(tools.CategoryTool); ok && categoryTool.SupportsCategories() {
+					if selectedItem := ts.list.SelectedItem(); selectedItem != nil {
+						if statusItem, ok := selectedItem.(components.StatusItem); ok {
+							// Navigate to category detail screen
+							categoryScreen := NewCategoryDetailScreen(
+								statusItem.ToolItem().Name, 
+								categoryTool, 
+								ts.themeManager, 
+								ts.width, 
+								ts.height)
+							return ts, func() tea.Msg {
+								return common.NavigateMsg{Screen: categoryScreen}
+							}
+						}
+					}
+				}
+				// If not a category tool, handle as normal list navigation
 				var cmd tea.Cmd
 				ts.list, cmd = ts.list.Update(msg)
 				cmds = append(cmds, cmd)
