@@ -446,5 +446,11 @@
   },
   "Projects/Tasks/Kanban Tasks/maybe check jj.md": {
     "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/configure ghostty, add edit command in terminal.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/manage claude mcp through dotfiles.md": {
+    "iconName": "OcTasklist24"
   }
 }
