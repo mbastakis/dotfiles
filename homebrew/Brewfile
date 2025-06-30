@@ -29,6 +29,7 @@ brew "age"                  # Simple, modern encryption tool
 brew "btop"                 # Resource monitor
 brew "git-delta"            # Syntax-highlighting pager for git
 brew "thefuck"              # Program to correct console commands
+brew "carapace"             # Terminal autocompletion framework
 
 # Fonts
 cask "font-jetbrains-mono"  # JetBrains Mono font

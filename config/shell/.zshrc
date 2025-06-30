@@ -1,4 +1,7 @@
 # .zshrc - Main ZSH configuration file
+# ─── Initialize Zsh Completion ─────────────────────────────────────
+autoload -U compinit      # load the compinit function
+compinit                 # initialize the completion system
 
 # Load Starship prompt if installed
 if command -v starship &> /dev/null; then
@@ -55,3 +58,8 @@ eval "$(zoxide init zsh)"
 
 # Thefuck
 eval $(thefuck --alias)
+
+# Carapace autocompletion
+export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
+zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
+source <(carapace _carapace)
