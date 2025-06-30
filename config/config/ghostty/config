@@ -35,7 +35,8 @@ clipboard-paste-protection = true
 
 # macOS-specific Settings
 macos-option-as-alt = true
-macos-titlebar-style = tabs
+macos-titlebar-style = hidden
+macos-titlebar-proxy-icon = hidden
 
 # Keybindings for splits and tabs
 keybind = cmd+d=new_split:right
@@ -48,6 +49,7 @@ keybind = ctrl+h=goto_split:left
 keybind = ctrl+t=goto_split:down
 keybind = ctrl+n=goto_split:up
 keybind = ctrl+s=goto_split:right
+
 keybind = global:cmd+ctrl+t=toggle_quick_terminal
 
 # Editor integration and command editing
