@@ -6,16 +6,6 @@ The script should:
 USE the vsce command to install each extension.
 The script should be executable.
 This script should be added in the config: config/config/dotfiles/config.yaml at the app tool.
-
-# TODO: Refactor go code to use my name
-Currently the go code uses yourusername as the author name and package name.
-We need to change this to use my name and package name.
-My name is: mbastakis
-SEARCH 
-All instances of "yourusername" in the Go code.
-REPLACE 
-All instances of "yourusername" with "mbastakis".
-UPDATE 
-The package name to match my name if necessary.
-TEST 
-The code to ensure it works with the new name.
+For now we only have one extension: data/vscode_extensions/tui_manager
+this tui_manager/ is the out of a compiled VSCode extension.
+We must use this script to add this extension to the VSCode installation.

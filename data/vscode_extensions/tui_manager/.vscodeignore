@@ -2,12 +2,7 @@
 .git/**
 .DS_Store
 *.vsix
-**/*.map
 .nyc_output
 coverage/
 **/.nyc_output
 **/node_modules/**
-src/**
-tsconfig.json
-.gitignore
-.yarnrc

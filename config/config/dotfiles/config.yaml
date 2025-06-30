@@ -92,6 +92,10 @@ apps:
     enabled: true
     scripts:
       - "data/scripts/setup_yazi_packages.sh"
+  vscode_extensions:
+    enabled: true
+    scripts:
+      - "data/scripts/install_vscode_extensions.sh"
 # Global NPM packages - Manages Node.js tools
 npm:
   auto_install: true
