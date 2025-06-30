@@ -1,0 +1,7 @@
+---
+name: "Check Behind Repos"
+command: "check_repos_behind"
+description: "Check current directory and all subdirectories for git repositories that are behind their remotes"
+arguments: []
+tags: ["git", "status", "repository", "behind", "sync"]
+shells: []

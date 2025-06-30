@@ -1,0 +1,6 @@
+---
+name: "Find Problematic Repositories"
+command: "find_problematic_repos"
+description: "Scan directory tree for problematic git repositories (empty, no remotes, access issues)"
+tags: ["git", "repository", "diagnosis", "problems", "health"]
+shells: []
