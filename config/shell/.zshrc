@@ -52,3 +52,6 @@ eval "$(atuin init zsh)"
 
 # Zoxide
 eval "$(zoxide init zsh)"
+
+# Thefuck
+eval $(thefuck --alias)

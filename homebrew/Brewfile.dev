@@ -1,11 +1,8 @@
 # Brewfile.dev - Development tools
 
-tap "oven-sh/bun" # Tap for Bun JavaScript runtime
-
 # Languages and runtimes
 brew "node"             # JavaScript runtime
 brew "bun"              # Bun JavaScript runtime
-brew "python"           # Python language
 brew "go"               # Go language
 brew "rust"             # Rust language
 brew "openjdk"          # Java Development Kit
@@ -27,11 +24,11 @@ brew "lazydocker"        # Terminal UI for Docker
 brew "ctop"              # Terminal UI for containers, top for containers
 
 # Kubernetes tools
-brew "kubectl"          # Kubernetes CLI
-brew "kubectx"          # Kubernetes context switcher
-brew "k9s"             # Kubernetes CLI UI
-brew "helm"            # Kubernetes package manager
-brew "kind"            # Kubernetes in Docker
+brew "kubernetes-cli"          # Kubernetes CLI
+brew "kubectx"                   # Kubernetes context switcher
+brew "k9s"                       # Kubernetes CLI UI
+brew "helm"                      # Kubernetes package manager
+brew "kind"                      # Kubernetes in Docker
 
 # Cloud tools
 brew "awscli"           # AWS CLI
@@ -39,7 +36,7 @@ brew "azure-cli"        # Azure CLI
 brew "terraform"        # Infrastructure as code
 
 # Database tools
-brew "postgresql"       # PostgreSQL database
+brew "postgresql@14"       # PostgreSQL database
 brew "mysql"            # MySQL database
 
 # Development utilities

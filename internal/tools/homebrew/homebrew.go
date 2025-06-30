@@ -295,7 +295,7 @@ func (h *HomebrewTool) getBrewfileStatus(brewfilePath string) (total, installed 
 	lines := strings.Split(string(content), "\n")
 	for _, line := range lines {
 		line = strings.TrimSpace(line)
-		if strings.HasPrefix(line, "brew ") || strings.HasPrefix(line, "cask ") || strings.HasPrefix(line, "mas ") {
+		if strings.HasPrefix(line, "brew ") || strings.HasPrefix(line, "cask ") || strings.HasPrefix(line, "mas ") || strings.HasPrefix(line, "tap ") {
 			total++
 		}
 	}
@@ -306,10 +306,16 @@ func (h *HomebrewTool) getBrewfileStatus(brewfilePath string) (total, installed 
 		return total, 0, fmt.Errorf("failed to get installed packages: %w", err)
 	}
 
+	// Get installed taps
+	installedTaps, err := h.getInstalledTaps()
+	if err != nil {
+		return total, 0, fmt.Errorf("failed to get installed taps: %w", err)
+	}
+
 	// Count how many packages from Brewfile are installed
 	for _, line := range lines {
 		line = strings.TrimSpace(line)
-		if strings.HasPrefix(line, "brew ") || strings.HasPrefix(line, "cask ") || strings.HasPrefix(line, "mas ") {
+		if strings.HasPrefix(line, "brew ") || strings.HasPrefix(line, "cask ") || strings.HasPrefix(line, "mas ") || strings.HasPrefix(line, "tap ") {
 			// Extract package name - handle quoted names and comments
 			parts := strings.Fields(line)
 			if len(parts) >= 2 {
@@ -321,13 +327,27 @@ func (h *HomebrewTool) getBrewfileStatus(brewfilePath string) (total, installed 
 					packageName = strings.TrimSpace(packageName[:commentIdx])
 				}
 				
-				// For mas entries, we need different logic since mas apps are checked differently
+				// For mas entries, check if they're actually installed
 				if strings.HasPrefix(line, "mas ") {
-					// For now, consider mas apps as not installed since checking them requires mas CLI
-					// This could be enhanced later to actually check mas installations
+					masInstalled, err := h.isMasAppInstalled(packageName, line)
+					if err == nil && masInstalled {
+						installed++
+					}
 					continue
 				}
 				
+				// Check if this is a tap
+				if strings.HasPrefix(line, "tap ") {
+					for _, tap := range installedTaps {
+						if tap == packageName {
+							installed++
+							break
+						}
+					}
+					continue
+				}
+				
+				// Check for regular packages
 				for _, pkg := range installedPackages {
 					if pkg.Name == packageName {
 						installed++
@@ -471,6 +491,13 @@ func (h *HomebrewTool) parseBrewfilePackages(brewfilePath, category string) ([]t
 		installedPackages = []BrewPackage{}
 	}
 
+	// Get installed taps for status checking
+	installedTaps, err := h.getInstalledTaps()
+	if err != nil {
+		// Continue without status checking if we can't get installed taps
+		installedTaps = []string{}
+	}
+
 	for lineNum, line := range lines {
 		line = strings.TrimSpace(line)
 		
@@ -496,6 +523,18 @@ func (h *HomebrewTool) parseBrewfilePackages(brewfilePath, category string) ([]t
 			}
 		} else if strings.HasPrefix(line, "mas ") {
 			packageType = "mas"
+			// For mas entries, extract the app name from quotes
+			// Format: mas "App Name", id: 123456789
+			quoteStart := strings.Index(line, "\"")
+			if quoteStart >= 0 {
+				remaining := line[quoteStart+1:]
+				quoteEnd := strings.Index(remaining, "\"")
+				if quoteEnd >= 0 {
+					packageName = remaining[:quoteEnd]
+				}
+			}
+		} else if strings.HasPrefix(line, "tap ") {
+			packageType = "tap"
 			parts := strings.Fields(line)
 			if len(parts) >= 2 {
 				packageName = strings.Trim(parts[1], "\"'")
@@ -515,16 +554,34 @@ func (h *HomebrewTool) parseBrewfilePackages(brewfilePath, category string) ([]t
 		}
 
 		// Determine installation status
-		installed := h.isPackageInstalled(packageName, packageType, installedPackages)
+		var installed bool
 		status := "not_installed"
+		
+		if packageType == "tap" {
+			installed = h.isTapInstalled(packageName, installedTaps)
+		} else {
+			installed = h.isPackageInstalled(packageName, packageType, installedPackages)
+		}
+		
 		if installed {
 			status = "installed"
 		}
 
-		// For mas packages, we can't easily check installation status
+		// For mas packages, check if they're installed using mas CLI
 		if packageType == "mas" {
-			status = "unknown"
-			installed = false
+			// Try to get the app ID from the mas line and check if installed
+			masInstalled, err := h.isMasAppInstalled(packageName, line)
+			if err != nil {
+				status = "unknown"
+				installed = false
+			} else {
+				installed = masInstalled
+				if installed {
+					status = "installed"
+				} else {
+					status = "not_installed"
+				}
+			}
 		}
 
 		pkg := types.ToolItem{
@@ -554,6 +611,66 @@ func (h *HomebrewTool) isPackageInstalled(packageName, packageType string, insta
 	return false
 }
 
+// getInstalledTaps returns a list of currently installed Homebrew taps
+func (h *HomebrewTool) getInstalledTaps() ([]string, error) {
+	cmd := exec.Command("brew", "tap")
+	output, err := cmd.Output()
+	if err != nil {
+		return nil, fmt.Errorf("failed to list taps: %w", err)
+	}
+
+	// Parse taps output (one tap per line)
+	tapLines := strings.Split(strings.TrimSpace(string(output)), "\n")
+	var taps []string
+	for _, line := range tapLines {
+		line = strings.TrimSpace(line)
+		if line != "" {
+			taps = append(taps, line)
+		}
+	}
+
+	return taps, nil
+}
+
+// isTapInstalled checks if a specific tap is installed
+func (h *HomebrewTool) isTapInstalled(tapName string, installedTaps []string) bool {
+	for _, tap := range installedTaps {
+		if tap == tapName {
+			return true
+		}
+	}
+	return false
+}
+
+// isMasAppInstalled checks if a MAS app is installed by extracting the app ID from the mas line
+func (h *HomebrewTool) isMasAppInstalled(appName, masLine string) (bool, error) {
+	// Extract app ID from mas line format: mas "App Name", id: 123456789
+	idIdx := strings.Index(masLine, "id:")
+	if idIdx == -1 {
+		return false, fmt.Errorf("unable to find app ID in mas line: %s", masLine)
+	}
+
+	// Extract the ID part after "id:"
+	idPart := strings.TrimSpace(masLine[idIdx+3:])
+	// Remove any trailing comments
+	if commentIdx := strings.Index(idPart, "#"); commentIdx >= 0 {
+		idPart = strings.TrimSpace(idPart[:commentIdx])
+	}
+	
+	appID := strings.TrimSpace(idPart)
+
+	// Get installed MAS apps
+	cmd := exec.Command("mas", "list")
+	output, err := cmd.Output()
+	if err != nil {
+		return false, fmt.Errorf("failed to list mas apps: %w", err)
+	}
+
+	// Check if the app ID is in the output
+	outputStr := string(output)
+	return strings.Contains(outputStr, appID), nil
+}
+
 // installSinglePackage installs a single package based on its type
 func (h *HomebrewTool) installSinglePackage(packageName, packageType string) error {
 	var args []string
@@ -564,9 +681,11 @@ func (h *HomebrewTool) installSinglePackage(packageName, packageType string) err
 	case "cask":
 		args = []string{"install", "--cask", packageName}
 	case "mas":
-		// For mas packages, we need to use mas CLI
-		// This is a simplified implementation - in practice you'd want to extract the app ID
-		return fmt.Errorf("mas package installation not yet supported - please install manually")
+		// For mas packages, we need to use mas CLI with the app ID
+		// Extract app ID from the package info - this would need to be passed differently
+		return fmt.Errorf("mas package installation requires app ID - please use 'mas install <id>' manually")
+	case "tap":
+		args = []string{"tap", packageName}
 	default:
 		return fmt.Errorf("unknown package type: %s", packageType)
 	}
