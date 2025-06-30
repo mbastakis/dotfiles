@@ -94,6 +94,13 @@ func (s *StowTool) Status(ctx context.Context) (*types.ToolStatus, error) {
 			status.Error = err
 		}
 		item.Installed = linked
+		
+		// Set status string for UI display
+		if linked {
+			item.Status = "linked"
+		} else {
+			item.Status = "not_linked"
+		}
 
 		status.Items = append(status.Items, item)
 	}
@@ -174,10 +181,16 @@ func (s *StowTool) List(ctx context.Context) ([]types.ToolItem, error) {
 	for _, pkg := range s.config.Packages {
 		linked, _ := s.isPackageLinked(pkg)
 
+		status := "not_linked"
+		if linked {
+			status = "linked"
+		}
+
 		item := types.ToolItem{
 			Name:      pkg.Name,
 			Enabled:   pkg.Enabled,
 			Installed: linked,
+			Status:    status,
 			Target:    pkg.Target,
 			Priority:  pkg.Priority,
 		}
@@ -293,7 +306,8 @@ func (s *StowTool) isPackageLinked(pkg config.StowPackage) (bool, error) {
 	// Check if package is linked by finding at least one correctly linked file
 	// This approach avoids issues with files that Stow ignores (README.md, etc.)
 	foundLinkedFile := false
-	foundProblematicFile := false
+	linkedFileCount := 0
+	expectedFileCount := 0
 
 	err := filepath.Walk(packagePath, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -312,6 +326,14 @@ func (s *StowTool) isPackageLinked(pkg config.StowPackage) (bool, error) {
 			return nil
 		}
 
+		// Skip directories - Stow may not symlink directories when using --no-folding
+		if info.IsDir() {
+			return nil
+		}
+
+		// This is a file we expect to be linked
+		expectedFileCount++
+
 		// Calculate relative path from package root
 		relPath, err := filepath.Rel(packagePath, path)
 		if err != nil {
@@ -325,19 +347,15 @@ func (s *StowTool) isPackageLinked(pkg config.StowPackage) (bool, error) {
 		linkTarget, err := os.Readlink(targetPath)
 		if err != nil {
 			// Target doesn't exist or is not a symlink
-			if info.IsDir() {
-				return nil // Directories might not be symlinked if using --no-folding or --adopt
-			}
-
-			// Check if the file exists but is not a symlink (might be adopted but not re-linked)
+			// Check if the file exists but is not a symlink (might be adopted)
 			if _, statErr := os.Stat(targetPath); statErr == nil {
-				// File exists but is not a symlink - might be an adopted file
-				// For now, don't mark as problematic since the file is in the right place
-				return nil
+				// File exists but is not a symlink - count as linked if content matches
+				if s.filesAreIdentical(path, targetPath) {
+					linkedFileCount++
+					foundLinkedFile = true
+				}
 			}
-
-			// File doesn't exist at all - this might indicate an issue for non-ignored files
-			foundProblematicFile = true
+			// Don't count missing files as errors - might be intentionally not linked
 			return nil
 		}
 
@@ -353,27 +371,48 @@ func (s *StowTool) isPackageLinked(pkg config.StowPackage) (bool, error) {
 		// Get absolute path and clean both for comparison
 		absLinkTarget, err = filepath.Abs(absLinkTarget)
 		if err != nil {
-			foundProblematicFile = true
-			return nil
+			return nil // Skip problematic symlinks rather than failing
 		}
 
 		absPath, err := filepath.Abs(path)
 		if err != nil {
-			foundProblematicFile = true
-			return nil
+			return nil // Skip problematic paths rather than failing
 		}
 
 		if absLinkTarget == absPath {
 			foundLinkedFile = true
-		} else {
-			foundProblematicFile = true
+			linkedFileCount++
 		}
 
 		return nil
 	})
 
-	// Package is considered linked if we found at least one linked file and no problematic files
-	return foundLinkedFile && !foundProblematicFile && err == nil, err
+	if err != nil {
+		return false, err
+	}
+
+	// Package is considered linked if:
+	// 1. We found at least one linked file, AND
+	// 2. Most files are linked (>= 50% threshold to handle partial adoptions)
+	if expectedFileCount == 0 {
+		// No files to link - consider it "linked" if the package directory exists
+		return true, nil
+	}
+
+	linkRatio := float64(linkedFileCount) / float64(expectedFileCount)
+	return foundLinkedFile && linkRatio >= 0.5, nil
+}
+
+// filesAreIdentical checks if two files have identical content
+func (s *StowTool) filesAreIdentical(file1, file2 string) bool {
+	content1, err1 := os.ReadFile(file1)
+	content2, err2 := os.ReadFile(file2)
+	
+	if err1 != nil || err2 != nil {
+		return false
+	}
+	
+	return string(content1) == string(content2)
 }
 
 // validatePackage validates a package configuration
