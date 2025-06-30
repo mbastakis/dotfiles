@@ -2,10 +2,10 @@ package tui
 
 import (
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/yourusername/dotfiles/internal/config"
-	"github.com/yourusername/dotfiles/internal/theme"
-	"github.com/yourusername/dotfiles/internal/tools"
-	"github.com/yourusername/dotfiles/internal/tui/models"
+	"github.com/mbastakis/dotfiles/internal/config"
+	"github.com/mbastakis/dotfiles/internal/theme"
+	"github.com/mbastakis/dotfiles/internal/tools"
+	"github.com/mbastakis/dotfiles/internal/tui/models"
 )
 
 // RunTUI starts the TUI application

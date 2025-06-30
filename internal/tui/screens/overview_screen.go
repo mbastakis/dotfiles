@@ -10,11 +10,11 @@ import (
 	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/yourusername/dotfiles/internal/config"
-	"github.com/yourusername/dotfiles/internal/theme"
-	"github.com/yourusername/dotfiles/internal/tools"
-	"github.com/yourusername/dotfiles/internal/tui/keys"
-	"github.com/yourusername/dotfiles/internal/types"
+	"github.com/mbastakis/dotfiles/internal/config"
+	"github.com/mbastakis/dotfiles/internal/theme"
+	"github.com/mbastakis/dotfiles/internal/tools"
+	"github.com/mbastakis/dotfiles/internal/tui/keys"
+	"github.com/mbastakis/dotfiles/internal/types"
 )
 
 // OverviewScreen shows a comprehensive overview of all tools

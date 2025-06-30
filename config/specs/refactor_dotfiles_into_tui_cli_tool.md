@@ -1223,10 +1223,10 @@ A modern, interactive CLI tool for managing your dotfiles with ease. Built with 
 ### Install from Release
 ```bash
 # Download latest release
-curl -sf https://gobinaries.com/yourusername/dotfiles | sh
+curl -sf https://gobinaries.com/mbastakis/dotfiles | sh
 
 # Or install with Go
-go install github.com/yourusername/dotfiles/cmd/dotfiles@latest
+go install github.com/mbastakis/dotfiles/cmd/dotfiles@latest
 ```
 
 ### Bootstrap Your System

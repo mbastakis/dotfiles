@@ -6,14 +6,14 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/yourusername/dotfiles/internal/config"
-	"github.com/yourusername/dotfiles/internal/tools"
-	"github.com/yourusername/dotfiles/internal/tools/apps"
-	"github.com/yourusername/dotfiles/internal/tools/homebrew"
-	"github.com/yourusername/dotfiles/internal/tools/npm"
-	"github.com/yourusername/dotfiles/internal/tools/rsync"
-	"github.com/yourusername/dotfiles/internal/tools/stow"
-	"github.com/yourusername/dotfiles/internal/tools/uv"
+	"github.com/mbastakis/dotfiles/internal/config"
+	"github.com/mbastakis/dotfiles/internal/tools"
+	"github.com/mbastakis/dotfiles/internal/tools/apps"
+	"github.com/mbastakis/dotfiles/internal/tools/homebrew"
+	"github.com/mbastakis/dotfiles/internal/tools/npm"
+	"github.com/mbastakis/dotfiles/internal/tools/rsync"
+	"github.com/mbastakis/dotfiles/internal/tools/stow"
+	"github.com/mbastakis/dotfiles/internal/tools/uv"
 )
 
 var (

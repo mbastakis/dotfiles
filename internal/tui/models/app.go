@@ -2,11 +2,11 @@ package models
 
 import (
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/yourusername/dotfiles/internal/common"
-	"github.com/yourusername/dotfiles/internal/config"
-	"github.com/yourusername/dotfiles/internal/theme"
-	"github.com/yourusername/dotfiles/internal/tools"
-	"github.com/yourusername/dotfiles/internal/tui/screens"
+	"github.com/mbastakis/dotfiles/internal/common"
+	"github.com/mbastakis/dotfiles/internal/config"
+	"github.com/mbastakis/dotfiles/internal/theme"
+	"github.com/mbastakis/dotfiles/internal/tools"
+	"github.com/mbastakis/dotfiles/internal/tui/screens"
 )
 
 // AppModel represents the root application model that handles navigation
