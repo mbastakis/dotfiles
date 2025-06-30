@@ -16,7 +16,6 @@ cask "stats"                                # System monitor
 # Development
 cask "visual-studio-code"                   # Code editor
 cask "visual-studio-code@insiders"          # Insiders version of VSCode
-cask "iterm2"                               # Terminal emulator
 cask "karabiner-elements"                   # Keyboard customizer
 cask "warp"                                 # Terminal emulator
 cask "ghostty"                              # Terminal multiplexer
