@@ -2,6 +2,7 @@ package models
 
 import (
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/yourusername/dotfiles/internal/common"
 	"github.com/yourusername/dotfiles/internal/config"
 	"github.com/yourusername/dotfiles/internal/theme"
 	"github.com/yourusername/dotfiles/internal/tools"
@@ -30,18 +31,12 @@ type ScreenType int
 const (
 	MainMenuScreen ScreenType = iota
 	ToolScreen
+	CategoryDetailScreen
 	OverviewScreen
 	SettingsScreen
 	ThemesScreen
 )
 
-// NavigateMsg represents navigation to a new screen
-type NavigateMsg struct {
-	Screen Screen
-}
-
-// BackMsg represents going back to the previous screen
-type BackMsg struct{}
 
 // NewAppModel creates a new application model
 func NewAppModel(cfg *config.Config, registry *tools.ToolRegistry, themeManager *theme.ThemeManager) AppModel {
@@ -72,13 +67,13 @@ func (a AppModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		a.currentScreen = newScreen
 		return a, cmd
 
-	case NavigateMsg:
+	case common.NavigateMsg:
 		// Push current screen to stack and navigate to new screen
 		a.screenStack = append(a.screenStack, a.currentScreen)
 		a.currentScreen = msg.Screen
 		return a, a.currentScreen.Init()
 
-	case BackMsg:
+	case common.BackMsg:
 		// Pop screen from stack
 		if len(a.screenStack) > 0 {
 			a.currentScreen = a.screenStack[len(a.screenStack)-1]
@@ -92,7 +87,7 @@ func (a AppModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "esc", "q":
 			// Go back if we're not on the main screen
 			if len(a.screenStack) > 0 {
-				return a.Update(BackMsg{})
+				return a.Update(common.BackMsg{})
 			}
 			// If on main screen and 'q' is pressed, quit
 			if msg.String() == "q" && len(a.screenStack) == 0 {
@@ -165,5 +160,5 @@ func (a AppModel) navigateToScreen(menuItem MenuItem) (tea.Model, tea.Cmd) {
 		}
 	}
 
-	return a.Update(NavigateMsg{Screen: newScreen})
+	return a.Update(common.NavigateMsg{Screen: newScreen})
 }

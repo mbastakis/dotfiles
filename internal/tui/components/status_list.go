@@ -15,6 +15,16 @@ type StatusItem struct {
 	toolItem types.ToolItem
 }
 
+// NewStatusItem creates a new StatusItem
+func NewStatusItem(item types.ToolItem) StatusItem {
+	return StatusItem{toolItem: item}
+}
+
+// ToolItem returns the underlying tool item
+func (s StatusItem) ToolItem() types.ToolItem {
+	return s.toolItem
+}
+
 // FilterValue implements list.Item interface
 func (s StatusItem) FilterValue() string {
 	return s.toolItem.Name

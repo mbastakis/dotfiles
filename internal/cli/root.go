@@ -185,6 +185,13 @@ func createLazyToolCommand(toolName string) *cobra.Command {
 	toolCmd.AddCommand(createLazyRemoveCommand(toolName))
 	toolCmd.AddCommand(createLazySyncCommand(toolName))
 
+	// Add category-specific commands for tools that support them
+	if toolName == "homebrew" {
+		toolCmd.AddCommand(createLazyListPackagesCommand(toolName))
+		toolCmd.AddCommand(createLazyInstallPackageCommand(toolName))
+		toolCmd.AddCommand(createLazyStatusPackageCommand(toolName))
+	}
+
 	return toolCmd
 }
 

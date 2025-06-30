@@ -2,7 +2,6 @@ package homebrew
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"os"
 	"os/exec"
@@ -111,8 +110,10 @@ func (h *HomebrewTool) Status(ctx context.Context) (*types.ToolStatus, error) {
 				} else {
 					if installedCount == packageCount {
 						item.Status = "installed"
+						item.Installed = true
 					} else {
 						item.Status = "partial"
+						item.Installed = false
 					}
 					item.Description = fmt.Sprintf("%s (%d/%d packages)", item.Description, installedCount, packageCount)
 				}
@@ -308,11 +309,25 @@ func (h *HomebrewTool) getBrewfileStatus(brewfilePath string) (total, installed 
 	// Count how many packages from Brewfile are installed
 	for _, line := range lines {
 		line = strings.TrimSpace(line)
-		if strings.HasPrefix(line, "brew ") || strings.HasPrefix(line, "cask ") {
-			// Extract package name (simplified parsing)
+		if strings.HasPrefix(line, "brew ") || strings.HasPrefix(line, "cask ") || strings.HasPrefix(line, "mas ") {
+			// Extract package name - handle quoted names and comments
 			parts := strings.Fields(line)
 			if len(parts) >= 2 {
-				packageName := strings.Trim(parts[1], "\"'")
+				packageName := parts[1]
+				// Remove quotes
+				packageName = strings.Trim(packageName, "\"'")
+				// Remove any trailing comments or extra characters
+				if commentIdx := strings.Index(packageName, "#"); commentIdx >= 0 {
+					packageName = strings.TrimSpace(packageName[:commentIdx])
+				}
+				
+				// For mas entries, we need different logic since mas apps are checked differently
+				if strings.HasPrefix(line, "mas ") {
+					// For now, consider mas apps as not installed since checking them requires mas CLI
+					// This could be enhanced later to actually check mas installations
+					continue
+				}
+				
 				for _, pkg := range installedPackages {
 					if pkg.Name == packageName {
 						installed++
@@ -327,34 +342,244 @@ func (h *HomebrewTool) getBrewfileStatus(brewfilePath string) (total, installed 
 }
 
 func (h *HomebrewTool) getInstalledPackages() ([]BrewPackage, error) {
+	var packages []BrewPackage
+
 	// Get formulae
-	cmd := exec.Command("brew", "list", "--formula", "--json=v1")
+	cmd := exec.Command("brew", "list", "--formula")
 	output, err := cmd.Output()
 	if err != nil {
 		return nil, fmt.Errorf("failed to list formulae: %w", err)
 	}
 
-	var formulae []BrewPackage
-	if err := json.Unmarshal(output, &formulae); err != nil {
-		return nil, fmt.Errorf("failed to parse formulae JSON: %w", err)
+	// Parse formulae output (one package per line)
+	formulaeLines := strings.Split(strings.TrimSpace(string(output)), "\n")
+	for _, line := range formulaeLines {
+		line = strings.TrimSpace(line)
+		if line != "" {
+			packages = append(packages, BrewPackage{
+				Name: line,
+				Type: "brew", // Use "brew" to match our package type
+			})
+		}
 	}
 
 	// Get casks
-	cmd = exec.Command("brew", "list", "--cask", "--json=v1")
+	cmd = exec.Command("brew", "list", "--cask")
 	output, err = cmd.Output()
 	if err != nil {
 		return nil, fmt.Errorf("failed to list casks: %w", err)
 	}
 
-	var casks []BrewPackage
-	if err := json.Unmarshal(output, &casks); err != nil {
-		return nil, fmt.Errorf("failed to parse casks JSON: %w", err)
+	// Parse casks output (one package per line)
+	caskLines := strings.Split(strings.TrimSpace(string(output)), "\n")
+	for _, line := range caskLines {
+		line = strings.TrimSpace(line)
+		if line != "" {
+			packages = append(packages, BrewPackage{
+				Name: line,
+				Type: "cask",
+			})
+		}
 	}
 
-	// Combine results
-	packages := make([]BrewPackage, 0, len(formulae)+len(casks))
-	packages = append(packages, formulae...)
-	packages = append(packages, casks...)
+	return packages, nil
+}
+
+// CategoryTool interface implementation
+
+// SupportsCategories returns true for homebrew tool
+func (h *HomebrewTool) SupportsCategories() bool {
+	return true
+}
+
+// ListCategoryItems returns all packages in a specific category
+func (h *HomebrewTool) ListCategoryItems(ctx context.Context, category string) ([]types.ToolItem, error) {
+	categoryConfig, exists := h.config.Categories[category]
+	if !exists {
+		return nil, fmt.Errorf("category %s not found", category)
+	}
+
+	if !categoryConfig.Enabled {
+		return nil, fmt.Errorf("category %s is disabled", category)
+	}
+
+	brewfilePath := filepath.Join(h.dotfilesPath, categoryConfig.Brewfile)
+	if _, err := os.Stat(brewfilePath); err != nil {
+		return nil, fmt.Errorf("Brewfile not found: %s", brewfilePath)
+	}
+
+	return h.parseBrewfilePackages(brewfilePath, category)
+}
+
+// InstallCategoryItem installs a specific package from a category
+func (h *HomebrewTool) InstallCategoryItem(ctx context.Context, category string, item string) (*types.OperationResult, error) {
+	result := &types.OperationResult{
+		Tool:      h.Name(),
+		Operation: "install_package",
+		Success:   true,
+		Message:   fmt.Sprintf("Package %s installed successfully", item),
+	}
+
+	// Get the package details first to determine type
+	packages, err := h.ListCategoryItems(ctx, category)
+	if err != nil {
+		result.Success = false
+		result.Error = err
+		return result, err
+	}
+
+	var targetPackage *types.ToolItem
+	for _, pkg := range packages {
+		if pkg.Name == item {
+			targetPackage = &pkg
+			break
+		}
+	}
+
+	if targetPackage == nil {
+		result.Success = false
+		result.Error = fmt.Errorf("package %s not found in category %s", item, category)
+		return result, result.Error
+	}
+
+	// Install the package based on its type
+	if err := h.installSinglePackage(targetPackage.Name, targetPackage.PackageType); err != nil {
+		result.Success = false
+		result.Error = err
+		result.Message = fmt.Sprintf("Failed to install package %s: %v", item, err)
+		return result, err
+	}
+
+	result.Modified = []string{item}
+	return result, nil
+}
+
+// parseBrewfilePackages parses a Brewfile and returns individual packages as ToolItems
+func (h *HomebrewTool) parseBrewfilePackages(brewfilePath, category string) ([]types.ToolItem, error) {
+	content, err := os.ReadFile(brewfilePath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read Brewfile: %w", err)
+	}
+
+	var packages []types.ToolItem
+	lines := strings.Split(string(content), "\n")
+
+	// Get installed packages for status checking
+	installedPackages, err := h.getInstalledPackages()
+	if err != nil {
+		// Continue without status checking if we can't get installed packages
+		installedPackages = []BrewPackage{}
+	}
+
+	for lineNum, line := range lines {
+		line = strings.TrimSpace(line)
+		
+		// Skip comments and empty lines
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+
+		var packageType, packageName, description string
+		
+		// Parse different types of package declarations
+		if strings.HasPrefix(line, "brew ") {
+			packageType = "brew"
+			parts := strings.Fields(line)
+			if len(parts) >= 2 {
+				packageName = strings.Trim(parts[1], "\"'")
+			}
+		} else if strings.HasPrefix(line, "cask ") {
+			packageType = "cask"
+			parts := strings.Fields(line)
+			if len(parts) >= 2 {
+				packageName = strings.Trim(parts[1], "\"'")
+			}
+		} else if strings.HasPrefix(line, "mas ") {
+			packageType = "mas"
+			parts := strings.Fields(line)
+			if len(parts) >= 2 {
+				packageName = strings.Trim(parts[1], "\"'")
+			}
+		} else {
+			// Skip lines that don't match known patterns
+			continue
+		}
+
+		if packageName == "" {
+			continue
+		}
+
+		// Extract description from comment
+		if commentIdx := strings.Index(line, "#"); commentIdx >= 0 {
+			description = strings.TrimSpace(line[commentIdx+1:])
+		}
+
+		// Determine installation status
+		installed := h.isPackageInstalled(packageName, packageType, installedPackages)
+		status := "not_installed"
+		if installed {
+			status = "installed"
+		}
+
+		// For mas packages, we can't easily check installation status
+		if packageType == "mas" {
+			status = "unknown"
+			installed = false
+		}
+
+		pkg := types.ToolItem{
+			Name:        packageName,
+			Description: description,
+			Status:      status,
+			Enabled:     true,
+			Installed:   installed,
+			Category:    category,
+			PackageType: packageType,
+			Priority:    lineNum, // Use line number as priority for ordering
+		}
+
+		packages = append(packages, pkg)
+	}
 
 	return packages, nil
+}
+
+// isPackageInstalled checks if a specific package is installed
+func (h *HomebrewTool) isPackageInstalled(packageName, packageType string, installedPackages []BrewPackage) bool {
+	for _, pkg := range installedPackages {
+		if pkg.Name == packageName && pkg.Type == packageType {
+			return true
+		}
+	}
+	return false
+}
+
+// installSinglePackage installs a single package based on its type
+func (h *HomebrewTool) installSinglePackage(packageName, packageType string) error {
+	var args []string
+	
+	switch packageType {
+	case "brew":
+		args = []string{"install", packageName}
+	case "cask":
+		args = []string{"install", "--cask", packageName}
+	case "mas":
+		// For mas packages, we need to use mas CLI
+		// This is a simplified implementation - in practice you'd want to extract the app ID
+		return fmt.Errorf("mas package installation not yet supported - please install manually")
+	default:
+		return fmt.Errorf("unknown package type: %s", packageType)
+	}
+
+	if h.dryRun {
+		args = append([]string{"--dry-run"}, args...)
+	}
+
+	cmd := exec.Command("brew", args...)
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("brew install failed: %w\nOutput: %s", err, string(output))
+	}
+
+	return nil
 }

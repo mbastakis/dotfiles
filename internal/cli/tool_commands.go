@@ -496,3 +496,120 @@ func createLazySyncCommand(toolName string) *cobra.Command {
 		},
 	}
 }
+
+// createLazyListPackagesCommand creates a list-packages command for category tools
+func createLazyListPackagesCommand(toolName string) *cobra.Command {
+	return &cobra.Command{
+		Use:   "list-packages <category>",
+		Short: fmt.Sprintf("List %s packages in a category", toolName),
+		Long:  fmt.Sprintf("List all packages in a specific %s category", toolName),
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			tool, err := getTool(toolName)
+			if err != nil {
+				return err
+			}
+			
+			categoryTool, ok := tool.(tools.CategoryTool)
+			if !ok || !categoryTool.SupportsCategories() {
+				return fmt.Errorf("%s tool does not support categories", toolName)
+			}
+			
+			ctx := context.Background()
+			category := args[0]
+			
+			packages, err := categoryTool.ListCategoryItems(ctx, category)
+			if err != nil {
+				return fmt.Errorf("failed to list %s packages in category %s: %w", toolName, category, err)
+			}
+
+			fmt.Printf("%s packages in category '%s':\n", strings.Title(toolName), category)
+			printItems(packages)
+			return nil
+		},
+	}
+}
+
+// createLazyInstallPackageCommand creates an install-package command for category tools
+func createLazyInstallPackageCommand(toolName string) *cobra.Command {
+	return &cobra.Command{
+		Use:   "install-package <category> <package>",
+		Short: fmt.Sprintf("Install a specific %s package", toolName),
+		Long:  fmt.Sprintf("Install a specific package from a %s category", toolName),
+		Args:  cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			tool, err := getTool(toolName)
+			if err != nil {
+				return err
+			}
+			
+			categoryTool, ok := tool.(tools.CategoryTool)
+			if !ok || !categoryTool.SupportsCategories() {
+				return fmt.Errorf("%s tool does not support categories", toolName)
+			}
+			
+			ctx := context.Background()
+			category := args[0]
+			packageName := args[1]
+			
+			fmt.Printf("Installing %s package '%s' from category '%s'...\n", toolName, packageName, category)
+			
+			result, err := categoryTool.InstallCategoryItem(ctx, category, packageName)
+			if err != nil {
+				return fmt.Errorf("failed to install %s package %s: %w", toolName, packageName, err)
+			}
+
+			printResult(result)
+			return nil
+		},
+	}
+}
+
+// createLazyStatusPackageCommand creates a status-package command for category tools
+func createLazyStatusPackageCommand(toolName string) *cobra.Command {
+	return &cobra.Command{
+		Use:   "status-package <category> <package>",
+		Short: fmt.Sprintf("Check status of a specific %s package", toolName),
+		Long:  fmt.Sprintf("Check the installation status of a specific package from a %s category", toolName),
+		Args:  cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			tool, err := getTool(toolName)
+			if err != nil {
+				return err
+			}
+			
+			categoryTool, ok := tool.(tools.CategoryTool)
+			if !ok || !categoryTool.SupportsCategories() {
+				return fmt.Errorf("%s tool does not support categories", toolName)
+			}
+			
+			ctx := context.Background()
+			category := args[0]
+			packageName := args[1]
+			
+			packages, err := categoryTool.ListCategoryItems(ctx, category)
+			if err != nil {
+				return fmt.Errorf("failed to list %s packages in category %s: %w", toolName, category, err)
+			}
+
+			// Find the specific package
+			for _, pkg := range packages {
+				if pkg.Name == packageName {
+					fmt.Printf("Package '%s' in category '%s':\n", packageName, category)
+					fmt.Printf("  Status: %s\n", pkg.Status)
+					fmt.Printf("  Installed: %v\n", pkg.Installed)
+					fmt.Printf("  Enabled: %v\n", pkg.Enabled)
+					if pkg.Version != "" {
+						fmt.Printf("  Version: %s\n", pkg.Version)
+					}
+					if pkg.Description != "" {
+						fmt.Printf("  Description: %s\n", pkg.Description)
+					}
+					return nil
+				}
+			}
+			
+			return fmt.Errorf("package '%s' not found in category '%s'", packageName, category)
+		},
+	}
+}
