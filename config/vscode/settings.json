@@ -370,6 +370,7 @@
     "acrmagentahome",
     "acrmhsandbox",
     "appcleaner",
+    "atuin",
     "autofetch",
     "autogen",
     "autohide",
@@ -394,6 +395,7 @@
     "dockerhub",
     "donot",
     "DTSP",
+    "DUPS",
     "esbenp",
     "factorypath",
     "felixkratz",
@@ -433,11 +435,14 @@
     "recents",
     "restow",
     "rgba",
+    "SAVEHIST",
     "screencapture",
+    "shellenv",
     "sketchybar",
     "steermouse",
     "stylesheet",
     "sysbox",
+    "thefuck",
     "tilesize",
     "trackpad",
     "Trackpad",
@@ -446,7 +451,9 @@
     "universalaccess",
     "Vuillamy",
     "wildlcard",
-    "Yazi"
+    "Yazi",
+    "ZDHARMA",
+    "Zinit"
   ],
   // ----------------------------------------------------------------------
   // END OF DICTIONARY

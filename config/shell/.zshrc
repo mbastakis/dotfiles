@@ -1,18 +1,8 @@
 # .zshrc - Main ZSH configuration file
-# ─── Initialize Zsh Completion ─────────────────────────────────────
-autoload -U compinit      # load the compinit function
-compinit                 # initialize the completion system
 
-# Load Starship prompt if installed
-if command -v starship &> /dev/null; then
-  eval "$(starship init zsh)"
-fi
-
-# Load custom configurations
-for file in ~/.zsh/{aliases,exports,functions,plugins,local,config}*.zsh; do
-  [ -r "$file" ] && [ -f "$file" ] && source "$file"
-done
-unset file
+# Completion system
+autoload -Uz compinit
+compinit
 
 # Set ZSH options
 setopt AUTO_CD           # Change directory without cd
@@ -26,13 +16,39 @@ HISTSIZE=10000
 SAVEHIST=10000
 HISTFILE=~/.zsh_history
 
-# Completion system
-autoload -Uz compinit
-compinit
+## Source tools
+# ----------------------------------------------------
+# Homebrew shell environment
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
-# Use fzf if installed
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# bun completions
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
+# Atuin shell history
+command -v atuin &>/dev/null && eval "$(atuin init zsh)"
+
+# Zoxide
+command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
+
+# Thefuck
+command -v thefuck &>/dev/null && eval $(thefuck --alias)
+
+# Carapace
+command -v carapace &>/dev/null && eval "$(carapace zsh)"
+
+# Carapace autocompletion
+zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
+source <(carapace _carapace)
+# ----------------------------------------------------
+
+# ----------------------------------------------------
+# Load Starship prompt if installed
+if command -v starship &> /dev/null; then
+  eval "$(starship init zsh)"
+fi
+# ----------------------------------------------------
+
+# ----------------------------------------------------
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
     print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
@@ -42,24 +58,26 @@ if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
         print -P "%F{160} The clone has failed.%f%b"
 fi
 
+# Load Zinit
 source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 ### End of Zinit's installer chunk
+# ----------------------------------------------------
 
-# bun completions
-[ -s "/Users/A200407315/.bun/_bun" ] && source "/Users/A200407315/.bun/_bun"
+## Shell configuration
+# ----------------------------------------------------
+# Create ~/.zsh/local.zsh if it doesn't exist
+if [[ ! -f ~/.zsh/local.zsh ]]; then
+  mkdir -p ~/.zsh
+  touch ~/.zsh/local.zsh
+fi
 
-# Atuin shell history
-eval "$(atuin init zsh)"
-
-# Zoxide
-eval "$(zoxide init zsh)"
-
-# Thefuck
-eval $(thefuck --alias)
-
-# Carapace autocompletion
-export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
-zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
-source <(carapace _carapace)
+# Load custom configurations
+source $HOME/.zshenv
+source $HOME/.zsh/local.zsh
+source $HOME/.zsh/exports.zsh
+source $HOME/.zsh/plugins.zsh
+source $HOME/.zsh/aliases.zsh
+source $HOME/.zsh/functions.zsh
+# ----------------------------------------------------
