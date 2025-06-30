@@ -71,7 +71,21 @@ func (a AppModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// Push current screen to stack and navigate to new screen
 		a.screenStack = append(a.screenStack, a.currentScreen)
 		a.currentScreen = msg.Screen
-		return a, a.currentScreen.Init()
+		
+		// Initialize the new screen and send it the current window size
+		cmds := []tea.Cmd{a.currentScreen.Init()}
+		if a.width > 0 && a.height > 0 {
+			// Send window size to the new screen
+			newScreen, sizeCmd := a.currentScreen.Update(tea.WindowSizeMsg{
+				Width:  a.width,
+				Height: a.height,
+			})
+			a.currentScreen = newScreen
+			if sizeCmd != nil {
+				cmds = append(cmds, sizeCmd)
+			}
+		}
+		return a, tea.Batch(cmds...)
 
 	case common.BackMsg:
 		// Pop screen from stack
@@ -93,6 +107,10 @@ func (a AppModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if msg.String() == "q" && len(a.screenStack) == 0 {
 				return a, tea.Quit
 			}
+		case "s":
+			// Navigate to overview screen from any screen
+			overviewScreen := screens.NewOverviewScreen(a.config, a.registry, a.themeManager, a.width, a.height)
+			return a.Update(common.NavigateMsg{Screen: overviewScreen})
 		}
 
 		// Check if this is navigation from the main menu
