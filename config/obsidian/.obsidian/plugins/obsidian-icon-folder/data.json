@@ -452,5 +452,8 @@
   },
   "Projects/Tasks/Kanban Tasks/manage claude mcp through dotfiles.md": {
     "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/check navi.md": {
+    "iconName": "OcTasklist24"
   }
 }
