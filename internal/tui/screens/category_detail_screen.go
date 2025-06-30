@@ -81,8 +81,11 @@ func (cs CategoryDetailScreen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		cs.width = msg.Width
 		cs.height = msg.Height
 		
-		h, v := lipgloss.NewStyle().Margin(2, 4).GetFrameSize()
-		cs.list.SetSize(msg.Width-h, msg.Height-v-4) // Leave space for header and help
+		// Only update list size if it's been initialized
+		if cs.list.Items() != nil {
+			h, v := lipgloss.NewStyle().Margin(2, 4).GetFrameSize()
+			cs.list.SetSize(msg.Width-h, msg.Height-v-4) // Leave space for header and help
+		}
 		
 	case CategoryPackagesLoadedMsg:
 		if msg.Category == cs.category {
