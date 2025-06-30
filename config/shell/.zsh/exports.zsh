@@ -5,14 +5,26 @@ export EDITOR="nvim"
 export VISUAL="code --wait"
 export PAGER="bat"
 
-# Path configuration
-# Add your custom paths here
-export PATH="$HOME/.local/bin:$PATH"
+## Path configuration
 
-# Add Homebrew sbin to PATH
-export PATH="/usr/local/sbin:$PATH"
+# Set PATH so it includes user's private bin if it exists
+if [[ -d "$HOME/bin" ]] ; then
+    PATH="$HOME/bin:$PATH"
+fi
 
-# Programming language environments
+# Set PATH so it includes user's private bin if it exists
+if [[ -d "$HOME/.local/bin" ]] ; then
+    PATH="$HOME/.local/bin:$PATH"
+fi
+
+# Set PATH for dotfiles bin
+if [[ -d "$DOTFILES_PATH/bin" ]] ; then
+    PATH="$DOTFILES_PATH/bin:$PATH"
+fi
+
+## End of path configuration
+
+## Programming language environments
 
 # Python
 export PYTHONDONTWRITEBYTECODE=1  # Don't write .pyc files
@@ -24,6 +36,15 @@ export PATH="$GOPATH/bin:$PATH"
 # Language preference
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
+
+## End of programming language environments
+
+## Custom environment variables
+
+# Set XDG base directories
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CACHE_HOME="$HOME/.cache"
 
 # Less settings
 export LESS="-R"
@@ -41,3 +62,8 @@ export DOTFILES_PATH="$HOME/dev/dotfiles"
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Carapace
+export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
+
+## End of custom environment variables
