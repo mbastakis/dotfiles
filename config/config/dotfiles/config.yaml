@@ -46,6 +46,14 @@ stow:
       target: "~/Documents/NotesOfTheGods/" # Adjust to your vault location
       enabled: true
       priority: 7
+    - name: "ai_docs"
+      target: "~/ai_docs/"
+      enabled: true
+      priority: 8
+    - name: "specs"
+      target: "~/specs/"
+      enabled: true
+      priority: 9
 # RSync configuration - Manages file synchronization
 rsync:
   enabled: true
