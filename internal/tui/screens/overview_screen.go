@@ -6,12 +6,14 @@ import (
 	"strings"
 	"time"
 
+	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/yourusername/dotfiles/internal/config"
 	"github.com/yourusername/dotfiles/internal/theme"
 	"github.com/yourusername/dotfiles/internal/tools"
+	"github.com/yourusername/dotfiles/internal/tui/keys"
 	"github.com/yourusername/dotfiles/internal/types"
 )
 
@@ -21,6 +23,8 @@ type OverviewScreen struct {
 	registry     *tools.ToolRegistry
 	themeManager *theme.ThemeManager
 	table        table.Model
+	keys         keys.ToolKeyMap
+	navKeys      keys.NavigationKeyMap
 	width        int
 	height       int
 	loading      bool
@@ -64,6 +68,8 @@ func NewOverviewScreen(cfg *config.Config, registry *tools.ToolRegistry, themeMa
 		registry:     registry,
 		themeManager: themeManager,
 		table:        t,
+		keys:         keys.DefaultToolKeyMap(),
+		navKeys:      keys.DefaultNavigationKeyMap(),
 		width:        width,
 		height:       height,
 	}
@@ -86,12 +92,15 @@ func (os OverviewScreen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		os.table.SetHeight(msg.Height - 10)
 
 	case tea.KeyMsg:
-		switch msg.String() {
-		case "r":
+		// Handle back/quit - let parent handle navigation
+		if key.Matches(msg, os.keys.Back) {
+			return os, nil
+		}
+
+		// Handle refresh
+		if key.Matches(msg, os.keys.Refresh) {
 			os.loading = true
 			return os, os.loadSystemStatus()
-		case "q", "esc":
-			return os, tea.Quit
 		}
 
 		// Forward to table for navigation
@@ -168,12 +177,20 @@ func (os OverviewScreen) renderSummary() string {
 
 func (os OverviewScreen) renderFooter() string {
 	styles := os.themeManager.GetStyles()
-	help := []string{
-		"[r] refresh",
-		"[↑/↓] navigate",
-		"[q/esc] back",
+	
+	var help []string
+	if !os.loading {
+		help = append(help,
+			fmt.Sprintf("[%s] %s", os.keys.Refresh.Help().Key, os.keys.Refresh.Help().Desc),
+			"[↑/↓] navigate",
+			fmt.Sprintf("[%s] back", os.keys.Back.Help().Key),
+		)
+	} else {
+		help = append(help, "Loading...")
 	}
-	return styles.Help.Render(strings.Join(help, " • "))
+	
+	helpText := styles.Help.Render(strings.Join(help, " • "))
+	return styles.Footer.Width(os.width - 2).Render(helpText)
 }
 
 func (os OverviewScreen) renderLoading() string {

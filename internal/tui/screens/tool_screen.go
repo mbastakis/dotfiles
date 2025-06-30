@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/yourusername/dotfiles/internal/theme"
 	"github.com/yourusername/dotfiles/internal/tools"
 	"github.com/yourusername/dotfiles/internal/tui/components"
+	"github.com/yourusername/dotfiles/internal/tui/keys"
 	"github.com/yourusername/dotfiles/internal/types"
 )
 
@@ -20,10 +22,13 @@ type ToolScreen struct {
 	themeManager *theme.ThemeManager
 	list         list.Model
 	progress     components.ProgressComponent
+	keys         keys.ToolKeyMap
+	navKeys      keys.NavigationKeyMap
 	width        int
 	height       int
 	loading      bool
 	error        error
+	showHelp     bool
 }
 
 
@@ -33,8 +38,11 @@ func NewToolScreen(tool tools.Tool, themeManager *theme.ThemeManager, width, hei
 		tool:         tool,
 		themeManager: themeManager,
 		progress:     components.NewProgressComponent(width),
+		keys:         keys.DefaultToolKeyMap(),
+		navKeys:      keys.DefaultNavigationKeyMap(),
 		width:        width,
 		height:       height,
+		showHelp:     false,
 	}
 }
 
@@ -70,32 +78,56 @@ func (ts ToolScreen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		ts.progress = components.NewProgressComponent(msg.Width)
 
 	case tea.KeyMsg:
-		switch msg.String() {
-		case "r":
-			ts.loading = true
-			return ts, ts.loadToolStatus()
-		case "i":
-			if !ts.loading {
-				return ts, ts.installSelected()
-			}
-		case "u":
-			if !ts.loading {
-				return ts, ts.updateSelected()
-			}
-		case "d":
-			if !ts.loading {
-				return ts, ts.removeSelected()
-			}
-		case "s":
-			if !ts.loading {
-				return ts, ts.syncAll()
-			}
+		// Handle help toggle
+		if key.Matches(msg, ts.keys.Help) {
+			ts.showHelp = !ts.showHelp
+			return ts, nil
 		}
 
+		// Handle back/quit
+		if key.Matches(msg, ts.keys.Back) {
+			// This will be handled by the parent AppModel
+			return ts, nil
+		}
+
+		// Only process tool operations if not loading
 		if !ts.loading {
-			var cmd tea.Cmd
-			ts.list, cmd = ts.list.Update(msg)
-			cmds = append(cmds, cmd)
+			switch {
+			case key.Matches(msg, ts.keys.Refresh):
+				ts.loading = true
+				return ts, ts.loadToolStatus()
+			case key.Matches(msg, ts.keys.Install):
+				if selectedItem := ts.list.SelectedItem(); selectedItem != nil {
+					ts.loading = true
+					return ts, ts.installSelected()
+				}
+			case key.Matches(msg, ts.keys.Update):
+				if selectedItem := ts.list.SelectedItem(); selectedItem != nil {
+					ts.loading = true
+					return ts, ts.updateSelected()
+				}
+			case key.Matches(msg, ts.keys.Remove):
+				if selectedItem := ts.list.SelectedItem(); selectedItem != nil {
+					ts.loading = true
+					return ts, ts.removeSelected()
+				}
+			case key.Matches(msg, ts.keys.Sync):
+				ts.loading = true
+				return ts, ts.syncAll()
+			case key.Matches(msg, ts.keys.Select):
+				// Toggle selection for batch operations (future enhancement)
+				// For now, just move cursor
+				var cmd tea.Cmd
+				ts.list, cmd = ts.list.Update(msg)
+				cmds = append(cmds, cmd)
+			default:
+				// Handle navigation keys (up/down/enter)
+				// Don't process Enter key here for tool operations
+				// It should only be used for navigation in lists
+				var cmd tea.Cmd
+				ts.list, cmd = ts.list.Update(msg)
+				cmds = append(cmds, cmd)
+			}
 		}
 
 	case ToolStatusLoadedMsg:
@@ -167,21 +199,46 @@ func (ts ToolScreen) renderHeader() string {
 }
 
 func (ts ToolScreen) renderFooter() string {
+	styles := ts.themeManager.GetStyles()
+	
+	if ts.showHelp {
+		// Show full help
+		var helpItems []string
+		for _, row := range ts.keys.FullHelp() {
+			for _, binding := range row {
+				helpItems = append(helpItems, fmt.Sprintf("[%s] %s", binding.Help().Key, binding.Help().Desc))
+			}
+		}
+		helpText := styles.Help.Render(strings.Join(helpItems, " • "))
+		return styles.Footer.Width(ts.width - 2).Render(helpText)
+	}
+	
+	// Show contextual help based on state
 	var help []string
 	
-	if !ts.loading {
+	if ts.loading {
+		help = append(help, "Loading...")
+	} else {
+		// Show available operations
+		if ts.list.SelectedItem() != nil {
+			help = append(help,
+				fmt.Sprintf("[%s] %s", ts.keys.Install.Help().Key, ts.keys.Install.Help().Desc),
+				fmt.Sprintf("[%s] %s", ts.keys.Update.Help().Key, ts.keys.Update.Help().Desc),
+				fmt.Sprintf("[%s] %s", ts.keys.Remove.Help().Key, ts.keys.Remove.Help().Desc),
+			)
+		}
 		help = append(help,
-			"[r] refresh",
-			"[i] install",
-			"[u] update",
-			"[d] remove",
-			"[s] sync",
+			fmt.Sprintf("[%s] %s", ts.keys.Sync.Help().Key, ts.keys.Sync.Help().Desc),
+			fmt.Sprintf("[%s] %s", ts.keys.Refresh.Help().Key, ts.keys.Refresh.Help().Desc),
 			"[↑/↓] navigate",
-			"[q] back",
+			fmt.Sprintf("[%s] back", ts.keys.Back.Help().Key),
 		)
+		
+		if !ts.showHelp {
+			help = append(help, fmt.Sprintf("[%s] more help", ts.keys.Help.Help().Key))
+		}
 	}
 
-	styles := ts.themeManager.GetStyles()
 	helpText := styles.Help.Render(strings.Join(help, " • "))
 	return styles.Footer.Width(ts.width - 2).Render(helpText)
 }
