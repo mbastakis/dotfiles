@@ -89,10 +89,14 @@ func (a AppModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		// Handle global navigation keys
 		switch msg.String() {
-		case "esc":
+		case "esc", "q":
 			// Go back if we're not on the main screen
 			if len(a.screenStack) > 0 {
 				return a.Update(BackMsg{})
+			}
+			// If on main screen and 'q' is pressed, quit
+			if msg.String() == "q" && len(a.screenStack) == 0 {
+				return a, tea.Quit
 			}
 		}
 
