@@ -36,9 +36,25 @@ type ToolScreen struct {
 
 // NewToolScreen creates a new tool screen
 func NewToolScreen(tool tools.Tool, themeManager *theme.ThemeManager, width, height int) ToolScreen {
+	// Create initial empty list
+	items := []list.Item{}
+	
+	// Create list with themed delegate
+	styles := themeManager.GetStyles()
+	delegate := list.NewDefaultDelegate()
+	delegate.Styles.SelectedTitle = styles.ActiveButton
+	delegate.Styles.SelectedDesc = styles.Info
+	
+	l := list.New(items, delegate, width-4, height-8)
+	l.Title = fmt.Sprintf("%s Tool", strings.Title(tool.Name()))
+	l.SetShowStatusBar(false)
+	l.SetFilteringEnabled(false)
+	l.Styles.Title = styles.Title
+	
 	return ToolScreen{
 		tool:         tool,
 		themeManager: themeManager,
+		list:         l,
 		progress:     components.NewProgressComponent(width),
 		keys:         keys.DefaultToolKeyMap(),
 		navKeys:      keys.DefaultNavigationKeyMap(),

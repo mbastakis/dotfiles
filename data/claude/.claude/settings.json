@@ -13,7 +13,11 @@
       "WebFetch(domain:opencode.ai)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:docs.anthropic.com)",
-      "WebFetch(domain:docs.anthropic.com)"
+      "WebFetch(domain:docs.anthropic.com)",
+      "mcp__socat-docker__search_code",
+      "mcp__socat-docker__list_directory",
+      "mcp__snap-happy__ListWindows",
+      "mcp__snap-happy__TakeScreenshot"
     ],
     "deny": []
   }

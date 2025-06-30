@@ -1,11 +1,29 @@
-# TODO: VSCode Extensions Installation Script
-CREATE data/scripts/install_vscode_extensions.sh
-This script will install the VSCode extensions listed in: data/vscode_extensions/
-data/vscode_extensions is a directory containing many extensions with a .vsix file.
-The script should:
-USE the vsce command to install each extension.
-The script should be executable.
-This script should be added in the config: config/config/dotfiles/config.yaml at the app tool.
-For now we only have one extension: data/vscode_extensions/tui_manager
-this tui_manager/ is the out of a compiled VSCode extension.
-We must use this script to add this extension to the VSCode installation.
+# TODO: Add snaphappy mcp tool claude code command
+CREATE a new command file in @data/claude/.claude/commands/take_screenshot.md
+INSTRUCT the agent to create a new command file
+PLAN the command file to include:
+- Title: Take Screenshot
+- Description: Capture a screenshot of the current screen
+- Command: snaphappy mcp tool claude code
+- Arguments: Which screen to capture
+The argument should be plaintext explaining the window and the context of the screenshot
+INSTRUCT the agent to explain what it sees and add the contents of the screenshot to it's context
+Make the agent to understand the screenshot in depth
+
+#TODO: Rsync performance optimization
+REFLECT on the rsync performance
+USE the rsync command to see how much time it takes to transfer files
+ANALYZE the output and identify any bottlenecks
+The rsync currently syncs not many files, so it should be fast
+SUGGEST optimizations if necessary
+PLAN how to improve the rsync performance
+IMPLEMENT the optimizations
+
+#TODO: Remove the backup features
+Currently in the config and settings of our TUI there are backup features
+REFLECT on the necessity of these features
+We are not using a lot of these features in the code
+CONSIDER removing them to simplify the codebase
+HIGHLIGHT where these backup would be useful but understand that stow already has a backup features so we don't need for stow and a lot of other tools
+IDENTIFY the files and code that implement these backup features
+PLAN how to remove the backup features

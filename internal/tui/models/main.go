@@ -186,28 +186,12 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 
 		case key.Matches(msg, m.keys.Enter):
-			selected := m.list.SelectedItem()
-			if menuItem, ok := selected.(MenuItem); ok {
-				if menuItem.tool != nil {
-					// TODO: Navigate to tool-specific screen
-					return m, tea.Batch(
-						tea.Printf("Selected tool: %s", menuItem.tool.Name()),
-						tea.Quit,
-					)
-				} else {
-					// Handle special menu items (overview, themes, settings)
-					return m, tea.Batch(
-						tea.Printf("Selected: %s", menuItem.title),
-						tea.Quit,
-					)
-				}
-			}
+			// Don't handle Enter here - let the app model handle navigation
+			// Just forward the key event to the list component
 
 		case key.Matches(msg, m.keys.Status):
-			return m, tea.Batch(
-				tea.Printf("Showing system status..."),
-				tea.Quit,
-			)
+			// Don't handle Status here - let the app model handle it
+			// Just forward the key event to the list component
 		}
 	}
 
