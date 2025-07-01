@@ -39,6 +39,11 @@ command -v carapace &>/dev/null && eval "$(carapace zsh)"
 # Carapace autocompletion
 zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
 source <(carapace _carapace)
+
+# dotfiles completion
+if [[ -f ~/.zsh/completions/dotfiles.zsh ]]; then
+    source ~/.zsh/completions/dotfiles.zsh
+fi
 # ----------------------------------------------------
 
 # ----------------------------------------------------
@@ -82,4 +87,5 @@ source $HOME/.zsh/vi-mode.zsh
 source $HOME/.zsh/aliases.zsh
 source $HOME/.zsh/functions.zsh
 source $HOME/.zsh/custom_shortcuts.zsh
+source $HOME/.zsh/dotfiles.zsh
 # ----------------------------------------------------
