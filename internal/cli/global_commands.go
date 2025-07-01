@@ -28,13 +28,28 @@ var statusCmd = &cobra.Command{
 		fmt.Println("Dotfiles System Status")
 		fmt.Println("======================")
 		
+		if cfg.Global.Verbose {
+			fmt.Printf("Configuration loaded from: %s\n", cfgFile)
+			fmt.Printf("Log level: %s\n", cfg.Global.LogLevel)
+			fmt.Printf("Dry run: %t\n", cfg.Global.DryRun)
+			fmt.Printf("Verbose: %t\n", cfg.Global.Verbose)
+			fmt.Println()
+		}
+		
 		for _, tool := range registry.ListEnabled() {
 			fmt.Printf("\n%s:\n", tool.Name())
 			fmt.Println(strings.Repeat("-", len(tool.Name())+1))
 			
+			if cfg.Global.Verbose {
+				fmt.Printf("  Enabled: %t, Priority: %d\n", tool.IsEnabled(), tool.Priority())
+			}
+			
 			status, err := tool.Status(ctx)
 			if err != nil {
 				fmt.Printf("  Error: %v\n", err)
+				if cfg.Global.Verbose {
+					fmt.Printf("  Error details: %+v\n", err)
+				}
 				continue
 			}
 			
@@ -81,14 +96,25 @@ var syncCmd = &cobra.Command{
 			return nil
 		}
 		
-		fmt.Printf("Synchronizing %d tools...\n\n", len(tools))
+		fmt.Printf("Synchronizing %d tools...\n", len(tools))
+		if cfg.Global.Verbose {
+			fmt.Printf("Verbose mode enabled (log level: %s)\n", cfg.Global.LogLevel)
+		}
+		fmt.Println()
 		
 		for _, tool := range tools {
+			if cfg.Global.Verbose {
+				fmt.Printf("Starting sync for tool: %s (enabled: %t, priority: %d)\n", 
+					tool.Name(), tool.IsEnabled(), tool.Priority())
+			}
 			fmt.Printf("Syncing %s...\n", tool.Name())
 			
 			result, err := tool.Sync(ctx)
 			if err != nil {
 				fmt.Printf("❌ Failed to sync %s: %v\n", tool.Name(), err)
+				if cfg.Global.Verbose {
+					fmt.Printf("   Error details: %+v\n", err)
+				}
 				continue
 			}
 			
@@ -100,6 +126,10 @@ var syncCmd = &cobra.Command{
 			
 			if len(result.Modified) > 0 {
 				fmt.Printf("   Modified: %s\n", strings.Join(result.Modified, ", "))
+			}
+			
+			if cfg.Global.Verbose && result.Details != nil {
+				fmt.Printf("   Details: %+v\n", result.Details)
 			}
 			
 			fmt.Println()
