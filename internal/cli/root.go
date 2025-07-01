@@ -175,6 +175,14 @@ func createLazyToolCommand(toolName string) *cobra.Command {
 			}
 			return nil
 		},
+		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+			// Completion for tool subcommands
+			subcommands := []string{"status", "list", "install", "update", "remove", "sync"}
+			if toolName == "homebrew" {
+				subcommands = append(subcommands, "list-packages", "install-package", "status-package")
+			}
+			return subcommands, cobra.ShellCompDirectiveNoFileComp
+		},
 	}
 
 	// Add common subcommands for each tool
