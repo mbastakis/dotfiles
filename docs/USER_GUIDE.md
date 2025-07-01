@@ -357,8 +357,6 @@ global:
   log_level: "info"
   dry_run: false
   auto_confirm: false
-  backup_enabled: true
-  backup_suffix: ".backup"
 
 tui:
   color_scheme: "default"
@@ -429,23 +427,10 @@ View performance metrics in the TUI Overview screen:
 
 ### Backup and Restore
 
-#### Automatic Backups
-- Files are backed up before modification
-- Configurable backup location and naming
-- Automatic cleanup of old backups
-- Restore from backup functionality
-
-#### Manual Backup
-```bash
-# Create backup
-dotfiles backup create "before-major-changes"
-
-# List backups
-dotfiles backup list
-
-# Restore from backup
-dotfiles backup restore "before-major-changes"
-```
+#### File Safety
+- Destructive operations require confirmation
+- Dry-run mode available for testing changes
+- GNU Stow provides built-in backup functionality
 
 ### Scripting and Automation
 

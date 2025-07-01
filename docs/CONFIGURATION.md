@@ -39,9 +39,6 @@ global:
   # Operational settings
   dry_run: false           # Preview changes without applying
   auto_confirm: false      # Skip confirmation prompts
-  backup_enabled: true     # Create backups before changes
-  backup_suffix: ".backup" # Suffix for backup files
-  backup_dir: ""           # Custom backup directory (empty for auto)
   
   # Concurrency settings
   max_concurrent: 5        # Maximum concurrent operations
@@ -70,10 +67,6 @@ global:
 - **Default**: `false`
 - **Warning**: Use with caution in automation
 
-#### `backup_enabled` (boolean)
-- **Description**: Create backups before modifying files
-- **Default**: `true`
-- **Recommendation**: Keep enabled for safety
 
 ## TUI Configuration
 
@@ -152,7 +145,7 @@ stow:
       exclude:                # Exclude these patterns
         - ".vim/temp/"
         - "*.swp"
-        - "*.backup"
+        - "*.tmp"
       
       # Dependencies
       depends_on:             # Packages this depends on
@@ -201,7 +194,7 @@ Each package in the `packages` array supports:
 #### `exclude` (array of strings)
 - **Description**: Glob patterns for files to exclude
 - **Default**: Empty (exclude nothing)
-- **Example**: `["*.log", "temp/", "*.backup"]`
+- **Example**: `["*.log", "temp/", "*.tmp"]`
 
 #### `depends_on` (array of strings)
 - **Description**: Package dependencies
@@ -516,8 +509,6 @@ packages:
 global:
   dotfiles_path: "/Users/john/.dotfiles"
   log_level: "info"
-  backup_enabled: true
-  backup_suffix: ".backup"
   auto_confirm: false
 
 tui:
