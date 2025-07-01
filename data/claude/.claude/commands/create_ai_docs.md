@@ -38,6 +38,10 @@ else
     else
         # Create the file with template
         cat > ~/dev/dotfiles/config/ai_docs/"${FILENAME}.md" << 'EOF'
+# Web Search
+BASIC WEB SEARCH of the technology, framework, or tool to gather initial information.
+USAGE of context7 mcp tool to search for relevant documentation and resources.
+
 # [TECHNOLOGY/FRAMEWORK NAME] Documentation
 
 ## Overview
