@@ -30,4 +30,5 @@ alias cat="bat --paging=always --color=always --style=plain --line-range=1:1000 
 alias r="atuin search -i"
 
 # Dotfiles
-alias dot="dotfiles tui"
+alias dot="dotfiles"
+alias doti="dotfiles tui"

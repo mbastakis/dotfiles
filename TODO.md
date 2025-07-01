@@ -27,11 +27,3 @@ CONSIDER removing them to simplify the codebase
 HIGHLIGHT where these backup would be useful but understand that stow already has a backup features so we don't need for stow and a lot of other tools
 IDENTIFY the files and code that implement these backup features
 PLAN how to remove the backup features
-
-#TODO: Add support for terminal completion
-Currently the cli does not support terminal completion
-REFLECT on the necessity of terminal completion
-CONSIDER adding terminal completion to the cli
-RESEARCH how to implement terminal completion in the cli
-IDENTIFY the files and code that implement the cli
-PLAN how to add terminal completion to the cli
