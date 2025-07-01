@@ -28,30 +28,26 @@ stow:
       target: "~/"
       enabled: true
       priority: 3
-    - name: "docker"
-      target: "~/"
-      enabled: true
-      priority: 4
     - name: "warp"
       target: "~/"
       enabled: true
-      priority: 5
+      priority: 4
     - name: "vscode"
       target: "~/Library/Application Support/Code/User/" # macOS default
       enabled: true
-      priority: 6
+      priority: 5
     - name: "obsidian"
       target: "~/Documents/NotesOfTheGods/" # Adjust to your vault location
       enabled: true
-      priority: 7
+      priority: 6
     - name: "ai_docs"
       target: "~/ai_docs/"
       enabled: true
-      priority: 8
+      priority: 7
     - name: "specs"
       target: "~/specs/"
       enabled: true
-      priority: 9
+      priority: 8
 # RSync configuration - Manages file synchronization
 rsync:
   enabled: true
