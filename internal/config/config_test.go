@@ -41,8 +41,6 @@ func TestLoad_WithValidFile(t *testing.T) {
   log_level: "debug"
   dry_run: true
   auto_confirm: true
-  backup_enabled: false
-  backup_suffix: ".bak"
 
 tui:
   color_scheme: "light"
@@ -120,9 +118,9 @@ func TestLoad_WithInvalidYAML(t *testing.T) {
 	
 	testutil.CreateTestFile(t, tmpDir, "config.yaml", invalidYAML)
 	
-	_, err := Load(configPath)
+	_, err := loadFromPath(configPath)
 	if err == nil {
-		t.Fatal("Expected Load to fail with invalid YAML")
+		t.Fatal("Expected loadFromPath to fail with invalid YAML")
 	}
 }
 
@@ -298,9 +296,6 @@ func TestSetDefaults(t *testing.T) {
 		t.Errorf("Expected color scheme to be set to default 'default', got %s", config.TUI.ColorScheme)
 	}
 	
-	if config.Global.BackupSuffix != ".backup" {
-		t.Errorf("Expected backup suffix to be set to default '.backup', got %s", config.Global.BackupSuffix)
-	}
 }
 
 // Helper function for string contains check

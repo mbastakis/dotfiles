@@ -292,9 +292,8 @@ func (os OverviewScreen) renderSummary() string {
 	// Additional system details
 	if !os.lastUpdate.IsZero() {
 		updateInfo := fmt.Sprintf(
-			"🕒 Last sync: %s • Backup: %t • Dry run: %t",
+			"🕒 Last sync: %s • Dry run: %t",
 			os.lastUpdate.Format("15:04:05"),
-			os.config.Global.BackupEnabled,
 			os.config.Global.DryRun,
 		)
 		sections = append(sections, styles.Help.Render(updateInfo))

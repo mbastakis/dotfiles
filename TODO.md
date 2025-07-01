@@ -18,12 +18,3 @@ The rsync currently syncs not many files, so it should be fast
 SUGGEST optimizations if necessary
 PLAN how to improve the rsync performance
 IMPLEMENT the optimizations
-
-#TODO: Remove the backup features
-Currently in the config and settings of our TUI there are backup features
-REFLECT on the necessity of these features
-We are not using a lot of these features in the code
-CONSIDER removing them to simplify the codebase
-HIGHLIGHT where these backup would be useful but understand that stow already has a backup features so we don't need for stow and a lot of other tools
-IDENTIFY the files and code that implement these backup features
-PLAN how to remove the backup features

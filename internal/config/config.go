@@ -27,8 +27,6 @@ type GlobalConfig struct {
 	LogLevel       string `yaml:"log_level"`
 	DryRun         bool   `yaml:"dry_run"`
 	AutoConfirm    bool   `yaml:"auto_confirm"`
-	BackupEnabled  bool   `yaml:"backup_enabled"`
-	BackupSuffix   string `yaml:"backup_suffix"`
 }
 
 // TUIConfig represents TUI-specific settings
@@ -111,8 +109,6 @@ func DefaultConfig() *Config {
 			LogLevel:      "info",
 			DryRun:        false,
 			AutoConfirm:   false,
-			BackupEnabled: true,
-			BackupSuffix:  ".backup",
 		},
 		TUI: TUIConfig{
 			ColorScheme:        "default",
@@ -401,9 +397,6 @@ func (c *Config) setDefaults() error {
 	// Set global defaults
 	if c.Global.LogLevel == "" {
 		c.Global.LogLevel = defaults.Global.LogLevel
-	}
-	if c.Global.BackupSuffix == "" {
-		c.Global.BackupSuffix = defaults.Global.BackupSuffix
 	}
 
 	// Set TUI defaults

@@ -17,7 +17,6 @@ import (
 type RsyncTool struct {
 	config       *config.RsyncConfig
 	dotfilesPath string
-	backupSuffix string
 	dryRun       bool
 }
 
@@ -26,7 +25,6 @@ func NewRsyncTool(cfg *config.Config) *RsyncTool {
 	return &RsyncTool{
 		config:       &cfg.Rsync,
 		dotfilesPath: cfg.Global.DotfilesPath,
-		backupSuffix: cfg.Global.BackupSuffix,
 		dryRun:       cfg.Global.DryRun,
 	}
 }
@@ -163,7 +161,7 @@ func (r *RsyncTool) Update(ctx context.Context, items []string) (*types.Operatio
 	return result, err
 }
 
-// Remove deletes synced content (with backup if enabled)
+// Remove deletes synced content
 func (r *RsyncTool) Remove(ctx context.Context, items []string) (*types.OperationResult, error) {
 	result := &types.OperationResult{
 		Tool:      r.Name(),
@@ -187,21 +185,11 @@ func (r *RsyncTool) Remove(ctx context.Context, items []string) (*types.Operatio
 			continue // Already removed
 		}
 
-		// Create backup if enabled
-		if r.backupSuffix != "" {
-			backupPath := targetPath + r.backupSuffix
-			if err := os.Rename(targetPath, backupPath); err != nil {
-				errors = append(errors, fmt.Sprintf("failed to backup %s: %v", targetPath, err))
-				result.Success = false
-				continue
-			}
-		} else {
-			// Remove without backup
-			if err := os.RemoveAll(targetPath); err != nil {
-				errors = append(errors, fmt.Sprintf("failed to remove %s: %v", targetPath, err))
-				result.Success = false
-				continue
-			}
+		// Remove target directory
+		if err := os.RemoveAll(targetPath); err != nil {
+			errors = append(errors, fmt.Sprintf("failed to remove %s: %v", targetPath, err))
+			result.Success = false
+			continue
 		}
 
 		removed = append(removed, sourceName)

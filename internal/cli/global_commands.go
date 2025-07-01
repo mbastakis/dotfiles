@@ -158,11 +158,6 @@ var configShowCmd = &cobra.Command{
 		fmt.Printf("Log level: %s\n", cfg.Global.LogLevel)
 		fmt.Printf("Dry run: %t\n", cfg.Global.DryRun)
 		fmt.Printf("Auto confirm: %t\n", cfg.Global.AutoConfirm)
-		fmt.Printf("Backup enabled: %t\n", cfg.Global.BackupEnabled)
-		
-		if cfg.Global.BackupEnabled {
-			fmt.Printf("Backup suffix: %s\n", cfg.Global.BackupSuffix)
-		}
 		
 		fmt.Printf("\nEnabled tools:\n")
 		for _, tool := range registry.ListEnabled() {
