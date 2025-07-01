@@ -8,7 +8,7 @@ background-blur = true
 
 # Font Configuration
 font-family = JetBrains Mono
-font-size = 20
+font-size = 19
 font-feature = liga=1
 font-feature = calt=1
 
