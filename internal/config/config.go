@@ -27,6 +27,7 @@ type GlobalConfig struct {
 	LogLevel       string `yaml:"log_level"`
 	DryRun         bool   `yaml:"dry_run"`
 	AutoConfirm    bool   `yaml:"auto_confirm"`
+	Verbose        bool   `yaml:"verbose"`
 }
 
 // TUIConfig represents TUI-specific settings
@@ -109,6 +110,7 @@ func DefaultConfig() *Config {
 			LogLevel:      "info",
 			DryRun:        false,
 			AutoConfirm:   false,
+			Verbose:       false,
 		},
 		TUI: TUIConfig{
 			ColorScheme:        "default",

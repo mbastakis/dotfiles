@@ -101,6 +101,13 @@ func initConfig() error {
 	if viper.IsSet("global.auto_confirm") {
 		cfg.Global.AutoConfirm = viper.GetBool("global.auto_confirm")
 	}
+	if viper.IsSet("global.verbose") {
+		cfg.Global.Verbose = viper.GetBool("global.verbose")
+		// When verbose is enabled, set log level to debug
+		if cfg.Global.Verbose {
+			cfg.Global.LogLevel = "debug"
+		}
+	}
 
 	// Expand environment variables in config
 	if err := cfg.ExpandVariables(); err != nil {

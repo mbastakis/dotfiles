@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/mbastakis/dotfiles/internal/config"
@@ -18,6 +19,14 @@ type RsyncTool struct {
 	config       *config.RsyncConfig
 	dotfilesPath string
 	dryRun       bool
+	statusCache  map[string]*statusCacheEntry
+	cacheMutex   sync.RWMutex
+}
+
+type statusCacheEntry struct {
+	status    string
+	timestamp time.Time
+	ttl       time.Duration
 }
 
 // NewRsyncTool creates a new RsyncTool instance
@@ -26,6 +35,7 @@ func NewRsyncTool(cfg *config.Config) *RsyncTool {
 		config:       &cfg.Rsync,
 		dotfilesPath: cfg.Global.DotfilesPath,
 		dryRun:       cfg.Global.DryRun,
+		statusCache:  make(map[string]*statusCacheEntry),
 	}
 }
 
@@ -99,7 +109,7 @@ func (r *RsyncTool) Status(ctx context.Context) (*types.ToolStatus, error) {
 			if _, err := os.Stat(sourcePath); err != nil {
 				item.Status = "error"
 				item.Error = fmt.Sprintf("Source not found: %s", sourcePath)
-			} else if r.needsSync(sourcePath, targetPath) {
+			} else if r.needsSyncCached(sourcePath, targetPath) {
 				item.Status = "needs_sync"
 			} else {
 				item.Status = "synced"
@@ -133,12 +143,35 @@ func (r *RsyncTool) Install(ctx context.Context, items []string) (*types.Operati
 		}
 	}
 
+	// Process sources in parallel for better performance
+	type syncResult struct {
+		sourceName string
+		err        error
+	}
+
+	resultChan := make(chan syncResult, len(items))
+	semaphore := make(chan struct{}, 3) // Limit concurrent syncs to 3
+
 	for _, sourceName := range items {
-		if err := r.syncSource(sourceName); err != nil {
-			errors = append(errors, fmt.Sprintf("%s: %v", sourceName, err))
+		go func(name string) {
+			semaphore <- struct{}{} // Acquire
+			defer func() { <-semaphore }() // Release
+			
+			err := r.syncSource(name)
+			resultChan <- syncResult{sourceName: name, err: err}
+		}(sourceName)
+	}
+
+	// Collect results
+	for i := 0; i < len(items); i++ {
+		syncRes := <-resultChan
+		if syncRes.err != nil {
+			errors = append(errors, fmt.Sprintf("%s: %v", syncRes.sourceName, syncRes.err))
 			result.Success = false
 		} else {
-			synced = append(synced, sourceName)
+			synced = append(synced, syncRes.sourceName)
+			// Clear cache entry for this source
+			r.clearStatusCache(syncRes.sourceName)
 		}
 	}
 
@@ -260,6 +293,49 @@ func (r *RsyncTool) needsSync(sourcePath, targetPath string) bool {
 	return !r.verifySync(sourcePath+"/", targetPath)
 }
 
+// needsSyncCached checks if sync is needed using cached results
+func (r *RsyncTool) needsSyncCached(sourcePath, targetPath string) bool {
+	cacheKey := sourcePath + "->" + targetPath
+	
+	r.cacheMutex.RLock()
+	entry, exists := r.statusCache[cacheKey]
+	r.cacheMutex.RUnlock()
+	
+	// Check if cache entry is valid
+	if exists && time.Since(entry.timestamp) < entry.ttl {
+		return entry.status == "needs_sync"
+	}
+	
+	// Cache miss or expired, compute and cache result
+	needsSync := r.needsSync(sourcePath, targetPath)
+	status := "synced"
+	if needsSync {
+		status = "needs_sync"
+	}
+	
+	r.cacheMutex.Lock()
+	r.statusCache[cacheKey] = &statusCacheEntry{
+		status:    status,
+		timestamp: time.Now(),
+		ttl:       30 * time.Second, // Cache for 30 seconds
+	}
+	r.cacheMutex.Unlock()
+	
+	return needsSync
+}
+
+// clearStatusCache clears cache entry for a source
+func (r *RsyncTool) clearStatusCache(sourceName string) {
+	r.cacheMutex.Lock()
+	defer r.cacheMutex.Unlock()
+	
+	for key := range r.statusCache {
+		if strings.HasPrefix(key, r.resolveSourcePath(sourceName)) {
+			delete(r.statusCache, key)
+		}
+	}
+}
+
 func (r *RsyncTool) syncSource(sourceName string) error {
 	source := r.findSource(sourceName)
 	if source == nil {
@@ -278,10 +354,18 @@ func (r *RsyncTool) syncSource(sourceName string) error {
 		return fmt.Errorf("failed to create target directory: %w", err)
 	}
 
-	// Build rsync command
+	// Build optimized rsync command
 	args := []string{
-		"-av", // Archive mode, verbose
-		"--delete", // Delete files not in source
+		"-rlptD", // Recursive, links, perms, times, devices (like -a but no verbose/group)
+		"--compress", // Compress during transfer for better performance
+		"--whole-file", // Don't use delta-xfer algorithm for small files
+		"--ignore-errors", // Continue despite errors
+		"--partial", // Keep partially transferred files
+	}
+	
+	// Only use --delete if target is not a system directory
+	if !r.isSystemDirectory(targetPath) {
+		args = append(args, "--delete")
 	}
 
 	if r.dryRun {
@@ -295,8 +379,11 @@ func (r *RsyncTool) syncSource(sourceName string) error {
 
 	args = append(args, sourcePath, targetPath)
 
-	// Execute rsync
-	cmd := exec.Command("rsync", args...)
+	// Execute rsync with timeout context
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+	
+	cmd := exec.CommandContext(ctx, "rsync", args...)
 	output, err := cmd.CombinedOutput()
 	
 	if err != nil {
@@ -374,4 +461,42 @@ func (r *RsyncTool) verifySync(sourcePath, targetPath string) bool {
 		
 		return nil
 	}) == nil
+}
+
+// isSystemDirectory checks if the target path is a system directory where --delete should not be used
+func (r *RsyncTool) isSystemDirectory(targetPath string) bool {
+	// Get user home directory
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return false
+	}
+	
+	// Normalize paths for comparison
+	targetPath = filepath.Clean(targetPath)
+	home = filepath.Clean(home)
+	
+	// If target is exactly the home directory, it's a system directory
+	if targetPath == home {
+		return true
+	}
+	
+	// Check for other system directories
+	systemDirs := []string{
+		"/System",
+		"/Library", 
+		"/usr",
+		"/bin",
+		"/sbin",
+		"/Applications",
+		home + "/Library",
+		home + "/Applications",
+	}
+	
+	for _, sysDir := range systemDirs {
+		if strings.HasPrefix(targetPath, filepath.Clean(sysDir)) {
+			return true
+		}
+	}
+	
+	return false
 }
