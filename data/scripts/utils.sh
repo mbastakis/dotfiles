@@ -66,25 +66,6 @@ ensure_dir() {
     fi
 }
 
-backup_file() {
-    if [ -f "$1" ]; then
-        local backup_file="$1.backup.$(date +%Y%m%d%H%M%S)"
-        log_info "Backing up $1 to $backup_file"
-        if [[ "$DRY_RUN" != "true" ]]; then
-            cp "$1" "$backup_file"
-        fi
-    fi
-}
-
-backup_dir() {
-    if [ -d "$1" ] && [ ! -L "$1" ]; then
-        local backup_dir="$1.backup.$(date +%Y%m%d%H%M%S)"
-        log_info "Backing up directory $1 to $backup_dir"
-        if [[ "$DRY_RUN" != "true" ]]; then
-            cp -r "$1" "$backup_dir"
-        fi
-    fi
-}
 
 check_sudo() {
     if ! sudo -n true 2>/dev/null; then

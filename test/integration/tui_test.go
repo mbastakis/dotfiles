@@ -238,8 +238,6 @@ func createTestConfig(tmpDir string) *config.Config {
 			LogLevel:       "info",
 			DryRun:         false,
 			AutoConfirm:    false,
-			BackupEnabled:  true,
-			BackupSuffix:   ".backup",
 		},
 		TUI: config.TUIConfig{
 			ColorScheme:        "default",

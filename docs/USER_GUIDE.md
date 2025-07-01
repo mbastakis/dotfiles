@@ -52,7 +52,6 @@ Follow the setup wizard to configure:
 - Dotfiles directory location
 - Default package manager preferences
 - Theme selection
-- Backup settings
 
 ## Basic Usage
 
@@ -143,7 +142,6 @@ The TUI uses intuitive keyboard controls:
 
 #### 5. Settings Screen
 - Configuration management
-- Backup and restore options
 - Performance settings
 - Advanced options
 
@@ -289,7 +287,6 @@ tools:
 - Install missing tools
 - Update to latest versions
 - Remove unused packages
-- Backup package lists
 
 #### Bulk Operations
 - Update all tools at once
@@ -425,12 +422,11 @@ View performance metrics in the TUI Overview screen:
 - Cache hit ratios
 - System resource usage
 
-### Backup and Restore
+### File Safety
 
-#### File Safety
 - Destructive operations require confirmation
 - Dry-run mode available for testing changes
-- GNU Stow provides built-in backup functionality
+- GNU Stow provides built-in backup functionality for symlink operations
 
 ### Scripting and Automation
 

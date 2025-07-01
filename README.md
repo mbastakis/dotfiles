@@ -204,7 +204,6 @@ BenchmarkObjectPool-8            5000000     312 ns/op       0 B/op    0 allocs/
 global:
   dotfiles_path: "/Users/username/.dotfiles"
   log_level: "info"
-  backup_enabled: true
 
 tui:
   color_scheme: "cyberpunk"

@@ -7,8 +7,6 @@ global:
   log_level: "info"
   dry_run: false
   auto_confirm: false
-  backup_enabled: true
-  backup_suffix: ".backup"
 # TUI preferences
 tui:
   color_scheme: "default"
