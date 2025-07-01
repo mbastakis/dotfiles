@@ -99,7 +99,11 @@
                   "Projects/Tasks/Kanban Tasks/Create default refactor specs.md",
                   "Projects/Tasks/Kanban Tasks/create git-tree default specs.md",
                   "Projects/Tasks/Kanban Tasks/use the agentic loop to create more warp workflows.md",
-                  "Projects/Tasks/Kanban Tasks/start using cline, free, with gemini cli, claude code.md"
+                  "Projects/Tasks/Kanban Tasks/start using cline, free, with gemini cli, claude code.md",
+                  "Projects/Tasks/Kanban Tasks/check navi.md",
+                  "Projects/Tasks/Kanban Tasks/manage claude mcp through dotfiles.md",
+                  "Projects/Tasks/Kanban Tasks/setup vi mode in ghostty.md",
+                  "Projects/Tasks/Kanban Tasks/add nix in dotfiles.md"
                 ]
               }
             }

@@ -40,8 +40,8 @@ if [[ -f "${HOME}/.local/share/zinit/zinit.git/zinit.zsh" ]]; then
     zinit load zsh-users/zsh-autosuggestions
     
     # Enhanced Vi mode plugin
-    zinit ice depth=1
-    zinit load jeffreytse/zsh-vi-mode
+    # zinit ice depth=1
+    # zinit load jeffreytse/zsh-vi-mode
     
     # Load syntax highlighting (must be last for proper highlighting)
     zinit ice wait lucid
