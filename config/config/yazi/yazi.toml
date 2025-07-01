@@ -74,6 +74,10 @@ rules = [
 	{ mime = "*/javascript", use = [ "edit", "reveal" ] },
 	# Empty file
 	{ mime = "inode/empty", use = [ "edit", "reveal" ] },
+	# MD
+	{ mime = "text/markdown", use = [ "edit", "reveal" ] },
+	# Data binary
+	{ mime = "application/octet-stream", use = [ "edit", "reveal" ] },
 	# Fallback
 	{ name = "*", use = [ "open", "reveal" ] },
 ]
