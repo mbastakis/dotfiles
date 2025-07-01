@@ -81,4 +81,5 @@ source $HOME/.zsh/plugins.zsh
 source $HOME/.zsh/vi-mode.zsh
 source $HOME/.zsh/aliases.zsh
 source $HOME/.zsh/functions.zsh
+source $HOME/.zsh/custom_shortcuts.zsh
 # ----------------------------------------------------
