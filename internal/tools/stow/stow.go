@@ -29,7 +29,7 @@ func NewStowTool(cfg *config.Config) *StowTool {
 	if p, exists := cfg.Tools.Priorities["stow"]; exists {
 		priority = p
 	}
-	
+
 	return &StowTool{
 		config:       &cfg.Stow,
 		dotfilesPath: cfg.Global.DotfilesPath,

@@ -32,7 +32,7 @@ func NewUVTool(cfg *config.Config) *UVTool {
 	if p, exists := cfg.Tools.Priorities["uv"]; exists {
 		priority = p
 	}
-	
+
 	return &UVTool{
 		config:   &cfg.UV,
 		dryRun:   cfg.Global.DryRun,

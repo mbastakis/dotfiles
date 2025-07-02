@@ -16,15 +16,15 @@ import (
 
 // RsyncTool implements the Tool interface for Rsync file synchronization
 type RsyncTool struct {
-	config           *config.RsyncConfig
-	dotfilesPath     string
-	dryRun           bool
-	priority         int
+	config            *config.RsyncConfig
+	dotfilesPath      string
+	dryRun            bool
+	priority          int
 	systemDirectories []string
-	cacheTimeout     time.Duration
-	commandTimeout   time.Duration
-	statusCache      map[string]*statusCacheEntry
-	cacheMutex       sync.RWMutex
+	cacheTimeout      time.Duration
+	commandTimeout    time.Duration
+	statusCache       map[string]*statusCacheEntry
+	cacheMutex        sync.RWMutex
 }
 
 type statusCacheEntry struct {
@@ -39,7 +39,7 @@ func NewRsyncTool(cfg *config.Config) *RsyncTool {
 	if p, exists := cfg.Tools.Priorities["rsync"]; exists {
 		priority = p
 	}
-	
+
 	// Parse timeouts with fallback defaults
 	cacheTimeout := 30 * time.Second
 	if timeoutStr, exists := cfg.Tools.Timeouts["rsync_cache"]; exists {
@@ -47,23 +47,23 @@ func NewRsyncTool(cfg *config.Config) *RsyncTool {
 			cacheTimeout = parsed
 		}
 	}
-	
+
 	commandTimeout := 30 * time.Second
 	if timeoutStr, exists := cfg.Tools.Timeouts["rsync_command"]; exists {
 		if parsed, err := time.ParseDuration(timeoutStr); err == nil {
 			commandTimeout = parsed
 		}
 	}
-	
+
 	return &RsyncTool{
-		config:           &cfg.Rsync,
-		dotfilesPath:     cfg.Global.DotfilesPath,
-		dryRun:           cfg.Global.DryRun,
-		priority:         priority,
+		config:            &cfg.Rsync,
+		dotfilesPath:      cfg.Global.DotfilesPath,
+		dryRun:            cfg.Global.DryRun,
+		priority:          priority,
 		systemDirectories: cfg.Tools.SystemDirectories,
-		cacheTimeout:     cacheTimeout,
-		commandTimeout:   commandTimeout,
-		statusCache:      make(map[string]*statusCacheEntry),
+		cacheTimeout:      cacheTimeout,
+		commandTimeout:    commandTimeout,
+		statusCache:       make(map[string]*statusCacheEntry),
 	}
 }
 

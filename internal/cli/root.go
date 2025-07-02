@@ -126,15 +126,15 @@ func initConfig() error {
 	if err := perf.InitGlobalCaches(ctx, cfg); err != nil {
 		return fmt.Errorf("failed to initialize caches: %w", err)
 	}
-	
+
 	if err := perf.InitGlobalMonitor(cfg); err != nil {
 		return fmt.Errorf("failed to initialize monitor: %w", err)
 	}
-	
+
 	if err := perf.InitGlobalProfiler(cfg); err != nil {
 		return fmt.Errorf("failed to initialize profiler: %w", err)
 	}
-	
+
 	// Start performance monitoring
 	perf.StartGlobalMonitor(ctx)
 	perf.StartGlobalProfiling(ctx)

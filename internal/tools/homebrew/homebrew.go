@@ -34,7 +34,7 @@ func NewHomebrewTool(cfg *config.Config) *HomebrewTool {
 	if p, exists := cfg.Tools.Priorities["homebrew"]; exists {
 		priority = p
 	}
-	
+
 	return &HomebrewTool{
 		config:       &cfg.Homebrew,
 		dotfilesPath: cfg.Global.DotfilesPath,

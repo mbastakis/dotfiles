@@ -336,27 +336,27 @@ var (
 // InitGlobalProfiler initializes the global profiler from configuration
 func InitGlobalProfiler(cfg *config.Config) error {
 	GlobalProfiler = NewProfiler("./profiles")
-	
+
 	// Parse profiler configuration
 	autoInterval, err := time.ParseDuration(cfg.Performance.Profiler.AutoInterval)
 	if err != nil {
 		return err
 	}
-	
+
 	cooldown, err := time.ParseDuration(cfg.Performance.Profiler.Cooldown)
 	if err != nil {
 		return err
 	}
-	
+
 	GlobalAutoProfiler = NewAutoProfiler("./profiles", autoInterval, cooldown)
-	
+
 	// Add configured profile conditions with durations from config
 	for profileType, setting := range cfg.Performance.Profiler.Profiles {
 		duration, err := time.ParseDuration(setting.Duration)
 		if err != nil {
 			return err
 		}
-		
+
 		switch profileType {
 		case "cpu":
 			GlobalAutoProfiler.AddCondition(ProfileCondition{
@@ -380,7 +380,7 @@ func InitGlobalProfiler(cfg *config.Config) error {
 			})
 		}
 	}
-	
+
 	return nil
 }
 

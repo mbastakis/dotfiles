@@ -98,10 +98,10 @@ type UVConfig struct {
 
 // ToolsConfig represents tool-level configuration
 type ToolsConfig struct {
-	Priorities        map[string]int            `yaml:"priorities"`
-	Interpreters      map[string]string         `yaml:"interpreters"`
-	SystemDirectories []string                  `yaml:"system_directories"`
-	Timeouts          map[string]string         `yaml:"timeouts"`
+	Priorities        map[string]int    `yaml:"priorities"`
+	Interpreters      map[string]string `yaml:"interpreters"`
+	SystemDirectories []string          `yaml:"system_directories"`
+	Timeouts          map[string]string `yaml:"timeouts"`
 }
 
 // PerformanceConfig represents performance and caching configuration

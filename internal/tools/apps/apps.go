@@ -28,7 +28,7 @@ func NewAppsTool(cfg *config.Config) *AppsTool {
 	if p, exists := cfg.Tools.Priorities["apps"]; exists {
 		priority = p
 	}
-	
+
 	return &AppsTool{
 		config:       &cfg.Apps,
 		dotfilesPath: cfg.Global.DotfilesPath,

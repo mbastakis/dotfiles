@@ -1,96 +1,137 @@
-# Dotfiles Manager Configuration
-# This file configures all aspects of the dotfiles management system
-
-# Global settings
 global:
-  dotfiles_path: "~/dev/dotfiles"
-  log_level: "info"
+  dotfiles_path: /Users/A200407315/dev/dotfiles
+  log_level: info
   dry_run: false
   auto_confirm: false
-# TUI preferences
+  verbose: false
 tui:
-  color_scheme: "default"
+  color_scheme: solarized_dark
   animations: true
   confirm_destructive: true
   show_progress: true
-# Stow configuration - Manages symlinked configuration packages
+tools:
+  priorities:
+    apps: 40
+    homebrew: 30
+    npm: 50
+    rsync: 20
+    stow: 1
+    uv: 60
+  interpreters:
+    .bash: bash
+    .js: node
+    .py: python3
+    .sh: bash
+  system_directories:
+    - /System
+    - /Library
+    - /usr
+    - /bin
+    - /sbin
+    - /Applications
+    - ~/Library
+    - ~/Applications
+  timeouts:
+    rsync_cache: 30s
+    rsync_command: 30s
+performance:
+  cache:
+    default:
+      size: 1000
+      ttl: 5m
+      cleanup_interval: 1m
+    status:
+      size: 100
+      ttl: 30s
+      cleanup_interval: 15s
+    view:
+      size: 50
+      ttl: 1m
+      cleanup_interval: 30s
+    config:
+      size: 20
+      ttl: 10m
+      cleanup_interval: 2m
+    theme:
+      size: 10
+      ttl: 15m
+      cleanup_interval: 5m
+  monitor:
+    interval: 5s
+    capacity: 100
+  profiler:
+    cooldown: 5m
+    auto_interval: 10s
+    profiles:
+      allocs:
+        duration: 60s
+      cpu:
+        duration: 30s
+      heap:
+        duration: 30s
+      mutex:
+        duration: 45s
+validation:
+  npm_package_pattern: ^(@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$
 stow:
   packages:
-    - name: "config"
-      target: "~/.config"
+    - name: config
+      target: /Users/A200407315/.config
       enabled: true
       priority: 1
-    - name: "shell"
-      target: "~/"
+    - name: shell
+      target: /Users/A200407315
       enabled: true
       priority: 2
-    - name: "git"
-      target: "~/"
+    - name: git
+      target: /Users/A200407315
       enabled: true
       priority: 3
-    - name: "warp"
-      target: "~/"
+    - name: warp
+      target: /Users/A200407315
       enabled: true
       priority: 4
-    - name: "vscode"
-      target: "~/Library/Application Support/Code/User/" # macOS default
+    - name: vscode
+      target: /Users/A200407315/Library/Application Support/Code/User
       enabled: true
       priority: 5
-    - name: "obsidian"
-      target: "~/Documents/NotesOfTheGods/" # Adjust to your vault location
+    - name: obsidian
+      target: /Users/A200407315/Documents/NotesOfTheGods
       enabled: true
       priority: 6
-    - name: "ai_docs"
-      target: "~/ai_docs/"
+    - name: ai_docs
+      target: /Users/A200407315/ai_docs
       enabled: true
       priority: 7
-    - name: "specs"
-      target: "~/specs/"
+    - name: specs
+      target: /Users/A200407315/specs
       enabled: true
       priority: 8
-# RSync configuration - Manages file synchronization
 rsync:
   enabled: true
   sources:
-    - name: "data/claude"
-      target: "~/"
+    - name: data/claude
+      target: /Users/A200407315
       enabled: true
       priority: 1
-
-# Homebrew configuration - Manages package installation
 homebrew:
   auto_update: true
   categories:
-    core:
-      enabled: true
-      brewfile: "homebrew/Brewfile"
     apps:
       enabled: true
-      brewfile: "homebrew/Brewfile.apps"
+      brewfile: homebrew/Brewfile.apps
+    core:
+      enabled: true
+      brewfile: homebrew/Brewfile
     dev:
       enabled: true
-      brewfile: "homebrew/Brewfile.dev"
+      brewfile: homebrew/Brewfile.dev
     mas:
       enabled: true
-      brewfile: "homebrew/Brewfile.mas"
+      brewfile: homebrew/Brewfile.mas
     taps:
       enabled: true
-      brewfile: "homebrew/Brewfile.tap"
-# Custom Applications - Manages script execution
-apps:
-  macos_settings:
-    enabled: false
-    scripts:
-      - "data/scripts/mac_settings.sh"
-  yazi_packages:
-    enabled: true
-    scripts:
-      - "data/scripts/setup_yazi_packages.sh"
-  vscode_extensions:
-    enabled: true
-    scripts:
-      - "data/scripts/install_vscode_extensions.sh"
-# Global NPM packages - Manages Node.js tools
+      brewfile: homebrew/Brewfile.tap
 npm:
   auto_install: true
   auto_update: true
@@ -99,9 +140,21 @@ npm:
     - "@mariozechner/snap-happy"
     - "@google/gemini-cli"
     - "@vscode/vsce"
-# Global UV packages - Manages Python tools
 uv:
   auto_install: true
   auto_update: true
   global_packages:
-    - "parllama"
+    - parllama
+apps:
+  macos_settings:
+    enabled: false
+    scripts:
+      - data/scripts/mac_settings.sh
+  vscode_extensions:
+    enabled: true
+    scripts:
+      - data/scripts/install_vscode_extensions.sh
+  yazi_packages:
+    enabled: true
+    scripts:
+      - data/scripts/setup_yazi_packages.sh

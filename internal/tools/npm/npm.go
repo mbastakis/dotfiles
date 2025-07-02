@@ -15,10 +15,10 @@ import (
 
 // NPMTool implements the Tool interface for NPM global package management
 type NPMTool struct {
-	config           *config.NPMConfig
-	dryRun           bool
-	priority         int
-	packagePattern   string
+	config         *config.NPMConfig
+	dryRun         bool
+	priority       int
+	packagePattern string
 }
 
 // NPMPackageInfo represents information about an NPM package
@@ -35,7 +35,7 @@ func NewNPMTool(cfg *config.Config) *NPMTool {
 	if p, exists := cfg.Tools.Priorities["npm"]; exists {
 		priority = p
 	}
-	
+
 	return &NPMTool{
 		config:         &cfg.NPM,
 		dryRun:         cfg.Global.DryRun,

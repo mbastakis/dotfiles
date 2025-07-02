@@ -460,61 +460,61 @@ func InitGlobalCaches(ctx context.Context, cfg *config.Config) error {
 		return err
 	}
 	DefaultCache = NewCache(cfg.Performance.Cache.Default.Size, defaultTTL)
-	
+
 	statusTTL, err := time.ParseDuration(cfg.Performance.Cache.Status.TTL)
 	if err != nil {
 		return err
 	}
 	StatusCache = NewCache(cfg.Performance.Cache.Status.Size, statusTTL)
-	
+
 	viewTTL, err := time.ParseDuration(cfg.Performance.Cache.View.TTL)
 	if err != nil {
 		return err
 	}
 	ViewCache = NewCache(cfg.Performance.Cache.View.Size, viewTTL)
-	
+
 	configTTL, err := time.ParseDuration(cfg.Performance.Cache.Config.TTL)
 	if err != nil {
 		return err
 	}
 	ConfigCache = NewCache(cfg.Performance.Cache.Config.Size, configTTL)
-	
+
 	themeTTL, err := time.ParseDuration(cfg.Performance.Cache.Theme.TTL)
 	if err != nil {
 		return err
 	}
 	ThemeCache = NewCache(cfg.Performance.Cache.Theme.Size, themeTTL)
-	
+
 	// Start cleanup timers with configurable intervals
 	defaultCleanup, err := time.ParseDuration(cfg.Performance.Cache.Default.CleanupInterval)
 	if err != nil {
 		return err
 	}
 	DefaultCache.StartCleanupTimer(ctx, defaultCleanup)
-	
+
 	statusCleanup, err := time.ParseDuration(cfg.Performance.Cache.Status.CleanupInterval)
 	if err != nil {
 		return err
 	}
 	StatusCache.StartCleanupTimer(ctx, statusCleanup)
-	
+
 	viewCleanup, err := time.ParseDuration(cfg.Performance.Cache.View.CleanupInterval)
 	if err != nil {
 		return err
 	}
 	ViewCache.StartCleanupTimer(ctx, viewCleanup)
-	
+
 	configCleanup, err := time.ParseDuration(cfg.Performance.Cache.Config.CleanupInterval)
 	if err != nil {
 		return err
 	}
 	ConfigCache.StartCleanupTimer(ctx, configCleanup)
-	
+
 	themeCleanup, err := time.ParseDuration(cfg.Performance.Cache.Theme.CleanupInterval)
 	if err != nil {
 		return err
 	}
 	ThemeCache.StartCleanupTimer(ctx, themeCleanup)
-	
+
 	return nil
 }

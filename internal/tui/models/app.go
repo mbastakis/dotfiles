@@ -1,6 +1,10 @@
 package models
 
 import (
+	"os"
+	"path/filepath"
+	"strings"
+
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/mbastakis/dotfiles/internal/common"
 	"github.com/mbastakis/dotfiles/internal/config"
@@ -92,6 +96,56 @@ func (a AppModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			a.currentScreen = a.screenStack[len(a.screenStack)-1]
 			a.screenStack = a.screenStack[:len(a.screenStack)-1]
 		}
+		return a, nil
+
+	case screens.ThemeChangedMsg:
+		// Handle theme change
+		themeName := msg.ThemeName
+
+		// Apply the theme to the theme manager
+		if err := a.themeManager.SetCurrentTheme(strings.ToLower(themeName)); err != nil {
+			return a, tea.Printf("Failed to apply theme: %v", err)
+		}
+
+		// Update the config
+		a.config.TUI.ColorScheme = strings.ToLower(themeName)
+
+		// Save config to the standard location
+		homeDir, _ := os.UserHomeDir()
+		configPath := filepath.Join(homeDir, ".config", "dotfiles", "config.yaml")
+		if err := a.config.Save(configPath); err != nil {
+			return a, tea.Printf("Failed to save config: %v", err)
+		}
+
+		// Recreate all screens with the new theme
+		// First recreate the current screen
+		if _, ok := a.currentScreen.(screens.ThemesScreen); ok {
+			a.currentScreen = screens.NewThemesScreen(a.config, a.themeManager, a.width, a.height)
+		}
+
+		// Clear and recreate the screen stack
+		newStack := make([]Screen, 0, len(a.screenStack))
+		for _, screen := range a.screenStack {
+			// Recreate main menu screens
+			if _, ok := screen.(MainModel); ok {
+				newStack = append(newStack, NewMainModel(a.config, a.registry, a.themeManager))
+			} else {
+				// For now, keep other screens as is (they'll be recreated when navigated to)
+				newStack = append(newStack, screen)
+			}
+		}
+		a.screenStack = newStack
+
+		// Send window size update to refresh the current screen
+		if a.width > 0 && a.height > 0 {
+			newScreen, cmd := a.currentScreen.Update(tea.WindowSizeMsg{
+				Width:  a.width,
+				Height: a.height,
+			})
+			a.currentScreen = newScreen
+			return a, cmd
+		}
+
 		return a, nil
 
 	case tea.KeyMsg:
