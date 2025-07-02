@@ -67,12 +67,25 @@ install_extension() {
 
     log_info "Installing extension: $extension_name"
     
-    if code --install-extension "$vsix_file"; then
+    # Try to install the extension
+    local install_output
+    install_output=$(code --install-extension "$vsix_file" 2>&1)
+    local exit_code=$?
+    
+    if [[ $exit_code -eq 0 ]]; then
         log_info "Successfully installed $extension_name"
         return 0
     else
-        log_error "Failed to install $extension_name"
-        return 1
+        # Check if the error is about restarting VS Code
+        if echo "$install_output" | grep -q "Please restart VS Code"; then
+            log_info "Extension $extension_name requires VS Code restart - this is normal for reinstallation"
+            log_info "The extension will be active after VS Code is restarted"
+            return 0  # Treat this as success since it's expected behavior
+        else
+            log_error "Failed to install $extension_name"
+            log_error "Output: $install_output"
+            return 1
+        fi
     fi
 }
 
