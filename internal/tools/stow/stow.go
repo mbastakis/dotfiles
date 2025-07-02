@@ -20,15 +20,22 @@ type StowTool struct {
 	dotfilesPath string
 	enabled      bool
 	dryRun       bool
+	priority     int
 }
 
 // NewStowTool creates a new StowTool instance
 func NewStowTool(cfg *config.Config) *StowTool {
+	priority := 1 // default fallback
+	if p, exists := cfg.Tools.Priorities["stow"]; exists {
+		priority = p
+	}
+	
 	return &StowTool{
 		config:       &cfg.Stow,
 		dotfilesPath: cfg.Global.DotfilesPath,
 		enabled:      true,
 		dryRun:       cfg.Global.DryRun,
+		priority:     priority,
 	}
 }
 
@@ -42,9 +49,9 @@ func (s *StowTool) IsEnabled() bool {
 	return s.enabled
 }
 
-// Priority returns the tool priority (stow should run early)
+// Priority returns the tool priority (configurable)
 func (s *StowTool) Priority() int {
-	return 1
+	return s.priority
 }
 
 // Validate checks if the tool is properly configured and dependencies are available

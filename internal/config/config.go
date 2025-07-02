@@ -4,21 +4,26 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
+	"time"
 
 	"gopkg.in/yaml.v3"
 )
 
 // Config represents the main configuration structure
 type Config struct {
-	Global   GlobalConfig   `yaml:"global"`
-	TUI      TUIConfig      `yaml:"tui"`
-	Stow     StowConfig     `yaml:"stow"`
-	Rsync    RsyncConfig    `yaml:"rsync"`
-	Homebrew HomebrewConfig `yaml:"homebrew"`
-	NPM      NPMConfig      `yaml:"npm"`
-	UV       UVConfig       `yaml:"uv"`
-	Apps     AppsConfig     `yaml:"apps"`
+	Global      GlobalConfig      `yaml:"global"`
+	TUI         TUIConfig         `yaml:"tui"`
+	Tools       ToolsConfig       `yaml:"tools"`
+	Performance PerformanceConfig `yaml:"performance"`
+	Validation  ValidationConfig  `yaml:"validation"`
+	Stow        StowConfig        `yaml:"stow"`
+	Rsync       RsyncConfig       `yaml:"rsync"`
+	Homebrew    HomebrewConfig    `yaml:"homebrew"`
+	NPM         NPMConfig         `yaml:"npm"`
+	UV          UVConfig          `yaml:"uv"`
+	Apps        AppsConfig        `yaml:"apps"`
 }
 
 // GlobalConfig represents global application settings
@@ -91,6 +96,60 @@ type UVConfig struct {
 	GlobalPackages []string `yaml:"global_packages"`
 }
 
+// ToolsConfig represents tool-level configuration
+type ToolsConfig struct {
+	Priorities        map[string]int            `yaml:"priorities"`
+	Interpreters      map[string]string         `yaml:"interpreters"`
+	SystemDirectories []string                  `yaml:"system_directories"`
+	Timeouts          map[string]string         `yaml:"timeouts"`
+}
+
+// PerformanceConfig represents performance and caching configuration
+type PerformanceConfig struct {
+	Cache    CacheConfig    `yaml:"cache"`
+	Monitor  MonitorConfig  `yaml:"monitor"`
+	Profiler ProfilerConfig `yaml:"profiler"`
+}
+
+// CacheConfig represents cache configuration
+type CacheConfig struct {
+	Default CacheSetting `yaml:"default"`
+	Status  CacheSetting `yaml:"status"`
+	View    CacheSetting `yaml:"view"`
+	Config  CacheSetting `yaml:"config"`
+	Theme   CacheSetting `yaml:"theme"`
+}
+
+// CacheSetting represents individual cache settings
+type CacheSetting struct {
+	Size            int    `yaml:"size"`
+	TTL             string `yaml:"ttl"`
+	CleanupInterval string `yaml:"cleanup_interval"`
+}
+
+// MonitorConfig represents monitoring configuration
+type MonitorConfig struct {
+	Interval string `yaml:"interval"`
+	Capacity int    `yaml:"capacity"`
+}
+
+// ProfilerConfig represents profiler configuration
+type ProfilerConfig struct {
+	Cooldown     string                    `yaml:"cooldown"`
+	AutoInterval string                    `yaml:"auto_interval"`
+	Profiles     map[string]ProfileSetting `yaml:"profiles"`
+}
+
+// ProfileSetting represents individual profiler settings
+type ProfileSetting struct {
+	Duration string `yaml:"duration"`
+}
+
+// ValidationConfig represents validation rules configuration
+type ValidationConfig struct {
+	NPMPackagePattern string `yaml:"npm_package_pattern"`
+}
+
 // AppsConfig represents custom application configuration
 type AppsConfig map[string]AppConfig
 
@@ -117,6 +176,82 @@ func DefaultConfig() *Config {
 			Animations:         true,
 			ConfirmDestructive: true,
 			ShowProgress:       true,
+		},
+		Tools: ToolsConfig{
+			Priorities: map[string]int{
+				"stow":     1,
+				"rsync":    20,
+				"homebrew": 30,
+				"apps":     40,
+				"npm":      50,
+				"uv":       60,
+			},
+			Interpreters: map[string]string{
+				".sh":   "bash",
+				".bash": "bash",
+				".py":   "python3",
+				".js":   "node",
+			},
+			SystemDirectories: []string{
+				"/System",
+				"/Library",
+				"/usr",
+				"/bin",
+				"/sbin",
+				"/Applications",
+				"~/Library",
+				"~/Applications",
+			},
+			Timeouts: map[string]string{
+				"rsync_cache":   "30s",
+				"rsync_command": "30s",
+			},
+		},
+		Performance: PerformanceConfig{
+			Cache: CacheConfig{
+				Default: CacheSetting{
+					Size:            1000,
+					TTL:             "5m",
+					CleanupInterval: "1m",
+				},
+				Status: CacheSetting{
+					Size:            100,
+					TTL:             "30s",
+					CleanupInterval: "15s",
+				},
+				View: CacheSetting{
+					Size:            50,
+					TTL:             "1m",
+					CleanupInterval: "30s",
+				},
+				Config: CacheSetting{
+					Size:            20,
+					TTL:             "10m",
+					CleanupInterval: "2m",
+				},
+				Theme: CacheSetting{
+					Size:            10,
+					TTL:             "15m",
+					CleanupInterval: "5m",
+				},
+			},
+			Monitor: MonitorConfig{
+				Interval: "5s",
+				Capacity: 100,
+			},
+			Profiler: ProfilerConfig{
+				Cooldown:     "5m",
+				AutoInterval: "10s",
+				Profiles: map[string]ProfileSetting{
+					"cpu":    {Duration: "30s"},
+					"heap":   {Duration: "30s"},
+					"allocs": {Duration: "60s"},
+					"mutex":  {Duration: "45s"},
+				},
+			},
+		},
+		Validation: ValidationConfig{
+			NPMPackagePattern: `^(@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$`,
 		},
 		Stow: StowConfig{
 			Packages: []StowPackage{
@@ -344,6 +479,78 @@ func (c *Config) Validate() error {
 		return fmt.Errorf("invalid log_level: %s", c.Global.LogLevel)
 	}
 
+	// Validate tool priorities
+	knownTools := []string{"stow", "rsync", "homebrew", "apps", "npm", "uv"}
+	for _, tool := range knownTools {
+		if priority, exists := c.Tools.Priorities[tool]; exists {
+			if priority < 1 || priority > 100 {
+				return fmt.Errorf("tool priority for %s must be between 1 and 100, got %d", tool, priority)
+			}
+		}
+	}
+
+	// Validate interpreters
+	for ext, interpreter := range c.Tools.Interpreters {
+		if !strings.HasPrefix(ext, ".") {
+			return fmt.Errorf("interpreter key must start with '.', got %s", ext)
+		}
+		if interpreter == "" {
+			return fmt.Errorf("interpreter for %s cannot be empty", ext)
+		}
+	}
+
+	// Validate timeouts
+	for name, timeout := range c.Tools.Timeouts {
+		if _, err := time.ParseDuration(timeout); err != nil {
+			return fmt.Errorf("invalid timeout duration for %s: %s", name, timeout)
+		}
+	}
+
+	// Validate cache configurations
+	if err := c.validateCacheSetting("default", c.Performance.Cache.Default); err != nil {
+		return err
+	}
+	if err := c.validateCacheSetting("status", c.Performance.Cache.Status); err != nil {
+		return err
+	}
+	if err := c.validateCacheSetting("view", c.Performance.Cache.View); err != nil {
+		return err
+	}
+	if err := c.validateCacheSetting("config", c.Performance.Cache.Config); err != nil {
+		return err
+	}
+	if err := c.validateCacheSetting("theme", c.Performance.Cache.Theme); err != nil {
+		return err
+	}
+
+	// Validate monitor configuration
+	if _, err := time.ParseDuration(c.Performance.Monitor.Interval); err != nil {
+		return fmt.Errorf("invalid monitor interval: %s", c.Performance.Monitor.Interval)
+	}
+	if c.Performance.Monitor.Capacity < 1 || c.Performance.Monitor.Capacity > 10000 {
+		return fmt.Errorf("monitor capacity must be between 1 and 10000, got %d", c.Performance.Monitor.Capacity)
+	}
+
+	// Validate profiler configuration
+	if _, err := time.ParseDuration(c.Performance.Profiler.Cooldown); err != nil {
+		return fmt.Errorf("invalid profiler cooldown: %s", c.Performance.Profiler.Cooldown)
+	}
+	if _, err := time.ParseDuration(c.Performance.Profiler.AutoInterval); err != nil {
+		return fmt.Errorf("invalid profiler auto interval: %s", c.Performance.Profiler.AutoInterval)
+	}
+	for name, profile := range c.Performance.Profiler.Profiles {
+		if _, err := time.ParseDuration(profile.Duration); err != nil {
+			return fmt.Errorf("invalid profiler duration for %s: %s", name, profile.Duration)
+		}
+	}
+
+	// Validate NPM package pattern
+	if c.Validation.NPMPackagePattern != "" {
+		if _, err := regexp.Compile(c.Validation.NPMPackagePattern); err != nil {
+			return fmt.Errorf("invalid npm package pattern: %w", err)
+		}
+	}
+
 	// Validate stow packages
 	for i, pkg := range c.Stow.Packages {
 		if pkg.Name == "" {
@@ -354,6 +561,20 @@ func (c *Config) Validate() error {
 		}
 	}
 
+	return nil
+}
+
+// validateCacheSetting validates an individual cache setting
+func (c *Config) validateCacheSetting(name string, setting CacheSetting) error {
+	if setting.Size < 1 || setting.Size > 100000 {
+		return fmt.Errorf("%s cache size must be between 1 and 100000, got %d", name, setting.Size)
+	}
+	if _, err := time.ParseDuration(setting.TTL); err != nil {
+		return fmt.Errorf("invalid %s cache TTL: %s", name, setting.TTL)
+	}
+	if _, err := time.ParseDuration(setting.CleanupInterval); err != nil {
+		return fmt.Errorf("invalid %s cache cleanup interval: %s", name, setting.CleanupInterval)
+	}
 	return nil
 }
 

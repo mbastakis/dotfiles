@@ -16,11 +16,15 @@ import (
 
 // RsyncTool implements the Tool interface for Rsync file synchronization
 type RsyncTool struct {
-	config       *config.RsyncConfig
-	dotfilesPath string
-	dryRun       bool
-	statusCache  map[string]*statusCacheEntry
-	cacheMutex   sync.RWMutex
+	config           *config.RsyncConfig
+	dotfilesPath     string
+	dryRun           bool
+	priority         int
+	systemDirectories []string
+	cacheTimeout     time.Duration
+	commandTimeout   time.Duration
+	statusCache      map[string]*statusCacheEntry
+	cacheMutex       sync.RWMutex
 }
 
 type statusCacheEntry struct {
@@ -31,11 +35,35 @@ type statusCacheEntry struct {
 
 // NewRsyncTool creates a new RsyncTool instance
 func NewRsyncTool(cfg *config.Config) *RsyncTool {
+	priority := 20 // default fallback
+	if p, exists := cfg.Tools.Priorities["rsync"]; exists {
+		priority = p
+	}
+	
+	// Parse timeouts with fallback defaults
+	cacheTimeout := 30 * time.Second
+	if timeoutStr, exists := cfg.Tools.Timeouts["rsync_cache"]; exists {
+		if parsed, err := time.ParseDuration(timeoutStr); err == nil {
+			cacheTimeout = parsed
+		}
+	}
+	
+	commandTimeout := 30 * time.Second
+	if timeoutStr, exists := cfg.Tools.Timeouts["rsync_command"]; exists {
+		if parsed, err := time.ParseDuration(timeoutStr); err == nil {
+			commandTimeout = parsed
+		}
+	}
+	
 	return &RsyncTool{
-		config:       &cfg.Rsync,
-		dotfilesPath: cfg.Global.DotfilesPath,
-		dryRun:       cfg.Global.DryRun,
-		statusCache:  make(map[string]*statusCacheEntry),
+		config:           &cfg.Rsync,
+		dotfilesPath:     cfg.Global.DotfilesPath,
+		dryRun:           cfg.Global.DryRun,
+		priority:         priority,
+		systemDirectories: cfg.Tools.SystemDirectories,
+		cacheTimeout:     cacheTimeout,
+		commandTimeout:   commandTimeout,
+		statusCache:      make(map[string]*statusCacheEntry),
 	}
 }
 
@@ -49,9 +77,9 @@ func (r *RsyncTool) IsEnabled() bool {
 	return r.config.Enabled
 }
 
-// Priority returns the tool priority
+// Priority returns the tool priority (configurable)
 func (r *RsyncTool) Priority() int {
-	return 20 // Higher than stow to run after configuration is linked
+	return r.priority
 }
 
 // Validate checks if rsync is available and sources are valid
@@ -317,7 +345,7 @@ func (r *RsyncTool) needsSyncCached(sourcePath, targetPath string) bool {
 	r.statusCache[cacheKey] = &statusCacheEntry{
 		status:    status,
 		timestamp: time.Now(),
-		ttl:       30 * time.Second, // Cache for 30 seconds
+		ttl:       r.cacheTimeout, // Configurable cache timeout
 	}
 	r.cacheMutex.Unlock()
 
@@ -379,8 +407,8 @@ func (r *RsyncTool) syncSource(sourceName string) error {
 
 	args = append(args, sourcePath, targetPath)
 
-	// Execute rsync with timeout context
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	// Execute rsync with configurable timeout context
+	ctx, cancel := context.WithTimeout(context.Background(), r.commandTimeout)
 	defer cancel()
 
 	cmd := exec.CommandContext(ctx, "rsync", args...)
@@ -480,20 +508,14 @@ func (r *RsyncTool) isSystemDirectory(targetPath string) bool {
 		return true
 	}
 
-	// Check for other system directories
-	systemDirs := []string{
-		"/System",
-		"/Library",
-		"/usr",
-		"/bin",
-		"/sbin",
-		"/Applications",
-		home + "/Library",
-		home + "/Applications",
-	}
-
-	for _, sysDir := range systemDirs {
-		if strings.HasPrefix(targetPath, filepath.Clean(sysDir)) {
+	// Check for configurable system directories
+	for _, sysDir := range r.systemDirectories {
+		// Expand ~ in system directory paths
+		expandedSysDir := sysDir
+		if strings.HasPrefix(sysDir, "~/") {
+			expandedSysDir = home + sysDir[1:]
+		}
+		if strings.HasPrefix(targetPath, filepath.Clean(expandedSysDir)) {
 			return true
 		}
 	}
