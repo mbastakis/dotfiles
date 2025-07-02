@@ -7,5 +7,5 @@ type NavigateMsg struct {
 	Screen tea.Model
 }
 
-// BackMsg represents going back to the previous screen  
+// BackMsg represents going back to the previous screen
 type BackMsg struct{}

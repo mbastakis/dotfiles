@@ -78,41 +78,6 @@ func getToolNames() []string {
 	return []string{"stow", "rsync", "homebrew", "npm", "uv", "apps"}
 }
 
-// getToolSubcommands returns common subcommands for tools
-func getToolSubcommands() []string {
-	return []string{"status", "list", "install", "update", "remove", "sync"}
-}
-
-// getHomebrewCategories returns homebrew package categories for completion
-func getHomebrewCategories() []string {
-	return []string{"formulae", "casks", "taps"}
-}
-
-// getToolItemsCompletion returns completion function for tool items
-func getToolItemsCompletion(toolName string) func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-	return func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		// Return empty for now - would need to query actual tool items at runtime
-		// This is a placeholder for dynamic completion based on actual tool state
-		return []string{}, cobra.ShellCompDirectiveNoFileComp
-	}
-}
-
-// getStowPackagesCompletion returns completion function for stow packages
-func getStowPackagesCompletion() func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-	return func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		// Return common stow package names as static examples
-		packages := []string{"shell", "config", "git", "vim", "nvim", "tmux", "zsh"}
-		return packages, cobra.ShellCompDirectiveNoFileComp
-	}
-}
-
-// getHomebrewCategoryCompletion returns completion function for homebrew categories
-func getHomebrewCategoryCompletion() func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-	return func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		return getHomebrewCategories(), cobra.ShellCompDirectiveNoFileComp
-	}
-}
-
 func init() {
 	rootCmd.AddCommand(completionCmd)
 	setupCompletions()

@@ -11,13 +11,13 @@ import (
 
 // AppModel represents the root application model that handles navigation
 type AppModel struct {
-	config       *config.Config
-	registry     *tools.ToolRegistry
-	themeManager *theme.ThemeManager
+	config        *config.Config
+	registry      *tools.ToolRegistry
+	themeManager  *theme.ThemeManager
 	currentScreen Screen
-	screenStack  []Screen
-	width        int
-	height       int
+	screenStack   []Screen
+	width         int
+	height        int
 }
 
 // Screen represents a screen in the application
@@ -37,11 +37,10 @@ const (
 	ThemesScreen
 )
 
-
 // NewAppModel creates a new application model
 func NewAppModel(cfg *config.Config, registry *tools.ToolRegistry, themeManager *theme.ThemeManager) AppModel {
 	mainModel := NewMainModel(cfg, registry, themeManager)
-	
+
 	return AppModel{
 		config:        cfg,
 		registry:      registry,
@@ -71,7 +70,7 @@ func (a AppModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// Push current screen to stack and navigate to new screen
 		a.screenStack = append(a.screenStack, a.currentScreen)
 		a.currentScreen = msg.Screen
-		
+
 		// Initialize the new screen and send it the current window size
 		cmds := []tea.Cmd{a.currentScreen.Init()}
 		if a.width > 0 && a.height > 0 {

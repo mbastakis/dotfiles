@@ -334,7 +334,7 @@ func (u *UVTool) getInstalledToolsFallback() (map[string]UVToolInfo, error) {
 		if len(parts) >= 2 {
 			name := parts[0]
 			version := strings.TrimPrefix(parts[1], "v")
-			
+
 			tools[name] = UVToolInfo{
 				Name:    name,
 				Version: version,

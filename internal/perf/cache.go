@@ -8,10 +8,10 @@ import (
 
 // CacheItem represents a cached item with expiration
 type CacheItem struct {
-	Value     interface{}
-	ExpiresAt time.Time
+	Value       interface{}
+	ExpiresAt   time.Time
 	AccessCount int64
-	CreatedAt time.Time
+	CreatedAt   time.Time
 }
 
 // IsExpired checks if the cache item has expired
@@ -266,17 +266,17 @@ type CacheStats struct {
 
 // AsyncCache provides asynchronous caching with background refresh
 type AsyncCache struct {
-	cache    *Cache
-	mu       sync.RWMutex
-	loading  map[string]chan struct{}
+	cache      *Cache
+	mu         sync.RWMutex
+	loading    map[string]chan struct{}
 	refreshing map[string]bool
 }
 
 // NewAsyncCache creates a new async cache
 func NewAsyncCache(maxSize int, defaultTTL time.Duration) *AsyncCache {
 	return &AsyncCache{
-		cache:    NewCache(maxSize, defaultTTL),
-		loading:  make(map[string]chan struct{}),
+		cache:      NewCache(maxSize, defaultTTL),
+		loading:    make(map[string]chan struct{}),
 		refreshing: make(map[string]bool),
 	}
 }
@@ -309,7 +309,7 @@ func (ac *AsyncCache) GetOrLoad(key string, loader func() (interface{}, error)) 
 
 	// Load the value
 	value, err := loader()
-	
+
 	// Cleanup loading state
 	ac.mu.Lock()
 	delete(ac.loading, key)
@@ -371,13 +371,13 @@ func NewLRUCache(capacity int) *LRUCache {
 		capacity: capacity,
 		items:    make(map[string]*lruNode),
 	}
-	
+
 	// Initialize dummy head and tail nodes
 	cache.head = &lruNode{}
 	cache.tail = &lruNode{}
 	cache.head.next = cache.tail
 	cache.tail.prev = cache.head
-	
+
 	return cache
 }
 
@@ -443,11 +443,11 @@ func (lc *LRUCache) removeTail() *lruNode {
 
 // Global caches for common use cases
 var (
-	DefaultCache     = NewCache(1000, 5*time.Minute)
-	StatusCache      = NewCache(100, 30*time.Second)
-	ViewCache        = NewCache(50, 1*time.Minute)
-	ConfigCache      = NewCache(20, 10*time.Minute)
-	ThemeCache       = NewCache(10, 15*time.Minute)
+	DefaultCache = NewCache(1000, 5*time.Minute)
+	StatusCache  = NewCache(100, 30*time.Second)
+	ViewCache    = NewCache(50, 1*time.Minute)
+	ConfigCache  = NewCache(20, 10*time.Minute)
+	ThemeCache   = NewCache(10, 15*time.Minute)
 )
 
 // InitGlobalCaches initializes global caches with cleanup timers

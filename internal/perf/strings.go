@@ -35,8 +35,9 @@ func (sb *StringBuilder) WriteString(s string) {
 }
 
 // WriteByte appends a byte to the builder
-func (sb *StringBuilder) WriteByte(b byte) {
+func (sb *StringBuilder) WriteByte(b byte) error {
 	sb.buf.buf = append(sb.buf.buf, b)
+	return nil
 }
 
 // WriteRune appends a rune to the builder
@@ -46,7 +47,7 @@ func (sb *StringBuilder) WriteRune(r rune) {
 		sb.WriteByte(byte(r))
 		return
 	}
-	
+
 	// UTF-8 encoding
 	var buf [4]byte
 	n := utf8EncodeRune(buf[:], r)
@@ -202,7 +203,7 @@ func stringFormatOne(format string, arg interface{}) string {
 	defer sb.Release()
 
 	sb.WriteString(format[:idx])
-	
+
 	// Handle common format specifiers
 	if idx+1 < len(format) {
 		switch format[idx+1] {
@@ -248,7 +249,7 @@ func stringFormatTwo(format string, arg1, arg2 interface{}) string {
 	formatArg(sb, format, indices[0], arg1)
 
 	// Middle part
-	sb.WriteString(format[indices[0]+2:indices[1]])
+	sb.WriteString(format[indices[0]+2 : indices[1]])
 	formatArg(sb, format, indices[1], arg2)
 
 	// End part

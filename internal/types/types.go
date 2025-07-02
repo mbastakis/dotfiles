@@ -4,27 +4,27 @@ import "time"
 
 // ToolStatus represents the current status of a tool
 type ToolStatus struct {
-	Name      string    `json:"name"`
-	Enabled   bool      `json:"enabled"`
-	Healthy   bool      `json:"healthy"`
-	LastCheck time.Time `json:"last_check"`
-	Error     error     `json:"error,omitempty"`
+	Name      string     `json:"name"`
+	Enabled   bool       `json:"enabled"`
+	Healthy   bool       `json:"healthy"`
+	LastCheck time.Time  `json:"last_check"`
+	Error     error      `json:"error,omitempty"`
 	Items     []ToolItem `json:"items,omitempty"`
 }
 
 // ToolItem represents an individual item managed by a tool (package, formula, etc.)
 type ToolItem struct {
-	Name        string            `json:"name"`
-	Description string            `json:"description,omitempty"`
-	Status      string            `json:"status,omitempty"`
-	Error       string            `json:"error,omitempty"`
-	Enabled     bool              `json:"enabled"`
-	Installed   bool              `json:"installed"`
-	Version     string            `json:"version,omitempty"`
-	Target      string            `json:"target,omitempty"`
-	Priority    int               `json:"priority,omitempty"`
-	Category    string            `json:"category,omitempty"`    // Category this item belongs to (e.g., "core", "apps")
-	PackageType string            `json:"package_type,omitempty"` // Type of package (e.g., "brew", "cask", "mas")
+	Name        string                 `json:"name"`
+	Description string                 `json:"description,omitempty"`
+	Status      string                 `json:"status,omitempty"`
+	Error       string                 `json:"error,omitempty"`
+	Enabled     bool                   `json:"enabled"`
+	Installed   bool                   `json:"installed"`
+	Version     string                 `json:"version,omitempty"`
+	Target      string                 `json:"target,omitempty"`
+	Priority    int                    `json:"priority,omitempty"`
+	Category    string                 `json:"category,omitempty"`     // Category this item belongs to (e.g., "core", "apps")
+	PackageType string                 `json:"package_type,omitempty"` // Type of package (e.g., "brew", "cask", "mas")
 	Metadata    map[string]interface{} `json:"metadata,omitempty"`
 }
 

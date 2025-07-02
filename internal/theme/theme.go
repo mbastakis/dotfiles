@@ -28,42 +28,42 @@ type ThemeConfig struct {
 
 // ThemeManager manages theme loading and application
 type ThemeManager struct {
-	themes        map[string]Theme
-	currentTheme  string
-	dotfilesPath  string
-	cachedStyles  *Styles
+	themes       map[string]Theme
+	currentTheme string
+	dotfilesPath string
+	cachedStyles *Styles
 }
 
 // Styles contains pre-computed lipgloss styles for the current theme
 type Styles struct {
 	// Common UI styles
-	Title       lipgloss.Style
-	Subtitle    lipgloss.Style
-	Header      lipgloss.Style
-	Footer      lipgloss.Style
-	Help        lipgloss.Style
-	Error       lipgloss.Style
-	Success     lipgloss.Style
-	Warning     lipgloss.Style
-	Info        lipgloss.Style
+	Title    lipgloss.Style
+	Subtitle lipgloss.Style
+	Header   lipgloss.Style
+	Footer   lipgloss.Style
+	Help     lipgloss.Style
+	Error    lipgloss.Style
+	Success  lipgloss.Style
+	Warning  lipgloss.Style
+	Info     lipgloss.Style
 
 	// Layout styles
-	Box         lipgloss.Style
-	ActiveBox   lipgloss.Style
-	Border      lipgloss.Style
+	Box          lipgloss.Style
+	ActiveBox    lipgloss.Style
+	Border       lipgloss.Style
 	ActiveBorder lipgloss.Style
 
 	// Interactive element styles
-	Button      lipgloss.Style
+	Button       lipgloss.Style
 	ActiveButton lipgloss.Style
-	Input       lipgloss.Style
-	InputFocus  lipgloss.Style
+	Input        lipgloss.Style
+	InputFocus   lipgloss.Style
 
 	// Status indicator styles
-	Healthy     lipgloss.Style
-	Unhealthy   lipgloss.Style
-	Disabled    lipgloss.Style
-	Pending     lipgloss.Style
+	Healthy   lipgloss.Style
+	Unhealthy lipgloss.Style
+	Disabled  lipgloss.Style
+	Pending   lipgloss.Style
 }
 
 // NewThemeManager creates a new theme manager
@@ -78,7 +78,7 @@ func NewThemeManager(dotfilesPath string) *ThemeManager {
 // LoadThemes loads themes from the themes.yaml file
 func (tm *ThemeManager) LoadThemes() error {
 	themesPath := filepath.Join(tm.dotfilesPath, "templates", "themes.yaml")
-	
+
 	// Check if themes file exists
 	if _, err := os.Stat(themesPath); os.IsNotExist(err) {
 		// Load default themes if file doesn't exist
@@ -330,7 +330,7 @@ func (tm *ThemeManager) generateStyles() {
 // SaveThemes saves the current themes to the themes.yaml file
 func (tm *ThemeManager) SaveThemes() error {
 	themesPath := filepath.Join(tm.dotfilesPath, "templates", "themes.yaml")
-	
+
 	// Ensure directory exists
 	dir := filepath.Dir(themesPath)
 	if err := os.MkdirAll(dir, 0755); err != nil {

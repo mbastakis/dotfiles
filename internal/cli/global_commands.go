@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/spf13/cobra"
 	"github.com/mbastakis/dotfiles/internal/tui"
+	"github.com/spf13/cobra"
 )
 
 func init() {
@@ -16,7 +16,6 @@ func init() {
 	rootCmd.AddCommand(configCmd)
 }
 
-
 // statusCmd shows overall system status
 var statusCmd = &cobra.Command{
 	Use:   "status",
@@ -24,10 +23,10 @@ var statusCmd = &cobra.Command{
 	Long:  "Display the current status of all enabled tools",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctx := context.Background()
-		
+
 		fmt.Println("Dotfiles System Status")
 		fmt.Println("======================")
-		
+
 		if cfg.Global.Verbose {
 			fmt.Printf("Configuration loaded from: %s\n", cfgFile)
 			fmt.Printf("Log level: %s\n", cfg.Global.LogLevel)
@@ -35,15 +34,15 @@ var statusCmd = &cobra.Command{
 			fmt.Printf("Verbose: %t\n", cfg.Global.Verbose)
 			fmt.Println()
 		}
-		
+
 		for _, tool := range registry.ListEnabled() {
 			fmt.Printf("\n%s:\n", tool.Name())
 			fmt.Println(strings.Repeat("-", len(tool.Name())+1))
-			
+
 			if cfg.Global.Verbose {
 				fmt.Printf("  Enabled: %t, Priority: %d\n", tool.IsEnabled(), tool.Priority())
 			}
-			
+
 			status, err := tool.Status(ctx)
 			if err != nil {
 				fmt.Printf("  Error: %v\n", err)
@@ -52,7 +51,7 @@ var statusCmd = &cobra.Command{
 				}
 				continue
 			}
-			
+
 			fmt.Printf("  Status: ")
 			if status.Healthy {
 				fmt.Println("✅ Healthy")
@@ -62,9 +61,9 @@ var statusCmd = &cobra.Command{
 					fmt.Printf("  Error: %v\n", status.Error)
 				}
 			}
-			
+
 			fmt.Printf("  Items: %d total", len(status.Items))
-			
+
 			var enabled, installed int
 			for _, item := range status.Items {
 				if item.Enabled {
@@ -74,10 +73,10 @@ var statusCmd = &cobra.Command{
 					installed++
 				}
 			}
-			
+
 			fmt.Printf(", %d enabled, %d installed\n", enabled, installed)
 		}
-		
+
 		return nil
 	},
 }
@@ -89,26 +88,26 @@ var syncCmd = &cobra.Command{
 	Long:  "Run sync operation for all enabled tools in priority order",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctx := context.Background()
-		
+
 		tools := registry.GetByPriority()
 		if len(tools) == 0 {
 			fmt.Println("No enabled tools found")
 			return nil
 		}
-		
+
 		fmt.Printf("Synchronizing %d tools...\n", len(tools))
 		if cfg.Global.Verbose {
 			fmt.Printf("Verbose mode enabled (log level: %s)\n", cfg.Global.LogLevel)
 		}
 		fmt.Println()
-		
+
 		for _, tool := range tools {
 			if cfg.Global.Verbose {
-				fmt.Printf("Starting sync for tool: %s (enabled: %t, priority: %d)\n", 
+				fmt.Printf("Starting sync for tool: %s (enabled: %t, priority: %d)\n",
 					tool.Name(), tool.IsEnabled(), tool.Priority())
 			}
 			fmt.Printf("Syncing %s...\n", tool.Name())
-			
+
 			result, err := tool.Sync(ctx)
 			if err != nil {
 				fmt.Printf("❌ Failed to sync %s: %v\n", tool.Name(), err)
@@ -117,24 +116,24 @@ var syncCmd = &cobra.Command{
 				}
 				continue
 			}
-			
+
 			if result.Success {
 				fmt.Printf("✅ %s synced successfully\n", tool.Name())
 			} else {
 				fmt.Printf("❌ %s sync failed: %s\n", tool.Name(), result.Message)
 			}
-			
+
 			if len(result.Modified) > 0 {
 				fmt.Printf("   Modified: %s\n", strings.Join(result.Modified, ", "))
 			}
-			
+
 			if cfg.Global.Verbose && result.Details != nil {
 				fmt.Printf("   Details: %+v\n", result.Details)
 			}
-			
+
 			fmt.Println()
 		}
-		
+
 		fmt.Println("Sync complete!")
 		return nil
 	},
@@ -172,7 +171,7 @@ var configValidateCmd = &cobra.Command{
 			fmt.Printf("❌ Configuration is invalid: %v\n", err)
 			return err
 		}
-		
+
 		fmt.Println("✅ Configuration is valid")
 		return nil
 	},
@@ -188,12 +187,12 @@ var configShowCmd = &cobra.Command{
 		fmt.Printf("Log level: %s\n", cfg.Global.LogLevel)
 		fmt.Printf("Dry run: %t\n", cfg.Global.DryRun)
 		fmt.Printf("Auto confirm: %t\n", cfg.Global.AutoConfirm)
-		
+
 		fmt.Printf("\nEnabled tools:\n")
 		for _, tool := range registry.ListEnabled() {
 			fmt.Printf("  - %s (priority %d)\n", tool.Name(), tool.Priority())
 		}
-		
+
 		return nil
 	},
 }

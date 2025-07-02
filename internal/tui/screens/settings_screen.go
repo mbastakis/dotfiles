@@ -25,7 +25,6 @@ type SettingsScreen struct {
 	currentSetting *SettingItem
 }
 
-
 // SettingItem represents a configurable setting
 type SettingItem struct {
 	key         string
@@ -34,7 +33,6 @@ type SettingItem struct {
 	value       string
 	settingType SettingType
 	options     []string // For enum types
-	validation  func(string) error
 }
 
 // SettingType defines the type of setting
@@ -126,7 +124,7 @@ func NewSettingsScreen(cfg *config.Config, themeManager *theme.ThemeManager, wid
 
 	// Get theme styles
 	styles := themeManager.GetStyles()
-	
+
 	// Create list with themed delegate
 	delegate := list.NewDefaultDelegate()
 	delegate.Styles.SelectedTitle = styles.ActiveButton
@@ -232,7 +230,7 @@ func (ss SettingsScreen) renderHeader() string {
 		styles.Title.Render(title),
 		styles.Subtitle.Render(subtitle),
 	)
-	return styles.Header.Width(ss.width-2).Render(headerContent)
+	return styles.Header.Width(ss.width - 2).Render(headerContent)
 }
 
 func (ss SettingsScreen) renderFooter() string {
@@ -244,7 +242,7 @@ func (ss SettingsScreen) renderFooter() string {
 		"[/] filter",
 		"[q/esc] back",
 	}
-	return styles.Footer.Width(ss.width-2).Render(
+	return styles.Footer.Width(ss.width - 2).Render(
 		styles.Help.Render(strings.Join(help, " • ")),
 	)
 }
@@ -255,7 +253,7 @@ func (ss SettingsScreen) renderEditMode() string {
 	}
 
 	styles := ss.themeManager.GetStyles()
-	
+
 	// Create edit interface based on setting type
 	var content []string
 
@@ -294,7 +292,7 @@ func (ss SettingsScreen) renderEditMode() string {
 	}
 
 	mainContent := strings.Join(content, "\n")
-	return styles.ActiveBox.Width(ss.width-4).Render(mainContent)
+	return styles.ActiveBox.Width(ss.width - 4).Render(mainContent)
 }
 
 func (ss SettingsScreen) startEditing(setting SettingItem) (SettingsScreen, tea.Cmd) {
@@ -390,14 +388,14 @@ func (ss SettingsScreen) resetSetting(setting SettingItem) (SettingsScreen, tea.
 func (ss SettingsScreen) getDefaultValue(key string) string {
 	// Return default values for each setting
 	defaults := map[string]string{
-		"global.log_level":           "info",
-		"global.dry_run":             "false",
-		"global.auto_confirm":        "false",
-		"global.dotfiles_path":       "~/dev/dotfiles",
-		"tui.color_scheme":           "default",
-		"tui.animations":             "true",
-		"tui.confirm_destructive":    "true",
-		"tui.show_progress":          "true",
+		"global.log_level":        "info",
+		"global.dry_run":          "false",
+		"global.auto_confirm":     "false",
+		"global.dotfiles_path":    "~/dev/dotfiles",
+		"tui.color_scheme":        "default",
+		"tui.animations":          "true",
+		"tui.confirm_destructive": "true",
+		"tui.show_progress":       "true",
 	}
 
 	if defaultVal, exists := defaults[key]; exists {

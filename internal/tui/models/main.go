@@ -87,7 +87,7 @@ var keys = keyMap{
 func NewMainModel(cfg *config.Config, registry *tools.ToolRegistry, themeManager *theme.ThemeManager) MainModel {
 	// Create menu items for enabled tools
 	var items []list.Item
-	
+
 	// Add overview item
 	items = append(items, MenuItem{
 		title:       "🏠 Overview",
@@ -99,7 +99,7 @@ func NewMainModel(cfg *config.Config, registry *tools.ToolRegistry, themeManager
 	for _, tool := range registry.GetByPriority() {
 		var icon string
 		var desc string
-		
+
 		switch tool.Name() {
 		case "stow":
 			icon = "📦"
@@ -123,9 +123,9 @@ func NewMainModel(cfg *config.Config, registry *tools.ToolRegistry, themeManager
 			icon = "🔧"
 			desc = "Tool management"
 		}
-		
+
 		items = append(items, MenuItem{
-			title:       fmt.Sprintf("%s %s", icon, strings.Title(tool.Name())),
+			title:       fmt.Sprintf("%s %s", icon, strings.ToUpper(tool.Name()[:1])+tool.Name()[1:]),
 			description: desc,
 			tool:        tool,
 		})
@@ -137,7 +137,7 @@ func NewMainModel(cfg *config.Config, registry *tools.ToolRegistry, themeManager
 		description: "🖌️  UI customization",
 		tool:        nil,
 	})
-	
+
 	items = append(items, MenuItem{
 		title:       "⚙️  Settings",
 		description: "⚙️  Configuration management",
@@ -146,7 +146,7 @@ func NewMainModel(cfg *config.Config, registry *tools.ToolRegistry, themeManager
 
 	// Get theme styles
 	styles := themeManager.GetStyles()
-	
+
 	// Create list with themed delegate
 	delegate := list.NewDefaultDelegate()
 	delegate.Styles.SelectedTitle = styles.ActiveButton
@@ -224,7 +224,7 @@ func (m MainModel) helpView() string {
 		"Press Enter to select, q to quit, ? for help",
 		"Use ↑/↓ or j/k to navigate, s for status",
 	}
-	
+
 	styles := m.themeManager.GetStyles()
 	return styles.Help.Render(strings.Join(help, " • "))
 }

@@ -94,7 +94,7 @@ func (s *StowTool) Status(ctx context.Context) (*types.ToolStatus, error) {
 			status.Error = err
 		}
 		item.Installed = linked
-		
+
 		// Set status string for UI display
 		if linked {
 			item.Status = "linked"
@@ -407,11 +407,11 @@ func (s *StowTool) isPackageLinked(pkg config.StowPackage) (bool, error) {
 func (s *StowTool) filesAreIdentical(file1, file2 string) bool {
 	content1, err1 := os.ReadFile(file1)
 	content2, err2 := os.ReadFile(file2)
-	
+
 	if err1 != nil || err2 != nil {
 		return false
 	}
-	
+
 	return string(content1) == string(content2)
 }
 

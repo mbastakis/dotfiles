@@ -76,6 +76,9 @@ homebrew:
     mas:
       enabled: false
       brewfile: "homebrew/Brewfile.mas"
+    taps:
+      enabled: false
+      brewfile: "homebrew/Brewfile.tap"
 
 # Custom Applications - Manages script execution
 apps:

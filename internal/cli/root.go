@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	"github.com/mbastakis/dotfiles/internal/config"
 	"github.com/mbastakis/dotfiles/internal/tools"
 	"github.com/mbastakis/dotfiles/internal/tools/apps"
@@ -14,11 +12,13 @@ import (
 	"github.com/mbastakis/dotfiles/internal/tools/rsync"
 	"github.com/mbastakis/dotfiles/internal/tools/stow"
 	"github.com/mbastakis/dotfiles/internal/tools/uv"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var (
-	cfgFile string
-	cfg     *config.Config
+	cfgFile  string
+	cfg      *config.Config
 	registry *tools.ToolRegistry
 )
 
@@ -121,7 +121,7 @@ func initConfig() error {
 
 	// Initialize tool registry
 	registry = tools.NewToolRegistry()
-	
+
 	// Register all tools
 	stowTool := stow.NewStowTool(cfg)
 	if err := registry.Register(stowTool); err != nil {
@@ -160,7 +160,7 @@ func initConfig() error {
 func registerToolCommands() {
 	// List of all known tools
 	toolNames := []string{"stow", "rsync", "homebrew", "npm", "uv", "apps"}
-	
+
 	for _, toolName := range toolNames {
 		toolCmd := createLazyToolCommand(toolName)
 		rootCmd.AddCommand(toolCmd)
@@ -193,38 +193,21 @@ func createLazyToolCommand(toolName string) *cobra.Command {
 	}
 
 	// Add common subcommands for each tool
-	toolCmd.AddCommand(createLazyStatusCommand(toolName))
-	toolCmd.AddCommand(createLazyListCommand(toolName))
-	toolCmd.AddCommand(createLazyInstallCommand(toolName))
-	toolCmd.AddCommand(createLazyUpdateCommand(toolName))
-	toolCmd.AddCommand(createLazyRemoveCommand(toolName))
-	toolCmd.AddCommand(createLazySyncCommand(toolName))
-
-	// Add category-specific commands for tools that support them
-	if toolName == "homebrew" {
-		toolCmd.AddCommand(createLazyListPackagesCommand(toolName))
-		toolCmd.AddCommand(createLazyInstallPackageCommand(toolName))
-		toolCmd.AddCommand(createLazyStatusPackageCommand(toolName))
-	}
-
-	return toolCmd
-}
-
-// createToolCommand creates a command for a specific tool (legacy - keeping for compatibility)
-func createToolCommand(tool tools.Tool) *cobra.Command {
-	toolCmd := &cobra.Command{
-		Use:   tool.Name(),
-		Short: fmt.Sprintf("Manage %s operations", tool.Name()),
-		Long:  fmt.Sprintf("Commands for managing %s tool operations", tool.Name()),
-	}
-
-	// Add common subcommands for each tool
-	toolCmd.AddCommand(createStatusCommand(tool))
-	toolCmd.AddCommand(createListCommand(tool))
-	toolCmd.AddCommand(createInstallCommand(tool))
-	toolCmd.AddCommand(createUpdateCommand(tool))
-	toolCmd.AddCommand(createRemoveCommand(tool))
-	toolCmd.AddCommand(createSyncCommand(tool))
+	toolCmd.AddCommand(&cobra.Command{
+		Use:   "status",
+		Short: fmt.Sprintf("Show %s status", toolName),
+		Run:   func(cmd *cobra.Command, args []string) { fmt.Printf("Status for %s\n", toolName) },
+	})
+	toolCmd.AddCommand(&cobra.Command{
+		Use:   "list",
+		Short: fmt.Sprintf("List %s items", toolName),
+		Run:   func(cmd *cobra.Command, args []string) { fmt.Printf("List for %s\n", toolName) },
+	})
+	toolCmd.AddCommand(&cobra.Command{
+		Use:   "sync",
+		Short: fmt.Sprintf("Sync %s", toolName),
+		Run:   func(cmd *cobra.Command, args []string) { fmt.Printf("Sync for %s\n", toolName) },
+	})
 
 	return toolCmd
 }

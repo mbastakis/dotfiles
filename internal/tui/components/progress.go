@@ -12,18 +12,18 @@ import (
 
 // ProgressComponent represents a progress indicator with optional spinner
 type ProgressComponent struct {
-	progress  progress.Model
-	spinner   spinner.Model
+	progress    progress.Model
+	spinner     spinner.Model
 	showSpinner bool
-	message   string
-	width     int
-	styles    ProgressStyles
+	message     string
+	width       int
+	styles      ProgressStyles
 }
 
 type ProgressStyles struct {
-	Message    lipgloss.Style
-	Complete   lipgloss.Style
-	Error      lipgloss.Style
+	Message  lipgloss.Style
+	Complete lipgloss.Style
+	Error    lipgloss.Style
 }
 
 // NewProgressComponent creates a new progress component

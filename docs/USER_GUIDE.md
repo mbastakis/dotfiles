@@ -25,7 +25,7 @@ Welcome to the dotfiles TUI manager! This guide will help you get started and ma
    cd ~/.dotfiles
    
    # Build the application
-   go build -o dotfiles cmd/main.go
+   go build -o dotfiles cmd/dotfiles/main.go
    
    # Make it available globally
    sudo mv dotfiles /usr/local/bin/

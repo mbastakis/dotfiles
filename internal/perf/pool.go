@@ -90,11 +90,11 @@ func PutStatusResult(result *StatusResult) {
 
 // CachedView represents a cached view string with metadata
 type CachedView struct {
-	Content    string
-	Width      int
-	Height     int
-	ThemeName  string
-	CachedAt   int64
+	Content   string
+	Width     int
+	Height    int
+	ThemeName string
+	CachedAt  int64
 }
 
 // Reset clears the view cache for reuse

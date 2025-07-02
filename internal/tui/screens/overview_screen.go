@@ -16,6 +16,8 @@ import (
 	"github.com/mbastakis/dotfiles/internal/tools"
 	"github.com/mbastakis/dotfiles/internal/tui/keys"
 	"github.com/mbastakis/dotfiles/internal/types"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 // OverviewScreen shows a comprehensive overview of all tools
@@ -32,7 +34,6 @@ type OverviewScreen struct {
 	lastUpdate   time.Time
 	statuses     map[string]*types.ToolStatus // Store loaded statuses
 }
-
 
 // SystemStatusMsg contains loaded system status
 type SystemStatusMsg struct {
@@ -58,7 +59,7 @@ func NewOverviewScreen(cfg *config.Config, registry *tools.ToolRegistry, themeMa
 	var initialRows []table.Row
 	for _, tool := range registry.List() {
 		initialRows = append(initialRows, table.Row{
-			strings.Title(tool.Name()),
+			cases.Title(language.English).String(tool.Name()),
 			"Loading...",
 			"-",
 			"-",
@@ -188,7 +189,7 @@ func (os OverviewScreen) renderHeader() string {
 		styles.Title.Render(title),
 		styles.Help.Render(" "+timestamp),
 	)
-	return styles.Header.Width(os.width-2).Render(headerContent)
+	return styles.Header.Width(os.width - 2).Render(headerContent)
 }
 
 func (os OverviewScreen) renderSummary() string {
@@ -244,7 +245,7 @@ func (os OverviewScreen) renderSummary() string {
 	if monitor != nil {
 		memStats := monitor.GetCurrentMemoryStats()
 		perfMetrics := monitor.GetPerformanceMetrics()
-		
+
 		if !memStats.Timestamp.IsZero() {
 			// Memory usage
 			perfSummary := fmt.Sprintf(
@@ -302,114 +303,9 @@ func (os OverviewScreen) renderSummary() string {
 	return lipgloss.JoinVertical(lipgloss.Left, sections...)
 }
 
-func (os OverviewScreen) renderErrorPanel() string {
-	styles := os.themeManager.GetStyles()
-	var errors []string
-
-	// Collect errors from tool statuses
-	for _, tool := range os.registry.List() {
-		if status, exists := os.statuses[tool.Name()]; exists {
-			if status.Error != nil {
-				errors = append(errors, fmt.Sprintf("❌ %s: %s", tool.Name(), status.Error.Error()))
-			}
-			// Also check for item-level errors
-			for _, item := range status.Items {
-				if item.Error != "" {
-					errors = append(errors, fmt.Sprintf("⚠️  %s/%s: %s", tool.Name(), item.Name, item.Error))
-				}
-			}
-		}
-	}
-
-	if len(errors) == 0 {
-		return ""
-	}
-
-	// Limit the number of errors shown to prevent overwhelming display
-	maxErrors := 5
-	if len(errors) > maxErrors {
-		errors = errors[:maxErrors]
-		errors = append(errors, fmt.Sprintf("... and %d more errors", len(errors)-maxErrors))
-	}
-
-	errorContent := strings.Join(errors, "\n")
-	
-	// Style the error panel with a border
-	errorStyle := styles.Error.Copy().
-		BorderStyle(lipgloss.RoundedBorder()).
-		BorderForeground(styles.Error.GetForeground()).
-		Padding(0, 1).
-		Margin(0, 0, 1, 0).
-		Width(os.width - 4)
-
-	return errorStyle.Render("🚨 Issues Found:\n" + errorContent)
-}
-
-func (os OverviewScreen) renderCategoryPanel() string {
-	styles := os.themeManager.GetStyles()
-	var categoryData []string
-
-	// Check for tools that support categories
-	for _, tool := range os.registry.List() {
-		if categoryTool, ok := tool.(tools.CategoryTool); ok && categoryTool.SupportsCategories() {
-			if status, exists := os.statuses[tool.Name()]; exists && status.Enabled {
-				categories := make(map[string][]string)
-				
-				// Group items by category
-				for _, item := range status.Items {
-					if item.Category != "" {
-						statusIcon := "❌"
-						if item.Installed {
-							statusIcon = "✅"
-						} else if item.Enabled {
-							statusIcon = "⏳"
-						}
-						categories[item.Category] = append(categories[item.Category], fmt.Sprintf("%s %s", statusIcon, item.Name))
-					}
-				}
-
-				// Format category data for this tool
-				if len(categories) > 0 {
-					toolInfo := fmt.Sprintf("📦 %s:", strings.Title(tool.Name()))
-					categoryData = append(categoryData, toolInfo)
-					
-					for catName, items := range categories {
-						// Limit items shown per category to prevent overwhelming display
-						maxItems := 3
-						displayItems := items
-						if len(items) > maxItems {
-							displayItems = items[:maxItems]
-							displayItems = append(displayItems, fmt.Sprintf("... and %d more", len(items)-maxItems))
-						}
-						
-						catInfo := fmt.Sprintf("  • %s: %s", catName, strings.Join(displayItems, ", "))
-						categoryData = append(categoryData, catInfo)
-					}
-				}
-			}
-		}
-	}
-
-	if len(categoryData) == 0 {
-		return ""
-	}
-
-	categoryContent := strings.Join(categoryData, "\n")
-	
-	// Style the category panel with a border
-	categoryStyle := styles.Subtitle.Copy().
-		BorderStyle(lipgloss.RoundedBorder()).
-		BorderForeground(styles.Subtitle.GetForeground()).
-		Padding(0, 1).
-		Margin(0, 0, 1, 0).
-		Width(os.width - 4)
-
-	return categoryStyle.Render("📊 Category Breakdown:\n" + categoryContent)
-}
-
 func (os OverviewScreen) renderFooter() string {
 	styles := os.themeManager.GetStyles()
-	
+
 	var help []string
 	if !os.loading {
 		help = append(help,
@@ -420,7 +316,7 @@ func (os OverviewScreen) renderFooter() string {
 	} else {
 		help = append(help, "Loading...")
 	}
-	
+
 	helpText := styles.Help.Render(strings.Join(help, " • "))
 	return styles.Footer.Width(os.width - 2).Render(helpText)
 }
@@ -528,7 +424,7 @@ func (os OverviewScreen) updateTableData(statuses map[string]*types.ToolStatus) 
 		}
 
 		// Tool description
-		description := fmt.Sprintf("%s tool", strings.Title(tool.Name()))
+		description := fmt.Sprintf("%s tool", cases.Title(language.English).String(tool.Name()))
 		switch tool.Name() {
 		case "stow":
 			description = "GNU Stow package management"
@@ -545,7 +441,7 @@ func (os OverviewScreen) updateTableData(statuses map[string]*types.ToolStatus) 
 		}
 
 		rows = append(rows, table.Row{
-			strings.Title(tool.Name()),
+			cases.Title(language.English).String(tool.Name()),
 			statusText,
 			fmt.Sprintf("%d", totalItems),
 			fmt.Sprintf("%d", installedItems),
@@ -564,18 +460,18 @@ func (os OverviewScreen) loadSystemStatus() tea.Cmd {
 		// Create context with overall timeout
 		ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 		defer cancel()
-		
+
 		statuses := make(map[string]*types.ToolStatus)
-		
+
 		// Process each tool with individual timeout
 		for _, tool := range os.registry.List() {
 			// Create individual context with shorter timeout for each tool
 			toolCtx, toolCancel := context.WithTimeout(ctx, 3*time.Second)
-			
+
 			// Channel to receive the result
 			resultChan := make(chan *types.ToolStatus, 1)
 			errorChan := make(chan error, 1)
-			
+
 			// Run tool status check in goroutine
 			go func(t tools.Tool) {
 				defer toolCancel()
@@ -586,7 +482,7 @@ func (os OverviewScreen) loadSystemStatus() tea.Cmd {
 					resultChan <- status
 				}
 			}(tool)
-			
+
 			// Wait for result or timeout
 			select {
 			case status := <-resultChan:
@@ -612,7 +508,7 @@ func (os OverviewScreen) loadSystemStatus() tea.Cmd {
 					LastCheck: time.Now(),
 				}
 			}
-			
+
 			toolCancel() // Clean up
 		}
 

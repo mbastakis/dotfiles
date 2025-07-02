@@ -72,12 +72,12 @@ type StatusListDelegate struct {
 }
 
 type StatusListStyles struct {
-	SelectedTitle    lipgloss.Style
-	SelectedDesc     lipgloss.Style
-	NormalTitle      lipgloss.Style
-	NormalDesc       lipgloss.Style
-	DimmedTitle      lipgloss.Style
-	DimmedDesc       lipgloss.Style
+	SelectedTitle lipgloss.Style
+	SelectedDesc  lipgloss.Style
+	NormalTitle   lipgloss.Style
+	NormalDesc    lipgloss.Style
+	DimmedTitle   lipgloss.Style
+	DimmedDesc    lipgloss.Style
 }
 
 func NewStatusListDelegate() StatusListDelegate {
@@ -101,7 +101,7 @@ func NewStatusListDelegate() StatusListDelegate {
 }
 
 func (d StatusListDelegate) Height() int                               { return 2 }
-func (d StatusListDelegate) Spacing() int                             { return 1 }
+func (d StatusListDelegate) Spacing() int                              { return 1 }
 func (d StatusListDelegate) Update(msg tea.Msg, m *list.Model) tea.Cmd { return nil }
 
 func (d StatusListDelegate) Render(w io.Writer, m list.Model, index int, item list.Item) {
@@ -111,7 +111,7 @@ func (d StatusListDelegate) Render(w io.Writer, m list.Model, index int, item li
 	}
 
 	isSelected := index == m.Index()
-	
+
 	var titleStyle, descStyle lipgloss.Style
 	if !statusItem.toolItem.Enabled {
 		titleStyle = d.styles.DimmedTitle
@@ -150,6 +150,6 @@ func CreateStatusList(items []types.ToolItem, width, height int) list.Model {
 	l.SetShowStatusBar(false)
 	l.SetFilteringEnabled(true)
 	l.SetShowHelp(false)
-	
+
 	return l
 }

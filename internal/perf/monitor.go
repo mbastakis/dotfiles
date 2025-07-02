@@ -18,9 +18,9 @@ type MemoryStats struct {
 	PauseTotalNs uint64 // total GC pause time
 
 	// Heap statistics
-	HeapAlloc   uint64 // bytes allocated and not yet freed (same as Alloc above)
-	HeapSys     uint64 // bytes obtained from system
-	HeapInuse   uint64 // bytes in in-use spans
+	HeapAlloc    uint64 // bytes allocated and not yet freed (same as Alloc above)
+	HeapSys      uint64 // bytes obtained from system
+	HeapInuse    uint64 // bytes in in-use spans
 	HeapReleased uint64 // bytes released to OS
 
 	// Goroutine count
@@ -193,7 +193,7 @@ func (m *Monitor) RecordOperation(operation string, duration time.Duration) {
 	defer m.mu.Unlock()
 
 	m.operationCounts[operation]++
-	
+
 	// Update average latency
 	if existing, exists := m.operationLatency[operation]; exists {
 		// Simple moving average

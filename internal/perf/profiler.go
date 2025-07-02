@@ -205,7 +205,7 @@ func (ap *AutoProfiler) SetCooldown(cooldown time.Duration) {
 // Start begins automatic profiling
 func (ap *AutoProfiler) Start(ctx context.Context) {
 	ap.monitor.Start(ctx)
-	
+
 	go ap.monitorLoop(ctx)
 }
 
