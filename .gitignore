@@ -13,3 +13,5 @@ vscode/extensions/tui-manager/out
 *.vsix
 # binary files
 bin
+# profiles
+profiles

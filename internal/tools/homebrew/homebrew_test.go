@@ -211,3 +211,193 @@ func TestHomebrewTool_IsTapInstalled(t *testing.T) {
 		t.Error("Expected homebrew/cas to be detected as not installed (partial match)")
 	}
 }
+
+func TestHomebrewTool_ConfigurablePriority(t *testing.T) {
+	// Test with custom priority
+	cfg := &config.Config{
+		Global: config.GlobalConfig{
+			DotfilesPath: "/test/path",
+		},
+		Tools: config.ToolsConfig{
+			Priorities: map[string]int{
+				"homebrew": 15,
+			},
+		},
+		Homebrew: config.HomebrewConfig{
+			Categories: map[string]config.HomebrewCategory{
+				"core": {Enabled: true, Brewfile: "homebrew/Brewfile"},
+			},
+		},
+	}
+
+	tool := NewHomebrewTool(cfg)
+
+	if tool.Priority() != 15 {
+		t.Errorf("Expected priority to be 15, got %d", tool.Priority())
+	}
+
+	// Test with no priority set (should use default)
+	cfgDefault := &config.Config{
+		Global: config.GlobalConfig{
+			DotfilesPath: "/test/path",
+		},
+		Tools: config.ToolsConfig{
+			Priorities: map[string]int{},
+		},
+		Homebrew: config.HomebrewConfig{
+			Categories: map[string]config.HomebrewCategory{
+				"core": {Enabled: true, Brewfile: "homebrew/Brewfile"},
+			},
+		},
+	}
+
+	toolDefault := NewHomebrewTool(cfgDefault)
+
+	if toolDefault.Priority() != 30 {
+		t.Errorf("Expected default priority to be 30, got %d", toolDefault.Priority())
+	}
+}
+
+func TestHomebrewTool_DryRunMode(t *testing.T) {
+	cfg := &config.Config{
+		Global: config.GlobalConfig{
+			DotfilesPath: "/test/path",
+			DryRun:       true,
+		},
+		Homebrew: config.HomebrewConfig{
+			Categories: map[string]config.HomebrewCategory{
+				"core": {Enabled: true, Brewfile: "homebrew/Brewfile"},
+			},
+		},
+	}
+
+	tool := NewHomebrewTool(cfg)
+
+	// Test that dry run state is preserved
+	if !tool.dryRun {
+		t.Error("Expected tool to be in dry run mode")
+	}
+
+	// Test non-dry run mode
+	cfg.Global.DryRun = false
+	toolNoDryRun := NewHomebrewTool(cfg)
+
+	if toolNoDryRun.dryRun {
+		t.Error("Expected tool to not be in dry run mode")
+	}
+}
+
+func TestHomebrewTool_AutoUpdate(t *testing.T) {
+	// Test with auto update enabled
+	cfg := &config.Config{
+		Global: config.GlobalConfig{
+			DotfilesPath: "/test/path",
+		},
+		Homebrew: config.HomebrewConfig{
+			AutoUpdate: true,
+			Categories: map[string]config.HomebrewCategory{
+				"core": {Enabled: true, Brewfile: "homebrew/Brewfile"},
+			},
+		},
+	}
+
+	tool := NewHomebrewTool(cfg)
+
+	if !tool.config.AutoUpdate {
+		t.Error("Expected auto update to be enabled")
+	}
+
+	// Test with auto update disabled
+	cfg.Homebrew.AutoUpdate = false
+	toolNoUpdate := NewHomebrewTool(cfg)
+
+	if toolNoUpdate.config.AutoUpdate {
+		t.Error("Expected auto update to be disabled")
+	}
+}
+
+func TestHomebrewTool_Categories(t *testing.T) {
+	cfg := &config.Config{
+		Global: config.GlobalConfig{
+			DotfilesPath: "/test/path",
+		},
+		Homebrew: config.HomebrewConfig{
+			Categories: map[string]config.HomebrewCategory{
+				"core": {Enabled: true, Brewfile: "homebrew/Brewfile"},
+				"apps": {Enabled: false, Brewfile: "homebrew/Brewfile.apps"},
+				"dev":  {Enabled: true, Brewfile: "homebrew/Brewfile.dev"},
+			},
+		},
+	}
+
+	tool := NewHomebrewTool(cfg)
+
+	// Test number of categories
+	if len(tool.config.Categories) != 3 {
+		t.Errorf("Expected 3 categories, got %d", len(tool.config.Categories))
+	}
+
+	// Test specific categories
+	if !tool.config.Categories["core"].Enabled {
+		t.Error("Expected core category to be enabled")
+	}
+
+	if tool.config.Categories["apps"].Enabled {
+		t.Error("Expected apps category to be disabled")
+	}
+
+	if !tool.config.Categories["dev"].Enabled {
+		t.Error("Expected dev category to be enabled")
+	}
+}
+
+func TestHomebrewTool_EmptyCategories(t *testing.T) {
+	cfg := &config.Config{
+		Global: config.GlobalConfig{
+			DotfilesPath: "/test/path",
+		},
+		Homebrew: config.HomebrewConfig{
+			Categories: map[string]config.HomebrewCategory{},
+		},
+	}
+
+	tool := NewHomebrewTool(cfg)
+
+	if len(tool.config.Categories) != 0 {
+		t.Errorf("Expected 0 categories, got %d", len(tool.config.Categories))
+	}
+
+	// Should still be a valid tool
+	if tool.Name() != "homebrew" {
+		t.Errorf("Expected tool name to be 'homebrew', got %s", tool.Name())
+	}
+}
+
+func TestHomebrewTool_Fields(t *testing.T) {
+	cfg := &config.Config{
+		Global: config.GlobalConfig{
+			DotfilesPath: "/test/path",
+		},
+		Homebrew: config.HomebrewConfig{
+			AutoUpdate: true,
+			Categories: map[string]config.HomebrewCategory{
+				"core": {Enabled: true, Brewfile: "homebrew/Brewfile"},
+			},
+		},
+	}
+
+	tool := NewHomebrewTool(cfg)
+	
+	// Test that all fields are properly set
+	if tool.config == nil {
+		t.Error("Expected config field to be set")
+	}
+	
+	if tool.dotfilesPath != "/test/path" {
+		t.Errorf("Expected dotfilesPath to be '/test/path', got '%s'", tool.dotfilesPath)
+	}
+	
+	if !tool.IsEnabled() {
+		t.Error("Expected tool to be enabled by default")
+	}
+}
