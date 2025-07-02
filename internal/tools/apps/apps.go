@@ -3,12 +3,14 @@ package apps
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"
 
+	"github.com/mbastakis/dotfiles/internal/common"
 	"github.com/mbastakis/dotfiles/internal/config"
 	"github.com/mbastakis/dotfiles/internal/types"
 )
@@ -18,8 +20,10 @@ type AppsTool struct {
 	config       *config.AppsConfig
 	dotfilesPath string
 	dryRun       bool
+	verbose      bool
 	priority     int
 	interpreters map[string]string
+	logger       *slog.Logger
 }
 
 // NewAppsTool creates a new AppsTool instance
@@ -33,8 +37,10 @@ func NewAppsTool(cfg *config.Config) *AppsTool {
 		config:       &cfg.Apps,
 		dotfilesPath: cfg.Global.DotfilesPath,
 		dryRun:       cfg.Global.DryRun,
+		verbose:      cfg.Global.Verbose,
 		priority:     priority,
 		interpreters: cfg.Tools.Interpreters,
+		logger:       common.LoggerForTool("apps"),
 	}
 }
 
@@ -245,7 +251,7 @@ func (a *AppsTool) runApp(ctx context.Context, appName string) error {
 		}
 
 		if a.dryRun {
-			fmt.Printf("[DRY RUN] Would execute script: %s\n", fullPath)
+			common.LogInfo(a.logger, "would execute script", "path", fullPath)
 			continue
 		}
 
@@ -295,14 +301,36 @@ func (a *AppsTool) executeScript(ctx context.Context, scriptPath string) error {
 	// This ensures scripts can access relative paths correctly
 	cmd.Dir = a.dotfilesPath
 
-	// Connect stdout/stderr to current process for proper TTY handling
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+	// Set environment variables for script to respect verbosity
+	cmd.Env = append(os.Environ(),
+		fmt.Sprintf("DOTFILES_VERBOSE=%t", a.verbose),
+		fmt.Sprintf("DOTFILES_DRY_RUN=%t", a.dryRun),
+		fmt.Sprintf("DOTFILES_LOG_LEVEL=%s", func() string {
+			if a.verbose {
+				return "debug"
+			}
+			return "info"
+		}()),
+	)
+
+	// Create filtered output writers for stdout and stderr
+	stdoutFilter := common.NewScriptOutputFilter(a.logger, a.verbose)
+	stderrFilter := common.NewScriptOutputFilter(a.logger, a.verbose)
+
+	cmd.Stdout = stdoutFilter
+	cmd.Stderr = stderrFilter
 
 	// Run the command and wait for completion
 	if err := cmd.Run(); err != nil {
+		// Flush any remaining output
+		stdoutFilter.Flush()
+		stderrFilter.Flush()
 		return fmt.Errorf("execution failed: %w", err)
 	}
+
+	// Flush any remaining output
+	stdoutFilter.Flush()
+	stderrFilter.Flush()
 
 	return nil
 }

@@ -15,41 +15,67 @@ NC='\033[0m' # No Color
 
 # Global variables
 DOTFILES_ROOT="${DOTFILES_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
-VERBOSE=${VERBOSE:-false}
-DRY_RUN=${DRY_RUN:-false}
+
+# Check if environment variables are set (passed from Go application)
+DOTFILES_VERBOSE="${DOTFILES_VERBOSE:-false}"
+DOTFILES_DRY_RUN="${DOTFILES_DRY_RUN:-false}"
+DOTFILES_LOG_LEVEL="${DOTFILES_LOG_LEVEL:-info}"
+
+# Legacy variable support for backward compatibility
+VERBOSE=${VERBOSE:-$DOTFILES_VERBOSE}
+DRY_RUN=${DRY_RUN:-$DOTFILES_DRY_RUN}
 FORCE_YES=${FORCE_YES:-false}
 
-# Logging functions
-log_info() {
-    echo -e "${GREEN}[$(date '+%Y-%m-%d %H:%M:%S')] [INFO]${NC} $1"
-}
+# Disable colors in non-verbose mode for cleaner output
+if [[ "$DOTFILES_VERBOSE" != "true" ]]; then
+    RED=''
+    GREEN=''
+    YELLOW=''
+    BLUE=''
+    PURPLE=''
+    CYAN=''
+    NC=''
+fi
 
-log_warning() {
-    echo -e "${YELLOW}[$(date '+%Y-%m-%d %H:%M:%S')] [WARNING]${NC} $1"
-}
-
-log_error() {
-    echo -e "${RED}[$(date '+%Y-%m-%d %H:%M:%S')] [ERROR]${NC} $1"
-}
-
-log_success() {
-    echo -e "${GREEN}[$(date '+%Y-%m-%d %H:%M:%S')] [SUCCESS]${NC} $1"
-}
-
+# Logging functions that respect verbosity and log levels
 log_debug() {
-    if [[ "$VERBOSE" == "true" ]]; then
-        echo -e "${CYAN}[$(date '+%Y-%m-%d %H:%M:%S')] [DEBUG]${NC} $1"
+    if [[ "$DOTFILES_LOG_LEVEL" == "debug" ]]; then
+        echo -e "${CYAN}[DEBUG]${NC} $1" >&2
     fi
 }
 
+log_info() {
+    # Always show important messages, or all in verbose mode
+    if [[ "$DOTFILES_VERBOSE" == "true" || "$1" =~ (successfully|complete|installation|setup) ]]; then
+        echo "[INFO] $1"
+    fi
+}
+
+log_success() {
+    echo "[SUCCESS] $1"
+}
+
+log_warning() {
+    echo -e "${YELLOW}[WARNING]${NC} $1" >&2
+}
+
+log_error() {
+    echo -e "${RED}[ERROR]${NC} $1" >&2
+}
+
+# Section logging functions - only show in verbose mode
 log_section() {
-    echo -e "\n${BLUE}[$(date '+%Y-%m-%d %H:%M:%S')] [SECTION] $1 ${NC}"
-    echo -e "${BLUE}========================================${NC}"
+    if [[ "$DOTFILES_VERBOSE" == "true" ]]; then
+        echo ""
+        echo -e "${BLUE}=== $1 ===${NC}"
+        echo ""
+    fi
 }
 
 log_subsection() {
-    echo -e "\n${PURPLE}[$(date '+%Y-%m-%d %H:%M:%S')] [SUBSECTION] $1 ${NC}"
-    echo -e "${PURPLE}----------------------------------------${NC}"
+    if [[ "$DOTFILES_VERBOSE" == "true" ]]; then
+        echo -e "${GREEN}--- $1 ---${NC}"
+    fi
 }
 
 # Utility functions

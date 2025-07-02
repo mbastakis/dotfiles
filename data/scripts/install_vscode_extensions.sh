@@ -9,12 +9,13 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOTFILES_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 EXTENSIONS_DATA_DIR="$DOTFILES_ROOT/data/vscode_extensions"
 
-log_info() {
-    echo "[INFO] $1"
-}
-
-log_error() {
-    echo "[ERROR] $1" >&2
+# Source the shared utilities
+source "$SCRIPT_DIR/utils.sh" 2>/dev/null || {
+    # Fallback logging if utils.sh is not available
+    log_info() { echo "[INFO] $1"; }
+    log_error() { echo "[ERROR] $1" >&2; }
+    log_success() { echo "[SUCCESS] $1"; }
+    log_warning() { echo "[WARNING] $1" >&2; }
 }
 
 check_vscode() {
@@ -137,8 +138,8 @@ main() {
             ((failed_count++))
         fi
     done
-    
-    log_info "Installation complete!"
+
+    log_info "VSCode Extensions Installation complete!"
     log_info "Successfully installed: $installed_count extensions"
     
     if [[ $failed_count -gt 0 ]]; then
