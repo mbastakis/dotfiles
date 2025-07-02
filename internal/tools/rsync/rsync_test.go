@@ -195,7 +195,11 @@ func TestRsyncTool_FindSource(t *testing.T) {
 }
 
 func TestRsyncTool_IsSystemDirectory(t *testing.T) {
-	cfg := &config.Config{}
+	cfg := &config.Config{
+		Tools: config.ToolsConfig{
+			SystemDirectories: []string{"/System", "/Library", "/usr", "/bin", "/sbin", "/Applications", "~/Library", "~/Applications"},
+		},
+	}
 	tool := NewRsyncTool(cfg)
 
 	// Test system directories

@@ -205,3 +205,282 @@ func TestStowTool_ResolveTarget(t *testing.T) {
 		t.Errorf("Expected absolute path to be unchanged, got %s", resolved)
 	}
 }
+
+func TestStowTool_IsPackageLinked(t *testing.T) {
+	tmpDir := testutil.TempDir(t)
+
+	cfg := &config.Config{
+		Global: config.GlobalConfig{
+			DotfilesPath: tmpDir,
+		},
+	}
+
+	tool := NewStowTool(cfg)
+
+	// Test with non-existent package
+	pkg := config.StowPackage{
+		Name:   "nonexistent",
+		Target: tmpDir,
+	}
+
+	linked, err := tool.isPackageLinked(pkg)
+	if err == nil {
+		t.Error("Expected error for non-existent package check")
+	}
+	if linked {
+		t.Error("Expected non-existent package to not be linked")
+	}
+}
+
+func TestStowTool_EnableDisable(t *testing.T) {
+	cfg := &config.Config{
+		Global: config.GlobalConfig{
+			DotfilesPath: "/test",
+		},
+	}
+
+	tool := NewStowTool(cfg)
+
+	// Test initial state
+	if !tool.IsEnabled() {
+		t.Error("Expected tool to be enabled by default")
+	}
+
+	// Test that we can access enabled state
+	enabled := tool.enabled
+	if !enabled {
+		t.Error("Expected enabled field to be true")
+	}
+}
+
+func TestStowTool_ConfigurablePriority(t *testing.T) {
+	// Test with custom priority
+	cfg := &config.Config{
+		Global: config.GlobalConfig{
+			DotfilesPath: "/test",
+		},
+		Tools: config.ToolsConfig{
+			Priorities: map[string]int{
+				"stow": 5,
+			},
+		},
+	}
+
+	tool := NewStowTool(cfg)
+
+	if tool.Priority() != 5 {
+		t.Errorf("Expected priority to be 5, got %d", tool.Priority())
+	}
+
+	// Test with no priority set (should use default)
+	cfgDefault := &config.Config{
+		Global: config.GlobalConfig{
+			DotfilesPath: "/test",
+		},
+		Tools: config.ToolsConfig{
+			Priorities: map[string]int{},
+		},
+	}
+
+	toolDefault := NewStowTool(cfgDefault)
+
+	if toolDefault.Priority() != 1 {
+		t.Errorf("Expected default priority to be 1, got %d", toolDefault.Priority())
+	}
+}
+
+func TestStowTool_DryRunMode(t *testing.T) {
+	cfg := &config.Config{
+		Global: config.GlobalConfig{
+			DotfilesPath: "/test",
+			DryRun:       true,
+		},
+	}
+
+	tool := NewStowTool(cfg)
+
+	// Test that dry run state is preserved
+	if !tool.dryRun {
+		t.Error("Expected tool to be in dry run mode")
+	}
+
+	// Test non-dry run mode
+	cfg.Global.DryRun = false
+	toolNoDryRun := NewStowTool(cfg)
+
+	if toolNoDryRun.dryRun {
+		t.Error("Expected tool to not be in dry run mode")
+	}
+}
+
+func TestStowTool_PackageManagement(t *testing.T) {
+	cfg := &config.Config{
+		Global: config.GlobalConfig{
+			DotfilesPath: "/test/path",
+		},
+		Stow: config.StowConfig{
+			Packages: []config.StowPackage{
+				{Name: "vim", Target: "~/", Enabled: true, Priority: 1},
+				{Name: "zsh", Target: "~/", Enabled: false, Priority: 2},
+				{Name: "git", Target: "~/", Enabled: true, Priority: 3},
+			},
+		},
+	}
+
+	tool := NewStowTool(cfg)
+
+	// Test number of packages
+	if len(tool.config.Packages) != 3 {
+		t.Errorf("Expected 3 packages, got %d", len(tool.config.Packages))
+	}
+
+	// Test specific packages
+	expectedPackages := []string{"vim", "zsh", "git"}
+	for i, expected := range expectedPackages {
+		if tool.config.Packages[i].Name != expected {
+			t.Errorf("Expected package %d to be '%s', got '%s'", i, expected, tool.config.Packages[i].Name)
+		}
+	}
+
+	// Test enabled/disabled status
+	if !tool.config.Packages[0].Enabled {
+		t.Error("Expected vim package to be enabled")
+	}
+
+	if tool.config.Packages[1].Enabled {
+		t.Error("Expected zsh package to be disabled")
+	}
+
+	if !tool.config.Packages[2].Enabled {
+		t.Error("Expected git package to be enabled")
+	}
+}
+
+func TestStowTool_EmptyPackages(t *testing.T) {
+	cfg := &config.Config{
+		Global: config.GlobalConfig{
+			DotfilesPath: "/test/path",
+		},
+		Stow: config.StowConfig{
+			Packages: []config.StowPackage{},
+		},
+	}
+
+	tool := NewStowTool(cfg)
+
+	if len(tool.config.Packages) != 0 {
+		t.Errorf("Expected 0 packages, got %d", len(tool.config.Packages))
+	}
+
+	// Should still be a valid tool
+	if tool.Name() != "stow" {
+		t.Errorf("Expected tool name to be 'stow', got %s", tool.Name())
+	}
+}
+
+func TestStowTool_PackagePriorities(t *testing.T) {
+	cfg := &config.Config{
+		Global: config.GlobalConfig{
+			DotfilesPath: "/test/path",
+		},
+		Stow: config.StowConfig{
+			Packages: []config.StowPackage{
+				{Name: "high", Target: "~/", Enabled: true, Priority: 1},
+				{Name: "medium", Target: "~/", Enabled: true, Priority: 5},
+				{Name: "low", Target: "~/", Enabled: true, Priority: 10},
+			},
+		},
+	}
+
+	tool := NewStowTool(cfg)
+
+	// Test that priorities are preserved
+	if tool.config.Packages[0].Priority != 1 {
+		t.Errorf("Expected first package priority to be 1, got %d", tool.config.Packages[0].Priority)
+	}
+
+	if tool.config.Packages[1].Priority != 5 {
+		t.Errorf("Expected second package priority to be 5, got %d", tool.config.Packages[1].Priority)
+	}
+
+	if tool.config.Packages[2].Priority != 10 {
+		t.Errorf("Expected third package priority to be 10, got %d", tool.config.Packages[2].Priority)
+	}
+}
+
+func TestStowTool_PackageTargets(t *testing.T) {
+	cfg := &config.Config{
+		Global: config.GlobalConfig{
+			DotfilesPath: "/test/path",
+		},
+		Stow: config.StowConfig{
+			Packages: []config.StowPackage{
+				{Name: "vim", Target: "~/", Enabled: true, Priority: 1},
+				{Name: "config", Target: "~/.config", Enabled: true, Priority: 2},
+				{Name: "local", Target: "~/.local", Enabled: true, Priority: 3},
+			},
+		},
+	}
+
+	tool := NewStowTool(cfg)
+
+	// Test that targets are preserved
+	expectedTargets := []string{"~/", "~/.config", "~/.local"}
+	for i, expected := range expectedTargets {
+		if tool.config.Packages[i].Target != expected {
+			t.Errorf("Expected package %d target to be '%s', got '%s'", i, expected, tool.config.Packages[i].Target)
+		}
+	}
+}
+
+func TestStowTool_EnabledState(t *testing.T) {
+	cfg := &config.Config{
+		Global: config.GlobalConfig{
+			DotfilesPath: "/test/path",
+		},
+		Stow: config.StowConfig{
+			Packages: []config.StowPackage{
+				{Name: "vim", Target: "~/", Enabled: true, Priority: 1},
+			},
+		},
+	}
+
+	tool := NewStowTool(cfg)
+
+	// Test that tool is enabled by default
+	if !tool.enabled {
+		t.Error("Expected stow tool to be enabled by default")
+	}
+
+	if !tool.IsEnabled() {
+		t.Error("Expected IsEnabled to return true")
+	}
+}
+
+func TestStowTool_Fields(t *testing.T) {
+	cfg := &config.Config{
+		Global: config.GlobalConfig{
+			DotfilesPath: "/test/path",
+		},
+		Stow: config.StowConfig{
+			Packages: []config.StowPackage{
+				{Name: "vim", Target: "~/", Enabled: true, Priority: 1},
+			},
+		},
+	}
+
+	tool := NewStowTool(cfg)
+	
+	// Test that all fields are properly set
+	if tool.config == nil {
+		t.Error("Expected config field to be set")
+	}
+	
+	if tool.dotfilesPath != "/test/path" {
+		t.Errorf("Expected dotfilesPath to be '/test/path', got '%s'", tool.dotfilesPath)
+	}
+	
+	if !tool.IsEnabled() {
+		t.Error("Expected tool to be enabled by default")
+	}
+}

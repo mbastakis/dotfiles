@@ -182,7 +182,26 @@ func TestValidate(t *testing.T) {
 			config: &Config{
 				Global: GlobalConfig{
 					DotfilesPath: "",
+					LogLevel:     "info",
 				},
+				Performance: PerformanceConfig{
+					Cache: CacheConfig{
+						Default: CacheSetting{Size: 1000, TTL: "5m", CleanupInterval: "1m"},
+						Status:  CacheSetting{Size: 100, TTL: "30s", CleanupInterval: "15s"},
+						View:    CacheSetting{Size: 50, TTL: "1m", CleanupInterval: "30s"},
+						Config:  CacheSetting{Size: 20, TTL: "10m", CleanupInterval: "2m"},
+						Theme:   CacheSetting{Size: 10, TTL: "15m", CleanupInterval: "5m"},
+					},
+					Monitor: MonitorConfig{Interval: "5s", Capacity: 100},
+					Profiler: ProfilerConfig{
+						Cooldown:     "5m",
+						AutoInterval: "10s",
+						Profiles: map[string]ProfileSetting{
+							"cpu": {Duration: "30s"},
+						},
+					},
+				},
+				Validation: ValidationConfig{NPMPackagePattern: "^(@[a-z0-9-~][a-z0-9-._~]*\\/)?[a-z0-9-~][a-z0-9-._~]*$"},
 			},
 			expectError: true,
 			errorMsg:    "dotfiles_path cannot be empty",
@@ -210,6 +229,24 @@ func TestValidate(t *testing.T) {
 						{Name: "", Target: "/target", Enabled: true},
 					},
 				},
+				Performance: PerformanceConfig{
+					Cache: CacheConfig{
+						Default: CacheSetting{Size: 1000, TTL: "5m", CleanupInterval: "1m"},
+						Status:  CacheSetting{Size: 100, TTL: "30s", CleanupInterval: "15s"},
+						View:    CacheSetting{Size: 50, TTL: "1m", CleanupInterval: "30s"},
+						Config:  CacheSetting{Size: 20, TTL: "10m", CleanupInterval: "2m"},
+						Theme:   CacheSetting{Size: 10, TTL: "15m", CleanupInterval: "5m"},
+					},
+					Monitor: MonitorConfig{Interval: "5s", Capacity: 100},
+					Profiler: ProfilerConfig{
+						Cooldown:     "5m",
+						AutoInterval: "10s",
+						Profiles: map[string]ProfileSetting{
+							"cpu": {Duration: "30s"},
+						},
+					},
+				},
+				Validation: ValidationConfig{NPMPackagePattern: "^(@[a-z0-9-~][a-z0-9-._~]*\\/)?[a-z0-9-~][a-z0-9-._~]*$"},
 			},
 			expectError: true,
 			errorMsg:    "name cannot be empty",
