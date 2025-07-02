@@ -23,19 +23,19 @@ type Config struct {
 
 // GlobalConfig represents global application settings
 type GlobalConfig struct {
-	DotfilesPath   string `yaml:"dotfiles_path"`
-	LogLevel       string `yaml:"log_level"`
-	DryRun         bool   `yaml:"dry_run"`
-	AutoConfirm    bool   `yaml:"auto_confirm"`
-	Verbose        bool   `yaml:"verbose"`
+	DotfilesPath string `yaml:"dotfiles_path"`
+	LogLevel     string `yaml:"log_level"`
+	DryRun       bool   `yaml:"dry_run"`
+	AutoConfirm  bool   `yaml:"auto_confirm"`
+	Verbose      bool   `yaml:"verbose"`
 }
 
 // TUIConfig represents TUI-specific settings
 type TUIConfig struct {
-	ColorScheme          string `yaml:"color_scheme"`
-	Animations           bool   `yaml:"animations"`
-	ConfirmDestructive   bool   `yaml:"confirm_destructive"`
-	ShowProgress         bool   `yaml:"show_progress"`
+	ColorScheme        string `yaml:"color_scheme"`
+	Animations         bool   `yaml:"animations"`
+	ConfirmDestructive bool   `yaml:"confirm_destructive"`
+	ShowProgress       bool   `yaml:"show_progress"`
 }
 
 // StowConfig represents GNU Stow configuration
@@ -67,28 +67,28 @@ type RsyncSource struct {
 
 // HomebrewConfig represents Homebrew package management configuration
 type HomebrewConfig struct {
-	AutoUpdate bool                          `yaml:"auto_update"`
-	Categories map[string]HomebrewCategory   `yaml:"categories"`
+	AutoUpdate bool                        `yaml:"auto_update"`
+	Categories map[string]HomebrewCategory `yaml:"categories"`
 }
 
 // HomebrewCategory represents a Homebrew package category
 type HomebrewCategory struct {
-	Enabled   bool   `yaml:"enabled"`
-	Brewfile  string `yaml:"brewfile"`
+	Enabled  bool   `yaml:"enabled"`
+	Brewfile string `yaml:"brewfile"`
 }
 
 // NPMConfig represents NPM global package configuration
 type NPMConfig struct {
-	AutoInstall     bool     `yaml:"auto_install"`
-	AutoUpdate      bool     `yaml:"auto_update"`
-	GlobalPackages  []string `yaml:"global_packages"`
+	AutoInstall    bool     `yaml:"auto_install"`
+	AutoUpdate     bool     `yaml:"auto_update"`
+	GlobalPackages []string `yaml:"global_packages"`
 }
 
 // UVConfig represents UV tool package configuration
 type UVConfig struct {
-	AutoInstall     bool     `yaml:"auto_install"`
-	AutoUpdate      bool     `yaml:"auto_update"`
-	GlobalPackages  []string `yaml:"global_packages"`
+	AutoInstall    bool     `yaml:"auto_install"`
+	AutoUpdate     bool     `yaml:"auto_update"`
+	GlobalPackages []string `yaml:"global_packages"`
 }
 
 // AppsConfig represents custom application configuration
@@ -103,14 +103,14 @@ type AppConfig struct {
 // DefaultConfig returns a configuration with sensible defaults
 func DefaultConfig() *Config {
 	homeDir, _ := os.UserHomeDir()
-	
+
 	return &Config{
 		Global: GlobalConfig{
-			DotfilesPath:  filepath.Join(homeDir, "dev", "dotfiles"),
-			LogLevel:      "info",
-			DryRun:        false,
-			AutoConfirm:   false,
-			Verbose:       false,
+			DotfilesPath: filepath.Join(homeDir, "dev", "dotfiles"),
+			LogLevel:     "info",
+			DryRun:       false,
+			AutoConfirm:  false,
+			Verbose:      false,
 		},
 		TUI: TUIConfig{
 			ColorScheme:        "default",
@@ -178,7 +178,7 @@ func LoadWithBootstrap(primaryPath string) (*Config, error) {
 
 	// Define the search order for configuration files
 	searchPaths := []string{}
-	
+
 	// 1. CLI flag path (if provided and not empty)
 	if primaryPath != "" {
 		expandedPath := primaryPath
@@ -187,11 +187,11 @@ func LoadWithBootstrap(primaryPath string) (*Config, error) {
 		}
 		searchPaths = append(searchPaths, expandedPath)
 	}
-	
+
 	// 2. ~/.config/dotfiles/config.yaml (current standard location)
 	standardPath := filepath.Join(homeDir, ".config", "dotfiles", "config.yaml")
 	searchPaths = append(searchPaths, standardPath)
-	
+
 	// 3. Stow-managed location (bootstrap fallback)
 	// Find dotfiles directory by looking for go.mod or other indicators
 	dotfilesPath := findDotfilesDirectory()
@@ -250,7 +250,7 @@ func findDotfilesDirectory() string {
 	if err != nil {
 		return ""
 	}
-	
+
 	// Common dotfiles locations to check
 	candidates := []string{
 		filepath.Join(homeDir, "dev", "dotfiles"),
@@ -259,19 +259,19 @@ func findDotfilesDirectory() string {
 		filepath.Join(homeDir, "Projects", "dotfiles"),
 		filepath.Join(homeDir, "Code", "dotfiles"),
 	}
-	
+
 	// Add current working directory if it looks like dotfiles repo
 	if cwd, err := os.Getwd(); err == nil {
 		candidates = append([]string{cwd}, candidates...)
 	}
-	
+
 	// Check each candidate for dotfiles indicators
 	for _, candidate := range candidates {
 		if isDotfilesDirectory(candidate) {
 			return candidate
 		}
 	}
-	
+
 	return ""
 }
 
@@ -284,20 +284,20 @@ func isDotfilesDirectory(path string) bool {
 			return true
 		}
 	}
-	
+
 	// Check for other common dotfiles indicators
 	indicators := []string{
 		"config",
 		"homebrew",
 		"templates/config.yaml",
 	}
-	
+
 	for _, indicator := range indicators {
 		if _, err := os.Stat(filepath.Join(path, indicator)); err == nil {
 			return true
 		}
 	}
-	
+
 	return false
 }
 
@@ -338,9 +338,9 @@ func (c *Config) Validate() error {
 	if c.Global.DotfilesPath == "" {
 		return fmt.Errorf("dotfiles_path cannot be empty")
 	}
-	
-	if c.Global.LogLevel != "debug" && c.Global.LogLevel != "info" && 
-	   c.Global.LogLevel != "warn" && c.Global.LogLevel != "error" {
+
+	if c.Global.LogLevel != "debug" && c.Global.LogLevel != "info" &&
+		c.Global.LogLevel != "warn" && c.Global.LogLevel != "error" {
 		return fmt.Errorf("invalid log_level: %s", c.Global.LogLevel)
 	}
 
@@ -379,7 +379,7 @@ func (c *Config) ExpandVariables() error {
 func expandPath(path string) string {
 	// First expand environment variables
 	expanded := os.ExpandEnv(path)
-	
+
 	// Then expand tilde if present
 	if strings.HasPrefix(expanded, "~/") {
 		homeDir, err := os.UserHomeDir()
@@ -387,7 +387,7 @@ func expandPath(path string) string {
 			expanded = filepath.Join(homeDir, expanded[2:])
 		}
 	}
-	
+
 	return expanded
 }
 

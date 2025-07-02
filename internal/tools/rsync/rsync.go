@@ -154,9 +154,9 @@ func (r *RsyncTool) Install(ctx context.Context, items []string) (*types.Operati
 
 	for _, sourceName := range items {
 		go func(name string) {
-			semaphore <- struct{}{} // Acquire
+			semaphore <- struct{}{}        // Acquire
 			defer func() { <-semaphore }() // Release
-			
+
 			err := r.syncSource(name)
 			resultChan <- syncResult{sourceName: name, err: err}
 		}(sourceName)
@@ -296,23 +296,23 @@ func (r *RsyncTool) needsSync(sourcePath, targetPath string) bool {
 // needsSyncCached checks if sync is needed using cached results
 func (r *RsyncTool) needsSyncCached(sourcePath, targetPath string) bool {
 	cacheKey := sourcePath + "->" + targetPath
-	
+
 	r.cacheMutex.RLock()
 	entry, exists := r.statusCache[cacheKey]
 	r.cacheMutex.RUnlock()
-	
+
 	// Check if cache entry is valid
 	if exists && time.Since(entry.timestamp) < entry.ttl {
 		return entry.status == "needs_sync"
 	}
-	
+
 	// Cache miss or expired, compute and cache result
 	needsSync := r.needsSync(sourcePath, targetPath)
 	status := "synced"
 	if needsSync {
 		status = "needs_sync"
 	}
-	
+
 	r.cacheMutex.Lock()
 	r.statusCache[cacheKey] = &statusCacheEntry{
 		status:    status,
@@ -320,7 +320,7 @@ func (r *RsyncTool) needsSyncCached(sourcePath, targetPath string) bool {
 		ttl:       30 * time.Second, // Cache for 30 seconds
 	}
 	r.cacheMutex.Unlock()
-	
+
 	return needsSync
 }
 
@@ -328,7 +328,7 @@ func (r *RsyncTool) needsSyncCached(sourcePath, targetPath string) bool {
 func (r *RsyncTool) clearStatusCache(sourceName string) {
 	r.cacheMutex.Lock()
 	defer r.cacheMutex.Unlock()
-	
+
 	for key := range r.statusCache {
 		if strings.HasPrefix(key, r.resolveSourcePath(sourceName)) {
 			delete(r.statusCache, key)
@@ -356,13 +356,13 @@ func (r *RsyncTool) syncSource(sourceName string) error {
 
 	// Build optimized rsync command
 	args := []string{
-		"-rlptD", // Recursive, links, perms, times, devices (like -a but no verbose/group)
-		"--compress", // Compress during transfer for better performance
-		"--whole-file", // Don't use delta-xfer algorithm for small files
+		"-rlptD",          // Recursive, links, perms, times, devices (like -a but no verbose/group)
+		"--compress",      // Compress during transfer for better performance
+		"--whole-file",    // Don't use delta-xfer algorithm for small files
 		"--ignore-errors", // Continue despite errors
-		"--partial", // Keep partially transferred files
+		"--partial",       // Keep partially transferred files
 	}
-	
+
 	// Only use --delete if target is not a system directory
 	if !r.isSystemDirectory(targetPath) {
 		args = append(args, "--delete")
@@ -382,15 +382,15 @@ func (r *RsyncTool) syncSource(sourceName string) error {
 	// Execute rsync with timeout context
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
-	
+
 	cmd := exec.CommandContext(ctx, "rsync", args...)
 	output, err := cmd.CombinedOutput()
-	
+
 	if err != nil {
 		// Check if this is an acceptable rsync exit code
 		if exitErr, ok := err.(*exec.ExitError); ok {
 			exitCode := exitErr.ExitCode()
-			
+
 			// Handle specific rsync exit codes
 			switch exitCode {
 			case 23:
@@ -424,41 +424,41 @@ func (r *RsyncTool) syncSource(sourceName string) error {
 func (r *RsyncTool) verifySync(sourcePath, targetPath string) bool {
 	// Remove trailing slash for consistent comparison
 	sourcePath = strings.TrimSuffix(sourcePath, "/")
-	
+
 	// Walk through source directory and verify each file exists in target
 	return filepath.Walk(sourcePath, func(srcFile string, srcInfo os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
-		
+
 		// Calculate relative path from source
 		relPath, err := filepath.Rel(sourcePath, srcFile)
 		if err != nil {
 			return err
 		}
-		
+
 		// Skip if this is the source directory itself
 		if relPath == "." {
 			return nil
 		}
-		
+
 		// Calculate corresponding target path
 		targetFile := filepath.Join(targetPath, relPath)
-		
+
 		// Check if target file/dir exists
 		targetInfo, err := os.Stat(targetFile)
 		if err != nil {
 			// Target file doesn't exist - sync failed
 			return fmt.Errorf("target file missing: %s", targetFile)
 		}
-		
+
 		// For files, verify size and modification time are reasonable
 		if srcInfo.Mode().IsRegular() && targetInfo.Mode().IsRegular() {
 			if srcInfo.Size() != targetInfo.Size() {
 				return fmt.Errorf("file size mismatch: %s", targetFile)
 			}
 		}
-		
+
 		return nil
 	}) == nil
 }
@@ -470,20 +470,20 @@ func (r *RsyncTool) isSystemDirectory(targetPath string) bool {
 	if err != nil {
 		return false
 	}
-	
+
 	// Normalize paths for comparison
 	targetPath = filepath.Clean(targetPath)
 	home = filepath.Clean(home)
-	
+
 	// If target is exactly the home directory, it's a system directory
 	if targetPath == home {
 		return true
 	}
-	
+
 	// Check for other system directories
 	systemDirs := []string{
 		"/System",
-		"/Library", 
+		"/Library",
 		"/usr",
 		"/bin",
 		"/sbin",
@@ -491,12 +491,12 @@ func (r *RsyncTool) isSystemDirectory(targetPath string) bool {
 		home + "/Library",
 		home + "/Applications",
 	}
-	
+
 	for _, sysDir := range systemDirs {
 		if strings.HasPrefix(targetPath, filepath.Clean(sysDir)) {
 			return true
 		}
 	}
-	
+
 	return false
 }

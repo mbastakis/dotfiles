@@ -66,7 +66,7 @@ func (h *HomebrewTool) Validate() error {
 
 		brewfilePath := filepath.Join(h.dotfilesPath, category.Brewfile)
 		if _, err := os.Stat(brewfilePath); err != nil {
-			return fmt.Errorf("Brewfile for category %s not found: %s", name, brewfilePath)
+			return fmt.Errorf("brewfile for category %s not found: %s", name, brewfilePath)
 		}
 	}
 
@@ -254,7 +254,7 @@ func (h *HomebrewTool) installCategory(categoryName string) error {
 
 	brewfilePath := filepath.Join(h.dotfilesPath, category.Brewfile)
 	if _, err := os.Stat(brewfilePath); err != nil {
-		return fmt.Errorf("Brewfile not found: %s", brewfilePath)
+		return fmt.Errorf("brewfile not found: %s", brewfilePath)
 	}
 
 	// Run brew bundle
@@ -326,7 +326,7 @@ func (h *HomebrewTool) getBrewfileStatus(brewfilePath string) (total, installed 
 				if commentIdx := strings.Index(packageName, "#"); commentIdx >= 0 {
 					packageName = strings.TrimSpace(packageName[:commentIdx])
 				}
-				
+
 				// For mas entries, check if they're actually installed
 				if strings.HasPrefix(line, "mas ") {
 					masInstalled, err := h.isMasAppInstalled(packageName, line)
@@ -335,7 +335,7 @@ func (h *HomebrewTool) getBrewfileStatus(brewfilePath string) (total, installed 
 					}
 					continue
 				}
-				
+
 				// Check if this is a tap
 				if strings.HasPrefix(line, "tap ") {
 					for _, tap := range installedTaps {
@@ -346,7 +346,7 @@ func (h *HomebrewTool) getBrewfileStatus(brewfilePath string) (total, installed 
 					}
 					continue
 				}
-				
+
 				// Check for regular packages
 				for _, pkg := range installedPackages {
 					if pkg.Name == packageName {
@@ -425,7 +425,7 @@ func (h *HomebrewTool) ListCategoryItems(ctx context.Context, category string) (
 
 	brewfilePath := filepath.Join(h.dotfilesPath, categoryConfig.Brewfile)
 	if _, err := os.Stat(brewfilePath); err != nil {
-		return nil, fmt.Errorf("Brewfile not found: %s", brewfilePath)
+		return nil, fmt.Errorf("brewfile not found: %s", brewfilePath)
 	}
 
 	return h.parseBrewfilePackages(brewfilePath, category)
@@ -500,14 +500,14 @@ func (h *HomebrewTool) parseBrewfilePackages(brewfilePath, category string) ([]t
 
 	for lineNum, line := range lines {
 		line = strings.TrimSpace(line)
-		
+
 		// Skip comments and empty lines
 		if line == "" || strings.HasPrefix(line, "#") {
 			continue
 		}
 
 		var packageType, packageName, description string
-		
+
 		// Parse different types of package declarations
 		if strings.HasPrefix(line, "brew ") {
 			packageType = "brew"
@@ -556,13 +556,13 @@ func (h *HomebrewTool) parseBrewfilePackages(brewfilePath, category string) ([]t
 		// Determine installation status
 		var installed bool
 		status := "not_installed"
-		
+
 		if packageType == "tap" {
 			installed = h.isTapInstalled(packageName, installedTaps)
 		} else {
 			installed = h.isPackageInstalled(packageName, packageType, installedPackages)
 		}
-		
+
 		if installed {
 			status = "installed"
 		}
@@ -656,7 +656,7 @@ func (h *HomebrewTool) isMasAppInstalled(appName, masLine string) (bool, error) 
 	if commentIdx := strings.Index(idPart, "#"); commentIdx >= 0 {
 		idPart = strings.TrimSpace(idPart[:commentIdx])
 	}
-	
+
 	appID := strings.TrimSpace(idPart)
 
 	// Get installed MAS apps
@@ -674,7 +674,7 @@ func (h *HomebrewTool) isMasAppInstalled(appName, masLine string) (bool, error) 
 // installSinglePackage installs a single package based on its type
 func (h *HomebrewTool) installSinglePackage(packageName, packageType string) error {
 	var args []string
-	
+
 	switch packageType {
 	case "brew":
 		args = []string{"install", packageName}

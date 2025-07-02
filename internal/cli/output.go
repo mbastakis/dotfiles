@@ -14,17 +14,17 @@ func printStatus(status *types.ToolStatus) {
 	fmt.Printf("Tool: %s\n", status.Name)
 	fmt.Printf("Enabled: %t\n", status.Enabled)
 	fmt.Printf("Healthy: %t\n", status.Healthy)
-	
+
 	if status.Error != nil {
 		fmt.Printf("Error: %v\n", status.Error)
 	}
-	
+
 	if len(status.Items) > 0 {
 		fmt.Println("\nItems:")
 		w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
 		fmt.Fprintln(w, "NAME\tENABLED\tINSTALLED\tTARGET\tPRIORITY")
 		fmt.Fprintln(w, "----\t-------\t---------\t------\t--------")
-		
+
 		for _, item := range status.Items {
 			fmt.Fprintf(w, "%s\t%t\t%t\t%s\t%d\n",
 				item.Name,
@@ -48,18 +48,18 @@ func printItems(items []types.ToolItem) {
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
 	fmt.Fprintln(w, "NAME\tENABLED\tINSTALLED\tVERSION\tTARGET")
 	fmt.Fprintln(w, "----\t-------\t---------\t-------\t------")
-	
+
 	for _, item := range items {
 		version := item.Version
 		if version == "" {
 			version = "-"
 		}
-		
+
 		target := item.Target
 		if target == "" {
 			target = "-"
 		}
-		
+
 		fmt.Fprintf(w, "%s\t%t\t%t\t%s\t%s\n",
 			item.Name,
 			item.Enabled,
@@ -78,15 +78,15 @@ func printResult(result *types.OperationResult) {
 	} else {
 		fmt.Printf("❌ %s\n", result.Message)
 	}
-	
+
 	if len(result.Modified) > 0 {
 		fmt.Printf("Modified: %s\n", strings.Join(result.Modified, ", "))
 	}
-	
+
 	if result.Output != "" {
 		fmt.Printf("Output:\n%s\n", result.Output)
 	}
-	
+
 	if result.Error != nil {
 		fmt.Printf("Error: %v\n", result.Error)
 	}

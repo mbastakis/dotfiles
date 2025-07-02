@@ -23,7 +23,7 @@ git clone https://github.com/mbastakis/dotfiles ~/.dotfiles
 cd ~/.dotfiles
 
 # Build the application
-go build -o dotfiles cmd/main.go
+go build -o dotfiles cmd/dotfiles/main.go
 
 # Make it available globally
 sudo mv dotfiles /usr/local/bin/
@@ -255,13 +255,13 @@ cd dotfiles
 go mod download
 
 # Build the application
-go build -o dotfiles cmd/main.go
+go build -o dotfiles cmd/dotfiles/main.go
 
 # Run tests
 go test ./...
 
 # Build with optimizations
-go build -ldflags "-s -w" -o dotfiles cmd/main.go
+go build -ldflags "-s -w" -o dotfiles cmd/dotfiles/main.go
 ```
 
 ### Development Setup

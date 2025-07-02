@@ -53,7 +53,7 @@ func (a *AppsTool) Validate() error {
 
 		for _, scriptPath := range appConfig.Scripts {
 			fullPath := a.resolveScriptPath(scriptPath)
-			
+
 			// Check if script exists
 			if _, err := os.Stat(fullPath); err != nil {
 				return fmt.Errorf("script %s for app %s not found: %w", fullPath, appName, err)
@@ -230,7 +230,7 @@ func (a *AppsTool) runApp(ctx context.Context, appName string) error {
 	// Execute all scripts for this app in order
 	for i, scriptPath := range appConfig.Scripts {
 		fullPath := a.resolveScriptPath(scriptPath)
-		
+
 		if err := a.validateScript(fullPath); err != nil {
 			return fmt.Errorf("script %s is invalid: %w", scriptPath, err)
 		}
@@ -290,11 +290,11 @@ func (a *AppsTool) executeScript(ctx context.Context, scriptPath string) error {
 	// Set working directory to dotfiles root, not script directory
 	// This ensures scripts can access relative paths correctly
 	cmd.Dir = a.dotfilesPath
-	
+
 	// Connect stdout/stderr to current process for proper TTY handling
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	
+
 	// Run the command and wait for completion
 	if err := cmd.Run(); err != nil {
 		return fmt.Errorf("execution failed: %w", err)

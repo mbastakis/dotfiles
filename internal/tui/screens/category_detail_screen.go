@@ -9,14 +9,15 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/mbastakis/dotfiles/internal/common"
 	"github.com/mbastakis/dotfiles/internal/theme"
 	"github.com/mbastakis/dotfiles/internal/tools"
-	"github.com/mbastakis/dotfiles/internal/common"
 	"github.com/mbastakis/dotfiles/internal/tui/components"
 	"github.com/mbastakis/dotfiles/internal/tui/keys"
 	"github.com/mbastakis/dotfiles/internal/types"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
-
 
 // CategoryDetailScreen represents a detailed view of packages within a category
 type CategoryDetailScreen struct {
@@ -80,35 +81,36 @@ func (cs CategoryDetailScreen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		cs.width = msg.Width
 		cs.height = msg.Height
-		
+
 		// Only update list size if it's been initialized
 		if cs.list.Items() != nil {
 			h, v := lipgloss.NewStyle().Margin(2, 4).GetFrameSize()
 			cs.list.SetSize(msg.Width-h, msg.Height-v-4) // Leave space for header and help
 		}
-		
+
 	case CategoryPackagesLoadedMsg:
 		if msg.Category == cs.category {
 			cs.loading = false
 			cs.error = nil
-			
+
 			// Convert packages to list items
 			items := make([]list.Item, len(msg.Packages))
 			for i, pkg := range msg.Packages {
 				items[i] = components.NewStatusItem(pkg)
 			}
-			
+
 			// Create new list with items
 			delegate := components.NewStatusListDelegate()
 			cs.list = list.New(items, delegate, cs.width, cs.height-8)
-			cs.list.Title = fmt.Sprintf("%s > %s Packages", 
-				strings.Title(cs.categoryTool.Name()), 
-				strings.Title(cs.category))
+			titleCaser := cases.Title(language.English)
+			cs.list.Title = fmt.Sprintf("%s > %s Packages",
+				titleCaser.String(cs.categoryTool.Name()),
+				titleCaser.String(cs.category))
 			cs.list.SetShowStatusBar(true)
 			cs.list.SetFilteringEnabled(true)
 			cs.list.Styles.Title = cs.themeManager.GetStyles().Header
 		}
-		
+
 	case CategoryPackageOperationCompleteMsg:
 		if msg.Category == cs.category {
 			cs.loading = false
@@ -120,23 +122,23 @@ func (cs CategoryDetailScreen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return cs, cs.loadCategoryPackages()
 			}
 		}
-		
+
 	case tea.KeyMsg:
 		// Global navigation keys
 		if key.Matches(msg, cs.keys.Back) {
 			return cs, func() tea.Msg { return common.BackMsg{} }
 		}
-		
+
 		if key.Matches(msg, cs.keys.Help) {
 			cs.showHelp = !cs.showHelp
 			return cs, nil
 		}
-		
+
 		// Don't process other keys while loading
 		if cs.loading {
 			return cs, nil
 		}
-		
+
 		// Package operations
 		switch {
 		case key.Matches(msg, cs.keys.Install):
@@ -146,11 +148,11 @@ func (cs CategoryDetailScreen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					return cs, cs.installPackage(statusItem.ToolItem().Name)
 				}
 			}
-			
+
 		case key.Matches(msg, cs.keys.Refresh):
 			cs.loading = true
 			return cs, cs.loadCategoryPackages()
-			
+
 		default:
 			// Handle list navigation
 			var cmd tea.Cmd
@@ -158,14 +160,14 @@ func (cs CategoryDetailScreen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			cmds = append(cmds, cmd)
 		}
 	}
-	
+
 	// Update progress if loading
 	if cs.loading {
 		var cmd tea.Cmd
 		cs.progress, cmd = cs.progress.Update(msg)
 		cmds = append(cmds, cmd)
 	}
-	
+
 	return cs, tea.Batch(cmds...)
 }
 
@@ -174,15 +176,15 @@ func (cs CategoryDetailScreen) View() string {
 	if cs.loading && cs.list.Items() == nil {
 		return cs.renderLoading()
 	}
-	
+
 	if cs.error != nil {
 		return cs.renderError()
 	}
-	
+
 	if cs.showHelp {
 		return cs.renderHelp()
 	}
-	
+
 	return cs.renderMain()
 }
 
@@ -198,7 +200,7 @@ func (cs CategoryDetailScreen) loadCategoryPackages() tea.Cmd {
 				Error:     err,
 			}
 		}
-		
+
 		return CategoryPackagesLoadedMsg{
 			Category: cs.category,
 			Packages: packages,
@@ -210,7 +212,7 @@ func (cs CategoryDetailScreen) loadCategoryPackages() tea.Cmd {
 func (cs CategoryDetailScreen) installPackage(packageName string) tea.Cmd {
 	return func() tea.Msg {
 		result, err := cs.categoryTool.InstallCategoryItem(context.Background(), cs.category, packageName)
-		
+
 		return CategoryPackageOperationCompleteMsg{
 			Category:  cs.category,
 			Operation: "install",
@@ -225,14 +227,14 @@ func (cs CategoryDetailScreen) installPackage(packageName string) tea.Cmd {
 // renderMain renders the main category detail view
 func (cs CategoryDetailScreen) renderMain() string {
 	mainContent := cs.list.View()
-	
+
 	if cs.loading {
 		progressView := cs.progress.View()
 		mainContent = lipgloss.JoinVertical(lipgloss.Left, mainContent, progressView)
 	}
-	
+
 	help := cs.renderHelpFooter()
-	
+
 	return lipgloss.JoinVertical(lipgloss.Left, mainContent, help)
 }
 
@@ -240,9 +242,9 @@ func (cs CategoryDetailScreen) renderMain() string {
 func (cs CategoryDetailScreen) renderLoading() string {
 	title := cs.themeManager.GetStyles().Header.Render(
 		fmt.Sprintf("Loading %s packages...", cs.category))
-	
+
 	progress := cs.progress.View()
-	
+
 	content := lipgloss.JoinVertical(lipgloss.Center,
 		"",
 		title,
@@ -250,7 +252,7 @@ func (cs CategoryDetailScreen) renderLoading() string {
 		progress,
 		"",
 	)
-	
+
 	return lipgloss.Place(cs.width, cs.height,
 		lipgloss.Center, lipgloss.Center, content)
 }
@@ -258,12 +260,12 @@ func (cs CategoryDetailScreen) renderLoading() string {
 // renderError renders the error state
 func (cs CategoryDetailScreen) renderError() string {
 	styles := cs.themeManager.GetStyles()
-	
+
 	title := styles.Header.Render("Error")
 	errorMsg := styles.Error.Render(fmt.Sprintf("Failed to load %s packages:\n%v", cs.category, cs.error))
-	
+
 	help := styles.Help.Render("Press 'r' to retry, 'esc' to go back")
-	
+
 	content := lipgloss.JoinVertical(lipgloss.Center,
 		"",
 		title,
@@ -273,7 +275,7 @@ func (cs CategoryDetailScreen) renderError() string {
 		help,
 		"",
 	)
-	
+
 	return lipgloss.Place(cs.width, cs.height,
 		lipgloss.Center, lipgloss.Center, content)
 }
@@ -281,13 +283,13 @@ func (cs CategoryDetailScreen) renderError() string {
 // renderHelp renders the help screen
 func (cs CategoryDetailScreen) renderHelp() string {
 	styles := cs.themeManager.GetStyles()
-	
+
 	title := styles.Header.Render("Category Package Management - Help")
-	
+
 	keyBindings := []string{
 		"Navigation:",
 		"  ↑/k       - Move up",
-		"  ↓/j       - Move down", 
+		"  ↓/j       - Move down",
 		"  /         - Filter packages",
 		"  esc       - Clear filter",
 		"",
@@ -299,9 +301,9 @@ func (cs CategoryDetailScreen) renderHelp() string {
 		"  ?         - Toggle this help",
 		"  esc/q     - Go back to tool screen",
 	}
-	
+
 	helpText := styles.Help.Render(strings.Join(keyBindings, "\n"))
-	
+
 	content := lipgloss.JoinVertical(lipgloss.Left,
 		"",
 		title,
@@ -309,7 +311,7 @@ func (cs CategoryDetailScreen) renderHelp() string {
 		helpText,
 		"",
 	)
-	
+
 	return lipgloss.Place(cs.width, cs.height,
 		lipgloss.Center, lipgloss.Center, content)
 }
@@ -317,17 +319,17 @@ func (cs CategoryDetailScreen) renderHelp() string {
 // renderHelpFooter renders the help footer
 func (cs CategoryDetailScreen) renderHelpFooter() string {
 	styles := cs.themeManager.GetStyles()
-	
+
 	keys := []string{
 		"i: install",
-		"r: refresh", 
+		"r: refresh",
 		"?: help",
 		"esc: back",
 	}
-	
+
 	if cs.list.FilterState() == list.Filtering {
 		keys = []string{"esc: clear filter", "enter: apply filter"}
 	}
-	
+
 	return styles.Help.Render(strings.Join(keys, " • "))
 }

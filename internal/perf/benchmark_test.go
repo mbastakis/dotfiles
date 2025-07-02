@@ -73,7 +73,7 @@ func BenchmarkStringJoin(b *testing.B) {
 // BenchmarkStringReplace tests string replacement performance
 func BenchmarkStringReplace(b *testing.B) {
 	text := strings.Repeat("The quick brown fox jumps over the lazy dog. ", 100)
-	
+
 	b.Run("FewReplacements", func(b *testing.B) {
 		b.ResetTimer()
 		for i := 0; i < b.N; i++ {
@@ -99,7 +99,7 @@ func BenchmarkStringReplace(b *testing.B) {
 // BenchmarkCache tests cache performance
 func BenchmarkCache(b *testing.B) {
 	cache := NewCache(1000, time.Hour)
-	
+
 	// Pre-populate cache
 	for i := 0; i < 500; i++ {
 		cache.Set(fmt.Sprintf("key%d", i), fmt.Sprintf("value%d", i))
@@ -137,7 +137,7 @@ func BenchmarkCache(b *testing.B) {
 // BenchmarkLRUCache tests LRU cache performance
 func BenchmarkLRUCache(b *testing.B) {
 	cache := NewLRUCache(1000)
-	
+
 	// Pre-populate cache
 	for i := 0; i < 500; i++ {
 		cache.Set(fmt.Sprintf("key%d", i), fmt.Sprintf("value%d", i))
@@ -196,7 +196,7 @@ func BenchmarkObjectPools(b *testing.B) {
 // BenchmarkConcurrentCache tests cache performance under concurrent load
 func BenchmarkConcurrentCache(b *testing.B) {
 	cache := NewCache(10000, time.Hour)
-	
+
 	// Pre-populate cache
 	for i := 0; i < 1000; i++ {
 		cache.Set(fmt.Sprintf("key%d", i), fmt.Sprintf("value%d", i))
@@ -306,7 +306,7 @@ func BenchmarkMemoryAllocations(b *testing.B) {
 	b.Run("StringBuilderAllocations", func(b *testing.B) {
 		mb := StartMemoryBenchmark()
 		b.ResetTimer()
-		
+
 		for i := 0; i < b.N; i++ {
 			sb := NewStringBuilder()
 			for j := 0; j < 10; j++ {
@@ -315,7 +315,7 @@ func BenchmarkMemoryAllocations(b *testing.B) {
 			_ = sb.String()
 			sb.Release()
 		}
-		
+
 		b.StopTimer()
 		allocs, bytes := mb.End()
 		b.ReportMetric(float64(allocs)/float64(b.N), "allocs/op")
@@ -325,7 +325,7 @@ func BenchmarkMemoryAllocations(b *testing.B) {
 	b.Run("StandardBuilderAllocations", func(b *testing.B) {
 		mb := StartMemoryBenchmark()
 		b.ResetTimer()
-		
+
 		for i := 0; i < b.N; i++ {
 			var sb strings.Builder
 			for j := 0; j < 10; j++ {
@@ -333,7 +333,7 @@ func BenchmarkMemoryAllocations(b *testing.B) {
 			}
 			_ = sb.String()
 		}
-		
+
 		b.StopTimer()
 		allocs, bytes := mb.End()
 		b.ReportMetric(float64(allocs)/float64(b.N), "allocs/op")
@@ -381,7 +381,7 @@ func StressTest(t *testing.T) {
 	defer monitor.Stop()
 
 	cache := NewCache(10000, time.Minute)
-	
+
 	var wg sync.WaitGroup
 	wg.Add(numGoroutines)
 
@@ -389,7 +389,7 @@ func StressTest(t *testing.T) {
 	for i := 0; i < numGoroutines; i++ {
 		go func(id int) {
 			defer wg.Done()
-			
+
 			counter := 0
 			for {
 				select {
@@ -398,24 +398,24 @@ func StressTest(t *testing.T) {
 				default:
 					// Perform various operations
 					key := fmt.Sprintf("stress_%d_%d", id, counter)
-					
+
 					// Cache operations
 					cache.Set(key, fmt.Sprintf("value_%d", counter))
 					_, _ = cache.Get(key)
-					
+
 					// String operations
 					sb := NewStringBuilder()
 					sb.WriteString(fmt.Sprintf("Worker %d operation %d", id, counter))
 					_ = sb.String()
 					sb.Release()
-					
+
 					// Monitor operations
 					op := monitor.StartTimedOperation("stress_test")
 					time.Sleep(time.Microsecond * 10) // Simulate work
 					op.Finish()
-					
+
 					counter++
-					
+
 					if counter%1000 == 0 {
 						runtime.GC() // Trigger GC occasionally
 					}
@@ -429,7 +429,7 @@ func StressTest(t *testing.T) {
 	// Check final stats
 	stats := cache.Stats()
 	metrics := monitor.GetPerformanceMetrics()
-	
+
 	t.Logf("Stress test completed:")
 	t.Logf("Cache size: %d items", stats.Size)
 	t.Logf("Memory usage: %s", monitor.GetMemoryUsageString())

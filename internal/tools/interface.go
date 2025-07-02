@@ -32,7 +32,7 @@ type Tool interface {
 // CategoryTool interface for tools that support category-level operations
 type CategoryTool interface {
 	Tool
-	
+
 	// Category-level operations
 	ListCategoryItems(ctx context.Context, category string) ([]types.ToolItem, error)
 	InstallCategoryItem(ctx context.Context, category string, item string) (*types.OperationResult, error)
@@ -56,11 +56,11 @@ func NewToolRegistry() *ToolRegistry {
 func (r *ToolRegistry) Register(tool Tool) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
-	
+
 	if tool.Name() == "" {
 		return ErrInvalidToolName
 	}
-	
+
 	r.tools[tool.Name()] = tool
 	return nil
 }
@@ -69,7 +69,7 @@ func (r *ToolRegistry) Register(tool Tool) error {
 func (r *ToolRegistry) Get(name string) (Tool, bool) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
-	
+
 	tool, exists := r.tools[name]
 	return tool, exists
 }
@@ -78,7 +78,7 @@ func (r *ToolRegistry) Get(name string) (Tool, bool) {
 func (r *ToolRegistry) List() []Tool {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
-	
+
 	tools := make([]Tool, 0, len(r.tools))
 	for _, tool := range r.tools {
 		tools = append(tools, tool)
@@ -90,7 +90,7 @@ func (r *ToolRegistry) List() []Tool {
 func (r *ToolRegistry) ListEnabled() []Tool {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
-	
+
 	var enabled []Tool
 	for _, tool := range r.tools {
 		if tool.IsEnabled() {
@@ -104,14 +104,14 @@ func (r *ToolRegistry) ListEnabled() []Tool {
 func (r *ToolRegistry) Remove(name string) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
-	
+
 	delete(r.tools, name)
 }
 
 // GetByPriority returns tools sorted by priority (lower numbers first)
 func (r *ToolRegistry) GetByPriority() []Tool {
 	tools := r.ListEnabled()
-	
+
 	// Sort by priority
 	for i := 0; i < len(tools); i++ {
 		for j := i + 1; j < len(tools); j++ {
@@ -120,6 +120,6 @@ func (r *ToolRegistry) GetByPriority() []Tool {
 			}
 		}
 	}
-	
+
 	return tools
 }

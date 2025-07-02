@@ -9,14 +9,15 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/mbastakis/dotfiles/internal/common"
 	"github.com/mbastakis/dotfiles/internal/theme"
 	"github.com/mbastakis/dotfiles/internal/tools"
-	"github.com/mbastakis/dotfiles/internal/common"
 	"github.com/mbastakis/dotfiles/internal/tui/components"
 	"github.com/mbastakis/dotfiles/internal/tui/keys"
 	"github.com/mbastakis/dotfiles/internal/types"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
-
 
 // ToolScreen represents a tool-specific screen
 type ToolScreen struct {
@@ -33,24 +34,23 @@ type ToolScreen struct {
 	showHelp     bool
 }
 
-
 // NewToolScreen creates a new tool screen
 func NewToolScreen(tool tools.Tool, themeManager *theme.ThemeManager, width, height int) ToolScreen {
 	// Create initial empty list
 	items := []list.Item{}
-	
+
 	// Create list with themed delegate
 	styles := themeManager.GetStyles()
 	delegate := list.NewDefaultDelegate()
 	delegate.Styles.SelectedTitle = styles.ActiveButton
 	delegate.Styles.SelectedDesc = styles.Info
-	
+
 	l := list.New(items, delegate, width-4, height-8)
-	l.Title = fmt.Sprintf("%s Tool", strings.Title(tool.Name()))
+	l.Title = fmt.Sprintf("%s Tool", cases.Title(language.English).String(tool.Name()))
 	l.SetShowStatusBar(false)
 	l.SetFilteringEnabled(false)
 	l.Styles.Title = styles.Title
-	
+
 	return ToolScreen{
 		tool:         tool,
 		themeManager: themeManager,
@@ -145,10 +145,10 @@ func (ts ToolScreen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 						if statusItem, ok := selectedItem.(components.StatusItem); ok {
 							// Navigate to category detail screen
 							categoryScreen := NewCategoryDetailScreen(
-								statusItem.ToolItem().Name, 
-								categoryTool, 
-								ts.themeManager, 
-								ts.width, 
+								statusItem.ToolItem().Name,
+								categoryTool,
+								ts.themeManager,
+								ts.width,
 								ts.height)
 							return ts, func() tea.Msg {
 								return common.NavigateMsg{Screen: categoryScreen}
@@ -225,8 +225,8 @@ func (ts ToolScreen) View() string {
 
 func (ts ToolScreen) renderHeader() string {
 	styles := ts.themeManager.GetStyles()
-	title := fmt.Sprintf("%s Tool Management", strings.Title(ts.tool.Name()))
-	
+	title := fmt.Sprintf("%s Tool Management", cases.Title(language.English).String(ts.tool.Name()))
+
 	var status string
 	if ts.tool.IsEnabled() {
 		status = styles.Healthy.Render("● Enabled")
@@ -240,7 +240,7 @@ func (ts ToolScreen) renderHeader() string {
 
 func (ts ToolScreen) renderFooter() string {
 	styles := ts.themeManager.GetStyles()
-	
+
 	if ts.showHelp {
 		// Show full help
 		var helpItems []string
@@ -252,10 +252,10 @@ func (ts ToolScreen) renderFooter() string {
 		helpText := styles.Help.Render(strings.Join(helpItems, " • "))
 		return styles.Footer.Width(ts.width - 2).Render(helpText)
 	}
-	
+
 	// Show contextual help based on state
 	var help []string
-	
+
 	if ts.loading {
 		help = append(help, "Loading...")
 	} else {
@@ -273,7 +273,7 @@ func (ts ToolScreen) renderFooter() string {
 			"[↑/↓] navigate",
 			fmt.Sprintf("[%s] back", ts.keys.Back.Help().Key),
 		)
-		
+
 		if !ts.showHelp {
 			help = append(help, fmt.Sprintf("[%s] more help", ts.keys.Help.Help().Key))
 		}
@@ -294,7 +294,7 @@ func (ts ToolScreen) loadToolStatus() tea.Cmd {
 func (ts ToolScreen) installSelected() tea.Cmd {
 	return func() tea.Msg {
 		ctx := context.Background()
-		
+
 		// Get selected items
 		var items []string
 		if selectedItem, ok := ts.list.SelectedItem().(components.StatusItem); ok {
@@ -311,7 +311,7 @@ func (ts ToolScreen) installSelected() tea.Cmd {
 func (ts ToolScreen) updateSelected() tea.Cmd {
 	return func() tea.Msg {
 		ctx := context.Background()
-		
+
 		var items []string
 		if selectedItem, ok := ts.list.SelectedItem().(components.StatusItem); ok {
 			items = []string{selectedItem.Title()}
@@ -325,7 +325,7 @@ func (ts ToolScreen) updateSelected() tea.Cmd {
 func (ts ToolScreen) removeSelected() tea.Cmd {
 	return func() tea.Msg {
 		ctx := context.Background()
-		
+
 		var items []string
 		if selectedItem, ok := ts.list.SelectedItem().(components.StatusItem); ok {
 			items = []string{selectedItem.Title()}

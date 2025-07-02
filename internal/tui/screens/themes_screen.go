@@ -9,6 +9,8 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/mbastakis/dotfiles/internal/config"
 	"github.com/mbastakis/dotfiles/internal/theme"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 // ThemesScreen manages theme selection and customization
@@ -20,7 +22,6 @@ type ThemesScreen struct {
 	height       int
 	currentTheme string
 }
-
 
 // ThemeItem represents a theme option
 type ThemeItem struct {
@@ -54,24 +55,24 @@ func NewThemesScreen(cfg *config.Config, themeManager *theme.ThemeManager, width
 	// Get available themes from theme manager
 	availableThemes := themeManager.GetThemes()
 	themes := make([]list.Item, 0, len(availableThemes))
-	
+
 	// Define theme descriptions
 	descriptions := map[string]string{
 		"default":         "🌟 Classic terminal theme with green accents",
-		"light":           "☀️ Clean light theme for daytime use", 
+		"light":           "☀️ Clean light theme for daytime use",
 		"cyberpunk":       "🌆 Neon-inspired theme with vibrant colors",
 		"solarized_dark":  "🌙 Popular Solarized dark color scheme",
 		"solarized_light": "☀️ Popular Solarized light color scheme",
 	}
-	
+
 	for name, themeData := range availableThemes {
 		description := descriptions[name]
 		if description == "" {
 			description = "🎨 Custom theme"
 		}
-		
+
 		themes = append(themes, ThemeItem{
-			name:        strings.Title(name),
+			name:        cases.Title(language.English).String(name),
 			description: description,
 			preview: ThemePreview{
 				Primary:    themeData.Primary,
@@ -87,7 +88,7 @@ func NewThemesScreen(cfg *config.Config, themeManager *theme.ThemeManager, width
 
 	// Get theme styles
 	styles := themeManager.GetStyles()
-	
+
 	// Create list with themed delegate
 	delegate := list.NewDefaultDelegate()
 	delegate.Styles.SelectedTitle = styles.ActiveButton
@@ -149,7 +150,7 @@ func (ts ThemesScreen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 // View renders the themes screen
 func (ts ThemesScreen) View() string {
 	// Split screen into list and preview
-	listWidth := (ts.width * 3) / 5 // 60% for list
+	listWidth := (ts.width * 3) / 5          // 60% for list
 	previewWidth := ts.width - listWidth - 4 // Rest for preview
 
 	ts.list.SetSize(listWidth, ts.height-6)
@@ -185,7 +186,7 @@ func (ts ThemesScreen) renderHeader() string {
 		styles.Title.Render(title),
 		styles.Help.Render(" • "+currentInfo),
 	)
-	return styles.Header.Width(ts.width-2).Render(headerContent)
+	return styles.Header.Width(ts.width - 2).Render(headerContent)
 }
 
 func (ts ThemesScreen) renderPreview(width int) string {
@@ -271,7 +272,7 @@ func (ts ThemesScreen) renderFooter() string {
 		"[/] filter",
 		"[q/esc] back",
 	}
-	return styles.Footer.Width(ts.width-2).Render(
+	return styles.Footer.Width(ts.width - 2).Render(
 		styles.Help.Render(strings.Join(help, " • ")),
 	)
 }
