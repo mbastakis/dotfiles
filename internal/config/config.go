@@ -154,8 +154,7 @@ func DefaultConfig() *Config {
 			"vscode_extensions": {
 				Enabled: true,
 				Scripts: []string{
-					"data/scripts/build_vscode_extensions.sh",
-					"data/scripts/list_vscode_extensions.sh",
+					"data/scripts/install_vscode_extensions.sh",
 				},
 			},
 			"macos_settings": {

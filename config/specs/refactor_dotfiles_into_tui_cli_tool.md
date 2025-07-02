@@ -166,8 +166,7 @@ apps:
   vscode_extensions: 
     enabled: true
     scripts: 
-      - "data/scripts/build_vscode_extensions.sh"
-      - "data/scripts/list_vscode_extensions.sh"
+      - "data/scripts/install_vscode_extensions.sh"
   macos_settings:
     enabled: true
     scripts:
