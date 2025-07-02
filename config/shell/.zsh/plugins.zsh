@@ -25,10 +25,6 @@ if [[ -f "${HOME}/.local/share/zinit/zinit.git/zinit.zsh" ]]; then
     zinit ice wait lucid blockf
     zinit load zsh-users/zsh-completions
     
-    # Example: Useful utilities
-    zinit ice wait"0" lucid
-    zinit load zdharma-continuum/history-search-multi-word
-    
     # Load Git plugin from Oh-My-Zsh
     zinit snippet OMZ::plugins/git/git.plugin.zsh
     
@@ -39,14 +35,7 @@ if [[ -f "${HOME}/.local/share/zinit/zinit.git/zinit.zsh" ]]; then
     zinit ice wait lucid atload'!_zsh_autosuggest_start'
     zinit load zsh-users/zsh-autosuggestions
     
-    # Enhanced Vi mode plugin
-    # zinit ice depth=1
-    # zinit load jeffreytse/zsh-vi-mode
-    
     # Load syntax highlighting (must be last for proper highlighting)
     zinit ice wait lucid
     zinit load zdharma-continuum/fast-syntax-highlighting
-    
-    # Load your custom plugins below
-    # zinit load <username>/<repository>
 fi
