@@ -3,8 +3,10 @@ package cli
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"os"
 
+	"github.com/mbastakis/dotfiles/internal/common"
 	"github.com/mbastakis/dotfiles/internal/config"
 	"github.com/mbastakis/dotfiles/internal/perf"
 	"github.com/mbastakis/dotfiles/internal/tools"
@@ -110,6 +112,22 @@ func initConfig() error {
 			cfg.Global.LogLevel = "debug"
 		}
 	}
+
+	// Initialize logger based on configuration
+	var logLevel slog.Level
+	switch cfg.Global.LogLevel {
+	case "debug":
+		logLevel = slog.LevelDebug
+	case "info":
+		logLevel = slog.LevelInfo
+	case "warn":
+		logLevel = slog.LevelWarn
+	case "error":
+		logLevel = slog.LevelError
+	default:
+		logLevel = slog.LevelInfo
+	}
+	common.InitLogger(logLevel, cfg.Global.Verbose)
 
 	// Expand environment variables in config
 	if err := cfg.ExpandVariables(); err != nil {

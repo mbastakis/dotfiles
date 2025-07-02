@@ -10,38 +10,17 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Logging functions
-log_info() {
-    echo -e "${BLUE}[INFO]${NC} $1"
-}
-
-log_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
-}
-
-log_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
-}
-
-log_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
-}
-
-log_section() {
-    echo ""
-    echo -e "${BLUE}=== $1 ===${NC}"
-    echo ""
-}
-
-log_subsection() {
-    echo -e "${GREEN}--- $1 ---${NC}"
+# Source the shared utilities
+source "$SCRIPT_DIR/utils.sh" 2>/dev/null || {
+    # Fallback logging if utils.sh is not available
+    log_info() { echo "[INFO] $1"; }
+    log_error() { echo "[ERROR] $1" >&2; }
+    log_success() { echo "[SUCCESS] $1"; }
+    log_warning() { echo "[WARNING] $1" >&2; }
+    log_section() { echo ""; echo "=== $1 ==="; echo ""; }
+    log_subsection() { echo "--- $1 ---"; }
 }
 
 # Check if command exists
@@ -106,6 +85,23 @@ install_yazi_packages() {
     install_yazi_themes
 }
 
+# Check if yazi package is already installed
+check_yazi_package_installed() {
+    local package="$1"
+    local type="${2:-package}"
+    
+    # Extract package name from the full package specification
+    local package_name="${package##*:}"
+    
+    # Check if package is already installed
+    if ya pkg list 2>/dev/null | grep -q "$package_name"; then
+        log_info "$type already installed: $package_name"
+        return 0  # Package is installed, continue processing
+    else
+        return 1  # Package not installed, skip to next
+    fi
+}
+
 # Install yazi plugins
 install_yazi_plugins() {
     log_subsection "Installing Yazi plugins"
@@ -115,10 +111,30 @@ install_yazi_plugins() {
     )
     
     for plugin in "${plugins[@]}"; do
+        if check_yazi_package_installed "$plugin" "plugin"; then
+            log_info "Skipping already installed plugin: $plugin"
+            continue  # Plugin already installed, skip to next
+        fi
+        log_info "Installing plugin: $plugin" && \
         install_yazi_package "$plugin" "plugin"
     done
     
     log_success "Yazi plugins installation completed"
+}
+
+check_yazi_theme_installed() {
+    local theme="$1"
+    
+    # Extract theme name from the full theme specification
+    local theme_name="${theme##*:}"
+    
+    # Check if theme is already installed
+    if ya pkg list 2>/dev/null | grep -q "$theme_name"; then
+        log_info "Theme already installed: $theme_name"
+        return 0  # Theme is installed, continue processing
+    else
+        return 1  # Theme not installed, skip to next
+    fi
 }
 
 # Install yazi themes
@@ -131,6 +147,12 @@ install_yazi_themes() {
     )
     
     for theme in "${themes[@]}"; do
+        if check_yazi_theme_installed "$theme"; then
+            log_info "Skipping already installed theme: $theme"
+            continue  # Theme already installed, skip to next
+        fi
+        log_info "Installing theme: $theme" && \
+        # Install the theme
         install_yazi_package "$theme" "theme"
     done
     
