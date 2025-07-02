@@ -14,8 +14,9 @@ import (
 
 // UVTool implements the Tool interface for UV Python tool management
 type UVTool struct {
-	config *config.UVConfig
-	dryRun bool
+	config   *config.UVConfig
+	dryRun   bool
+	priority int
 }
 
 // UVToolInfo represents information about a UV tool
@@ -27,9 +28,15 @@ type UVToolInfo struct {
 
 // NewUVTool creates a new UVTool instance
 func NewUVTool(cfg *config.Config) *UVTool {
+	priority := 60 // default fallback
+	if p, exists := cfg.Tools.Priorities["uv"]; exists {
+		priority = p
+	}
+	
 	return &UVTool{
-		config: &cfg.UV,
-		dryRun: cfg.Global.DryRun,
+		config:   &cfg.UV,
+		dryRun:   cfg.Global.DryRun,
+		priority: priority,
 	}
 }
 
@@ -43,9 +50,9 @@ func (u *UVTool) IsEnabled() bool {
 	return u.config != nil
 }
 
-// Priority returns the tool priority
+// Priority returns the tool priority (configurable)
 func (u *UVTool) Priority() int {
-	return 60 // Run last after all other tools
+	return u.priority
 }
 
 // Validate checks if uv is available and tools are valid

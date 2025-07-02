@@ -18,6 +18,7 @@ type HomebrewTool struct {
 	config       *config.HomebrewConfig
 	dotfilesPath string
 	dryRun       bool
+	priority     int
 }
 
 // BrewPackage represents a package from brew list output
@@ -29,10 +30,16 @@ type BrewPackage struct {
 
 // NewHomebrewTool creates a new HomebrewTool instance
 func NewHomebrewTool(cfg *config.Config) *HomebrewTool {
+	priority := 30 // default fallback
+	if p, exists := cfg.Tools.Priorities["homebrew"]; exists {
+		priority = p
+	}
+	
 	return &HomebrewTool{
 		config:       &cfg.Homebrew,
 		dotfilesPath: cfg.Global.DotfilesPath,
 		dryRun:       cfg.Global.DryRun,
+		priority:     priority,
 	}
 }
 
@@ -46,9 +53,9 @@ func (h *HomebrewTool) IsEnabled() bool {
 	return h.config != nil
 }
 
-// Priority returns the tool priority
+// Priority returns the tool priority (configurable)
 func (h *HomebrewTool) Priority() int {
-	return 30 // Run after stow and rsync
+	return h.priority
 }
 
 // Validate checks if brew is available and Brewfiles exist

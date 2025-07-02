@@ -1,10 +1,12 @@
 package cli
 
 import (
+	"context"
 	"fmt"
 	"os"
 
 	"github.com/mbastakis/dotfiles/internal/config"
+	"github.com/mbastakis/dotfiles/internal/perf"
 	"github.com/mbastakis/dotfiles/internal/tools"
 	"github.com/mbastakis/dotfiles/internal/tools/apps"
 	"github.com/mbastakis/dotfiles/internal/tools/homebrew"
@@ -118,6 +120,24 @@ func initConfig() error {
 	if err := cfg.Validate(); err != nil {
 		return fmt.Errorf("invalid configuration: %w", err)
 	}
+
+	// Initialize performance systems from configuration
+	ctx := context.Background()
+	if err := perf.InitGlobalCaches(ctx, cfg); err != nil {
+		return fmt.Errorf("failed to initialize caches: %w", err)
+	}
+	
+	if err := perf.InitGlobalMonitor(cfg); err != nil {
+		return fmt.Errorf("failed to initialize monitor: %w", err)
+	}
+	
+	if err := perf.InitGlobalProfiler(cfg); err != nil {
+		return fmt.Errorf("failed to initialize profiler: %w", err)
+	}
+	
+	// Start performance monitoring
+	perf.StartGlobalMonitor(ctx)
+	perf.StartGlobalProfiling(ctx)
 
 	// Initialize tool registry
 	registry = tools.NewToolRegistry()

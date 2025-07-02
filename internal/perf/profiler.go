@@ -9,6 +9,8 @@ import (
 	"runtime/pprof"
 	"sync"
 	"time"
+
+	"github.com/mbastakis/dotfiles/internal/config"
 )
 
 // Profiler provides application profiling capabilities
@@ -179,12 +181,12 @@ type ProfileCondition struct {
 }
 
 // NewAutoProfiler creates a new automatic profiler
-func NewAutoProfiler(profileDir string, interval time.Duration) *AutoProfiler {
+func NewAutoProfiler(profileDir string, interval time.Duration, cooldown time.Duration) *AutoProfiler {
 	return &AutoProfiler{
 		profiler: NewProfiler(profileDir),
 		monitor:  NewMonitor(interval, 100),
 		interval: interval,
-		cooldown: 5 * time.Minute, // Default cooldown between profiles
+		cooldown: cooldown,
 	}
 }
 
@@ -325,27 +327,73 @@ func LowCacheHitRatioCondition(cacheName string, threshold float64) ProfileCondi
 	}
 }
 
-// Global profiler instances
+// Global profiler instances (initialized from config)
 var (
-	GlobalProfiler     = NewProfiler("./profiles")
-	GlobalAutoProfiler = NewAutoProfiler("./profiles", 10*time.Second)
+	GlobalProfiler     *Profiler
+	GlobalAutoProfiler *AutoProfiler
 )
 
-// InitGlobalProfiler initializes the global profiler with common conditions
-func InitGlobalProfiler() {
-	// Add common profiling conditions
-	GlobalAutoProfiler.AddCondition(HighMemoryCondition(100 * 1024 * 1024)) // 100MB
-	GlobalAutoProfiler.AddCondition(HighGoroutineCondition(1000))
-	GlobalAutoProfiler.AddCondition(SlowOperationCondition("theme_load", 100*time.Millisecond))
-	GlobalAutoProfiler.AddCondition(LowCacheHitRatioCondition("theme_cache", 0.8))
+// InitGlobalProfiler initializes the global profiler from configuration
+func InitGlobalProfiler(cfg *config.Config) error {
+	GlobalProfiler = NewProfiler("./profiles")
+	
+	// Parse profiler configuration
+	autoInterval, err := time.ParseDuration(cfg.Performance.Profiler.AutoInterval)
+	if err != nil {
+		return err
+	}
+	
+	cooldown, err := time.ParseDuration(cfg.Performance.Profiler.Cooldown)
+	if err != nil {
+		return err
+	}
+	
+	GlobalAutoProfiler = NewAutoProfiler("./profiles", autoInterval, cooldown)
+	
+	// Add configured profile conditions with durations from config
+	for profileType, setting := range cfg.Performance.Profiler.Profiles {
+		duration, err := time.ParseDuration(setting.Duration)
+		if err != nil {
+			return err
+		}
+		
+		switch profileType {
+		case "cpu":
+			GlobalAutoProfiler.AddCondition(ProfileCondition{
+				Name:      "high_cpu",
+				CheckFunc: func(metrics PerformanceMetrics) bool { return metrics.Memory.Alloc > 50*1024*1024 }, // High memory as CPU proxy
+				Duration:  duration,
+			})
+		case "heap":
+			GlobalAutoProfiler.AddCondition(HighMemoryCondition(100 * 1024 * 1024)) // 100MB
+		case "allocs":
+			GlobalAutoProfiler.AddCondition(ProfileCondition{
+				Name:      "high_allocs",
+				CheckFunc: func(metrics PerformanceMetrics) bool { return metrics.Memory.TotalAlloc > 1024*1024*1024 }, // 1GB total allocs
+				Duration:  duration,
+			})
+		case "mutex":
+			GlobalAutoProfiler.AddCondition(ProfileCondition{
+				Name:      "high_gc_pressure",
+				CheckFunc: func(metrics PerformanceMetrics) bool { return metrics.Memory.NumGC > 100 },
+				Duration:  duration,
+			})
+		}
+	}
+	
+	return nil
 }
 
 // StartGlobalProfiling starts global profiling
 func StartGlobalProfiling(ctx context.Context) {
-	GlobalAutoProfiler.Start(ctx)
+	if GlobalAutoProfiler != nil {
+		GlobalAutoProfiler.Start(ctx)
+	}
 }
 
 // StopGlobalProfiling stops global profiling
 func StopGlobalProfiling() {
-	GlobalAutoProfiler.Stop()
+	if GlobalAutoProfiler != nil {
+		GlobalAutoProfiler.Stop()
+	}
 }

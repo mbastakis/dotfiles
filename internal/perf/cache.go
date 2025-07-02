@@ -4,6 +4,8 @@ import (
 	"context"
 	"sync"
 	"time"
+
+	"github.com/mbastakis/dotfiles/internal/config"
 )
 
 // CacheItem represents a cached item with expiration
@@ -441,20 +443,78 @@ func (lc *LRUCache) removeTail() *lruNode {
 	return lastNode
 }
 
-// Global caches for common use cases
+// Global caches for common use cases (initialized from config)
 var (
-	DefaultCache = NewCache(1000, 5*time.Minute)
-	StatusCache  = NewCache(100, 30*time.Second)
-	ViewCache    = NewCache(50, 1*time.Minute)
-	ConfigCache  = NewCache(20, 10*time.Minute)
-	ThemeCache   = NewCache(10, 15*time.Minute)
+	DefaultCache *Cache
+	StatusCache  *Cache
+	ViewCache    *Cache
+	ConfigCache  *Cache
+	ThemeCache   *Cache
 )
 
-// InitGlobalCaches initializes global caches with cleanup timers
-func InitGlobalCaches(ctx context.Context) {
-	DefaultCache.StartCleanupTimer(ctx, 1*time.Minute)
-	StatusCache.StartCleanupTimer(ctx, 15*time.Second)
-	ViewCache.StartCleanupTimer(ctx, 30*time.Second)
-	ConfigCache.StartCleanupTimer(ctx, 2*time.Minute)
-	ThemeCache.StartCleanupTimer(ctx, 5*time.Minute)
+// InitGlobalCaches initializes global caches from configuration
+func InitGlobalCaches(ctx context.Context, cfg *config.Config) error {
+	// Parse cache settings and create caches
+	defaultTTL, err := time.ParseDuration(cfg.Performance.Cache.Default.TTL)
+	if err != nil {
+		return err
+	}
+	DefaultCache = NewCache(cfg.Performance.Cache.Default.Size, defaultTTL)
+	
+	statusTTL, err := time.ParseDuration(cfg.Performance.Cache.Status.TTL)
+	if err != nil {
+		return err
+	}
+	StatusCache = NewCache(cfg.Performance.Cache.Status.Size, statusTTL)
+	
+	viewTTL, err := time.ParseDuration(cfg.Performance.Cache.View.TTL)
+	if err != nil {
+		return err
+	}
+	ViewCache = NewCache(cfg.Performance.Cache.View.Size, viewTTL)
+	
+	configTTL, err := time.ParseDuration(cfg.Performance.Cache.Config.TTL)
+	if err != nil {
+		return err
+	}
+	ConfigCache = NewCache(cfg.Performance.Cache.Config.Size, configTTL)
+	
+	themeTTL, err := time.ParseDuration(cfg.Performance.Cache.Theme.TTL)
+	if err != nil {
+		return err
+	}
+	ThemeCache = NewCache(cfg.Performance.Cache.Theme.Size, themeTTL)
+	
+	// Start cleanup timers with configurable intervals
+	defaultCleanup, err := time.ParseDuration(cfg.Performance.Cache.Default.CleanupInterval)
+	if err != nil {
+		return err
+	}
+	DefaultCache.StartCleanupTimer(ctx, defaultCleanup)
+	
+	statusCleanup, err := time.ParseDuration(cfg.Performance.Cache.Status.CleanupInterval)
+	if err != nil {
+		return err
+	}
+	StatusCache.StartCleanupTimer(ctx, statusCleanup)
+	
+	viewCleanup, err := time.ParseDuration(cfg.Performance.Cache.View.CleanupInterval)
+	if err != nil {
+		return err
+	}
+	ViewCache.StartCleanupTimer(ctx, viewCleanup)
+	
+	configCleanup, err := time.ParseDuration(cfg.Performance.Cache.Config.CleanupInterval)
+	if err != nil {
+		return err
+	}
+	ConfigCache.StartCleanupTimer(ctx, configCleanup)
+	
+	themeCleanup, err := time.ParseDuration(cfg.Performance.Cache.Theme.CleanupInterval)
+	if err != nil {
+		return err
+	}
+	ThemeCache.StartCleanupTimer(ctx, themeCleanup)
+	
+	return nil
 }

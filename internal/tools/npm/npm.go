@@ -15,8 +15,10 @@ import (
 
 // NPMTool implements the Tool interface for NPM global package management
 type NPMTool struct {
-	config *config.NPMConfig
-	dryRun bool
+	config           *config.NPMConfig
+	dryRun           bool
+	priority         int
+	packagePattern   string
 }
 
 // NPMPackageInfo represents information about an NPM package
@@ -29,9 +31,16 @@ type NPMPackageInfo struct {
 
 // NewNPMTool creates a new NPMTool instance
 func NewNPMTool(cfg *config.Config) *NPMTool {
+	priority := 50 // default fallback
+	if p, exists := cfg.Tools.Priorities["npm"]; exists {
+		priority = p
+	}
+	
 	return &NPMTool{
-		config: &cfg.NPM,
-		dryRun: cfg.Global.DryRun,
+		config:         &cfg.NPM,
+		dryRun:         cfg.Global.DryRun,
+		priority:       priority,
+		packagePattern: cfg.Validation.NPMPackagePattern,
 	}
 }
 
@@ -45,9 +54,9 @@ func (n *NPMTool) IsEnabled() bool {
 	return n.config != nil
 }
 
-// Priority returns the tool priority
+// Priority returns the tool priority (configurable)
 func (n *NPMTool) Priority() int {
-	return 50 // Run after apps
+	return n.priority
 }
 
 // Validate checks if npm is available and packages are valid
@@ -62,11 +71,13 @@ func (n *NPMTool) Validate() error {
 		return fmt.Errorf("node command not found: %w", err)
 	}
 
-	// Validate package names (basic validation)
-	packageNameRegex := regexp.MustCompile(`^(@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$`)
-	for _, packageName := range n.config.GlobalPackages {
-		if !packageNameRegex.MatchString(packageName) {
-			return fmt.Errorf("invalid package name: %s", packageName)
+	// Validate package names using configurable pattern
+	if n.packagePattern != "" {
+		packageNameRegex := regexp.MustCompile(n.packagePattern)
+		for _, packageName := range n.config.GlobalPackages {
+			if !packageNameRegex.MatchString(packageName) {
+				return fmt.Errorf("invalid package name: %s", packageName)
+			}
 		}
 	}
 

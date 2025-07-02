@@ -6,6 +6,8 @@ import (
 	"runtime"
 	"sync"
 	"time"
+
+	"github.com/mbastakis/dotfiles/internal/config"
 )
 
 // MemoryStats represents memory usage statistics
@@ -288,12 +290,25 @@ func formatBytes(bytes uint64) string {
 	return fmt.Sprintf("%.1f %cB", float64(bytes)/float64(div), "KMGTPE"[exp])
 }
 
-// Global monitor instance
-var globalMonitor = NewMonitor(5*time.Second, 100)
+// Global monitor instance (initialized from config)
+var globalMonitor *Monitor
+
+// InitGlobalMonitor initializes the global monitor from configuration
+func InitGlobalMonitor(cfg *config.Config) error {
+	interval, err := time.ParseDuration(cfg.Performance.Monitor.Interval)
+	if err != nil {
+		return err
+	}
+	
+	globalMonitor = NewMonitor(interval, cfg.Performance.Monitor.Capacity)
+	return nil
+}
 
 // StartGlobalMonitor starts the global performance monitor
 func StartGlobalMonitor(ctx context.Context) {
-	globalMonitor.Start(ctx)
+	if globalMonitor != nil {
+		globalMonitor.Start(ctx)
+	}
 }
 
 // StopGlobalMonitor stops the global performance monitor

@@ -18,14 +18,23 @@ type AppsTool struct {
 	config       *config.AppsConfig
 	dotfilesPath string
 	dryRun       bool
+	priority     int
+	interpreters map[string]string
 }
 
 // NewAppsTool creates a new AppsTool instance
 func NewAppsTool(cfg *config.Config) *AppsTool {
+	priority := 40 // default fallback
+	if p, exists := cfg.Tools.Priorities["apps"]; exists {
+		priority = p
+	}
+	
 	return &AppsTool{
 		config:       &cfg.Apps,
 		dotfilesPath: cfg.Global.DotfilesPath,
 		dryRun:       cfg.Global.DryRun,
+		priority:     priority,
+		interpreters: cfg.Tools.Interpreters,
 	}
 }
 
@@ -39,9 +48,9 @@ func (a *AppsTool) IsEnabled() bool {
 	return a.config != nil && len(*a.config) > 0
 }
 
-// Priority returns the tool priority
+// Priority returns the tool priority (configurable)
 func (a *AppsTool) Priority() int {
-	return 40 // Run after homebrew, before npm and uv
+	return a.priority
 }
 
 // Validate checks if all app scripts exist and are executable
@@ -271,18 +280,13 @@ func (a *AppsTool) validateScript(scriptPath string) error {
 }
 
 func (a *AppsTool) executeScript(ctx context.Context, scriptPath string) error {
-	// Determine the interpreter based on file extension
+	// Determine the interpreter based on configurable file extension mappings
 	var cmd *exec.Cmd
 	ext := filepath.Ext(scriptPath)
 
-	switch ext {
-	case ".sh", ".bash":
-		cmd = exec.CommandContext(ctx, "bash", scriptPath)
-	case ".py":
-		cmd = exec.CommandContext(ctx, "python3", scriptPath)
-	case ".js":
-		cmd = exec.CommandContext(ctx, "node", scriptPath)
-	default:
+	if interpreter, exists := a.interpreters[ext]; exists {
+		cmd = exec.CommandContext(ctx, interpreter, scriptPath)
+	} else {
 		// Try to execute directly (assuming it has shebang)
 		cmd = exec.CommandContext(ctx, scriptPath)
 	}
