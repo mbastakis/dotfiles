@@ -10,6 +10,6 @@ obsidian/.obsidian/plugins/copilot/data.json
 # vscode local extensions
 vscode/extensions/tui-manager/node_modules
 vscode/extensions/tui-manager/out
-vscode/extensions/tui-manager/tui-manager.vsix
+*.vsix
 # binary files
 bin/dotfiles

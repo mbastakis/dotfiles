@@ -27,8 +27,13 @@ check_vscode() {
 
 package_extension() {
     local extension_dir="$1"
-    local extension_name="$(basename "$extension_dir")"
-    
+    local extension_name=""
+    extension_name="$(basename "$extension_dir")"
+    if [[ ! -d "$extension_dir" ]]; then
+        log_error "Extension directory not found: $extension_dir"
+        return 1
+    fi
+
     log_info "Packaging extension: $extension_name"
     
     cd "$extension_dir"
@@ -41,7 +46,7 @@ package_extension() {
     fi
     
     # Package the extension
-    vsce package --out "$extension_name.vsix"
+    vsce package --allow-missing-repository --out "$extension_name.vsix"
     
     if [[ ! -f "$extension_name.vsix" ]]; then
         log_error "Failed to create $extension_name.vsix"
@@ -53,8 +58,13 @@ package_extension() {
 
 install_extension() {
     local vsix_file="$1"
-    local extension_name="$(basename "$vsix_file" .vsix)"
-    
+    local extension_name=""
+    extension_name="$(basename "$vsix_file" .vsix)"
+    if [[ ! -f "$vsix_file" ]]; then
+        log_error "VSIX file not found: $vsix_file"
+        return 1
+    fi
+
     log_info "Installing extension: $extension_name"
     
     if code --install-extension "$vsix_file"; then
@@ -86,7 +96,8 @@ main() {
             continue
         fi
         
-        local extension_name="$(basename "$extension_dir")"
+        local extension_name=""
+        extension_name="$(basename "$extension_dir")"
         log_info "Processing extension directory: $extension_name"
         
         # Check if package.json exists
@@ -99,11 +110,10 @@ main() {
         # Package the extension
         if package_extension "$extension_dir"; then
             local vsix_file="$extension_dir/$extension_name.vsix"
-            
+            log_info "VSIX file created: $vsix_file"
             # Install the extension
             if install_extension "$vsix_file"; then
                 ((installed_count++))
-                
                 # Clean up the .vsix file after successful installation
                 rm -f "$vsix_file"
                 log_info "Cleaned up $vsix_file"
@@ -122,6 +132,9 @@ main() {
         log_error "Failed to install: $failed_count extensions"
         exit 1
     fi
+
+    log_info "All extensions processed"
+    exit 0
 }
 
 main "$@"

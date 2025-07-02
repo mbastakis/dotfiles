@@ -287,13 +287,17 @@ func (a *AppsTool) executeScript(ctx context.Context, scriptPath string) error {
 		cmd = exec.CommandContext(ctx, scriptPath)
 	}
 
-	// Set working directory to the script's directory
-	cmd.Dir = filepath.Dir(scriptPath)
+	// Set working directory to dotfiles root, not script directory
+	// This ensures scripts can access relative paths correctly
+	cmd.Dir = a.dotfilesPath
 	
-	// Capture both stdout and stderr
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		return fmt.Errorf("execution failed: %w\nOutput: %s", err, string(output))
+	// Connect stdout/stderr to current process for proper TTY handling
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	
+	// Run the command and wait for completion
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("execution failed: %w", err)
 	}
 
 	return nil
