@@ -299,7 +299,7 @@ func InitGlobalMonitor(cfg *config.Config) error {
 	if err != nil {
 		return err
 	}
-	
+
 	globalMonitor = NewMonitor(interval, cfg.Performance.Monitor.Capacity)
 	return nil
 }

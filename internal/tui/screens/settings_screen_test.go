@@ -62,7 +62,7 @@ func TestNewSettingsScreen(t *testing.T) {
 	}
 
 	themeManager := theme.NewThemeManager("/test/path")
-	
+
 	screen := NewSettingsScreen(cfg, themeManager, 80, 24)
 
 	if screen.config != cfg {
@@ -97,7 +97,7 @@ func TestSettingsScreen_Dimensions(t *testing.T) {
 	}
 
 	themeManager := theme.NewThemeManager("/test")
-	
+
 	screen := NewSettingsScreen(cfg, themeManager, 100, 50)
 
 	if screen.width != 100 {

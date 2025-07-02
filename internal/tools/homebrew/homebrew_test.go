@@ -387,16 +387,16 @@ func TestHomebrewTool_Fields(t *testing.T) {
 	}
 
 	tool := NewHomebrewTool(cfg)
-	
+
 	// Test that all fields are properly set
 	if tool.config == nil {
 		t.Error("Expected config field to be set")
 	}
-	
+
 	if tool.dotfilesPath != "/test/path" {
 		t.Errorf("Expected dotfilesPath to be '/test/path', got '%s'", tool.dotfilesPath)
 	}
-	
+
 	if !tool.IsEnabled() {
 		t.Error("Expected tool to be enabled by default")
 	}

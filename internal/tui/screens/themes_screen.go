@@ -42,7 +42,7 @@ type ThemePreview struct {
 }
 
 func (t ThemeItem) FilterValue() string { return t.name }
-func (t ThemeItem) Title() string       { return t.name }
+func (t ThemeItem) Title() string       { return cases.Title(language.English).String(t.name) }
 func (t ThemeItem) Description() string { return t.description }
 
 // ThemeChangedMsg indicates a theme has been selected
@@ -72,7 +72,7 @@ func NewThemesScreen(cfg *config.Config, themeManager *theme.ThemeManager, width
 		}
 
 		themes = append(themes, ThemeItem{
-			name:        cases.Title(language.English).String(name),
+			name:        name, // Keep original name (lowercase) for internal use
 			description: description,
 			preview: ThemePreview{
 				Primary:    themeData.Primary,
@@ -131,9 +131,11 @@ func (ts ThemesScreen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			// Apply selected theme
 			selected := ts.list.SelectedItem()
 			if themeItem, ok := selected.(ThemeItem); ok {
-				ts.currentTheme = themeItem.name
+				// Store the theme name in lowercase to match theme manager keys
+				themeName := strings.ToLower(themeItem.name)
+				ts.currentTheme = themeName
 				return ts, func() tea.Msg {
-					return ThemeChangedMsg{ThemeName: themeItem.name}
+					return ThemeChangedMsg{ThemeName: themeName}
 				}
 			}
 		case "q", "esc":
@@ -180,7 +182,7 @@ func (ts ThemesScreen) View() string {
 func (ts ThemesScreen) renderHeader() string {
 	styles := ts.themeManager.GetStyles()
 	title := "🎨 Theme Selection"
-	currentInfo := fmt.Sprintf("Current: %s", ts.currentTheme)
+	currentInfo := fmt.Sprintf("Current: %s", cases.Title(language.English).String(ts.currentTheme))
 	headerContent := lipgloss.JoinHorizontal(
 		lipgloss.Left,
 		styles.Title.Render(title),
@@ -214,7 +216,7 @@ func (ts ThemesScreen) renderThemePreview(theme ThemeItem, width int) string {
 
 	content := lipgloss.JoinVertical(
 		lipgloss.Left,
-		lipgloss.NewStyle().Bold(true).Render(fmt.Sprintf("Preview: %s", theme.name)),
+		lipgloss.NewStyle().Bold(true).Render(fmt.Sprintf("Preview: %s", cases.Title(language.English).String(theme.name))),
 		"",
 		lipgloss.NewStyle().Bold(true).Render("Color Palette:"),
 		strings.Join(swatches, "\n"),

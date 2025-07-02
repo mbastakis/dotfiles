@@ -341,16 +341,16 @@ func TestNPMTool_Fields(t *testing.T) {
 	}
 
 	tool := NewNPMTool(cfg)
-	
+
 	// Test that all fields are properly set
 	if tool.config == nil {
 		t.Error("Expected config field to be set")
 	}
-	
+
 	if tool.priority != 50 {
 		t.Errorf("Expected priority to be 50, got %d", tool.priority)
 	}
-	
+
 	if !tool.IsEnabled() {
 		t.Error("Expected tool to be enabled by default")
 	}
