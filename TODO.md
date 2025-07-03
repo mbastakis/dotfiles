@@ -1,5 +1,3 @@
-#TODO: make `ctrl + r` in the terminal trigger atuin not zsh history search
-
 #TODO: improve test coverage for the dotfiles tool
 USE `make test-coverage` and `make test-coverage-check` to ensure coverage is above 80%
 PLAN
