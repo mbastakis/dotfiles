@@ -25,24 +25,9 @@
               "icon": "projects-icon",
               "title": "Projects"
             }
-          },
-          {
-            "id": "b7a9613e1da5c28d",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Projects/Tasks/Kanban Tasks/notes from the aicc meeting.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": false
-              },
-              "icon": "lucide-file",
-              "title": "notes from the aicc meeting"
-            }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -198,8 +183,12 @@
       "omnisearch:Omnisearch": true
     }
   },
-  "active": "b7a9613e1da5c28d",
+  "active": "8f9bcc9d3ec99f9c",
   "lastOpenFiles": [
+    "Projects/Tasks/DT Tasks/Azure & GCP contact dimitra.md",
+    "Projects/Tasks/DT Tasks/Ask Paul the script for aws login.md",
+    "Projects/Tasks/Kanban Tasks/notes from the aicc meeting.md",
+    "image.png",
     "lhermetica-moc.md",
     "lpireos-startup-accelerator.md",
     "lhermetica.md",
@@ -210,8 +199,6 @@
     "lenvironment-moc.md",
     "lappearance-moc.md",
     "Resources/Sticky Notes/Installing Nix.md",
-    "Projects/Tasks/DT Tasks/Azure & GCP contact dimitra.md",
-    "Projects/Tasks/Kanban Tasks/notes from the aicc meeting.md",
     "Projects/Tasks/Kanban Tasks/setup vi mode in ghostty.md",
     "Projects/Tasks/Kanban Tasks/add nix in dotfiles.md",
     "Projects/Tasks/Kanban Tasks/check navi.md",
@@ -227,7 +214,6 @@
     "Extras/Images/italy-roadtrip-2025-1751116633531.webp",
     "Extras/Unkown/diakopes 2025.md",
     "italy-roadtrip-2025.md",
-    "Untitled 789.md",
     "My Resume.pdf",
     "Dashboards/Fitness.canvas",
     "loukas-mertzanis-cv 1.pdf",
@@ -249,7 +235,6 @@
     "Extras/Images/indian-spirit-1750283960793.webp",
     "Extras/Images/indian-spirit-1750283154794.webp",
     "Extras/Images/AI Articulate - The Collaborative AI Guessing Game-1750263010541.webp",
-    "Extras/Images/AI Articulate - The Collaborative AI Guessing Game-1750262986970.webp",
     "Dashboards/PARA.canvas",
     "Dashboards/Global Tasks.canvas"
   ]
