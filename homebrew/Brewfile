@@ -30,6 +30,7 @@ brew "btop"                 # Resource monitor
 brew "git-delta"            # Syntax-highlighting pager for git
 brew "thefuck"              # Program to correct console commands
 brew "carapace"             # Terminal autocompletion framework
+brew "p7zip"                 # 7-Zip file archiver
 
 # Fonts
 cask "font-jetbrains-mono"  # JetBrains Mono font
