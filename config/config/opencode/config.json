@@ -7,11 +7,8 @@
     "openrouter": {
       "npm": "@openrouter/ai-sdk-provider",
       "models": {
-        "anthropic/claude-3.5-sonnet": {
-          "name": "Claude 3.5 Sonnet (OpenRouter)"
-        },
-        "anthropic/claude-3.5-haiku": {
-          "name": "Claude 3.5 Haiku (OpenRouter)"
+        "moonshotai/kimi-dev-72b:free": {
+          "name": "Kimi Dev 72B (OpenRouter)"
         },
         "openai/gpt-4o": {
           "name": "GPT-4o (OpenRouter)"

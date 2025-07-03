@@ -480,5 +480,6 @@
   // OTHER SETTINGS
   // ----------------------------------------------------------------------
   // ----------------------------------------------------------------------
-  "dummy-value": "dummy-value"
+  "dummy-value": "dummy-value",
+  "application.shellEnvironmentResolutionTimeout": 30
 }
