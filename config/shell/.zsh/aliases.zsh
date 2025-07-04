@@ -16,7 +16,6 @@ alias lg="eza --long --color=always --icons=always --no-user --git"
 
 # Utilities
 alias reload="source ~/.zshrc"
-alias brewup="brew update && brew upgrade && brew cleanup"
 
 # Vim
 alias v="nvim"
@@ -28,7 +27,3 @@ alias cat="bat --paging=always --color=always --style=plain --line-range=1:1000 
 
 # Atuin
 alias r="atuin search -i"
-
-# Dotfiles
-alias dot="dotfiles"
-alias doti="dotfiles tui"
