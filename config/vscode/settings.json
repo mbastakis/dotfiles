@@ -265,6 +265,9 @@
   "sops.binPath": "/opt/homebrew/bin/sops",
 
   // Project Manager
+  "application.shellEnvironmentResolutionTimeout": 30,
+  "projectManager.any.maxDepthRecursion": 10,
+  "projectManager.git.maxDepthRecursion": 10,
   "projectManager.git.baseFolders": ["~/dev"],
 
   // Code Clipper
@@ -480,6 +483,5 @@
   // OTHER SETTINGS
   // ----------------------------------------------------------------------
   // ----------------------------------------------------------------------
-  "dummy-value": "dummy-value",
-  "application.shellEnvironmentResolutionTimeout": 30
+  "dummy-value": "dummy-value"
 }
