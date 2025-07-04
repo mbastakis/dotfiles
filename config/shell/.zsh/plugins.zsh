@@ -31,10 +31,6 @@ if [[ -f "${HOME}/.local/share/zinit/zinit.git/zinit.zsh" ]]; then
     # Load Kubectl plugin from Oh-My-Zsh
     zinit snippet OMZ::plugins/kubectl/kubectl.plugin.zsh
 
-    # Load vim key bindings
-    zinit ice depth=1
-    zinit light jeffreytse/zsh-vi-mode
-
     # Load autosuggestions (should be before syntax highlighting)
     zinit ice wait lucid atload'!_zsh_autosuggest_start'
     zinit load zsh-users/zsh-autosuggestions
