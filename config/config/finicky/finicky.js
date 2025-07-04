@@ -11,8 +11,9 @@ export default {
         "*yam-united*",
         "*yam-united.telekom.com/*",
         "*yo-digital.com/*",
-        "*.telekom.com/*",
-        "*telekom.de/*",
+        "*.telekom.com*",
+        "*.telekom.de*",
+        "*telekom.net*",
       ],
       browser: "Google Chrome",
     }

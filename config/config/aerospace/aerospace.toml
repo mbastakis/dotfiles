@@ -1,9 +1,5 @@
 after-startup-command = [
   'exec-and-forget sketchybar',
-  # Uncomment the lines below to auto-launch apps in workspace u in order
-  # 'exec-and-forget open -a "Slack"',
-  # 'exec-and-forget open -a "Microsoft Teams"', 
-  # 'exec-and-forget open -a "Outlook"'
 ]
 
 # Notify Sketchybar about workspace change
@@ -84,7 +80,6 @@ if.app-name-regex-substring = 'Messages'
 run = 'move-node-to-workspace e'
 
 # Workspace U
-# Apps are ordered by priority - first in config = first position
 
 # Communication & Work Tools (highest priority)
 [[on-window-detected]]
@@ -99,44 +94,44 @@ run = 'move-node-to-workspace u'
 if.app-name-regex-substring = 'Outlook'
 run = 'move-node-to-workspace u'
 
+[[on-window-detected]]
+if.app-name-regex-substring = 'Spotify'
+run = 'move-node-to-workspace u'
+
+# Workspace j
 # Development Tools
 [[on-window-detected]]
 if.app-name-regex-substring = 'GitHub'
-run = 'move-node-to-workspace u'
+run = 'move-node-to-workspace j'
 
-# AI Tools
 [[on-window-detected]]
 if.app-name-regex-substring = 'ChatGPT'
-run = 'move-node-to-workspace u'
+run = 'move-node-to-workspace j'
 
 [[on-window-detected]]
 if.app-name-regex-substring = 'Claude'
-run = 'move-node-to-workspace u'
+run = 'move-node-to-workspace j'
 
 [[on-window-detected]]
 if.app-name-regex-substring = 'Perplexity'
-run = 'move-node-to-workspace u'
+run = 'move-node-to-workspace j'
 
 [[on-window-detected]]
 if.app-name-regex-substring = 'Gemini'
-run = 'move-node-to-workspace u'
+run = 'move-node-to-workspace j'
 
 [[on-window-detected]]
 if.app-name-regex-substring = 'Grok'
-run = 'move-node-to-workspace u'
+run = 'move-node-to-workspace j'
 
 # Presentation & Media
 [[on-window-detected]]
 if.app-name-regex-substring = 'Tome'
-run = 'move-node-to-workspace u'
+run = 'move-node-to-workspace j'
 
 [[on-window-detected]]
 if.app-name-regex-substring = 'Docker Desktop'
-run = 'move-node-to-workspace u'
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'Spotify'
-run = 'move-node-to-workspace u'
+run = 'move-node-to-workspace j'
 
 # Floating windows
 
@@ -200,6 +195,7 @@ alt-a = 'workspace a'
 alt-o = 'workspace o'
 alt-e = 'workspace e'
 alt-u = 'workspace u'
+alt-j = 'workspace j'
 alt-1 = 'workspace 1'
 alt-2 = 'workspace 2'
 alt-3 = 'workspace 3'
@@ -209,6 +205,7 @@ alt-shift-a = 'move-node-to-workspace a --focus-follows-window'
 alt-shift-o = 'move-node-to-workspace o --focus-follows-window'
 alt-shift-e = 'move-node-to-workspace e --focus-follows-window'
 alt-shift-u = 'move-node-to-workspace u --focus-follows-window'
+alt-shift-j = 'move-node-to-workspace j --focus-follows-window'
 alt-shift-1 = 'move-node-to-workspace 1 --focus-follows-window'
 alt-shift-2 = 'move-node-to-workspace 2 --focus-follows-window'
 alt-shift-3 = 'move-node-to-workspace 3 --focus-follows-window'
