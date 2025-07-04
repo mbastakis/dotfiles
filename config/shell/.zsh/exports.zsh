@@ -66,4 +66,7 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # Carapace
 export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
 
+# Nix
+export NIX_CONF_DIR="$HOME/.config/nix"
+
 ## End of custom environment variables
