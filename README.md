@@ -80,7 +80,6 @@ Intuitive package management with real-time status:
 │  ├─ [✓] git       enabled   1          -               2 days ago         │
 │  ├─ [✓] vim       enabled   2          git             1 hour ago         │
 │  ├─ [✓] zsh       enabled   3          git             3 hours ago        │
-│  ├─ [ ] tmux      disabled  4          -               1 week ago         │
 │  └─ [✓] homebrew  enabled   5          -               2 days ago         │
 │                                                                            │
 │  [Space] Toggle   [Enter] Configure   [D] Details   [R] Remove             │
