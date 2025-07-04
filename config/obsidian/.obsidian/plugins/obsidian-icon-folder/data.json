@@ -464,5 +464,8 @@
   },
   "Projects/Tasks/Kanban Tasks/watch youtube quantitization local llm.md": {
     "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/add hooks claude pro.md": {
+    "iconName": "OcTasklist24"
   }
 }
