@@ -1,0 +1,7 @@
+.stowrc
+README.md
+.gitignore
+bin
+setup.sh
+vscode_extensions
+.git
