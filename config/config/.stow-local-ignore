@@ -1,8 +1,0 @@
-# Ignore backup files created during stow operations
-\.backup\..*
-
-# Common ignore patterns (since we're overriding defaults)
-\.git
-\.gitignore
-README\.md
-\.DS_Store

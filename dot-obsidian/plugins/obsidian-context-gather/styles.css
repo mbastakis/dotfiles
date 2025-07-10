@@ -1,0 +1,88 @@
+/*
+
+Context Gather Plugin Styles
+
+*/
+
+.context-gather-path {
+	color: var(--text-muted);
+	font-size: 0.8em;
+	margin-left: 10px;
+}
+
+.context-gather-list {
+	margin-top: 20px;
+	padding: 15px;
+	background: var(--background-secondary);
+	border-radius: 8px;
+	border: 1px solid var(--background-modifier-border);
+}
+
+.context-gather-list h4 {
+	margin: 0 0 10px 0;
+	color: var(--text-normal);
+	font-size: 0.9em;
+	font-weight: 600;
+}
+
+.context-gather-list ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.context-gather-list li {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 5px 0;
+	border-bottom: 1px solid var(--background-modifier-border-hover);
+}
+
+.context-gather-list li:last-child {
+	border-bottom: none;
+}
+
+.context-gather-list li span {
+	flex-grow: 1;
+	color: var(--text-normal);
+	font-size: 0.85em;
+}
+
+.context-gather-remove {
+	background: var(--interactive-hover);
+	border: none;
+	border-radius: 4px;
+	color: var(--text-muted);
+	cursor: pointer;
+	font-size: 12px;
+	height: 20px;
+	width: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-left: 10px;
+}
+
+.context-gather-remove:hover {
+	background: var(--background-modifier-error);
+	color: var(--text-on-accent);
+}
+
+.suggestion-item.context-gather-suggestion {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	padding: 8px 12px;
+}
+
+.suggestion-item.context-gather-suggestion .suggestion-title {
+	font-weight: 500;
+	color: var(--text-normal);
+}
+
+.suggestion-item.context-gather-suggestion .suggestion-note {
+	font-size: 0.8em;
+	color: var(--text-muted);
+	margin-top: 2px;
+}

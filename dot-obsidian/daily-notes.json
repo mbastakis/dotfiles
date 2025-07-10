@@ -1,0 +1,6 @@
+{
+  "format": "dddd DD-MM-YYYY",
+  "template": "mike-templates/daily-note-template",
+  "autorun": false,
+  "folder": "Daily Notes"
+}

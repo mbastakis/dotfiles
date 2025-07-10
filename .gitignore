@@ -1,17 +1,1 @@
-local.zsh
-.DS_Store
-
-# Obsidian
-## google calendar
-obsidian/.obsidian/plugins/google-calendar/data.json
-## copilot index
-obsidian/.obsidian/copilot-index*
-obsidian/.obsidian/plugins/copilot/data.json
-# vscode local extensions
-vscode/extensions/tui-manager/node_modules
-vscode/extensions/tui-manager/out
-*.vsix
-# binary files
-bin
-# profiles
-profiles
+.vsix

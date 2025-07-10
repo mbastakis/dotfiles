@@ -1,7 +1,0 @@
-#TODO: improve test coverage for the dotfiles tool
-USE `make test-coverage` and `make test-coverage-check` to ensure coverage is above 80%
-PLAN
-- Identify areas with low test coverage
-- Write unit tests for uncovered code
-- Run tests and verify coverage improvements
-- Document testing process and coverage goals

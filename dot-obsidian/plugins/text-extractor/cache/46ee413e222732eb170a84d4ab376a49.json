@@ -1,0 +1,1 @@
+{"path":"Extras/Images/Pasted image 20241110170921.png","text":"apiVersion: rbac.authorization.k8s.io0/v1l kind: RoleBinding metadata: name: myapp-viewer NETEE oE Tl =H6 [2\\V] roleRef: ELRUCTRIT] s ol o Tol- 1V o Lol gh W4 ) i o] T X1 FR ) kind: Role NETCHRATY=TY subjects: - kind: ServiceAccount NEUEEN ) \\ZT) NENEE E Yol [\\","libVersion":"0.5.0","langs":"eng"}

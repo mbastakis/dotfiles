@@ -1,0 +1,18 @@
+{
+  "cssTheme": "Cupertino",
+  "theme": "obsidian",
+  "accentColor": "#b873bf",
+  "interfaceFontFamily": "JetBrains Mono",
+  "baseFontSize": 15,
+  "showRibbon": true,
+  "textFontFamily": "JetBrains Mono",
+  "monospaceFontFamily": "JetBrains Mono",
+  "baseFontSizeAction": true,
+  "translucency": false,
+  "enabledCssSnippets": [
+    "dash-list-style",
+    "tasks-view-daily-note",
+    "clean-tasks",
+    "slides"
+  ]
+}

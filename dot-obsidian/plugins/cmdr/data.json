@@ -1,0 +1,81 @@
+{
+  "confirmDeletion": false,
+  "showAddCommand": true,
+  "debug": false,
+  "editorMenu": [],
+  "fileMenu": [],
+  "leftRibbon": [
+    {
+      "id": "workspaces:load",
+      "icon": "lucide-layout",
+      "name": "Workspaces: Load workspace layout",
+      "mode": "any"
+    },
+    {
+      "id": "file-explorer:open",
+      "icon": "lucide-folders",
+      "name": "Files: Show file explorer",
+      "mode": "any"
+    },
+    {
+      "id": "workspaces:save",
+      "icon": "lucide-save",
+      "name": "Workspaces: Save layout",
+      "mode": "any"
+    },
+    {
+      "id": "google-calendar:open-google-calendar-week-view",
+      "icon": "lucide-calendar-days",
+      "name": "Google Calendar: Open gCal week view",
+      "mode": "any"
+    }
+  ],
+  "rightRibbon": [],
+  "titleBar": [],
+  "statusBar": [
+    {
+      "id": "app:toggle-right-sidebar",
+      "icon": "sidebar-right",
+      "name": "Toggle right sidebar",
+      "mode": "any"
+    },
+    {
+      "id": "app:toggle-left-sidebar",
+      "icon": "sidebar-left",
+      "name": "Toggle left sidebar",
+      "mode": "any"
+    }
+  ],
+  "pageHeader": [
+    {
+      "id": "markdown:add-metadata-property",
+      "icon": "lucide-plus-circle",
+      "name": "Add file property",
+      "mode": "any"
+    }
+  ],
+  "macros": [],
+  "explorer": [],
+  "hide": {
+    "statusbar": [
+      "editor-status",
+      "janitor",
+      "various-complements",
+      "obsidian-textgenerator-plugin",
+      "obsidian-textgenerator-plugin",
+      "obsidian-textgenerator-plugin"
+    ],
+    "leftRibbon": []
+  },
+  "spacing": 8,
+  "advancedToolbar": {
+    "rowHeight": 48,
+    "rowCount": 1,
+    "spacing": 0,
+    "buttonWidth": 48,
+    "columnLayout": false,
+    "mappedIcons": [],
+    "tooltips": false,
+    "heightOffset": 0
+  }
+}
