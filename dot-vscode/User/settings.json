@@ -489,5 +489,6 @@
   "chat.commandCenter.enabled": false,
   "[nix]": {
     "editor.defaultFormatter": "jnoortheen.nix-ide"
-  }
+  },
+  "window.customTitleBarVisibility": "never"
 }

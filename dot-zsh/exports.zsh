@@ -2,7 +2,7 @@
 
 # Default programs
 export EDITOR="nvim"
-export VISUAL="code --wait"
+export VISUAL="code --user-data-dir ~/.vscode --wait"
 export PAGER="bat"
 
 ## Path configuration
