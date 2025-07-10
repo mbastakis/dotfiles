@@ -410,6 +410,10 @@ var init_imageViewModal = __esm({
 });
 
 // src/modal/modals/folderSelectionModal.js
+var folderSelectionModal_exports = {};
+__export(folderSelectionModal_exports, {
+  FolderSelectionModal: () => FolderSelectionModal
+});
 var import_obsidian9, FolderSelectionModal;
 var init_folderSelectionModal = __esm({
   "src/modal/modals/folderSelectionModal.js"() {
@@ -484,6 +488,10 @@ var init_folderSelectionModal = __esm({
 });
 
 // src/modal/modals/saveImageModal.js
+var saveImageModal_exports = {};
+__export(saveImageModal_exports, {
+  SaveImageModal: () => SaveImageModal
+});
 var import_obsidian10, SaveImageModal;
 var init_saveImageModal = __esm({
   "src/modal/modals/saveImageModal.js"() {
@@ -543,6 +551,12 @@ var init_saveImageModal = __esm({
 });
 
 // src/utils/frontmatterUtils.js
+var frontmatterUtils_exports = {};
+__export(frontmatterUtils_exports, {
+  getFrontmatterValue: () => getFrontmatterValue,
+  getValueWithZeroCheck: () => getValueWithZeroCheck,
+  updateNoteFrontmatter: () => updateNoteFrontmatter
+});
 function getFrontmatterValue(frontmatter, fieldNames) {
   if (!frontmatter || !fieldNames) return null;
   const fields = Array.isArray(fieldNames) ? fieldNames : [fieldNames];
@@ -1051,7 +1065,7 @@ var init_selectPixelBannerModal = __esm({
           const storeButtonContent = storeButton.createDiv({ cls: "pixel-banner-button-content" });
           storeButtonContent.createEl("span", { text: "\u{1F3EA}", cls: "pixel-banner-button-icon" });
           storeButtonContent.createEl("div", { cls: "pixel-banner-button-text-container" }).createEl("span", {
-            text: "Store",
+            text: "Plus Collection",
             cls: "pixel-banner-button-text"
           });
           const storeLoadingOverlay = storeButton.createDiv({
@@ -1073,6 +1087,10 @@ var init_selectPixelBannerModal = __esm({
             }
           });
           storeLoadingOverlay.appendChild(this.createLoadingSpinner());
+          storeButton.addEventListener("click", () => {
+            this.close();
+            new PixelBannerStoreModal(this.app, this.plugin).open();
+          });
         }
         const customizationSection = mainContainer.createDiv({ cls: "pixel-banner-section" });
         customizationSection.createEl("h3", {
@@ -1101,23 +1119,34 @@ var init_selectPixelBannerModal = __esm({
         }
         bannerIconImageButton.addEventListener("click", () => {
           this.close();
-          const onChooseBannerIconImage = async (file) => {
-            if (!file) return;
+          const onChooseBannerIconImage = async (filePath) => {
+            if (!filePath) {
+              return;
+            }
+            let pathString = filePath;
+            if (typeof filePath === "object" && filePath.path) {
+              pathString = filePath.path;
+            } else if (typeof filePath !== "string") {
+              return;
+            }
             const activeFile2 = this.app.workspace.getActiveFile();
             if (!activeFile2) return;
-            if (file.isWebUrl) {
+            const file = this.app.vault.getAbstractFileByPath(pathString);
+            if (typeof pathString === "string" && (pathString.startsWith("http://") || pathString.startsWith("https://"))) {
               this.app.fileManager.processFrontMatter(activeFile2, (fm) => {
                 const iconImageField = Array.isArray(this.plugin.settings.customBannerIconImageField) ? this.plugin.settings.customBannerIconImageField[0].split(",")[0].trim() : this.plugin.settings.customBannerIconImageField;
-                fm[iconImageField] = file.path;
+                fm[iconImageField] = pathString;
               });
               new TargetPositionModal(this.app, this.plugin).open();
               return;
             }
-            if (file.extension.toLowerCase().match(/^(jpg|jpeg|png|gif|bmp|svg|webp|avif)$/)) {
+            const extensionPart = pathString.split(".").pop();
+            const fileExtension = extensionPart ? extensionPart.toLowerCase() : "";
+            if (fileExtension && fileExtension.match(/^(jpg|jpeg|png|gif|bmp|svg|webp|avif)$/)) {
               try {
-                const imageUrl = await this.plugin.getVaultImageUrl(file.path);
+                const imageUrl = await this.plugin.getVaultImageUrl(pathString);
                 if (imageUrl) {
-                  this.plugin.loadedImages.set(file.path, imageUrl);
+                  this.plugin.loadedImages.set(pathString, imageUrl);
                   const preloadImg = new Image();
                   preloadImg.src = imageUrl;
                 }
@@ -1127,7 +1156,7 @@ var init_selectPixelBannerModal = __esm({
             }
             this.app.fileManager.processFrontMatter(activeFile2, (fm) => {
               const iconImageField = Array.isArray(this.plugin.settings.customBannerIconImageField) ? this.plugin.settings.customBannerIconImageField[0].split(",")[0].trim() : this.plugin.settings.customBannerIconImageField;
-              fm[iconImageField] = `![[${file.path}]]`;
+              fm[iconImageField] = `![[${pathString}]]`;
             });
             new TargetPositionModal(this.app, this.plugin).open();
           };
@@ -3601,7 +3630,7 @@ var init_imageSelectionModal = __esm({
         this.currentPage = 1;
         this.imagesPerPage = 20;
         this.sortOrder = "name-asc";
-        this.imageFiles = this.app.vault.getFiles().filter((file) => file.extension.toLowerCase().match(/^(jpg|jpeg|png|gif|bmp|svg|webp|avif)$/));
+        this.imageFiles = this.app.vault.getFiles().filter((file) => file.extension.toLowerCase().match(/^(jpg|jpeg|png|gif|bmp|svg|webp|avif|mp4|mov)$/));
       }
       debounce(func, wait) {
         let timeout;
@@ -3966,7 +3995,7 @@ var init_imageSelectionModal = __esm({
         const fileInput = searchContainer.createEl("input", {
           type: "file",
           attr: {
-            accept: "image/*",
+            accept: "image/*,video/mp4,video/quicktime",
             style: "display: none;"
           }
         });
@@ -4063,7 +4092,8 @@ var init_imageSelectionModal = __esm({
         currentFiles.forEach((file) => {
           const imageContainer = this.gridContainer.createDiv({ cls: "pixel-banner-image-container" });
           const thumbnailContainer = imageContainer.createDiv();
-          if (file.extension.toLowerCase() === "svg") {
+          const fileExt = file.extension.toLowerCase();
+          if (fileExt === "svg") {
             this.app.vault.read(file).then((content) => {
               const parser = new DOMParser();
               const svgDoc = parser.parseFromString(content, "image/svg+xml");
@@ -4079,6 +4109,35 @@ var init_imageSelectionModal = __esm({
                 text: "Error loading SVG"
               });
             });
+          } else if (fileExt === "mp4" || fileExt === "mov") {
+            const resourcePath = this.app.vault.getResourcePath(file);
+            const video = thumbnailContainer.createEl("video", {
+              cls: "pixel-banner-video-thumbnail",
+              attr: {
+                src: resourcePath,
+                preload: "metadata",
+                muted: true
+              }
+            });
+            video.style.width = "100%";
+            video.style.height = "100%";
+            video.style.objectFit = "cover";
+            video.addEventListener("loadedmetadata", () => {
+              video.currentTime = Math.min(1, video.duration / 4);
+            });
+            const videoOverlay = thumbnailContainer.createDiv({ cls: "pixel-banner-video-overlay" });
+            videoOverlay.innerHTML = "\u25B6\uFE0F";
+            videoOverlay.style.cssText = `
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    font-size: 24px;
+                    background: rgba(0, 0, 0, 0.7);
+                    border-radius: 50%;
+                    padding: 8px;
+                    pointer-events: none;
+                `;
           } else {
             this.app.vault.readBinary(file).then((arrayBuffer) => {
               const blob = new Blob([arrayBuffer]);
@@ -4422,9 +4481,15 @@ var init_targetPositionModal = __esm({
         const displayField = Array.isArray(this.plugin.settings.customImageDisplayField) ? this.plugin.settings.customImageDisplayField[0].split(",")[0].trim() : this.plugin.settings.customImageDisplayField;
         this.currentDisplay = (frontmatter == null ? void 0 : frontmatter[displayField]) || this.plugin.settings.imageDisplay;
         const xField = Array.isArray(this.plugin.settings.customXPositionField) ? this.plugin.settings.customXPositionField[0].split(",")[0].trim() : this.plugin.settings.customXPositionField;
-        this.currentX = (frontmatter == null ? void 0 : frontmatter[xField]) || this.plugin.settings.xPosition;
+        this.currentX = getValueWithZeroCheck([
+          frontmatter == null ? void 0 : frontmatter[xField],
+          this.plugin.settings.xPosition
+        ]);
         const yField = Array.isArray(this.plugin.settings.customYPositionField) ? this.plugin.settings.customYPositionField[0].split(",")[0].trim() : this.plugin.settings.customYPositionField;
-        this.currentY = (frontmatter == null ? void 0 : frontmatter[yField]) || this.plugin.settings.yPosition;
+        this.currentY = getValueWithZeroCheck([
+          frontmatter == null ? void 0 : frontmatter[yField],
+          this.plugin.settings.yPosition
+        ]);
         const heightField = Array.isArray(this.plugin.settings.customBannerHeightField) ? this.plugin.settings.customBannerHeightField[0].split(",")[0].trim() : this.plugin.settings.customBannerHeightField;
         this.currentHeight = (frontmatter == null ? void 0 : frontmatter[heightField]) || this.plugin.settings.bannerHeight;
         const maxWidthField = Array.isArray(this.plugin.settings.customBannerMaxWidthField) ? this.plugin.settings.customBannerMaxWidthField[0].split(",")[0].trim() : this.plugin.settings.customBannerMaxWidthField;
@@ -4753,15 +4818,33 @@ var init_targetPositionModal = __esm({
                     display: flex;
                     flex-direction: row;
                     gap: 20px;
-                    alignt-items: stretch;
+                    align-items: stretch;
+                    justify-content: space-between;
                 `
           }
         });
+        let isVideoFile = false;
+        const bannerField = Array.isArray(this.plugin.settings.customBannerField) ? this.plugin.settings.customBannerField[0].split(",")[0].trim() : this.plugin.settings.customBannerField;
+        const bannerValue = frontmatter == null ? void 0 : frontmatter[bannerField];
+        if (bannerValue) {
+          if (typeof bannerValue === "string") {
+            const lowerBanner = bannerValue.toLowerCase();
+            isVideoFile = lowerBanner.endsWith(".mp4") || lowerBanner.endsWith(".mov");
+          }
+          if (!isVideoFile && (bannerValue.includes("[[") || bannerValue.includes("![["))) {
+            const linkMatch = bannerValue.match(/\[\[(.*?)\]\]/) || bannerValue.match(/!\[\[(.*?)\]\]/);
+            if (linkMatch && linkMatch[1]) {
+              const linkPath = linkMatch[1].toLowerCase();
+              isVideoFile = linkPath.endsWith(".mp4") || linkPath.endsWith(".mov");
+            }
+          }
+        }
         const controlPanel = mainContainer.createDiv({
           cls: "control-panel",
+          id: "display-mode-panel",
           attr: {
             style: `
-                    display: flex;
+                    display: ${isVideoFile ? "none" : "flex"};
                     flex-direction: column;
                     gap: 10px;
                     flex: 0 auto;
@@ -4987,7 +5070,6 @@ var init_targetPositionModal = __esm({
                     display: flex;
                     flex-direction: column;
                     gap: 10px;
-                    flex-grow: 1;
                 `
           }
         });
@@ -5296,11 +5378,21 @@ var init_targetPositionModal = __esm({
                 new _TargetPositionModal(this.app, this.plugin).open();
                 return;
               }
-              if (file.extension.toLowerCase().match(/^(jpg|jpeg|png|gif|bmp|svg|webp|avif)$/)) {
+              let fileExtension = "";
+              let filePath = "";
+              if (typeof file === "string") {
+                filePath = file;
+                const extensionPart = file.split(".").pop();
+                fileExtension = extensionPart ? extensionPart.toLowerCase() : "";
+              } else if (file && file.extension) {
+                filePath = file.path;
+                fileExtension = file.extension.toLowerCase();
+              }
+              if (fileExtension && fileExtension.match(/^(jpg|jpeg|png|gif|bmp|svg|webp|avif)$/)) {
                 try {
-                  const imageUrl = await this.plugin.getVaultImageUrl(file.path);
+                  const imageUrl = await this.plugin.getVaultImageUrl(filePath);
                   if (imageUrl) {
-                    this.plugin.loadedImages.set(file.path, imageUrl);
+                    this.plugin.loadedImages.set(filePath, imageUrl);
                     const preloadImg = new Image();
                     preloadImg.src = imageUrl;
                   }
@@ -5310,7 +5402,7 @@ var init_targetPositionModal = __esm({
               }
               this.app.fileManager.processFrontMatter(activeFile2, (fm) => {
                 const iconImageField = Array.isArray(this.plugin.settings.customBannerIconImageField) ? this.plugin.settings.customBannerIconImageField[0].split(",")[0].trim() : this.plugin.settings.customBannerIconImageField;
-                fm[iconImageField] = `![[${file.path}]]`;
+                fm[iconImageField] = `![[${filePath}]]`;
               });
               new _TargetPositionModal(this.app, this.plugin).open();
             },
@@ -6683,10 +6775,10 @@ var init_targetPositionModal = __esm({
             const flagColorField = Array.isArray(this.plugin.settings.customFlagColorField) ? this.plugin.settings.customFlagColorField[0].split(",")[0].trim() : this.plugin.settings.customFlagColorField;
             delete frontmatter2[flagColorField];
             if (deleteBannerAndIcon) {
-              const bannerField = Array.isArray(this.plugin.settings.customBannerField) ? this.plugin.settings.customBannerField[0].split(",")[0].trim() : this.plugin.settings.customBannerField;
+              const bannerField2 = Array.isArray(this.plugin.settings.customBannerField) ? this.plugin.settings.customBannerField[0].split(",")[0].trim() : this.plugin.settings.customBannerField;
               const bannerIconImageField2 = Array.isArray(this.plugin.settings.customBannerIconImageField) ? this.plugin.settings.customBannerIconImageField[0].split(",")[0].trim() : this.plugin.settings.customBannerIconImageField;
               const bannerIconField2 = Array.isArray(this.plugin.settings.customBannerIconField) ? this.plugin.settings.customBannerIconField[0].split(",")[0].trim() : this.plugin.settings.customBannerIconField;
-              delete frontmatter2[bannerField];
+              delete frontmatter2[bannerField2];
               delete frontmatter2[bannerIconImageField2];
               delete frontmatter2[bannerIconField2];
             }
@@ -6706,6 +6798,7 @@ var init_targetPositionModal = __esm({
           if (inlineTitleEnabled && titleColorInput) {
             let defaultTitleColor = this.plugin.settings.titleColor;
             if (defaultTitleColor.startsWith("var(--")) {
+              console.log("defaultTitleColor", defaultTitleColor);
               const tempEl = document.createElement("div");
               tempEl.style.color = defaultTitleColor;
               document.body.appendChild(tempEl);
@@ -6721,7 +6814,12 @@ var init_targetPositionModal = __esm({
             if (titleColorPicker) {
               titleColorPicker.value = defaultTitleColor.startsWith("#") ? defaultTitleColor : getCurrentTheme_default() === "dark" ? "#ffffff" : "#000000";
             }
-            this.updateTitleColor(defaultTitleColor);
+          }
+          const titleColorField2 = Array.isArray(this.plugin.settings.customTitleColorField) ? this.plugin.settings.customTitleColorField[0].split(",")[0].trim() : this.plugin.settings.customTitleColorField;
+          if (activeFile2) {
+            this.app.fileManager.processFrontMatter(activeFile2, (fm) => {
+              delete fm[titleColorField2];
+            });
           }
           this.currentX = this.plugin.settings.xPosition;
           this.currentY = this.plugin.settings.yPosition;
@@ -6859,7 +6957,6 @@ var init_targetPositionModal = __esm({
                 display: flex;
                 flex-direction: column;
                 gap: 10px;
-                flex-grow: 1;
                 min-width: 200px;
             }
 
@@ -7169,12 +7266,12 @@ var init_iconImageSelectionModal = __esm({
         super(app);
         this.plugin = plugin;
         this.onChoose = onChoose;
-        this.defaultPath = defaultPath;
-        this.searchQuery = defaultPath.toLowerCase();
+        this.defaultPath = defaultPath || "";
+        this.searchQuery = defaultPath && typeof defaultPath === "string" ? defaultPath.toLowerCase() : "";
         this.currentPage = 1;
         this.imagesPerPage = 20;
         this.sortOrder = "name-asc";
-        this.imageFiles = this.app.vault.getFiles().filter((file) => file.extension.toLowerCase().match(/^(jpg|jpeg|png|gif|bmp|svg|webp|avif)$/));
+        this.imageFiles = this.app.vault.getFiles().filter((file) => file && file.extension && file.extension.toLowerCase && file.extension.toLowerCase().match(/^(jpg|jpeg|png|gif|bmp|svg|webp|avif)$/));
         this.iconCategories = [];
         this.selectedIconCategory = null;
         this.selectedIconCategoryIndex = 0;
@@ -7807,7 +7904,7 @@ var init_iconImageSelectionModal = __esm({
           this.updateImageGrid();
         });
         searchInput.addEventListener("input", this.debounce(() => {
-          this.searchQuery = searchInput.value.toLowerCase();
+          this.searchQuery = searchInput && searchInput.value && typeof searchInput.value === "string" ? searchInput.value.toLowerCase() : "";
           this.updateImageGrid();
         }, 500));
         const webUrlInputContainer = webContent.createDiv({
@@ -7863,7 +7960,7 @@ var init_iconImageSelectionModal = __esm({
           try {
             new URL(url);
             const imageExtensions = ["jpg", "jpeg", "png", "gif", "svg", "webp", "avif", "bmp"];
-            const extension = url.split(".").pop().toLowerCase();
+            const extension = url && url.split && url.split(".").pop() ? url.split(".").pop().toLowerCase() : "";
             return imageExtensions.includes(extension);
           } catch (e) {
             return false;
@@ -8264,7 +8361,7 @@ var init_iconImageSelectionModal = __esm({
           } else if (iconData.file_name) {
             const parts = iconData.file_name.split(".");
             if (parts.length > 1) {
-              extension = parts[parts.length - 1].toLowerCase();
+              extension = parts && parts.length > 0 && parts[parts.length - 1] ? parts[parts.length - 1].toLowerCase() : "";
             }
           }
           if (iconData.base64Image) {
@@ -8600,8 +8697,8 @@ var init_iconImageSelectionModal = __esm({
         this.gridContainer.empty();
         this.paginationContainer.empty();
         let filteredFiles = this.imageFiles.filter((file) => {
-          const filePath = file.path.toLowerCase();
-          const fileName = file.name.toLowerCase();
+          const filePath = file && file.path ? file.path.toLowerCase() : "";
+          const fileName = file && file.name ? file.name.toLowerCase() : "";
           return filePath.includes(this.searchQuery) || fileName.includes(this.searchQuery);
         });
         filteredFiles = this.sortFiles(filteredFiles);
@@ -8645,7 +8742,7 @@ var init_iconImageSelectionModal = __esm({
                     `
             }
           });
-          if (file.extension.toLowerCase() === "svg") {
+          if (file && file.extension && file.extension.toLowerCase() === "svg") {
             this.app.vault.readBinary(file).then((arrayBuffer) => {
               const blob = new Blob([arrayBuffer], { type: "image/svg+xml" });
               const url = URL.createObjectURL(blob);
@@ -8690,7 +8787,11 @@ var init_iconImageSelectionModal = __esm({
           const displayPath = this.plugin.settings.useShortPath ? this.getShortPath(file.path) : file.path;
           infoContainer.createDiv({ text: displayPath, cls: "pixel-banner-image-path" });
           imageContainer.addEventListener("click", () => {
-            this.onChoose(file);
+            if (!file || !file.path) {
+              console.error("\u{1F527} ERROR: file or file.path is undefined during selection");
+              return;
+            }
+            this.onChoose(file.path);
             this.close();
           });
         });
@@ -28343,7 +28444,7 @@ var init_pixelBannerStoreModal = __esm({
         this.totalPages = 1;
         this.searchTerm = "";
         this.isSearchMode = false;
-        this.itemsPerPage = 9;
+        this.itemsPerPage = 18;
         this.voteStats = {};
         this.userVotes = {};
         this.storeVotingEnabled = this.plugin.settings.storeVotingEnabled !== false;
@@ -28406,13 +28507,121 @@ var init_pixelBannerStoreModal = __esm({
           this.loadingOverlay = null;
         }
       }
+      // Download and save banner (handles both images and videos)
+      async downloadAndSaveBanner(data, filename) {
+        try {
+          if (data.fileType === "video") {
+            await this.saveVideoFileWithPrompts(data.base64Image, filename);
+          } else {
+            await handlePinIconClick(data.base64Image, this.plugin, null, filename.replace(/\.[^/.]+$/, ""));
+          }
+        } catch (error) {
+          console.error("Error saving banner:", error);
+          new import_obsidian19.Notice("Failed to save banner. Please try again.");
+        }
+      }
+      // Save video file with user prompts (similar to handlePinIconClick flow)
+      async saveVideoFileWithPrompts(base64Video, suggestedFilename) {
+        try {
+          const base64Data = base64Video.split(",")[1];
+          const byteCharacters = atob(base64Data);
+          const byteNumbers = new Array(byteCharacters.length);
+          for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          }
+          const arrayBuffer = new Uint8Array(byteNumbers).buffer;
+          const { file, useAsBanner } = await this.saveVideoLocally(arrayBuffer, suggestedFilename);
+          const finalPath = await this.waitForFileRename(file);
+          if (!finalPath) {
+            console.error("\u274C Failed to resolve valid file path");
+            new import_obsidian19.Notice("Failed to save video - file not found");
+            return null;
+          }
+          if (useAsBanner) {
+            const { updateNoteFrontmatter: updateNoteFrontmatter2 } = await Promise.resolve().then(() => (init_frontmatterUtils(), frontmatterUtils_exports));
+            await updateNoteFrontmatter2(finalPath, this.plugin, null);
+          }
+          return finalPath;
+        } catch (error) {
+          console.error("Error saving video file:", error);
+          throw error;
+        }
+      }
+      // Save video locally with folder/filename prompts (adapted from handlePinIconClick)
+      async saveVideoLocally(arrayBuffer, suggestedFilename) {
+        const { FolderSelectionModal: FolderSelectionModal2 } = await Promise.resolve().then(() => (init_folderSelectionModal(), folderSelectionModal_exports));
+        const { SaveImageModal: SaveImageModal2 } = await Promise.resolve().then(() => (init_saveImageModal(), saveImageModal_exports));
+        const vault = this.plugin.app.vault;
+        const defaultFolderPath = this.plugin.settings.pinnedImageFolder;
+        const folderPath = await new Promise((resolve) => {
+          const modal = new FolderSelectionModal2(this.plugin.app, defaultFolderPath, (result) => {
+            resolve(result);
+          });
+          modal.open();
+        });
+        if (!folderPath) {
+          throw new Error("No folder selected");
+        }
+        if (!await vault.adapter.exists(folderPath)) {
+          await vault.createFolder(folderPath);
+        }
+        const filenameParts = suggestedFilename.match(/^(.+)\.(\w+)$/);
+        const baseName = filenameParts ? filenameParts[1] : suggestedFilename;
+        const extension = filenameParts ? filenameParts[2] : "mp4";
+        const userInput = await new Promise((resolve) => {
+          const modal = new SaveImageModal2(this.plugin.app, baseName, (name, useAsBanner) => {
+            resolve({ name, useAsBanner });
+          });
+          modal.open();
+        });
+        if (!userInput) {
+          throw new Error("No filename provided");
+        }
+        let finalBaseName = userInput.name.replace(/[^a-zA-Z0-9-_ ]/g, "").trim();
+        if (!finalBaseName) finalBaseName = "banner";
+        if (!finalBaseName.toLowerCase().endsWith(`.${extension}`)) {
+          finalBaseName += `.${extension}`;
+        }
+        let fileName = finalBaseName;
+        let counter = 1;
+        while (await vault.adapter.exists(`${folderPath}/${fileName}`)) {
+          const nameWithoutExt = finalBaseName.slice(0, -(extension.length + 1));
+          fileName = `${nameWithoutExt}-${counter}.${extension}`;
+          counter++;
+        }
+        const filePath = `${folderPath}/${fileName}`;
+        const savedFile = await vault.createBinary(filePath, arrayBuffer);
+        return {
+          initialPath: filePath,
+          file: savedFile,
+          useAsBanner: userInput.useAsBanner
+        };
+      }
+      // Wait for potential file rename (adapted from handlePinIconClick)
+      async waitForFileRename(file) {
+        const maxWaitTime = 5e3;
+        const checkInterval = 100;
+        let elapsedTime = 0;
+        while (elapsedTime < maxWaitTime) {
+          try {
+            const currentFile = this.plugin.app.vault.getAbstractFileByPath(file.path);
+            if (currentFile) {
+              return currentFile.path;
+            }
+          } catch (error) {
+          }
+          await new Promise((resolve) => setTimeout(resolve, checkInterval));
+          elapsedTime += checkInterval;
+        }
+        return file.path;
+      }
       // Initialize modal content
       async initializeModal() {
         await this.plugin.verifyPixelBannerPlusCredentials();
         const { contentEl } = this;
-        contentEl.createEl("h3", { text: "\u{1F3EA} Pixel Banner Plus Store", cls: "margin-top-0" });
+        contentEl.createEl("h3", { text: "\u{1F3EA} Pixel Banner Plus Collection", cls: "margin-top-0" });
         contentEl.createEl("p", {
-          text: `Browse the Pixel Banner Plus Store to find the perfect banner for your needs. Banner Token prices are displayed on each card below (FREE or 1 Banner Token). Previous purchases will be listed as FREE.`,
+          text: `Browse the Pixel Banner Plus Collection to find the perfect banner for your needs. Banner Token prices are displayed on each card below (FREE or 1 Banner Token). Previous purchases will be listed as FREE.`,
           attr: {
             "style": "font-size: 12px; color: var(--text-muted);"
           }
@@ -28724,12 +28933,14 @@ var init_pixelBannerStoreModal = __esm({
       // --------------------------
       // -- Load Category Images --
       // --------------------------
-      async loadCategoryImages() {
+      async loadCategoryImages(page = 1) {
         if (!this.selectedCategory) return;
         this.isSearchMode = false;
-        this.currentPage = 1;
-        this.userVotes = {};
-        this.voteStats = {};
+        this.currentPage = page;
+        if (page === 1) {
+          this.userVotes = {};
+          this.voteStats = {};
+        }
         this.imageContainer.empty();
         if (this.storeVotingEnabled) {
           this.imageContainer.removeClass("store-voting-off");
@@ -28740,7 +28951,7 @@ var init_pixelBannerStoreModal = __esm({
         this.loadingEl.innerHTML = `<div class="pixel-banner-store-spinner"></div>`;
         try {
           const response = await fetch(
-            `${PIXEL_BANNER_PLUS.API_URL}${PIXEL_BANNER_PLUS.ENDPOINTS.STORE_CATEGORY_IMAGES}?categoryId=${this.selectedCategory}`,
+            `${PIXEL_BANNER_PLUS.API_URL}${PIXEL_BANNER_PLUS.ENDPOINTS.STORE_CATEGORY_IMAGES}?categoryId=${this.selectedCategory}&page=${this.currentPage}&limit=${this.itemsPerPage}`,
             {
               headers: {
                 "x-user-email": this.plugin.settings.pixelBannerPlusEmail,
@@ -28751,8 +28962,27 @@ var init_pixelBannerStoreModal = __esm({
             }
           );
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const images = await response.json();
-          this.displayImages(images);
+          const data = await response.json();
+          let images, totalPages = 1, totalItems = 0;
+          if (Array.isArray(data)) {
+            images = data;
+            totalPages = Math.ceil(images.length / this.itemsPerPage);
+            totalItems = images.length;
+            const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+            const endIndex = startIndex + this.itemsPerPage;
+            images = images.slice(startIndex, endIndex);
+          } else {
+            images = data.images || data.banners || [];
+            totalPages = data.totalPages || 1;
+            totalItems = data.totalItems || data.totalCount || images.length;
+          }
+          this.totalPages = totalPages;
+          this.displayImages(images, false, totalItems);
+          if (totalPages > 1) {
+            this.addPaginationControls();
+          } else {
+            this.paginationContainer.style.display = "none";
+          }
         } catch (error) {
           console.error("Failed to fetch images:", error);
           this.imageContainer.empty();
@@ -28855,7 +29085,7 @@ var init_pixelBannerStoreModal = __esm({
       // --------------------
       // -- Display Images --
       // --------------------
-      displayImages(images, isSearchResult = false) {
+      displayImages(images, isSearchResult = false, totalItems = 0) {
         if (this.loadingEl) {
           this.loadingEl.remove();
           this.loadingEl = null;
@@ -28908,20 +29138,66 @@ var init_pixelBannerStoreModal = __esm({
                 "data-image-id": imageId,
                 "data-image-cost": imageCost,
                 "data-image-new": true,
-                "data-image-hot": image.hot ? "true" : "false"
+                "data-image-hot": image.hot ? "true" : "false",
+                "style": "position: relative;"
+                // Ensure proper positioning for absolute children
               }
             });
             const imageSource = image.base64Image || image.base64 || image.url || image.src || "";
-            const imgEl = card.createEl("img", {
-              attr: {
-                src: imageSource,
-                alt: image.prompt || image.description || "Banner image"
-              }
-            });
+            const isVideo = image.fileType === "video";
+            if (isVideo) {
+              const imgEl = card.createEl("img", {
+                attr: {
+                  src: imageSource,
+                  alt: image.prompt || image.description || "Banner video thumbnail"
+                }
+              });
+              const videoBadge = card.createEl("div", {
+                text: "VIDEO",
+                cls: "pixel-banner-store-video-badge",
+                attr: {
+                  style: `
+                                position: absolute;
+                                top: 8px;
+                                right: 8px;
+                                background: rgba(255, 255, 255, 0.9);
+                                color: #333;
+                                padding: 2px 6px;
+                                border-radius: 3px;
+                                font-size: 10px;
+                                font-weight: bold;
+                                z-index: 2;
+                                pointer-events: none;
+                            `
+                }
+              });
+            } else {
+              const imgEl = card.createEl("img", {
+                attr: {
+                  src: imageSource,
+                  alt: image.prompt || image.description || "Banner image"
+                }
+              });
+            }
             const details = card.createDiv({ cls: "pixel-banner-store-image-details" });
+            const promptWrapper = details.createDiv({ cls: "pixel-banner-store-prompt-wrapper" });
             const promptText = image.prompt || image.description || image.title || "No description";
             const truncatedPrompt = promptText.length > 85 ? promptText.slice(0, 85) + "..." : promptText;
-            details.createEl("p", { text: truncatedPrompt, cls: "pixel-banner-store-prompt" });
+            promptWrapper.createEl("p", { text: truncatedPrompt, cls: "pixel-banner-store-prompt" });
+            if (image.filesize) {
+              promptWrapper.createEl("div", {
+                text: image.filesize,
+                cls: "pixel-banner-store-filesize",
+                attr: {
+                  style: `
+                                color: var(--text-muted);
+                                font-size: 10px;
+                                margin: 2px 0 0 0;
+                                text-align: left;
+                            `
+                }
+              });
+            }
             const metaDetails = details.createEl("div", { cls: "pixel-banner-store-meta-details" });
             const costText = imageCost === 0 ? "FREE" : `\u{1FA99} ${decimalToFractionString(imageCost)}`;
             const costEl = metaDetails.createEl("div", {
@@ -29022,7 +29298,7 @@ var init_pixelBannerStoreModal = __esm({
                       }
                     });
                     if (!response.ok) {
-                      throw new Error("Failed to fetch image");
+                      throw new Error("Failed to fetch banner");
                     }
                     await this.plugin.verifyPixelBannerPlusCredentials();
                     card.setAttribute("data-image-cost", "0");
@@ -29031,16 +29307,21 @@ var init_pixelBannerStoreModal = __esm({
                     const data = await response.json();
                     let filename = ((_a2 = image.prompt) == null ? void 0 : _a2.toLowerCase().replace(/[^a-zA-Z0-9-_ ]/g, "").trim()) || "banner";
                     filename = filename.replace(/\s+/g, "-").substring(0, 47);
-                    await handlePinIconClick(data.base64Image, this.plugin, null, filename);
+                    if (data.fileType === "video") {
+                      filename += `.${data.fileExtension || "mp4"}`;
+                    } else {
+                      filename += `.${data.fileExtension || "jpg"}`;
+                    }
+                    await this.downloadAndSaveBanner(data, filename);
                     this.close();
                     if (this.plugin.settings.openTargetingModalAfterSelectingBannerOrIcon) {
                       new TargetPositionModal(this.app, this.plugin).open();
                     }
                   } catch (error) {
-                    console.error("Error purchasing image:", error);
-                    new import_obsidian19.Notice("Failed to purchase image. Please try again.");
+                    console.error("Error purchasing banner:", error);
+                    new import_obsidian19.Notice("Failed to purchase banner. Please try again.");
                   }
-                }, this.plugin).open();
+                }, this.plugin, isVideo, image.fileType, image.file_extension).open();
               } else {
                 try {
                   const response = await fetch(`${PIXEL_BANNER_PLUS.API_URL}${PIXEL_BANNER_PLUS.ENDPOINTS.STORE_IMAGE_BY_ID}?bannerId=${image.id}`, {
@@ -29052,18 +29333,23 @@ var init_pixelBannerStoreModal = __esm({
                     }
                   });
                   if (!response.ok) {
-                    throw new Error("Failed to fetch image");
+                    throw new Error("Failed to fetch banner");
                   }
                   const data = await response.json();
                   let filename = ((_a = image.prompt) == null ? void 0 : _a.toLowerCase().replace(/[^a-zA-Z0-9-_ ]/g, "").trim()) || "banner";
                   filename = filename.replace(/\s+/g, "-").substring(0, 47);
-                  await handlePinIconClick(data.base64Image, this.plugin, null, filename);
+                  if (data.fileType === "video") {
+                    filename += `.${data.fileExtension || "mp4"}`;
+                  } else {
+                    filename += `.${data.fileExtension || "jpg"}`;
+                  }
+                  await this.downloadAndSaveBanner(data, filename);
                   this.close();
                   if (this.plugin.settings.openTargetingModalAfterSelectingBannerOrIcon) {
                     new TargetPositionModal(this.app, this.plugin).open();
                   }
                 } catch (error) {
-                  console.error("Error fetching store image:", error);
+                  console.error("Error fetching store banner:", error);
                 }
               }
             });
@@ -29213,7 +29499,11 @@ var init_pixelBannerStoreModal = __esm({
         });
         prevButton.addEventListener("click", () => {
           if (this.currentPage > 1) {
-            this.searchBanners(this.currentPage - 1);
+            if (this.isSearchMode) {
+              this.searchBanners(this.currentPage - 1);
+            } else {
+              this.loadCategoryImages(this.currentPage - 1);
+            }
           }
         });
         this.paginationContainer.createEl("span", {
@@ -29229,7 +29519,11 @@ var init_pixelBannerStoreModal = __esm({
         });
         nextButton.addEventListener("click", () => {
           if (this.currentPage < this.totalPages) {
-            this.searchBanners(this.currentPage + 1);
+            if (this.isSearchMode) {
+              this.searchBanners(this.currentPage + 1);
+            } else {
+              this.loadCategoryImages(this.currentPage + 1);
+            }
           }
         });
       }
@@ -29638,13 +29932,16 @@ var init_pixelBannerStoreModal = __esm({
       }
     };
     ConfirmPurchaseModal = class extends import_obsidian19.Modal {
-      constructor(app, cost, prompt, previewImage, onConfirm, plugin) {
+      constructor(app, cost, prompt, previewImage, onConfirm, plugin, isVideo = false, fileType = "image", fileExtension = "jpg") {
         super(app);
         this.cost = cost;
         this.prompt = prompt;
         this.previewImage = previewImage;
         this.onConfirm = onConfirm;
         this.plugin = plugin;
+        this.isVideo = isVideo;
+        this.fileType = fileType;
+        this.fileExtension = fileExtension;
       }
       onOpen() {
         var _a;
@@ -29667,13 +29964,58 @@ var init_pixelBannerStoreModal = __esm({
           }
         });
         titleContainer.appendChild(document.createTextNode("Confirm Pixel Banner Purchase"));
-        const imageContainer = contentEl.createDiv({ cls: "pixel-banner-store-confirm-image" });
-        imageContainer.createEl("img", {
-          attr: {
-            src: this.previewImage,
-            alt: "Banner Preview"
-          }
-        });
+        const mediaContainer = contentEl.createDiv({ cls: "pixel-banner-store-confirm-media" });
+        if (this.isVideo) {
+          const videoPreview = mediaContainer.createDiv({ cls: "pixel-banner-store-video-preview" });
+          videoPreview.createEl("img", {
+            attr: {
+              src: this.previewImage,
+              alt: "Video Banner Thumbnail"
+            }
+          });
+          const playOverlay = videoPreview.createDiv({
+            cls: "pixel-banner-store-play-overlay",
+            attr: {
+              style: `
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        background: rgba(0, 0, 0, 0.7);
+                        border-radius: 50%;
+                        width: 60px;
+                        height: 60px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: white;
+                        font-size: 24px;
+                        pointer-events: none;
+                    `
+            }
+          });
+          playOverlay.innerHTML = "\u25B6";
+          const typeIndicator = mediaContainer.createDiv({
+            text: `VIDEO (${this.fileExtension.toUpperCase()})`,
+            cls: "pixel-banner-store-type-indicator",
+            attr: {
+              style: `
+                        text-align: center;
+                        margin-top: 8px;
+                        font-size: 0.8em;
+                        color: var(--text-muted);
+                        font-weight: bold;
+                    `
+            }
+          });
+        } else {
+          mediaContainer.createEl("img", {
+            attr: {
+              src: this.previewImage,
+              alt: "Banner Preview"
+            }
+          });
+        }
         contentEl.createEl("p", {
           text: `"${(_a = this.prompt) == null ? void 0 : _a.toLowerCase().replace(/[^a-zA-Z0-9-_ ]/g, "").trim()}"`,
           cls: "pixel-banner-store-confirm-prompt",
@@ -29727,20 +30069,34 @@ var init_pixelBannerStoreModal = __esm({
         });
         cancelButton.addEventListener("click", () => this.close());
       }
-      // Add styles for the preview image
+      // Add styles for the preview media
       addStyle() {
         const style = document.createElement("style");
         style.textContent = `
-            .pixel-banner-store-confirm-image {
+            .pixel-banner-store-confirm-media {
                 display: flex;
-                justify-content: center;
+                flex-direction: column;
+                align-items: center;
                 margin: 40px 10px;
             }
             
-            .pixel-banner-store-confirm-image img {
+            .pixel-banner-store-confirm-media img {
                 max-width: 100%;
                 height: auto;
                 border-radius: 4px;
+            }
+            
+            .pixel-banner-store-video-preview {
+                position: relative;
+                display: inline-block;
+            }
+            
+            .pixel-banner-store-video-preview img {
+                display: block;
+            }
+            
+            .pixel-banner-store-image-card {
+                position: relative;
             }
         `;
         document.head.appendChild(style);
@@ -30134,7 +30490,7 @@ module.exports = __toCommonJS(main_exports);
 var import_obsidian30 = require("obsidian");
 
 // virtual-module:virtual:release-notes
-var releaseNotes = '<a href="https://www.youtube.com/watch?v=fwvVX7to7-4">\n  <img src="https://pixel-banner.online/img/pixel-banner-v3.5.jpg" alt="Pixel Banner" style="max-width: 400px;">\n</a>\n\n<h2>\u{1F389} What&#39;s New</h2>\n<h3>v3.5.6 - 2025-06-26</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>New <code>image property format</code> setting allows for specifying banner image format as <code>[[image]]</code> or <code>![[image]]</code></li>\n<li>Introduced <code>pinnedImageFilename</code> setting for default filename when pinning 3rd party API images</li>\n</ul>\n<h3>v3.5.5 - 2025-05-30</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>New AI Image Model, <code>FLUX Kontext (pro)</code>, allows for uploading images and editing them via text prompts<ul>\n<li>example: type in a prompt &quot;Make this a Studio Ghible cartoon&quot;, select the &quot;FLUX Kontext&quot; model, upload an image, then click Generate</li>\n</ul>\n</li>\n</ul>\n<h3>v3.5.4 - 2025-05-27</h3>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>Resolve issue with not evaluating all defined custom field names for &quot;banner&quot; frontmatter</li>\n<li>Revert aggresive css change impacting the background color of some theme variations and plugins</li>\n</ul>\n<h3>v3.5.3 - 2025-05-23</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>New <code>Icon Image Size Multiplier</code> control:<br>allows for changing the icon image size relative to the Banner Icon elements size (perfect to when you want the image to be larger or smaller than any accompanying icon text)</li>\n<li>New <code>Icon Text Vertical Offset</code> control:<br>allows for adjusting the vertical offset of the Icon Text relative to the Icon Image if set (perfect for fine-tuning center alignment of text)</li>\n</ul>\n<h4>\u{1F4E6} Updated</h4>\n<ul>\n<li>Updated some labels on the &quot;Position, Size &amp; Style&quot; modal for clarity</li>\n</ul>\n<h3>v3.5.2 - 2025-05-21</h3>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>Updated styles to remove overflow on images for mobile devices</li>\n<li>Resolved issue with icon image selection modal not using the correct extension for non-svg images</li>\n</ul>\n<h3>v3.5.1 - 2025-05-19</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>Added Command Palette command for selecting a <code>Banner Icon Image</code></li>\n</ul>\n<h3>v3.5.0 - 2025-05-18</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>New &quot;Banner Icon Rotation&quot; option to rotate the banner icon from 0 to 360 degrees</li>\n<li>New &quot;Icon Image&quot; support to allow banner icons to contain both text/emojis and an image</li>\n<li>Added Banner Icon Image controls to the Position, Size &amp; Style Modal (image source and alignment)</li>\n<li>Banner Icon Image sources include:<ul>\n<li>Local images</li>\n<li>Web URL</li>\n<li>Online Collections (FREE downloadable icons)</li>\n</ul>\n</li>\n<li>Banner Icon Image alignment options include:<ul>\n<li>Left or Right (set the position of the icon image relative to the text/emojis)</li>\n</ul>\n</li>\n<li>New Border Radius slider control available in the Position, Size &amp; Style Modal</li>\n<li>Four new AI Models to choose from when generating an image for a banner</li>\n</ul>\n<h4>\u{1F4E6} Updated</h4>\n<ul>\n<li>Embedded notes now respect custom frontmatter settings (border radius, banner height, etc.)</li>\n<li>Any system action that sets the frontmatter value for a Banner or Icon Image now uses <code>![[image]]</code> format vs <code>[[image]]</code></li>\n<li>Updated Token currency to allow for fractional tokens (e.g. 0.5 tokens) for better pricing where applicable</li>\n</ul>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>Resolved issue with content being pushed down when banner was present in embedded notes</li>\n<li>Resolved issue with max-width slider being disabled even when a custom max-width was set in frontmatter</li>\n<li>Addressed background color preventing banner from showing in reading mode for some themes</li>\n</ul>\n<a href="https://www.youtube.com/watch?v=pJFsMfrWak4">\n  <img src="https://pixel-banner.online/img/pixel-banner-transparent-bg.png" alt="Pixel Banner" style="max-width: 400px;">\n</a>';
+var releaseNotes = '<a href="https://www.youtube.com/watch?v=tfNqEAQuhXs">\n  <img src="https://pixel-banner.online/img/pixel-banner-v3.6.jpg" alt="Pixel Banner" style="max-width: 400px;">\n</a>\n\n<h2>\u{1F389} What&#39;s New</h2>\n<h3>v3.6.0 - 2025-06-29</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>Support for \u{1F3AC} Video Banners!<ul>\n<li>Upload and choose Video files as banners from your vault</li>\n<li>Downloadable \u{1F3AC} Video Banners from the <code>Pixel Banner Plus Collection</code></li>\n</ul>\n</li>\n<li>Added paging controls to the <code>Pixel Banner Plus Collection</code></li>\n<li>New global <code>Banner Max Width</code> setting to control the default max width for all banners</li>\n</ul>\n<h4>\u{1F4E6} Updated</h4>\n<ul>\n<li>Moved <code>Default Saved Banners Folder</code> setting to the <code>General</code> tab</li>\n<li>Renamed <code>Pixel Banner Plus Store</code> to <code>Pixel Banner Plus Collection</code> as many items are free</li>\n</ul>\n<h3>v3.6.1 - 2025-06-30</h3>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>Resolved issue with Icon Image selection modal not setting the selected icon image</li>\n</ul>\n<h3>v3.6.2 - 2025-06-30</h3>\n<h4>\u{1F4E6} Updated</h4>\n<ul>\n<li>Improved debounce logic to prevent multiple banner reloads when opening a note</li>\n</ul>\n<h3>v3.6.3 - 2025-06-30</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>Added <code>filesize</code> display to the store modal</li>\n</ul>\n<a href="https://www.youtube.com/watch?v=pJFsMfrWak4">\n  <img src="https://pixel-banner.online/img/pixel-banner-transparent-bg.png" alt="Pixel Banner" style="max-width: 400px;">\n</a>\n';
 
 // src/settings/settings.js
 var import_obsidian6 = require("obsidian");
@@ -30332,26 +30688,9 @@ function createAPISettings(containerEl, plugin) {
   new import_obsidian.Setting(containerEl).setName("Images").setDesc("Configure settings for images fetched from API. These settings apply when using keywords to fetch random images.").setHeading();
   new import_obsidian.Setting(containerEl).setName("Show Pin Icon").setDesc("Show a pin icon on random banner images that allows saving them to your vault. Once pinned, your frontmatter will be updated to use the local image instead of the API image.").addToggle((toggle) => toggle.setValue(plugin.settings.showPinIcon).onChange(async (value) => {
     plugin.settings.showPinIcon = value;
-    folderInputSetting.settingEl.style.display = value ? "flex" : "none";
     refreshIconSetting.settingEl.style.display = value ? "flex" : "none";
     await plugin.saveSettings();
   }));
-  const folderInputSetting = new import_obsidian.Setting(containerEl).setName("Pinned Images Folder").setDesc("Default folder where pinned banner images will be saved").addText((text) => {
-    text.setPlaceholder("pixel-banner-images").setValue(plugin.settings.pinnedImageFolder).onChange(async (value) => {
-      plugin.settings.pinnedImageFolder = value;
-      await plugin.saveSettings();
-    });
-    text.inputEl.addEventListener("blur", async (event) => {
-      let value = text.inputEl.value.trim();
-      if (!value) {
-        value = "pixel-banner-images";
-      }
-      text.setValue(value);
-      plugin.settings.pinnedImageFolder = value;
-      await plugin.saveSettings();
-    });
-    return text;
-  });
   new import_obsidian.Setting(containerEl).setName("Pinned Image Filename").setDesc("Set the default filename for pinned images.").addText((text) => text.setPlaceholder("pixel-banner-image").setValue(plugin.settings.pinnedImageFilename).onChange(async (value) => {
     plugin.settings.pinnedImageFilename = value;
     await plugin.saveSettings();
@@ -30365,7 +30704,6 @@ function createAPISettings(containerEl, plugin) {
     plugin.settings.showRefreshIcon = value;
     await plugin.saveSettings();
   }));
-  folderInputSetting.settingEl.style.display = plugin.settings.showPinIcon ? "flex" : "none";
   refreshIconSetting.settingEl.style.display = plugin.settings.showPinIcon ? "flex" : "none";
   new import_obsidian.Setting(containerEl).setName("Size").setDesc("Select the size of the image - (API only)").addDropdown((dropdown) => dropdown.addOption("small", "Small").addOption("medium", "Medium").addOption("large", "Large").setValue(plugin.settings.imageSize).onChange(async (value) => {
     plugin.settings.imageSize = value;
@@ -31228,6 +31566,38 @@ function createGeneralSettings(containerEl, plugin) {
     });
     plugin.updateAllBanners();
   }));
+  const defaultSavedBannersFolderSetting = new import_obsidian4.Setting(SelectImageSettingsGroup).setName("Default Saved Banners Folder").setDesc("Default folder where Banners will be saved").addText((text) => {
+    text.setPlaceholder("pixel-banner-images").setValue(plugin.settings.pinnedImageFolder).onChange(async (value) => {
+      plugin.settings.pinnedImageFolder = value;
+      await plugin.saveSettings();
+    });
+    text.inputEl.addEventListener("blur", async (event) => {
+      let value = text.inputEl.value.trim();
+      if (!value) {
+        value = "pixel-banner-images";
+      }
+      text.setValue(value);
+      plugin.settings.pinnedImageFolder = value;
+      await plugin.saveSettings();
+    });
+    return text;
+  }).addButton((button) => button.setButtonText("Browse").onClick(() => {
+    new FolderSuggestModal(plugin.app, (chosenPath) => {
+      plugin.settings.pinnedImageFolder = chosenPath;
+      const textInput = defaultSavedBannersFolderSetting.components[0];
+      if (textInput) {
+        textInput.setValue(chosenPath);
+      }
+      plugin.saveSettings();
+    }).open();
+  })).addExtraButton((button) => button.setIcon("reset").setTooltip("Reset to default").onClick(async () => {
+    plugin.settings.pinnedImageFolder = DEFAULT_SETTINGS.pinnedImageFolder;
+    await plugin.saveSettings();
+    const textComponent = defaultSavedBannersFolderSetting.components[0];
+    if (textComponent) {
+      textComponent.setValue(DEFAULT_SETTINGS.pinnedImageFolder);
+    }
+  }));
   const defaultSelectImagePathSetting = new import_obsidian4.Setting(SelectImageSettingsGroup).setName("Default Select Image Path").setDesc("Set a default folder path to filter images when opening the Select Image modal").addText((text) => {
     text.setPlaceholder("Example: Images/Banners").setValue(plugin.settings.defaultSelectImagePath).onChange(async (value) => {
       plugin.settings.defaultSelectImagePath = value;
@@ -31286,6 +31656,19 @@ function createGeneralSettings(containerEl, plugin) {
     if (toggleComponent) {
       toggleComponent.setValue(DEFAULT_SETTINGS.openTargetingModalAfterSelectingBannerOrIcon);
     }
+  }));
+  new import_obsidian4.Setting(containerEl).setName("Banner Max Width").setDesc("Set the maximum width for banner images (100-2560 pixels)").addSlider((slider) => slider.setLimits(100, 2560, 10).setValue(plugin.settings.bannerMaxWidth).setDynamicTooltip().onChange(async (value) => {
+    plugin.settings.bannerMaxWidth = value;
+    await plugin.saveSettings();
+    plugin.updateAllBanners();
+  })).addExtraButton((button) => button.setIcon("reset").setTooltip("Reset to default").onClick(async () => {
+    plugin.settings.bannerMaxWidth = DEFAULT_SETTINGS.bannerMaxWidth;
+    await plugin.saveSettings();
+    const sliderInput = button.extraSettingsEl.parentElement.querySelector('input[type="range"]');
+    sliderInput.value = DEFAULT_SETTINGS.bannerMaxWidth;
+    const event = new Event("input", { bubbles: true, cancelable: true });
+    sliderInput.dispatchEvent(event);
+    plugin.updateAllBanners();
   }));
   new import_obsidian4.Setting(containerEl).setName("Image Horizontal Position").setDesc("Set the horizontal position of the image (0-100)").addSlider(
     (slider) => slider.setLimits(0, 100, 1).setValue(plugin.settings.xPosition).setDynamicTooltip().onChange(async (value) => {
@@ -32090,6 +32473,7 @@ var DEFAULT_SETTINGS = {
   imageDisplay: "cover",
   imageRepeat: false,
   bannerHeight: 350,
+  bannerMaxWidth: 2560,
   fade: -70,
   bannerFadeInAnimationDuration: 300,
   borderRadius: 17,
@@ -32532,7 +32916,7 @@ function getCacheEntriesForFile(filePath) {
   return Array.from(this.bannerStateCache.entries()).filter(([key]) => key.startsWith(`${encodedPath}-`));
 }
 function cleanupCache(force = false) {
-  var _a, _b, _c, _d;
+  var _a, _b;
   const now = Date.now();
   for (const [key, entry] of this.bannerStateCache) {
     const maxAge = entry.isShuffled ? this.SHUFFLE_CACHE_AGE : this.MAX_CACHE_AGE;
@@ -32550,7 +32934,7 @@ function cleanupCache(force = false) {
           });
         }
       }
-      if ((_b = (_a = entry.state) == null ? void 0 : _a.imageUrl) == null ? void 0 : _b.startsWith("blob:")) {
+      if (((_a = entry.state) == null ? void 0 : _a.imageUrl) && typeof entry.state.imageUrl === "string" && entry.state.imageUrl.startsWith("blob:")) {
         URL.revokeObjectURL(entry.state.imageUrl);
       }
       this.bannerStateCache.delete(key);
@@ -32573,7 +32957,7 @@ function cleanupCache(force = false) {
           });
         }
       }
-      if ((_d = (_c = entry.state) == null ? void 0 : _c.imageUrl) == null ? void 0 : _d.startsWith("blob:")) {
+      if (((_b = entry.state) == null ? void 0 : _b.imageUrl) && typeof entry.state.imageUrl === "string" && entry.state.imageUrl.startsWith("blob:")) {
         URL.revokeObjectURL(entry.state.imageUrl);
       }
       this.bannerStateCache.delete(key);
@@ -32581,9 +32965,9 @@ function cleanupCache(force = false) {
   }
 }
 function invalidateLeafCache(leafId) {
-  var _a, _b;
+  var _a;
   for (const [key, entry] of this.bannerStateCache) {
-    if (key.includes(`-${leafId}`)) {
+    if (key && typeof key === "string" && key.includes(`-${leafId}`)) {
       const leaf = this.app.workspace.getLeafById(leafId);
       if ((leaf == null ? void 0 : leaf.view) instanceof import_obsidian24.MarkdownView) {
         const contentEl = leaf.view.contentEl;
@@ -32595,7 +32979,7 @@ function invalidateLeafCache(leafId) {
           }
         });
       }
-      if ((_b = (_a = entry.state) == null ? void 0 : _a.imageUrl) == null ? void 0 : _b.startsWith("blob:")) {
+      if (((_a = entry.state) == null ? void 0 : _a.imageUrl) && typeof entry.state.imageUrl === "string" && entry.state.imageUrl.startsWith("blob:")) {
         URL.revokeObjectURL(entry.state.imageUrl);
       }
       this.bannerStateCache.delete(key);
@@ -32848,18 +33232,11 @@ init_handlePinIconClick();
 init_flags();
 
 // src/utils/debounce.js
-function debounceImmediate(func, wait) {
+function debounceFunction(func, wait) {
   let timeout;
-  let isFirstCall = true;
   return function executedFunction(...args) {
-    if (isFirstCall) {
-      isFirstCall = false;
-      func(...args);
-      return;
-    }
     const later = () => {
       clearTimeout(timeout);
-      isFirstCall = true;
       func(...args);
     };
     clearTimeout(timeout);
@@ -32878,6 +33255,10 @@ function debounceAndSwallow(func, wait) {
 }
 
 // src/core/bannerManager.js
+var markdownPostProcessorDebounceMap = /* @__PURE__ */ new Map();
+var MARKDOWN_PROCESSOR_DEBOUNCE_DELAY = 200;
+var updateBannerDebounceMap = /* @__PURE__ */ new Map();
+var UPDATE_BANNER_DEBOUNCE_DELAY = 250;
 var debouncedAddPixelBanner = debounceAndSwallow(addPixelBanner, 350);
 async function addPixelBanner(plugin, el, ctx) {
   var _a, _b, _c;
@@ -32908,7 +33289,7 @@ async function addPixelBanner(plugin, el, ctx) {
       const previewViewEl = embedContentDiv.querySelector(":scope > .markdown-preview-view");
       if (previewViewEl) {
         const folderSpecific = plugin.getFolderSpecificImage(file.path);
-        const maxWidth = getFrontmatterValue(frontmatter, plugin.settings.customBannerMaxWidthField) || (folderSpecific == null ? void 0 : folderSpecific.bannerMaxWidth) || "unset";
+        const maxWidth = getFrontmatterValue(frontmatter, plugin.settings.customBannerMaxWidthField) || (folderSpecific == null ? void 0 : folderSpecific.bannerMaxWidth) || plugin.settings.bannerMaxWidth || "unset";
         const maxWidthValue = maxWidth === "unset" ? "unset" : `${maxWidth}px`;
         const bannerYPosition = getValueWithZeroCheck([
           getFrontmatterValue(frontmatter, plugin.settings.customYPositionField),
@@ -33189,32 +33570,74 @@ async function addPixelBanner(plugin, el, ctx) {
       const folderSpecific2 = plugin.getFolderSpecificImage(file.path);
       const imageDisplay = getFrontmatterValue(frontmatter, plugin.settings.customImageDisplayField) || (folderSpecific2 == null ? void 0 : folderSpecific2.imageDisplay) || plugin.settings.imageDisplay;
       const imageRepeat = getFrontmatterValue(frontmatter, plugin.settings.customImageRepeatField) || (folderSpecific2 == null ? void 0 : folderSpecific2.imageRepeat) || plugin.settings.imageRepeat;
-      const isSvg = imageUrl.includes("image/svg+xml") || file.path && file.path.toLowerCase().endsWith(".svg");
-      if (imageUrl.startsWith("blob:")) {
+      let isVideoFile = false;
+      let fileUrl = "";
+      if (typeof imageUrl === "object" && imageUrl !== null) {
+        isVideoFile = imageUrl.isVideo === true;
+        fileUrl = imageUrl.url;
+      } else {
+        fileUrl = imageUrl;
+        if (typeof fileUrl === "string" && fileUrl.includes("/media-attachment/") && (fileUrl.toLowerCase().endsWith(".mp4") || fileUrl.toLowerCase().endsWith(".mov"))) {
+          isVideoFile = true;
+        }
+      }
+      const isSvg = fileUrl.includes("image/svg+xml") || file.path && file.path.toLowerCase().endsWith(".svg");
+      if (fileUrl.startsWith("blob:")) {
         try {
-          const response = await fetch(imageUrl);
+          const response = await fetch(fileUrl);
           if (!response.ok) {
             throw new Error("Blob URL validation failed");
           }
         } catch (error) {
-          console.log("Blob URL invalid, refreshing image:", error);
+          console.log("Blob URL invalid, refreshing file:", error);
           plugin.loadedImages.delete(file.path);
-          URL.revokeObjectURL(imageUrl);
+          URL.revokeObjectURL(fileUrl);
           const inputType2 = plugin.getInputType(bannerImage);
-          const freshImageUrl = await plugin.getImageUrl(inputType2, bannerImage);
-          if (freshImageUrl) {
-            imageUrl = freshImageUrl;
-            plugin.loadedImages.set(file.path, freshImageUrl);
+          const freshResult = await plugin.getImageUrl(inputType2, bannerImage);
+          if (freshResult) {
+            if (typeof freshResult === "object" && freshResult !== null) {
+              isVideoFile = freshResult.isVideo === true;
+              fileUrl = freshResult.url;
+            } else {
+              fileUrl = freshResult;
+            }
+            plugin.loadedImages.set(file.path, fileUrl);
           }
         }
       }
-      bannerDiv.style.backgroundImage = `url('${imageUrl}')`;
-      if (isSvg) {
-        bannerDiv.style.backgroundSize = imageDisplay === "contain" ? "contain" : "100% 100%";
+      if (isVideoFile) {
+        bannerDiv.style.backgroundImage = "";
+        const existingVideo = bannerDiv.querySelector("video");
+        if (existingVideo) {
+          existingVideo.remove();
+        }
+        const videoEl = document.createElement("video");
+        videoEl.className = "pixel-banner-video";
+        videoEl.src = fileUrl;
+        videoEl.autoplay = true;
+        videoEl.loop = true;
+        videoEl.muted = true;
+        videoEl.playsInline = true;
+        videoEl.style.width = "100%";
+        videoEl.style.height = "100%";
+        videoEl.style.objectFit = imageDisplay || "cover";
+        videoEl.style.position = "absolute";
+        videoEl.style.top = "0";
+        videoEl.style.left = "0";
+        bannerDiv.appendChild(videoEl);
       } else {
-        bannerDiv.style.backgroundSize = imageDisplay || "cover";
+        const existingVideo = bannerDiv.querySelector("video");
+        if (existingVideo) {
+          existingVideo.remove();
+        }
+        bannerDiv.style.backgroundImage = `url('${fileUrl}')`;
+        if (isSvg) {
+          bannerDiv.style.backgroundSize = imageDisplay === "contain" ? "contain" : "100% 100%";
+        } else {
+          bannerDiv.style.backgroundSize = imageDisplay || "cover";
+        }
+        bannerDiv.style.backgroundRepeat = imageRepeat ? "repeat" : "no-repeat";
       }
-      bannerDiv.style.backgroundRepeat = imageRepeat ? "repeat" : "no-repeat";
       bannerDiv.style.display = "block";
       if (isEmbedded) {
         bannerDiv.style.setProperty("--pixel-banner-image", `url('${imageUrl}')`);
@@ -33278,29 +33701,55 @@ async function addPixelBanner(plugin, el, ctx) {
             try {
               plugin.loadedImages.delete(file.path);
               plugin.lastKeywords.delete(file.path);
-              const newImageUrl = await plugin.getImageUrl(inputType, bannerImage);
-              if (newImageUrl) {
-                plugin.loadedImages.set(file.path, newImageUrl);
+              const result = await plugin.getImageUrl(inputType, bannerImage);
+              if (result) {
+                let isVideoFile2 = false;
+                let fileUrl2 = "";
+                if (typeof result === "object" && result !== null) {
+                  isVideoFile2 = result.isVideo === true;
+                  fileUrl2 = result.url;
+                } else {
+                  fileUrl2 = result;
+                }
+                plugin.loadedImages.set(file.path, fileUrl2);
                 plugin.lastKeywords.set(file.path, bannerImage);
-                bannerDiv.style.backgroundImage = `url('${newImageUrl}')`;
+                if (isVideoFile2) {
+                  bannerDiv.style.backgroundImage = "";
+                  const existingVideo = bannerDiv.querySelector("video");
+                  if (existingVideo) {
+                    existingVideo.remove();
+                  }
+                  const videoEl = document.createElement("video");
+                  videoEl.className = "pixel-banner-video";
+                  videoEl.src = fileUrl2;
+                  videoEl.autoplay = true;
+                  videoEl.loop = true;
+                  videoEl.muted = true;
+                  videoEl.playsInline = true;
+                  videoEl.style.width = "100%";
+                  videoEl.style.height = "100%";
+                  videoEl.style.objectFit = "cover";
+                  videoEl.style.position = "absolute";
+                  videoEl.style.top = "0";
+                  videoEl.style.left = "0";
+                  bannerDiv.appendChild(videoEl);
+                } else {
+                  bannerDiv.style.backgroundImage = `url('${fileUrl2}')`;
+                  const existingVideo = bannerDiv.querySelector("video");
+                  if (existingVideo) {
+                    existingVideo.remove();
+                  }
+                }
                 const viewImageIcon2 = container.querySelector(":scope > .view-image-icon");
                 if (viewImageIcon2 && viewImageIcon2._updateVisibility) {
                   const bannerValue = getFrontmatterValue(frontmatter, plugin.settings.customBannerField);
-                  viewImageIcon2._updateVisibility(newImageUrl, bannerValue || file.path);
+                  viewImageIcon2._updateVisibility(fileUrl2, bannerValue || file.path);
                 }
-                pinIcon.onclick = async () => {
-                  try {
-                    await handlePinIconClick(newImageUrl, plugin);
-                  } catch (error) {
-                    console.error("Error pinning image:", error);
-                    new import_obsidian26.Notice("Failed to pin the image.");
-                  }
-                };
-                new import_obsidian26.Notice("\u{1F504} Refreshed banner image");
+                new import_obsidian26.Notice("\u{1F504} Refreshed banner");
               }
             } catch (error) {
-              console.error("Error refreshing image:", error);
-              new import_obsidian26.Notice("Failed to refresh image");
+              console.error("Error refreshing banner:", error);
+              new import_obsidian26.Notice("Failed to refresh the banner.");
             }
           };
           container.appendChild(refreshIcon);
@@ -33316,12 +33765,19 @@ async function addPixelBanner(plugin, el, ctx) {
     }
   }
 }
-var debouncedUpdateBanner = debounceImmediate(updateBanner, 50);
+var debouncedUpdateBanner = debounceFunction(updateBanner, 50);
 async function updateBanner(plugin, view, isContentChange, updateMode = plugin.UPDATE_MODE.FULL_UPDATE) {
   var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n;
   if (!view || !view.file) {
     return;
   }
+  const filePath = view.file.path;
+  const currentTime = Date.now();
+  const lastUpdateTime = updateBannerDebounceMap.get(filePath);
+  if (lastUpdateTime && currentTime - lastUpdateTime < UPDATE_BANNER_DEBOUNCE_DELAY) {
+    return;
+  }
+  updateBannerDebounceMap.set(filePath, currentTime);
   if (!isContentChange) {
     await new Promise((resolve) => setTimeout(resolve, 50));
   }
@@ -33610,34 +34066,39 @@ async function updateBanner(plugin, view, isContentChange, updateMode = plugin.U
       if (bannerIconImage) {
         const inputType = plugin.getInputType(bannerIconImage);
         let imagePath = null;
-        switch (inputType) {
-          case "obsidianLink":
-            const file = plugin.getPathFromObsidianLink(bannerIconImage);
-            if (file) {
-              imagePath = plugin.loadedImages.get(file.path);
+        if (inputType === "invalid") {
+          console.warn("Invalid banner icon image value detected:", bannerIconImage);
+        } else {
+          switch (inputType) {
+            case "obsidianLink":
+              const file = plugin.getPathFromObsidianLink(bannerIconImage);
+              if (file) {
+                imagePath = plugin.loadedImages.get(file.path);
+                if (!imagePath) {
+                  plugin.getVaultImageUrl(file.path).then((url) => {
+                    if (url) plugin.loadedImages.set(file.path, url);
+                  });
+                }
+              }
+              break;
+            case "vaultPath":
+              imagePath = plugin.loadedImages.get(bannerIconImage);
               if (!imagePath) {
-                plugin.getVaultImageUrl(file.path).then((url) => {
-                  if (url) plugin.loadedImages.set(file.path, url);
+                plugin.getVaultImageUrl(bannerIconImage).then((url) => {
+                  if (url) plugin.loadedImages.set(bannerIconImage, url);
                 });
               }
-            }
-            break;
-          case "vaultPath":
-            imagePath = plugin.loadedImages.get(bannerIconImage);
-            if (!imagePath) {
-              plugin.getVaultImageUrl(bannerIconImage).then((url) => {
-                if (url) plugin.loadedImages.set(bannerIconImage, url);
-              });
-            }
-            break;
-          case "url":
-            imagePath = bannerIconImage;
-            break;
-        }
-        if (imagePath) {
-          imgElement = document.createElement("img");
-          imgElement.src = imagePath;
-          imgElement.className = "banner-icon-image";
+              break;
+            case "url":
+              imagePath = bannerIconImage;
+              break;
+          }
+          if (imagePath) {
+            imgElement = document.createElement("img");
+            const imageUrl = typeof imagePath === "object" && imagePath.url ? imagePath.url : imagePath;
+            imgElement.src = imageUrl;
+            imgElement.className = "banner-icon-image";
+          }
         }
       }
       let textElement = null;
@@ -33698,7 +34159,7 @@ function applyBannerSettings(plugin, bannerDiv, ctx, isEmbedded) {
     folderSpecific == null ? void 0 : folderSpecific.xPosition,
     plugin.settings.xPosition
   ]);
-  const pixelBannerMaxWidth = getFrontmatterValue(frontmatter, plugin.settings.customBannerMaxWidthField) || (folderSpecific == null ? void 0 : folderSpecific.bannerMaxWidth) || "unset";
+  const pixelBannerMaxWidth = getFrontmatterValue(frontmatter, plugin.settings.customBannerMaxWidthField) || (folderSpecific == null ? void 0 : folderSpecific.bannerMaxWidth) || plugin.settings.bannerMaxWidth || "unset";
   const titleColor = getFrontmatterValue(frontmatter, plugin.settings.customTitleColorField) || (folderSpecific == null ? void 0 : folderSpecific.titleColor) || plugin.settings.titleColor;
   const bannerIconSize = getFrontmatterValue(frontmatter, plugin.settings.customBannerIconSizeField) || (folderSpecific == null ? void 0 : folderSpecific.bannerIconSize) || plugin.settings.bannerIconSize || 70;
   const bannerIconXPosition = getValueWithZeroCheck([
@@ -33861,6 +34322,15 @@ function registerMarkdownPostProcessor(plugin) {
     var _a;
     const isPreview = ctx.containerEl.classList.contains("markdown-preview-view");
     const isHoverPopover = ctx.containerEl.closest(".hover-popover");
+    const debounceFile = ctx.sourcePath ? plugin.app.vault.getAbstractFileByPath(ctx.sourcePath) : null;
+    if (debounceFile) {
+      const currentTime = Date.now();
+      const lastProcessTime = markdownPostProcessorDebounceMap.get(debounceFile.path);
+      if (lastProcessTime && currentTime - lastProcessTime < MARKDOWN_PROCESSOR_DEBOUNCE_DELAY) {
+        return;
+      }
+      markdownPostProcessorDebounceMap.set(debounceFile.path, currentTime);
+    }
     if (!isPreview && !isHoverPopover) return;
     const file = ctx.sourcePath ? plugin.app.vault.getAbstractFileByPath(ctx.sourcePath) : null;
     if (!file) return;
@@ -33951,13 +34421,29 @@ async function getVaultImageUrl(path) {
   const file = this.app.vault.getAbstractFileByPath(path);
   if (file && "extension" in file) {
     try {
+      const fileExt = file.extension.toLowerCase();
+      const videoExtensions = ["mp4", "mov"];
+      if (videoExtensions.includes(fileExt)) {
+        const resourcePath = this.app.vault.getResourcePath(file);
+        return {
+          url: resourcePath,
+          isVideo: true,
+          fileType: fileExt,
+          // Store original path to help with caching
+          originalPath: path
+        };
+      }
       const arrayBuffer = await this.app.vault.readBinary(file);
-      const mimeType = file.extension.toLowerCase() === "svg" ? "image/svg+xml" : `image/${file.extension}`;
+      const mimeType = fileExt === "svg" ? "image/svg+xml" : `image/${fileExt}`;
       const blob = new Blob([arrayBuffer], { type: mimeType });
       const url = URL.createObjectURL(blob);
-      return url;
+      return {
+        url,
+        isVideo: false,
+        fileType: fileExt
+      };
     } catch (error) {
-      console.error("Error reading vault image:", error);
+      console.error("Error reading vault file:", error);
       return null;
     }
   }
@@ -34075,16 +34561,25 @@ function createFolderImageSettings(folderImage) {
 var import_obsidian28 = require("obsidian");
 init_modals();
 init_frontmatterUtils();
+var bannerUpdateDebounceMap = /* @__PURE__ */ new Map();
+var BANNER_UPDATE_DEBOUNCE_DELAY = 300;
 async function handleActiveLeafChange(leaf) {
   var _a;
+  if (!leaf || !(leaf.view instanceof import_obsidian28.MarkdownView) || !leaf.view.file) {
+    return;
+  }
+  const filePath = leaf.view.file.path;
+  const debounceCheckTime = Date.now();
+  const lastUpdateTime = bannerUpdateDebounceMap.get(filePath);
+  if (lastUpdateTime && debounceCheckTime - lastUpdateTime < BANNER_UPDATE_DEBOUNCE_DELAY) {
+    return;
+  }
+  bannerUpdateDebounceMap.set(filePath, debounceCheckTime);
   this.cleanupCache();
   const previousLeaf = this.app.workspace.activeLeaf;
   if (previousLeaf && previousLeaf.view instanceof import_obsidian28.MarkdownView && previousLeaf !== leaf) {
     this.cleanupPreviousLeaf(previousLeaf);
     this.cleanupIconOverlay(previousLeaf.view);
-  }
-  if (!leaf || !(leaf.view instanceof import_obsidian28.MarkdownView) || !leaf.view.file) {
-    return;
   }
   const currentPath = leaf.view.file.path;
   const leafId = leaf.id;
@@ -34195,13 +34690,13 @@ async function handleActiveLeafChange(leaf) {
   }
 }
 function handleLayoutChange() {
-  var _a, _b;
+  var _a;
   const currentLeafIds = new Set(
     this.app.workspace.getLeavesOfType("markdown").map((leaf) => leaf.id)
   );
   for (const [key, entry] of this.bannerStateCache) {
     if (entry.leafId && !currentLeafIds.has(entry.leafId)) {
-      if ((_b = (_a = entry.state) == null ? void 0 : _a.imageUrl) == null ? void 0 : _b.startsWith("blob:")) {
+      if (((_a = entry.state) == null ? void 0 : _a.imageUrl) && typeof entry.state.imageUrl === "string" && entry.state.imageUrl.startsWith("blob:")) {
         URL.revokeObjectURL(entry.state.imageUrl);
       }
       this.bannerStateCache.delete(key);
@@ -34451,7 +34946,7 @@ function cleanupPreviousLeaf(previousLeaf) {
         previousBanner.style.display = "none";
         if (previousLeaf.view.file) {
           const existingUrl = this.loadedImages.get(previousLeaf.view.file.path);
-          if (existingUrl == null ? void 0 : existingUrl.startsWith("blob:")) {
+          if (existingUrl && typeof existingUrl === "string" && existingUrl.startsWith("blob:")) {
             URL.revokeObjectURL(existingUrl);
           }
           this.loadedImages.delete(previousLeaf.view.file.path);
@@ -34865,7 +35360,7 @@ var PixelBannerPlugin = class extends import_obsidian30.Plugin {
     });
     this.addCommand({
       id: "open-banner-store",
-      name: "\u{1F3EA} Open Pixel Banner Plus Store",
+      name: "\u{1F3EA} Open Pixel Banner Plus Collection",
       callback: () => this.openBannerStore()
     });
     this.addCommand({
@@ -35218,7 +35713,7 @@ var PixelBannerPlugin = class extends import_obsidian30.Plugin {
   // -- open the banner store --
   // --------------------------
   openBannerStore() {
-    new SelectPixelBannerModal(this.app, this).open();
+    new PixelBannerStoreModal(this.app, this).open();
   }
 };
 

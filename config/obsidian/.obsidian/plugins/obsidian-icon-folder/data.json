@@ -467,5 +467,23 @@
   },
   "Projects/Tasks/Kanban Tasks/add hooks claude pro.md": {
     "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/1. obsidian git, disable sync.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/2. check nix user, check how to setup nix darwin correctly.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/3. change dotfiles repo.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/4. add glow to my workflow, in general check my packages and create esay to use docs and commands.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/add specs and ai docs to obsidain.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/create commands to easily symlink specs and ai docs to repos=.md": {
+    "iconName": "OcTasklist24"
   }
 }
