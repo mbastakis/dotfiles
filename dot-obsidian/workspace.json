@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "ce980d974ae50036",
+        "id": "60603576d0811252",
         "type": "tabs",
         "children": [
           {
-            "id": "c64bbf0a6f963caf",
+            "id": "59c71793bd5b0cce",
             "type": "leaf",
             "state": {
               "type": "beautitab-react-view",
@@ -17,7 +17,7 @@
             }
           },
           {
-            "id": "1bed0d7bc3ec59a2",
+            "id": "978de1d4a08ec38d",
             "type": "leaf",
             "state": {
               "type": "obsidian-projects",
@@ -84,7 +84,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 249.5010757446289,
+    "width": 235.5010757446289,
     "collapsed": true
   },
   "right": {
@@ -105,8 +105,29 @@
               "icon": "layout-list",
               "title": "GCal Schedule View"
             }
+          },
+          {
+            "id": "5d9f3ecce44dd16c",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
+          },
+          {
+            "id": "3277780dede59bb3",
+            "type": "leaf",
+            "state": {
+              "type": "git-history-view",
+              "state": {},
+              "icon": "history",
+              "title": "History"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       },
       {
         "id": "014043c44890df20",
@@ -175,18 +196,20 @@
       "pomodoro-timer:Toggle timer panel": true,
       "cmdr:Workspaces: Load workspace layout": false,
       "cmdr:Workspaces: Save layout": false,
-      "meld-encrypt:Encrypt/Decrypt In-place": false,
+      "meld-encrypt:Encrypt Selection": false,
+      "meld-encrypt:Decrypt Selection": false,
       "janitor:Janitor: scan vault": false,
       "markdown-importer:Open format converter": true,
       "custom-sort:Toggle custom sorting": true,
       "canvas:Create new canvas": true,
       "omnisearch:Omnisearch": true,
-      "meld-encrypt:Encrypt Selection": false,
-      "meld-encrypt:Decrypt Selection": false
+      "obsidian-git:Open Git source control": false
     }
   },
-  "active": "1bed0d7bc3ec59a2",
+  "active": "978de1d4a08ec38d",
   "lastOpenFiles": [
+    "Daily/Quotes of the Day - 1-2-3 Magic.md",
+    "Calendar/Calendar Events/Hermetic presentation tools, setup, slides.md",
     "Untitled 5.md",
     "Untitled 4.md",
     "Resources/LStickyNotes/Night heart rate.md",
@@ -217,8 +240,6 @@
     "Projects/Tasks/DT Tasks/Ask Paul the script for aws login.md",
     "Projects/Tasks/Kanban Tasks/notes from the aicc meeting.md",
     "image.png",
-    "lhermetica-moc.md",
-    "lpireos-startup-accelerator.md",
     "Resources/LStickyNotes",
     "Extras/Images/italy-roadtrip-2025-1751116633531.webp",
     "My Resume.pdf",
