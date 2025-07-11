@@ -169,6 +169,7 @@
       "templates:Insert template": true,
       "pinned-notes:Homepage": false,
       "cmdr:Files: Show file explorer": false,
+      "obsidian-git:Open Git source control": false,
       "ribbon-divider:ribbon-divider-d6836d41-e02e-4707-a8f9-d737fd521486": false,
       "obsidian-projects:Open projects": false,
       "obsidian-excalidraw-plugin:New drawing": false,
@@ -202,8 +203,7 @@
       "markdown-importer:Open format converter": true,
       "custom-sort:Toggle custom sorting": true,
       "canvas:Create new canvas": true,
-      "omnisearch:Omnisearch": true,
-      "obsidian-git:Open Git source control": false
+      "omnisearch:Omnisearch": true
     }
   },
   "active": "978de1d4a08ec38d",
