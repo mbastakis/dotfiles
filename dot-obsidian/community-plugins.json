@@ -45,5 +45,6 @@
   "js-engine",
   "text-extractor",
   "ai-image-analyzer",
-  "context-gather-plugin"
+  "context-gather-plugin",
+  "obsidian-git"
 ]
