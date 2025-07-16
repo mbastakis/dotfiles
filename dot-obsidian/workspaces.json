@@ -17,19 +17,8 @@
                   "state": {},
                   "title": "New tab"
                 }
-              },
-              {
-                "id": "978de1d4a08ec38d",
-                "type": "leaf",
-                "state": {
-                  "type": "obsidian-projects",
-                  "state": {},
-                  "icon": "projects-icon",
-                  "title": "Projects"
-                }
               }
-            ],
-            "currentTab": 1
+            ]
           }
         ],
         "direction": "vertical"
@@ -86,8 +75,7 @@
           }
         ],
         "direction": "horizontal",
-        "width": 235.5010757446289,
-        "collapsed": true
+        "width": 235.5010757446289
       },
       "right": {
         "id": "45a4c33d2d217b48",
@@ -161,8 +149,7 @@
           }
         ],
         "direction": "horizontal",
-        "width": 326.5,
-        "collapsed": true
+        "width": 326.5
       },
       "left-ribbon": {
         "hiddenItems": {
@@ -208,8 +195,8 @@
           "omnisearch:Omnisearch": true
         }
       },
-      "active": "978de1d4a08ec38d",
-      "mtime": "2025-07-11T03:15:16+03:00"
+      "active": "1b9875d61959b663",
+      "mtime": "2025-07-16T10:09:08+03:00"
     }
   },
   "active": "mike-base"

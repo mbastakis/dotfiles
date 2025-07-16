@@ -75,26 +75,28 @@
               "InProgress": {
                 "weight": 3,
                 "records": [
-                  "Projects/Tasks/Kanban Tasks/notes from the aicc meeting.md",
                   "Projects/Tasks/Kanban Tasks/Tool for easy context to llm.md",
                   "Projects/Tasks/Kanban Tasks/Track Subscriptions.md",
                   "Extras/Unkown/checkout browser use.md",
                   "Extras/Unkown/solution for auto-fill out in forms.md",
                   "Extras/Unkown/How Platform engineers support Data Scientist.md",
                   "Extras/Unkown/Check LangChain, LLamaIndex.md",
-                  "Extras/Unkown/configure glove80.md",
                   "Projects/Tasks/Kanban Tasks/Obsidian MCP for task cration.md",
                   "Projects/Tasks/Kanban Tasks/Add agent tool, check emails and create obsidian tasks.md",
-                  "Projects/Tasks/Kanban Tasks/agentic tool for revolut api, track finance.md"
+                  "Projects/Tasks/Kanban Tasks/agentic tool for revolut api, track finance.md",
+                  "Projects/Tasks/Kanban Tasks/add hooks claude pro.md",
+                  "Projects/Tasks/Kanban Tasks/add nix in dotfiles.md",
+                  "Projects/Tasks/Kanban Tasks/watch youtube quantitization local llm.md"
                 ],
                 "collapse": false
               },
               "Today": {
                 "weight": 4,
                 "records": [
+                  "Projects/Tasks/Kanban Tasks/fix glove80 symbols.md",
+                  "Projects/Tasks/Kanban Tasks/fix glove80 use cases.md",
                   "Projects/Tasks/Kanban Tasks/configure ghostty, add edit command in terminal.md",
                   "Projects/Tasks/Kanban Tasks/use local models, maybe with langgraph to index and structure obsidian notes.md",
-                  "Projects/Tasks/Kanban Tasks/obsidian in git.md",
                   "Projects/Tasks/Kanban Tasks/create default feat specs.md",
                   "Projects/Tasks/Kanban Tasks/Create default refactor specs.md",
                   "Projects/Tasks/Kanban Tasks/create git-tree default specs.md",
@@ -103,7 +105,12 @@
                   "Projects/Tasks/Kanban Tasks/check navi.md",
                   "Projects/Tasks/Kanban Tasks/manage claude mcp through dotfiles.md",
                   "Projects/Tasks/Kanban Tasks/setup vi mode in ghostty.md",
-                  "Projects/Tasks/Kanban Tasks/add nix in dotfiles.md"
+                  "Projects/Tasks/Kanban Tasks/create kanban column for websites I obsidian clip.md",
+                  "Projects/Tasks/Kanban Tasks/document all brew commands, maybe add to navi.md",
+                  "Projects/Tasks/Kanban Tasks/plan vacation, write dates to calendar etc.md",
+                  "Projects/Tasks/Kanban Tasks/revamp workflow, in general some refactor on obsiadian.md",
+                  "Projects/Tasks/Kanban Tasks/track subscriptions in excel ? Maybe obsidian excel ?.md",
+                  "Projects/Tasks/Kanban Tasks/specs and ai_docs in obsidian as symlinks, commands that can creat them easily.md"
                 ]
               }
             }
