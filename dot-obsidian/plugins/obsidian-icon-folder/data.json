@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "LiKeyboard",
       "SiShortcut",
       "TiBooks",
       "OcTasklist24",
-      "CoCalendarEvent",
-      "IbDashboard"
+      "CoCalendarEvent"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [
@@ -485,5 +485,35 @@
   },
   "Projects/Tasks/Kanban Tasks/create commands to easily symlink specs and ai docs to repos=.md": {
     "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/plan vacation, write dates to calendar etc.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/track subscriptions in excel ? Maybe obsidian excel ?.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/document all brew commands, maybe add to navi.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/create kanban column for websites I obsidian clip.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/revamp workflow, in general some refactor on obsiadian.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/specs and ai_docs in obsidian as symlinks, commands that can creat them easily.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/fix glove80 use cases.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/DT Tasks/PSA Portal Notes.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Resources/Lily58 Pro.md": {
+    "iconName": "LiKeyboard"
+  },
+  "Resources/Glove80.md": {
+    "iconName": "LiKeyboard"
   }
 }
