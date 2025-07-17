@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
-      "LiKeyboard",
-      "SiShortcut",
-      "TiBooks",
       "OcTasklist24",
-      "CoCalendarEvent"
+      "IbDocumentCode",
+      "CoFolderDocument",
+      "LiKeyboard",
+      "SiShortcut"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [
@@ -515,5 +515,10 @@
   },
   "Resources/Glove80.md": {
     "iconName": "LiKeyboard"
+  },
+  "Resources/AI_Docs": "CoFolderDocument",
+  "Resources/Specs": "IbDocumentCode",
+  "Projects/Tasks/Kanban Tasks/checout kimi llm, free openrouter, add to cline and opencode.md": {
+    "iconName": "OcTasklist24"
   }
 }

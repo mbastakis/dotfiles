@@ -1,4 +1,4 @@
-# .zshrc - Main ZSH configuration file
+#!/bin/bash
 
 # Completion system
 autoload -Uz compinit
@@ -40,10 +40,11 @@ command -v carapace &>/dev/null && eval "$(carapace zsh)"
 zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
 source <(carapace _carapace)
 
-# dotfiles completion
-if [[ -f ~/.zsh/completions/dotfiles.zsh ]]; then
-    source ~/.zsh/completions/dotfiles.zsh
+# Obsidian CLI
+if command -v obsidian-cli &>/dev/null; then
+  eval "$(obsidian-cli completion zsh)"
 fi
+
 # ----------------------------------------------------
 
 # ----------------------------------------------------
@@ -87,5 +88,4 @@ source $HOME/.zsh/vi-mode.zsh
 source $HOME/.zsh/aliases.zsh
 source $HOME/.zsh/functions.zsh
 source $HOME/.zsh/custom_shortcuts.zsh
-source $HOME/.zsh/dotfiles.zsh
 # ----------------------------------------------------

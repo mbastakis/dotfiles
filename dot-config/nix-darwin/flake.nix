@@ -56,6 +56,7 @@
         "felixkratz/formulae"
         "nikitabobko/tap"
         "oven-sh/bun"
+        "yakitrak/yakitrak"
       ];
       homebrew.casks = [
 	      "raycast"
@@ -151,6 +152,7 @@
         "sops"
         "opencode"
         "zellij"
+        "yakitrak/yakitrak/obsidian-cli"
       ];
       homebrew.masApps = 
         { 
