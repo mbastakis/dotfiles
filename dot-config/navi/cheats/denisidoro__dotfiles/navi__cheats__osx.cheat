@@ -1,0 +1,60 @@
+% osx, notification
+
+# Display a notification with message, title and subtitle
+osascript -e 'display notification "<message>" with title "<title>" subtitle "<subtitle>"'
+
+# Display a notification with message and title
+osascript -e 'display notification "<message>" with title "<title>"'
+
+
+% osx, file
+
+# Show desktop icons
+defaults write com.apple.finder CreateDesktop -bool true && killall Finder
+
+# Hide desktop icons
+defaults write com.apple.finder CreateDesktop -bool false && killall Finder
+
+# Show hidden files
+defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder
+
+# Hide hidden files
+defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder
+
+# Create new file
+suffix="$(date +'%Hh%Mmin%S')"; osascript -e 'set title to "new_'$suffix'.txt"' -e 'tell application "Finder" to make new file at (the target of the front window) as alias with properties {name: title}'
+
+
+% osx, power
+
+# Lock screen
+pmset displaysleepnow
+
+# Prevent sleep
+caffeinate -t $((60*<minutes>))
+
+# Prevent sleep for a long time
+caffeinate -t 18000
+
+# Turn Macbook display on :: screen
+brightness 0.5
+
+# Turn Macbook display off :: screen
+brightness 0
+
+
+% osx, ui
+
+# Set dark mode on (dark)
+osascript -e 'tell app "System Events" to tell appearance preferences to set dark mode to true'
+
+# Set dark mode off (light)
+osascript -e 'tell app "System Events" to tell appearance preferences to set dark mode to false'
+
+# Set wallpaper for a single workspace
+osascript -e 'tell application "Finder" to set desktop picture to POSIX file "<wallpaper>"'
+
+# Set wallpaper for multiple workspaces
+osascript -e 'tell application "System Events" to tell every desktop to set picture to "<wallpaper>"'
+
+$ wallpaper: find ~/Pictures/Wallpapers -type f --- --preview 'viu --height 20 {}' --preview-window 'bottom:20'

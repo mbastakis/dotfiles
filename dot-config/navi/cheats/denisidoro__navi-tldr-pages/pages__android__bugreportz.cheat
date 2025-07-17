@@ -1,0 +1,19 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/android/bugreportz.md
+
+% bugreportz, android
+
+# Generate a complete zipped bug report of an Android device
+bugreportz
+
+# Show the progress of a running `bugreportz` operation
+bugreportz -p
+
+# Write the content of an Android bug report to `stdout`
+bugreportz -s
+
+# Display help
+bugreportz -h
+
+# Display version
+bugreportz -v

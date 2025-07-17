@@ -1,0 +1,13 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/linux/cgroups.md
+
+% cgroups, linux
+
+# View documentation for `cgclassify`
+tldr cgclassify
+
+# View documentation for `cgcreate`
+tldr cgcreate
+
+# View documentation for `cgexec`
+tldr cgexec

@@ -1,0 +1,58 @@
+% kubernetes, k8s, pvc
+@ kubernetes, k8s
+# Increase disk space of an existing pvc in current context
+kubectl patch -n <namespace> pvc/<pvc_name> --patch '{"spec": {"resources": {"requests": {"storage": "<size_in_Gi>Gi"}}}}'
+
+% kubernetes, k8s, context
+@ kubernetes, k8s
+
+$ namespace: kubectl get ns --context $context --- --column 1 --header-lines 1
+$ name: kubectl get pod -n $namespace --context $context --- --column 1 --header-lines 1
+
+# Get object names of a kubernetes, k8s context
+kubectl get <object> --no-headers -o custom-columns=':metadata.name' --context <context>
+
+# Copy truststore.jks from one secret to another
+kubectl --context=<source_context> -n <source_namespace> get secret <source_secret_name> -o json | jq -r '.data."truststore.jks"' | base64 -d -i > truststore.jks && kubectl --context=<target_context> -n <target_namespace> create secret generic <target_secret_name> --from-file=truststore.jk
+
+$ source_context: kubectl config get-contexts --- --column 2 --header-lines 1
+$ target_context: kubectl config get-contexts --- --column 2 --header-lines 1
+$ source_namespace: kubectl get ns --context $source_context --- --column 1 --header-lines 1
+$ source_secret_name: kubectl get secret --context $context -n $namespace --- --column 1 --header-lines 1
+$ target_namespace: kubectl get ns --context $context --- --column 1 --header-lines 1
+
+# Print logs of a pod in a specific context
+kubectl logs --context <context> -n <namespace> -f pods/<pod>
+
+# Open shell to a pod in a specific context
+kubectl exec -it --context <context> -n <namespace> <pod> -- /bin/bash
+
+# Check disk space on pod in a specific context
+kubectl exec -it --context <context> -n <namespace> <pod> -- sh -c "df -h"
+
+# Set default namespace of current context
+kubectl config set-context --current --namespace=<namespace>
+
+# Get info about current context
+kubectl config get-contexts $(kubectl config current-context)
+
+% kubernetes, k8s, context, pvc
+@ kubernetes, k8s, context
+# Get pvc names for a given namespace in a specific context
+kubectl get pvc --context <context> -n <ns> -o=jsonpath=\"{range .items[?(@.spec.storageClassName=='<storageclass>')]}{.metadata.name}{' '}{end}\"
+
+# Get pvc names for a given namespace in current context
+kubectl get pvc -n <ns> -o=jsonpath=\"{range .items[?(@.spec.storageClassName=='<storageclass>')]}{.metadata.name}{' '}{end}\"
+
+# get label 'managed-by'"
+kubectl get <type> --context <context> -n <namespace> -o=jsonpath=\"{range .items[*]}{.spec.volumeclaimtemplates[?(@.kind=='PersistentVolumeClaim')]}{.metadata.name}{' --- '}{.spec.template.metadata.labels.app\\.kubernetes, k8s\\.io/managed-by}{'\\n'}{end}\"
+
+# Increase disk space of an existing pvc in a given context
+kubectl patch --context <context> -n <namespace> pvc/<pvc_name> --patch '{"spec": {"resources": {"requests": {"storage": "<size_in_Gi>Gi"}}}}'
+
+$ pvc_name: kubectl get pvc -n $namespace --context $context --- --column 1 --header-lines 1
+
+# Remove claimRef from pv (patch)
+kubectl patch pv <pv_name> --context <context> -p '{\"spec\":{\"claimRef\": null}}'
+
+$ pv_name: kubectl get pv --context $source_context --- --column 1 --header-lines 1

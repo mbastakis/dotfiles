@@ -1,0 +1,25 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/fastboot.md
+
+% fastboot, common
+
+# Unlock the bootloader
+fastboot oem unlock
+
+# Relock the bootloader
+fastboot oem lock
+
+# Reboot the device from fastboot mode into fastboot mode again
+fastboot reboot bootloader
+
+# Flash a given image
+fastboot flash <path_to_file.img>
+
+# Flash a custom recovery image
+fastboot flash recovery <path_to_file.img>
+
+# List connected devices
+fastboot devices
+
+# Display all information of a device
+fastboot getvar all

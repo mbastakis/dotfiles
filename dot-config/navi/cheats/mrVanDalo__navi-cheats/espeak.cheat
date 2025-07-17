@@ -1,0 +1,7 @@
+% espeak
+
+# speak german text
+espeak -v de -s 143 -p 20 "<text>"
+
+# speak english text
+espeak -v en -s 145 -p 23 "<text>"

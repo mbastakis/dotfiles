@@ -1,0 +1,16 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/babeld.md
+
+% babeld, common
+
+# Start the daemon with one or more [c]onfiguration files (read in order)
+babeld -c <path_to_ports.conf> -c <path_to_filters.conf> -c <path_to_interfaces.conf>
+
+# [D]eamonize after startup
+babeld -D
+
+# Specify a [C]onfiguration command
+babeld -C <'redistribute metric 256'>
+
+# Specify on which interfaces to operate
+babeld <eth0> <eth1> <wlan0>

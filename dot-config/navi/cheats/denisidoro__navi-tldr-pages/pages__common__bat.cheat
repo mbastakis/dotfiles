@@ -1,0 +1,28 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/bat.md
+
+% bat, common
+
+# Pretty print the contents of one or more files to `stdout`
+bat <path_to_file1 path_to_file2 ...>
+
+# Concatenate several files into the target file
+bat <path_to_file1 path_to_file2 ...> > <path_to_target_file>
+
+# Remove decorations and disable paging (`--style plain` can be replaced with `-p`, or both options with `-pp`)
+bat --style plain --pager never <path_to_file>
+
+# Highlight a specific line or a range of lines with a different background color
+bat <-H|--highlight-line> <10|5:10|:10|10:|10:+5> <path_to_file>
+
+# Show non-printable characters like space, tab or newline
+bat <-A|--show-all> <path_to_file>
+
+# Remove all decorations except line numbers in the output
+bat <-n|--number> <path_to_file>
+
+# Syntax highlight a JSON file by explicitly setting the language
+bat <-l|--language> json <path_to_file.json>
+
+# Display all supported languages
+bat <-L|--list-languages>

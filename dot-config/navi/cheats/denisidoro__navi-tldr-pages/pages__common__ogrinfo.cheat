@@ -1,0 +1,25 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/ogrinfo.md
+
+% ogrinfo, common
+
+# List supported formats
+ogrinfo --formats
+
+# List layers of a data source
+ogrinfo <path_to_input.gpkg>
+
+# Get detailed information about a specific layer of a data source
+ogrinfo <path_to_input.gpkg> <layer_name>
+
+# Show summary information about a specific layer of a data source
+ogrinfo -so <path_to_input.gpkg> <layer_name>
+
+# Show summary of all layers of the data source
+ogrinfo -so -al <path_to_input.gpkg>
+
+# Show detailed information of features matching a condition
+ogrinfo -where '<attribute_name > 42>' <path_to_input.gpkg> <layer_name>
+
+# Update a layer in the data source with SQL
+ogrinfo <path_to_input.geojson> -dialect SQLite -sql "<UPDATE input SET attribute_name = 'foo'>"

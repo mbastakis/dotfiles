@@ -1,0 +1,22 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/cradle-elastic.md
+
+% cradle-elastic, common
+
+# Truncate the Elasticsearch index
+cradle elastic flush
+
+# Truncate the Elasticsearch index for a specific package
+cradle elastic flush <package>
+
+# Submit the Elasticsearch schema
+cradle elastic map
+
+# Submit the Elasticsearch schema for a specific package
+cradle elastic map <package>
+
+# Populate the Elasticsearch indices for all packages
+cradle elastic populate
+
+# Populate the Elasticsearch indices for a specific package
+cradle elastic populate <package>

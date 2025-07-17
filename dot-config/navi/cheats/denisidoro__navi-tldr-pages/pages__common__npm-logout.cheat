@@ -1,0 +1,10 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/npm-logout.md
+
+% npm-logout, common
+
+# Log out of the registry user account
+npm logout
+
+# Log out using a custom registry
+npm logout --registry=<registry_url>

@@ -1,0 +1,28 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/xz.md
+
+% xz, common
+
+# Compress a file using xz
+xz <path_to_file>
+
+# Decompress an XZ file
+xz --decompress <path_to_file.xz>
+
+# Compress a file using lzma
+xz --format=lzma <path_to_file>
+
+# Decompress an LZMA file
+xz --decompress --format=lzma <path_to_file.lzma>
+
+# Decompress a file and write to `stdout` (implies `--keep`)
+xz --decompress --stdout <path_to_file.xz>
+
+# Compress a file, but don't delete the original
+xz --keep <path_to_file>
+
+# Compress a file using the fastest compression
+xz -0 <path_to_file>
+
+# Compress a file using the best compression
+xz -9 <path_to_file>

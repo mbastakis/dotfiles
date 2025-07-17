@@ -1,0 +1,22 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/cordova.md
+
+% cordova, common
+
+# Create a Cordova project
+cordova create <path_to_directory> <package> <project_name>
+
+# Display the current workspace status
+cordova info
+
+# Add a Cordova platform
+cordova platform add <platform>
+
+# Remove a Cordova platform
+cordova platform remove <platform>
+
+# Add a Cordova plugin
+cordova plugin add <pluginid>
+
+# Remove a Cordova plugin
+cordova plugin remove <pluginid>

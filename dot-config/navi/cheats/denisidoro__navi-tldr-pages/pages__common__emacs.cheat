@@ -1,0 +1,28 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/emacs.md
+
+% emacs, common
+
+# Start Emacs and open a file
+emacs <path_to_file>
+
+# Open a file at a specified line number
+emacs +<line_number> <path_to_file>
+
+# Run an Emacs Lisp file as a script
+emacs --script <path_to_file.el>
+
+# Start Emacs in console mode (without an X window)
+emacs --no-window-system
+
+# Start an Emacs server in the background (accessible via `emacsclient`)
+emacs --daemon
+
+# Stop a running Emacs server and all its instances, asking for confirmation on unsaved files
+emacsclient --eval '(save-buffers-kill-emacs)'
+
+# Save a file in Emacs
+<Ctrl> + X, <Ctrl> + S
+
+# Quit Emacs
+<Ctrl> + X, <Ctrl> + C

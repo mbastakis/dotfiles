@@ -1,0 +1,16 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/cargo-locate-project.md
+
+% cargo-locate-project, common
+
+# Display the JSON object with full path to the `Cargo.toml` manifest
+cargo locate-project
+
+# Display the project path in the specified format
+cargo locate-project --message-format <plain|json>
+
+# Display the `Cargo.toml` manifest located at the root of the workspace as opposed to the current workspace member
+cargo locate-project --workspace
+
+# Display the `Cargo.toml` manifest of a specific directory
+cargo locate-project --manifest-path <path_to_Cargo.toml>

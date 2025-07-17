@@ -1,0 +1,55 @@
+% Fuzzers
+
+$ target: if [[ ! -z $target ]]; then echo $target; fi
+$ scheme: echo "http https" | tr " " "\n"
+$ wordlists: fdfind . /usr/share/{seclists,wordlists} /usr/share/amass/ -Ltf | sort -u
+$ file_exts: echo "php txt cgi html htm js css png jpg jpeg gif svg bmp" | tr ' ' '\n' --- --multi --map "navi fn map::expand"
+$ file_exts_comma: echo "<file_exts>" | tr ' ' ','
+
+# Feroxbuster (faster)
+
+feroxbuster -eBEg --auto-tune --scan-limit 3 -u <scheme>://<target> --wordlist <wordlists>
+
+# Feroxbuster (slower [exts: php txt cgi html js])
+
+feroxbuster -eBEg --auto-tune --scan-limit 3 -u <scheme>://<target> --wordlist <wordlists> -x <file_exts>
+
+# Gobuster (faster)
+
+gobuster -t 15 dir -u <scheme>://<target> -w <wordlists> | tee <target>.$(basename $PWD).gobuster.txt
+
+# Gobuster (slower [exts: php txt cgi html js])
+
+gobuster -t 15 dir -u <scheme>://<target> -w <wordlists> -x <file_exts_comma> | tee <target>.$(basename $PWD).gobuster-extended.txt
+
+# wfuzz (POST [required:FUZZ in params])
+
+wfuzz -c -z range,<min_range>-<max_range> -d "<params>" -X POST -u <target>
+
+# ffuf
+
+ffuf smth smth smth todo:(RitchieS)
+
+# hydra [ssh] (user/password file)
+
+hydra -L users.txt -P pass.txt <target> -t 16 ssh
+
+# hydra [ftp] (user/password file)
+
+hydra -L users.txt -P pass.txt <target> -t 16 ftp
+
+# hydra [ssh] (user file/static password) 
+
+hydra -L users.txt -P <pass> <target> -t 16 ssh
+
+# hydra [ftp] (user file/static password)
+
+hydra -L users.txt -P <pass> <target> -t 16 ftp
+
+# hydra [ssh] (static user/password file) 
+
+hydra -L <user> -P pass.txt <target> -t 16 ssh
+
+# hydra [ftp] (static user/password file)
+
+hydra -L <user> -P pass.txt <target> -t 16 ftp

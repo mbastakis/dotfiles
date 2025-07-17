@@ -1,0 +1,28 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/ncu.md
+
+% ncu, common
+
+# List outdated dependencies in the current directory
+ncu
+
+# List outdated global `npm` packages
+ncu --global
+
+# Upgrade all dependencies in the current directory
+ncu --upgrade
+
+# Interactively upgrade dependencies in the current directory
+ncu --interactive
+
+# List outdated dependencies up to the highest minor version
+ncu --target <minor>
+
+# List outdated dependencies that match a keyword or regular expression
+ncu --filter <keyword|_regex_>
+
+# List only a specific section of outdated dependencies
+ncu --dep <dev|optional|peer|prod|packageManager>
+
+# Display help
+ncu --help

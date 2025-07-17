@@ -1,0 +1,95 @@
+% Misc Linux & Applications
+
+# Edit filenames in current directory in you $EDITOR
+vidir
+
+# List all processes by user and pipe to less
+ps aux | less
+
+# Untar a gzip'ed file
+tar -xzvf <GzipTarFile>
+
+# Untar a bzip'ed file
+tar -xjvf <BzipTarFile>
+
+# Tar and zip a file or directory (recursively)
+tar -czvf <ArchiveName> <FileOrDirectory>
+
+# Better extraction solution (for unzip, bunzip, untar, etc.)
+dtrx <ZIPedFile>
+
+# Get a json output of all windows in the current i3-wm session
+i3-msg -t get_tree | jq
+
+# Shrink a video
+ffmpeg -i <InputFile> -r 30 -s 960x540 -strict -2 <OutputFile>
+
+# Create blurry background pictures from images in current dir
+mkdir blurrybackgrounds && for i in *.jpg *.JPG *.png *.PNG ; do out=$(uuidgen).jpg ; convert -quality 75 "$i" -strip -auto-orient -resize 4x4 -resize 1920x1080\! "blurrybackgrounds/${out}" ; done
+
+# Screenshot: Whole screen
+scrot
+
+# Screenshot: Focused window after X seconds
+scrot -f -d <seconds>
+
+# Screenshot: Select the part of the screen
+scrot -s
+
+# Screenshot: Select the part of the screen, then wait X seconds
+scrot -s -d <seconds>
+
+# Test download/upload network speeds
+speedtest-cli
+
+# Basic, good system info
+neofetch
+
+# Comprehensive system info
+inxi
+
+# Comprehensive battery information
+upower -d
+
+# Show disk usage and allow for deleting stuff
+ncdu
+
+# System monitor - improved "top"
+htop
+
+# System monitoring tool
+glances
+
+# Live system info
+saidar
+
+# Shows all systemd services (root to change status etc.)
+chkservice
+
+# Disk usage overview getting every device possible
+duf --all
+
+# Disk usage overview but disregard special devices
+duf -hide-special
+
+# Disk usage overview (see https://github.com/muesli/duf)
+duf
+
+# Interactive setup of displays
+arandr
+
+# Auto-setup displays
+xrandr --auto
+
+# Text to speech
+espeak
+
+# Ncurses spreadsheet
+sc
+
+# Ncurses git (must be launched from a git repo)
+tig
+
+# Reddit browser
+tuir
+

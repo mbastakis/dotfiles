@@ -1,0 +1,13 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/openssl.md
+
+% openssl, common
+
+# Display help
+openssl help
+
+# Display help for a specific subcommand
+openssl help <x509>
+
+# Display version
+openssl version

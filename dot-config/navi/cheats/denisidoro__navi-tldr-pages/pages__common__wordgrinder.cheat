@@ -1,0 +1,13 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/wordgrinder.md
+
+% wordgrinder, common
+
+# Start WordGrinder (loads a blank document by default)
+wordgrinder
+
+# Open a given file
+wordgrinder <path_to_file>
+
+# Show the menu
+<Alt> + M

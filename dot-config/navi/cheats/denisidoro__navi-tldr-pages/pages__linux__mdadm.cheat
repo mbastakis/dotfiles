@@ -1,0 +1,25 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/linux/mdadm.md
+
+% mdadm, linux
+
+# Create array
+sudo mdadm --create <dev_md_MyRAID> --level <raid_level> --raid-devices <number_of_disks> <dev_sdXN>
+
+# Stop array
+sudo mdadm --stop <dev_md0>
+
+# Mark disk as failed
+sudo mdadm --fail <dev_md0> <dev_sdXN>
+
+# Remove disk
+sudo mdadm --remove <dev_md0> <dev_sdXN>
+
+# Add disk to array
+sudo mdadm --assemble <dev_md0> <dev_sdXN>
+
+# Show RAID info
+sudo mdadm --detail <dev_md0>
+
+# Reset disk by deleting RAID metadata
+sudo mdadm --zero-superblock <dev_sdXN>

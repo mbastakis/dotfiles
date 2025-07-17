@@ -1,0 +1,11 @@
+% htop, process
+
+# show process with current users
+htop -u <user>
+ps -u <user> ux
+
+# kill process
+kill <pid>
+
+$ user: echo "$USER"
+$ pid: ps -u $USER --no-headers ux | awk '{print $2}'

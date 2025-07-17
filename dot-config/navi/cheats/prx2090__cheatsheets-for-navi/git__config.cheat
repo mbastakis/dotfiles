@@ -1,0 +1,13 @@
+% git, config, email, user
+
+    # Config username
+git config --global user.name <name>
+
+# Config email
+git config --global user.email <email>
+
+# Config default git editor
+git config --global core.editor <editor:emacs/vim/nvim/code>
+
+# Check config
+git config --list

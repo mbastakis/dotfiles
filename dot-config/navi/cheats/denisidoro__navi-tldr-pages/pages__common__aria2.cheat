@@ -1,0 +1,7 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/aria2.md
+
+% aria2, common
+
+# View documentation for the updated command
+tldr aria2c

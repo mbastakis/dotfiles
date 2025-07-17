@@ -1,0 +1,16 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/mkfifo.md
+
+% mkfifo, common
+
+# Create a named pipe at a given path
+mkfifo <path_to_pipe>
+
+# Send data through a named pipe and send the command to the background
+echo "<Hello World>" > <path_to_pipe> &
+
+# Receive data through a named pipe
+cat <path_to_pipe>
+
+# Share your terminal session in real-time
+mkfifo <path_to_pipe>; script -f <path_to_pipe>

@@ -1,0 +1,19 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/pandoc.md
+
+% pandoc, common
+
+# Convert file to PDF (the output format is determined by file extension)
+pandoc <path_to_input.md> <-o|--output> <path_to_output.pdf>
+
+# Convert to a standalone file with the appropriate headers/footers (for LaTeX, HTML, etc.)
+pandoc <path_to_input.md> <-s|--standalone> <-o|--output> <path_to_output.html>
+
+# Manually specify format detection and conversion (overriding automatic format detection using filename extension or when filename extension is missing altogether)
+pandoc <-f|-r|--from|--read> <docx|...> <path_to_input> <-t|-w|--to|--write> <pdf|...> <-o|--output> <path_to_output>
+
+# List all supported input formats
+pandoc --list-input-formats
+
+# List all supported output formats
+pandoc --list-output-formats

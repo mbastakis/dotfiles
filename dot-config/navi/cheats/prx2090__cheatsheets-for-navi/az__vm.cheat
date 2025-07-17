@@ -1,0 +1,61 @@
+% az, vm
+
+# Start a VM
+az vm start -g <ResourceGroup> -n <Name>
+
+# Stop a VM	(Stop execution but not billing)
+az vm stop -g <ResourceGroup> -n <Name>
+
+# Deallocate a VM (Stop billing)
+az vm deallocate  -g <ResourceGroup> -n <Name>
+
+# Create a VM with SSH Keys
+az vm create \ 
+	-n <VMname> \
+	-g <ResourceGroup> \
+	--image <DistributionName> \
+	--ssh-key-values <pub_route_file> \
+	--admin-username <admin_name> \
+	--location <locacion_VM> \
+	--size <VMsize>
+
+# Create a VM 
+az vm create \
+    -n <vm_name> \
+    -g <resource_group> \  
+    --availability-set <availability_set_name> \
+    --nics <network_interface_card_name> \
+    --image <image_name> \
+    --admin-username <username> \
+    --generate-ssh-key \
+    --custom-data <optional: yml_script_name> \
+    --no-wait
+
+# Get Info about VM
+az vm get-instance-view --name <VMname> -g <ResourceGroup> --output table
+
+# Get VM Size
+az vm show -n <VMname> -g <ResourceGroup> --query '[hardwareProfile.vmSize]' -o tsv
+
+# List VMs
+az vm list
+
+# List VM Images List
+az vm image list
+
+# List all available VM Sizes
+az vm list-sizes -l <location> -o tsv
+
+# Show VM PublicIP
+az vm show -d \
+	-g <Grupo_de_recursos> \
+	-n <Nombre_VM> \
+	--query "publicIps" \
+	-o tsv
+
+# Show info about a VM
+az vm show -g <ResourceGroup> -n <Name>
+
+# Add a data disk to a VM
+az vm disk attach -g <ResourseGroup> --vm-name <Name> --disk <NameForDisk> --size-gb <gb> --new
+

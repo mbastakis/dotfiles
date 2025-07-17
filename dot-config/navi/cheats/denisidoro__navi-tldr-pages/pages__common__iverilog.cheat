@@ -1,0 +1,19 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/iverilog.md
+
+% iverilog, common
+
+# Compile a source file into an executable
+iverilog <path_to_source.v> -o <path_to_executable>
+
+# Compile a source file into an executable while displaying all warnings
+iverilog <path_to_source.v> -Wall -o <path_to_executable>
+
+# Compile and run explicitly using the VVP runtime
+iverilog -o <path_to_executable> -tvvp <path_to_source.v>
+
+# Compile using Verilog library files from a different path
+iverilog <path_to_source.v> -o <path_to_executable> -I<path_to_library_directory>
+
+# Preprocess Verilog code without compiling
+iverilog -E <path_to_source.v>

@@ -1,0 +1,68 @@
+% az, ip, load, balancer, nsg, vnet, network
+
+# Create a Public Ip
+az network public-ip create -g <resource_group> -n <name_for_ip>
+
+# Create a Load Balander (FrontEnd/BackEnd is created on this command)
+az network lb create \
+    -g <resourse_grou> \
+    -n <load_balancer_name> \
+    --frontend-ip-name <frontend_pool_name> \
+    --backend-pool-name <backend_pool_name> \
+    --public-ip-address <public_ip_name>
+
+# Create a health rule
+az network lb probe create \
+    -g <resource_group> \
+    --lb-name <load_balancer_name> \
+    --name <health_rule_name> \
+    --protocol <protocol> \
+    --port <port>
+
+# Create a Net Load Balancer Rule
+az network lb rule create \
+    -g <resource_group> \
+    --lb-name <load_balancer_name> \
+    -n <load_balancer_rule_name> \
+    --protocol <protocol> \
+    --frontend-port <port> \
+    --backend-port <port> \
+    --frontend-ip-name <frontend_pool_name> \
+    --backend-pool-name <backend_pool_name> \
+    --probe-name <health_rule_name>
+
+# Create a VNet
+az network vnet create \
+    -g <resource_group> \
+    -n <vnet_name> \
+    --subnet-name <subnet_name>
+
+# Create a Network Security Group (NSG)
+az network nsg create \
+    -g <resource_group> \
+    -n <network_security_group_name>
+
+# Create Inbound Rule for Network Security Group 
+az network nsg rule create \
+    -g <resource_group> \
+    --nsg-name <network_security_group_name> \
+    --name <network_security_rule_name> \
+    --priority <priority> \
+    --protocol <protocol> \
+    --destination-port-range <port>
+
+# Create a network interface card
+az network nic create \
+    -g <resource_group> \
+    --name <network_interface_card_name> \
+    --vnet-name <vnet_name> \
+    --subnet <subnet_name> \
+    --network-security-group <network_security_group_name> \
+    --lb-name <load_balancer_name> \
+    --lb-address-pools <backend_pool_name>
+
+# Create a availability-set
+az vm availability-set create -g <resource_group> -n <availability_set_name>
+
+# Show Public IP from Load Balancer
+az network public-ip show -g <resource_group> -n <public_ip_name> --query [ipAddress] -o tsv

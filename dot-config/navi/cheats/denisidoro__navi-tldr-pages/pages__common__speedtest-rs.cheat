@@ -1,0 +1,22 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/speedtest-rs.md
+
+% speedtest-rs, common
+
+# Run a full speed test (download and upload)
+speedtest-rs
+
+# Display a list of `speedtest.net` servers sorted by distance
+speedtest-rs --list
+
+# Run a download test only
+speedtest-rs --no-upload
+
+# Run an upload test only
+speedtest-rs --no-download
+
+# Generate a shareable link to the test results image
+speedtest-rs --share
+
+# Display basic output information only
+speedtest-rs --simple

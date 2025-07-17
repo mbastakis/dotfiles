@@ -1,0 +1,13 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/rustfmt.md
+
+% rustfmt, common
+
+# Format a file, overwriting the original file in-place
+rustfmt <path_to_source.rs>
+
+# Check a file for formatting and display any changes on the console
+rustfmt --check <path_to_source.rs>
+
+# Backup any modified files before formatting (the original file is renamed with a `.bk` extension)
+rustfmt --backup <path_to_source.rs>

@@ -1,0 +1,22 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/sox.md
+
+% sox, common
+
+# Merge two audio files into one
+sox -m <path_to_input_audio1> <path_to_input_audio2> <path_to_output_audio>
+
+# Trim an audio file to the specified times
+sox <path_to_input_audio> <path_to_output_audio> trim <start> <duration>
+
+# Normalize an audio file (adjust volume to the maximum peak level, without clipping)
+sox --norm <path_to_input_audio> <path_to_output_audio>
+
+# Reverse and save an audio file
+sox <path_to_input_audio> <path_to_output_audio> reverse
+
+# Print statistical data of an audio file
+sox <path_to_input_audio> -n stat
+
+# Increase the volume of an audio file by 2x
+sox -v 2.0 <path_to_input_audio> <path_to_output_audio>

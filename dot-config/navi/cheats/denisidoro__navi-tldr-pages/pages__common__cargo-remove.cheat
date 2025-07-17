@@ -1,0 +1,13 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/cargo-remove.md
+
+% cargo-remove, common
+
+# Remove a dependency from the current project
+cargo remove <dependency>
+
+# Remove a development or build dependency
+cargo remove --<dev|build> <dependency>
+
+# Remove a dependency of the given target platform
+cargo remove --target <target> <dependency>

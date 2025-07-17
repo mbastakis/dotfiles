@@ -1,0 +1,25 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/linux/udevadm.md
+
+% udevadm, linux
+
+# Monitor all device events
+sudo udevadm monitor
+
+# Print `uevents` sent out by the kernel
+sudo udevadm monitor --kernel
+
+# Print device events after being processed by `udev`
+sudo udevadm monitor --udev
+
+# List attributes of device `/dev/sda`
+sudo udevadm info --attribute-walk <dev_sda>
+
+# Reload all `udev` rules
+sudo udevadm control --reload-rules
+
+# Trigger all `udev` rules to run
+sudo udevadm trigger
+
+# Test an event run by simulating loading of `/dev/sda`
+sudo udevadm test <dev_sda>

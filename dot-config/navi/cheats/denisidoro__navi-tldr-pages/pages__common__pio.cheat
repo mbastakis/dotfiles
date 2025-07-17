@@ -1,0 +1,13 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/pio.md
+
+% pio, common
+
+# Display help and list subcommands
+pio --help
+
+# Display help for a specific subcommand
+pio <subcommand> --help
+
+# Display version
+pio --version

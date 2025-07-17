@@ -1,0 +1,10 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/users.md
+
+% users, common
+
+# Print logged in usernames
+users
+
+# Print logged in usernames according to a given file
+users <var_log_wmtp>

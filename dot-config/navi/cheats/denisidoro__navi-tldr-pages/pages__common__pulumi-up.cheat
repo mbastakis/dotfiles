@@ -1,0 +1,19 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/pulumi-up.md
+
+% pulumi-up, common
+
+# Preview and deploy changes to a program and/or infrastructure
+pulumi up
+
+# Automatically approve and perform the update after previewing it
+pulumi up --yes
+
+# Preview and deploy changes in a specific stack
+pulumi up --stack <stack>
+
+# Don't display stack outputs
+pulumi up --suppress-outputs
+
+# Continue updating the resources, even if an error is encountered
+pulumi up --continue-on-error

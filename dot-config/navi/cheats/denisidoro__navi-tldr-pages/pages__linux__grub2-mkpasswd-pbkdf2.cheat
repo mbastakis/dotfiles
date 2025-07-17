@@ -1,0 +1,7 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/linux/grub2-mkpasswd-pbkdf2.md
+
+% grub2-mkpasswd-pbkdf2, linux
+
+# Create a password hash for GRUB 2 using PBKDF2 and print it to `stdout`
+sudo grub2-mkpasswd-pbkdf2 <-c|--iteration-count> <number_of_pbkdf2_iterations> <-s|--salt> <salt_length>

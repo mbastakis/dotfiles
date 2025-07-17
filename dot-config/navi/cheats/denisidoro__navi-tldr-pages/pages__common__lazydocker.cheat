@@ -1,0 +1,22 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/lazydocker.md
+
+% lazydocker, common
+
+# Open Lazydocker
+lazydocker
+
+# Display the current default configuration
+lazydocker --config
+
+# Run Lazydocker in debug mode
+lazydocker --debug
+
+# Specify an alternate Docker Compose file
+lazydocker --file <path_to_docker-compose.yml>
+
+# Display help
+lazydocker --help
+
+# Display version
+lazydocker --version

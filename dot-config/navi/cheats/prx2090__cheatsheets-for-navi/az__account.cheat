@@ -1,0 +1,13 @@
+% az, account
+
+# Login into Azure CLI
+az login
+
+# Login into Azure CLI with device code
+az login --use-device-code
+
+# Set default Azure Subscription
+az account set -s <NAME_OR_ID>
+
+# List VM Location List
+az account list-locations

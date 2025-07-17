@@ -1,0 +1,10 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/powershell.md
+
+% powershell, common
+
+# View the documentation for the command referring to the latest, cross-platform version of PowerShell (version 6 and above)
+tldr pwsh
+
+# View the documentation for the command referring to the legacy Windows PowerShell (version 5.1 and below)
+tldr powershell -p windows

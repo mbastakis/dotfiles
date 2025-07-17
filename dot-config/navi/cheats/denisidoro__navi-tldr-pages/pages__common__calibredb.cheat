@@ -1,0 +1,22 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/calibredb.md
+
+% calibredb, common
+
+# List e-books in the library with additional information
+calibredb list
+
+# Search for e-books displaying additional information
+calibredb list --search <search_term>
+
+# Search for just ids of e-books
+calibredb search <search_term>
+
+# Add one or more e-books to the library
+calibredb add <path_to_file1 path_to_file2 ...>
+
+# Recursively add all e-books under a directory to the library
+calibredb add <-r|--recurse> <path_to_directory>
+
+# Remove one or more e-books from the library. You need the e-book IDs (see above)
+calibredb remove <id1 id2 ...>

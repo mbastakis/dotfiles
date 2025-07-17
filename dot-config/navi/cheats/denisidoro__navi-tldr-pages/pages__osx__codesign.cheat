@@ -1,0 +1,10 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/osx/codesign.md
+
+% codesign, osx
+
+# Sign an application with a certificate
+codesign --sign "<My Company Name>" <path_to_application_file.app>
+
+# Verify the certificate of an application
+codesign --verify <path_to_application_file.app>

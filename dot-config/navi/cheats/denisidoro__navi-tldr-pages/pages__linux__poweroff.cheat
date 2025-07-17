@@ -1,0 +1,19 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/linux/poweroff.md
+
+% poweroff, linux
+
+# Power off the system
+poweroff
+
+# Halt the system (same as `halt`)
+poweroff --halt
+
+# Reboot the system (same as `reboot`)
+poweroff --reboot
+
+# Shut down immediately without contacting the system manager
+poweroff --force
+
+# Write the wtmp shutdown entry without shutting down the system
+poweroff --wtmp-only

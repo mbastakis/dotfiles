@@ -1,0 +1,8 @@
+---
+syntax: bash
+tags: [ python, py, venv ]
+---
+% python, py, venv
+
+# Create a Virtual Enviroment, usually is used `venv` as <venv_name>
+python -m venv <venv_name> 

@@ -1,0 +1,16 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/windows/assoc.md
+
+% assoc, windows
+
+# List all associations between file extensions and file types
+assoc
+
+# Display the associated file type for a specific extension
+assoc <.txt>
+
+# Set the associated file type for a specific extension
+assoc .<txt>=<txtfile>
+
+# View the output of `assoc` one screen at a time
+assoc | <more>

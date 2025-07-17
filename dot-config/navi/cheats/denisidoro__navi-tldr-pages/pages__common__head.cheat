@@ -1,0 +1,7 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/head.md
+
+% head, common
+
+# Output the first few lines of a file
+head -n <count> <path_to_file>

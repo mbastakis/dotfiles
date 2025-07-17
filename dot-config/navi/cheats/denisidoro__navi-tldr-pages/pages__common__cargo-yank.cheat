@@ -1,0 +1,13 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/cargo-yank.md
+
+% cargo-yank, common
+
+# Yank the specified version of a crate
+cargo yank <crate>@<version>
+
+# Undo a yank (i.e. allow downloading it again)
+cargo yank --undo <crate>@<version>
+
+# Use the specified registry (registry names can be defined in the configuration - the default is <https://crates.io>)
+cargo yank --registry <name> <crate>@<version>

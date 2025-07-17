@@ -1,0 +1,16 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/visudo.md
+
+% visudo, common
+
+# Edit the sudoers file
+sudo visudo
+
+# Check the sudoers file for errors
+sudo visudo -c
+
+# Edit the sudoers file using a specific editor
+sudo EDITOR=<editor> visudo
+
+# Display version information
+visudo --version

@@ -1,0 +1,7 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/osx/autoraise.md
+
+% autoraise, osx
+
+# Run AutoRaise in the background
+autoraise &

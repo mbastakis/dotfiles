@@ -1,0 +1,16 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/traefik.md
+
+% traefik, common
+
+# Start the server with the default configuration
+traefik
+
+# Start the server with a custom configuration file
+traefik --ConfigFile <config_file.toml>
+
+# Start the server with cluster mode enabled
+traefik --cluster
+
+# Start server with web UI enabled
+traefik --web

@@ -1,0 +1,28 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/v.md
+
+% v, common
+
+# Compile a file and output its executable
+v <path_to_file.v>
+
+# Compile the current project or directory
+v .
+
+# Compile a file and run it
+v run <path_to_file.v>
+
+# Compile a file and run it, output its executable
+v crun <path_to_file.v>
+
+# Re-compile on every modification to a file
+v watch <path_to_file.v>
+
+# Re-run on every modification to a file
+v watch run <path_to_file.v>
+
+# Open the v repl
+v repl
+
+# Format a file and [w]rite to it
+v fmt -w <path_to_file.v>

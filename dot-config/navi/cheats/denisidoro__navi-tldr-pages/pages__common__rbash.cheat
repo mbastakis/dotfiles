@@ -1,0 +1,22 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/rbash.md
+
+% rbash, common
+
+# Start an interactive shell session
+rbash
+
+# Execute a command and then exit
+rbash -c "<command>"
+
+# Execute a script
+rbash <path_to_script.sh>
+
+# Execute a script, printing each command before executing it
+rbash -x <path_to_script.sh>
+
+# Execute commands from a script, stopping at the first error
+rbash -e <path_to_script.sh>
+
+# Read and execute commands from `stdin`
+rbash -s

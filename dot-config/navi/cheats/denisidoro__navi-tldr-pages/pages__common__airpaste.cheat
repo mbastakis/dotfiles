@@ -1,0 +1,19 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/airpaste.md
+
+% airpaste, common
+
+# Wait for a message and display it when received
+airpaste
+
+# Send text
+echo <text> | airpaste
+
+# Send a file
+airpaste < <path_to_file>
+
+# Receive a file
+airpaste > <path_to_file>
+
+# Create or join a channel
+airpaste <channel_name>

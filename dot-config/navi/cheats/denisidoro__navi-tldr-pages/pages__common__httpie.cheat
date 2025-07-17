@@ -1,0 +1,13 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/httpie.md
+
+% httpie, common
+
+# Check updates for `http`
+httpie cli check-updates
+
+# List installed `http` plugins
+httpie cli plugins list
+
+# Install/upgrade/uninstall plugins
+httpie cli plugins <install|upgrade|uninstall> <plugin_name>

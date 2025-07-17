@@ -1,0 +1,16 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/vboxmanage.md
+
+% vboxmanage, common
+
+# Execute a VboxManage subcommand
+VBoxManage <subcommand>
+
+# Display help
+VBoxManage --help
+
+# Display help for a specific subcommand
+VBoxManage --help <clonevm|import|export|startvm|...>
+
+# Display version
+VBoxManage --version

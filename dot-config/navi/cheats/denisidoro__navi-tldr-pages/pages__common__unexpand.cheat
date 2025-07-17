@@ -1,0 +1,19 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/unexpand.md
+
+% unexpand, common
+
+# Convert blanks in each file to tabs, writing to `stdout`
+unexpand <path_to_file>
+
+# Convert blanks to tabs, reading from `stdout`
+unexpand
+
+# Convert all blanks, instead of just initial blanks
+unexpand -a <path_to_file>
+
+# Convert only leading sequences of blanks (overrides -a)
+unexpand --first-only <path_to_file>
+
+# Have tabs a certain number of characters apart, not 8 (enables -a)
+unexpand -t <number> <path_to_file>

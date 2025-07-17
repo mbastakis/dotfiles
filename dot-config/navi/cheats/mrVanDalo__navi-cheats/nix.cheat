@@ -1,0 +1,20 @@
+% nix, nixos, nixpkgs
+
+# start a nix-shell with the local ./shell.nix or ./default.nix
+nix-shell <nixfile>
+
+# start a nix-shell with a package
+nix-shell -p <pkgs>
+
+# start nix-shell without internet connection
+nix-shell <nixfile> --option substitute false
+
+# start nix-shell with unstable package
+nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs-channels/archive/nixos-unstable.tar.gz -p <pkgs>
+
+# build the deafult.nix in the current folder
+nix-build -E 'with import <nixpkgs> {} ; callPackage ./<nixfile> {}'
+
+# Attempt to find files with the appropriate endings, default to everything.
+$ nixfile: ls -a | grep -e "\(.nix$\)" ---
+$ nixpkgs: echo "<nixpkgs>"

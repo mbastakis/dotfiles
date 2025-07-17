@@ -1,0 +1,13 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/arp.md
+
+% arp, common
+
+# Show the current ARP table
+arp -a
+
+# [d]elete a specific entry
+arp -d <address>
+
+# [s]et up a new entry in the ARP table
+arp -s <address> <mac_address>

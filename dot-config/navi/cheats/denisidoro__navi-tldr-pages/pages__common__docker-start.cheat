@@ -1,0 +1,16 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/docker-start.md
+
+% docker-start, common
+
+# Display help
+docker start
+
+# Start a Docker container
+docker start <container>
+
+# Start a container, attaching `stdout` and `stderr` and forwarding signals
+docker start --attach <container>
+
+# Start one or more containers
+docker start <container1 container2 ...>

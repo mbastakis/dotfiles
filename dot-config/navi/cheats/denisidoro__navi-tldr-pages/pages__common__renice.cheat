@@ -1,0 +1,13 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/renice.md
+
+% renice, common
+
+# Increase/decrease the priority of a running [p]rocess
+renice -n <3> -p <pid>
+
+# Increase/decrease the priority of all processes owned by a [u]ser
+renice -n <-4> -u <uid|user>
+
+# Increase/decrease the priority of all processes that belong to a process [g]roup
+renice -n <5> -g <process_group>

@@ -1,0 +1,19 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/alacritty.md
+
+% alacritty, common
+
+# Open a new Alacritty window
+alacritty
+
+# Run in a specific directory
+alacritty --working-directory <path_to_directory>
+
+# [e]xecute a command in a new Alacritty window
+alacritty -e <command>
+
+# Use an alternative configuration file (defaults to `$XDG_CONFIG_HOME/alacritty/alacritty.toml`)
+alacritty --config-file <path_to_config.toml>
+
+# Run with live configuration reload enabled (can also be enabled by default in `alacritty.toml`)
+alacritty --live-config-reload --config-file <path_to_config.toml>

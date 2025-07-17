@@ -1,0 +1,19 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/linux/export.md
+
+% export, linux
+
+# Set an environment variable
+export <VARIABLE>=<value>
+
+# Unset an environment variable
+export -n <VARIABLE>
+
+# Export a function to child processes
+export -f <FUNCTION_NAME>
+
+# Append a pathname to the environment variable `PATH`
+export PATH=$PATH:<path_to_append>
+
+# Display a list of active exported variables in shell command form
+export -p

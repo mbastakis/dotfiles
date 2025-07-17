@@ -1,0 +1,13 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/linux/termusic.md
+
+% termusic, linux
+
+# Open termusic to a specific directory. (It can be set permanently in `~/.config/termusic/config.toml`)
+termusic <path_to_directory>
+
+# Disable showing the album cover for a specific file
+termusic -c <path_to_music_file>
+
+# Display help
+termusic --help

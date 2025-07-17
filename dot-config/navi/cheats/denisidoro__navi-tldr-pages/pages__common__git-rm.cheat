@@ -1,0 +1,13 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/git-rm.md
+
+% git-rm, common
+
+# Remove file from repository index and filesystem
+git rm <path_to_file>
+
+# Remove directory
+git rm -r <path_to_directory>
+
+# Remove file from repository index but keep it untouched locally
+git rm --cached <path_to_file>

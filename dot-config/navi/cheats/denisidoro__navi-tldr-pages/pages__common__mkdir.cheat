@@ -1,0 +1,13 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/mkdir.md
+
+% mkdir, common
+
+# Create specific directories
+mkdir <path_to_directory1 path_to_directory2 ...>
+
+# Create specific directories and their parents if needed
+mkdir <-p|--parents> <path_to_directory1 path_to_directory2 ...>
+
+# Create directories with specific permissions
+mkdir <-m|--mode> <rwxrw-r--> <path_to_directory1 path_to_directory2 ...>

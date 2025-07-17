@@ -1,0 +1,16 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/osx/head.md
+
+% head, osx
+
+# Output the first few lines of a file
+head --lines <8> <path_to_file>
+
+# Output the first few bytes of a file
+head --bytes <8> <path_to_file>
+
+# Output everything but the last few lines of a file
+head --lines -<8> <path_to_file>
+
+# Output everything but the last few bytes of a file
+head --bytes -<8> <path_to_file>

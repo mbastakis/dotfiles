@@ -1,0 +1,25 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/sha256sum.md
+
+% sha256sum, common
+
+# Calculate the SHA256 checksum for one or more files
+sha256sum <path_to_file1 path_to_file2 ...>
+
+# Calculate and save the list of SHA256 checksums to a file
+sha256sum <path_to_file1 path_to_file2 ...> > <path_to_file.sha256>
+
+# Calculate a SHA256 checksum from `stdin`
+<command> | sha256sum
+
+# Read a file of SHA256 checksums and filenames and verify all files have matching checksums
+sha256sum --check <path_to_file.sha256>
+
+# Only show a message for missing files or when verification fails
+sha256sum --check --quiet <path_to_file.sha256>
+
+# Only show a message when verification fails, ignoring missing files
+sha256sum --ignore-missing --check --quiet <path_to_file.sha256>
+
+# Check a known SHA256 checksum of a file
+echo <known_sha256_checksum_of_the_file> <path_to_file> | sha256sum --check

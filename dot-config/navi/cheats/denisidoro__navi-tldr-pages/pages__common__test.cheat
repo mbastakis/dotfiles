@@ -1,0 +1,19 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/test.md
+
+% test, common
+
+# Test if a given variable is equal to a given string
+test "<$MY_VAR>" = "<bin_zsh>"
+
+# Test if a given variable is empty
+test -z "<$GIT_BRANCH>"
+
+# Test if a file exists
+test -f "<path_to_file_or_directory>"
+
+# Test if a directory does not exist
+test ! -d "<path_to_directory>"
+
+# If A is true, then do B, or C in the case of an error (notice that C may run even if A fails)
+test <condition> && <echo "true"> || <echo "false">

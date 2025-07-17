@@ -1,0 +1,25 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/rubocop.md
+
+% rubocop, common
+
+# Check all files in the current directory (including subdirectories)
+rubocop
+
+# Check one or more specific files or directories
+rubocop <path_to_file_or_directory1 path_to_file_or_directory2 ...>
+
+# Write output to file
+rubocop --out <path_to_file>
+
+# View list of cops (linter rules)
+rubocop --show-cops
+
+# Exclude a cop
+rubocop --except <cop1 cop2 ...>
+
+# Run only specified cops
+rubocop --only <cop1 cop2 ...>
+
+# Auto-correct files (experimental)
+rubocop --auto-correct

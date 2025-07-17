@@ -1,0 +1,10 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/tsort.md
+
+% tsort, common
+
+# Perform a topological sort consistent with a partial sort per line of input separated by blanks
+tsort <path_to_file>
+
+# Perform a topological sort consistent on strings
+echo -e "<UI Backend\nBackend Database\nDocs UI>" | tsort

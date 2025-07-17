@@ -1,0 +1,13 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/lzop.md
+
+% lzop, common
+
+# Compress a file into a new file with the `.lzo` suffix
+lzop <path_to_file>
+
+# Decompress a file
+lzop -d <path_to_file.lzo>
+
+# Compress a file, while specifying the compression level. 0 = Worst, 9 = Best (Default level is 3)
+lzop -<level> <path_to_file>

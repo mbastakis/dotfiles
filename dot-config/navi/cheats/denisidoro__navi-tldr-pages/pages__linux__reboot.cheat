@@ -1,0 +1,19 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/linux/reboot.md
+
+% reboot, linux
+
+# Reboot the system
+reboot
+
+# Power off the system (same as `poweroff`)
+reboot --poweroff
+
+# Halt (terminates all processes and shuts down the CPU) the system (same as `halt`)
+reboot --halt
+
+# Reboot immediately without contacting the system manager
+reboot --force
+
+# Write the wtmp shutdown entry without rebooting the system
+reboot --wtmp-only

@@ -1,0 +1,22 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/nkf.md
+
+% nkf, common
+
+# Convert to UTF-8 encoding
+nkf -w <path_to_file.txt>
+
+# Convert to SHIFT_JIS encoding
+nkf -s <path_to_file.txt>
+
+# Convert to UTF-8 encoding and overwrite the file
+nkf -w --overwrite <path_to_file.txt>
+
+# Use LF as the new line code and overwrite (UNIX type)
+nkf -d --overwrite <path_to_file.txt>
+
+# Use CRLF as the new line code and overwrite (windows type)
+nkf -c --overwrite <path_to_file.txt>
+
+# Decrypt mime file and overwrite
+nkf -m --overwrite <path_to_file.txt>
