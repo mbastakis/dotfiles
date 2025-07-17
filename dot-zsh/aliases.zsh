@@ -30,3 +30,6 @@ alias r="atuin search -i"
 
 # VScode
 alias code="code --user-data-dir ~/.vscode"
+
+# Obsidian CLI
+alias obs="obsidian-cli"
