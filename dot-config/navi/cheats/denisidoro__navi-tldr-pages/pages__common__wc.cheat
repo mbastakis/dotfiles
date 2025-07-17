@@ -1,0 +1,22 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/wc.md
+
+% wc, common
+
+# Count all lines in a file
+wc --lines <path_to_file>
+
+# Count all words in a file
+wc --words <path_to_file>
+
+# Count all bytes in a file
+wc --bytes <path_to_file>
+
+# Count all characters in a file (taking multi-byte characters into account)
+wc --chars <path_to_file>
+
+# Count all lines, words and bytes from `stdin`
+<find .> | wc
+
+# Count the length of the longest line in number of characters
+wc --max-line-length <path_to_file>

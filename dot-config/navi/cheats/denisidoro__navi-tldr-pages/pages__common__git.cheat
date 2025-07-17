@@ -1,0 +1,22 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/git.md
+
+% git, common
+
+# Execute a Git subcommand
+git <subcommand>
+
+# Execute a Git subcommand on a custom repository root path
+git -C <path_to_repo> <subcommand>
+
+# Execute a Git subcommand with a given configuration set
+git -c '<config.key>=<value>' <subcommand>
+
+# Display help
+git --help
+
+# Display help for a specific subcommand (like `clone`, `add`, `push`, `log`, etc.)
+git help <subcommand>
+
+# Display version
+git --version

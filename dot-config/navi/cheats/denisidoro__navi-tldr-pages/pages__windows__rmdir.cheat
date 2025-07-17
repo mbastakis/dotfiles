@@ -1,0 +1,16 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/windows/rmdir.md
+
+% rmdir, windows
+
+# View the documentation of the equivalent PowerShell command
+tldr remove-item
+
+# Remove an empty directory
+rmdir <path\to\directory>
+
+# Remove a directory and its contents recursively
+rmdir <path\to\directory> /s
+
+# Remove a directory and its contents recursively without prompting
+rmdir <path\to\directory> /s /q

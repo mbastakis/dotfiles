@@ -1,0 +1,19 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/uname.md
+
+% uname, common
+
+# Print kernel name
+uname
+
+# Print system architecture and processor information
+uname --machine --processor
+
+# Print kernel name, kernel release and kernel version
+uname --kernel-name --kernel-release --kernel-version
+
+# Print system hostname
+uname --nodename
+
+# Print all available system information
+uname --all

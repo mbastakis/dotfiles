@@ -1,0 +1,24 @@
+% slurm
+
+# view job queue for specific user
+squeue -u <user>
+squeue -u <user> -o "%.10i %.9P %.8j %.2t %.10M %.6D %Z"
+squeue -u <user> -o "%.10i %.9P %.8j %.2t %.10M %.6D %Z" | sed -e "s#$SCRATCH#\$SCRATCH#g"
+
+# cancel job
+scancel <job_id>
+# cancel all jobs
+squeue -u <user> -h | awk '{print $1}' | xargs scancel
+
+# get job info
+scontrol show jobid -d <job_id>
+# get very detailed job info
+scontrol show jobid -dd <job_id>
+
+# watch job info
+watch -n <watch_sec> "squeue -u <user>"
+watch -n <watch_sec> "echo \"Total (`squeue -u <user> | wc -l`) jobs\"; echo ''; squeue -u <user>"
+
+$ user: echo "$USER"
+$ job_id: squeue -u $USER -o %i -h
+$ watch_sec: echo "5"

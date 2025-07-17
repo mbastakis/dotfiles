@@ -1,0 +1,19 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/objdump.md
+
+% objdump, common
+
+# Display the file header information
+objdump -f <path_to_binary>
+
+# Display all header information
+objdump -x <path_to_binary>
+
+# Display the disassembled output of executable sections
+objdump -d <path_to_binary>
+
+# Display the disassembled executable sections in Intel syntax
+objdump -M intel -d <path_to_binary>
+
+# Display a complete binary hex dump of all sections
+objdump -s <path_to_binary>

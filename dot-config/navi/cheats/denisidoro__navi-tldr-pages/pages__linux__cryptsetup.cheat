@@ -1,0 +1,19 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/linux/cryptsetup.md
+
+% cryptsetup, linux
+
+# Initialize a LUKS volume with a passphrase (overwrites all data on the partition)
+cryptsetup luksFormat <dev_sdXY>
+
+# Open a LUKS volume and create a decrypted mapping at `/dev/mapper/mapping_name`
+cryptsetup open <dev_sdXY> <mapping_name>
+
+# Display information about a mapping
+cryptsetup status <mapping_name>
+
+# Remove an existing mapping
+cryptsetup close <mapping_name>
+
+# Change a LUKS volume's passphrase
+cryptsetup luksChangeKey <dev_sdXY>

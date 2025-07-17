@@ -1,0 +1,10 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/shift.md
+
+% shift, common
+
+# Remove the first positional parameter
+shift
+
+# Remove the first `N` positional parameters
+shift <N>

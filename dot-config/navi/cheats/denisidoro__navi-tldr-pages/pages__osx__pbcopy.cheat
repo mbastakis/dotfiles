@@ -1,0 +1,10 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/osx/pbcopy.md
+
+% pbcopy, osx
+
+# Place the contents of a specific file in the clipboard
+pbcopy < <path_to_file>
+
+# Place the results of a specific command in the clipboard
+find . -type t -name "*.png" | pbcopy

@@ -1,0 +1,13 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/linux/fsck.md
+
+% fsck, linux
+
+# Check filesystem `/dev/sdXN`, reporting any damaged blocks
+sudo fsck <dev_sdXN>
+
+# Check filesystem `/dev/sdXN`, reporting any damaged blocks and interactively letting the user choose to repair each one
+sudo fsck -r <dev_sdXN>
+
+# Check filesystem `/dev/sdXN`, reporting any damaged blocks and automatically repairing them
+sudo fsck -a <dev_sdXN>

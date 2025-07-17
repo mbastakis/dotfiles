@@ -1,0 +1,13 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/clamav.md
+
+% clamav, common
+
+# View documentation for scanning files using the `clamd` daemon
+tldr clamdscan
+
+# View documentation for scanning files without the `clamd` daemon running
+tldr clamscan
+
+# View documentation for updating the virus definitions
+tldr freshclam

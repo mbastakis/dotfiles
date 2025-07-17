@@ -1,0 +1,7 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/cargo-generate-lockfile.md
+
+% cargo-generate-lockfile, common
+
+# Generate a `Cargo.lock` file with the latest version of every package
+cargo generate-lockfile

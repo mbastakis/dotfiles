@@ -1,0 +1,19 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/deno.md
+
+% deno, common
+
+# Run a JavaScript or TypeScript file
+deno run <path_to_file.ts>
+
+# Start a REPL (interactive shell)
+deno
+
+# Run a file with network access enabled
+deno run --allow-net <path_to_file.ts>
+
+# Run a file from a URL
+deno run <https:__deno.land_std_examples_welcome.ts>
+
+# Install an executable script from a URL
+deno install <https:__deno.land_std_examples_colors.ts>

@@ -1,0 +1,19 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/linux/eix.md
+
+% eix, linux
+
+# Search for a package
+eix <query>
+
+# Search for installed packages
+eix --installed <query>
+
+# Search in package descriptions
+eix --description "<description>"
+
+# Search by package license
+eix --license <license>
+
+# Exclude results from search
+eix --not --license <license>

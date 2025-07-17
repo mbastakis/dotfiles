@@ -1,0 +1,40 @@
+% nix, nixos, nix-env
+
+# search for a package
+nix search <package-name>
+
+# search for a package
+nix-env --query <package-name>
+
+# search for a package
+nix-env -qa <package-name>
+
+# list of installed packages that were installed via nix-env run:
+nix-env --query --installed
+
+# install a package
+nix-env --install <package-name>
+
+# uninstall a package
+nix-env --uninstall <package-name>
+
+# To remove all old packages but the current one, run this:
+nix-env --delete-generations old && nix-store --gc
+
+# delete based on different generations (like generation 10, 11, 14):
+nix-env --delete-generations <generations> && nix-store --gc
+
+# you can delete generations based on how old they are:
+nix-env --delete-generations <days>d && nix-store --gc
+
+# roll back a user environment
+nix-env --rollback
+
+# list generations
+nix-env --list-generations --profile /nix/var/nix/profiles/system
+
+# as root switch to generation
+nix-env --profile /nix/var/nix/profiles/system --switch-generation <generation>
+
+# as root delete broken generations (space separated) 
+nix-env --profile /nix/var/nix/profiles/system --delete-generations <generations>

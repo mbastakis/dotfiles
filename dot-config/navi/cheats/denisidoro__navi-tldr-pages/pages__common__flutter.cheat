@@ -1,0 +1,25 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/flutter.md
+
+% flutter, common
+
+# Initialize a new Flutter project in a directory of the same name
+flutter create <project_name>
+
+# Check if all external tools are correctly installed
+flutter doctor
+
+# List or change Flutter channel
+flutter channel <stable|beta|dev|master>
+
+# Run Flutter on all started emulators and connected devices
+flutter run -d all
+
+# Run tests in a terminal from the root of the project
+flutter test <test_example_test.dart>
+
+# Build a release APK targeting most modern smartphones
+flutter build apk --target-platform <android-arm>,<android-arm64>
+
+# Display help about a specific command
+flutter help <command>

@@ -1,0 +1,16 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/amass.md
+
+% amass, common
+
+# Execute an Amass subcommand
+amass <intel|enum> <options>
+
+# Display help
+amass -help
+
+# Display help on an Amass subcommand
+amass <intel|enum> -help
+
+# Display version
+amass -version

@@ -1,0 +1,16 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/anki.md
+
+% anki, common
+
+# Launch the GUI
+anki
+
+# Use a specific [p]rofile
+anki -p <profile_name>
+
+# Use a specific [l]anguage
+anki -l <language>
+
+# Use a non-default directory (`~/Anki` for default)
+anki -b <path_to_directory>

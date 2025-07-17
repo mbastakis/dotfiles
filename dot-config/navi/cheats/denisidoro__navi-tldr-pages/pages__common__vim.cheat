@@ -1,0 +1,28 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/vim.md
+
+% vim, common
+
+# Open a file
+vim <path_to_file>
+
+# Open a file at a specified line number
+vim +<line_number> <path_to_file>
+
+# View Vim's help manual
+:help<Enter>
+
+# Save and quit the current buffer
+<<Esc>ZZ|<Esc>:x<Enter>|<Esc>:wq<Enter>>
+
+# Enter normal mode and undo the last operation
+<Esc>u
+
+# Search for a pattern in the file (press `n`/`N` to go to next/previous match)
+/<search_pattern><Enter>
+
+# Perform a regular expression substitution in the whole file
+:%s/<regular_expression>/<replacement>/g<Enter>
+
+# Display the line numbers
+:set nu<Enter>

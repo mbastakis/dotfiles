@@ -1,0 +1,13 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/git-extras.md
+
+% git-extras, common
+
+# Install or upgrade `git-extras` commands
+git extras update
+
+# Display help
+git extras --help
+
+# Display version
+git extras --version

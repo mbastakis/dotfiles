@@ -1,0 +1,19 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/ar.md
+
+% ar, common
+
+# E[x]tract all members from an archive
+ar x <path_to_file.a>
+
+# Lis[t] contents in a specific archive
+ar t <path_to_file.ar>
+
+# [r]eplace or add specific files to an archive
+ar r <path_to_file.deb> <path_to_debian-binary path_to_control.tar.gz path_to_data.tar.xz ...>
+
+# In[s]ert an object file index (equivalent to using `ranlib`)
+ar s <path_to_file.a>
+
+# Create an archive with specific files and an accompanying object file index
+ar rs <path_to_file.a> <path_to_file1.o path_to_file2.o ...>

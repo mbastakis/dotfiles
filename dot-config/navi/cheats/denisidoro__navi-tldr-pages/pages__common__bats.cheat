@@ -1,0 +1,22 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/bats.md
+
+% bats, common
+
+# Run a BATS test script and output results in the [t]AP (Test Anything Protocol) format
+bats --tap <path_to_test.bats>
+
+# [c]ount test cases of a test script without running any tests
+bats --count <path_to_test.bats>
+
+# Run BATS test cases [r]ecursively (files with a `.bats` extension)
+bats --recursive <path_to_directory>
+
+# Output results in a specific [F]ormat
+bats --formatter <pretty|tap|tap13|junit> <path_to_test.bats>
+
+# Add [T]iming information to tests
+bats --timing <path_to_test.bats>
+
+# Run specific number of [j]obs in parallel (requires GNU `parallel` to be installed)
+bats --jobs <number> <path_to_test.bats>

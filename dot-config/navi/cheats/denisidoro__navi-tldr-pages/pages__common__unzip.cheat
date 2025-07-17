@@ -1,0 +1,22 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/unzip.md
+
+% unzip, common
+
+# Extract all files/directories from specific archives into the current directory
+unzip <path_to_archive1.zip path_to_archive2.zip ...>
+
+# Extract files/directories from archives to a specific path
+unzip <path_to_archive1.zip path_to_archive2.zip ...> -d <path_to_output>
+
+# Extract files/directories from archives to `stdout` alongside the extracted file names
+unzip -c <path_to_archive1.zip path_to_archive2.zip ...>
+
+# Extract an archive created on Windows, containing files with non-ASCII (e.g. Chinese or Japanese characters) filenames
+unzip -O <gbk> <path_to_archive1.zip path_to_archive2.zip ...>
+
+# List the contents of a specific archive without extracting them
+unzip -l <path_to_archive.zip>
+
+# Extract a specific file from an archive
+unzip -j <path_to_archive.zip> <path_to_file1_in_archive path_to_file2_in_archive ...>

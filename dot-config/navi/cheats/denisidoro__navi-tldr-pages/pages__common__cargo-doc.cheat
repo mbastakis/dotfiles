@@ -1,0 +1,16 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/cargo-doc.md
+
+% cargo-doc, common
+
+# Build the documentation for the current project and all dependencies
+cargo doc
+
+# Do not build documentation for dependencies
+cargo doc --no-deps
+
+# Build and open the documentation in a browser
+cargo doc --open
+
+# Build and view the documentation of a particular package
+cargo doc --open --package <package>

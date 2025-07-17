@@ -1,0 +1,10 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/windows/reg-export.md
+
+% reg-export, windows
+
+# Export all subkeys and values of a specific key
+reg export <key_name> <path\to\file.reg>
+
+# Forcefully (assuming [y]es) overwrite of an existing file
+reg export <key_name> <path\to\file.reg> /y

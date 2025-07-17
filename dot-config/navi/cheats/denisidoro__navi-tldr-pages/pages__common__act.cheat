@@ -1,0 +1,25 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/act.md
+
+% act, common
+
+# [l]ist the available jobs
+act -l
+
+# Run the default event
+act
+
+# Run a specific event
+act <event_type>
+
+# Run a specific [j]ob
+act -j <job_id>
+
+# Do [n]ot actually run the actions (i.e. a dry run)
+act -n
+
+# Show [v]erbose logs
+act -v
+
+# Run a specific [W]orkflow with the push event
+act push -W <path_to_workflow>

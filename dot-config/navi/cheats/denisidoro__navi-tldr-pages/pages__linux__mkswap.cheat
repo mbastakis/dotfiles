@@ -1,0 +1,13 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/linux/mkswap.md
+
+% mkswap, linux
+
+# Set up a given swap area
+sudo mkswap <path_to_file>
+
+# Check a partition for bad blocks before creating the swap area
+sudo mkswap -c <path_to_file>
+
+# Specify a label for the partition (to allow `swapon` to use the label)
+sudo mkswap -L <label> <dev_sda1>

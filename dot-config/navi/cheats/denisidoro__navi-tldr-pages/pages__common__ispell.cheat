@@ -1,0 +1,13 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/ispell.md
+
+% ispell, common
+
+# Start an interactive session
+ispell
+
+# Check for typos in the specified file and interactively apply suggestions
+ispell <path_to_file>
+
+# Display version
+ispell -v

@@ -1,0 +1,10 @@
+% git, add, changes
+
+# Stages all Changes
+git add -A
+
+# Stages new files and modifications, without deletions (on the current directory and its subdirectories).
+git add .
+
+# Stages modifications and deletions, without new files
+git add -u

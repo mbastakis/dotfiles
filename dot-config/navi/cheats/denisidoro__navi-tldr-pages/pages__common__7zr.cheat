@@ -1,0 +1,25 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/7zr.md
+
+% 7zr, common
+
+# [a]rchive a file or directory
+7zr a <path_to_archive.7z> <path_to_file_or_directory>
+
+# Encrypt an existing archive (including file names)
+7zr a <path_to_encrypted.7z> -p<password> -mhe=<on> <path_to_archive.7z>
+
+# E[x]tract an archive preserving the original directory structure
+7zr x <path_to_archive.7z>
+
+# E[x]tract an archive to a specific directory
+7zr x <path_to_archive.7z> -o<path_to_output>
+
+# E[x]tract an archive to `stdout`
+7zr x <path_to_archive.7z> -so
+
+# [l]ist the contents of an archive
+7zr l <path_to_archive.7z>
+
+# Set the level of compression (higher means more compression, but slower)
+7zr a <path_to_archive.7z> -mx=<0|1|3|5|7|9> <path_to_file_or_directory>

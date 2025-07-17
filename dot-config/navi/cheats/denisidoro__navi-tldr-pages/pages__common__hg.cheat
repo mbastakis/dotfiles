@@ -1,0 +1,16 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/hg.md
+
+% hg, common
+
+# Execute a Mercurial command
+hg <command>
+
+# Display help
+hg help
+
+# Display help for a specific command
+hg help <command>
+
+# Check the Mercurial version
+hg --version

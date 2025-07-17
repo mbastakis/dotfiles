@@ -1,0 +1,28 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/sftp.md
+
+% sftp, common
+
+# Connect to a remote server and enter an interactive command mode
+sftp <remote_user>@<remote_host>
+
+# Connect using an alternate port
+sftp -P <remote_port> <remote_user>@<remote_host>
+
+# Connect using a predefined host (in `~/.ssh/config`)
+sftp <host>
+
+# Transfer remote file to the local system
+get <path_remote_file>
+
+# Transfer local file to the remote system
+put <path_local_file>
+
+# Transfer remote directory to the local system recursively (works with `put` too)
+get -R <path_remote_directory>
+
+# Get list of files on local machine
+lls
+
+# Get list of files on remote machine
+ls

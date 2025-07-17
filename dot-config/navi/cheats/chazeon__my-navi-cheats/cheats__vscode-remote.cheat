@@ -1,0 +1,11 @@
+% vscode
+
+# Kill VSCode Remote server
+ps ux -u chazeon | grep "<vscode_dir>" | grep node | awk '{print $2}' | xargs kill -9
+rm <vscode_dir>/vscode-remote-lock.<vscode_commit_id>
+
+# Show VSCode log
+less $HOME/.vscode-server/.<vscode_commit_id>.log
+
+$ vscode_commit_id: ls -t $HOME/.vscode-server/bin | head -n 1
+$ vscode_dir: echo "$HOME/.vscode-server/bin/<vscode_commit_id>"

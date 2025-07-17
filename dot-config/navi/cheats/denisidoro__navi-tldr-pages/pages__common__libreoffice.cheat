@@ -1,0 +1,16 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/libreoffice.md
+
+% libreoffice, common
+
+# Open one or more files in read-only mode
+libreoffice --view <path_to_file1 path_to_file2 ...>
+
+# Display the content of one or more files
+libreoffice --cat <path_to_file1 path_to_file2 ...>
+
+# Print files using a specific printer
+libreoffice --pt <printer_name> <path_to_file1 path_to_file2 ...>
+
+# Convert all `.doc` files in current directory to PDF
+libreoffice --convert-to pdf *.doc

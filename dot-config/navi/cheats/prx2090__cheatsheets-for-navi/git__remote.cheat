@@ -1,0 +1,7 @@
+% git, remote, origin
+
+# Add remote repo
+git remote add origin <url>
+
+# Verify remote added repo
+git remove -v

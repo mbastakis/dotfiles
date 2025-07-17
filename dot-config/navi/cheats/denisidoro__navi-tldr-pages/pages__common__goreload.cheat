@@ -1,0 +1,13 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/goreload.md
+
+% goreload, common
+
+# Watch a binary file (defaults to `.goreload`)
+goreload -b <path_to_binary> <path_to_file.go>
+
+# Set a custom log prefix (defaults to `goreload`)
+goreload --logPrefix <prefix> <path_to_file.go>
+
+# Reload whenever any file changes
+goreload --all

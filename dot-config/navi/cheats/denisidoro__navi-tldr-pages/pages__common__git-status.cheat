@@ -1,0 +1,25 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/git-status.md
+
+% git-status, common
+
+# Show changed files which are not yet added for commit
+git status
+
+# Give output in [s]hort format
+git status --short
+
+# Show [v]erbose information on changes in both the staging area and working directory
+git status --verbose --verbose
+
+# Show the [b]ranch and tracking info
+git status --branch
+
+# Show output in [s]hort format along with [b]ranch info
+git status --short --branch
+
+# Show the number of entries currently stashed away
+git status --show-stash
+
+# Don't show untracked files in the output
+git status --untracked-files=no

@@ -1,0 +1,16 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/aws-google-auth.md
+
+% aws-google-auth, common
+
+# Log in with Google SSO using the specified [u]sername [I]DP and [S]P identifiers and set the credentials [d]uration to one hour
+aws-google-auth -u <example@example.com> -I <$GOOGLE_IDP_ID> -S <$GOOGLE_SP_ID> -d <3600>
+
+# Log in [a]sking which role to use (in case of several available SAML roles)
+aws-google-auth -u <example@example.com> -I <$GOOGLE_IDP_ID> -S <$GOOGLE_SP_ID> -d <3600> -a
+
+# Resolve aliases for AWS accounts
+aws-google-auth -u <example@example.com> -I <$GOOGLE_IDP_ID> -S <$GOOGLE_SP_ID> -d <3600> -a --resolve-aliases
+
+# Display help
+aws-google-auth -h

@@ -1,0 +1,28 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/audacious.md
+
+% audacious, common
+
+# Launch the GUI
+audacious
+
+# Start a new instance and play an audio
+audacious --new-instance <path_to_audio>
+
+# Enqueue a specific directory of audio files
+audacious --enqueue <path_to_directory>
+
+# Start or stop playback
+audacious --play-pause
+
+# Skip forwards ([fwd]) or backwards ([rew]) in the playlist
+audacious --<fwd|rew>
+
+# Stop playback
+audacious --stop
+
+# Start in CLI mode (headless)
+audacious --headless
+
+# Exit as soon as playback stops or there is nothing to playback
+audacious --quit-after-play

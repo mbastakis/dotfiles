@@ -1,0 +1,16 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/windows/reg-delete.md
+
+% reg-delete, windows
+
+# Delete a specific registry key
+reg delete <key_name>
+
+# Delete a [v]alue under a specific key
+reg delete <key_name> /v <value>
+
+# Delete [a]ll [v]alues recursively under the specified key
+reg delete <key_name> /va
+
+# [f]orcefully (without a prompt) delete [a]ll [v]alues recursively under a key
+reg delete <key_name> /f /va

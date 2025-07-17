@@ -1,0 +1,10 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/tpp.md
+
+% tpp, common
+
+# View a presentation
+tpp <path_to_file>
+
+# Output a presentation
+tpp -t <type> -o <path_to_output> <path_to_file>

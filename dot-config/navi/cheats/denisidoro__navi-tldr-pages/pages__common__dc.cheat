@@ -1,0 +1,22 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/dc.md
+
+% dc, common
+
+# Start an interactive session
+dc
+
+# Execute a script
+dc <path_to_script.dc>
+
+# Calculate an expression with the specified scale
+dc --expression='<10> k <5 3 _> p'
+
+# Calculate 4 times 5 (4 5 *), subtract 17 (17 -), and [p]rint the output
+dc --expression='4 5 * 17 - p'
+
+# Specify the number of decimal places to 7 (7 k), calculate 5 divided by -3 (5 _3 /) and [p]rint
+dc --expression='7 k 5 _3 / p'
+
+# Calculate the golden ratio, phi: set number of decimal places to 100 (100 k), square root of 5 (5 v) plus 1 (1 +), divided by 2 (2 /), and [p]rint result
+dc --expression='100 k 5 v 1 + 2 / p'

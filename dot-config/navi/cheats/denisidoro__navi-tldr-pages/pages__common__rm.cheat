@@ -1,0 +1,19 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/rm.md
+
+% rm, common
+
+# Remove specific files
+rm <path_to_file1 path_to_file2 ...>
+
+# Remove specific files ignoring nonexistent ones
+rm -f <path_to_file1 path_to_file2 ...>
+
+# Remove specific files interactively prompting before each removal
+rm -i <path_to_file1 path_to_file2 ...>
+
+# Remove specific files printing info about each removal
+rm -v <path_to_file1 path_to_file2 ...>
+
+# Remove specific files and directories recursively
+rm -r <path_to_file_or_directory1 path_to_file_or_directory2 ...>

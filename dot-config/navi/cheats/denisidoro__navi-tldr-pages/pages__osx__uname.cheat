@@ -1,0 +1,19 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/osx/uname.md
+
+% uname, osx
+
+# Print kernel name
+uname
+
+# Print system architecture and processor information
+uname -mp
+
+# Print kernel name, kernel release and kernel version
+uname -srv
+
+# Print system hostname
+uname -n
+
+# Print all available system information
+uname -a

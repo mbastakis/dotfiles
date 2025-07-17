@@ -1,0 +1,22 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/behat.md
+
+% behat, common
+
+# Initialize a new Behat project
+behat --init
+
+# Run all tests
+behat
+
+# Run all tests from the specified suite
+behat --suite <suite_name>
+
+# Run tests with a specific output formatter
+behat --format <pretty|progress>
+
+# Run tests and output results to a file
+behat --out <path_to_file>
+
+# List the definitions in your test suites
+behat --definitions

@@ -1,0 +1,22 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/fd.md
+
+% fd, common
+
+# Recursively find files matching a specific pattern in the current directory
+fd "<string|regex>"
+
+# Find files that begin with a specific string
+fd "<^string>"
+
+# Find files with a specific extension
+fd --extension <txt>
+
+# Find files in a specific directory
+fd "<string|regex>" <path_to_directory>
+
+# Include ignored and hidden files in the search
+fd --hidden --no-ignore "<string|regex>"
+
+# Execute a command on each search result returned
+fd "<string|regex>" --exec <command>

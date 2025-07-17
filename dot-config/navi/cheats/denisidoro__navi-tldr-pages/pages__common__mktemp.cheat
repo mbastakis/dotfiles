@@ -1,0 +1,19 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/mktemp.md
+
+% mktemp, common
+
+# Create an empty temporary file and print its absolute path
+mktemp
+
+# Use a custom directory if `$TMPDIR` is not set (the default is platform-dependent, but usually `/tmp`)
+mktemp -p <path_to_tempdir>
+
+# Use a custom path template (`X`s are replaced with random alphanumeric characters)
+mktemp <tmp_example.XXXXXXXX>
+
+# Use a custom file name template
+mktemp -t <example.XXXXXXXX>
+
+# Create an empty temporary directory and print its absolute path
+mktemp -d

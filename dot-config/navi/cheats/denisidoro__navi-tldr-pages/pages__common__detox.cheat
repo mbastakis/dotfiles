@@ -1,0 +1,13 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/detox.md
+
+% detox, common
+
+# Remove spaces and other undesirable characters from a file's name
+detox <path_to_file>
+
+# Show how detox would rename all the files in a directory tree
+detox --dry-run -r <path_to_directory>
+
+# Remove spaces and other undesirable characters from all files in a directory tree
+detox -r <path_to_directory>

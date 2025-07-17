@@ -1,0 +1,10 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/nice.md
+
+% nice, common
+
+# Launch a program with altered priority
+nice -<niceness_value> <command>
+
+# Define the priority with an explicit option
+nice <-n|--adjustment> <niceness_value> <command>

@@ -1,0 +1,10 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/go-version.md
+
+% go-version, common
+
+# Display version
+go version
+
+# Display the Go version used to build a specific executable file
+go version <path_to_executable>

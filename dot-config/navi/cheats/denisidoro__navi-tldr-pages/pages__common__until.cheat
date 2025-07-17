@@ -1,0 +1,10 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/until.md
+
+% until, common
+
+# Execute a command until it succeeds
+until <command>; do :; done
+
+# Wait for a systemd service to be active
+until systemctl is-active --quiet <nginx>; do <echo "Waiting...">; sleep 1; done; <echo "Launched!">

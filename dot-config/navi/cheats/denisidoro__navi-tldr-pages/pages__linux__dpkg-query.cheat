@@ -1,0 +1,19 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/linux/dpkg-query.md
+
+% dpkg-query, linux
+
+# List all installed packages
+dpkg-query --list
+
+# List installed packages matching a pattern
+dpkg-query --list '<libc6*>'
+
+# List all files installed by a package
+dpkg-query --listfiles <libc6>
+
+# Show information about a package
+dpkg-query --status <libc6>
+
+# Search for packages that own files matching a pattern
+dpkg-query --search <etc_ld.so.conf.d>

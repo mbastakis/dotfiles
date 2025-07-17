@@ -1,0 +1,10 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/just.md
+
+% just, common
+
+# View documentation for the command runner
+tldr just.1
+
+# View documentation for the V8 JavaScript runtime
+tldr just.js

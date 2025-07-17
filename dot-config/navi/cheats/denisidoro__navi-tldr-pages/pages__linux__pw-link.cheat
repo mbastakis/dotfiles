@@ -1,0 +1,19 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/linux/pw-link.md
+
+% pw-link, linux
+
+# List all audio output and input ports with their IDs
+pw-link --output --input --ids
+
+# Create a link between an output and an input port
+pw-link <output_port_name> <input_port_name>
+
+# Disconnect two ports
+pw-link --disconnect <output_port_name> <input_port_name>
+
+# List all links with their IDs
+pw-link --links --ids
+
+# Display help
+pw-link -h

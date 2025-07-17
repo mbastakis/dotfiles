@@ -1,0 +1,12 @@
+% tar
+
+# create a `.tar.gz` file excluding `*/tmp`
+tar --exclude="*/tmp" -cvf <archive_fname>.tar.gz <fnames>
+
+$ fnames: echo "`ls | xargs`"; ls -t
+$ archive_fname: basename $(pwd); ls -t
+
+# extract tarball to a folder with same basename
+tar -xvf <tarball> --one-top-level
+
+$ tarball: ls | grep 'gz$'

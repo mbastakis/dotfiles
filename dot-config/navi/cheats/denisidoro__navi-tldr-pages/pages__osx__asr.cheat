@@ -1,0 +1,16 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/osx/asr.md
+
+% asr, osx
+
+# Restore a disk image to a target volume
+sudo asr restore --source <image_file.dmg> --target <path_to_volume_file>
+
+# Erase the target volume before restoring
+sudo asr restore --source <image_file.dmg> --target <path_to_volume_file> --erase
+
+# Skip verification after restoring
+sudo asr restore --source <image_file.dmg> --target <path_to_volume_file> --noverify
+
+# Clone volumes without using an intermediate disk image
+sudo asr restore --source <path_to_volume_file> --target <path_to_volume_file>

@@ -1,0 +1,10 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/osx/xsltproc.md
+
+% xsltproc, osx
+
+# Transform an XML file with a specific XSLT stylesheet
+xsltproc --output <path_to_output_file.html> <path_to_stylesheet_file.xslt> <path_to_file.xml>
+
+# Pass a value to a parameter in the stylesheet
+xsltproc --output <path_to_output_file.html> --stringparam "<name>" "<value>" <path_to_stylesheet_file.xslt> <path_to_xml_file.xml>

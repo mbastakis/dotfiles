@@ -1,0 +1,19 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/pg_dumpall.md
+
+% pg_dumpall, common
+
+# Dump all databases
+pg_dumpall > <path_to_file.sql>
+
+# Dump all databases using a specific username
+pg_dumpall <-U|--username> <username> > <path_to_file.sql>
+
+# Same as above, customize host and port
+pg_dumpall -h <host> -p <port> > <output_file.sql>
+
+# Dump only database data into an SQL-script file
+pg_dumpall <-a|--data-only> > <path_to_file.sql>
+
+# Dump only schema (data definitions) into an SQL-script file
+pg_dumpall -s > <output_file.sql>

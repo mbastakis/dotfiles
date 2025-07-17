@@ -1,0 +1,22 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/freebsd/base64.md
+
+% base64, freebsd
+
+# Encode a file to `stdout`
+base64 <-i|--input> <path_to_file>
+
+# Encode a file to the specified output file
+base64 <-i|--input> <path_to_input_file> <-o|--output> <path_to_output_file>
+
+# Wrap encoded output at a specific width (`0` disables wrapping)
+base64 <-b|--break> <0|76|...> <path_to_file>
+
+# Decode a file to `stdout`
+base64 <-d|--decode> <-i|--input> <path_to_file>
+
+# Encode from `stdin` to `stdout`
+<command> | base64
+
+# Decode from `stdin` to `stdout`
+<command> | base64 <-d|--decode>

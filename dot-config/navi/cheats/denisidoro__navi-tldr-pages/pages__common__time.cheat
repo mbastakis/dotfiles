@@ -1,0 +1,10 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/time.md
+
+% time, common
+
+# Run the `command` and print the time measurements to `stdout`
+time <command>
+
+# Create a very simple stopwatch (only works in Bash)
+time read

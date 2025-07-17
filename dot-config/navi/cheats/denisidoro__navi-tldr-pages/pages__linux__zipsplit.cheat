@@ -1,0 +1,16 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/linux/zipsplit.md
+
+% zipsplit, linux
+
+# Split Zip archive into parts that are no larger than 36000 bytes (36 MB)
+zipsplit <path_to_archive.zip>
+
+# Use a given [n]umber of bytes as the part limit
+zipsplit -n <size> <path_to_archive.zip>
+
+# [p]ause between the creation of each part
+zipsplit -p -n <size> <path_to_archive.zip>
+
+# Output the smaller Zip archives into a given directory
+zipsplit -b <path_to_output_directory> -n <size> <path_to_archive.zip>

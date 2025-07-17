@@ -1,0 +1,13 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/linux/swapoff.md
+
+% swapoff, linux
+
+# Disable a given swap area
+swapoff <path_to_file>
+
+# Disable all swap areas in `/proc/swaps`
+swapoff --all
+
+# Disable a swap partition by its label
+swapoff -L <label>

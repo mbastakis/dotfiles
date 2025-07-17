@@ -1,0 +1,7 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/linux/e2label.md
+
+% e2label, linux
+
+# Change the volume label on a specific ext partition
+e2label <dev_sda1> "<label_name>"

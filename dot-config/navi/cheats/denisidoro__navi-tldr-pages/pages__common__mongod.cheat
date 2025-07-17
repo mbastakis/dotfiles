@@ -1,0 +1,16 @@
+; This has been extracted from
+; https://github.com/tldr-pages/tldr/blob/master/pages/common/mongod.md
+
+% mongod, common
+
+# Specify the storage directory (default: `/data/db` on Linux and macOS, `C:\data\db` on Windows)
+mongod --dbpath <path_to_directory>
+
+# Specify a configuration file
+mongod --config <path_to_file>
+
+# Specify the port to listen on (default: 27017)
+mongod --port <port>
+
+# Specify the database profiling level. 0 is off, 1 is only slow operations, 2 is all (default: 0)
+mongod --profile <0|1|2>
