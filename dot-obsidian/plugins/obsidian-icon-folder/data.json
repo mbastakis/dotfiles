@@ -520,5 +520,8 @@
   "Resources/Specs": "IbDocumentCode",
   "Projects/Tasks/Kanban Tasks/checout kimi llm, free openrouter, add to cline and opencode.md": {
     "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/checkout mcp servers vscode.md": {
+    "iconName": "OcTasklist24"
   }
 }

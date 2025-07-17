@@ -352,6 +352,18 @@
       "terminalName": "Gemini"
     },
     {
+      "id": "searchinfiles",
+      "name": "Search in Files",
+      "command": "rg --files --hidden --glob '!.git' | xargs rg --line-number --color=always --hidden --glob '!.git' . | fzf --ansi --delimiter : --preview 'bat --style=numbers --color=always --highlight-line {2} {1}' --preview-window +{2}-5 && exit",
+      "terminalName": "Search in Files"
+    },
+    {
+      "id": "searchfilenames",
+      "name": "Search Filenames",
+      "command": "find . -type f -name '.*' -not -path '*/.git/*' -o -type f -not -path '*/.*' -not -path '*/.git/*' | fzf --preview 'bat --style=numbers --color=always {}' && exit",
+      "terminalName": "Search Filenames"
+    },
+    {
       "id": "basicterminal",
       "name": "Basic Terminal",
       "command": "",

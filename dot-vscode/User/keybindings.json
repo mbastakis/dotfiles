@@ -85,6 +85,15 @@
     "command": "claude-code.runClaude.keyboard",
     "when": "claude-code.hasClaudeInPath"
   },
+  // search file content and filenames
+  {
+    "key": "cmd+shift+f",
+    "command": "tui-manager.searchinfiles"
+  },
+  {
+    "key": "cmd+shift+o",
+    "command": "tui-manager.searchfilenames",
+  },
   // Terminal
   {
     "key": "shift+enter",
@@ -102,15 +111,6 @@
   {
     "key": "cmd+t",
     "command": "projectManager.listProjects"
-  },
-  // Extension Find It Faster
-  {
-    "key": "shift+cmd+f",
-    "command": "find-it-faster.findWithinFiles"
-  },
-  {
-    "key": "shift+cmd+o",
-    "command": "find-it-faster.findFiles"
   },
   {
     "key": "ctrl+t",
