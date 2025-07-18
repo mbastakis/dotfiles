@@ -70,7 +70,6 @@
         "hiddenbar"
         "finicky"
         "stats"
-        "visual-studio-code" 
         "karabiner-elements" 
         "warp" 
         "ghostty"

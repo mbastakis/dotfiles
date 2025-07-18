@@ -1,8 +1,0 @@
-.vscode/**
-.git/**
-.DS_Store
-*.vsix
-.nyc_output
-coverage/
-**/.nyc_output
-**/node_modules/**
