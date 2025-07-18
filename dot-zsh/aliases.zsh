@@ -28,8 +28,5 @@ alias cat="bat --paging=always --color=always --style=plain --line-range=1:1000 
 # Atuin
 alias r="atuin search -i"
 
-# VScode
-alias code="code --user-data-dir ~/.vscode"
-
 # Obsidian CLI
 alias obs="obsidian-cli"
