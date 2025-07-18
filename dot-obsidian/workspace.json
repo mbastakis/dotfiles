@@ -84,7 +84,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 235.5010757446289
+    "width": 235.5010757446289,
+    "collapsed": true
   },
   "right": {
     "id": "45a4c33d2d217b48",
@@ -207,6 +208,9 @@
   },
   "active": "98d3f03a9f72d6b5",
   "lastOpenFiles": [
+    "telekom-auth.pcap",
+    "Resources/kalamata-camping-date.md",
+    "Resources/Shortcuts/vscode-shortcuts.md",
     "Projects/Tasks/Kanban Tasks/checkout mcp servers vscode.md",
     "Resources/AI_Docs/stow/stow_documentation.md",
     "Resources/AI_Docs/stow",
@@ -239,9 +243,6 @@
     "Resources/AI_Docs/specs/refactor_dotfiles_into_tui_cli_tool.md",
     "Resources/AI_Docs/specs/feat_helm_keycloak.md",
     "Resources/AI_Docs/ai_docs/dt_gcp_docs.md",
-    "Resources/AI_Docs/ai_docs/dt_aws_docs.md",
-    "Resources/AI_Docs/ai_docs/ghostty_documentation.md",
-    "Resources/AI_Docs/ai_docs/bubbletea_documentation.md",
     "Resources/AI_Docs/specs",
     "Extras/Images/kalamata-camping-date-1752687994154.webp",
     "Extras/Images/kalamata-camping-date-1752687935802.webp",

@@ -45,10 +45,10 @@ keybind = cmd+t=new_tab
 keybind = cmd+w=close_surface
 
 # Split navigation
-keybind = ctrl+h=goto_split:left
-keybind = ctrl+t=goto_split:down
-keybind = ctrl+n=goto_split:up
-keybind = ctrl+s=goto_split:right
+keybind = ctrl+shift+h=goto_split:left
+keybind = ctrl+shift+t=goto_split:down
+keybind = ctrl+shift+n=goto_split:up
+keybind = ctrl+shift+s=goto_split:right
 
 keybind = global:cmd+ctrl+t=toggle_quick_terminal
 
