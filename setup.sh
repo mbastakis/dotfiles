@@ -63,42 +63,4 @@ else
     log_warning "Nix installer not found at $SCRIPT_DIR/bin/install_nix.sh"
 fi
 
-# 5. Check and install VSCode extension
-check_vscode_extension() {
-    local extension_id="$1"
-    if command -v code &> /dev/null; then
-        # Check if extension is installed
-        if code --list-extensions | grep -q "^${extension_id}$"; then
-            return 0
-        else
-            return 1
-        fi
-    else
-        log_warning "VSCode 'code' command not found"
-        return 1
-    fi
-}
-
-# Install TUI Manager extension
-if command -v code &> /dev/null; then
-    log_info "Checking VSCode extensions..."
-    
-    # Check if tui-manager extension is already installed
-    if ! check_vscode_extension "local.tui-manager"; then
-        log_info "TUI Manager extension not found. Installing..."
-        
-        # Run the extension installer script
-        if [[ -f "$SCRIPT_DIR/bin/install_code_extensions.sh" ]]; then
-            chmod +x "$SCRIPT_DIR/bin/install_code_extensions.sh"
-            "$SCRIPT_DIR/bin/install_code_extensions.sh"
-        else
-            log_error "Extension installer script not found"
-        fi
-    else
-        log_info "TUI Manager extension is already installed"
-    fi
-else
-    log_warning "VSCode not found. Skipping extension installation"
-fi
-
 log_info "Setup complete!"
