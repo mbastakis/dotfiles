@@ -42,12 +42,18 @@
       # System configuration.
       system.defaults = {
         dock.autohide = true;
+        dock.orientation = "right";
         dock.mru-spaces = false;
         finder.AppleShowAllExtensions = true;
         finder.FXPreferredViewStyle = "clmv";
         loginwindow.LoginwindowText = "mbastakis";
         screencapture.location = "~/Pictures/screenshots";
         screensaver.askForPasswordDelay = 10;
+        NSGlobalDomain.AppleICUForce24HourTime = true;
+        NSGlobalDomain.AppleShowAllExtensions = true;
+        NSGlobalDomain.AppleShowAllFiles = true;
+        NSGlobalDomain.NSAutomaticCapitalizationEnabled = false;
+        controlcenter.BatteryShowPercentage = true;
       };
 
       # Homebrew configuration.
@@ -57,6 +63,7 @@
         "nikitabobko/tap"
         "oven-sh/bun"
         "yakitrak/yakitrak"
+	"sst/tap"
       ];
       homebrew.casks = [
 	      "raycast"
@@ -66,8 +73,7 @@
         "font-jetbrains-mono-nerd-font"
         "aerospace" 
         "obsidian" 
-        "steermouse" 
-        "hiddenbar"
+        "steermouse"
         "finicky"
         "stats"
         "karabiner-elements" 
@@ -80,6 +86,7 @@
         "spotify"
         "the-unarchiver" 
         "appcleaner"
+	"betterdisplay"
       ];
       homebrew.brews = [
 	      "stow" 
@@ -93,6 +100,7 @@
         "fzf"
         "ripgrep"
         "mas"
+        "sketchybar"
         "zinit"
         "zoxide" 
         "diff-so-fancy"
@@ -116,7 +124,7 @@
         "poppler"
         "fd"
         "node"
-        "bun"
+        "oven-sh/bun/bun"
         "go"
         "rust"
         "openjdk"
@@ -156,11 +164,13 @@
       homebrew.masApps = 
         { 
           "Amphetamine" = 937984704;
-          "Hidden Bar" = 1452453066;
           "Quick Sticky Notes" = 6740142714;
           "Microsoft Outlook" = 985367838;
+          "Mark And Scribble" = 1635403801;
+          "Hidden Bar" = 1452453066;
+          "Bitwarden"  = 1352778147;
         };
-      system.primaryUser = "A200407315";
+      system.primaryUser = "mbastakis";
     };
   in
   {

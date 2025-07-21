@@ -1,3 +1,15 @@
 .vsix
 .DS_Store
 local.zsh
+
+# TheFuck
+thefuck
+
+# Claude
+dot-claude/ide
+
+# Vscode
+code-portable-data/*
+!code-portable-data/user-data/User/settings.json
+!code-portable-data/user-data/User/keybindings.json
+!code-portable-data/extensions/extensions.json
