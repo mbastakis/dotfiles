@@ -17,7 +17,7 @@
             }
           },
           {
-            "id": "98d3f03a9f72d6b5",
+            "id": "0dceb87987e06404",
             "type": "leaf",
             "state": {
               "type": "obsidian-projects",
@@ -159,7 +159,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 326.5
+    "width": 326.5,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -202,10 +203,12 @@
       "markdown-importer:Open format converter": true,
       "custom-sort:Toggle custom sorting": true,
       "canvas:Create new canvas": true,
-      "omnisearch:Omnisearch": true
+      "omnisearch:Omnisearch": true,
+      "meld-encrypt:Lock and Close all open encrypted notes": false,
+      "meld-encrypt:Decrypt at Cursor": false
     }
   },
-  "active": "98d3f03a9f72d6b5",
+  "active": "0dceb87987e06404",
   "lastOpenFiles": [
     "telekom-auth.pcap",
     "Resources/kalamata-camping-date.md",

@@ -2,6 +2,10 @@
 .DS_Store
 local.zsh
 
+# raycast
+dot-config/raycast/extensions
+dot-config/raycast/config.json
+
 # TheFuck
 thefuck
 
