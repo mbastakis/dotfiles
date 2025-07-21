@@ -64,7 +64,7 @@
         "nikitabobko/tap"
         "oven-sh/bun"
         "yakitrak/yakitrak"
-	"sst/tap"
+      	"sst/tap"
       ];
       homebrew.casks = [
 	      "raycast"
@@ -88,7 +88,7 @@
         "spotify"
         "the-unarchiver" 
         "appcleaner"
-	"betterdisplay"
+      	"betterdisplay"
       ];
       homebrew.brews = [
 	      "stow" 
