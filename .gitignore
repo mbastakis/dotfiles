@@ -11,6 +11,8 @@ thefuck
 
 # Claude
 dot-claude/ide
+dot-claude/statsig
+dot-claude/todos
 
 # Vscode
 code-portable-data/*
