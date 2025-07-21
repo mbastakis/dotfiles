@@ -54,6 +54,7 @@
         NSGlobalDomain.AppleShowAllFiles = true;
         NSGlobalDomain.NSAutomaticCapitalizationEnabled = false;
         controlcenter.BatteryShowPercentage = true;
+        universalaccess.closeViewScrollWheelToggle = true;
       };
 
       # Homebrew configuration.
@@ -69,6 +70,7 @@
 	      "raycast"
         "rectangle"
         "font-sketchybar-app-font"
+        "font-sf-pro"
         "font-jetbrains-mono"
         "font-jetbrains-mono-nerd-font"
         "aerospace" 
@@ -160,6 +162,7 @@
         "opencode"
         "zellij"
         "yakitrak/yakitrak/obsidian-cli"
+        "duti"
       ];
       homebrew.masApps = 
         { 

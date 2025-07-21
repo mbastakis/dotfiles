@@ -30,9 +30,9 @@ ueberzug_offset = [ 0, 0, 0, 0 ]
 
 [opener]
 edit = [
-	{ run = 'code --user-data-dir ~/.vscode "$@"', orphan = true, desc = "VS Code", for = "unix" },
-	{ run = 'code --user-data-dir ~/.vscode %*',    orphan = true, desc = "code",           for = "windows" },
-	{ run = 'code --user-data-dir ~/.vscode -w %*', block = true,  desc = "code (block)",   for = "windows" },
+	{ run = 'code  "$@"', orphan = true, desc = "VS Code", for = "unix" },
+	{ run = 'code  %*',    orphan = true, desc = "code",           for = "windows" },
+	{ run = 'code  -w %*', block = true,  desc = "code (block)",   for = "windows" },
 ]
 open = [
 	{ run = 'xdg-open "$1"',                desc = "Open", for = "linux" },
