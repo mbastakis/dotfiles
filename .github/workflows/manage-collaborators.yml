@@ -1,0 +1,80 @@
+---
+name: Manage Repository Collaborators
+
+on:
+  push:
+    paths:
+      - '.github/collaborators.yml'
+      - '.github/workflows/manage-collaborators.yml'
+  workflow_dispatch:
+
+jobs:
+  manage-collaborators:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      metadata: read
+      administration: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install GitHub CLI
+        run: |
+          type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
+            sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+          sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | \
+            sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+          sudo apt update
+          sudo apt install gh -y
+
+      - name: Authenticate GitHub CLI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: Parse collaborators configuration
+        id: parse-config
+        run: |
+          if [ -f .github/collaborators.yml ]; then
+            echo "Processing collaborators configuration..."
+            # Parse YAML and extract collaborators (basic implementation)
+            # Note: This is a simplified parser for demonstration
+            cat .github/collaborators.yml
+          else
+            echo "No collaborators.yml found"
+            exit 1
+          fi
+
+      - name: Update repository collaborators
+        run: |
+          # Read the collaborators.yml file and update collaborators
+          if [ -f .github/collaborators.yml ]; then
+            echo "Managing collaborators for repository: ${{ github.repository }}"
+
+            # Extract collaborators from YAML (simplified approach)
+            # In a production setup, you might want to use yq or a more robust parser
+            grep -A 10 "collaborators:" .github/collaborators.yml | \
+              grep -E "^\s*-\s*username:" | \
+              sed 's/.*username:\s*//' | while read username; do
+              if [ ! -z "$username" ]; then
+                permission=$(grep -A 5 "username: $username" .github/collaborators.yml | \
+                  grep "permission:" | \
+                  sed 's/.*permission:\s*//' | head -1)
+                echo "Adding collaborator: $username with permission: $permission"
+
+                # Add or update collaborator
+                gh api repos/${{ github.repository }}/collaborators/$username \
+                  --method PUT \
+                  --field permission="$permission" \
+                  --silent || echo "Failed to add $username"
+              fi
+            done
+          fi
+
+      - name: List current collaborators
+        run: |
+          echo "Current repository collaborators:"
+          gh api repos/${{ github.repository }}/collaborators | \
+            jq -r '.[] | "\(.login) (\(.permissions | to_entries | map(select(.value == true)) | map(.key) | join(", ")))"'

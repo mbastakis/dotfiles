@@ -1,0 +1,17 @@
+---
+# Repository Collaborators Configuration
+# This file defines the collaborators for the repository and their permission
+# levels.
+#
+# Permission levels:
+# - pull: Read-only access
+# - push: Read-write access (equivalent to "write")
+# - maintain: Maintain access (manage issues, PRs, settings)
+# - triage: Triage access (manage issues and PRs)
+# - admin: Admin access (full access including settings and collaborators)
+
+collaborators:
+  - username: rantallanb
+    permission: push  # write permission level
+    reason: "Added as requested for repository collaboration"
+    added_date: "2024-07-22"
