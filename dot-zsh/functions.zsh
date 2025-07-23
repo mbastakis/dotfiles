@@ -54,13 +54,6 @@ venvremove() {
 	sudo rm -rf ~/.virtualenvs/$1
 }
 
-# Zoxide
-# unalias zi from zinit
-if command -v zi &>/dev/null; then
-  unalias zi
-fi
-command -v z &>/dev/null && alias cd='z' && alias cdi='zi'
-
 # Yazi
 function y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd

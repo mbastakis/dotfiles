@@ -34,7 +34,7 @@ fi
 # Load Zinit
 source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
+(( ${+_comps} )) && _comps["zinit"]=_zinit
 ### End of Zinit's installer chunk
 # ----------------------------------------------------
 
@@ -57,6 +57,10 @@ command -v starship &> /dev/null && eval "$(starship init zsh)"
 command -v obsidian-cli &>/dev/null && eval "$(obsidian-cli completion zsh)"
 
 # Zoxide
+# if alias zi exists unalias zi from zinit
+if alias zi &>/dev/null; then
+  unalias zi
+fi
 command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
 
 # Carapace
@@ -64,7 +68,7 @@ command -v carapace &>/dev/null && eval "$(carapace zsh)"
 
 # Carapace autocompletion
 zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
-source <(carapace _carapace)
+command -v carapace &>/dev/null && eval "$(carapace _carapace)"
 
 # ----------------------------------------------------
 
