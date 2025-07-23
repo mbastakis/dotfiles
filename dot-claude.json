@@ -1,12 +1,16 @@
 {
-  "numStartups": 8,
+  "numStartups": 12,
   "installMethod": "unknown",
   "autoUpdates": true,
   "tipsHistory": {
     "ide-hotkey": 1,
     "new-user-warmup": 6,
     "shift-enter": 7,
-    "memory-command": 8
+    "memory-command": 8,
+    "theme-command": 9,
+    "prompt-queue": 10,
+    "enter-to-steer-in-relatime": 11,
+    "todo-list": 12
   },
   "promptQueueUseCount": 2,
   "userID": "406ae8649cac86c41ec68596b332d99e9d0e5d48ed9d2aee1e0aa3d89c4432ec",
@@ -15,6 +19,30 @@
     "/Users/mbastakis/dev/dotfiles": {
       "allowedTools": [],
       "history": [
+        {
+          "display": "cd to ~",
+          "pastedContents": {}
+        },
+        {
+          "display": "can you make the zshrc configuration so when you use the terminal you always use the builtin cd but when hi use the terminal I always use zoxide ?",
+          "pastedContents": {}
+        },
+        {
+          "display": "can you cd to~",
+          "pastedContents": {}
+        },
+        {
+          "display": "check if you can cd ~",
+          "pastedContents": {}
+        },
+        {
+          "display": "Why can't you use zoxide ?",
+          "pastedContents": {}
+        },
+        {
+          "display": "try to cd to ~ are you able or is zoxide making you unable ?",
+          "pastedContents": {}
+        },
         {
           "display": "/mcp ",
           "pastedContents": {}
@@ -36,7 +64,17 @@
         "bootstrap.sh"
       ],
       "exampleFilesGeneratedAt": 1753103825821,
-      "lastTotalWebSearchRequests": 0
+      "lastTotalWebSearchRequests": 0,
+      "lastCost": 0.33536639999999995,
+      "lastAPIDuration": 9838,
+      "lastDuration": 10735,
+      "lastLinesAdded": 0,
+      "lastLinesRemoved": 0,
+      "lastTotalInputTokens": 1397,
+      "lastTotalOutputTokens": 160,
+      "lastTotalCacheCreationInputTokens": 17460,
+      "lastTotalCacheReadInputTokens": 0,
+      "lastSessionId": "6fec0646-50aa-4317-8b80-e457c1042350"
     },
     "/Users/mbastakis/Documents/my-notes": {
       "allowedTools": [],
