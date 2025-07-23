@@ -54,7 +54,6 @@
         NSGlobalDomain.AppleShowAllFiles = true;
         NSGlobalDomain.NSAutomaticCapitalizationEnabled = false;
         controlcenter.BatteryShowPercentage = true;
-        universalaccess.closeViewScrollWheelToggle = true;
       };
 
       # Homebrew configuration.
@@ -163,6 +162,7 @@
         "zellij"
         "yakitrak/yakitrak/obsidian-cli"
         "duti"
+        "ollama"
       ];
       homebrew.masApps = 
         { 

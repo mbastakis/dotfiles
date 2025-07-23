@@ -1,10 +1,14 @@
 {
-  "numStartups": 5,
+  "numStartups": 8,
   "installMethod": "unknown",
   "autoUpdates": true,
   "tipsHistory": {
-    "ide-hotkey": 1
+    "ide-hotkey": 1,
+    "new-user-warmup": 6,
+    "shift-enter": 7,
+    "memory-command": 8
   },
+  "promptQueueUseCount": 2,
   "userID": "406ae8649cac86c41ec68596b332d99e9d0e5d48ed9d2aee1e0aa3d89c4432ec",
   "firstStartTime": "2025-07-21T13:16:02.616Z",
   "projects": {
@@ -32,17 +36,7 @@
         "bootstrap.sh"
       ],
       "exampleFilesGeneratedAt": 1753103825821,
-      "lastTotalWebSearchRequests": 0,
-      "lastCost": 0.00018720000000000002,
-      "lastAPIDuration": 1413,
-      "lastDuration": 18931,
-      "lastLinesAdded": 0,
-      "lastLinesRemoved": 0,
-      "lastTotalInputTokens": 164,
-      "lastTotalOutputTokens": 14,
-      "lastTotalCacheCreationInputTokens": 0,
-      "lastTotalCacheReadInputTokens": 0,
-      "lastSessionId": "2a6aa5d9-a28e-4974-b320-dc3d47e195f9"
+      "lastTotalWebSearchRequests": 0
     },
     "/Users/mbastakis/Documents/my-notes": {
       "allowedTools": [],
@@ -55,6 +49,214 @@
       "projectOnboardingSeenCount": 0,
       "hasClaudeMdExternalIncludesApproved": false,
       "hasClaudeMdExternalIncludesWarningShown": false
+    },
+    "/Users/mbastakis/dev/agentic-wfmt": {
+      "allowedTools": [],
+      "history": [
+        {
+          "display": "can we somehow use this proxy.pac to import these extarnel proxies to charles easily ? so we can replicate this esier",
+          "pastedContents": {}
+        },
+        {
+          "display": "for your information we are trying to capture traffic for page https://wfmt-abn1.telekom.de and https://yam-united.telekom.com will the proxy you are setting work ?",
+          "pastedContents": {}
+        },
+        {
+          "display": "/dev let's continue with story 1.1.2 and quickly try to catch light-managed browser traffic using charles we must configure charles to do that",
+          "pastedContents": {}
+        },
+        {
+          "display": "Okay but charles should be able to capture traffic from the light managed browsers if we configure it correctly no ?",
+          "pastedContents": {}
+        },
+        {
+          "display": "can I continue to 1.1.3 even though I still haven't managed to capture traffic from the light managed browser ? will story 1.1.3 help me configure how to capture data or should I do it in 1.1.2?",
+          "pastedContents": {}
+        },
+        {
+          "display": "/qa user story 1.1.2 ",
+          "pastedContents": {}
+        },
+        {
+          "display": "1. safari works and shows in charles \\\n2. For chrome clean profile I used your command and created a new chrome profile but again traffic is not shown in charles I checked and even this new chrome profile had policies etc configured by the company although I managed to catch something interesting incharles not sure if it is related to chrome openinng a new profile but I got this request which I am sure is company internal\\\ncurl -H \"Host: awds.t-systems.com\" -H \"Proxy-Connection: keep-alive\" -X CONNECT \"https://awds.t-systems.com\"\\\nI captured this trace in this file @browser-configuration/awds-t-systems-maybe-relevant.chlz \\\nagain withchrome nothing was shown in charles even with a new profile\\\n3. firefox shows correctly as well as vivaldi\\\nsummary:\\\nall non managed browesers are showing in charles chrome and edge which are light managed company browsers do not show traffic in current charles configuration",
+          "pastedContents": {}
+        },
+        {
+          "display": "1. I opened this proxy.pac and dowloaded it I put it here @browser-configuration/proxy.pac \\\n2.\\\nI used in terminal this command:\\\n/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --proxy-server=\"127.0.0.1:8888\"\n  --ignore-certificate-errors --disable-features=VizDisplayCompositor\nOpening in existing browser session.\nzsh: command not found: --ignore-certificate-errors\\\nthen I tried to access httpbin again but still in charles I don't see the request\\\n/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --proxy-server=\"127.0.0.1:8888\" --disable-features=VizDisplayCompositor WARNING: All log messages before absl::InitializeLog() is called are written to STDERR\nI0000 00:00:1753185118.668909 3725013 voice_transcription.cc:58] Registering VoiceTranscriptionCapability\nTrying to load the allocator multiple times. This is *not* supported.\nCreated TensorFlow Lite XNNPACK delegate for CPU.\nAttempting to use a delegate that only supports static-sized tensors with a graph that has dynamic-sized tensors (tensor#-1 is a dynamic-sized tensor).\n[59058:3725014:0722/145158.965848:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT\\\nAlso with the chrome browser that had the proxy-server I tried accessing internal websites and it didn't work got in the internal page 403 Forbidden. I then reopened the chrom ebrowser using default settings and I was able to access the page",
+          "pastedContents": {}
+        },
+        {
+          "display": "1. I opened this proxy.pac and dowloaded it I put it here @browser-configuration/proxy.pac \\\n2.\\\nI used in terminal thi",
+          "pastedContents": {}
+        },
+        {
+          "display": "1. I went to chrome policy tab and exported all of them to this json @browser-configuration/policies_7_22_25, 2_32_48 PM GMT+3.json \\\nIn the chrome settings tab I see this \"Chrome is using proxy settings from your administrator\"\\\n2. In my network tab I see that I am using a vpn but in the proxies I think I have the default htpp is at 127.0.0.1 8888 and https the same. I don't see any proxy configuration in the system only the vpn\\\n3. no corporate extensions are installed",
+          "pastedContents": {}
+        },
+        {
+          "display": "Let's continue with story 1.1.2 you can also see the output of story 1.1.1 to understand what we did",
+          "pastedContents": {}
+        },
+        {
+          "display": "*help",
+          "pastedContents": {}
+        },
+        {
+          "display": "/dev ",
+          "pastedContents": {}
+        },
+        {
+          "display": "should we set story 1.1.1 to done ",
+          "pastedContents": {}
+        },
+        {
+          "display": "*help",
+          "pastedContents": {}
+        },
+        {
+          "display": "*review 1.1.1 you can find files of the output of this story in @network-analysis your internal templates are in @.bmad-core",
+          "pastedContents": {}
+        },
+        {
+          "display": "*help",
+          "pastedContents": {}
+        },
+        {
+          "display": "/qa ",
+          "pastedContents": {}
+        },
+        {
+          "display": "I stoped reconding I cleared charles and exported the .chlsm inside network-analysis @network-analysis/Charles Initial Session.chlz again this is only captures from vivaldi since google chrome and edge didn't give any captures. I imported this file and I see all captured data ",
+          "pastedContents": {}
+        },
+        {
+          "display": "I did all of your requests here is what happened:\\\n- I tested all http and https for httpbin and google.com\\\n- In the vivaldi browser which is not managed by the company I see in charles requests for all httpbin and google.com \\\n- In the light managed browsers I tested on both (chrome and edge) I don't see any of the requests\\\n- this leads me to believe charles is successfully finding the network traffic for non managed browsers butthe light manage browsers have some different way of working since hi don't see either encrypted or decrypted charles requests. \\\n2. for the https in the vivaldi since only this browser is showing in charles I can see the full response/request headers \\\n3. there are some sites showing encrypted but these are only from other applications in my mac like spotify",
+          "pastedContents": {}
+        },
+        {
+          "display": "Super I have trusted and successfully installed charles certificate and now in charles I can see that I get non encrypted traffic before I was only getting Encrypted",
+          "pastedContents": {}
+        },
+        {
+          "display": "Okay charles is configured like you said version is 5.0.1 ",
+          "pastedContents": {}
+        },
+        {
+          "display": "Okay I have installed both wireshark and charles",
+          "pastedContents": {}
+        },
+        {
+          "display": "let's start with story 1.1.1 you will for sure need me to perform some tasks like open browser and login to wfmt while we are capturing. so we have to go back and forth",
+          "pastedContents": {}
+        },
+        {
+          "display": "*help",
+          "pastedContents": {}
+        },
+        {
+          "display": "/dev ",
+          "pastedContents": {}
+        },
+        {
+          "display": "*execute-chelist-po for big story 1.1.network you already did some sharding verify state",
+          "pastedContents": {}
+        },
+        {
+          "display": "/po let's break @docs/.../1.1.network to shards also run *help",
+          "pastedContents": {}
+        },
+        {
+          "display": "*exit",
+          "pastedContents": {}
+        },
+        {
+          "display": "Let's start implementing the story @docs/stories/1.1.network-traffic-analysis.md You will for sure need me to perform some task",
+          "pastedContents": {}
+        },
+        {
+          "display": "*help",
+          "pastedContents": {}
+        },
+        {
+          "display": "/dev ",
+          "pastedContents": {}
+        },
+        {
+          "display": "*exit",
+          "pastedContents": {}
+        },
+        {
+          "display": "/qa review the @docs/stories/1.1.network...",
+          "pastedContents": {}
+        },
+        {
+          "display": "*draft",
+          "pastedContents": {}
+        },
+        {
+          "display": "*help",
+          "pastedContents": {}
+        },
+        {
+          "display": "/sm ",
+          "pastedContents": {}
+        },
+        {
+          "display": "*exit",
+          "pastedContents": {}
+        },
+        {
+          "display": "*create-backend-architecuter read the docs/prd.md this is not a typical backend but you will understand",
+          "pastedContents": {}
+        },
+        {
+          "display": "*help",
+          "pastedContents": {}
+        },
+        {
+          "display": "/architect ",
+          "pastedContents": {}
+        },
+        {
+          "display": "*help",
+          "pastedContents": {}
+        },
+        {
+          "display": "*create-prd from @docs/brief.md ",
+          "pastedContents": {}
+        },
+        {
+          "display": "*help",
+          "pastedContents": {}
+        },
+        {
+          "display": "/pm \\\nREAD @docs/brief.md",
+          "pastedContents": {}
+        },
+        {
+          "display": "/help ",
+          "pastedContents": {}
+        }
+      ],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 9,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "lastTotalWebSearchRequests": 0,
+      "lastCost": 30.36129040000001,
+      "lastAPIDuration": 4502508,
+      "lastDuration": 63389510,
+      "lastLinesAdded": 6030,
+      "lastLinesRemoved": 55,
+      "lastTotalInputTokens": 297257,
+      "lastTotalOutputTokens": 152289,
+      "lastTotalCacheCreationInputTokens": 1889272,
+      "lastTotalCacheReadInputTokens": 11936022,
+      "lastSessionId": "dced66ac-1ac0-41b1-bc9b-405ff96cd9b4"
     }
   },
   "oauthAccount": {

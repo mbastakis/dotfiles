@@ -387,6 +387,7 @@
     "autofetch",
     "autogen",
     "autohide",
+    "automatable",
     "autoshare",
     "autoupdate",
     "awscli",
@@ -429,6 +430,7 @@
     "inshellisense",
     "ipynb",
     "iterm",
+    "JAMF",
     "karabiner",
     "Karabiner",
     "keybind",
@@ -468,6 +470,7 @@
     "pkgs",
     "poppler",
     "preprod",
+    "Proxyman",
     "pyenv",
     "qwen",
     "recents",
@@ -475,6 +478,7 @@
     "rgba",
     "SAVEHIST",
     "screencapture",
+    "scriptable",
     "shellenv",
     "sketchybar",
     "spack",
@@ -484,6 +488,7 @@
     "sysbox",
     "thefuck",
     "tilesize",
+    "Timebox",
     "titlebar",
     "trackpad",
     "Trackpad",
@@ -493,7 +498,9 @@
     "universalaccess",
     "vlang",
     "Vuillamy",
+    "WFMT",
     "wildlcard",
+    "Wireshark",
     "yakitrak",
     "Yazi",
     "ZDHARMA",
@@ -515,5 +522,6 @@
   "[nix]": {
     "editor.defaultFormatter": "jnoortheen.nix-ide"
   },
-  "window.customTitleBarVisibility": "never"
+  "window.customTitleBarVisibility": "never",
+  "rapidapi.terminalLink.enabled": false
 }

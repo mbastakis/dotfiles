@@ -84,8 +84,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 235.5010757446289,
-    "collapsed": true
+    "width": 235.5010757446289
   },
   "right": {
     "id": "45a4c33d2d217b48",
@@ -210,6 +209,9 @@
   },
   "active": "a317575e7707ec81",
   "lastOpenFiles": [
+    "Projects/Tasks/DT Tasks/wfmt silverlight.md",
+    "Extras/Images/wfmt silverlight-1753190605273.webp",
+    "raw_book_data/Untitled 96.md",
     "telekom-auth.pcap",
     "Resources/kalamata-camping-date.md",
     "Resources/Shortcuts/vscode-shortcuts.md",
@@ -243,9 +245,6 @@
     "Resources/AI_Docs/specs/cleanup_prorject.md",
     "Resources/AI_Docs/specs/implement_todo.md",
     "Resources/AI_Docs/specs/refactor_dotfiles_into_tui_cli_tool.md",
-    "Resources/AI_Docs/specs/feat_helm_keycloak.md",
-    "Resources/AI_Docs/ai_docs/dt_gcp_docs.md",
-    "Resources/AI_Docs/specs",
     "Extras/Images/kalamata-camping-date-1752687994154.webp",
     "Extras/Images/kalamata-camping-date-1752687935802.webp",
     "Extras/Images/kalamata-camping-date-1752687769097.webp",
@@ -255,7 +254,6 @@
     "Extras/Images/Glove80-1752649404077.webp",
     "Extras/Images/Glove80-1752649346632.webp",
     "Extras/Images/Glove80-1752649242311.webp",
-    "Extras/Images/Glove80-1752649115937.webp",
     "Dashboards/Fitness.canvas",
     "Dashboards/Home.canvas",
     "Dashboards/Dashboards.canvas",
