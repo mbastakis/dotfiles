@@ -357,7 +357,7 @@
     "colours": {
       "light": {
         "codeblock": {
-          "backgroundColour": "#06000C",
+          "backgroundColour": "--code-background",
           "textColour": "--code-normal"
         },
         "gutter": {
@@ -400,7 +400,7 @@
       },
       "dark": {
         "codeblock": {
-          "backgroundColour": "#06000C",
+          "backgroundColour": "--code-background",
           "textColour": "--code-normal"
         },
         "gutter": {
@@ -448,7 +448,7 @@
   "exampleCodeblockParameters": "python title:foo",
   "exampleCodeblockContent": "print(\"This line is very long and should be used as an example for how the plugin deals with wrapping and unwrapping very long lines given the choice of codeblock parameters and settings.\")\nprint(\"This line is highlighted.\")",
   "exampleInlineCode": "{python icon title:foo} print(\"This is inline code\")",
-  "decoratePrint": true,
+  "decoratePrint": false,
   "excludedLanguages": "ad-*, reference",
   "externalReferenceUpdateOnLoad": false,
   "processedCodeblocksWhitelist": "run-*, include",

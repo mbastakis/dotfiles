@@ -163,6 +163,8 @@
         "yakitrak/yakitrak/obsidian-cli"
         "duti"
         "ollama"
+        "sox"
+        "whisper-cpp"
       ];
       homebrew.masApps = 
         { 

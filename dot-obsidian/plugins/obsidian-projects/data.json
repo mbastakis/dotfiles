@@ -61,14 +61,18 @@
                 "weight": 2,
                 "records": [
                   "Projects/Tasks/Kanban Tasks/Create Dates with Chara page.md",
-                  "Extras/Unkown/setup neovim.md",
-                  "Extras/Unkown/Polish Obsidian setup Mobile.md",
                   "Extras/Unkown/Test vscode models.md",
-                  "Projects/Tasks/Kanban Tasks/Sync obsidian, CouchDB.md",
                   "Extras/Unkown/create clothing style doc.md",
-                  "Extras/Unkown/write first blog post.md",
                   "Extras/Unkown/get drivers license.md",
-                  "Resources/Sticky Notes/Capture Ideas.md"
+                  "Projects/Tasks/Kanban Tasks/Check Claude + Docker MCP and remove Copilot in obsidian if not needed.md",
+                  "Projects/Tasks/Kanban Tasks/make terminal shortcuts-commands ?.md",
+                  "Projects/Tasks/Kanban Tasks/Track Finance.md",
+                  "Extras/Unkown/solution for auto-fill out in forms.md",
+                  "Extras/Unkown/checkout browser use.md",
+                  "Projects/Tasks/Kanban Tasks/Check Hyperbrowser.md",
+                  "Projects/Tasks/Kanban Tasks/maybe check jj.md",
+                  "Extras/Unkown/write first blog post.md",
+                  "Projects/Tasks/Kanban Tasks/Sync obsidian, CouchDB.md"
                 ],
                 "collapse": false
               },
@@ -77,15 +81,10 @@
                 "records": [
                   "Projects/Tasks/Kanban Tasks/Tool for easy context to llm.md",
                   "Projects/Tasks/Kanban Tasks/Track Subscriptions.md",
-                  "Extras/Unkown/checkout browser use.md",
-                  "Extras/Unkown/solution for auto-fill out in forms.md",
-                  "Extras/Unkown/How Platform engineers support Data Scientist.md",
                   "Extras/Unkown/Check LangChain, LLamaIndex.md",
-                  "Projects/Tasks/Kanban Tasks/Obsidian MCP for task cration.md",
                   "Projects/Tasks/Kanban Tasks/Add agent tool, check emails and create obsidian tasks.md",
                   "Projects/Tasks/Kanban Tasks/agentic tool for revolut api, track finance.md",
                   "Projects/Tasks/Kanban Tasks/add hooks claude pro.md",
-                  "Projects/Tasks/Kanban Tasks/add nix in dotfiles.md",
                   "Projects/Tasks/Kanban Tasks/watch youtube quantitization local llm.md"
                 ],
                 "collapse": false
@@ -93,24 +92,18 @@
               "Today": {
                 "weight": 4,
                 "records": [
-                  "Projects/Tasks/Kanban Tasks/fix glove80 symbols.md",
-                  "Projects/Tasks/Kanban Tasks/fix glove80 use cases.md",
-                  "Projects/Tasks/Kanban Tasks/configure ghostty, add edit command in terminal.md",
-                  "Projects/Tasks/Kanban Tasks/use local models, maybe with langgraph to index and structure obsidian notes.md",
-                  "Projects/Tasks/Kanban Tasks/create default feat specs.md",
+                  "Projects/Tasks/Kanban Tasks/plan vacation, write dates to calendar etc.md",
                   "Projects/Tasks/Kanban Tasks/Create default refactor specs.md",
                   "Projects/Tasks/Kanban Tasks/create git-tree default specs.md",
-                  "Projects/Tasks/Kanban Tasks/use the agentic loop to create more warp workflows.md",
-                  "Projects/Tasks/Kanban Tasks/start using cline, free, with gemini cli, claude code.md",
-                  "Projects/Tasks/Kanban Tasks/check navi.md",
-                  "Projects/Tasks/Kanban Tasks/manage claude mcp through dotfiles.md",
-                  "Projects/Tasks/Kanban Tasks/setup vi mode in ghostty.md",
+                  "Projects/Tasks/Kanban Tasks/Obsidian MCP for task cration.md",
                   "Projects/Tasks/Kanban Tasks/create kanban column for websites I obsidian clip.md",
-                  "Projects/Tasks/Kanban Tasks/document all brew commands, maybe add to navi.md",
-                  "Projects/Tasks/Kanban Tasks/plan vacation, write dates to calendar etc.md",
+                  "Projects/Tasks/Kanban Tasks/create obsidian web clipper templates and export settings.md",
                   "Projects/Tasks/Kanban Tasks/revamp workflow, in general some refactor on obsiadian.md",
                   "Projects/Tasks/Kanban Tasks/track subscriptions in excel ? Maybe obsidian excel ?.md",
-                  "Projects/Tasks/Kanban Tasks/specs and ai_docs in obsidian as symlinks, commands that can creat them easily.md"
+                  "Projects/Tasks/Kanban Tasks/specs and ai_docs in obsidian as symlinks, commands that can creat them easily.md",
+                  "Projects/Tasks/Kanban Tasks/checkout mcp servers vscode.md",
+                  "Projects/Tasks/Kanban Tasks/checout kimi llm, free openrouter, add to cline and opencode.md",
+                  "Projects/Tasks/Kanban Tasks/use local models, maybe with langgraph to index and structure obsidian notes.md"
                 ]
               }
             }

@@ -269,7 +269,7 @@
   "projectManager.git.baseFolders": ["~/dev"],
 
   // Code Clipper
-  "codeclipper.obsidianVault": "NotesOfTheGods",
+  "codeclipper.obsidianVault": "my-notes",
   "codeclipper.defaultFolder": "Resources/Snippets/Code",
   "codeclipper.storeWorkItems": false,
   "codeclipper.frontmatterTags": ["mcode-snippet"],

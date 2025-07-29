@@ -120,7 +120,6 @@
   "Areas/DT-mike.md": {
     "iconName": "SiWorkplace"
   },
-  "Areas/DT-AICC.md": "FasRobot",
   "Projects/the-obsidian-setup.md": {
     "iconName": "SiObsidian"
   },
@@ -525,6 +524,10 @@
     "iconName": "OcTasklist24"
   },
   "Projects/Tasks/DT Tasks/wfmt silverlight.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/DT-AICC.md": "FasRobot",
+  "Projects/Tasks/Kanban Tasks/create obsidian web clipper templates and export settings.md": {
     "iconName": "OcTasklist24"
   }
 }

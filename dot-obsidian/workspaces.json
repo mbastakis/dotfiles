@@ -19,7 +19,7 @@
                 }
               },
               {
-                "id": "0dceb87987e06404",
+                "id": "a317575e7707ec81",
                 "type": "leaf",
                 "state": {
                   "type": "obsidian-projects",
@@ -86,8 +86,7 @@
           }
         ],
         "direction": "horizontal",
-        "width": 235.5010757446289,
-        "collapsed": true
+        "width": 235.5010757446289
       },
       "right": {
         "id": "45a4c33d2d217b48",
@@ -124,8 +123,8 @@
                 "state": {
                   "type": "git-history-view",
                   "state": {},
-                  "icon": "lucide-file",
-                  "title": "Plugin no longer active"
+                  "icon": "history",
+                  "title": "History"
                 }
               }
             ],
@@ -194,22 +193,24 @@
           "pinned-notes:Logistics": false,
           "ribbon-divider:ribbon-divider-cb86a7cb-7e64-467d-b89d-2c69120994bf": false,
           "ribbon-divider:ribbon-divider-36ef3d98-08ff-4dc5-ae9e-d9b4d0ebc3c9": true,
-          "meld-encrypt:New encrypted note": true,
           "meld-encrypt:Convert to or from an Encrypted note": true,
           "pomodoro-timer:Toggle timer panel": true,
           "cmdr:Workspaces: Load workspace layout": false,
           "cmdr:Workspaces: Save layout": false,
-          "meld-encrypt:Encrypt Selection": false,
+          "meld-encrypt:New encrypted note": false,
+          "meld-encrypt:Encrypt Selection": true,
+          "meld-encrypt:Lock and Close all open encrypted notes": false,
           "meld-encrypt:Decrypt Selection": false,
           "janitor:Janitor: scan vault": false,
           "markdown-importer:Open format converter": true,
           "custom-sort:Toggle custom sorting": true,
           "canvas:Create new canvas": true,
-          "omnisearch:Omnisearch": true
+          "omnisearch:Omnisearch": true,
+          "meld-encrypt:Decrypt at Cursor": true
         }
       },
-      "active": "0dceb87987e06404",
-      "mtime": "2025-07-21T11:42:23+03:00"
+      "active": "1b9875d61959b663",
+      "mtime": "2025-07-23T11:15:48+03:00"
     }
   },
   "active": "mike-base"

@@ -14,6 +14,7 @@ fi
 if [ -f "$HOME/.config/nix-darwin/flake.nix" ]; then
   echo "Nix Flakes are already set up."
   cd "$HOME/.config/nix-darwin" || exit 1
+  nix flake update
   sudo nix run nix-darwin --extra-experimental-features 'nix-command flakes' -- switch --flake .#simple
   cd - || exit 1
 else

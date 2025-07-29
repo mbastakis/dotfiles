@@ -17,7 +17,7 @@
             }
           },
           {
-            "id": "a317575e7707ec81",
+            "id": "480c64c4d16d34de",
             "type": "leaf",
             "state": {
               "type": "obsidian-projects",
@@ -153,8 +153,7 @@
               "title": "GCal Month View"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -191,24 +190,38 @@
       "pinned-notes:Logistics": false,
       "ribbon-divider:ribbon-divider-cb86a7cb-7e64-467d-b89d-2c69120994bf": false,
       "ribbon-divider:ribbon-divider-36ef3d98-08ff-4dc5-ae9e-d9b4d0ebc3c9": true,
-      "meld-encrypt:New encrypted note": true,
       "meld-encrypt:Convert to or from an Encrypted note": true,
       "pomodoro-timer:Toggle timer panel": true,
       "cmdr:Workspaces: Load workspace layout": false,
       "cmdr:Workspaces: Save layout": false,
-      "meld-encrypt:Encrypt Selection": false,
-      "meld-encrypt:Decrypt Selection": false,
+      "meld-encrypt:New encrypted note": false,
+      "meld-encrypt:Encrypt Selection": true,
+      "meld-encrypt:Lock and Close all open encrypted notes": false,
       "janitor:Janitor: scan vault": false,
       "markdown-importer:Open format converter": true,
       "custom-sort:Toggle custom sorting": true,
       "canvas:Create new canvas": true,
       "omnisearch:Omnisearch": true,
-      "meld-encrypt:Lock and Close all open encrypted notes": false,
-      "meld-encrypt:Decrypt at Cursor": false
+      "meld-encrypt:Decrypt at Cursor": true
     }
   },
-  "active": "a317575e7707ec81",
+  "active": "480c64c4d16d34de",
   "lastOpenFiles": [
+    "Test.md",
+    "Resources/Glove80.md",
+    "Projects/Tasks/Kanban Tasks/make terminal shortcuts-commands ?.md",
+    "Projects/Tasks/Kanban Tasks/maybe check jj.md",
+    "Projects/Tasks/Kanban Tasks/plan vacation, write dates to calendar etc.md",
+    "Projects/Tasks/Kanban Tasks/create obsidian web clipper templates and export settings.md",
+    "Projects/Tasks/Kanban Tasks/use local models, maybe with langgraph to index and structure obsidian notes.md",
+    "Projects/DT-AICC.md",
+    "Resources/aicc-netbird-aiccvpn-access.md",
+    "Extras/Images/aicc-netbird-aiccvpn-access-1753264782490.webp",
+    "Projects/My-Kanban-Plugin.md",
+    "Dashboards/Discovery.canvas",
+    "Extras/Filters/Tasks.md",
+    "Areas/DT-mike.md",
+    "Projects/the-obsidian-setup.md",
     "Projects/Tasks/DT Tasks/wfmt silverlight.md",
     "Extras/Images/wfmt silverlight-1753190605273.webp",
     "raw_book_data/Untitled 96.md",
@@ -228,23 +241,11 @@
     "Resources/AI_Docs/dt_aws_docs.md",
     "Resources/AI_Docs/tmux_docs.md",
     "Resources/AI_Docs/tmux",
-    "Resources/AI_Docs/ghostty/ghostty_documentation.md",
-    "Resources/AI_Docs/ghostty_documentation.md",
-    "Resources/AI_Docs/bubbletea/bubbletea_documentation.md",
     "Resources/AI_Docs/ghostty",
     "Resources/AI_Docs/bubbletea",
-    "Resources/Specs/keycloak/feat_helm_keycloak.md",
     "Resources/Specs/keycloak",
     "Resources/Specs/untitled folder",
-    "Resources/Specs/dotfiles/refactor_dotfiles_into_tui_cli_tool.md",
     "Resources/Specs/dotfiles",
-    "Resources/Specs/refactor_dotfiles_into_tui_cli_tool.md",
-    "Resources/Specs/implement_todo.md",
-    "Resources/Specs/feat_helm_keycloak.md",
-    "Resources/Specs/cleanup_prorject.md",
-    "Resources/AI_Docs/specs/cleanup_prorject.md",
-    "Resources/AI_Docs/specs/implement_todo.md",
-    "Resources/AI_Docs/specs/refactor_dotfiles_into_tui_cli_tool.md",
     "Extras/Images/kalamata-camping-date-1752687994154.webp",
     "Extras/Images/kalamata-camping-date-1752687935802.webp",
     "Extras/Images/kalamata-camping-date-1752687769097.webp",
@@ -253,11 +254,9 @@
     "Extras/Images/Glove80-1752649438739.webp",
     "Extras/Images/Glove80-1752649404077.webp",
     "Extras/Images/Glove80-1752649346632.webp",
-    "Extras/Images/Glove80-1752649242311.webp",
     "Dashboards/Fitness.canvas",
     "Dashboards/Home.canvas",
     "Dashboards/Dashboards.canvas",
-    "Dashboards/Discovery.canvas",
     "Dashboards/PARA.canvas",
     "Dashboards/Global Tasks.canvas"
   ]
