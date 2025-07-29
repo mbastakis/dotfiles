@@ -1,0 +1,146 @@
+{
+  "general_settings": {
+    "betaFeatures": false,
+    "legacyMode": false,
+    "saveBehavior": "addToObsidian",
+    "showMoreActionsButton": false,
+    "silentOpen": false
+  },
+  "highlighter_settings": {
+    "alwaysShowHighlights": true,
+    "highlightBehavior": "highlight-inline",
+    "highlighterEnabled": true
+  },
+  "interpreter_settings": {
+    "defaultPromptContext": "",
+    "interpreterAutoRun": false,
+    "interpreterEnabled": false,
+    "interpreterModel": "",
+    "models": [],
+    "providers": []
+  },
+  "migrationVersion": 1,
+  "property_types": [
+    {
+      "defaultValue": "{{title}}",
+      "name": "title",
+      "type": "text"
+    },
+    {
+      "defaultValue": "{{url}}",
+      "name": "source",
+      "type": "text"
+    },
+    {
+      "defaultValue": "{{author|split:\", \"|wikilink|join}}",
+      "name": "author",
+      "type": "multitext"
+    },
+    {
+      "defaultValue": "{{published}}",
+      "name": "published",
+      "type": "date"
+    },
+    {
+      "defaultValue": "{{date}}",
+      "name": "created",
+      "type": "date"
+    },
+    {
+      "defaultValue": "{{description}}",
+      "name": "description",
+      "type": "text"
+    },
+    {
+      "defaultValue": "clippings",
+      "name": "tags",
+      "type": "multitext"
+    },
+    {
+      "name": "isRead",
+      "type": "text"
+    }
+  ],
+  "reader_settings": {
+    "fontSize": 1.5,
+    "lineHeight": 1.6,
+    "maxWidth": 38,
+    "theme": "default",
+    "themeMode": "auto"
+  },
+  "stats": {
+    "addToObsidian": 10,
+    "copyToClipboard": 0,
+    "saveFile": 0,
+    "share": 0
+  },
+  "template_17490495259859w0iopb7v": [
+    "ᯡࡅ䁬⁼ၦǸƀᎠٴૠፆ⠧༡溉䀾怣䁃ȡ屠͢[¦ƌʸ愠ࣇ嘡⸠㘠⺬⃊㠠嫕址ԃ怸擓嗘睆暅娡摚㠣ল⾅司ᡘ墑冼Ɯ仄⦍䨀ొᘢ䊸ᦠ຀ڒ䨋㓜擬洸妥䫶Ί嚭䞨峄⥑丠߄嘭擉│⧺㣣倠浰␯ᄵƢ䇣戱⠠沼暆✲ᶭ帼㈃塘瑡㓌冁㜲㛾椁䪐ヵↁ瘈ⱼņॠ೫栤㥱ᆄ䄣⸾ࡹᡩ⫊Ἴ佬䂍埂ׅ砪縹໔泼ፐၤm冰v㏃扇঄猴侒䷌怴ጪ⠠ἰ䊫玩倠ݱ䀠ऑ呱ؠǌ恿ᦪ⛃⃒၆筌疏凌榍呀呦⁁ᱢȳ恱䉊២૩᱈যٜ㘡⡶ª抦␄摔ᬶ匤䊩⩶ᾇ˨O㘯䶣咺㚼⬸☨䳢˳᳎⋱䵻᧊囮ɡࡡԴ༳とᇄ£䬊ᾮ暩憶哘Ь䋡䔴ẂᗕᏅ⸙唴3摡注␲䷷篤噈⸸㳴彟䠶ᚼN䦮ᅈ恀䡂⡵ᖊ槤  "
+  ],
+  "template_1749049525986t7jtuhxib": {
+    "id": "1749049525986t7jtuhxib",
+    "name": "Default",
+    "behavior": "create",
+    "noteNameFormat": "{{title}}",
+    "path": "Resources/Weblist",
+    "noteContentFormat": "{{content}}",
+    "context": "",
+    "properties": [
+      {
+        "id": "1749049525986sj12anvq2",
+        "name": "title",
+        "value": "{{title}}",
+        "type": "text"
+      },
+      {
+        "id": "1749049525986x93t0x4nu",
+        "name": "source",
+        "value": "{{url}}",
+        "type": "text"
+      },
+      {
+        "id": "1749049525986xupf6nau4",
+        "name": "author",
+        "value": "{{author|split:\\\", \\\"|wikilink|join}}",
+        "type": "multitext"
+      },
+      {
+        "id": "1749049525986w4332sfqr",
+        "name": "published",
+        "value": "{{published}}",
+        "type": "date"
+      },
+      {
+        "id": "1749049525986xx9kqlg0f",
+        "name": "created",
+        "value": "{{date}}",
+        "type": "date"
+      },
+      {
+        "id": "17490495259866cgj6tczy",
+        "name": "description",
+        "value": "{{description}}",
+        "type": "text"
+      },
+      {
+        "id": "17490495259860yhuztf0u",
+        "name": "tags",
+        "value": "readitlater",
+        "type": "multitext"
+      },
+      {
+        "id": "1749051739901b1rq3f30a",
+        "name": "isRead",
+        "value": "False",
+        "type": "text"
+      }
+    ],
+    "triggers": []
+  },
+  "template_list": [
+    "1749049525986t7jtuhxib"
+  ],
+  "vaults": [
+    "NotesOfTheGods"
+  ]
+}

@@ -1,50 +1,4 @@
 {
-  "safety": {
-    "require_confirmation": [
-      "rm -rf",
-      "rm -R", 
-      "rm -r",
-      "sudo rm",
-      "git push --force",
-      "git push -f",
-      "git push origin +",
-      "git reset --hard",
-      "git clean -fd",
-      "chmod -R 777",
-      "chmod 777",
-      "dd if=",
-      "mkfs",
-      "format",
-      "del /s /q",
-      "rmdir /s",
-      "npm uninstall -g",
-      "pip uninstall",
-      "docker system prune",
-      "docker rm",
-      "docker rmi",
-      "systemctl stop",
-      "systemctl disable",
-      "kill -9",
-      "killall",
-      "reboot",
-      "shutdown",
-      "mv * ",
-      "cp -r / ",
-      "rsync --delete"
-    ],
-    "high_risk_patterns": [
-      ".*\\*.*rm.*",
-      ".*sudo.*rm.*",
-      ".*git.*force.*",
-      ".*chmod.*777.*",
-      ".*>/dev/null.*rm.*"
-    ]
-  },
-  "automation": {
-    "auto_confirm_safe_operations": true,
-    "auto_save_changes": true,
-    "skip_routine_confirmations": true
-  },
   "permissions": {
     "allow": [
       "Write",
@@ -69,10 +23,5 @@
       "mcp__context7__get-library-docs"
     ],
     "deny": []
-  },
-  "display": {
-    "show_command_preview": true,
-    "verbose_output": true,
-    "show_execution_details": true
   }
 }
