@@ -1,21 +1,21 @@
 {
-  "numStartups": 25,
+  "numStartups": 39,
   "installMethod": "unknown",
-  "autoUpdates": "false",
+  "autoUpdates": false,
   "tipsHistory": {
     "ide-hotkey": 25,
     "new-user-warmup": 6,
-    "shift-enter": 7,
-    "memory-command": 8,
+    "shift-enter": 28,
+    "memory-command": 39,
     "theme-command": 9,
     "prompt-queue": 23,
     "enter-to-steer-in-relatime": 11,
     "todo-list": 12,
-    "# for memory": 13,
-    "install-github-app": 14,
-    "permissions": 15,
-    "drag-and-drop-images": 16,
-    "double-esc": 17,
+    "# for memory": 34,
+    "install-github-app": 35,
+    "permissions": 36,
+    "drag-and-drop-images": 37,
+    "double-esc": 38,
     "continue": 18,
     "custom-commands": 20,
     "shift-tab": 21,
@@ -28,6 +28,34 @@
     "/Users/mbastakis/dev/dotfiles": {
       "allowedTools": [],
       "history": [
+        {
+          "display": "/mcp ",
+          "pastedContents": {}
+        },
+        {
+          "display": "/doctor ",
+          "pastedContents": {}
+        },
+        {
+          "display": "/mcp ",
+          "pastedContents": {}
+        },
+        {
+          "display": "/doctor ",
+          "pastedContents": {}
+        },
+        {
+          "display": "/add-dir ~/.bmad-infrastructure-devops/",
+          "pastedContents": {}
+        },
+        {
+          "display": "/add-dir ~/.bmad-core/",
+          "pastedContents": {}
+        },
+        {
+          "display": "/add-dir ",
+          "pastedContents": {}
+        },
         {
           "display": "/mcp ",
           "pastedContents": {}
@@ -118,16 +146,16 @@
       ],
       "exampleFilesGeneratedAt": 1753753594596,
       "lastTotalWebSearchRequests": 0,
-      "lastCost": 0.0001384,
-      "lastAPIDuration": 1228,
-      "lastDuration": 11142,
+      "lastCost": 0.00018720000000000002,
+      "lastAPIDuration": 1084,
+      "lastDuration": 6368,
       "lastLinesAdded": 0,
       "lastLinesRemoved": 0,
-      "lastTotalInputTokens": 108,
-      "lastTotalOutputTokens": 13,
+      "lastTotalInputTokens": 164,
+      "lastTotalOutputTokens": 14,
       "lastTotalCacheCreationInputTokens": 0,
       "lastTotalCacheReadInputTokens": 0,
-      "lastSessionId": "b5759c83-6596-4fc1-b02a-558e7aa56520"
+      "lastSessionId": "4dfa54a8-be88-4bd6-bf46-932aadff2a52"
     },
     "/Users/mbastakis/Documents/my-notes": {
       "allowedTools": [],
@@ -363,26 +391,31 @@
     },
     "/Users/mbastakis/dev/test": {
       "allowedTools": [],
-      "history": [],
+      "history": [
+        {
+          "display": "/BMad:agents:analyst ",
+          "pastedContents": {}
+        }
+      ],
       "mcpContextUris": [],
       "mcpServers": {},
       "enabledMcpjsonServers": [],
       "disabledMcpjsonServers": [],
       "hasTrustDialogAccepted": true,
-      "projectOnboardingSeenCount": 1,
+      "projectOnboardingSeenCount": 4,
       "hasClaudeMdExternalIncludesApproved": false,
       "hasClaudeMdExternalIncludesWarningShown": false,
-      "lastCost": 0,
-      "lastAPIDuration": 0,
-      "lastDuration": 395670,
+      "lastTotalWebSearchRequests": 0,
+      "lastCost": 0.0016024000000000001,
+      "lastAPIDuration": 3276,
+      "lastDuration": 1632318,
       "lastLinesAdded": 0,
       "lastLinesRemoved": 0,
-      "lastTotalInputTokens": 0,
-      "lastTotalOutputTokens": 0,
+      "lastTotalInputTokens": 1678,
+      "lastTotalOutputTokens": 65,
       "lastTotalCacheCreationInputTokens": 0,
       "lastTotalCacheReadInputTokens": 0,
-      "lastTotalWebSearchRequests": 0,
-      "lastSessionId": "5d418095-78bd-4b22-8f02-c10567da0472"
+      "lastSessionId": "a11495b4-8650-4042-9625-cd14fac82dd7"
     }
   },
   "oauthAccount": {
@@ -411,8 +444,13 @@
       "env": {}
     },
     "context7": {
-      "type": "sse",
-      "url": "https://mcp.context7.com/sse"
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ],
+      "env": {}
     },
     "fetch": {
       "type": "stdio",

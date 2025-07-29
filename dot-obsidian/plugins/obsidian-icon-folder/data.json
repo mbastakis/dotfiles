@@ -529,5 +529,8 @@
   "Projects/DT-AICC.md": "FasRobot",
   "Projects/Tasks/Kanban Tasks/create obsidian web clipper templates and export settings.md": {
     "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/fix the raw data and delete the duplicate books.md": {
+    "iconName": "OcTasklist24"
   }
 }

@@ -20,10 +20,15 @@
             "id": "480c64c4d16d34de",
             "type": "leaf",
             "state": {
-              "type": "obsidian-projects",
-              "state": {},
-              "icon": "projects-icon",
-              "title": "Projects"
+              "type": "markdown",
+              "state": {
+                "file": "Resources/BMad-Method BMad Code User Guide.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "BMad-Method BMad Code User Guide"
             }
           }
         ],
@@ -84,7 +89,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 235.5010757446289
+    "width": 235.5010757446289,
+    "collapsed": true
   },
   "right": {
     "id": "45a4c33d2d217b48",
@@ -207,6 +213,8 @@
   },
   "active": "480c64c4d16d34de",
   "lastOpenFiles": [
+    "Resources/BMad-Method BMad Code User Guide.md",
+    "Projects/Tasks/Kanban Tasks/fix the raw data and delete the duplicate books.md",
     "Test.md",
     "Resources/Glove80.md",
     "Projects/Tasks/Kanban Tasks/make terminal shortcuts-commands ?.md",
@@ -238,8 +246,6 @@
     "Resources/AI_Docs/dt_general",
     "Resources/AI_Docs/stow_documentation.md",
     "Resources/AI_Docs/dt_gcp_docs.md",
-    "Resources/AI_Docs/dt_aws_docs.md",
-    "Resources/AI_Docs/tmux_docs.md",
     "Resources/AI_Docs/tmux",
     "Resources/AI_Docs/ghostty",
     "Resources/AI_Docs/bubbletea",
