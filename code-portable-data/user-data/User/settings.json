@@ -523,5 +523,7 @@
     "editor.defaultFormatter": "jnoortheen.nix-ide"
   },
   "window.customTitleBarVisibility": "never",
-  "rapidapi.terminalLink.enabled": false
+  "rapidapi.terminalLink.enabled": false,
+  "docker.extension.dockerEngineAvailabilityPrompt": false,
+  "codium.codeCompletion.enable": true
 }

@@ -165,6 +165,7 @@
         "ollama"
         "sox"
         "whisper-cpp"
+        "fabric-ai"
       ];
       homebrew.masApps = 
         { 

@@ -1,14 +1,14 @@
 {
-  "numStartups": 39,
+  "numStartups": 45,
   "installMethod": "unknown",
   "autoUpdates": false,
   "tipsHistory": {
-    "ide-hotkey": 25,
+    "ide-hotkey": 44,
     "new-user-warmup": 6,
     "shift-enter": 28,
     "memory-command": 39,
     "theme-command": 9,
-    "prompt-queue": 23,
+    "prompt-queue": 41,
     "enter-to-steer-in-relatime": 11,
     "todo-list": 12,
     "# for memory": 34,
@@ -16,9 +16,9 @@
     "permissions": 36,
     "drag-and-drop-images": 37,
     "double-esc": 38,
-    "continue": 18,
+    "continue": 40,
     "custom-commands": 20,
-    "shift-tab": 21,
+    "shift-tab": 42,
     "custom-agents": 22
   },
   "promptQueueUseCount": 2,
@@ -406,16 +406,120 @@
       "hasClaudeMdExternalIncludesApproved": false,
       "hasClaudeMdExternalIncludesWarningShown": false,
       "lastTotalWebSearchRequests": 0,
-      "lastCost": 0.0016024000000000001,
-      "lastAPIDuration": 3276,
-      "lastDuration": 1632318,
+      "lastCost": 0.00028720000000000004,
+      "lastAPIDuration": 1751,
+      "lastDuration": 70748934,
       "lastLinesAdded": 0,
       "lastLinesRemoved": 0,
-      "lastTotalInputTokens": 1678,
-      "lastTotalOutputTokens": 65,
+      "lastTotalInputTokens": 109,
+      "lastTotalOutputTokens": 50,
       "lastTotalCacheCreationInputTokens": 0,
       "lastTotalCacheReadInputTokens": 0,
-      "lastSessionId": "a11495b4-8650-4042-9625-cd14fac82dd7"
+      "lastSessionId": "9bdec7f2-79f9-452c-b923-ce192eceff60"
+    },
+    "/Users/mbastakis": {
+      "allowedTools": [],
+      "history": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": false,
+      "projectOnboardingSeenCount": 3,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "lastTotalWebSearchRequests": 0,
+      "lastCost": 0,
+      "lastAPIDuration": 0,
+      "lastDuration": 7639,
+      "lastLinesAdded": 0,
+      "lastLinesRemoved": 0,
+      "lastTotalInputTokens": 0,
+      "lastTotalOutputTokens": 0,
+      "lastTotalCacheCreationInputTokens": 0,
+      "lastTotalCacheReadInputTokens": 0,
+      "lastSessionId": "eb6b9d9a-48f2-4ca7-a257-579f3f38ade4"
+    },
+    "/Users/mbastakis/dev/work/e2e-automation": {
+      "allowedTools": [],
+      "history": [
+        {
+          "display": "*help",
+          "pastedContents": {}
+        },
+        {
+          "display": "/BMad:agents:dev ",
+          "pastedContents": {}
+        }
+      ],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 1,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "exampleFiles": [
+        "BrowserActions.java",
+        "ServiceOrderManagement.java",
+        "ServiceOrderGet.java",
+        "WfmtManagement.java",
+        "ServiceOrderUpdateSteps.java"
+      ],
+      "exampleFilesGeneratedAt": 1753858714879,
+      "lastCost": 0.08360305000000001,
+      "lastAPIDuration": 12186,
+      "lastDuration": 7359938,
+      "lastLinesAdded": 0,
+      "lastLinesRemoved": 0,
+      "lastTotalInputTokens": 659,
+      "lastTotalOutputTokens": 259,
+      "lastTotalCacheCreationInputTokens": 19737,
+      "lastTotalCacheReadInputTokens": 19655,
+      "lastTotalWebSearchRequests": 0,
+      "lastSessionId": "caa82188-ce0d-41ec-9839-ba72b38bb627"
+    },
+    "/Users/mbastakis/dev/wfmt": {
+      "allowedTools": [],
+      "history": [
+        {
+          "display": "*help",
+          "pastedContents": {}
+        },
+        {
+          "display": "/BMad:agents:analyst ",
+          "pastedContents": {}
+        },
+        {
+          "display": "/init this wfmt dir we are in tracks all of my repos for a task I have, let's create an index for now to now what is the purpose of each subdir\\\n@e2e-automation/docs/README.md contains some of the purpose of this e2e-automation repo this repo is a regression testing repo for the wfmt website\\\nthe @agentic-wfmt is a repo which tries to conterize a browser that can open the wfmt website and essentially contained some testing we did and how to access this website you can see the user stories in @agentic-wfmt/docs/...\\\nnow I believe we have everything and we will need to combine info from both these subdirs to create a new dir which will be a repo testing my plan, let's write this to the claude file to keep context",
+          "pastedContents": {}
+        },
+        {
+          "display": "/init this wfmt dir we are in tracks all of my repos for a task I have, let's create an index for now to now what is the purpose of each subdir\\\n@e2e-automation/docs/README.md contains some of the purpose of thi",
+          "pastedContents": {}
+        }
+      ],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 1,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasCompletedProjectOnboarding": true,
+      "lastCost": 0.3649336,
+      "lastAPIDuration": 92755,
+      "lastDuration": 17530546,
+      "lastLinesAdded": 127,
+      "lastLinesRemoved": 0,
+      "lastTotalInputTokens": 110,
+      "lastTotalOutputTokens": 3793,
+      "lastTotalCacheCreationInputTokens": 49814,
+      "lastTotalCacheReadInputTokens": 404685,
+      "lastTotalWebSearchRequests": 0,
+      "lastSessionId": "a0bdc2ef-7d3e-4a76-a9d7-e02984d1b35e"
     }
   },
   "oauthAccount": {
