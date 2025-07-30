@@ -532,5 +532,20 @@
   },
   "Projects/Tasks/Kanban Tasks/fix the raw data and delete the duplicate books.md": {
     "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/finish raw book data.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/how the dashboard for project should be.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/create pixel asset pipeline project.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/generate ditigal persona, youtube etc.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/create deep research claude code command.md": {
+    "iconName": "OcTasklist24"
   }
 }

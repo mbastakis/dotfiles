@@ -17,7 +17,17 @@
             }
           },
           {
-            "id": "480c64c4d16d34de",
+            "id": "9922179a6f41fb79",
+            "type": "leaf",
+            "state": {
+              "type": "obsidian-projects",
+              "state": {},
+              "icon": "projects-icon",
+              "title": "Projects"
+            }
+          },
+          {
+            "id": "6f333e6d2798ec69",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -30,9 +40,39 @@
               "icon": "lucide-file",
               "title": "BMad-Method BMad Code User Guide"
             }
+          },
+          {
+            "id": "ef7dde4b4b78bfee",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "AICC - Magenta Apprentice.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "AICC - Magenta Apprentice"
+            }
+          },
+          {
+            "id": "78602828d1713cff",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Resources/aicc-netbird-aiccvpn-access.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "aicc-netbird-aiccvpn-access"
+            }
           }
         ],
-        "currentTab": 1
+        "currentTab": 4
       }
     ],
     "direction": "vertical"
@@ -211,9 +251,18 @@
       "meld-encrypt:Decrypt at Cursor": true
     }
   },
-  "active": "480c64c4d16d34de",
+  "active": "78602828d1713cff",
   "lastOpenFiles": [
+    "AICC - Magenta Apprentice.md",
     "Resources/BMad-Method BMad Code User Guide.md",
+    "Projects/Tasks/Kanban Tasks/create deep research claude code command.md",
+    "Projects/Tasks/Kanban Tasks/generate ditigal persona, youtube etc.md",
+    "Projects/Tasks/Kanban Tasks/create pixel asset pipeline project.md",
+    "Resources/aicc-netbird-aiccvpn-access.md",
+    "Dashboards/PARA.canvas",
+    "Projects/Tasks/Kanban Tasks/how the dashboard for project should be.md",
+    "Projects/Tasks/DT Tasks/wfmt silverlight.md",
+    "Projects/Tasks/Kanban Tasks/finish raw book data.md",
     "Projects/Tasks/Kanban Tasks/fix the raw data and delete the duplicate books.md",
     "Test.md",
     "Resources/Glove80.md",
@@ -223,29 +272,21 @@
     "Projects/Tasks/Kanban Tasks/create obsidian web clipper templates and export settings.md",
     "Projects/Tasks/Kanban Tasks/use local models, maybe with langgraph to index and structure obsidian notes.md",
     "Projects/DT-AICC.md",
-    "Resources/aicc-netbird-aiccvpn-access.md",
     "Extras/Images/aicc-netbird-aiccvpn-access-1753264782490.webp",
     "Projects/My-Kanban-Plugin.md",
     "Dashboards/Discovery.canvas",
     "Extras/Filters/Tasks.md",
     "Areas/DT-mike.md",
     "Projects/the-obsidian-setup.md",
-    "Projects/Tasks/DT Tasks/wfmt silverlight.md",
     "Extras/Images/wfmt silverlight-1753190605273.webp",
     "raw_book_data/Untitled 96.md",
     "telekom-auth.pcap",
     "Resources/kalamata-camping-date.md",
     "Resources/Shortcuts/vscode-shortcuts.md",
     "Projects/Tasks/Kanban Tasks/checkout mcp servers vscode.md",
-    "Resources/AI_Docs/stow/stow_documentation.md",
     "Resources/AI_Docs/stow",
     "Resources/AI_Docs/untitled folder",
-    "Resources/AI_Docs/tmux/tmux_docs.md",
-    "Resources/AI_Docs/dt_general/dt_gcp_docs.md",
-    "Resources/AI_Docs/dt_general/dt_aws_docs.md",
     "Resources/AI_Docs/dt_general",
-    "Resources/AI_Docs/stow_documentation.md",
-    "Resources/AI_Docs/dt_gcp_docs.md",
     "Resources/AI_Docs/tmux",
     "Resources/AI_Docs/ghostty",
     "Resources/AI_Docs/bubbletea",
@@ -263,7 +304,6 @@
     "Dashboards/Fitness.canvas",
     "Dashboards/Home.canvas",
     "Dashboards/Dashboards.canvas",
-    "Dashboards/PARA.canvas",
     "Dashboards/Global Tasks.canvas"
   ]
 }

@@ -80,28 +80,25 @@
               "InProgress": {
                 "weight": 3,
                 "records": [
-                  "Projects/Tasks/Kanban Tasks/Tool for easy context to llm.md",
-                  "Projects/Tasks/Kanban Tasks/Track Subscriptions.md",
-                  "Extras/Unkown/Check LangChain, LLamaIndex.md",
                   "Projects/Tasks/Kanban Tasks/Add agent tool, check emails and create obsidian tasks.md",
                   "Projects/Tasks/Kanban Tasks/agentic tool for revolut api, track finance.md",
-                  "Projects/Tasks/Kanban Tasks/add hooks claude pro.md",
-                  "Projects/Tasks/Kanban Tasks/watch youtube quantitization local llm.md"
+                  "Projects/Tasks/Kanban Tasks/watch youtube quantitization local llm.md",
+                  "Projects/Tasks/Kanban Tasks/create pixel asset pipeline project.md",
+                  "Projects/Tasks/Kanban Tasks/generate ditigal persona, youtube etc.md"
                 ],
                 "collapse": false
               },
               "Today": {
                 "weight": 4,
                 "records": [
+                  "Projects/Tasks/Kanban Tasks/create deep research claude code command.md",
+                  "Projects/Tasks/Kanban Tasks/how the dashboard for project should be.md",
+                  "Projects/Tasks/Kanban Tasks/finish raw book data.md",
                   "Projects/Tasks/Kanban Tasks/plan vacation, write dates to calendar etc.md",
-                  "Projects/Tasks/Kanban Tasks/Create default refactor specs.md",
-                  "Projects/Tasks/Kanban Tasks/create git-tree default specs.md",
                   "Projects/Tasks/Kanban Tasks/Obsidian MCP for task cration.md",
                   "Projects/Tasks/Kanban Tasks/create kanban column for websites I obsidian clip.md",
                   "Projects/Tasks/Kanban Tasks/create obsidian web clipper templates and export settings.md",
-                  "Projects/Tasks/Kanban Tasks/revamp workflow, in general some refactor on obsiadian.md",
                   "Projects/Tasks/Kanban Tasks/track subscriptions in excel ? Maybe obsidian excel ?.md",
-                  "Projects/Tasks/Kanban Tasks/specs and ai_docs in obsidian as symlinks, commands that can creat them easily.md",
                   "Projects/Tasks/Kanban Tasks/checkout mcp servers vscode.md",
                   "Projects/Tasks/Kanban Tasks/checout kimi llm, free openrouter, add to cline and opencode.md",
                   "Projects/Tasks/Kanban Tasks/use local models, maybe with langgraph to index and structure obsidian notes.md"
