@@ -88,6 +88,7 @@
         "the-unarchiver" 
         "appcleaner"
       	"betterdisplay"
+        "SoundSource"
       ];
       homebrew.brews = [
 	      "stow" 

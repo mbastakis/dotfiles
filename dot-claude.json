@@ -1,5 +1,5 @@
 {
-  "numStartups": 45,
+  "numStartups": 46,
   "installMethod": "unknown",
   "autoUpdates": false,
   "tipsHistory": {
@@ -146,16 +146,16 @@
       ],
       "exampleFilesGeneratedAt": 1753753594596,
       "lastTotalWebSearchRequests": 0,
-      "lastCost": 0.00018720000000000002,
-      "lastAPIDuration": 1084,
-      "lastDuration": 6368,
+      "lastCost": 0,
+      "lastAPIDuration": 0,
+      "lastDuration": 1394283,
       "lastLinesAdded": 0,
       "lastLinesRemoved": 0,
-      "lastTotalInputTokens": 164,
-      "lastTotalOutputTokens": 14,
+      "lastTotalInputTokens": 0,
+      "lastTotalOutputTokens": 0,
       "lastTotalCacheCreationInputTokens": 0,
       "lastTotalCacheReadInputTokens": 0,
-      "lastSessionId": "4dfa54a8-be88-4bd6-bf46-932aadff2a52"
+      "lastSessionId": "db43e2d6-272e-4ffb-818e-20fe7fe75b1a"
     },
     "/Users/mbastakis/Documents/my-notes": {
       "allowedTools": [],

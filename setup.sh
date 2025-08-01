@@ -44,6 +44,7 @@ fi
 # 2. Check and install stow
 if ! command -v stow &> /dev/null; then
     log_info "Installing stow..."
+    brew update && brew upgrades
     brew install stow
 else
     log_info "stow is already installed"

@@ -232,9 +232,9 @@
   "github.copilot.enable": {
     "*": true,
     "plaintext": true,
+    "markdown": true,
     "scminput": false,
-    "yaml": true,
-    "markdown": true
+    "yaml": true
   },
   "github.copilot.nextEditSuggestions.fixes": true,
   "github.copilot.renameSuggestions.triggerAutomatically": true,
@@ -525,5 +525,6 @@
   "window.customTitleBarVisibility": "never",
   "rapidapi.terminalLink.enabled": false,
   "docker.extension.dockerEngineAvailabilityPrompt": false,
-  "codium.codeCompletion.enable": true
+  "codium.codeCompletion.enable": true,
+  "github.copilot.selectedCompletionModel": ""
 }

@@ -134,5 +134,9 @@
     "key": "cmd+left",
     "command": "cursorLineStart",
     "when": "textInputFocus"
+  },
+  {
+    "key": "ctrl+]",
+    "command": "github.copilot.chat.review.next"
   }
 ]
