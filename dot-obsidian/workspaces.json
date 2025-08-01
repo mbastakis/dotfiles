@@ -6,30 +6,29 @@
         "type": "split",
         "children": [
           {
-            "id": "60603576d0811252",
+            "id": "f15cd5978972a640",
             "type": "tabs",
             "children": [
               {
-                "id": "59c71793bd5b0cce",
+                "id": "8f7e5a5403edb299",
                 "type": "leaf",
+                "pinned": true,
                 "state": {
-                  "type": "beautitab-react-view",
-                  "state": {},
-                  "title": "New tab"
-                }
-              },
-              {
-                "id": "a317575e7707ec81",
-                "type": "leaf",
-                "state": {
-                  "type": "obsidian-projects",
-                  "state": {},
-                  "icon": "projects-icon",
-                  "title": "Projects"
+                  "type": "canvas",
+                  "state": {
+                    "file": "Dashboards/Home.canvas",
+                    "viewState": {
+                      "x": -169.5,
+                      "y": -110.07105712890628,
+                      "zoom": 0
+                    }
+                  },
+                  "pinned": true,
+                  "icon": "lucide-layout-dashboard",
+                  "title": "Home"
                 }
               }
-            ],
-            "currentTab": 1
+            ]
           }
         ],
         "direction": "vertical"
@@ -86,7 +85,8 @@
           }
         ],
         "direction": "horizontal",
-        "width": 235.5010757446289
+        "width": 235.5010757446289,
+        "collapsed": true
       },
       "right": {
         "id": "45a4c33d2d217b48",
@@ -155,8 +155,7 @@
                   "title": "GCal Month View"
                 }
               }
-            ],
-            "currentTab": 1
+            ]
           }
         ],
         "direction": "horizontal",
@@ -200,7 +199,6 @@
           "meld-encrypt:New encrypted note": false,
           "meld-encrypt:Encrypt Selection": true,
           "meld-encrypt:Lock and Close all open encrypted notes": false,
-          "meld-encrypt:Decrypt Selection": false,
           "janitor:Janitor: scan vault": false,
           "markdown-importer:Open format converter": true,
           "custom-sort:Toggle custom sorting": true,
@@ -209,8 +207,8 @@
           "meld-encrypt:Decrypt at Cursor": true
         }
       },
-      "active": "1b9875d61959b663",
-      "mtime": "2025-07-23T11:15:48+03:00"
+      "active": "8f7e5a5403edb299",
+      "mtime": "2025-08-01T07:06:47+03:00"
     }
   },
   "active": "mike-base"

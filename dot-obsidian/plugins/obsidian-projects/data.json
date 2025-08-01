@@ -35,18 +35,8 @@
             "groupByField": "status",
             "includeFields": [],
             "columns": {
-              "ToBuy": {
-                "weight": 0,
-                "records": [
-                  "new toothbrush.md",
-                  "pouf gia ta podia.md",
-                  "Protein.md",
-                  "xali gia to krebati.md"
-                ],
-                "collapse": true
-              },
               "Done": {
-                "weight": 1,
+                "weight": 0,
                 "records": [
                   "Add Collapse in board.md",
                   "Polish Obsidian setup Desktop.md",
@@ -58,7 +48,7 @@
                 "collapse": true
               },
               "ToDo": {
-                "weight": 2,
+                "weight": 1,
                 "records": [
                   "Projects/Tasks/Kanban Tasks/fix the raw data and delete the duplicate books.md",
                   "Projects/Tasks/Kanban Tasks/Create Dates with Chara page.md",
@@ -78,7 +68,7 @@
                 "collapse": false
               },
               "InProgress": {
-                "weight": 3,
+                "weight": 2,
                 "records": [
                   "Projects/Tasks/Kanban Tasks/Add agent tool, check emails and create obsidian tasks.md",
                   "Projects/Tasks/Kanban Tasks/agentic tool for revolut api, track finance.md",
@@ -89,7 +79,7 @@
                 "collapse": false
               },
               "Today": {
-                "weight": 4,
+                "weight": 3,
                 "records": [
                   "Projects/Tasks/Kanban Tasks/create deep research claude code command.md",
                   "Projects/Tasks/Kanban Tasks/how the dashboard for project should be.md",
@@ -103,6 +93,17 @@
                   "Projects/Tasks/Kanban Tasks/checout kimi llm, free openrouter, add to cline and opencode.md",
                   "Projects/Tasks/Kanban Tasks/use local models, maybe with langgraph to index and structure obsidian notes.md"
                 ]
+              },
+              "ToBuy": {
+                "weight": 4,
+                "records": [
+                  "Projects/Tasks/Kanban Tasks/Monitor Arm for Desk.md",
+                  "Extras/Unkown/pouf gia ta podia.md",
+                  "Extras/Unkown/Protein.md",
+                  "Extras/Unkown/xali gia to krebati.md",
+                  "Projects/Tasks/Kanban Tasks/iPad.md"
+                ],
+                "collapse": false
               }
             }
           },
