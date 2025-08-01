@@ -43,11 +43,6 @@
     }
   },
   "mcp": {
-    "docker-mcp": {
-      "type": "local",
-      "command": ["docker", "run", "-i", "--rm", "alpine/socat", "STDIO", "TCP:host.docker.internal:8811"],
-      "environment": {}
-    },
     "snap-happy": {
       "type": "local",
       "command": ["npx", "@mariozechner/snap-happy"],

@@ -21,6 +21,11 @@ on-focus-changed = ['move-mouse window-lazy-center'] # Mouse lazily follows any 
 [key-mapping]
     preset = 'dvorak'
 
+# Workspace 1
+[[on-window-detected]]
+if.app-name-regex-substring = 'Wispr Flow'
+run = ['layout floating', 'move-node-to-workspace 1']
+
 # Workspace A
 [[on-window-detected]]
 if.app-name-regex-substring = 'Microsoft Edge'
@@ -81,6 +86,10 @@ run = 'move-node-to-workspace e'
 
 [[on-window-detected]]
 if.app-name-regex-substring = 'Spotify'
+run = 'move-node-to-workspace e'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Clock'
 run = 'move-node-to-workspace e'
 
 # Workspace U
@@ -155,6 +164,9 @@ run = 'layout floating'
 if.app-name-regex-substring = 'Chess'
 run = 'layout floating'
 
+[[on-window-detected]]
+if.app-name-regex-substring = 'SoundSource'
+run = 'layout floating'
 
 [gaps]
 inner.horizontal = 10
