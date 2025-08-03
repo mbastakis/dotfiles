@@ -12,8 +12,8 @@ Comprehensive task for managing OpenCode configuration, including agent creation
 - **AGENTS.md Management**: Keep ecosystem documentation updated and concise
 
 ### 2. Configuration Management
-- **Global Config**: Manage `~/.config/opencode/config.json`
-- **Project Config**: Handle project-specific `./.opencode/config.json`
+- **Global Config**: Manage `~/.config/opencode/opencode.json`
+- **Project Config**: Handle project-specific `./.opencode/opencode.json`
 - **Schema Validation**: Ensure all configurations follow OpenCode schema
 - **Configuration Optimization**: Optimize settings for performance and usability
 
@@ -117,14 +117,14 @@ Agent implementation following established patterns...
 
 ### Adding MCP Server
 1. Identify MCP server requirements
-2. Configure server in config.json
+2. Configure server in opencode.json
 3. Set up environment variables if needed
 4. Test MCP server integration
 5. Document server purpose and usage
 
 ### Setting up LSP
 1. Identify language server needs
-2. Configure LSP server in config.json
+2. Configure LSP server in opencode.json
 3. Set up initialization options
 4. Configure associated formatter
 5. Test language server functionality
@@ -193,7 +193,7 @@ Steps:
 ```
 Task: Add MCP server for database operations
 Steps:
-1. Configure database MCP server in config.json
+1. Configure database MCP server in opencode.json
 2. Set up database connection environment variables
 3. Test MCP server connectivity
 4. Document server capabilities

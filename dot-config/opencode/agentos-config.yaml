@@ -1,0 +1,118 @@
+# AgentOS Configuration for OpenCode Integration
+
+agentos:
+  enabled: true
+  version: "1.0"
+  
+  # Three-Layer Context Architecture
+  context_layers:
+    standards:
+      path: "~/.config/opencode/standards"
+      always_load: ["bmad/methodology-lite", "coding/style-guides"]
+      conditional_load:
+        web_project: ["security/secure-coding", "performance/optimization"]
+        api_project: ["apis/patterns", "security/secure-coding"]
+        mobile_project: ["mobile/patterns", "performance/optimization"]
+    
+    products:
+      path: "~/.config/opencode/products"
+      detection: "auto"
+      fallback: "web-apps"
+    
+    specs:
+      path: "~/.config/opencode/specs"
+      source: "project_context"
+      cache_duration: "1h"
+
+  # Smart Context Loading
+  context_optimization:
+    smart_loading: true
+    conditional_loading: true
+    cache_enabled: true
+    auto_detection: true
+    token_reduction_target: 60
+    relevance_threshold: 90
+    cache_duration: "1h"
+
+  # Quality Gates
+  quality_gates:
+    enabled: true
+    gates:
+      - "standards_compliance"
+      - "spec_alignment" 
+      - "bmad_validation"
+      - "security_check"
+      - "performance_validation"
+    
+    thresholds:
+      standards_compliance: 100
+      spec_alignment: 95
+      bmad_validation: 100
+      security_check: 100
+      performance_validation: 85
+
+  # Subagent System
+  subagents:
+    enabled: true
+    auto_spawn: true
+    coordination: "orchestrated"
+    
+    available:
+      - name: "context-optimizer"
+        role: "context_optimization"
+        auto_spawn_conditions: ["context_loading", "performance_optimization"]
+      
+      - name: "spec-analyzer"
+        role: "specification_analysis"
+        auto_spawn_conditions: ["spec_creation", "requirements_analysis"]
+      
+      - name: "quality-enforcer"
+        role: "quality_validation"
+        auto_spawn_conditions: ["quality_gates", "standards_validation"]
+
+  # Project Detection Rules
+  project_detection:
+    web_application:
+      files: ["package.json", "src/", "public/", "index.html"]
+      patterns: ["react", "vue", "angular", "svelte"]
+      context_load:
+        standards: ["coding/style-guides", "security/secure-coding", "performance/optimization"]
+        products: ["web-apps/patterns"]
+    
+    api_service:
+      files: ["api/", "routes/", "controllers/", "openapi.yaml", "swagger.json"]
+      patterns: ["express", "fastapi", "rails", "django"]
+      context_load:
+        standards: ["coding/style-guides", "security/secure-coding"]
+        products: ["apis/patterns"]
+    
+    mobile_app:
+      files: ["ios/", "android/", "mobile/", "react-native/", "flutter/"]
+      patterns: ["react-native", "flutter", "ionic", "cordova"]
+      context_load:
+        standards: ["coding/style-guides", "performance/optimization"]
+        products: ["mobile/patterns"]
+
+  # Integration Settings
+  integration:
+    bmad_methodology: true
+    existing_workflows: "enhance"
+    backward_compatibility: true
+    migration_mode: "gradual"
+
+# Performance Monitoring
+monitoring:
+  context_efficiency:
+    track_token_usage: true
+    track_relevance_score: true
+    track_loading_time: true
+  
+  quality_metrics:
+    track_gate_pass_rate: true
+    track_compliance_score: true
+    track_defect_rate: true
+  
+  agent_performance:
+    track_coordination_efficiency: true
+    track_subagent_utilization: true
+    track_workflow_completion: true

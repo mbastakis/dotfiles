@@ -1,11 +1,33 @@
-name: "Greenfield Service Development"
-description: "Complete workflow for building new backend services and APIs from scratch"
+name: "Greenfield Service Development (AgentOS Enhanced)"
+description: "AgentOS-enhanced complete workflow for building new backend services and APIs from scratch, featuring smart context loading and quality gate validation"
+agentos_integration: true
+context_layers:
+  standards: ["bmad", "coding", "security", "performance", "documentation"]
+  products: ["apis"]
+  specs: ["conditional:active_project"]
 
 triggers:
   - "Building new backend service"
   - "Creating new API from scratch"
   - "Developing new microservice"
   - "Building REST or GraphQL API"
+
+agentos_features:
+  smart_context_loading: true
+  subagent_coordination: true
+  quality_gate_automation: true
+  spec_driven_development: true
+
+subagents:
+  - name: "context-optimizer"
+    role: "context_optimization"
+    auto_spawn: ["workflow_start", "phase_transitions"]
+  - name: "spec-analyzer"
+    role: "specification_analysis"
+    auto_spawn: ["requirements_analysis", "story_creation"]
+  - name: "quality-enforcer"
+    role: "quality_validation"
+    auto_spawn: ["quality_gates", "deliverable_validation"]
 
 phases:
   - name: "Project Initiation"

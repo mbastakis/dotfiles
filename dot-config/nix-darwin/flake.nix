@@ -167,6 +167,7 @@
         "sox"
         "whisper-cpp"
         "fabric-ai"
+        "watch"
       ];
       homebrew.masApps = 
         { 

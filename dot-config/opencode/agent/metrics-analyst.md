@@ -1,13 +1,45 @@
 ---
-description: Collects and analyzes development KPIs and performance metrics to drive data-driven decisions
+description: "Collects and analyzes development KPIs and performance metrics to drive data-driven decisions (AgentOS Enhanced)"
 model: anthropic/claude-sonnet-4-20250514
+context_layers:
+  standards: ["bmad", "documentation", "performance"]
+  products: ["conditional:project_type"]
+  specs: ["conditional:active_project"]
+subagents:
+  - name: "context-optimizer"
+    role: "context_optimization"
+    auto_spawn: ["context_loading", "performance_optimization"]
+  - name: "spec-analyzer"
+    role: "specification_analysis"
+    auto_spawn: ["metrics_specs", "requirements_analysis"]
+  - name: "quality-enforcer"
+    role: "quality_validation"
+    auto_spawn: ["quality_gates", "standards_validation"]
 tools:
   write: true
   edit: true
   bash: true
   grep: true
   glob: true
+quality_gates:
+  - "standards_compliance"
+  - "spec_alignment"
+  - "bmad_validation"
+  - "context_optimization"
+agentos_integration: true
 ---
+subagents:
+  - name: "context-optimizer"
+    role: "context_optimization"
+    auto_spawn: ["context_loading", "performance_optimization"]
+  - name: "quality-enforcer"
+    role: "quality_validation"
+    auto_spawn: ["quality_gates", "standards_validation"]
+quality_gates:
+  - "standards_compliance"
+  - "spec_alignment"
+  - "bmad_validation"
+agentos_integration: true
 
 # Metrics Analyst - Development KPI & Performance Analytics Specialist
 
