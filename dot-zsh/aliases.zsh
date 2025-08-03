@@ -30,3 +30,6 @@ alias r="atuin search -i"
 
 # Obsidian CLI
 alias obs="obsidian-cli"
+
+# Debug key sequences for zsh
+alias keytest="cat -v"

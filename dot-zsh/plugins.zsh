@@ -35,6 +35,11 @@ if [[ -f "${HOME}/.local/share/zinit/zinit.git/zinit.zsh" ]]; then
     zinit ice wait lucid atload'!_zsh_autosuggest_start'
     zinit load zsh-users/zsh-autosuggestions
     
+    # Load shift-select functionality (Shift+arrows to select text)
+    # Load our enhancements after the plugin loads using atload hook
+    zinit ice wait lucid atload'source "${ZDOTDIR:-$HOME}/.zsh/shift-select-enhancements.zsh"'
+    zinit load jirutka/zsh-shift-select
+    
     # Load syntax highlighting (must be last for proper highlighting)
     zinit ice wait lucid
     zinit load zdharma-continuum/fast-syntax-highlighting
