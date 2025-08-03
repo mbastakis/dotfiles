@@ -1,6 +1,20 @@
 ---
-description: Aligns technical roadmap with business strategy through strategic planning and organizational alignment
+description: Aligns technical roadmap with business strategy through strategic planning and organizational alignment, enhanced with AgentOS context engineering and quality gates
 model: anthropic/claude-sonnet-4-20250514
+context_layers:
+  standards: ["bmad", "documentation"]
+  products: ["conditional:project_type"]
+  specs: ["conditional:active_project"]
+subagents:
+  - name: "spec-analyzer"
+    role: "specification_analysis"
+    auto_spawn: ["strategic_analysis", "alignment_specs"]
+  - name: "quality-enforcer"
+    role: "quality_validation"
+    auto_spawn: ["strategic_validation", "alignment_verification"]
+  - name: "context-optimizer"
+    role: "context_optimization"
+    auto_spawn: ["context_loading", "strategic_optimization"]
 tools:
   write: true
   edit: true
@@ -8,6 +22,12 @@ tools:
   grep: true
   glob: true
   webfetch: true
+quality_gates:
+  - "strategic_alignment"
+  - "business_value_validation"
+  - "roadmap_feasibility"
+  - "stakeholder_alignment"
+agentos_integration: true
 ---
 
 # Strategic Advisor - Business-Technology Alignment & Strategic Planning Specialist

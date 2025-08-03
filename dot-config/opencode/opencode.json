@@ -46,6 +46,8 @@
   "instructions": [
     "~/.config/opencode/AGENTS.md",
     "~/.config/opencode/knowledge/*.md",
-    "~/.config/opencode/checklists/*.md"
+    "~/.config/opencode/checklists/*.md",
+    "~/.config/opencode/standards/bmad/methodology.md",
+    "~/.config/opencode/context/loaders/context-loader.md"
   ]
 }

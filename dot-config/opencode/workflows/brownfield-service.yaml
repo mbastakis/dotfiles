@@ -1,11 +1,33 @@
-name: "Brownfield Service Development"
-description: "Workflow for enhancing existing backend services and APIs with new features"
+name: "Brownfield Service Development (AgentOS Enhanced)"
+description: "AgentOS-enhanced workflow for enhancing existing backend services and APIs with new features, featuring smart context loading and quality gate validation"
+agentos_integration: true
+context_layers:
+  standards: ["bmad", "coding", "performance", "security"]
+  products: ["apis"]
+  specs: ["conditional:active_project"]
 
 triggers:
   - "Enhancing existing backend service"
   - "Adding features to existing API"
   - "Modernizing legacy service"
   - "Performance optimization of existing service"
+
+agentos_features:
+  smart_context_loading: true
+  subagent_coordination: true
+  quality_gate_automation: true
+  spec_driven_development: true
+
+subagents:
+  - name: "context-optimizer"
+    role: "context_optimization"
+    auto_spawn: ["workflow_start", "phase_transitions"]
+  - name: "spec-analyzer"
+    role: "specification_analysis"
+    auto_spawn: ["requirements_analysis", "story_creation"]
+  - name: "quality-enforcer"
+    role: "quality_validation"
+    auto_spawn: ["quality_gates", "deliverable_validation"]
 
 phases:
   - name: "Service Analysis"
@@ -94,20 +116,31 @@ phases:
           - "Service tests"
 
 quality_gates:
-  - name: "Service Analysis Review"
-    description: "Ensure service enhancement approach is sound"
+  - name: "Service Analysis Review (AgentOS Enhanced)"
+    description: "Ensure service enhancement approach is sound with AgentOS validation"
     checklist: "architect-checklist"
     required_approvers: ["system-architect", "senior-developer"]
+    agentos_validation:
+      - "standards_compliance"
+      - "spec_alignment"
+      - "context_optimization"
   
-  - name: "Epic Approval"
-    description: "Confirm epic aligns with service strategy"
+  - name: "Epic Approval (AgentOS Enhanced)"
+    description: "Confirm epic aligns with service strategy with AgentOS validation"
     checklist: "pm-checklist"
     required_approvers: ["product-manager", "product-owner"]
+    agentos_validation:
+      - "bmad_validation"
+      - "spec_alignment"
   
-  - name: "Story Validation"
-    description: "Ensure stories are ready for service development"
+  - name: "Story Validation (AgentOS Enhanced)"
+    description: "Ensure stories are ready for service development with AgentOS validation"
     checklist: "story-dod-checklist"
     required_approvers: ["product-owner", "quality-assurance"]
+    agentos_validation:
+      - "standards_compliance"
+      - "bmad_validation"
+      - "context_optimization"
 
 success_criteria:
   - "Service enhancements integrate seamlessly"
@@ -115,6 +148,9 @@ success_criteria:
   - "Performance meets or exceeds benchmarks"
   - "All stories meet definition of done"
   - "Service documentation updated"
+  - "AgentOS quality gates passed (90% threshold)"
+  - "Context optimization achieved (60% token reduction)"
+  - "Subagent coordination effective"
 
 team_composition:
   required:

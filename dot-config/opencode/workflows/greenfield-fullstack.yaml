@@ -1,5 +1,11 @@
-name: "Greenfield Fullstack Development"
-description: "Complete workflow for building new fullstack applications from scratch"
+name: "Greenfield Fullstack Development (AgentOS Enhanced)"
+description: "Complete workflow for building new fullstack applications from scratch with AgentOS context engineering, smart loading, and automated quality gates"
+version: "2.0"
+agentos_integration: true
+context_layers:
+  standards: ["bmad", "coding", "security", "performance", "documentation"]
+  products: ["web-apps"]
+  specs: ["conditional:project_context"]
 
 triggers:
   - "Starting new fullstack project"
@@ -7,20 +13,47 @@ triggers:
   - "Creating new web application"
 
 phases:
-  - name: "Project Initiation"
-    description: "Define project scope and create initial documentation"
+  - name: "Context Discovery & Project Initiation (AgentOS Enhanced)"
+    description: "Establish AgentOS context and define project scope with specification framework"
+    context_loading:
+      - "standards/bmad/methodology-lite.md"
+      - "products/web-apps/patterns.md"
+      - "specs/templates/agentos-spec-template.yaml"
+    quality_gates:
+      - "context_relevance"
+      - "standards_compliance"
+      - "spec_completeness"
     tasks:
+      - task: "agentos-context-initialization"
+        agent: "context-optimizer"
+        description: "Initialize AgentOS context for greenfield project"
+        inputs:
+          - "Project concept"
+          - "Initial requirements"
+        outputs:
+          - "project_context.md"
+          - "context_optimization_plan.md"
+        quality_gates:
+          - "context_relevance"
       - task: "greenfield-create-project-brief"
         agent: "product-manager"
-        description: "Create comprehensive project brief and business case"
+        subagents: ["@spec-analyzer", "@quality-enforcer"]
+        description: "Create comprehensive project brief using AgentOS specification framework"
+        context_check: "product-strategy"
         inputs:
+          - "project_context.md"
           - "Business requirements"
           - "Market analysis"
           - "Stakeholder input"
         outputs:
-          - "Project brief"
-          - "Business case"
-          - "Success metrics"
+          - "project_brief_spec.yaml"
+          - "business_case.md"
+          - "success_metrics.yaml"
+          - "stakeholder_validation.md"
+        quality_gates:
+          - "business_alignment"
+          - "spec_completeness"
+          - "stakeholder_validation"
       
       - task: "advanced-elicitation"
         agent: "business-analyst"

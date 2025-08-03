@@ -38,16 +38,19 @@ Each project type supports three development contexts:
 - **Service**: Backend services and APIs only
 - **UI**: Frontend applications and interfaces only
 
-## The BMad Agent Ecosystem
+## The BMad Agent Ecosystem (AgentOS Enhanced)
 
-### Core Agents
+All agents are now enhanced with AgentOS capabilities including smart context loading, quality gate validation, and subagent coordination for optimal performance.
 
-#### 🎭 **BMad Master** (`@bmad-master`)
+### Core Agents (AgentOS Enhanced)
+
+#### 🎭 **BMad Master** (`@bmad-master`) ✅ AgentOS Enhanced
 - **Role**: Universal task executor and methodology expert
 - **Use**: Can execute any BMad task or workflow directly
 - **When**: Start here if unsure which agent to use
+- **AgentOS Features**: Smart context loading, quality gates, subagent coordination
 
-#### 📊 **Business Analyst** (`@business-analyst`)
+#### 📊 **Business Analyst** (`@business-analyst`) ✅ AgentOS Enhanced
 - **Role**: Requirements elicitation and business process analysis
 - **Deliverables**: Business requirements, process maps, stakeholder analysis
 - **Key Tasks**: Stakeholder interviews, requirements gathering, gap analysis
