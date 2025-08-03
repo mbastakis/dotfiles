@@ -27,6 +27,9 @@
       "cat ~/.config/opencode/*": "allow",
       "ls ~/.config/opencode/*": "allow",
       "find ~/.config/opencode -name '*.md'": "allow",
+      "~/.config/opencode/cache/cache-helper.sh *": "allow",
+      "~/.config/opencode/logs/session-logger.sh *": "allow",
+      "mkdir -p ~/.config/opencode/metrics/*": "allow",
       "sort": "allow",
       "grep": "allow",
       "head": "allow",
@@ -40,11 +43,13 @@
       "xargs": "allow",
       "echo": "allow",
       "eza": "allow",
+      "date": "allow",
       "*": "ask"
     }
   },
   "instructions": [
     "~/.config/opencode/AGENTS.md",
+    "~/.config/opencode/agentos-config.yaml",
     "~/.config/opencode/knowledge/*.md",
     "~/.config/opencode/checklists/*.md",
     "~/.config/opencode/standards/bmad/methodology.md",

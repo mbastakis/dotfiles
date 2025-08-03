@@ -30,9 +30,3 @@ alias r="atuin search -i"
 
 # Obsidian CLI
 alias obs="obsidian-cli"
-
-# Zoxide
-alias cd="z"
-if [[ -n "$CLAUDECODE" ]]; then
-  unalias cd 2>/dev/null
-fi
