@@ -1,47 +1,13 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "theme": "ayu",
+  "theme": "system",
   "autoshare": false,
+  "share": "manual",
   "autoupdate": true,
   "provider": {
-    "openrouter": {
-      "npm": "@openrouter/ai-sdk-provider",
-      "models": {
-        "moonshotai/kimi-dev-72b:free": {
-          "name": "Kimi Dev 72B (OpenRouter)"
-        },
-        "openai/gpt-4o": {
-          "name": "GPT-4o (OpenRouter)"
-        },
-        "google/gemini-pro-1.5": {
-          "name": "Gemini Pro 1.5 (OpenRouter)"
-        }
-      }
-    },
-    "ollama": {
-      "npm": "@ai-sdk/openai-compatible",
-      "options": {
-        "baseURL": "http://localhost:11434/v1"
-      },
-      "models": {
-        "llava-llama3": {
-          "name": "LLaVA Llama 3 (Local)"
-        },
-        "qwen2.5": {
-          "name": "Qwen 2.5 (Local)"
-        },
-        "qwen2.5-coder": {
-          "name": "Qwen 2.5 Coder (Local)"
-        },
-        "deepseek-r1": {
-          "name": "DeepSeek R1 (Local)"
-        },
-        "llama3.2": {
-          "name": "Llama 3.2 (Local)"
-        }
-      }
-    }
   },
+  "model": "anthropic/claude-sonnet-4-20250514",
+  "small_model": "anthropic/claude-3-5-haiku-20241022",
   "mcp": {
     "snap-happy": {
       "type": "local",
@@ -49,6 +15,10 @@
       "environment": {
         "SNAP_HAPPY_SCREENSHOT_PATH": "${HOME}/Screenshots"
       }
+    },
+    "context7": {
+      "type": "local",
+      "command": ["npx", "-y", "@upstash/context7-mcp"]
     }
   }
 }

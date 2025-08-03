@@ -40,9 +40,19 @@
               "icon": "lucide-file",
               "title": "DT-AICC"
             }
+          },
+          {
+            "id": "5cd330489e12f3c6",
+            "type": "leaf",
+            "state": {
+              "type": "obsidian-projects",
+              "state": {},
+              "icon": "projects-icon",
+              "title": "Projects"
+            }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -221,10 +231,11 @@
       "meld-encrypt:Decrypt at Cursor": true
     }
   },
-  "active": "edb6d25b4aeb2a3c",
+  "active": "5cd330489e12f3c6",
   "lastOpenFiles": [
-    "Dashboards/Home.canvas",
+    "Projects/Tasks/Kanban Tasks/Find a topic and create a 30 min presentation.md",
     "Projects/DT-AICC.md",
+    "Dashboards/Home.canvas",
     "Resources/hendriks proxmox machines, gpus.md",
     "Resources/aicc-aws-playground-access.md",
     "Untitled.md",
