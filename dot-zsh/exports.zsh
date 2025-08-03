@@ -72,4 +72,7 @@ export NIX_CONF_DIR="$HOME/.config/nix"
 # Opencode
 export OPENCODE_CONFIG="$HOME/.config/opencode/opencode.json"
 
+# Zoxide
+export _ZO_ECHO=1 # Enable zoxide echo
+
 ## End of custom environment variables
