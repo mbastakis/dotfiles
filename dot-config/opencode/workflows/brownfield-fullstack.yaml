@@ -1,0 +1,142 @@
+name: "Brownfield Fullstack Development"
+description: "Complete workflow for developing new features in existing fullstack applications"
+
+triggers:
+  - "Working on existing fullstack application"
+  - "Adding features to established codebase"
+  - "Enhancing existing web application"
+
+phases:
+  - name: "Discovery & Analysis"
+    description: "Understand existing system and requirements"
+    tasks:
+      - task: "brownfield-create-tech-analysis"
+        agent: "system-architect"
+        description: "Analyze existing architecture and identify integration points"
+        inputs:
+          - "Existing codebase"
+          - "Current architecture documentation"
+          - "Feature requirements"
+        outputs:
+          - "Technical analysis document"
+          - "Integration plan"
+          - "Risk assessment"
+      
+      - task: "advanced-elicitation"
+        agent: "business-analyst"
+        description: "Gather detailed requirements considering existing constraints"
+        inputs:
+          - "Stakeholder list"
+          - "Existing system documentation"
+          - "Business objectives"
+        outputs:
+          - "Detailed requirements"
+          - "Constraint analysis"
+          - "Stakeholder feedback"
+
+  - name: "Planning & Design"
+    description: "Plan implementation within existing system constraints"
+    tasks:
+      - task: "brownfield-create-epic"
+        agent: "product-manager"
+        description: "Create epic that fits within existing product strategy"
+        inputs:
+          - "Technical analysis"
+          - "Requirements document"
+          - "Product roadmap"
+        outputs:
+          - "Epic document"
+          - "Feature specification"
+          - "Success criteria"
+      
+      - task: "greenfield-create-ux-wireframes"
+        agent: "ux-designer"
+        description: "Design UX that integrates with existing interface"
+        inputs:
+          - "Epic document"
+          - "Existing design system"
+          - "User research"
+        outputs:
+          - "Wireframes"
+          - "User flow diagrams"
+          - "Design specifications"
+
+  - name: "Story Development"
+    description: "Break down epic into implementable stories"
+    tasks:
+      - task: "brownfield-create-story"
+        agent: "product-owner"
+        description: "Create stories that work within existing architecture"
+        inputs:
+          - "Epic document"
+          - "Technical analysis"
+          - "Wireframes"
+        outputs:
+          - "User stories"
+          - "Acceptance criteria"
+          - "Story estimates"
+      
+      - task: "validate-story"
+        agent: "quality-assurance"
+        description: "Validate stories against existing system capabilities"
+        inputs:
+          - "User stories"
+          - "Technical constraints"
+          - "Testing framework"
+        outputs:
+          - "Validated stories"
+          - "Test strategy"
+          - "Quality criteria"
+
+  - name: "Implementation"
+    description: "Develop and integrate new features"
+    tasks:
+      - task: "execute-checklist"
+        agent: "senior-developer"
+        description: "Implement stories following development standards"
+        inputs:
+          - "Validated stories"
+          - "Technical specifications"
+          - "Coding standards"
+        outputs:
+          - "Implemented features"
+          - "Unit tests"
+          - "Integration tests"
+
+quality_gates:
+  - name: "Technical Analysis Review"
+    description: "Ensure technical approach is sound"
+    checklist: "architect-checklist"
+    required_approvers: ["system-architect", "senior-developer"]
+  
+  - name: "Epic Approval"
+    description: "Confirm epic aligns with product strategy"
+    checklist: "pm-checklist"
+    required_approvers: ["product-manager", "product-owner"]
+  
+  - name: "Story Validation"
+    description: "Ensure stories are ready for development"
+    checklist: "story-dod-checklist"
+    required_approvers: ["product-owner", "quality-assurance"]
+
+success_criteria:
+  - "All stories meet definition of done"
+  - "Features integrate seamlessly with existing system"
+  - "No regression in existing functionality"
+  - "Performance meets or exceeds current benchmarks"
+  - "Security standards maintained"
+
+team_composition:
+  required:
+    - "system-architect"
+    - "business-analyst"
+    - "product-manager"
+    - "product-owner"
+    - "senior-developer"
+    - "ux-designer"
+    - "quality-assurance"
+  optional:
+    - "scrum-master"
+
+estimated_duration: "4-8 weeks"
+complexity: "medium-high"

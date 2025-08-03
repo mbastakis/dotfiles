@@ -1,0 +1,163 @@
+name: "Greenfield Fullstack Development"
+description: "Complete workflow for building new fullstack applications from scratch"
+
+triggers:
+  - "Starting new fullstack project"
+  - "Building MVP from concept"
+  - "Creating new web application"
+
+phases:
+  - name: "Project Initiation"
+    description: "Define project scope and create initial documentation"
+    tasks:
+      - task: "greenfield-create-project-brief"
+        agent: "product-manager"
+        description: "Create comprehensive project brief and business case"
+        inputs:
+          - "Business requirements"
+          - "Market analysis"
+          - "Stakeholder input"
+        outputs:
+          - "Project brief"
+          - "Business case"
+          - "Success metrics"
+      
+      - task: "advanced-elicitation"
+        agent: "business-analyst"
+        description: "Conduct thorough requirements gathering"
+        inputs:
+          - "Project brief"
+          - "Stakeholder list"
+          - "Business objectives"
+        outputs:
+          - "Detailed requirements"
+          - "User personas"
+          - "Business rules"
+
+  - name: "Architecture & Design"
+    description: "Design system architecture and user experience"
+    tasks:
+      - task: "greenfield-create-architecture"
+        agent: "system-architect"
+        description: "Design complete system architecture"
+        inputs:
+          - "Project brief"
+          - "Requirements document"
+          - "Technical constraints"
+        outputs:
+          - "Architecture document"
+          - "Technology stack"
+          - "Infrastructure plan"
+      
+      - task: "greenfield-create-ux-wireframes"
+        agent: "ux-designer"
+        description: "Create comprehensive UX design"
+        inputs:
+          - "Requirements document"
+          - "User personas"
+          - "Architecture document"
+        outputs:
+          - "Wireframes"
+          - "User journey maps"
+          - "Design system"
+
+  - name: "Epic Planning"
+    description: "Break down project into manageable epics"
+    tasks:
+      - task: "greenfield-create-epic"
+        agent: "product-manager"
+        description: "Create epics for major features"
+        inputs:
+          - "Architecture document"
+          - "Wireframes"
+          - "Project brief"
+        outputs:
+          - "Epic documents"
+          - "Feature roadmap"
+          - "Release plan"
+
+  - name: "Story Development"
+    description: "Create detailed user stories for development"
+    tasks:
+      - task: "greenfield-create-story"
+        agent: "product-owner"
+        description: "Create detailed user stories"
+        inputs:
+          - "Epic documents"
+          - "Architecture document"
+          - "Wireframes"
+        outputs:
+          - "User stories"
+          - "Acceptance criteria"
+          - "Story estimates"
+      
+      - task: "validate-story"
+        agent: "quality-assurance"
+        description: "Validate stories for completeness and testability"
+        inputs:
+          - "User stories"
+          - "Architecture document"
+          - "Quality standards"
+        outputs:
+          - "Validated stories"
+          - "Test strategy"
+          - "Quality plan"
+
+  - name: "Implementation"
+    description: "Develop and test the application"
+    tasks:
+      - task: "execute-checklist"
+        agent: "senior-developer"
+        description: "Implement stories following best practices"
+        inputs:
+          - "Validated stories"
+          - "Architecture document"
+          - "Coding standards"
+        outputs:
+          - "Implemented features"
+          - "Unit tests"
+          - "Integration tests"
+
+quality_gates:
+  - name: "Project Brief Approval"
+    description: "Ensure project is viable and well-defined"
+    checklist: "pm-checklist"
+    required_approvers: ["product-manager", "business-analyst"]
+  
+  - name: "Architecture Review"
+    description: "Validate technical architecture"
+    checklist: "architect-checklist"
+    required_approvers: ["system-architect", "senior-developer"]
+  
+  - name: "Epic Validation"
+    description: "Confirm epics support project goals"
+    checklist: "pm-checklist"
+    required_approvers: ["product-manager", "product-owner"]
+  
+  - name: "Story Readiness"
+    description: "Ensure stories are ready for development"
+    checklist: "story-dod-checklist"
+    required_approvers: ["product-owner", "quality-assurance"]
+
+success_criteria:
+  - "All project objectives met"
+  - "Architecture supports scalability requirements"
+  - "User experience meets design standards"
+  - "All stories meet definition of done"
+  - "Performance benchmarks achieved"
+  - "Security requirements satisfied"
+
+team_composition:
+  required:
+    - "product-manager"
+    - "business-analyst"
+    - "system-architect"
+    - "product-owner"
+    - "senior-developer"
+    - "ux-designer"
+    - "quality-assurance"
+  optional:
+    - "scrum-master"
+
+estimated_duration: "8-16 weeks"
+complexity: "high"

@@ -1,0 +1,131 @@
+name: "Brownfield Service Development"
+description: "Workflow for enhancing existing backend services and APIs with new features"
+
+triggers:
+  - "Enhancing existing backend service"
+  - "Adding features to existing API"
+  - "Modernizing legacy service"
+  - "Performance optimization of existing service"
+
+phases:
+  - name: "Service Analysis"
+    description: "Analyze existing service architecture and constraints"
+    tasks:
+      - task: "brownfield-create-tech-analysis"
+        agent: "system-architect"
+        description: "Analyze existing service architecture and integration points"
+        inputs:
+          - "Existing service codebase"
+          - "Current API documentation"
+          - "Performance metrics"
+          - "Integration dependencies"
+        outputs:
+          - "Service analysis document"
+          - "Integration impact assessment"
+          - "Performance baseline"
+      
+      - task: "advanced-elicitation"
+        agent: "business-analyst"
+        description: "Gather requirements considering service constraints"
+        inputs:
+          - "Service analysis"
+          - "Business requirements"
+          - "Stakeholder feedback"
+        outputs:
+          - "Detailed requirements"
+          - "Service enhancement scope"
+          - "Constraint analysis"
+
+  - name: "Planning & Design"
+    description: "Plan service enhancements within existing architecture"
+    tasks:
+      - task: "brownfield-create-epic"
+        agent: "product-manager"
+        description: "Create epic for service enhancement"
+        inputs:
+          - "Service analysis"
+          - "Requirements document"
+          - "Business objectives"
+        outputs:
+          - "Epic document"
+          - "Service enhancement plan"
+          - "Success criteria"
+
+  - name: "Story Development"
+    description: "Create implementable stories for service enhancement"
+    tasks:
+      - task: "brownfield-create-story"
+        agent: "product-owner"
+        description: "Create stories for service features"
+        inputs:
+          - "Epic document"
+          - "Service analysis"
+          - "API specifications"
+        outputs:
+          - "User stories"
+          - "API change specifications"
+          - "Story estimates"
+      
+      - task: "validate-story"
+        agent: "quality-assurance"
+        description: "Validate stories against service capabilities"
+        inputs:
+          - "User stories"
+          - "Service constraints"
+          - "Testing framework"
+        outputs:
+          - "Validated stories"
+          - "Service test strategy"
+          - "Quality criteria"
+
+  - name: "Implementation"
+    description: "Implement service enhancements"
+    tasks:
+      - task: "execute-checklist"
+        agent: "senior-developer"
+        description: "Implement service enhancements"
+        inputs:
+          - "Validated stories"
+          - "Service architecture"
+          - "API standards"
+        outputs:
+          - "Enhanced service"
+          - "Updated API documentation"
+          - "Service tests"
+
+quality_gates:
+  - name: "Service Analysis Review"
+    description: "Ensure service enhancement approach is sound"
+    checklist: "architect-checklist"
+    required_approvers: ["system-architect", "senior-developer"]
+  
+  - name: "Epic Approval"
+    description: "Confirm epic aligns with service strategy"
+    checklist: "pm-checklist"
+    required_approvers: ["product-manager", "product-owner"]
+  
+  - name: "Story Validation"
+    description: "Ensure stories are ready for service development"
+    checklist: "story-dod-checklist"
+    required_approvers: ["product-owner", "quality-assurance"]
+
+success_criteria:
+  - "Service enhancements integrate seamlessly"
+  - "API backward compatibility maintained"
+  - "Performance meets or exceeds benchmarks"
+  - "All stories meet definition of done"
+  - "Service documentation updated"
+
+team_composition:
+  required:
+    - "system-architect"
+    - "business-analyst"
+    - "product-manager"
+    - "product-owner"
+    - "senior-developer"
+    - "quality-assurance"
+  optional:
+    - "scrum-master"
+
+estimated_duration: "3-6 weeks"
+complexity: "medium"
