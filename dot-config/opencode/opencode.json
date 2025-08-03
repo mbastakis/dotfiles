@@ -39,6 +39,7 @@
       "uniq": "allow",
       "xargs": "allow",
       "echo": "allow",
+      "eza": "allow",
       "*": "ask"
     }
   },
