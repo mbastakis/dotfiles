@@ -54,3 +54,8 @@ keybind = global:cmd+ctrl+t=toggle_quick_terminal
 
 # Editor integration and command editing
 keybind = cmd+shift+e=write_screen_file:open
+
+# Custom keybinds for zsh-shift-select integration
+# Send custom escape sequences that won't interfere with normal terminal operations
+keybind = cmd+c=csi:200~
+keybind = cmd+x=csi:201~
