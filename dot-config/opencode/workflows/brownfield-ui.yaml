@@ -1,0 +1,144 @@
+name: "Brownfield UI Development"
+description: "Workflow for enhancing existing frontend applications with new features"
+
+triggers:
+  - "Enhancing existing frontend application"
+  - "Adding UI features to existing app"
+  - "Modernizing legacy frontend"
+  - "Design system updates"
+
+phases:
+  - name: "UI Analysis"
+    description: "Analyze existing UI architecture and design patterns"
+    tasks:
+      - task: "brownfield-create-tech-analysis"
+        agent: "system-architect"
+        description: "Analyze existing frontend architecture and component structure"
+        inputs:
+          - "Existing frontend codebase"
+          - "Current design system"
+          - "User analytics data"
+          - "Component dependencies"
+        outputs:
+          - "UI analysis document"
+          - "Component impact assessment"
+          - "Design system evaluation"
+      
+      - task: "advanced-elicitation"
+        agent: "business-analyst"
+        description: "Gather UI requirements considering existing constraints"
+        inputs:
+          - "UI analysis"
+          - "User feedback"
+          - "Business requirements"
+        outputs:
+          - "Detailed UI requirements"
+          - "User experience goals"
+          - "Design constraint analysis"
+
+  - name: "Design & Planning"
+    description: "Plan UI enhancements within existing design system"
+    tasks:
+      - task: "brownfield-create-epic"
+        agent: "product-manager"
+        description: "Create epic for UI enhancement"
+        inputs:
+          - "UI analysis"
+          - "Requirements document"
+          - "Business objectives"
+        outputs:
+          - "Epic document"
+          - "UI enhancement plan"
+          - "Success criteria"
+      
+      - task: "greenfield-create-ux-wireframes"
+        agent: "ux-designer"
+        description: "Design UI enhancements that integrate with existing patterns"
+        inputs:
+          - "Epic document"
+          - "Existing design system"
+          - "UI analysis"
+        outputs:
+          - "Updated wireframes"
+          - "Component specifications"
+          - "Design integration plan"
+
+  - name: "Story Development"
+    description: "Create implementable stories for UI enhancement"
+    tasks:
+      - task: "brownfield-create-story"
+        agent: "product-owner"
+        description: "Create stories for UI features"
+        inputs:
+          - "Epic document"
+          - "Wireframes"
+          - "UI analysis"
+        outputs:
+          - "User stories"
+          - "UI component specifications"
+          - "Story estimates"
+      
+      - task: "validate-story"
+        agent: "quality-assurance"
+        description: "Validate stories against UI capabilities"
+        inputs:
+          - "User stories"
+          - "Design constraints"
+          - "Testing framework"
+        outputs:
+          - "Validated stories"
+          - "UI test strategy"
+          - "Quality criteria"
+
+  - name: "Implementation"
+    description: "Implement UI enhancements"
+    tasks:
+      - task: "execute-checklist"
+        agent: "senior-developer"
+        description: "Implement UI enhancements"
+        inputs:
+          - "Validated stories"
+          - "Component specifications"
+          - "Design system"
+        outputs:
+          - "Enhanced UI components"
+          - "Updated design system"
+          - "UI tests"
+
+quality_gates:
+  - name: "UI Analysis Review"
+    description: "Ensure UI enhancement approach is sound"
+    checklist: "architect-checklist"
+    required_approvers: ["system-architect", "ux-designer"]
+  
+  - name: "Epic Approval"
+    description: "Confirm epic aligns with UI strategy"
+    checklist: "pm-checklist"
+    required_approvers: ["product-manager", "product-owner"]
+  
+  - name: "Story Validation"
+    description: "Ensure stories are ready for UI development"
+    checklist: "story-dod-checklist"
+    required_approvers: ["product-owner", "quality-assurance"]
+
+success_criteria:
+  - "UI enhancements integrate seamlessly with existing design"
+  - "Design system consistency maintained"
+  - "User experience meets design standards"
+  - "All stories meet definition of done"
+  - "Component documentation updated"
+
+team_composition:
+  required:
+    - "system-architect"
+    - "business-analyst"
+    - "product-manager"
+    - "product-owner"
+    - "senior-developer"
+    - "ux-designer"
+    - "quality-assurance"
+  optional:
+    - "scrum-master"
+
+estimated_duration: "3-6 weeks"
+complexity: "medium"
