@@ -69,4 +69,7 @@ export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
 # Nix
 export NIX_CONF_DIR="$HOME/.config/nix"
 
+# Opencode
+export OPENCODE_CONFIG="$HOME/.config/opencode/opencode.json"
+
 ## End of custom environment variables

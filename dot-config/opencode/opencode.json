@@ -1,0 +1,50 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "theme": "system",
+  "autoshare": false,
+  "share": "manual",
+  "autoupdate": true,
+  "provider": {
+  },
+  "model": "anthropic/claude-sonnet-4-20250514",
+  "small_model": "anthropic/claude-3-5-haiku-20241022",
+  "mcp": {
+    "snap-happy": {
+      "type": "local",
+      "command": ["npx", "@mariozechner/snap-happy"],
+      "environment": {
+        "SNAP_HAPPY_SCREENSHOT_PATH": "${HOME}/Screenshots"
+      }
+    },
+    "context7": {
+      "type": "local",
+      "command": ["npx", "-y", "@upstash/context7-mcp"]
+    }
+  },
+  "permission": {
+    "edit": "allow",
+    "bash": {
+      "cat ~/.config/opencode/*": "allow",
+      "ls ~/.config/opencode/*": "allow",
+      "find ~/.config/opencode -name '*.md'": "allow",
+      "sort": "allow",
+      "grep": "allow",
+      "head": "allow",
+      "tail": "allow",
+      "wc": "allow",
+      "cut": "allow",
+      "sed": "allow",
+      "awk": "allow",
+      "tr": "allow",
+      "uniq": "allow",
+      "xargs": "allow",
+      "echo": "allow",
+      "*": "ask"
+    }
+  },
+  "instructions": [
+    "~/.config/opencode/AGENTS.md",
+    "~/.config/opencode/knowledge/*.md",
+    "~/.config/opencode/checklists/*.md"
+  ]
+}

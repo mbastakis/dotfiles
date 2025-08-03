@@ -87,6 +87,77 @@ Each project type supports three development contexts:
 - **Deliverables**: Sprint reports, process improvements, team metrics
 - **Key Tasks**: Sprint facilitation, impediment removal, team coaching
 
+#### 🔍 **Deep Researcher** (`@deep-researcher`)
+- **Role**: Advanced research and knowledge discovery specialist
+- **Deliverables**: Comprehensive research reports, competitive analysis, evidence-based insights
+- **Key Tasks**: Multi-angle investigation, source validation, knowledge synthesis
+
+#### ⚙️ **OpenCode Configurator** (`@opencode-configurator`)
+- **Role**: OpenCode configuration master and agent ecosystem manager
+- **Deliverables**: Agent configurations, MCP setups, LSP configurations, organizational structure
+- **Key Tasks**: Agent creation, configuration management, MCP integration, structure optimization
+
+#### 🔍 **Context Primer** (`@context-primer`)
+- **Role**: Project discovery and orientation specialist
+- **Deliverables**: Comprehensive project context reports, codebase analysis, development status
+- **Key Tasks**: Documentation discovery, structure analysis, git history review, environment assessment
+
+#### 📋 **Agent Lister** (`@agent-lister`)
+- **Role**: Quick reference agent that lists all available OpenCode agents
+- **Deliverables**: Formatted list of agents with descriptions and invocation syntax
+- **Key Tasks**: Agent discovery, reference generation, ecosystem navigation
+
+### Process Optimization Agents
+
+#### 🔄 **Automation Orchestrator** (`@automation-orchestrator`)
+- **Role**: Identifies and implements workflow automation opportunities
+- **Deliverables**: Automation solutions, CI/CD pipelines, process optimization reports
+- **Key Tasks**: Process analysis, automation design, workflow optimization, tool integration
+
+#### 📊 **Metrics Analyst** (`@metrics-analyst`)
+- **Role**: Collects and analyzes development KPIs and performance metrics
+- **Deliverables**: Performance dashboards, trend analysis, improvement recommendations
+- **Key Tasks**: KPI tracking, data analysis, performance monitoring, insights generation
+
+#### ⚡ **Lean Optimizer** (`@lean-optimizer`)
+- **Role**: Applies lean manufacturing principles to development processes
+- **Deliverables**: Value stream maps, waste elimination plans, flow optimization strategies
+- **Key Tasks**: Waste identification, flow optimization, continuous improvement, Kaizen facilitation
+
+### Knowledge Management Agents
+
+#### 📚 **Knowledge Curator** (`@knowledge-curator`)
+- **Role**: Organizes and maintains institutional knowledge and best practices
+- **Deliverables**: Knowledge repositories, best practice guides, learning pathways
+- **Key Tasks**: Knowledge organization, content curation, best practice identification, knowledge sharing
+
+#### 📖 **Documentation Librarian** (`@documentation-librarian`)
+- **Role**: Manages documentation lifecycle and findability
+- **Deliverables**: Documentation systems, content standards, information architecture
+- **Key Tasks**: Lifecycle management, findability optimization, quality assurance, system design
+
+#### 📋 **Script Supervisor** (`@script-supervisor`)
+- **Role**: Ensures consistency across requirements and specifications
+- **Deliverables**: Consistency reports, compliance documentation, validation frameworks
+- **Key Tasks**: Consistency validation, compliance monitoring, traceability management, change control
+
+### Strategic & Innovation Agents
+
+#### 🚀 **Innovation Catalyst** (`@innovation-catalyst`)
+- **Role**: Identifies emerging technologies and adoption strategies
+- **Deliverables**: Technology research, adoption roadmaps, innovation strategies
+- **Key Tasks**: Trend analysis, opportunity assessment, experimentation planning, strategic innovation
+
+#### 💰 **ROI Calculator** (`@roi-calculator`)
+- **Role**: Evaluates technical decisions from business value perspective
+- **Deliverables**: ROI analysis, business cases, financial models, investment recommendations
+- **Key Tasks**: Financial modeling, value assessment, cost-benefit analysis, investment evaluation
+
+#### 🎯 **Strategic Advisor** (`@strategic-advisor`)
+- **Role**: Aligns technical roadmap with business strategy
+- **Deliverables**: Strategic plans, alignment assessments, transformation roadmaps
+- **Key Tasks**: Strategic planning, business-technology alignment, organizational strategy, change management
+
 ## BMad Workflows
 
 ### 🌱 Greenfield Workflows
@@ -227,6 +298,7 @@ For **Brownfield** projects:
 @product-manager Create a product roadmap for my e-commerce platform
 @system-architect Design the architecture for a microservices system
 @product-owner Create user stories for the shopping cart feature
+@deep-researcher Conduct comprehensive research on AI-powered customer service trends
 ```
 
 ### 3. **Running Workflows**
@@ -282,5 +354,6 @@ BMad tracks both **Quality Metrics** (requirements traceability, defect rates, c
 - **Methodology questions**: Access the knowledge base in `knowledge/bmad-kb.md`
 - **Process guidance**: Use `advanced-elicitation.md` for enhanced requirements gathering
 - **Quality issues**: Run appropriate checklists for validation
+- **Research needs**: Use `@deep-researcher` for comprehensive multi-angle investigation
 
 BMad in OpenCode provides a complete, production-ready methodology for systematic software development with built-in quality assurance and stakeholder alignment.
