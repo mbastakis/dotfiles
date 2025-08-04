@@ -306,49 +306,49 @@
     {
       "id": "lazygit",
       "name": "Lazygit",
-      "command": "lazygit && exit",
+      "command": "lazygit",
       "terminalName": "Lazygit"
     },
     {
       "id": "lazydocker",
       "name": "Lazydocker", 
-      "command": "lazydocker && exit",
+      "command": "lazydocker",
       "terminalName": "Lazydocker"
     },
     {
       "id": "yazi",
       "name": "Yazi",
-      "command": "y && exit",
+      "command": "y",
       "terminalName": "Yazi"
     },
     {
       "id": "btop",
       "name": "Btop",
-      "command": "btop && exit",
+      "command": "btop",
       "terminalName": "Btop"
     },
     {
       "id": "k9s",
       "name": "K9s",
-      "command": "k9s && exit",
+      "command": "k9s",
       "terminalName": "K9s"
     },
     {
       "id": "opencode",
       "name": "Opencode",
-      "command": "opencode && exit",
+      "command": "opencode",
       "terminalName": "Opencode"
     },
     {
       "id": "claudecode",
       "name": "Claudecode",
-      "command": "claude && exit",
+      "command": "claude",
       "terminalName": "Claudecode"
     },
     {
       "id": "gemini",
       "name": "Gemini",
-      "command": "gemini && exit",
+      "command": "gemini",
       "terminalName": "Gemini"
     },
     {
