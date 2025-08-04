@@ -1,5 +1,20 @@
 # BMad Knowledge Base
 
+## Knowledge Base Index
+
+### Core Methodology Documentation
+- **[BMad Methodology](bmad-kb.md)** - Complete BMad framework documentation
+- **[OAuth2 Knowledge Base](oauth2-knowledge-base.md)** - Comprehensive OAuth2 learning framework
+- **[OAuth2 Quick Reference](oauth2-quick-reference.md)** - Essential OAuth2 concepts and patterns
+- **[OAuth2 Taxonomy](oauth2-taxonomy.yaml)** - Structured knowledge organization
+- **[OAuth2 Curation Guide](oauth2-curation-guide.md)** - Knowledge maintenance procedures
+
+### Specialized Knowledge Areas
+- **[Technical Preferences](technical-preferences.md)** - Technology stack guidelines
+- **[Brainstorming Techniques](brainstorming-techniques.md)** - Facilitation methods
+- **[Elicitation Methods](elicitation-methods.md)** - Requirements gathering techniques
+- **[OpenCode Configuration](opencode-configuration-kb.md)** - System configuration patterns
+
 ## Core Methodology
 
 BMad (Business Methodology for Agile Development) is a comprehensive framework that bridges business requirements with technical implementation through structured elicitation, analysis, and development processes.
