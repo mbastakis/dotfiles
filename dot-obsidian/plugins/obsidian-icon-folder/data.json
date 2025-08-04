@@ -570,5 +570,8 @@
   },
   "Projects/Tasks/Kanban Tasks/remove unecssary logs, metrics, cache, optimize the files.md": {
     "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/checkout crush.md": {
+    "iconName": "OcTasklist24"
   }
 }

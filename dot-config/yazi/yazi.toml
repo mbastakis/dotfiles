@@ -42,11 +42,21 @@ open = [
 ]
 reveal = [
 	{ run = 'xdg-open "$(dirname "$1")"',           desc = "Reveal", for = "linux" },
-	{ run = 'open -R "$1"',                         desc = "Reveal", for = "macos" },
+	{ run = 'open "$1"',                 desc = "Reveal", for = "macos" },
 	{ run = 'explorer /select,"%1"', orphan = true, desc = "Reveal", for = "windows" },
 	{ run = 'termux-open "$(dirname "$1")"',        desc = "Reveal", for = "android" },
 	{ run = '''clear; exiftool "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show EXIF", for = "unix" },
 ]
+
+render_markdown = [
+	{ run = 'glow "$1"', block = true, desc = "Render Markdown", for = "unix" },
+	{ run = 'glow "%1"', block = true, desc = "Render Markdown", for = "windows" },
+]
+
+terminal = [
+	{ run = 'zsh -c "cd $(dirname "$1") && exec $SHELL"', block = true, desc = "Open terminal here", for = "macos" },
+]
+
 extract = [
 	{ run = 'ya pub extract --list "$@"', desc = "Extract here", for = "unix" },
 	{ run = 'ya pub extract --list %*',   desc = "Extract here", for = "windows" },
@@ -60,7 +70,7 @@ play = [
 [open]
 rules = [
 	# Folder
-	{ name = "*/", use = [ "edit", "open", "reveal" ] },
+	{ name = "*/", use = [ "edit", "open", "reveal", "render_markdown", "terminal" ] },
 	# Text
 	{ mime = "text/*", use = [ "edit", "reveal" ] },
 	# Image
@@ -75,11 +85,11 @@ rules = [
 	# Empty file
 	{ mime = "inode/empty", use = [ "edit", "reveal" ] },
 	# MD
-	{ mime = "text/markdown", use = [ "edit", "reveal" ] },
+	{ mime = "text/markdown", use = [ "edit", "reveal", "render_markdown" ] },
 	# Data binary
 	{ mime = "application/octet-stream", use = [ "edit", "reveal" ] },
 	# Fallback
-	{ name = "*", use = [ "open", "reveal" ] },
+	{ name = "*", use = [ "open", "reveal", "terminal" ] },
 ]
 
 [tasks]

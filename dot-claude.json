@@ -1,5 +1,5 @@
 {
-  "numStartups": 50,
+  "numStartups": 51,
   "installMethod": "unknown",
   "autoUpdates": false,
   "tipsHistory": {
@@ -17,7 +17,7 @@
     "drag-and-drop-images": 37,
     "double-esc": 38,
     "continue": 40,
-    "custom-commands": 20,
+    "custom-commands": 51,
     "shift-tab": 42,
     "custom-agents": 22
   },
@@ -524,6 +524,34 @@
       "lastTotalCacheReadInputTokens": 404685,
       "lastTotalWebSearchRequests": 0,
       "lastSessionId": "a0bdc2ef-7d3e-4a76-a9d7-e02984d1b35e"
+    },
+    "/Users/mbastakis/dev": {
+      "allowedTools": [],
+      "history": [
+        {
+          "display": "test",
+          "pastedContents": {}
+        }
+      ],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 1,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "lastCost": 0.05465855,
+      "lastAPIDuration": 5581,
+      "lastDuration": 12249,
+      "lastLinesAdded": 0,
+      "lastLinesRemoved": 0,
+      "lastTotalInputTokens": 89,
+      "lastTotalOutputTokens": 48,
+      "lastTotalCacheCreationInputTokens": 14445,
+      "lastTotalCacheReadInputTokens": 0,
+      "lastTotalWebSearchRequests": 0,
+      "lastSessionId": "c042bfa1-026d-41d9-934c-c93c4525339e"
     }
   },
   "oauthAccount": {
