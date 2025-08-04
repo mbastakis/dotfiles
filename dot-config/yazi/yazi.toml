@@ -9,7 +9,7 @@ sort_sensitive = false
 sort_reverse 	 = false
 sort_dir_first = true
 sort_translit  = false
-linemode       = "none"
+linemode       = "size"
 show_hidden    = true
 show_symlink   = true
 scrolloff      = 5
@@ -72,7 +72,7 @@ rules = [
 	# Folder
 	{ name = "*/", use = [ "edit", "open", "reveal", "render_markdown", "terminal" ] },
 	# Text
-	{ mime = "text/*", use = [ "edit", "reveal" ] },
+	{ mime = "text/*", use = [ "edit", "reveal", "render_markdown" ] },
 	# Image
 	{ mime = "image/*", use = [ "open", "reveal" ] },
 	# Media

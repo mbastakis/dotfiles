@@ -4,9 +4,9 @@ style: "/Users/mbastakis/.config/glow/themes/mocha.json"
 mouse: true
 # use pager to display markdown
 pager: false
+# use TUI mode
+tui: true
 # word-wrap at width
 width: 100
 # show all files, including hidden and ignored.
 all: true
-# show line numbers, tui mode only
-showLineNumbers: true

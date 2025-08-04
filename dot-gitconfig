@@ -5,6 +5,8 @@
 	path = ~/.gitconfig-work
 [includeIf "gitdir:~/dev/personal/"]
 	path = ~/.gitconfig-personal
+[include]
+	path = ~/.config/delta/themes/catppuccin.gitconfig
 
 [core]
 	pager = delta
@@ -12,6 +14,7 @@
 [interactive]
 	diffFilter = delta --color-only
 [delta]
+features = catppuccin-mocha
 	navigate = true  # use n and N to move between diff sections
 	dark = true      # or light = true, or omit for auto-detection
 [color]
