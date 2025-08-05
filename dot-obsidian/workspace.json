@@ -52,7 +52,7 @@
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -231,14 +231,15 @@
       "meld-encrypt:Decrypt at Cursor": true
     }
   },
-  "active": "5cd330489e12f3c6",
+  "active": "edb6d25b4aeb2a3c",
   "lastOpenFiles": [
+    "Dashboards/Home.canvas",
+    "Projects/Tasks/DT Tasks/deploy logfire.md",
     "Projects/Tasks/Kanban Tasks/checkout crush.md",
     "Projects/Tasks/Kanban Tasks/remove unecssary logs, metrics, cache, optimize the files.md",
     "Projects/Tasks/Kanban Tasks/configure nushell maybe ?.md",
     "Projects/Tasks/Kanban Tasks/Find a topic and create a 30 min presentation.md",
     "Projects/DT-AICC.md",
-    "Dashboards/Home.canvas",
     "Resources/hendriks proxmox machines, gpus.md",
     "Resources/aicc-aws-playground-access.md",
     "Untitled.md",
@@ -261,8 +262,6 @@
     "Projects/Tasks/Kanban Tasks/create pixel asset pipeline project.md",
     "Projects/Tasks/Kanban Tasks/how the dashboard for project should be.md",
     "Projects/Tasks/DT Tasks/wfmt silverlight.md",
-    "Projects/Tasks/Kanban Tasks/finish raw book data.md",
-    "Projects/Tasks/Kanban Tasks/fix the raw data and delete the duplicate books.md",
     "Extras/Images/aicc-netbird-aiccvpn-access-1753264782490.webp",
     "Dashboards/Discovery.canvas",
     "Extras/Images/wfmt silverlight-1753190605273.webp",
