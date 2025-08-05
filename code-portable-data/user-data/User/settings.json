@@ -3,7 +3,7 @@
   // ----------------------------------------------------------------------
   // ----------------------------------------------------------------------
   // UI Themes
-  "workbench.colorTheme": "Vesper",
+  "workbench.colorTheme": "Catppuccin Mocha",
   "workbench.iconTheme": "material-icon-theme",
   // UI Editor
   "workbench.editor.showTabs": "single",
@@ -26,11 +26,7 @@
   "window.zoomLevel": 1,
   "window.titleBarStyle": "native",
   "custom-ui-style.electron": {
-    "titleBarStyle": "hiddenInset",
-    "trafficLightPosition": {
-      "x": 20,
-      "y": 16
-    }
+    "frame": false,
   },
   "custom-ui-style.stylesheet": {
     ".notification-toast": "box-shadow: none !important",
@@ -46,31 +42,33 @@
     ".monaco-workbench .part.editor > .content .editor-group-container > .title > .label-container > .title-label": "padding-left: 70px !important; box-shadow: none !important; justify-content: center;",
     ".monaco-scrollable-element > .scrollbar> .slider": "border-radius: 35rem !important;  height: 6px !important; background: rgba(255, 255, 255, 0.2) !important;",
     ".monaco-editor .scroll-decoration": "box-shadow: none !important;",
-    ".monaco-editor .sticky-widget": "box-shadow: none !important;"
+    ".monaco-editor .sticky-widget": "box-shadow: none !important;",
+    ".monaco-workbench .terminal-editor .xterm, .monaco-workbench .pane-body.integrated-terminal .xterm":
+    "position: relative !important;"
   },
   // Cursor
   "editor.cursorBlinking": "solid",
   "editor.cursorSmoothCaretAnimation": "on",
   "editor.cursorStyle": "block",
-  // Fonts
+  // Fonts check
   "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font Mono",
   "terminal.integrated.fontSize": 16,
   "editor.fontSize": 16,
   "editor.lineHeight": 1.6,
   "editor.fontLigatures": true,
-  "editor.fontFamily": "JetBrains Mono",
-  "editor.inlayHints.fontFamily": "JetBrains Mono",
-  "debug.console.fontFamily": "JetBrains Mono",
-  "scm.inputFontFamily": "JetBrains Mono",
-  "editor.codeLensFontFamily": "JetBrains Mono",
-  "editor.inlineSuggest.fontFamily": "JetBrains Mono",
-  "notebook.markup.fontFamily": "JetBrains Mono",
-  "notebook.output.fontFamily": "JetBrains Mono",
-  "chat.editor.fontFamily": "JetBrains Mono",
-  "errorLens.fontFamily": "JetBrains Mono",
-  "markdown.preview.fontFamily": "JetBrains Mono",
-  "custom-ui-style.font.monospace": "JetBrains Mono",
-  "custom-ui-style.font.sansSerif": "JetBrains Mono",
+  "editor.fontFamily": "JetBrainsMono Nerd Font Mono",
+  "editor.inlayHints.fontFamily": "JetBrainsMono Nerd Font Mono",
+  "debug.console.fontFamily": "JetBrainsMono Nerd Font Mono",
+  "scm.inputFontFamily": "JetBrainsMono Nerd Font Mono",
+  "editor.codeLensFontFamily": "JetBrainsMono Nerd Font Mono",
+  "editor.inlineSuggest.fontFamily": "JetBrainsMono Nerd Font Mono",
+  "notebook.markup.fontFamily": "JetBrainsMono Nerd Font Mono",
+  "notebook.output.fontFamily": "JetBrainsMono Nerd Font Mono",
+  "chat.editor.fontFamily": "JetBrainsMono Nerd Font Mono",
+  "errorLens.fontFamily": "JetBrainsMono Nerd Font Mono",
+  "markdown.preview.fontFamily": "JetBrainsMono Nerd Font Mono",
+  "custom-ui-style.font.monospace": "JetBrainsMono Nerd Font Mono",
+  "custom-ui-style.font.sansSerif": "JetBrainsMono Nerd Font Mono",
   "editor.tokenColorCustomizations": {
     "textMateRules": [
       { "scope": "comment", "settings": { "fontStyle": "italic" } }
@@ -84,7 +82,6 @@
   "editor.linkedEditing": true,
   "workbench.editor.enablePreview": false,
   "editor.unicodeHighlight.ambiguousCharacters": false,
-  "editor.accessibilitySupport": "on",
   "editor.inlineSuggest.enabled": true,
   "editor.tabCompletion": "on",
   "diffEditor.hideUnchangedRegions.enabled": true,
@@ -287,13 +284,12 @@
   // ----------------------------------------------------------------------
   // END OF EXTENSIONS
   // ----------------------------------------------------------------------
-  
+
   // ----------------------------------------------------------------------
   // MCP (Multi-Cloud Platform) Settings
   // ----------------------------------------------------------------------
   "mcp": {
-    "servers": {
-    }
+    "servers": {}
   },
   // ----------------------------------------------------------------------
   // END OF MCP Settings
@@ -311,7 +307,7 @@
     },
     {
       "id": "lazydocker",
-      "name": "Lazydocker", 
+      "name": "Lazydocker",
       "command": "lazydocker",
       "terminalName": "Lazydocker"
     },
@@ -509,7 +505,7 @@
   // ----------------------------------------------------------------------
   // END OF DICTIONARY
   // ----------------------------------------------------------------------
-  
+
   // ----------------------------------------------------------------------
   // ----------------------------------------------------------------------
   // OTHER SETTINGS
@@ -526,5 +522,16 @@
   "rapidapi.terminalLink.enabled": false,
   "docker.extension.dockerEngineAvailabilityPrompt": false,
   "codium.codeCompletion.enable": true,
-  "github.copilot.selectedCompletionModel": ""
+  "github.copilot.selectedCompletionModel": "",
+  "workbench.colorCustomizations": {
+    "terminal.background": "#00000000"
+  },
+  "vscode_vibrancy.preferedDarkTheme": "Catppuccin Mocha",
+  "vscode_vibrancy.preferedLightTheme": "Catppuccin Mocha",
+  "vscode_vibrancy.opacity": -1,
+  "vscode_vibrancy.refreshInterval": 100,
+  "vscode_vibrancy.theme": "Catppuccin Mocha",
+  "terminal.integrated.gpuAcceleration": "off",
+  "window.systemColorTheme": "dark",
+  "window.autoDetectColorScheme": false,
 }
