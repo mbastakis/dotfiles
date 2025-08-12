@@ -4,55 +4,19 @@
     "type": "split",
     "children": [
       {
-        "id": "f15cd5978972a640",
+        "id": "1b4d9afd113a1cee",
         "type": "tabs",
         "children": [
           {
-            "id": "8f7e5a5403edb299",
-            "type": "leaf",
-            "pinned": true,
-            "state": {
-              "type": "canvas",
-              "state": {
-                "file": "Dashboards/Home.canvas",
-                "viewState": {
-                  "x": -165.77977294921874,
-                  "y": -70,
-                  "zoom": 0
-                }
-              },
-              "pinned": true,
-              "icon": "lucide-layout-dashboard",
-              "title": "Home"
-            }
-          },
-          {
-            "id": "edb6d25b4aeb2a3c",
+            "id": "779ea50e5e0657a8",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Projects/DT-AICC.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": false
-              },
-              "icon": "lucide-file",
-              "title": "DT-AICC"
-            }
-          },
-          {
-            "id": "5cd330489e12f3c6",
-            "type": "leaf",
-            "state": {
-              "type": "obsidian-projects",
+              "type": "beautitab-react-view",
               "state": {},
-              "icon": "projects-icon",
-              "title": "Projects"
+              "title": "New tab"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -179,7 +143,8 @@
               "title": "GCal Month View"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -231,18 +196,25 @@
       "meld-encrypt:Decrypt at Cursor": true
     }
   },
-  "active": "edb6d25b4aeb2a3c",
+  "active": "779ea50e5e0657a8",
   "lastOpenFiles": [
+    "Calendar/Daily Notes/Thursday 07-08-2025.md",
+    "Friday 08-08-2025.md",
+    "Extras/Unkown/Holy Mountain.md",
+    "Calendar/Daily Notes/Sunday 10-08-2025.md",
+    "Extras/Templates/Projects/kanban-card.md",
+    "Extras/Templates/Projects/DT-AICC/kanban-card.md",
+    "Calendar/Daily Notes",
     "Dashboards/Home.canvas",
+    "Projects/DT-AICC.md",
+    "Projects/Tasks/Kanban Tasks/see swe_prompt_bench how is a prompt tested, how do you craft master agentic prompts.md",
     "Projects/Tasks/DT Tasks/deploy logfire.md",
     "Projects/Tasks/Kanban Tasks/checkout crush.md",
     "Projects/Tasks/Kanban Tasks/remove unecssary logs, metrics, cache, optimize the files.md",
     "Projects/Tasks/Kanban Tasks/configure nushell maybe ?.md",
     "Projects/Tasks/Kanban Tasks/Find a topic and create a 30 min presentation.md",
-    "Projects/DT-AICC.md",
     "Resources/hendriks proxmox machines, gpus.md",
     "Resources/aicc-aws-playground-access.md",
-    "Untitled.md",
     "raw_book_data/Untitled 195.md",
     "Projects/AICC - Magenta Apprentice.md",
     "Dashboards/PARA.canvas",
@@ -257,11 +229,6 @@
     "Projects/Tasks/Kanban Tasks/configure opencode.md",
     "Resources/BMad-Method BMad Code User Guide.md",
     "Resources/aicc-netbird-aiccvpn-access.md",
-    "Projects/Tasks/Kanban Tasks/create deep research claude code command.md",
-    "Projects/Tasks/Kanban Tasks/generate ditigal persona, youtube etc.md",
-    "Projects/Tasks/Kanban Tasks/create pixel asset pipeline project.md",
-    "Projects/Tasks/Kanban Tasks/how the dashboard for project should be.md",
-    "Projects/Tasks/DT Tasks/wfmt silverlight.md",
     "Extras/Images/aicc-netbird-aiccvpn-access-1753264782490.webp",
     "Dashboards/Discovery.canvas",
     "Extras/Images/wfmt silverlight-1753190605273.webp",
@@ -273,7 +240,6 @@
     "Resources/AI_Docs/ghostty",
     "Resources/AI_Docs/bubbletea",
     "Resources/Specs/keycloak",
-    "Resources/Specs/untitled folder",
     "Extras/Images/kalamata-camping-date-1752687994154.webp",
     "Extras/Images/kalamata-camping-date-1752687935802.webp",
     "Extras/Images/kalamata-camping-date-1752687769097.webp",

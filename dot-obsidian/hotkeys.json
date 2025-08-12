@@ -157,16 +157,16 @@
   "darlal-switcher-plus:switcher-plus:open-editors": [
     {
       "modifiers": [
-        "Mod",
-        "Shift"
+        "Mod"
       ],
       "key": "O"
     }
   ],
-  "darlal-switcher-plus:switcher-plus:open-headings": [
+  "omnisearch:show-modal": [
     {
       "modifiers": [
-        "Mod"
+        "Mod",
+        "Shift"
       ],
       "key": "O"
     }
