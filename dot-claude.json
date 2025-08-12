@@ -1,5 +1,5 @@
 {
-  "numStartups": 51,
+  "numStartups": 52,
   "installMethod": "unknown",
   "autoUpdates": false,
   "tipsHistory": {
@@ -19,7 +19,8 @@
     "continue": 40,
     "custom-commands": 51,
     "shift-tab": 42,
-    "custom-agents": 22
+    "custom-agents": 22,
+    "git-worktrees": 52
   },
   "promptQueueUseCount": 2,
   "userID": "406ae8649cac86c41ec68596b332d99e9d0e5d48ed9d2aee1e0aa3d89c4432ec",
@@ -552,6 +553,55 @@
       "lastTotalCacheReadInputTokens": 0,
       "lastTotalWebSearchRequests": 0,
       "lastSessionId": "c042bfa1-026d-41d9-934c-c93c4525339e"
+    },
+    "/Users/mbastakis/dev/work/aicc/work-horse-image": {
+      "allowedTools": [],
+      "history": [
+        {
+          "display": "Also from what I see the images I tag and push have not good and discriptive tag name, I would like the name of the tags to use version. ",
+          "pastedContents": {}
+        },
+        {
+          "display": "fix the risk assessment issues",
+          "pastedContents": {}
+        },
+        {
+          "display": "/BMad:agents:qa run qa analysis on the entire repo for best practices. And identify bad design",
+          "pastedContents": {}
+        },
+        {
+          "display": "yes",
+          "pastedContents": {}
+        },
+        {
+          "display": "/BMad:agents:dev check the @Makefile it hase a lot of options that aren't useful check the @README.md update the repo to reflect current state and best practices",
+          "pastedContents": {}
+        },
+        {
+          "display": "I want you to test locally if the gitlab pipelines would pass, use: \"gitlab-ci-local --variable DOCKER_AUTH_CONFIG=\"$(cat ~/.docker/config.json | tr -d '\\n\\t ')\" build_base\" then test for k8s and then for terraform. wait until they finish. If any error arises fix it",
+          "pastedContents": {}
+        },
+        {
+          "display": "/context_prime ",
+          "pastedContents": {}
+        }
+      ],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": false,
+      "projectOnboardingSeenCount": 2,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "exampleFiles": [
+        "security-scan.yml",
+        "docker-build.yml",
+        "Dockerfile",
+        "install-aws-cli.sh",
+        "configure-k8s.sh"
+      ],
+      "exampleFilesGeneratedAt": 1754560605124
     }
   },
   "oauthAccount": {

@@ -73,6 +73,18 @@ ftext() {
         --bind 'enter:execute(code {})';
 }
 
+# Update brew
+function brew_update() {
+  brew update
+  brew upgrade
+  brew cleanup
+  brew doctor
+  brew missing
+  brew outdated
+  brew autoremove
+  echo "Homebrew update complete."
+}
+
 # Custom functions
 check_repos_behind() {
     echo "Checking for repositories that are behind their remotes..."
