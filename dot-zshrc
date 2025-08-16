@@ -89,4 +89,5 @@ source $HOME/.zsh/plugins.zsh
 source $HOME/.zsh/aliases.zsh
 source $HOME/.zsh/functions.zsh
 source $HOME/.zsh/custom_shortcuts.zsh
+source $HOME/.zsh/obsidian-cli.zsh
 # ----------------------------------------------------

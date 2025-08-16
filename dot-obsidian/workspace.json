@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "1b4d9afd113a1cee",
+        "id": "bf686de61a3cacbc",
         "type": "tabs",
         "children": [
           {
-            "id": "779ea50e5e0657a8",
+            "id": "a5a414fe25c342a5",
             "type": "leaf",
             "state": {
               "type": "beautitab-react-view",
@@ -153,6 +153,7 @@
   },
   "left-ribbon": {
     "hiddenItems": {
+      "bases:Create new base": false,
       "workspaces:Manage workspace layouts": true,
       "pexels-banner:🚩 Pixel Banner Menu": true,
       "templates:Insert template": true,
@@ -196,8 +197,9 @@
       "meld-encrypt:Decrypt at Cursor": true
     }
   },
-  "active": "779ea50e5e0657a8",
+  "active": "a5a414fe25c342a5",
   "lastOpenFiles": [
+    "Calendar/Daily Notes/Tuesday 12-08-2025.md",
     "Calendar/Daily Notes/Thursday 07-08-2025.md",
     "Friday 08-08-2025.md",
     "Extras/Unkown/Holy Mountain.md",
@@ -228,7 +230,6 @@
     "Projects/Tasks/DT Tasks/use the proxmox gpus to add the ollamas .md",
     "Projects/Tasks/Kanban Tasks/configure opencode.md",
     "Resources/BMad-Method BMad Code User Guide.md",
-    "Resources/aicc-netbird-aiccvpn-access.md",
     "Extras/Images/aicc-netbird-aiccvpn-access-1753264782490.webp",
     "Dashboards/Discovery.canvas",
     "Extras/Images/wfmt silverlight-1753190605273.webp",
