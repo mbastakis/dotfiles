@@ -30,3 +30,9 @@ dot-config/wireshark
 
 # glab
 dot-config/glab-cli
+
+# Configstore
+dot-config/configstore
+
+# Fabric
+dot-config/fabric

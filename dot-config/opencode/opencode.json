@@ -4,8 +4,6 @@
   "autoshare": false,
   "share": "manual",
   "autoupdate": true,
-  "provider": {
-  },
   "model": "anthropic/claude-sonnet-4-20250514",
   "small_model": "anthropic/claude-3-5-haiku-20241022",
   "mcp": {
@@ -19,6 +17,15 @@
     "context7": {
       "type": "local",
       "command": ["npx", "-y", "@upstash/context7-mcp"]
+    },
+    "mcp-obsidian": {
+      "type": "local",
+      "command": ["uvx", "mcp-obsidian"],
+      "environment": {
+        "OBSIDIAN_API_KEY": "fc66e63d54ee9f23e95b48ef533c62910d388af3db4408b76da25f0129beffeb",
+        "OBSIDIAN_HOST": "127.0.0.1",
+        "OBSIDIAN_PORT": "27124"
+      }
     }
   },
   "permission": {
@@ -48,11 +55,6 @@
     }
   },
   "instructions": [
-    "~/.config/opencode/AGENTS.md",
-    "~/.config/opencode/agentos-config.yaml",
-    "~/.config/opencode/knowledge/*.md",
-    "~/.config/opencode/checklists/*.md",
-    "~/.config/opencode/standards/bmad/methodology.md",
-    "~/.config/opencode/context/loaders/context-loader.md"
+    
   ]
 }
