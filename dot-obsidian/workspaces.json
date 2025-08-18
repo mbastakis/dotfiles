@@ -164,6 +164,7 @@
       },
       "left-ribbon": {
         "hiddenItems": {
+          "bases:Create new base": true,
           "workspaces:Manage workspace layouts": true,
           "pexels-banner:🚩 Pixel Banner Menu": true,
           "templates:Insert template": true,
@@ -208,7 +209,7 @@
         }
       },
       "active": "8f7e5a5403edb299",
-      "mtime": "2025-08-01T07:06:47+03:00"
+      "mtime": "2025-08-18T04:45:37+03:00"
     }
   },
   "active": "mike-base"

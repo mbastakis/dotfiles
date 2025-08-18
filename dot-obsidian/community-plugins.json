@@ -46,5 +46,7 @@
   "text-extractor",
   "ai-image-analyzer",
   "context-gather-plugin",
-  "obsidian-git"
+  "obsidian-git",
+  "obsidian-file-link",
+  "better-export-pdf"
 ]

@@ -4,16 +4,26 @@
     "type": "split",
     "children": [
       {
-        "id": "bf686de61a3cacbc",
+        "id": "f15cd5978972a640",
         "type": "tabs",
         "children": [
           {
-            "id": "a5a414fe25c342a5",
+            "id": "8f7e5a5403edb299",
             "type": "leaf",
+            "pinned": true,
             "state": {
-              "type": "beautitab-react-view",
-              "state": {},
-              "title": "New tab"
+              "type": "canvas",
+              "state": {
+                "file": "Dashboards/Home.canvas",
+                "viewState": {
+                  "x": -169.5,
+                  "y": -70,
+                  "zoom": -0.29260700418876506
+                }
+              },
+              "pinned": true,
+              "icon": "lucide-layout-dashboard",
+              "title": "Home"
             }
           }
         ]
@@ -143,8 +153,7 @@
               "title": "GCal Month View"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -153,7 +162,7 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "bases:Create new base": false,
+      "bases:Create new base": true,
       "workspaces:Manage workspace layouts": true,
       "pexels-banner:🚩 Pixel Banner Menu": true,
       "templates:Insert template": true,
@@ -197,39 +206,39 @@
       "meld-encrypt:Decrypt at Cursor": true
     }
   },
-  "active": "a5a414fe25c342a5",
+  "active": "8f7e5a5403edb299",
   "lastOpenFiles": [
-    "Calendar/Daily Notes/Tuesday 12-08-2025.md",
+    "Calendar/Daily Notes/Friday 08-08-2025.md",
     "Calendar/Daily Notes/Thursday 07-08-2025.md",
-    "Friday 08-08-2025.md",
-    "Extras/Unkown/Holy Mountain.md",
-    "Calendar/Daily Notes/Sunday 10-08-2025.md",
-    "Extras/Templates/Projects/kanban-card.md",
-    "Extras/Templates/Projects/DT-AICC/kanban-card.md",
-    "Calendar/Daily Notes",
     "Dashboards/Home.canvas",
-    "Projects/DT-AICC.md",
-    "Projects/Tasks/Kanban Tasks/see swe_prompt_bench how is a prompt tested, how do you craft master agentic prompts.md",
-    "Projects/Tasks/DT Tasks/deploy logfire.md",
-    "Projects/Tasks/Kanban Tasks/checkout crush.md",
-    "Projects/Tasks/Kanban Tasks/remove unecssary logs, metrics, cache, optimize the files.md",
-    "Projects/Tasks/Kanban Tasks/configure nushell maybe ?.md",
-    "Projects/Tasks/Kanban Tasks/Find a topic and create a 30 min presentation.md",
-    "Resources/hendriks proxmox machines, gpus.md",
-    "Resources/aicc-aws-playground-access.md",
-    "raw_book_data/Untitled 195.md",
-    "Projects/AICC - Magenta Apprentice.md",
+    "Resources/Shortform Books/the-power-of-discipline.md",
+    "Resources/Shortform Books/the-power-of-habit.md",
+    "Resources/Shortform Books/the-power-of-now.md",
+    "Resources/Shortform Books/the-power-of-positive-thinking.md",
+    "Resources/Shortform Books/the-power-of-regret.md",
+    "Resources/Shortform Books/the-personal-mba.md",
+    "Resources/Shortform Books/the-oxygen-advantage.md",
+    "Resources/Shortform Books/the-pathless-path.md",
+    "Resources/Shortform Books/the-other-wes-moore.md",
+    "Resources/Shortform Books/the-outsiders-eight-unconventional-ceos.md",
+    "Resources/Shortform Books/the-origins-of-political-order.md",
+    "Resources/Shortform Books/the-opposable-mind.md",
+    "Resources/Shortform Books/the-one-minute-manager.md",
+    "Resources/Shortform Books/the-only-study-guide-youll-ever-need.md",
+    "Resources/Shortform Books/the-one-thing.md",
+    "Resources/Shortform Books/the-obstacle-is-the-way.md",
+    "Resources/Shortform Books/the-mythical-man-month.md",
+    "Resources/Shortform Books/the-myth-of-sisyphus.md",
+    "Resources/Shortform Books/the-monk-who-sold-his-ferrari.md",
+    "Resources/Shortform Books/the-mountain-is-you.md",
+    "Resources/Shortform Books/the-miracle-morning.md",
+    "Resources/Shortform Books/the-minimalist-entrepreneur.md",
+    "Resources/Shortform Books/the-mom-test.md",
+    "Resources/Shortform Books/the-millionaire-real-estate-agent.md",
+    "Calendar/Daily Notes",
     "Dashboards/PARA.canvas",
-    "Extras/Templates/PARA/project.md",
-    "Archives/My-Kanban-Plugin.md",
-    "Archives/the-obsidian-setup.md",
     "Extras/Filters/PARA-Archives.base",
     "Dashboards/Dashboards.canvas",
-    "Projects/Tasks/Kanban Tasks/HDMI 2.1.md",
-    "Projects/Tasks/Kanban Tasks/Monitor Arm for Desk.md",
-    "Projects/Tasks/DT Tasks/use the proxmox gpus to add the ollamas .md",
-    "Projects/Tasks/Kanban Tasks/configure opencode.md",
-    "Resources/BMad-Method BMad Code User Guide.md",
     "Extras/Images/aicc-netbird-aiccvpn-access-1753264782490.webp",
     "Dashboards/Discovery.canvas",
     "Extras/Images/wfmt silverlight-1753190605273.webp",
