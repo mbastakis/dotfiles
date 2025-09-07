@@ -1,12 +1,12 @@
-after-startup-command = [
-  'exec-and-forget sketchybar',
-]
+# after-startup-command = [
+#   'exec-and-forget sketchybar',
+# ]
 
-# Notify Sketchybar about workspace change
-exec-on-workspace-change = ['/bin/bash', '-c',
-  'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
-  'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0'
-]
+# # Notify Sketchybar about workspace change
+# exec-on-workspace-change = ['/bin/bash', '-c',
+#   'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
+#   'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0'
+# ]
 
 # Start AeroSpace at login
 start-at-login = true
@@ -174,7 +174,7 @@ inner.vertical =   10
 outer.left =       10
 outer.bottom =     10
 outer.top =        10
-outer.right =      80
+outer.right =      10
 
 
 [mode.main.binding]
@@ -182,10 +182,10 @@ outer.right =      80
 alt-ctrl-shift-f = 'fullscreen'
 alt-ctrl-f = 'layout floating tiling'
 
-# alt-shift-left = 'join-with left'
-# alt-shift-down = 'join-with down'
-# alt-shift-up = 'join-with up'
-# alt-shift-right = 'join-with right'
+alt-ctrl-h = 'join-with left'
+alt-ctrl-t = 'join-with down'
+alt-ctrl-n = 'join-with up'
+alt-ctrl-s = 'join-with right'
 
 alt-slash = 'layout tiles horizontal vertical'
 alt-comma = 'layout accordion horizontal vertical'

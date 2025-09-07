@@ -1,26 +1,28 @@
 {
-  "numStartups": 57,
+  "numStartups": 58,
   "installMethod": "unknown",
   "autoUpdates": false,
   "tipsHistory": {
     "ide-hotkey": 44,
     "new-user-warmup": 6,
     "shift-enter": 49,
-    "memory-command": 39,
+    "memory-command": 57,
     "theme-command": 50,
-    "prompt-queue": 41,
+    "prompt-queue": 57,
     "enter-to-steer-in-relatime": 53,
-    "todo-list": 12,
-    "# for memory": 34,
-    "install-github-app": 35,
-    "permissions": 36,
-    "drag-and-drop-images": 37,
-    "double-esc": 38,
-    "continue": 40,
+    "todo-list": 57,
+    "# for memory": 57,
+    "install-github-app": 57,
+    "permissions": 57,
+    "drag-and-drop-images": 57,
+    "double-esc": 57,
+    "continue": 57,
     "custom-commands": 51,
-    "shift-tab": 42,
-    "custom-agents": 22,
-    "git-worktrees": 52
+    "shift-tab": 57,
+    "custom-agents": 57,
+    "git-worktrees": 52,
+    "status-line": 57,
+    "paste-images-mac": 57
   },
   "promptQueueUseCount": 2,
   "userID": "406ae8649cac86c41ec68596b332d99e9d0e5d48ed9d2aee1e0aa3d89c4432ec",
@@ -433,17 +435,7 @@
       "projectOnboardingSeenCount": 3,
       "hasClaudeMdExternalIncludesApproved": false,
       "hasClaudeMdExternalIncludesWarningShown": false,
-      "lastTotalWebSearchRequests": 0,
-      "lastCost": 0,
-      "lastAPIDuration": 0,
-      "lastDuration": 7639,
-      "lastLinesAdded": 0,
-      "lastLinesRemoved": 0,
-      "lastTotalInputTokens": 0,
-      "lastTotalOutputTokens": 0,
-      "lastTotalCacheCreationInputTokens": 0,
-      "lastTotalCacheReadInputTokens": 0,
-      "lastSessionId": "eb6b9d9a-48f2-4ca7-a257-579f3f38ade4"
+      "lastTotalWebSearchRequests": 0
     },
     "/Users/mbastakis/dev/work/e2e-automation": {
       "allowedTools": [],
@@ -558,6 +550,66 @@
       "allowedTools": [],
       "history": [
         {
+          "display": "fix the make ",
+          "pastedContents": {}
+        },
+        {
+          "display": "!make gitlab-ci-local-all",
+          "pastedContents": {}
+        },
+        {
+          "display": "!make gitla-ci-local-all",
+          "pastedContents": {}
+        },
+        {
+          "display": "!make gitlab-local-all",
+          "pastedContents": {}
+        },
+        {
+          "display": "Understand current codebase write a detailed @README.md Rewrite from scratch. Ultrathink. Plan what you will write",
+          "pastedContents": {}
+        },
+        {
+          "display": "Did it fail ? and why",
+          "pastedContents": {}
+        },
+        {
+          "display": "!gitlab-ci-local build_base",
+          "pastedContents": {}
+        },
+        {
+          "display": "!gitlab-ci-local iac_scanning",
+          "pastedContents": {}
+        },
+        {
+          "display": "As you saw we had a fatal error in iac_scanning due to sh for trivy fix it",
+          "pastedContents": {}
+        },
+        {
+          "display": "!gitlab-ci-local iac_scanning",
+          "pastedContents": {}
+        },
+        {
+          "display": "!gitlab-ci-local dockerfile_lint_k8s",
+          "pastedContents": {}
+        },
+        {
+          "display": "fix the issues for the job",
+          "pastedContents": {}
+        },
+        {
+          "display": "!gitlab-ci-local dockerfile_lint_k8s",
+          "pastedContents": {}
+        },
+        {
+          "display": "I want you to completely remove the Makefile and any of it's uses from this repo",
+          "pastedContents": {}
+        },
+        {
+          "display": "/init ",
+          "pastedContents": {}
+        },
+        {
           "display": "Also from what I see the images I tag and push have not good and discriptive tag name, I would like the name of the tags to use version. ",
           "pastedContents": {}
         },
@@ -591,17 +643,30 @@
       "enabledMcpjsonServers": [],
       "disabledMcpjsonServers": [],
       "hasTrustDialogAccepted": false,
-      "projectOnboardingSeenCount": 2,
+      "projectOnboardingSeenCount": 21,
       "hasClaudeMdExternalIncludesApproved": false,
       "hasClaudeMdExternalIncludesWarningShown": false,
       "exampleFiles": [
-        "security-scan.yml",
         "docker-build.yml",
         "Dockerfile",
-        "install-aws-cli.sh",
-        "configure-k8s.sh"
+        "login-mtr.yml",
+        "version-manager.sh",
+        "install-core-tools.sh"
       ],
-      "exampleFilesGeneratedAt": 1754560605124
+      "exampleFilesGeneratedAt": 1755761869502,
+      "hasCompletedProjectOnboarding": true,
+      "lastCost": 11.7421502,
+      "lastAPIDuration": 1001640,
+      "lastToolDuration": 182946,
+      "lastDuration": 336196704,
+      "lastLinesAdded": 1099,
+      "lastLinesRemoved": 254,
+      "lastTotalInputTokens": 83766,
+      "lastTotalOutputTokens": 29928,
+      "lastTotalCacheCreationInputTokens": 1332800,
+      "lastTotalCacheReadInputTokens": 8143460,
+      "lastTotalWebSearchRequests": 0,
+      "lastSessionId": "1b93eea6-24ef-43a9-aad6-ddf11ed87e9c"
     },
     "/Users/mbastakis/dev/personal/context-engineering-config": {
       "allowedTools": [],
@@ -762,6 +827,77 @@
       "lastTotalCacheReadInputTokens": 468546,
       "lastTotalWebSearchRequests": 0,
       "lastSessionId": "779cfbe8-54f2-4ccd-85d3-0e056083eaa6"
+    },
+    "/Users/mbastakis/dev/work/order-management": {
+      "allowedTools": [],
+      "history": [
+        {
+          "display": "!export AWS_ACCESS_KEY_ID=ASIARDYSL5GRJKPAIYRR\nexport AWS_SECRET_ACCESS_KEY=yXSnrqPIrlyj14qhgoCsnn0mNis+Wq3RHYlBOl9v\nexport AWS_SESSION_TOKEN=FwoGZXIvYXdzEBMaDPAzxQzP2xnI68GMNSLAAfEoWfHwZaQcNfHlPFGN15SNtp0xjjp5apjBiWBfhKvXMVsEdQqvw2CbNPKPm0tfi6GWDoETPJJjRPuoccc94RrAs+GzygeOVI69oOWqaudZgRkhY8yTk6B3yBvLlSK9HirIE2hXALtN3QP35A9nNamXCobZ95Mbv05ncchOT4qG8AzHHM+L4Ipf0+y7SxeBLcZDrosDaGKZCFcdlFKkWlB/R2MlISozgZlPkO+fXRD9ESITfxgQsCFqZVAtt30uZCiK1rDFBjItsyB2E3JHVFJBe++OfIwAViwBh+n8AAhNDvUEDGc7aVyjZkCF/2jWO6TKgljC\nexport AWS_DEFAULT_REGION=eu-central-1\n\n",
+          "pastedContents": {}
+        },
+        {
+          "display": "/init ",
+          "pastedContents": {}
+        }
+      ],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": false,
+      "projectOnboardingSeenCount": 1,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "exampleFiles": [
+        "frontend/src/routes/_layout/services/$serviceId/index.tsx",
+        "backend/uv.lock",
+        "charts/apa/Chart.yaml",
+        "CHANGELOG.md",
+        "Taskfile.yaml"
+      ],
+      "exampleFilesGeneratedAt": 1756099432808,
+      "hasCompletedProjectOnboarding": true,
+      "lastCost": 2.8157293000000005,
+      "lastAPIDuration": 126191,
+      "lastToolDuration": 462,
+      "lastDuration": 14744445,
+      "lastLinesAdded": 91,
+      "lastLinesRemoved": 0,
+      "lastTotalInputTokens": 11442,
+      "lastTotalOutputTokens": 3098,
+      "lastTotalCacheCreationInputTokens": 74638,
+      "lastTotalCacheReadInputTokens": 794242,
+      "lastTotalWebSearchRequests": 0,
+      "lastSessionId": "3210336c-2c30-4937-b612-57e7a614618d"
+    },
+    "/Users/mbastakis/dev/personal": {
+      "allowedTools": [],
+      "history": [
+        {
+          "display": "can you generate an image of an elf",
+          "pastedContents": {}
+        }
+      ],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": false,
+      "projectOnboardingSeenCount": 1,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "lastCost": 0.6186819,
+      "lastAPIDuration": 7315,
+      "lastToolDuration": 0,
+      "lastDuration": 17381,
+      "lastLinesAdded": 0,
+      "lastLinesRemoved": 0,
+      "lastTotalInputTokens": 194,
+      "lastTotalOutputTokens": 136,
+      "lastTotalCacheCreationInputTokens": 32538,
+      "lastTotalCacheReadInputTokens": 0,
+      "lastTotalWebSearchRequests": 0,
+      "lastSessionId": "9bb21d43-dc4d-40c5-b2ce-655219d86143"
     }
   },
   "oauthAccount": {
@@ -817,5 +953,11 @@
     }
   },
   "lastReleaseNotesSeen": "1.0.60",
-  "isQualifiedForDataSharing": false
+  "isQualifiedForDataSharing": false,
+  "s1mAccessCache": {
+    "df55ed03-75ac-497a-ba5e-2937715c22e1": {
+      "hasAccess": false,
+      "timestamp": 1756483242729
+    }
+  }
 }

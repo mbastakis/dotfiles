@@ -3,14 +3,13 @@
   // ----------------------------------------------------------------------
   // ----------------------------------------------------------------------
   // UI Themes
-  "workbench.colorTheme": "Catppuccin Mocha",
+  "workbench.colorTheme": "Vesper",
   "workbench.iconTheme": "material-icon-theme",
   // UI Editor
   "workbench.editor.showTabs": "single",
   "workbench.sideBar.location": "right",
   "workbench.activityBar.location": "top",
   "workbench.startupEditor": "none",
-  "workbench.statusBar.visible": false,
   "workbench.tips.enabled": false,
   "editor.minimap.enabled": false,
   "breadcrumbs.enabled": false,
@@ -26,7 +25,7 @@
   "window.zoomLevel": 1,
   "window.titleBarStyle": "native",
   "custom-ui-style.electron": {
-    "frame": false,
+    "frame": false
   },
   "custom-ui-style.stylesheet": {
     ".notification-toast": "box-shadow: none !important",
@@ -43,8 +42,7 @@
     ".monaco-scrollable-element > .scrollbar> .slider": "border-radius: 35rem !important;  height: 6px !important; background: rgba(255, 255, 255, 0.2) !important;",
     ".monaco-editor .scroll-decoration": "box-shadow: none !important;",
     ".monaco-editor .sticky-widget": "box-shadow: none !important;",
-    ".monaco-workbench .terminal-editor .xterm, .monaco-workbench .pane-body.integrated-terminal .xterm":
-    "position: relative !important;"
+    ".monaco-workbench .terminal-editor .xterm, .monaco-workbench .pane-body.integrated-terminal .xterm": "position: relative !important;"
   },
   // Cursor
   "editor.cursorBlinking": "solid",
@@ -392,15 +390,19 @@
     "bitnami",
     "Bitpool",
     "btop",
+    "BUILDKIT",
     "calt",
     "catppuccin",
     "catppuccin_mocha",
     "cerebro",
     "chflags",
     "cicd",
+    "clickhouse",
     "codeclipper",
     "codesearch",
+    "configmap",
     "Configurator",
+    "contiamo",
     "cooldown",
     "copilotmd",
     "coreutils",
@@ -437,8 +439,10 @@
     "kubectx",
     "kyverno",
     "kyvernopre",
+    "langfuse",
     "lazydocker",
     "Lazygit",
+    "letsencrypt",
     "liga",
     "llava",
     "localmcp",
@@ -455,7 +459,9 @@
     "multiarch",
     "navi",
     "netns",
+    "nextauth",
     "nikitabobko",
+    "nindent",
     "nixpkgs",
     "Nlsv",
     "nohidden",
@@ -489,12 +495,14 @@
     "tilesize",
     "Timebox",
     "titlebar",
+    "tolerations",
     "trackpad",
     "Trackpad",
     "typst",
     "unarchiver",
     "unhide",
     "universalaccess",
+    "VITE",
     "vlang",
     "Vuillamy",
     "WFMT",
@@ -526,15 +534,11 @@
   "docker.extension.dockerEngineAvailabilityPrompt": false,
   "codium.codeCompletion.enable": true,
   "github.copilot.selectedCompletionModel": "",
-  "workbench.colorCustomizations": {
-    "terminal.background": "#00000000"
-  },
+  "workbench.colorCustomizations": {},
   "vscode_vibrancy.preferedDarkTheme": "Catppuccin Mocha",
   "vscode_vibrancy.preferedLightTheme": "Catppuccin Mocha",
   "vscode_vibrancy.opacity": -1,
   "vscode_vibrancy.refreshInterval": 100,
   "vscode_vibrancy.theme": "Catppuccin Mocha",
-  "terminal.integrated.gpuAcceleration": "off",
-  "window.systemColorTheme": "dark",
-  "window.autoDetectColorScheme": false,
+  "workbench.statusBar.visible": false
 }

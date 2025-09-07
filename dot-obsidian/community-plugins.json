@@ -21,7 +21,6 @@
   "pinned-notes",
   "obsidian-linter",
   "meld-encrypt",
-  "pomodoro-timer",
   "pexels-banner",
   "obsidian-tasks-plugin",
   "obsidian-statusbar-pomo",
@@ -48,5 +47,6 @@
   "context-gather-plugin",
   "obsidian-git",
   "obsidian-file-link",
-  "better-export-pdf"
+  "better-export-pdf",
+  "pdf-plus"
 ]

@@ -10,7 +10,12 @@
     "svg": "Extras/Images",
     "gif": "Extras/Images",
     "avif": "Extras/Images",
-    "mdenc": "Extras/Encrypted"
+    "mdenc": "Extras/Encrypted",
+    "excalidraw": "Extras/Excalidraw",
+    "pdf": "Extras/PDF",
+    "epub": "Resources/Books",
+    "base": "Extras/Filters",
+    "canvas": "Dashboards"
   },
   "tagMapping": {
     "#mresource": "Resources",

@@ -4,8 +4,6 @@
   "autoshare": false,
   "share": "manual",
   "autoupdate": true,
-  "model": "anthropic/claude-sonnet-4-20250514",
-  "small_model": "anthropic/claude-3-5-haiku-20241022",
   "mcp": {
     "snap-happy": {
       "type": "local",
@@ -25,6 +23,382 @@
         "OBSIDIAN_API_KEY": "fc66e63d54ee9f23e95b48ef533c62910d388af3db4408b76da25f0129beffeb",
         "OBSIDIAN_HOST": "127.0.0.1",
         "OBSIDIAN_PORT": "27124"
+      }
+    }
+  },
+  "agent": {
+    "context-primer": {
+      "description": "Specialized agent for comprehensive project context analysis, codebase understanding, and intelligent project priming for development workflows",
+      "mode": "subagent",
+      "prompt": "{file:~/.ai-core/subagent-prompts/context-primer.md}",
+      "temperature": 0.1,
+      "tools": {
+        "write": true,
+        "edit": true,
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "list": true,
+        "bash": true,
+        "webfetch": false,
+        "todowrite": true,
+        "todoread": true
+      },
+      "permission": {
+        "edit": "allow",
+        "bash": {
+          "*": "ask",
+          "find": "allow",
+          "ls": "allow",
+          "cat": "allow",
+          "head": "allow",
+          "tail": "allow",
+          "grep": "allow",
+          "eza": "allow",
+          "tree": "allow",
+          "git log": "allow",
+          "git status": "allow",
+          "git ls-files": "allow",
+          "git show": "allow",
+          "git diff": "allow",
+          "wc": "allow",
+          "sort": "allow",
+          "uniq": "allow",
+          "cut": "allow",
+          "awk": "allow",
+          "sed": "allow"
+        },
+        "webfetch": "deny"
+      }
+    },
+    "opencode-engineer": {
+      "description": "Specialized agent for OpenCode configuration, dot-ai-core management, and AI workflow engineering",
+      "mode": "subagent",
+      "prompt": "{file:~/.ai-core/subagent-prompts/opencode-engineer.md}",
+      "temperature": 0.1,
+      "tools": {
+        "write": true,
+        "edit": true,
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "list": true,
+        "bash": true,
+        "webfetch": true,
+        "todowrite": true,
+        "todoread": true,
+        "mcp-obsidian": true
+      },
+      "permission": {
+        "edit": "allow",
+        "bash": {
+          "*": "ask",
+          "find": "allow",
+          "ls": "allow",
+          "cat": "allow",
+          "head": "allow",
+          "tail": "allow",
+          "grep": "allow",
+          "eza": "allow",
+          "tree": "allow",
+          "git log": "allow",
+          "git status": "allow",
+          "git ls-files": "allow",
+          "git show": "allow",
+          "git diff": "allow",
+          "wc": "allow",
+          "sort": "allow",
+          "uniq": "allow",
+          "cut": "allow",
+          "awk": "allow",
+          "sed": "allow"
+        },
+        "webfetch": "allow"
+      }
+    },
+    "qa": {
+      "description": "Quinn - Test Architect & Quality Advisor specializing in test architecture review, quality gate decisions, and comprehensive code improvement",
+      "mode": "subagent",
+      "prompt": "{file:~/.ai-core/subagent-prompts/qa.md}",
+      "temperature": 0.1,
+      "tools": {
+        "write": true,
+        "edit": true,
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "list": true,
+        "bash": true,
+        "webfetch": false,
+        "todowrite": true,
+        "todoread": true,
+        "mcp-obsidian": true
+      },
+      "permission": {
+        "edit": "allow",
+        "bash": {
+          "*": "ask",
+          "find": "allow",
+          "ls": "allow",
+          "cat": "allow",
+          "head": "allow",
+          "tail": "allow",
+          "grep": "allow",
+          "eza": "allow",
+          "tree": "allow",
+          "git log": "allow",
+          "git status": "allow",
+          "git ls-files": "allow",
+          "git show": "allow",
+          "git diff": "allow",
+          "wc": "allow",
+          "sort": "allow",
+          "uniq": "allow",
+          "cut": "allow",
+          "awk": "allow",
+          "sed": "allow",
+          "npm test": "allow",
+          "yarn test": "allow",
+          "pytest": "allow",
+          "jest": "allow",
+          "mvn test": "allow",
+          "gradle test": "allow"
+        },
+        "webfetch": "deny"
+      }
+    },
+    "po": {
+      "description": "Sarah - Product Owner specializing in backlog management, story refinement, acceptance criteria, and sprint planning",
+      "mode": "subagent",
+      "prompt": "{file:~/.ai-core/subagent-prompts/po.md}",
+      "temperature": 0.2,
+      "tools": {
+        "write": true,
+        "edit": true,
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "list": true,
+        "bash": true,
+        "webfetch": false,
+        "todowrite": true,
+        "todoread": true,
+        "mcp-obsidian": true
+      },
+      "permission": {
+        "edit": "allow",
+        "bash": {
+          "*": "ask",
+          "find": "allow",
+          "ls": "allow",
+          "cat": "allow",
+          "head": "allow",
+          "tail": "allow",
+          "grep": "allow",
+          "eza": "allow",
+          "tree": "allow",
+          "git log": "allow",
+          "git status": "allow",
+          "git ls-files": "allow",
+          "git show": "allow",
+          "git diff": "allow",
+          "wc": "allow",
+          "sort": "allow",
+          "uniq": "allow",
+          "cut": "allow",
+          "awk": "allow",
+          "sed": "allow"
+        },
+        "webfetch": "deny"
+      }
+    },
+    "dev": {
+      "description": "James - Full Stack Developer specializing in code implementation, debugging, refactoring, and development best practices",
+      "mode": "subagent",
+      "prompt": "{file:~/.ai-core/subagent-prompts/dev.md}",
+      "temperature": 0.1,
+      "tools": {
+        "write": true,
+        "edit": true,
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "list": true,
+        "bash": true,
+        "webfetch": true,
+        "todowrite": true,
+        "todoread": true,
+        "context7": true
+      },
+      "permission": {
+        "edit": "allow",
+        "bash": {
+          "*": "ask",
+          "find": "allow",
+          "ls": "allow",
+          "cat": "allow",
+          "head": "allow",
+          "tail": "allow",
+          "grep": "allow",
+          "eza": "allow",
+          "tree": "allow",
+          "git log": "allow",
+          "git status": "allow",
+          "git ls-files": "allow",
+          "git show": "allow",
+          "git diff": "allow",
+          "git add": "allow",
+          "git commit": "allow",
+          "wc": "allow",
+          "sort": "allow",
+          "uniq": "allow",
+          "cut": "allow",
+          "awk": "allow",
+          "sed": "allow",
+          "npm install": "allow",
+          "npm run": "allow",
+          "yarn install": "allow",
+          "yarn run": "allow",
+          "pip install": "allow",
+          "mvn compile": "allow",
+          "gradle build": "allow"
+        },
+        "webfetch": "allow"
+      }
+    },
+    "analyst": {
+      "description": "Mary - Business Analyst specializing in market research, brainstorming, competitive analysis, and project discovery",
+      "mode": "subagent",
+      "prompt": "{file:~/.ai-core/subagent-prompts/analyst.md}",
+      "temperature": 0.3,
+      "tools": {
+        "write": true,
+        "edit": true,
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "list": true,
+        "bash": true,
+        "webfetch": true,
+        "todowrite": true,
+        "todoread": true,
+        "mcp-obsidian": true
+      },
+      "permission": {
+        "edit": "allow",
+        "bash": {
+          "*": "ask",
+          "find": "allow",
+          "ls": "allow",
+          "cat": "allow",
+          "head": "allow",
+          "tail": "allow",
+          "grep": "allow",
+          "eza": "allow",
+          "tree": "allow",
+          "git log": "allow",
+          "git status": "allow",
+          "git ls-files": "allow",
+          "git show": "allow",
+          "git diff": "allow",
+          "wc": "allow",
+          "sort": "allow",
+          "uniq": "allow",
+          "cut": "allow",
+          "awk": "allow",
+          "sed": "allow"
+        },
+        "webfetch": "allow"
+      }
+    },
+    "pm": {
+      "description": "John - Product Manager specializing in PRD creation, product strategy, feature prioritization, and roadmap planning",
+      "mode": "subagent",
+      "prompt": "{file:~/.ai-core/subagent-prompts/pm.md}",
+      "temperature": 0.2,
+      "tools": {
+        "write": true,
+        "edit": true,
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "list": true,
+        "bash": true,
+        "webfetch": true,
+        "todowrite": true,
+        "todoread": true,
+        "mcp-obsidian": true
+      },
+      "permission": {
+        "edit": "allow",
+        "bash": {
+          "*": "ask",
+          "find": "allow",
+          "ls": "allow",
+          "cat": "allow",
+          "head": "allow",
+          "tail": "allow",
+          "grep": "allow",
+          "eza": "allow",
+          "tree": "allow",
+          "git log": "allow",
+          "git status": "allow",
+          "git ls-files": "allow",
+          "git show": "allow",
+          "git diff": "allow",
+          "wc": "allow",
+          "sort": "allow",
+          "uniq": "allow",
+          "cut": "allow",
+          "awk": "allow",
+          "sed": "allow"
+        },
+        "webfetch": "allow"
+      }
+    },
+    "sm": {
+      "description": "Bob - Scrum Master specializing in story creation, epic management, and agile process guidance",
+      "mode": "subagent",
+      "prompt": "{file:~/.ai-core/subagent-prompts/sm.md}",
+      "temperature": 0.2,
+      "tools": {
+        "write": true,
+        "edit": true,
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "list": true,
+        "bash": true,
+        "webfetch": false,
+        "todowrite": true,
+        "todoread": true,
+        "mcp-obsidian": true
+      },
+      "permission": {
+        "edit": "allow",
+        "bash": {
+          "*": "ask",
+          "find": "allow",
+          "ls": "allow",
+          "cat": "allow",
+          "head": "allow",
+          "tail": "allow",
+          "grep": "allow",
+          "eza": "allow",
+          "tree": "allow",
+          "git log": "allow",
+          "git status": "allow",
+          "git ls-files": "allow",
+          "git show": "allow",
+          "git diff": "allow",
+          "wc": "allow",
+          "sort": "allow",
+          "uniq": "allow",
+          "cut": "allow",
+          "awk": "allow",
+          "sed": "allow"
+        },
+        "webfetch": "deny"
       }
     }
   },
@@ -55,6 +429,5 @@
     }
   },
   "instructions": [
-    
   ]
 }
