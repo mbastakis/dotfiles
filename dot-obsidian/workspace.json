@@ -4,29 +4,35 @@
     "type": "split",
     "children": [
       {
-        "id": "f15cd5978972a640",
+        "id": "83583869511d7fb6",
         "type": "tabs",
         "children": [
           {
-            "id": "8f7e5a5403edb299",
+            "id": "35d355ade1309747",
             "type": "leaf",
-            "pinned": true,
             "state": {
-              "type": "canvas",
+              "type": "beautitab-react-view",
+              "state": {},
+              "title": "New tab"
+            }
+          },
+          {
+            "id": "37f7f2ef1681df04",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
               "state": {
-                "file": "Dashboards/Home.canvas",
-                "viewState": {
-                  "x": -169.5,
-                  "y": -70,
-                  "zoom": -0.29260700418876506
-                }
+                "file": "to-do.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
               },
-              "pinned": true,
-              "icon": "lucide-layout-dashboard",
-              "title": "Home"
+              "icon": "lucide-file",
+              "title": "to-do"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -83,8 +89,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 235.5010757446289,
-    "collapsed": true
+    "width": 368.5104179382324
   },
   "right": {
     "id": "45a4c33d2d217b48",
@@ -93,7 +98,7 @@
       {
         "id": "549649fefd6df736",
         "type": "tabs",
-        "dimension": 68.26394344069128,
+        "dimension": 66.52323580034424,
         "children": [
           {
             "id": "4f8f385ea32358a8",
@@ -131,18 +136,8 @@
       {
         "id": "014043c44890df20",
         "type": "tabs",
-        "dimension": 31.736056559308718,
+        "dimension": 33.47676419965577,
         "children": [
-          {
-            "id": "891fa13d3b582d57",
-            "type": "leaf",
-            "state": {
-              "type": "timer-view",
-              "state": {},
-              "icon": "timer",
-              "title": "Timer"
-            }
-          },
           {
             "id": "f1049f826872d3e5",
             "type": "leaf",
@@ -157,8 +152,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 326.5,
-    "collapsed": true
+    "width": 326.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -192,7 +186,6 @@
       "ribbon-divider:ribbon-divider-cb86a7cb-7e64-467d-b89d-2c69120994bf": false,
       "ribbon-divider:ribbon-divider-36ef3d98-08ff-4dc5-ae9e-d9b4d0ebc3c9": true,
       "meld-encrypt:Convert to or from an Encrypted note": true,
-      "pomodoro-timer:Toggle timer panel": true,
       "cmdr:Workspaces: Load workspace layout": false,
       "cmdr:Workspaces: Save layout": false,
       "meld-encrypt:New encrypted note": false,
@@ -203,62 +196,65 @@
       "custom-sort:Toggle custom sorting": true,
       "canvas:Create new canvas": true,
       "omnisearch:Omnisearch": true,
-      "meld-encrypt:Decrypt at Cursor": true
+      "meld-encrypt:Decrypt at Cursor": true,
+      "pdf-plus:PDF++: Toggle auto-copy": true,
+      "pdf-plus:PDF++: Toggle auto-focus": true,
+      "pdf-plus:PDF++: Toggle auto-paste": true
     }
   },
-  "active": "8f7e5a5403edb299",
+  "active": "37f7f2ef1681df04",
   "lastOpenFiles": [
-    "Calendar/Daily Notes/Friday 08-08-2025.md",
-    "Calendar/Daily Notes/Thursday 07-08-2025.md",
+    "to-do.md",
+    "Resources/Books/Build a Large Language Model (From Scratch) (Sebastian Raschka) (Z-Library) 1.pdf",
+    "Extras/PDF/ISS_Welcome_Guide_2024.pdf",
+    "Extras/PDF/purchase-summary-indian-spirit.pdf",
+    "Extras/PDF/RF02908559002502081142531-1.pdf",
+    "Extras/PDF/RF32908559002504051430241-1.pdf",
+    "Extras/PDF/synopsis.pdf",
+    "Extras/PDF/synopsis (1).pdf",
+    "Extras/PDF/The Daily Blueprint.pdf",
+    "Extras/PDF/TravelGuide_ISS_2024-1.pdf",
+    "Extras/PDF/TravelGuide_ISS_2024-1 1.pdf",
+    "raw_book_data/Untitled 1.md",
+    "raw_book_data/Untitled.md",
+    "raw_book_data/Shortform App Discover Books Articles Podcasts My library Search  3 Discover the world's best ideas Untitled 522.md",
+    "raw_book_data/Shortform App Discover Books Articles Podcasts My library Search  3 Discover the world's best ideas Untitled 595.md",
+    "raw_book_data/Shortform App Discover Books Articles Podcasts My library Search  3 Discover the world's best ideas Untitled 553.md",
+    "raw_book_data/Shortform App Discover Books Articles Podcasts My library Search  3 Discover the world's best ideas Untitled 568.md",
+    "raw_book_data/Shortform App Discover Books Articles Podcasts My library Search  3 Discover the world's best ideas Untitled 550.md",
+    "raw_book_data/Shortform App Discover Books Articles Podcasts My library Search  3 Discover the world's best ideas Untitled 544.md",
+    "raw_book_data/Shortform App Discover Books Articles Podcasts My library Search  3 Discover the world's best ideas Untitled 524.md",
     "Dashboards/Home.canvas",
-    "Resources/Shortform Books/the-power-of-discipline.md",
-    "Resources/Shortform Books/the-power-of-habit.md",
-    "Resources/Shortform Books/the-power-of-now.md",
-    "Resources/Shortform Books/the-power-of-positive-thinking.md",
-    "Resources/Shortform Books/the-power-of-regret.md",
-    "Resources/Shortform Books/the-personal-mba.md",
-    "Resources/Shortform Books/the-oxygen-advantage.md",
-    "Resources/Shortform Books/the-pathless-path.md",
-    "Resources/Shortform Books/the-other-wes-moore.md",
-    "Resources/Shortform Books/the-outsiders-eight-unconventional-ceos.md",
-    "Resources/Shortform Books/the-origins-of-political-order.md",
-    "Resources/Shortform Books/the-opposable-mind.md",
-    "Resources/Shortform Books/the-one-minute-manager.md",
-    "Resources/Shortform Books/the-only-study-guide-youll-ever-need.md",
-    "Resources/Shortform Books/the-one-thing.md",
-    "Resources/Shortform Books/the-obstacle-is-the-way.md",
-    "Resources/Shortform Books/the-mythical-man-month.md",
-    "Resources/Shortform Books/the-myth-of-sisyphus.md",
-    "Resources/Shortform Books/the-monk-who-sold-his-ferrari.md",
-    "Resources/Shortform Books/the-mountain-is-you.md",
-    "Resources/Shortform Books/the-miracle-morning.md",
-    "Resources/Shortform Books/the-minimalist-entrepreneur.md",
-    "Resources/Shortform Books/the-mom-test.md",
-    "Resources/Shortform Books/the-millionaire-real-estate-agent.md",
-    "Calendar/Daily Notes",
+    "test.md",
+    "Extras/Templates/Empty.md",
+    "Extras/Templates/NotSure.md",
+    "Projects/test.md",
+    "Projects/DT-AICC.md",
+    "Archives/mike-hermetica.md",
+    "Extras/Excalidraw/1st iteration internal diagram view.excalidraw.md",
+    "Extras/Excalidraw/1st iteration internal architecture.excalidraw.md",
+    "Extras/Excalidraw/aerospace.excalidraw.md",
+    "Extras/Excalidraw/kyverno-arch-diagrams.md",
+    "Extras/Excalidraw/Obsidian Workflow Organization.md",
+    "Extras/Unkown/plugin architecture.md",
+    "to-do.md",
+    "Extras/Unkown/[CRev] failing SWIT job 1.  DEFECT-55923.md",
+    "raw_book_data/Untitled 99.md",
+    "raw_book_data/Untitled 98.md",
+    "Dashboards/Discovery.canvas",
+    "Extras/Images/Cygnus.png",
+    "Extras/Images/corfu trip - chara + mike-1756481741800.webp",
+    "Extras/Images/corfu trip - chara + mike-1756481721378.webp",
+    "Extras/Images/character_cheatsheet.png",
+    "Extras/Images/Beginners Guide-1756543416668.webp",
+    "Extras/Images/corfu trip - chara + mike-1756481850047.webp",
+    "Extras/Images/corfu trip - chara + mike-1756481779272.webp",
     "Dashboards/PARA.canvas",
-    "Extras/Filters/PARA-Archives.base",
+    "Dashboards/Fitness.canvas",
     "Dashboards/Dashboards.canvas",
     "Extras/Images/aicc-netbird-aiccvpn-access-1753264782490.webp",
-    "Dashboards/Discovery.canvas",
     "Extras/Images/wfmt silverlight-1753190605273.webp",
-    "telekom-auth.pcap",
-    "Resources/AI_Docs/stow",
-    "Resources/AI_Docs/untitled folder",
-    "Resources/AI_Docs/dt_general",
-    "Resources/AI_Docs/tmux",
-    "Resources/AI_Docs/ghostty",
-    "Resources/AI_Docs/bubbletea",
-    "Resources/Specs/keycloak",
     "Extras/Images/kalamata-camping-date-1752687994154.webp",
-    "Extras/Images/kalamata-camping-date-1752687935802.webp",
-    "Extras/Images/kalamata-camping-date-1752687769097.webp",
-    "Extras/Images/Pasted Image 20250716095548_882.png",
-    "Extras/Images/Glove80-1752648798892.webp",
-    "Extras/Images/Glove80-1752649438739.webp",
-    "Extras/Images/Glove80-1752649404077.webp",
-    "Extras/Images/Glove80-1752649346632.webp",
-    "Dashboards/Fitness.canvas",
     "Dashboards/Global Tasks.canvas"
   ]
 }
