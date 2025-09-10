@@ -16,5 +16,6 @@
   "focusNewTab": true,
   "newFileLocation": "root",
   "showUnsupportedFiles": true,
-  "attachmentFolderPath": "Extras/Images"
+  "attachmentFolderPath": "Extras/Images",
+  "promptDelete": false
 }

@@ -4,35 +4,29 @@
     "type": "split",
     "children": [
       {
-        "id": "83583869511d7fb6",
+        "id": "f58b8918ceb3c939",
         "type": "tabs",
         "children": [
           {
-            "id": "35d355ade1309747",
+            "id": "f46e29a1721e3800",
             "type": "leaf",
+            "pinned": true,
             "state": {
-              "type": "beautitab-react-view",
-              "state": {},
-              "title": "New tab"
-            }
-          },
-          {
-            "id": "37f7f2ef1681df04",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
+              "type": "canvas",
               "state": {
-                "file": "to-do.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": false
+                "file": "Dashboards/Home.canvas",
+                "viewState": {
+                  "x": -657.5,
+                  "y": -420,
+                  "zoom": -0.1958790964248377
+                }
               },
-              "icon": "lucide-file",
-              "title": "to-do"
+              "pinned": true,
+              "icon": "lucide-layout-dashboard",
+              "title": "Home"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -199,49 +193,54 @@
       "meld-encrypt:Decrypt at Cursor": true,
       "pdf-plus:PDF++: Toggle auto-copy": true,
       "pdf-plus:PDF++: Toggle auto-focus": true,
-      "pdf-plus:PDF++: Toggle auto-paste": true
+      "pdf-plus:PDF++: Toggle auto-paste": true,
+      "vscode-editor:Create Code File": false,
+      "homepage:Open homepage": false
     }
   },
-  "active": "37f7f2ef1681df04",
+  "active": "1b9875d61959b663",
   "lastOpenFiles": [
+    "Resources/AI_Prompts",
+    "Dashboards/Home.canvas",
     "to-do.md",
+    "Extras/Templates/Projects/opencode-card.md",
+    "Projects/Tasks/Opencode Tasks/test.md",
+    "Projects/opencode.md",
+    "Projects/Tasks/Opencode Tasks",
+    "empty files.md",
+    "Extras/Unkown/Weekly Review.md",
+    "Extras/Unkown/Research Note.md",
+    "Extras/Unkown/CONFIGURATION.md",
+    "Extras/Templates/PARA/resource.md",
+    "Extras/Unkown/Quick Capture.md",
+    "Extras/Unkown/atomic-habits.md",
+    "Extras/Unkown/body-measurements.md",
+    "Extras/Unkown/brain-wash.md",
+    "Extras/Unkown/koinoxrista-application.md",
+    "Extras/Unkown/holidays-2024.md",
+    "Extras/Unkown/encrypted-note.md",
+    "Extras/Unkown/pininfo.md",
+    "Extras/Unkown/tmp99.md",
+    "Extras/Unkown/undefined.md",
+    "Resources/Shortform Books/Orange is the New Black.md",
+    "all_tags_complete.txt",
+    "meaningful_tags.txt",
+    "extract_meaningful_tags.sh",
+    "all_tags.txt",
+    "extract_tags.sh",
+    "Resources/Shortform Books/The Black Swan.md",
+    "Archives/Υπόδειγμα συνοπτικής παρουσίασης επιχείρησης - India in a Box.md",
+    "Archives/ΠΚ-1003.md",
+    "Extras/Unkown/Ενότητα 10 - Μαθαίνοντας από την αποτυχία.md",
+    "Extras/Unkown/Ενότητα 3 - Ανάπτυξη επιχειρηματικής νοοτροπίας.md",
+    "Dashboards/Fitness.canvas",
+    "Dashboards/Global Tasks.canvas",
+    "Dashboards/PARA.canvas",
+    "Dashboards/Discovery.canvas",
     "Resources/Books/Build a Large Language Model (From Scratch) (Sebastian Raschka) (Z-Library) 1.pdf",
     "Extras/PDF/ISS_Welcome_Guide_2024.pdf",
     "Extras/PDF/purchase-summary-indian-spirit.pdf",
     "Extras/PDF/RF02908559002502081142531-1.pdf",
-    "Extras/PDF/RF32908559002504051430241-1.pdf",
-    "Extras/PDF/synopsis.pdf",
-    "Extras/PDF/synopsis (1).pdf",
-    "Extras/PDF/The Daily Blueprint.pdf",
-    "Extras/PDF/TravelGuide_ISS_2024-1.pdf",
-    "Extras/PDF/TravelGuide_ISS_2024-1 1.pdf",
-    "raw_book_data/Untitled 1.md",
-    "raw_book_data/Untitled.md",
-    "raw_book_data/Shortform App Discover Books Articles Podcasts My library Search  3 Discover the world's best ideas Untitled 522.md",
-    "raw_book_data/Shortform App Discover Books Articles Podcasts My library Search  3 Discover the world's best ideas Untitled 595.md",
-    "raw_book_data/Shortform App Discover Books Articles Podcasts My library Search  3 Discover the world's best ideas Untitled 553.md",
-    "raw_book_data/Shortform App Discover Books Articles Podcasts My library Search  3 Discover the world's best ideas Untitled 568.md",
-    "raw_book_data/Shortform App Discover Books Articles Podcasts My library Search  3 Discover the world's best ideas Untitled 550.md",
-    "raw_book_data/Shortform App Discover Books Articles Podcasts My library Search  3 Discover the world's best ideas Untitled 544.md",
-    "raw_book_data/Shortform App Discover Books Articles Podcasts My library Search  3 Discover the world's best ideas Untitled 524.md",
-    "Dashboards/Home.canvas",
-    "test.md",
-    "Extras/Templates/Empty.md",
-    "Extras/Templates/NotSure.md",
-    "Projects/test.md",
-    "Projects/DT-AICC.md",
-    "Archives/mike-hermetica.md",
-    "Extras/Excalidraw/1st iteration internal diagram view.excalidraw.md",
-    "Extras/Excalidraw/1st iteration internal architecture.excalidraw.md",
-    "Extras/Excalidraw/aerospace.excalidraw.md",
-    "Extras/Excalidraw/kyverno-arch-diagrams.md",
-    "Extras/Excalidraw/Obsidian Workflow Organization.md",
-    "Extras/Unkown/plugin architecture.md",
-    "to-do.md",
-    "Extras/Unkown/[CRev] failing SWIT job 1.  DEFECT-55923.md",
-    "raw_book_data/Untitled 99.md",
-    "raw_book_data/Untitled 98.md",
-    "Dashboards/Discovery.canvas",
     "Extras/Images/Cygnus.png",
     "Extras/Images/corfu trip - chara + mike-1756481741800.webp",
     "Extras/Images/corfu trip - chara + mike-1756481721378.webp",
@@ -249,12 +248,9 @@
     "Extras/Images/Beginners Guide-1756543416668.webp",
     "Extras/Images/corfu trip - chara + mike-1756481850047.webp",
     "Extras/Images/corfu trip - chara + mike-1756481779272.webp",
-    "Dashboards/PARA.canvas",
-    "Dashboards/Fitness.canvas",
     "Dashboards/Dashboards.canvas",
     "Extras/Images/aicc-netbird-aiccvpn-access-1753264782490.webp",
     "Extras/Images/wfmt silverlight-1753190605273.webp",
-    "Extras/Images/kalamata-camping-date-1752687994154.webp",
-    "Dashboards/Global Tasks.canvas"
+    "Extras/Images/kalamata-camping-date-1752687994154.webp"
   ]
 }

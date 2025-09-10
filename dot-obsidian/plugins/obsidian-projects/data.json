@@ -14,17 +14,17 @@
       },
       "defaultName": "",
       "templates": [
-        "Extras/Templates/Projects/kanban-card.md"
+        "Extras/Templates/Projects/default-card.md"
       ],
       "excludedNotes": [
-        "Extras/Templates/Projects/kanban-card.md",
+        "Extras/Templates/Projects/default-card.md",
         "Extras/Templates/Calendar/calendar-event.md"
       ],
-      "isDefault": true,
+      "isDefault": false,
       "dataSource": {
         "kind": "tag",
         "config": {
-          "tag": "#arcane-default",
+          "tag": "#default-task",
           "hierarchy": false
         }
       },
@@ -38,19 +38,91 @@
               "Done": {
                 "weight": 0,
                 "records": [
-                  "Add Collapse in board.md",
-                  "Polish Obsidian setup Desktop.md",
-                  "Woman in Black - 2025-05-12 - _6sq36d3.md",
-                  "Add google calendar to Projects.md",
-                  "Add google calendar to Projects - 2025-06-04 - p2vphf8t.md",
-                  "Create Project for DT-AICC.md"
+                  "Calendar/Calendar Events/Hermetica check compliance.md",
+                  "Extras/Unkown/👖 Laundry - recurring-18t2kit0.md",
+                  "Extras/Unkown/Add Collapse in board.md",
+                  "Extras/Unkown/Add google calendar to Projects - 2025-06-04 - p2vphf8t.md",
+                  "Extras/Unkown/Add google calendar to Projects.md",
+                  "Extras/Unkown/Architect the new Obsidian Vault.md",
+                  "Extras/Unkown/Check LangChain, LLamaIndex.md",
+                  "Extras/Unkown/Cloud Core & SRE Meeting - recurring-76dq5d66.md",
+                  "Extras/Unkown/configure glove80.md",
+                  "Extras/Unkown/Create Project for DT-AICC - 2025-06-06 - trf4eihr.md",
+                  "Extras/Unkown/Create Project for DT-AICC.md",
+                  "Extras/Unkown/Download DT Repos - 2025-06-06 - kom9ufmg.md",
+                  "Extras/Unkown/Download DT Repos.md",
+                  "Extras/Unkown/Hermetica -- Olympia discussion - 2025-05-26 - _60q30c1.md",
+                  "Extras/Unkown/How Platform engineers support Data Scientist.md",
+                  "Extras/Unkown/KAN-20- Send Money Trading 212 - recurring-26cuvtos.md",
+                  "Extras/Unkown/love xara - 2025-06-06 - 4ai5vjit.md",
+                  "Extras/Unkown/love xara - 2025-06-06 - 9om0unb1.md",
+                  "Extras/Unkown/love xara - 2025-06-06 - 9vt475ro.md",
+                  "Extras/Unkown/love xara - 2025-06-06 - nkdn1s5u.md",
+                  "Extras/Unkown/love xara - 2025-06-06 - nvf0vifc.md",
+                  "Extras/Unkown/love xara - 2025-06-06 - oln43j30.md",
+                  "Extras/Unkown/Lukas birthday - recurring-_6oqjgh9.md",
+                  "Extras/Unkown/Manos Kalozumis birthday - recurring-_8d134hi.md",
+                  "Extras/Unkown/Marileni’s birthday - recurring-_74s3edq.md",
+                  "Extras/Unkown/new toothbrush.md",
+                  "Extras/Unkown/Polish Obsidian setup Desktop.md",
+                  "Extras/Unkown/Polish Obsidian setup Mobile.md",
+                  "Extras/Unkown/Refine and polish the Projects plugin.md",
+                  "Extras/Unkown/setup neovim.md",
+                  "Extras/Unkown/Woman in Black - 2025-05-12 - _6sq36d3.md",
+                  "Projects/Tasks/Kanban Tasks/1. obsidian git, disable sync.md",
+                  "Projects/Tasks/Kanban Tasks/2. check nix user, check how to setup nix darwin correctly.md",
+                  "Projects/Tasks/Kanban Tasks/3. change dotfiles repo.md",
+                  "Projects/Tasks/Kanban Tasks/add ai_docs.md",
+                  "Projects/Tasks/Kanban Tasks/add hooks claude pro.md",
+                  "Projects/Tasks/Kanban Tasks/add nix in dotfiles.md",
+                  "Projects/Tasks/Kanban Tasks/add parllama to dotfiles, add uv tools to dotfiles.md",
+                  "Projects/Tasks/Kanban Tasks/Add plugins to yazi.md",
+                  "Projects/Tasks/Kanban Tasks/add specs dir.md",
+                  "Projects/Tasks/Kanban Tasks/Add warp workflows to .dotfiles.md",
+                  "Projects/Tasks/Kanban Tasks/Check Atlas and ACE Systems.md",
+                  "Projects/Tasks/Kanban Tasks/check if I can download bitnet huggingface to ollama, check dotfiles.md",
+                  "Projects/Tasks/Kanban Tasks/check llmstudio vs ollama.md",
+                  "Projects/Tasks/Kanban Tasks/check navi.md",
+                  "Projects/Tasks/Kanban Tasks/Check opencode.md",
+                  "Projects/Tasks/Kanban Tasks/configure ghostty, add edit command in terminal.md",
+                  "Projects/Tasks/Kanban Tasks/Create command to start and stop all local AI.md",
+                  "Projects/Tasks/Kanban Tasks/create deep research claude code command.md",
+                  "Projects/Tasks/Kanban Tasks/create default feat specs.md",
+                  "Projects/Tasks/Kanban Tasks/Create default refactor specs.md",
+                  "Projects/Tasks/Kanban Tasks/create git-tree default specs.md",
+                  "Projects/Tasks/Kanban Tasks/create good claude code configuration, global commands dotfiles config.md",
+                  "Projects/Tasks/Kanban Tasks/Create good dir structure for work using warp workflows.md",
+                  "Projects/Tasks/Kanban Tasks/create warp workflows with claude code.md",
+                  "Projects/Tasks/Kanban Tasks/document all brew commands, maybe add to navi.md",
+                  "Projects/Tasks/Kanban Tasks/document yazi, fix vscode fzf, zoxide.md",
+                  "Projects/Tasks/Kanban Tasks/dotfiles tui.md",
+                  "Projects/Tasks/Kanban Tasks/Find a good prompt versioning and testing system.md",
+                  "Projects/Tasks/Kanban Tasks/fitness dashboard.md",
+                  "Projects/Tasks/Kanban Tasks/fix glove80 use cases.md",
+                  "Projects/Tasks/Kanban Tasks/fix list height, kanban.md",
+                  "Projects/Tasks/Kanban Tasks/Make global Tasks dashboard.md",
+                  "Projects/Tasks/Kanban Tasks/manage claude mcp through dotfiles.md",
+                  "Projects/Tasks/Kanban Tasks/Maybe Replace Warp with Ghostty.md",
+                  "Projects/Tasks/Kanban Tasks/notes from the aicc meeting.md",
+                  "Projects/Tasks/Kanban Tasks/obsidian in git.md",
+                  "Projects/Tasks/Kanban Tasks/ollama tui.md",
+                  "Projects/Tasks/Kanban Tasks/Refactor Resources, Make atomic notes.md",
+                  "Projects/Tasks/Kanban Tasks/revamp workflow, in general some refactor on obsiadian.md",
+                  "Projects/Tasks/Kanban Tasks/setup vi mode in ghostty.md",
+                  "Projects/Tasks/Kanban Tasks/specs and ai_docs in obsidian as symlinks, commands that can creat them easily.md",
+                  "Projects/Tasks/Kanban Tasks/start using cline, free, with gemini cli, claude code.md",
+                  "Projects/Tasks/Kanban Tasks/Tool for easy context to llm.md",
+                  "Projects/Tasks/Kanban Tasks/Track Subscriptions.md",
+                  "Projects/Tasks/Kanban Tasks/use the agentic loop to create more warp workflows.md"
                 ],
                 "collapse": true
               },
               "ToDo": {
                 "weight": 1,
                 "records": [
+                  "Calendar/Calendar Events/Hermetic presentation tools, setup, slides.md",
                   "Projects/Tasks/Kanban Tasks/fix the raw data and delete the duplicate books.md",
+                  "Calendar/Calendar Events/Go to Chara.md",
                   "Projects/Tasks/Kanban Tasks/Create Dates with Chara page.md",
                   "Extras/Unkown/Test vscode models.md",
                   "Extras/Unkown/create clothing style doc.md",
@@ -61,7 +133,6 @@
                   "Extras/Unkown/solution for auto-fill out in forms.md",
                   "Extras/Unkown/checkout browser use.md",
                   "Projects/Tasks/Kanban Tasks/Check Hyperbrowser.md",
-                  "Projects/Tasks/Kanban Tasks/maybe check jj.md",
                   "Extras/Unkown/write first blog post.md",
                   "Projects/Tasks/Kanban Tasks/Sync obsidian, CouchDB.md"
                 ],
@@ -160,7 +231,7 @@
         }
       ],
       "id": "824b0507-3776-47dd-a6c1-f2bddec493f4",
-      "name": "Default"
+      "name": "default"
     },
     {
       "fieldConfig": {
@@ -175,16 +246,16 @@
       },
       "defaultName": "",
       "templates": [
-        "Extras/Templates/Projects/DT-AICC/kanban-card.md"
+        "Extras/Templates/Projects/dt-aicc-card.md"
       ],
       "excludedNotes": [
-        "Extras/Templates/Projects/DT-AICC/kanban-card.md"
+        "Extras/Templates/Projects/dt-aicc-card.md"
       ],
       "isDefault": false,
       "dataSource": {
         "kind": "tag",
         "config": {
-          "tag": "#dt-aicc",
+          "tag": "#dt-aicc-task",
           "hierarchy": false
         }
       },
@@ -197,28 +268,24 @@
               "Done": {
                 "weight": 0,
                 "records": [
-                  "Documentation.md",
-                  "Communicate with AICC people.md"
+                  "Projects/Tasks/DT Tasks/test.md"
                 ],
                 "collapse": true
               },
-              "ToDo": {
+              "No status": {
                 "weight": 1,
-                "records": [
-                  "Extras/Unkown/Learn about Image Generation Infra Setup.md"
-                ]
+                "records": []
+              },
+              "ToDo": {
+                "weight": 2,
+                "records": []
               },
               "InProgress": {
-                "weight": 2,
-                "records": [
-                  "Projects/Tasks/Kanban Tasks/Meeting with Bali Dimitra.md",
-                  "Extras/Unkown/Meeting with Vasiliki at Tuesday.md",
-                  "Extras/Unkown/Get Access to Slack.md",
-                  "Projects/Tasks/Kanban Tasks/Ask for Perplexity Pro subscription.md"
-                ]
+                "weight": 3,
+                "records": []
               },
               "ToReport": {
-                "weight": 3,
+                "weight": 4,
                 "records": [
                   "Extras/Unkown/Get Access to Tools Account.md",
                   "Resources/Kanban Tasks/Ask for a DTTL Teams Account, and ask for accesses.md",
@@ -281,7 +348,213 @@
         }
       ],
       "id": "0dd85664-dad4-4770-885c-b7e354b37736",
-      "name": "DT-AICC"
+      "name": "dt-aicc"
+    },
+    {
+      "fieldConfig": {
+        "status": {
+          "options": [
+            "ToDo",
+            "InProgress",
+            "Today",
+            "Done"
+          ]
+        }
+      },
+      "defaultName": "",
+      "templates": [
+        "Extras/Templates/Projects/opencode-card.md"
+      ],
+      "excludedNotes": [
+        "Extras/Templates/Projects/opencode-card.md"
+      ],
+      "isDefault": true,
+      "dataSource": {
+        "kind": "tag",
+        "config": {
+          "tag": "#opencode-task",
+          "hierarchy": false
+        }
+      },
+      "newNotesFolder": "Projects/Tasks/Opencode Tasks",
+      "views": [
+        {
+          "config": {
+            "groupByField": "status",
+            "includeFields": [],
+            "columns": {
+              "ToDo": {
+                "weight": 0,
+                "records": [
+                  "Projects/Tasks/Opencode Tasks/test.md"
+                ],
+                "collapse": false
+              },
+              "InProgress": {
+                "weight": 1,
+                "records": [
+                  "Projects/Tasks/Kanban Tasks/Add agent tool, check emails and create obsidian tasks.md",
+                  "Projects/Tasks/Kanban Tasks/agentic tool for revolut api, track finance.md",
+                  "Projects/Tasks/Kanban Tasks/watch youtube quantitization local llm.md",
+                  "Projects/Tasks/Kanban Tasks/create pixel asset pipeline project.md",
+                  "Projects/Tasks/Kanban Tasks/generate ditigal persona, youtube etc.md"
+                ],
+                "collapse": false
+              },
+              "Today": {
+                "weight": 2,
+                "records": [
+                  "Projects/Tasks/Kanban Tasks/create deep research claude code command.md",
+                  "Projects/Tasks/Kanban Tasks/how the dashboard for project should be.md",
+                  "Projects/Tasks/Kanban Tasks/finish raw book data.md",
+                  "Projects/Tasks/Kanban Tasks/plan vacation, write dates to calendar etc.md",
+                  "Projects/Tasks/Kanban Tasks/Obsidian MCP for task cration.md",
+                  "Projects/Tasks/Kanban Tasks/create kanban column for websites I obsidian clip.md",
+                  "Projects/Tasks/Kanban Tasks/create obsidian web clipper templates and export settings.md",
+                  "Projects/Tasks/Kanban Tasks/track subscriptions in excel ? Maybe obsidian excel ?.md",
+                  "Projects/Tasks/Kanban Tasks/checkout mcp servers vscode.md",
+                  "Projects/Tasks/Kanban Tasks/checout kimi llm, free openrouter, add to cline and opencode.md",
+                  "Projects/Tasks/Kanban Tasks/use local models, maybe with langgraph to index and structure obsidian notes.md"
+                ]
+              },
+              "Done": {
+                "weight": 3,
+                "records": [
+                  "Calendar/Calendar Events/Hermetica check compliance.md",
+                  "Extras/Unkown/👖 Laundry - recurring-18t2kit0.md",
+                  "Extras/Unkown/Add Collapse in board.md",
+                  "Extras/Unkown/Add google calendar to Projects - 2025-06-04 - p2vphf8t.md",
+                  "Extras/Unkown/Add google calendar to Projects.md",
+                  "Extras/Unkown/Architect the new Obsidian Vault.md",
+                  "Extras/Unkown/Check LangChain, LLamaIndex.md",
+                  "Extras/Unkown/Cloud Core & SRE Meeting - recurring-76dq5d66.md",
+                  "Extras/Unkown/configure glove80.md",
+                  "Extras/Unkown/Create Project for DT-AICC - 2025-06-06 - trf4eihr.md",
+                  "Extras/Unkown/Create Project for DT-AICC.md",
+                  "Extras/Unkown/Download DT Repos - 2025-06-06 - kom9ufmg.md",
+                  "Extras/Unkown/Download DT Repos.md",
+                  "Extras/Unkown/Hermetica -- Olympia discussion - 2025-05-26 - _60q30c1.md",
+                  "Extras/Unkown/How Platform engineers support Data Scientist.md",
+                  "Extras/Unkown/KAN-20- Send Money Trading 212 - recurring-26cuvtos.md",
+                  "Extras/Unkown/love xara - 2025-06-06 - 4ai5vjit.md",
+                  "Extras/Unkown/love xara - 2025-06-06 - 9om0unb1.md",
+                  "Extras/Unkown/love xara - 2025-06-06 - 9vt475ro.md",
+                  "Extras/Unkown/love xara - 2025-06-06 - nkdn1s5u.md",
+                  "Extras/Unkown/love xara - 2025-06-06 - nvf0vifc.md",
+                  "Extras/Unkown/love xara - 2025-06-06 - oln43j30.md",
+                  "Extras/Unkown/Lukas birthday - recurring-_6oqjgh9.md",
+                  "Extras/Unkown/Manos Kalozumis birthday - recurring-_8d134hi.md",
+                  "Extras/Unkown/Marileni’s birthday - recurring-_74s3edq.md",
+                  "Extras/Unkown/new toothbrush.md",
+                  "Extras/Unkown/Polish Obsidian setup Desktop.md",
+                  "Extras/Unkown/Polish Obsidian setup Mobile.md",
+                  "Extras/Unkown/Refine and polish the Projects plugin.md",
+                  "Extras/Unkown/setup neovim.md",
+                  "Extras/Unkown/Woman in Black - 2025-05-12 - _6sq36d3.md",
+                  "Projects/Tasks/Kanban Tasks/1. obsidian git, disable sync.md",
+                  "Projects/Tasks/Kanban Tasks/2. check nix user, check how to setup nix darwin correctly.md",
+                  "Projects/Tasks/Kanban Tasks/3. change dotfiles repo.md",
+                  "Projects/Tasks/Kanban Tasks/add ai_docs.md",
+                  "Projects/Tasks/Kanban Tasks/add hooks claude pro.md",
+                  "Projects/Tasks/Kanban Tasks/add nix in dotfiles.md",
+                  "Projects/Tasks/Kanban Tasks/add parllama to dotfiles, add uv tools to dotfiles.md",
+                  "Projects/Tasks/Kanban Tasks/Add plugins to yazi.md",
+                  "Projects/Tasks/Kanban Tasks/add specs dir.md",
+                  "Projects/Tasks/Kanban Tasks/Add warp workflows to .dotfiles.md",
+                  "Projects/Tasks/Kanban Tasks/Check Atlas and ACE Systems.md",
+                  "Projects/Tasks/Kanban Tasks/check if I can download bitnet huggingface to ollama, check dotfiles.md",
+                  "Projects/Tasks/Kanban Tasks/check llmstudio vs ollama.md",
+                  "Projects/Tasks/Kanban Tasks/check navi.md",
+                  "Projects/Tasks/Kanban Tasks/Check opencode.md",
+                  "Projects/Tasks/Kanban Tasks/configure ghostty, add edit command in terminal.md",
+                  "Projects/Tasks/Kanban Tasks/Create command to start and stop all local AI.md",
+                  "Projects/Tasks/Kanban Tasks/create deep research claude code command.md",
+                  "Projects/Tasks/Kanban Tasks/create default feat specs.md",
+                  "Projects/Tasks/Kanban Tasks/Create default refactor specs.md",
+                  "Projects/Tasks/Kanban Tasks/create git-tree default specs.md",
+                  "Projects/Tasks/Kanban Tasks/create good claude code configuration, global commands dotfiles config.md",
+                  "Projects/Tasks/Kanban Tasks/Create good dir structure for work using warp workflows.md",
+                  "Projects/Tasks/Kanban Tasks/create warp workflows with claude code.md",
+                  "Projects/Tasks/Kanban Tasks/document all brew commands, maybe add to navi.md",
+                  "Projects/Tasks/Kanban Tasks/document yazi, fix vscode fzf, zoxide.md",
+                  "Projects/Tasks/Kanban Tasks/dotfiles tui.md",
+                  "Projects/Tasks/Kanban Tasks/Find a good prompt versioning and testing system.md",
+                  "Projects/Tasks/Kanban Tasks/fitness dashboard.md",
+                  "Projects/Tasks/Kanban Tasks/fix glove80 use cases.md",
+                  "Projects/Tasks/Kanban Tasks/fix list height, kanban.md",
+                  "Projects/Tasks/Kanban Tasks/Make global Tasks dashboard.md",
+                  "Projects/Tasks/Kanban Tasks/manage claude mcp through dotfiles.md",
+                  "Projects/Tasks/Kanban Tasks/Maybe Replace Warp with Ghostty.md",
+                  "Projects/Tasks/Kanban Tasks/notes from the aicc meeting.md",
+                  "Projects/Tasks/Kanban Tasks/obsidian in git.md",
+                  "Projects/Tasks/Kanban Tasks/ollama tui.md",
+                  "Projects/Tasks/Kanban Tasks/Refactor Resources, Make atomic notes.md",
+                  "Projects/Tasks/Kanban Tasks/revamp workflow, in general some refactor on obsiadian.md",
+                  "Projects/Tasks/Kanban Tasks/setup vi mode in ghostty.md",
+                  "Projects/Tasks/Kanban Tasks/specs and ai_docs in obsidian as symlinks, commands that can creat them easily.md",
+                  "Projects/Tasks/Kanban Tasks/start using cline, free, with gemini cli, claude code.md",
+                  "Projects/Tasks/Kanban Tasks/Tool for easy context to llm.md",
+                  "Projects/Tasks/Kanban Tasks/Track Subscriptions.md",
+                  "Projects/Tasks/Kanban Tasks/use the agentic loop to create more warp workflows.md"
+                ],
+                "collapse": true
+              }
+            }
+          },
+          "filter": {
+            "conjunction": "and",
+            "conditions": []
+          },
+          "colors": {
+            "conditions": [
+              {
+                "color": "#b873bf",
+                "condition": {
+                  "field": "priority",
+                  "operator": "is",
+                  "enabled": true,
+                  "value": "medium"
+                }
+              },
+              {
+                "color": "#6fd1d3",
+                "condition": {
+                  "field": "priority",
+                  "operator": "is",
+                  "enabled": true,
+                  "value": "low"
+                }
+              },
+              {
+                "color": "#e16060",
+                "condition": {
+                  "field": "priority",
+                  "operator": "is",
+                  "enabled": true,
+                  "value": "high"
+                }
+              },
+              {
+                "color": "#ff0000",
+                "condition": {
+                  "field": "priority",
+                  "operator": "is",
+                  "enabled": true,
+                  "value": "urgent"
+                }
+              }
+            ]
+          },
+          "sort": {
+            "criteria": []
+          },
+          "id": "b403d78f-1e2b-478f-a329-ad7b245480c7",
+          "name": "Board",
+          "type": "board"
+        }
+      ],
+      "id": "8d6f1995-384f-4ccd-bd81-4fd3aa1919fa",
+      "name": "opencode"
     }
   ],
   "archives": [],
@@ -301,6 +574,10 @@
       {
         "project": "0dd85664-dad4-4770-885c-b7e354b37736",
         "view": "710d4d76-16c6-4a1b-b839-139147d55162"
+      },
+      {
+        "project": "8d6f1995-384f-4ccd-bd81-4fd3aa1919fa",
+        "view": "b403d78f-1e2b-478f-a329-ad7b245480c7"
       }
     ],
     "linkBehavior": "open-note",
