@@ -32,6 +32,6 @@
   "primary_tags_results_visible": true,
   "tags_sidebar": true,
   "tags_sidebar_sorted_by_frequency": false,
-  "onclose_search": "@notes excalidraw",
+  "onclose_search": "",
   "saved_searches": []
 }

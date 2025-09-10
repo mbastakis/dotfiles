@@ -36,3 +36,6 @@ dot-config/configstore
 
 # Fabric
 dot-config/fabric
+
+# Helm 
+dot-config/helm

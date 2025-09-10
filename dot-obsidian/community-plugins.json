@@ -38,15 +38,15 @@
   "code-styler",
   "fold-properties-by-default",
   "omnisearch",
-  "beautitab",
   "obsidian-meta-bind-plugin",
   "obsidian-local-rest-api",
   "js-engine",
   "text-extractor",
   "ai-image-analyzer",
-  "context-gather-plugin",
   "obsidian-git",
   "obsidian-file-link",
   "better-export-pdf",
-  "pdf-plus"
+  "pdf-plus",
+  "vscode-editor",
+  "homepage"
 ]

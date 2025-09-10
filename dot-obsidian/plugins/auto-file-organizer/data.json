@@ -1,5 +1,5 @@
 {
-  "tagEnabled": false,
+  "tagEnabled": true,
   "extensionEnabled": true,
   "priority": "tag",
   "extensionMapping": {
@@ -18,13 +18,12 @@
     "canvas": "Dashboards"
   },
   "tagMapping": {
-    "#mresource": "Resources",
-    "#mproject": "Projects",
-    "#marea": "Areas",
     "#shortcuts": "Resources/Shortcuts",
     "#mshortcut": "Resources/Shortcuts",
     "#marchive": "Archives"
   },
   "extensionBlackList": {},
-  "tagBlackList": {}
+  "tagBlackList": {
+    "Extras/Templates": "Extras/Templates"
+  }
 }
