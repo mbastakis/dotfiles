@@ -4,13 +4,12 @@
     "type": "split",
     "children": [
       {
-        "id": "f58b8918ceb3c939",
+        "id": "53c4f797429b1554",
         "type": "tabs",
         "children": [
           {
-            "id": "f46e29a1721e3800",
+            "id": "8c0d325c783972b6",
             "type": "leaf",
-            "pinned": true,
             "state": {
               "type": "canvas",
               "state": {
@@ -18,15 +17,25 @@
                 "viewState": {
                   "x": -657.5,
                   "y": -420,
-                  "zoom": -0.1958790964248377
+                  "zoom": -0.18555565315607656
                 }
               },
-              "pinned": true,
               "icon": "lucide-layout-dashboard",
               "title": "Home"
             }
+          },
+          {
+            "id": "dc4237808db88228",
+            "type": "leaf",
+            "state": {
+              "type": "obsidian-projects",
+              "state": {},
+              "icon": "projects-icon",
+              "title": "Projects"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -83,7 +92,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 368.5104179382324
+    "width": 368.5104179382324,
+    "collapsed": true
   },
   "right": {
     "id": "45a4c33d2d217b48",
@@ -146,7 +156,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 326.5
+    "width": 326.5,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -198,10 +209,14 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "1b9875d61959b663",
+  "active": "dc4237808db88228",
   "lastOpenFiles": [
-    "Resources/AI_Prompts",
+    "Projects/Tasks/DT Tasks/Create Prod with billing element.md",
+    "Projects/Tasks/DT Tasks/Check backlog and current sprint.md",
+    "Projects/Tasks/DT Tasks/Bring Keycloak in front of Langfuse, Magenta Apprentice, LMStudio.md",
     "Dashboards/Home.canvas",
+    "Areas/Documentation/AI - Documentation.md",
+    "Resources/AI_Prompts",
     "to-do.md",
     "Extras/Templates/Projects/opencode-card.md",
     "Projects/Tasks/Opencode Tasks/test.md",
@@ -230,9 +245,6 @@
     "extract_tags.sh",
     "Resources/Shortform Books/The Black Swan.md",
     "Archives/Υπόδειγμα συνοπτικής παρουσίασης επιχείρησης - India in a Box.md",
-    "Archives/ΠΚ-1003.md",
-    "Extras/Unkown/Ενότητα 10 - Μαθαίνοντας από την αποτυχία.md",
-    "Extras/Unkown/Ενότητα 3 - Ανάπτυξη επιχειρηματικής νοοτροπίας.md",
     "Dashboards/Fitness.canvas",
     "Dashboards/Global Tasks.canvas",
     "Dashboards/PARA.canvas",
@@ -240,7 +252,6 @@
     "Resources/Books/Build a Large Language Model (From Scratch) (Sebastian Raschka) (Z-Library) 1.pdf",
     "Extras/PDF/ISS_Welcome_Guide_2024.pdf",
     "Extras/PDF/purchase-summary-indian-spirit.pdf",
-    "Extras/PDF/RF02908559002502081142531-1.pdf",
     "Extras/Images/Cygnus.png",
     "Extras/Images/corfu trip - chara + mike-1756481741800.webp",
     "Extras/Images/corfu trip - chara + mike-1756481721378.webp",
