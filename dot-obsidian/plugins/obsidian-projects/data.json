@@ -268,7 +268,29 @@
               "Done": {
                 "weight": 0,
                 "records": [
-                  "Projects/Tasks/DT Tasks/test.md"
+                  "Projects/Tasks/DT Tasks/wfmt silverlight.md",
+                  "Projects/Tasks/DT Tasks/deploy logfire.md",
+                  "Extras/Unkown/Communicate with AICC people.md",
+                  "Extras/Unkown/Documentation.md",
+                  "Extras/Unkown/Get Access to Slack.md",
+                  "Extras/Unkown/Get Access to TelekomWiki.md",
+                  "Extras/Unkown/Get Access to Tools Account.md",
+                  "Extras/Unkown/Login n8n, argocd, langfuse, litellm.md",
+                  "Extras/Unkown/Meeting with Patrick at Tuesday.md",
+                  "Extras/Unkown/Meeting with Vasiliki at Tuesday.md",
+                  "Extras/Unkown/Schedule Meeting with Aayush.md",
+                  "Projects/Tasks/DT Tasks/2 Jul Abishek check .md",
+                  "Projects/Tasks/DT Tasks/Ask Paul the script for aws login.md",
+                  "Projects/Tasks/DT Tasks/Azure & GCP contact dimitra.md",
+                  "Projects/Tasks/DT Tasks/Contact Nickel get kanban board access.md",
+                  "Projects/Tasks/DT Tasks/Create an onboarding ticket.md",
+                  "Projects/Tasks/DT Tasks/Get access to the Kanban Board.md",
+                  "Projects/Tasks/DT Tasks/Go to aws Playground.md",
+                  "Projects/Tasks/DT Tasks/Help BFL Dev Team.md",
+                  "Projects/Tasks/DT Tasks/PSA Portal Notes.md",
+                  "Projects/Tasks/Kanban Tasks/Ask for a DTTL Teams Account, and ask for accesses.md",
+                  "Projects/Tasks/Kanban Tasks/Ask for Perplexity Pro subscription.md",
+                  "Projects/Tasks/Kanban Tasks/Meeting with Bali Dimitra.md"
                 ],
                 "collapse": true
               },
@@ -282,7 +304,9 @@
               },
               "InProgress": {
                 "weight": 3,
-                "records": []
+                "records": [
+                  "Projects/Tasks/DT Tasks/use the proxmox gpus to add the ollamas .md"
+                ]
               },
               "ToReport": {
                 "weight": 4,

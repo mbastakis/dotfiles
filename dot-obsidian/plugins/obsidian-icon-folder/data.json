@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "OcTasklist24",
       "TiPrompt",
       "RiTaskLine",
       "FasDollarSign",
-      "LiSquareKanban",
-      "SiShortcut"
+      "LiSquareKanban"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [
@@ -434,5 +434,14 @@
   "Extras/Templates/Projects/opencode-card.md": {
     "iconName": "OcTasklist24"
   },
-  "Resources/AI_Prompts": "TiPrompt"
+  "Resources/AI_Prompts": "TiPrompt",
+  "Projects/Tasks/DT Tasks/Bring Keycloak in front of Langfuse, Magenta Apprentice, LMStudio.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/DT Tasks/Check backlog and current sprint.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/DT Tasks/Create Prod with billing element.md": {
+    "iconName": "OcTasklist24"
+  }
 }
