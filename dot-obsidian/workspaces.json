@@ -6,11 +6,11 @@
         "type": "split",
         "children": [
           {
-            "id": "f15cd5978972a640",
+            "id": "d470c8604eece1c5",
             "type": "tabs",
             "children": [
               {
-                "id": "8f7e5a5403edb299",
+                "id": "0f004151c8d391e6",
                 "type": "leaf",
                 "pinned": true,
                 "state": {
@@ -18,9 +18,9 @@
                   "state": {
                     "file": "Dashboards/Home.canvas",
                     "viewState": {
-                      "x": -169.5,
-                      "y": -110.07105712890628,
-                      "zoom": 0
+                      "x": -657.5,
+                      "y": -420,
+                      "zoom": -0.3667043345078536
                     }
                   },
                   "pinned": true,
@@ -85,7 +85,7 @@
           }
         ],
         "direction": "horizontal",
-        "width": 235.5010757446289,
+        "width": 368.5104179382324,
         "collapsed": true
       },
       "right": {
@@ -95,7 +95,7 @@
           {
             "id": "549649fefd6df736",
             "type": "tabs",
-            "dimension": 68.26394344069128,
+            "dimension": 66.52323580034424,
             "children": [
               {
                 "id": "4f8f385ea32358a8",
@@ -133,18 +133,8 @@
           {
             "id": "014043c44890df20",
             "type": "tabs",
-            "dimension": 31.736056559308718,
+            "dimension": 33.47676419965577,
             "children": [
-              {
-                "id": "891fa13d3b582d57",
-                "type": "leaf",
-                "state": {
-                  "type": "timer-view",
-                  "state": {},
-                  "icon": "timer",
-                  "title": "Timer"
-                }
-              },
               {
                 "id": "f1049f826872d3e5",
                 "type": "leaf",
@@ -194,22 +184,26 @@
           "ribbon-divider:ribbon-divider-cb86a7cb-7e64-467d-b89d-2c69120994bf": false,
           "ribbon-divider:ribbon-divider-36ef3d98-08ff-4dc5-ae9e-d9b4d0ebc3c9": true,
           "meld-encrypt:Convert to or from an Encrypted note": true,
-          "pomodoro-timer:Toggle timer panel": true,
           "cmdr:Workspaces: Load workspace layout": false,
           "cmdr:Workspaces: Save layout": false,
           "meld-encrypt:New encrypted note": false,
           "meld-encrypt:Encrypt Selection": true,
           "meld-encrypt:Lock and Close all open encrypted notes": false,
-          "janitor:Janitor: scan vault": false,
           "markdown-importer:Open format converter": true,
           "custom-sort:Toggle custom sorting": true,
           "canvas:Create new canvas": true,
           "omnisearch:Omnisearch": true,
-          "meld-encrypt:Decrypt at Cursor": true
+          "meld-encrypt:Decrypt at Cursor": true,
+          "pdf-plus:PDF++: Toggle auto-copy": true,
+          "pdf-plus:PDF++: Toggle auto-focus": true,
+          "pdf-plus:PDF++: Toggle auto-paste": true,
+          "vscode-editor:Create Code File": true,
+          "janitor:Janitor: scan vault": false,
+          "homepage:Open homepage": true
         }
       },
-      "active": "8f7e5a5403edb299",
-      "mtime": "2025-08-18T04:45:37+03:00"
+      "active": "0f004151c8d391e6",
+      "mtime": "2025-09-16T21:33:54+03:00"
     }
   },
   "active": "mike-base"
