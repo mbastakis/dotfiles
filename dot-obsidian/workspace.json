@@ -4,38 +4,27 @@
     "type": "split",
     "children": [
       {
-        "id": "53c4f797429b1554",
+        "id": "d470c8604eece1c5",
         "type": "tabs",
         "children": [
           {
-            "id": "8c0d325c783972b6",
+            "id": "0f004151c8d391e6",
             "type": "leaf",
             "state": {
               "type": "canvas",
               "state": {
                 "file": "Dashboards/Home.canvas",
                 "viewState": {
-                  "x": -657.5,
-                  "y": -420,
-                  "zoom": -0.18555565315607656
+                  "x": -570,
+                  "y": -150,
+                  "zoom": 0
                 }
               },
               "icon": "lucide-layout-dashboard",
               "title": "Home"
             }
-          },
-          {
-            "id": "dc4237808db88228",
-            "type": "leaf",
-            "state": {
-              "type": "obsidian-projects",
-              "state": {},
-              "icon": "projects-icon",
-              "title": "Projects"
-            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -196,7 +185,6 @@
       "meld-encrypt:New encrypted note": false,
       "meld-encrypt:Encrypt Selection": true,
       "meld-encrypt:Lock and Close all open encrypted notes": false,
-      "janitor:Janitor: scan vault": false,
       "markdown-importer:Open format converter": true,
       "custom-sort:Toggle custom sorting": true,
       "canvas:Create new canvas": true,
@@ -205,53 +193,55 @@
       "pdf-plus:PDF++: Toggle auto-copy": true,
       "pdf-plus:PDF++: Toggle auto-focus": true,
       "pdf-plus:PDF++: Toggle auto-paste": true,
-      "vscode-editor:Create Code File": false,
-      "homepage:Open homepage": false
+      "vscode-editor:Create Code File": true,
+      "janitor:Janitor: scan vault": false,
+      "homepage:Open homepage": true
     }
   },
-  "active": "dc4237808db88228",
+  "active": "0f004151c8d391e6",
   "lastOpenFiles": [
-    "Projects/Tasks/DT Tasks/Create Prod with billing element.md",
-    "Projects/Tasks/DT Tasks/Check backlog and current sprint.md",
-    "Projects/Tasks/DT Tasks/Bring Keycloak in front of Langfuse, Magenta Apprentice, LMStudio.md",
+    "Extras/PDF/learning-patterns-v1.1.pdf",
+    "Resources/Books/book-summaries.md",
+    "Resources/Books/learning-patterns-v1.1.pdf",
+    "Projects/Tasks/Obsidian Tasks/Automatic way to discover and bring up old notes that needs cleaning or remembering.md",
+    "Projects/Tasks/Obsidian Tasks/create mcp for obsidian, converse with AI about the design.md",
     "Dashboards/Home.canvas",
-    "Areas/Documentation/AI - Documentation.md",
-    "Resources/AI_Prompts",
-    "to-do.md",
-    "Extras/Templates/Projects/opencode-card.md",
-    "Projects/Tasks/Opencode Tasks/test.md",
-    "Projects/opencode.md",
-    "Projects/Tasks/Opencode Tasks",
-    "empty files.md",
-    "Extras/Unkown/Weekly Review.md",
-    "Extras/Unkown/Research Note.md",
-    "Extras/Unkown/CONFIGURATION.md",
-    "Extras/Templates/PARA/resource.md",
-    "Extras/Unkown/Quick Capture.md",
-    "Extras/Unkown/atomic-habits.md",
-    "Extras/Unkown/body-measurements.md",
-    "Extras/Unkown/brain-wash.md",
-    "Extras/Unkown/koinoxrista-application.md",
-    "Extras/Unkown/holidays-2024.md",
-    "Extras/Unkown/encrypted-note.md",
-    "Extras/Unkown/pininfo.md",
-    "Extras/Unkown/tmp99.md",
-    "Extras/Unkown/undefined.md",
-    "Resources/Shortform Books/Orange is the New Black.md",
-    "all_tags_complete.txt",
-    "meaningful_tags.txt",
-    "extract_meaningful_tags.sh",
-    "all_tags.txt",
-    "extract_tags.sh",
-    "Resources/Shortform Books/The Black Swan.md",
-    "Archives/Υπόδειγμα συνοπτικής παρουσίασης επιχείρησης - India in a Box.md",
+    "Areas/Work/DT-AICC/get-access-telekomwiki.md",
+    "Areas/Work/DT-AICC/clco-1548-dtsp-scanning.md",
+    "Areas/Career/jobs-tracking.md",
+    "Resources/Programming/advanced-data-structures.md",
+    "Resources/Computing/operating-systems-concepts.md",
+    "Resources/Computing",
+    "Resources/Career/workplace-effectiveness.md",
+    "Resources/Career/technical-interview-patterns.md",
+    "Archives/_Reports/extraction-tracking.md",
+    "Archives/_Reports",
+    "Resources/DevOps/kubernetes-ecosystem.md",
+    "Resources/Software/software-development-principles.md",
+    "Resources/Software",
+    "Resources/Finance/investment-strategies.md",
+    "Resources/Finance",
+    "Archives/Work/Sitecore/sitecore.md",
+    "Archives/Personal/personal-notes.md",
+    "Resources/AWS/vpc-networking.md",
+    "Areas/Database-MOC.md",
+    "Areas/Security-MOC.md",
+    "Resources/Health/sleep-optimization.md",
+    "Resources/Health/fitness-training-principles.md",
+    "Resources/DevOps/git-version-control.md",
+    "Resources/Database/database-optimization.md",
+    "Resources/Database",
+    "Resources/Security/application-security-layers.md",
+    "Resources/Cloud/cloud-computing-concepts.md",
+    "Resources/AWS",
+    "Resources/Security",
+    "Resources/Databases",
+    "Extras/Images/4001x3501-cartoon-tomato-clipart-freedesignfile.png",
+    "Extras/Images/19852122_6195005.jpg",
     "Dashboards/Fitness.canvas",
     "Dashboards/Global Tasks.canvas",
     "Dashboards/PARA.canvas",
     "Dashboards/Discovery.canvas",
-    "Resources/Books/Build a Large Language Model (From Scratch) (Sebastian Raschka) (Z-Library) 1.pdf",
-    "Extras/PDF/ISS_Welcome_Guide_2024.pdf",
-    "Extras/PDF/purchase-summary-indian-spirit.pdf",
     "Extras/Images/Cygnus.png",
     "Extras/Images/corfu trip - chara + mike-1756481741800.webp",
     "Extras/Images/corfu trip - chara + mike-1756481721378.webp",
@@ -260,8 +250,6 @@
     "Extras/Images/corfu trip - chara + mike-1756481850047.webp",
     "Extras/Images/corfu trip - chara + mike-1756481779272.webp",
     "Dashboards/Dashboards.canvas",
-    "Extras/Images/aicc-netbird-aiccvpn-access-1753264782490.webp",
-    "Extras/Images/wfmt silverlight-1753190605273.webp",
-    "Extras/Images/kalamata-camping-date-1752687994154.webp"
+    "Extras/Images/aicc-netbird-aiccvpn-access-1753264782490.webp"
   ]
 }

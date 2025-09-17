@@ -64,6 +64,7 @@
         "oven-sh/bun"
         "yakitrak/yakitrak"
       	"sst/tap"
+        "browsh-org/homebrew-browsh"
       ];
       homebrew.casks = [
 	      "raycast"
@@ -168,6 +169,8 @@
         "whisper-cpp"
         "fabric-ai"
         "watch"
+        "bagels"
+        "browsh"
       ];
       homebrew.masApps = 
         { 

@@ -7,9 +7,9 @@
     "iconColor": null,
     "recentlyUsedIcons": [
       "OcTasklist24",
-      "TiPrompt",
-      "RiTaskLine",
       "FasDollarSign",
+      "SiObsidian",
+      "LiEye",
       "LiSquareKanban"
     ],
     "recentlyUsedIconsSize": 5,
@@ -424,9 +424,6 @@
   "Resources/Shortcuts/Shortcuts.md": {
     "iconName": "SiShortcut"
   },
-  "Archives/mike-kanban.md": {
-    "iconName": "LiSquareKanban"
-  },
   "Areas/mike-logistics.md": {
     "iconName": "FasDollarSign"
   },
@@ -442,6 +439,89 @@
     "iconName": "OcTasklist24"
   },
   "Projects/Tasks/DT Tasks/Create Prod with billing element.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Opencode Tasks/Use Hendriks machine for kimi k2, qwen coder.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Opencode Tasks/Use Vertex AI from GCP.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Opencode Tasks/Use Bedrock from Playground AWS.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/Find good Tea brand and buy.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Fitness Tasks": "RiTaskLine",
+  "Extras/Templates/Projects/fitness-card.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Fitness Tasks/Find a book containing practices and write down.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Areas/mike-software.md": {
+    "iconName": "SiPaloaltosoftware"
+  },
+  "Areas/DT-mike.md": {
+    "iconName": "SiWorkplace"
+  },
+  "Areas/mike-people.md": {
+    "iconName": "OcPeople16"
+  },
+  "Archives/Personal/health/Exercise.md": {
+    "iconName": "LiDumbbell"
+  },
+  "Projects/Tasks/Opencode Tasks/Have drop zones in obsidian, with constant opencode.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Opencode Tasks/Add opencode to github agent.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/Export automatically browser pinned tabs to obsidian.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Resources/Tools/vivaldi-shortcuts.md": {
+    "iconName": "SiShortcut"
+  },
+  "Archives/Projects/mike-dashboard.md": {
+    "iconName": "LiHome"
+  },
+  "Resources/AI/ocr.md": {
+    "iconName": "FasMagnifyingGlassPlus"
+  },
+  "Resources/Tools/screen-recording.md": {
+    "iconName": "TiPlayerRecord"
+  },
+  "Resources/Hardware/glove80.md": {
+    "iconName": "LiKeyboard"
+  },
+  "Resources/Hardware/lily58-pro.md": {
+    "iconName": "LiKeyboard"
+  },
+  "Resources/Infrastructure/kyverno-presentation.md": {
+    "iconName": "SiSlides"
+  },
+  "Resources/Mac/mac-setup.md": {
+    "iconName": "RiMacbookLine"
+  },
+  "Resources/Mac/mac.md": {
+    "iconName": "RiMacbookLine"
+  },
+  "Resources/Mac/to-be-packaged.md": {
+    "iconName": "LiPlane"
+  },
+  "Areas/Documentation/aws-ssa-certification-info.md": {
+    "iconName": "LiInfo"
+  },
+  "Projects/Tasks/Obsidian Tasks": "RiTaskLine",
+  "Extras/Templates/Projects/obsidian-card.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Obsidian Tasks/create mcp for obsidian, converse with AI about the design.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Obsidian Tasks/Automatic way to discover and bring up old notes that needs cleaning or remembering.md": {
     "iconName": "OcTasklist24"
   }
 }
