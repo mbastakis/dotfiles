@@ -1,0 +1,61 @@
+# Ghostty Terminal Configuration
+# https://ghostty.org/docs/config/reference
+
+# Appearance & Theming
+theme = catppuccin-mocha
+background-opacity = 0.8
+background-blur = true
+
+# Font Configuration
+font-family = JetBrainsMono Nerd Font Mono
+font-size = 21
+font-feature = liga=1
+font-feature = calt=1
+
+# Window Management
+window-padding-x = 10
+window-padding-y = 10
+window-save-state = never
+
+# Cursor Configuration
+cursor-style = block
+cursor-style-blink = true
+
+# Mouse Behavior
+mouse-hide-while-typing = true
+mouse-shift-capture = true
+
+# Shell Integration
+shell-integration = detect
+shell-integration-features = cursor,sudo,title
+
+# Security & Privacy
+clipboard-paste-bracketed-safe = true
+clipboard-paste-protection = true
+
+# macOS-specific Settings
+macos-option-as-alt = true
+macos-titlebar-style = hidden
+macos-titlebar-proxy-icon = hidden
+
+# Keybindings for splits and tabs
+keybind = cmd+d=new_split:right
+keybind = cmd+shift+d=new_split:down
+keybind = cmd+t=new_tab
+keybind = cmd+w=close_surface
+
+# Split navigation
+keybind = ctrl+shift+h=goto_split:left
+keybind = ctrl+shift+t=goto_split:down
+keybind = ctrl+shift+n=goto_split:up
+keybind = ctrl+shift+s=goto_split:right
+
+keybind = global:cmd+ctrl+t=toggle_quick_terminal
+
+# Editor integration and command editing
+keybind = cmd+shift+e=write_screen_file:open
+
+# Custom keybinds for zsh-shift-select integration
+# Send custom escape sequences that won't interfere with normal terminal operations
+keybind = cmd+c=csi:200~
+keybind = cmd+x=csi:201~

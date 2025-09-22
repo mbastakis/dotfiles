@@ -171,6 +171,7 @@
         "watch"
         "bagels"
         "browsh"
+        "ffmpeg"
       ];
       homebrew.masApps = 
         { 

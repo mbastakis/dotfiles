@@ -13,7 +13,7 @@
   "spellcheck": true,
   "propertiesInDocument": "visible",
   "showLineNumber": false,
-  "focusNewTab": true,
+  "focusNewTab": false,
   "newFileLocation": "root",
   "showUnsupportedFiles": true,
   "attachmentFolderPath": "Extras/Images",

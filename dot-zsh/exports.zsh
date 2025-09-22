@@ -22,6 +22,11 @@ if [[ -d "$DOTFILES_PATH/bin" ]] ; then
     PATH="$DOTFILES_PATH/bin:$PATH"
 fi
 
+# Set PATH for cargo bin
+if [[ -d "$HOME/.cargo/bin" ]] ; then
+    PATH="$HOME/.cargo/bin:$PATH"
+fi
+
 ## End of path configuration
 
 ## Programming language environments
