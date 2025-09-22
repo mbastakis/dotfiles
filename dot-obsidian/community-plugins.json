@@ -48,5 +48,7 @@
   "better-export-pdf",
   "pdf-plus",
   "vscode-editor",
-  "homepage"
+  "homepage",
+  "obsidian-book-search-plugin",
+  "tag-wrangler"
 ]

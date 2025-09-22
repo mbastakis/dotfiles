@@ -3,5 +3,12 @@
   "cupertino@@accented-frame-opacity": 40,
   "cupertino@@hide-nav-header-off": false,
   "cupertino@@blur-effect-off": false,
-  "cupertino@@hide-frontmatter-off": true
+  "cupertino@@hide-frontmatter-off": true,
+  "catppuccin-theme-settings@@catppuccin-theme-accents": "ctp-full-palette",
+  "catppuccin-icon-styles@@ctp-icon-hide": true,
+  "catppuccin-interface-styles@@ctp-bold-folder-title": true,
+  "catppuccin-pdf@@ctp-pdf-darken": true,
+  "catppuccin-pdf@@ctp-pdf-blend": true,
+  "catppuccin-pdf@@ctp-seamless-pdf": true,
+  "catppuccin-tag-styles@@ctp-tag-pill": true
 }

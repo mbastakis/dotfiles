@@ -119,7 +119,7 @@
   "devMode": false,
   "templateFolderPath": "Extras/Templates",
   "announceUpdates": true,
-  "version": "2.2.1",
+  "version": "2.3.0",
   "globalVariables": {},
   "onePageInputEnabled": false,
   "disableOnlineFeatures": true,

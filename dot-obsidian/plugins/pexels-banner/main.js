@@ -2607,6 +2607,118 @@ var init_generateAIBannerModal = __esm({
                 controlValueDisplay.textContent = "No file";
               }
             });
+          } else if (control.type === "image_files") {
+            const fileContainer = controlElement.createDiv({
+              attr: { style: "display: flex; flex-direction: column; gap: 10px;" }
+            });
+            if (!this.selectedFiles) this.selectedFiles = {};
+            this.selectedFiles[controlKey] = [];
+            const fileInput = fileContainer.createEl("input", {
+              type: "file",
+              attr: {
+                id: `control-${this.selectedModelId}-${controlKey}`,
+                accept: "image/jpeg,image/jpg,image/png,image/webp,image/gif",
+                multiple: true
+              }
+            });
+            const previewContainer = fileContainer.createDiv({
+              attr: {
+                id: `${fileInput.id}-previews`,
+                style: "display: flex; flex-wrap: wrap; gap: 10px; display: none;"
+              }
+            });
+            const fileInfo = fileContainer.createDiv({
+              attr: {
+                id: `${fileInput.id}-info`,
+                style: "font-size: 12px; color: var(--text-muted);"
+              },
+              text: "No files selected (max 10MB each)"
+            });
+            const updatePreviewDisplay = () => {
+              previewContainer.empty();
+              const validFiles = this.selectedFiles[controlKey];
+              if (validFiles.length > 0) {
+                validFiles.forEach((file, index) => {
+                  const previewItem = previewContainer.createDiv({
+                    attr: {
+                      style: "display: flex; flex-direction: column; align-items: center; position: relative;"
+                    }
+                  });
+                  const removeButton = previewItem.createEl("button", {
+                    text: "X",
+                    attr: {
+                      style: "position: absolute; top: -5px; right: -5px; width: 20px; height: 20px; border-radius: 50%; background: maroon; color: white; border: none; font-weight: bold; cursor: pointer; z-index: 1; line-height: 1; font-size: 14px;",
+                      title: "Remove this image"
+                    }
+                  });
+                  const previewImage = previewItem.createEl("img", {
+                    attr: {
+                      style: "max-width: 100px; max-height: 100px; border-radius: 4px; border: 1px solid var(--background-modifier-border);"
+                    }
+                  });
+                  const fileName = previewItem.createDiv({
+                    text: file.name,
+                    attr: { style: "font-size: 10px; color: var(--text-muted); text-align: center; max-width: 100px; word-break: break-word;" }
+                  });
+                  const reader = new FileReader();
+                  reader.onload = (e) => {
+                    previewImage.src = e.target.result;
+                  };
+                  reader.onerror = (e) => {
+                    console.error("File reader error:", e);
+                  };
+                  reader.readAsDataURL(file);
+                  removeButton.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.selectedFiles[controlKey] = this.selectedFiles[controlKey].filter((_, i) => i !== index);
+                    updatePreviewDisplay();
+                  });
+                });
+                const totalSize = validFiles.reduce((sum, file) => sum + file.size, 0);
+                const totalSizeMB = (totalSize / (1024 * 1024)).toFixed(1);
+                let infoText = `\u{1F4C1} ${validFiles.length} file${validFiles.length !== 1 ? "s" : ""} selected (${totalSizeMB}MB total)`;
+                fileInfo.textContent = infoText;
+                previewContainer.style.display = "flex";
+                this.controlValues[controlKey] = "FILES_SELECTED";
+                controlValueDisplay.textContent = `${validFiles.length} files selected`;
+              } else {
+                fileInfo.textContent = "No files selected (max 10MB each)";
+                previewContainer.style.display = "none";
+                this.controlValues[controlKey] = null;
+                controlValueDisplay.textContent = "No files";
+              }
+            };
+            fileInput.addEventListener("change", (e) => {
+              const newFiles = Array.from(e.target.files);
+              if (newFiles.length > 0) {
+                let errors = [];
+                newFiles.forEach((file) => {
+                  const maxFileSize = 10 * 1024 * 1024;
+                  const fileSizeMB = (file.size / (1024 * 1024)).toFixed(1);
+                  const isDuplicate = this.selectedFiles[controlKey].some(
+                    (existingFile) => existingFile.name === file.name && existingFile.size === file.size
+                  );
+                  if (file.size > maxFileSize) {
+                    errors.push(`${file.name}: ${fileSizeMB}MB (too large)`);
+                    return;
+                  }
+                  if (isDuplicate) {
+                    errors.push(`${file.name}: already selected`);
+                    return;
+                  }
+                  this.selectedFiles[controlKey].push(file);
+                });
+                if (errors.length > 0) {
+                  const errorMsg = `\u274C ${errors.length} file${errors.length !== 1 ? "s" : ""} rejected: ${errors.join(", ")}`;
+                  fileInfo.innerHTML = errorMsg;
+                  setTimeout(() => updatePreviewDisplay(), 3e3);
+                } else {
+                  updatePreviewDisplay();
+                }
+              }
+              fileInput.value = "";
+            });
           }
         });
         setTimeout(() => {
@@ -2625,6 +2737,7 @@ var init_generateAIBannerModal = __esm({
       }
       // Helper method to collect control values
       async collectControlValues() {
+        var _a;
         if (!this.selectedModelId || !this.availableModels[this.selectedModelId]) {
           console.error("No selected model or model data not found");
           return {};
@@ -2640,6 +2753,9 @@ var init_generateAIBannerModal = __esm({
             } else if (controls[controlKey].type === "image_file") {
               const file = controlElement.files[0];
               controlValues[controlKey] = file ? "FILE_SELECTED" : null;
+            } else if (controls[controlKey].type === "image_files") {
+              const selectedFiles = ((_a = this.selectedFiles) == null ? void 0 : _a[controlKey]) || [];
+              controlValues[controlKey] = selectedFiles.length > 0 ? "FILES_SELECTED" : null;
             } else {
               controlValues[controlKey] = controlElement.value;
             }
@@ -2651,7 +2767,7 @@ var init_generateAIBannerModal = __esm({
       }
       // Helper method to upload image files
       async uploadImageFiles(controlValues) {
-        var _a;
+        var _a, _b, _c;
         const controls = this.availableModels[this.selectedModelId].controls;
         const updatedControlValues = { ...controlValues };
         for (const controlKey in controlValues) {
@@ -2696,6 +2812,49 @@ var init_generateAIBannerModal = __esm({
             } else {
               updatedControlValues[controlKey] = null;
             }
+          } else if (((_b = controls[controlKey]) == null ? void 0 : _b.type) === "image_files" && controlValues[controlKey] === "FILES_SELECTED") {
+            const files = ((_c = this.selectedFiles) == null ? void 0 : _c[controlKey]) || [];
+            if (files.length > 0) {
+              try {
+                const uploadedImageIds = [];
+                for (const file of files) {
+                  const maxFileSize = 10 * 1024 * 1024;
+                  if (file.size > maxFileSize) {
+                    throw new Error(`Image file too large. Maximum size is ${maxFileSize / (1024 * 1024)}MB, but file is ${(file.size / (1024 * 1024)).toFixed(1)}MB`);
+                  }
+                  const formData = new FormData();
+                  formData.append("image", file);
+                  const uploadUrl = new URL(PIXEL_BANNER_PLUS.ENDPOINTS.UPLOAD_TEMP_IMAGE, PIXEL_BANNER_PLUS.API_URL).toString();
+                  const response = await fetch(uploadUrl, {
+                    method: "POST",
+                    headers: {
+                      "X-User-Email": this.plugin.settings.pixelBannerPlusEmail,
+                      "X-API-Key": this.plugin.settings.pixelBannerPlusApiKey,
+                      "X-Pixel-Banner-Version": this.plugin.settings.lastVersion
+                      // Don't set Content-Type - let browser set it with boundary for FormData
+                    },
+                    body: formData
+                  });
+                  if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error(`Upload failed with status ${response.status}:`, errorText);
+                    throw new Error(`Failed to upload ${controlKey} image: HTTP ${response.status}`);
+                  }
+                  const responseData = await response.json();
+                  if (!(responseData == null ? void 0 : responseData.imageId)) {
+                    console.error("Upload response missing imageId:", responseData);
+                    throw new Error(`Upload response missing imageId for ${controlKey}`);
+                  }
+                  uploadedImageIds.push(responseData.imageId);
+                }
+                updatedControlValues[controlKey] = uploadedImageIds;
+              } catch (error) {
+                console.error(`Error uploading ${controlKey}:`, error);
+                throw new Error(`Failed to upload ${controlKey}: ${error.message}`);
+              }
+            } else {
+              updatedControlValues[controlKey] = null;
+            }
           }
         }
         return updatedControlValues;
@@ -2723,7 +2882,7 @@ var init_generateAIBannerModal = __esm({
             await this.refreshHistoryContainer();
           }
           let controlValues = await this.collectControlValues();
-          const hasImageFiles = Object.values(controlValues).includes("FILE_SELECTED");
+          const hasImageFiles = Object.values(controlValues).includes("FILE_SELECTED") || Object.values(controlValues).includes("FILES_SELECTED");
           if (hasImageFiles) {
             loadingContainer.empty();
             const uploadingDiv = loadingContainer.createDiv({ text: "Uploading images..." });
@@ -30747,7 +30906,7 @@ module.exports = __toCommonJS(main_exports);
 var import_obsidian31 = require("obsidian");
 
 // virtual-module:virtual:release-notes
-var releaseNotes = '<a href="https://www.youtube.com/watch?v=tfNqEAQuhXs">\n  <img src="https://pixel-banner.online/img/pixel-banner-v3.6.jpg" alt="Pixel Banner" style="max-width: 400px;">\n</a>\n\n<h2>\u{1F389} What&#39;s New</h2>\n<h3>v3.6.0</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>Support for \u{1F3AC} Video Banners!<ul>\n<li>Upload and choose Video files as banners from your vault</li>\n<li>Downloadable \u{1F3AC} Video Banners from the <code>Pixel Banner Plus Collection</code></li>\n</ul>\n</li>\n<li>Added paging controls to the <code>Pixel Banner Plus Collection</code></li>\n<li>New global <code>Banner Max Width</code> setting to control the default max width for all banners</li>\n</ul>\n<h4>\u{1F4E6} Updated</h4>\n<ul>\n<li>Moved <code>Default Saved Banners Folder</code> setting to the <code>General</code> tab</li>\n<li>Renamed <code>Pixel Banner Plus Store</code> to <code>Pixel Banner Plus Collection</code> as many items are free</li>\n</ul>\n<h3>v3.6.1</h3>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>Resolved issue with Icon Image selection modal not setting the selected icon image</li>\n</ul>\n<h3>v3.6.2</h3>\n<h4>\u{1F4E6} Updated</h4>\n<ul>\n<li>Improved debounce logic to prevent multiple banner reloads when opening a note</li>\n</ul>\n<h3>v3.6.3</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>Added <code>filesize</code> display to the store modal</li>\n</ul>\n<h3>v3.6.4</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>Banner images now support local <code>file</code> protocol for images outside of your vault (e.g. <code>file:///C:\\path\\banner.jpg</code>)</li>\n</ul>\n<h4>\u{1F4E6} Updated</h4>\n<ul>\n<li>Allow commas in banner filenames</li>\n</ul>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>Ensure pinned banner is the currently displayed image when saving API banners</li>\n<li>Ensure banner icons are only rendered when a main banner image is present</li>\n<li>Banner Icon Image not always rendered until the note was clicked/focused</li>\n</ul>\n<h3>v3.6.5</h3>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>Fix refresh button to use original comma-separated keywords from frontmatter instead of the cached single keyword</li>\n<li>Resolved issue with the default x/y frontmatter fields not being hidden when the &quot;Hide Pixel Banner Fields&quot; option is enabled</li>\n<li>Updated API call for <code>Pexels</code> to conform to spec changes on their side</li>\n</ul>\n<h3>v3.6.6</h3>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>New folder group entries now inherit the user&#39;s default Content Start Position setting instead of being hardcoded to 150px</li>\n</ul>\n<h3>v3.6.8</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li><strong>Pin Choice Modal</strong>: When pinning API images, users can now choose between saving locally or pinning the URL directly to frontmatter<ul>\n<li>New choice modal presents &quot;Save Image Locally&quot; vs &quot;Pin Image URL&quot; options</li>\n<li>URL pinning saves no storage space in vault but requires internet connection</li>\n<li>Local saving remains available for offline access and permanence</li>\n<li>Choice only appears for user-initiated pin actions (pin icon, command palette)</li>\n<li>AI generation and Pixel Banner Plus continue to save locally automatically</li>\n</ul>\n</li>\n<li><strong>Auto-Focus Enhancement</strong>: Folder selection modal now automatically focuses and selects the text input for improved workflow</li>\n</ul>\n<h3>v3.6.7</h3>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>Fixed ImageViewModal to properly display banner images and videos when clicking the &quot;Show View Image Icon&quot;<ul>\n<li>Added support for MP4 and MOV video files in the ImageViewModal with proper video player controls</li>\n<li>Correctly display actual image URLs instead of keywords for 3rd party API banners in the ImageViewModal</li>\n<li>Local images, videos, and file:/// paths maintain original display behavior</li>\n</ul>\n</li>\n</ul>\n<h3>v3.6.8</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li><strong>Pin Choice Modal</strong>: When pinning API images, users can now choose between saving locally or pinning the URL directly to frontmatter<ul>\n<li>New choice modal presents &quot;Save Image Locally&quot; vs &quot;Pin Image URL&quot; options</li>\n<li>URL pinning saves no storage space in vault but requires internet connection</li>\n<li>Local saving remains available for offline access and permanence</li>\n<li>Choice only appears for user-initiated pin actions (pin icon, command palette)</li>\n<li>AI generation and Pixel Banner Plus continue to save locally automatically</li>\n</ul>\n</li>\n<li><strong>Auto-Focus Enhancement</strong>: Folder selection modal now automatically focuses and selects the text input for improved workflow</li>\n<li><code>Enter</code> button support for submitting the save image form in the <code>Save Image Modal</code></li>\n<li>New <code>Pin Image URL</code> option to save API images directly as URL references in frontmatter without downloading to vault</li>\n</ul>\n<h4>\u{1F4E6} Updated</h4>\n<ul>\n<li>Replaced manual frontmatter string manipulation with Obsidian&#39;s native processFrontMatter API for more reliable metadata updates</li>\n</ul>\n<h3>v3.6.9</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>New <code>Icon Image Size Multiplier</code> setting to the <code>General</code> settings tab to control the global size of banner icon images</li>\n<li>Check for version updates when opening <code>General</code> settings and show update button if available</li>\n</ul>\n<h4>\u{1F4E6} Updated</h4>\n<ul>\n<li>Moved <code>AI Model</code> selection from radio buttons to a dropdown for better organization</li>\n<li>Changed default banner fade value from <code>-70</code> to <code>-40</code></li>\n</ul>\n<h3>v3.6.10</h3>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>Icon images and emojis not being displayed properly</li>\n</ul>\n<h3>v3.6.11</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>New toggle to turn on/off <code>Pixel Banner Plus</code> in the main Pixel Banner select modal</li>\n</ul>\n<h4>\u{1F4E6} Updated</h4>\n<ul>\n<li>Added unquoted wiki-link support for Image Icons paths (e.g. <code>[[path/icon.png]]</code>)</li>\n<li>Misc code cleanup</li>\n</ul>\n<h3>v3.6.12</h3>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>Resolved inccorect <code>Pixel Banner Plus Server</code> URL</li>\n</ul>\n<a href="https://www.youtube.com/watch?v=pJFsMfrWak4">\n  <img src="https://pixel-banner.online/img/pixel-banner-transparent-bg.png" alt="Pixel Banner" style="max-width: 400px;">\n</a>\n';
+var releaseNotes = '<a href="https://www.youtube.com/watch?v=tfNqEAQuhXs">\n  <img src="https://pixel-banner.online/img/pixel-banner-v3.6.jpg" alt="Pixel Banner" style="max-width: 400px;">\n</a>\n\n<h2>\u{1F389} What&#39;s New</h2>\n<h3>v3.6.0</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>Support for \u{1F3AC} Video Banners!<ul>\n<li>Upload and choose Video files as banners from your vault</li>\n<li>Downloadable \u{1F3AC} Video Banners from the <code>Pixel Banner Plus Collection</code></li>\n</ul>\n</li>\n<li>Added paging controls to the <code>Pixel Banner Plus Collection</code></li>\n<li>New global <code>Banner Max Width</code> setting to control the default max width for all banners</li>\n</ul>\n<h4>\u{1F4E6} Updated</h4>\n<ul>\n<li>Moved <code>Default Saved Banners Folder</code> setting to the <code>General</code> tab</li>\n<li>Renamed <code>Pixel Banner Plus Store</code> to <code>Pixel Banner Plus Collection</code> as many items are free</li>\n</ul>\n<h3>v3.6.1</h3>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>Resolved issue with Icon Image selection modal not setting the selected icon image</li>\n</ul>\n<h3>v3.6.2</h3>\n<h4>\u{1F4E6} Updated</h4>\n<ul>\n<li>Improved debounce logic to prevent multiple banner reloads when opening a note</li>\n</ul>\n<h3>v3.6.3</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>Added <code>filesize</code> display to the store modal</li>\n</ul>\n<h3>v3.6.4</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>Banner images now support local <code>file</code> protocol for images outside of your vault (e.g. <code>file:///C:\\path\\banner.jpg</code>)</li>\n</ul>\n<h4>\u{1F4E6} Updated</h4>\n<ul>\n<li>Allow commas in banner filenames</li>\n</ul>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>Ensure pinned banner is the currently displayed image when saving API banners</li>\n<li>Ensure banner icons are only rendered when a main banner image is present</li>\n<li>Banner Icon Image not always rendered until the note was clicked/focused</li>\n</ul>\n<h3>v3.6.5</h3>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>Fix refresh button to use original comma-separated keywords from frontmatter instead of the cached single keyword</li>\n<li>Resolved issue with the default x/y frontmatter fields not being hidden when the &quot;Hide Pixel Banner Fields&quot; option is enabled</li>\n<li>Updated API call for <code>Pexels</code> to conform to spec changes on their side</li>\n</ul>\n<h3>v3.6.6</h3>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>New folder group entries now inherit the user&#39;s default Content Start Position setting instead of being hardcoded to 150px</li>\n</ul>\n<h3>v3.6.8</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li><strong>Pin Choice Modal</strong>: When pinning API images, users can now choose between saving locally or pinning the URL directly to frontmatter<ul>\n<li>New choice modal presents &quot;Save Image Locally&quot; vs &quot;Pin Image URL&quot; options</li>\n<li>URL pinning saves no storage space in vault but requires internet connection</li>\n<li>Local saving remains available for offline access and permanence</li>\n<li>Choice only appears for user-initiated pin actions (pin icon, command palette)</li>\n<li>AI generation and Pixel Banner Plus continue to save locally automatically</li>\n</ul>\n</li>\n<li><strong>Auto-Focus Enhancement</strong>: Folder selection modal now automatically focuses and selects the text input for improved workflow</li>\n</ul>\n<h3>v3.6.7</h3>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>Fixed ImageViewModal to properly display banner images and videos when clicking the &quot;Show View Image Icon&quot;<ul>\n<li>Added support for MP4 and MOV video files in the ImageViewModal with proper video player controls</li>\n<li>Correctly display actual image URLs instead of keywords for 3rd party API banners in the ImageViewModal</li>\n<li>Local images, videos, and file:/// paths maintain original display behavior</li>\n</ul>\n</li>\n</ul>\n<h3>v3.6.8</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li><strong>Pin Choice Modal</strong>: When pinning API images, users can now choose between saving locally or pinning the URL directly to frontmatter<ul>\n<li>New choice modal presents &quot;Save Image Locally&quot; vs &quot;Pin Image URL&quot; options</li>\n<li>URL pinning saves no storage space in vault but requires internet connection</li>\n<li>Local saving remains available for offline access and permanence</li>\n<li>Choice only appears for user-initiated pin actions (pin icon, command palette)</li>\n<li>AI generation and Pixel Banner Plus continue to save locally automatically</li>\n</ul>\n</li>\n<li><strong>Auto-Focus Enhancement</strong>: Folder selection modal now automatically focuses and selects the text input for improved workflow</li>\n<li><code>Enter</code> button support for submitting the save image form in the <code>Save Image Modal</code></li>\n<li>New <code>Pin Image URL</code> option to save API images directly as URL references in frontmatter without downloading to vault</li>\n</ul>\n<h4>\u{1F4E6} Updated</h4>\n<ul>\n<li>Replaced manual frontmatter string manipulation with Obsidian&#39;s native processFrontMatter API for more reliable metadata updates</li>\n</ul>\n<h3>v3.6.9</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>New <code>Icon Image Size Multiplier</code> setting to the <code>General</code> settings tab to control the global size of banner icon images</li>\n<li>Check for version updates when opening <code>General</code> settings and show update button if available</li>\n</ul>\n<h4>\u{1F4E6} Updated</h4>\n<ul>\n<li>Moved <code>AI Model</code> selection from radio buttons to a dropdown for better organization</li>\n<li>Changed default banner fade value from <code>-70</code> to <code>-40</code></li>\n</ul>\n<h3>v3.6.10</h3>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>Icon images and emojis not being displayed properly</li>\n</ul>\n<h3>v3.6.11</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>New toggle to turn on/off <code>Pixel Banner Plus</code> in the main Pixel Banner select modal</li>\n</ul>\n<h4>\u{1F4E6} Updated</h4>\n<ul>\n<li>Added unquoted wiki-link support for Image Icons paths (e.g. <code>[[path/icon.png]]</code>)</li>\n<li>Misc code cleanup</li>\n</ul>\n<h3>v3.6.12</h3>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>Resolved incorrect <code>Pixel Banner Plus Server</code> URL</li>\n</ul>\n<h3>v3.6.13</h3>\n<h4>\u2728 Added</h4>\n<ul>\n<li>Support for Multiple Image Reference for new AI Image Generation models<ul>\n<li><code>Nano Banana</code></li>\n<li><code>Seedream 4</code></li>\n</ul>\n</li>\n</ul>\n<h3>v3.6.14</h3>\n<h4>\u{1F41B} Fixed</h4>\n<ul>\n<li>Resolved issue with <code>.webp</code> images not being displayed</li>\n</ul>\n<a href="https://www.youtube.com/watch?v=pJFsMfrWak4">\n  <img src="https://pixel-banner.online/img/pixel-banner-transparent-bg.png" alt="Pixel Banner" style="max-width: 400px;">\n</a>\n';
 
 // src/settings/settings.js
 var import_obsidian6 = require("obsidian");
@@ -35141,13 +35300,13 @@ function getInputType(input, sourcePath = "") {
   } catch (_) {
     const file = this.app.vault.getAbstractFileByPath(cleanedInput);
     if (file && "extension" in file) {
-      if (file.extension.match(/^(jpg|jpeg|png|gif|bmp|svg|avif)$/i)) {
+      if (file.extension.match(/^(jpg|jpeg|png|gif|bmp|svg|webp|avif)$/i)) {
         return "vaultPath";
       }
     }
     const resolvedFile = this.app.metadataCache.getFirstLinkpathDest(cleanedInput, sourcePath);
     if (resolvedFile && "extension" in resolvedFile) {
-      if (resolvedFile.extension.match(/^(jpg|jpeg|png|gif|bmp|svg|avif)$/i)) {
+      if (resolvedFile.extension.match(/^(jpg|jpeg|png|gif|bmp|svg|webp|avif)$/i)) {
         return "vaultPath";
       }
     }
@@ -35240,13 +35399,13 @@ function getIconImageInputType(input, sourcePath = "") {
   } catch (_) {
     const file = this.app.vault.getAbstractFileByPath(cleanedInput);
     if (file && "extension" in file) {
-      if (file.extension.match(/^(jpg|jpeg|png|gif|bmp|svg|avif)$/i)) {
+      if (file.extension.match(/^(jpg|jpeg|png|gif|bmp|svg|webp|avif)$/i)) {
         return "vaultPath";
       }
     }
     const resolvedFile = this.app.metadataCache.getFirstLinkpathDest(cleanedInput, sourcePath);
     if (resolvedFile && "extension" in resolvedFile) {
-      if (resolvedFile.extension.match(/^(jpg|jpeg|png|gif|bmp|svg|avif)$/i)) {
+      if (resolvedFile.extension.match(/^(jpg|jpeg|png|gif|bmp|svg|webp|avif)$/i)) {
         return "vaultPath";
       }
     }
