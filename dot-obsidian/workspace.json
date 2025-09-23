@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "4509724f8bf84da7",
+        "id": "e6f5d165f63c3c4d",
         "type": "tabs",
         "children": [
           {
-            "id": "e7a7b303c61786dc",
+            "id": "b4747c79ac6ed5e7",
             "type": "leaf",
             "state": {
               "type": "canvas",
@@ -199,10 +199,12 @@
       "obsidian-book-search-plugin:Create new book note": true
     }
   },
-  "active": "e7a7b303c61786dc",
+  "active": "b4747c79ac6ed5e7",
   "lastOpenFiles": [
-    "Extras/PDF/Building LLMs for Production Enhancing LLM Abilities and Reliability with Prompting, Fine-Tuning, and RAG (Louis-François Bouchard) (Z-Library).pdf",
+    "Extras/PDF/learning-coding-patterns.pdf",
     "Dashboards/Home.canvas",
+    "test.md",
+    "Extras/PDF/Building LLMs for Production Enhancing LLM Abilities and Reliability with Prompting, Fine-Tuning, and RAG (Louis-François Bouchard) (Z-Library).pdf",
     "Resources/Books/How to Win at Chess The Ultimate Guide for Beginners and Beyond (Levy Rozman) (Z-Library).epub",
     "Resources/Books/LLM Engineer’s Handbook (Paul Iusztin ,Maxime Labonne) (Z-Library).epub",
     "Resources/Computing/operating-systems-concepts.md",
@@ -210,9 +212,7 @@
     "Resources/Books/Unconfirmed 741835.crdownload",
     "Resources/Weblist/5 Advanced RAG Architectures Beyond Traditional Methods.md",
     "Projects/Tasks/Obsidian Tasks/Add pre-commit hooks in git were they check file size and suggest reduce, think of other pre-commit hooks.md",
-    "Extras/PDF/learning-coding-patterns.pdf",
     "Extras/PDF/learning-patterns-v1.1.pdf",
-    "test.md",
     "Areas/mike-logistics.md",
     "Logistics.md",
     "Extras/PDF/learning-patterns-v1.1-compressed.pdf",
