@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "e6f5d165f63c3c4d",
+        "id": "d366e2bafe19b3c0",
         "type": "tabs",
         "children": [
           {
-            "id": "b4747c79ac6ed5e7",
+            "id": "647095cc7f15a2af",
             "type": "leaf",
             "state": {
               "type": "canvas",
@@ -16,15 +16,26 @@
                 "file": "Dashboards/Home.canvas",
                 "viewState": {
                   "x": -770,
-                  "y": -150,
+                  "y": -168,
                   "zoom": 0
                 }
               },
               "icon": "lucide-layout-dashboard",
               "title": "Home"
             }
+          },
+          {
+            "id": "f6e7a8873e8c0826",
+            "type": "leaf",
+            "state": {
+              "type": "obsidian-projects",
+              "state": {},
+              "icon": "projects-icon",
+              "title": "Projects"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -199,44 +210,44 @@
       "obsidian-book-search-plugin:Create new book note": true
     }
   },
-  "active": "b4747c79ac6ed5e7",
+  "active": "f6e7a8873e8c0826",
   "lastOpenFiles": [
-    "Extras/PDF/learning-coding-patterns.pdf",
     "Dashboards/Home.canvas",
+    "Resources/Shortform Books/My Name Is Barbra.md",
+    "Archives/Personal/lifestyle/TestBench Update - Forward Scenario.md",
+    "Projects/Tasks/Kanban Tasks/make terminal shortcuts-commands ?.md",
+    "Projects/Tasks/Obsidian Tasks/create mcp for obsidian, converse with AI about the design.md",
+    "Projects/Tasks/WhoCaresGames Tasks/to-be-deleted.md",
+    "Projects/Tasks/SpiritBind Tasks/to-be-deleted.md",
+    "Projects/whocaresgames.md",
+    "Projects/spiritbind.md",
+    "Extras/Templates/Projects/default-card.md",
+    "Extras/Templates/Projects/spiritbind-card.md",
+    "Extras/Templates/Projects/whocaresgames-card.md",
+    "Extras/Templates/Projects/opencode-card.md",
+    "Extras/Templates/Projects/fitness-card 1 1.md",
+    "Extras/Templates/book-note.md",
+    "Projects/Tasks/Untitled",
+    "Projects/Tasks/WhoCaresGames Tasks",
+    "Projects/Tasks/SpiritBind Tasks",
+    "Areas/mike-logistics.md",
+    "Resources/Career/Interview-Other-Country/Resources/countries-with-lukas.md",
+    "Resources/Career/Interview-Other-Country/Resources/evaluation-report.md",
+    "Resources/Career/Interview-Other-Country/Resources/Countries/country-summary.md",
+    "Resources/Career/Interview-Other-Country/Resources/Countries/country-list.md",
+    "Resources/Career/Interview-Other-Country/Resources/Countries",
+    "Resources/Career/Interview-Other-Country/specs/evaluate-countries-criteria.md",
+    "Resources/Career/Interview-Other-Country/specs/country-list.md",
+    "Resources/Career/Interview-Other-Country/specs",
+    "Resources/Career/Interview-Other-Country/Resources/michail_bastakis_cv.md",
+    "Resources/Career/Interview-Other-Country/Resources",
+    "Resources/Career/Interview-Other-Country/AGENTS.md",
+    "Resources/Career/Interview-Other-Country",
+    "Extras/PDF/learning-coding-patterns.pdf",
     "test.md",
     "Extras/PDF/Building LLMs for Production Enhancing LLM Abilities and Reliability with Prompting, Fine-Tuning, and RAG (Louis-François Bouchard) (Z-Library).pdf",
     "Resources/Books/How to Win at Chess The Ultimate Guide for Beginners and Beyond (Levy Rozman) (Z-Library).epub",
-    "Resources/Books/LLM Engineer’s Handbook (Paul Iusztin ,Maxime Labonne) (Z-Library).epub",
     "Resources/Computing/operating-systems-concepts.md",
-    "Resources/Weblist/Top 5 Books to Learn LLMs (Large Language Models) in Depth.md",
-    "Resources/Books/Unconfirmed 741835.crdownload",
-    "Resources/Weblist/5 Advanced RAG Architectures Beyond Traditional Methods.md",
-    "Projects/Tasks/Obsidian Tasks/Add pre-commit hooks in git were they check file size and suggest reduce, think of other pre-commit hooks.md",
-    "Extras/PDF/learning-patterns-v1.1.pdf",
-    "Areas/mike-logistics.md",
-    "Logistics.md",
-    "Extras/PDF/learning-patterns-v1.1-compressed.pdf",
-    "Resources/Work/AICC/hendriks-proxmox-machines-gpus.md",
-    "Resources/Work/AICC/Current Infrastructure Architecture - 17-09-25.md",
-    "Resources/Work/AICC/aicc-netbird-aiccvpn-access.md",
-    "Resources/Work/AICC",
-    "Resources/Work/Current Infrastructure Architecture - 17-09-25.md",
-    "Areas/Work/dt-creds-mike.md",
-    "Areas/Work/📞-dt-mike.md",
-    "Projects/default.md",
-    "Projects/Tasks/Kanban Tasks/create pixel asset pipeline project.md",
-    "Projects/Tasks/Kanban Tasks/start using cline, free, with gemini cli, claude code.md",
-    "Projects/Tasks/Kanban Tasks/specs and ai_docs in obsidian as symlinks, commands that can creat them easily.md",
-    "Projects/Tasks/Kanban Tasks/setup vi mode in ghostty.md",
-    "Projects/Tasks/Kanban Tasks/revamp workflow, in general some refactor on obsiadian.md",
-    "Projects/Tasks/Kanban Tasks/ollama tui.md",
-    "Projects/Tasks/Kanban Tasks/obsidian in git.md",
-    "Projects/Tasks/Kanban Tasks/Maybe Replace Warp with Ghostty.md",
-    "Projects/Tasks/Kanban Tasks/manage claude mcp through dotfiles.md",
-    "Projects/Tasks/Kanban Tasks/fix list height, kanban.md",
-    "Projects/Tasks/Kanban Tasks/dotfiles tui.md",
-    "Resources/Software",
-    "Resources/Security",
     "Dashboards/Discovery.canvas",
     "Extras/Images/4001x3501-cartoon-tomato-clipart-freedesignfile.png",
     "Extras/Images/19852122_6195005.jpg",

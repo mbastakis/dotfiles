@@ -172,6 +172,7 @@
         "bagels"
         "browsh"
         "ffmpeg"
+        "unity-hub"
       ];
       homebrew.masApps = 
         { 
