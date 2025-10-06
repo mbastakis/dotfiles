@@ -64,13 +64,85 @@ function y() {
 }
 
 ftext() {
-  rg --color=always --line-number --no-heading --smart-case "${*:-}" |
+  # Interactive ripgrep search with fzf
+  # Suppress errors from ripgrep (permission denied, etc.)
+  local selected
+  selected=$(rg --color=always --line-number --no-heading --smart-case "${*:-}" 2>/dev/null |
     fzf --ansi \
         --color "hl:-1:underline,hl+:-1:underline:reverse" \
         --delimiter : \
-        --preview 'bat --color=always {1} --highlight-line {2}' \
+        --preview 'bat --color=always {1} --highlight-line {2} 2>/dev/null' \
+        --preview-window 'up,60%,border-bottom,+{2}+3/3,~3')
+  
+  if [[ -n "$selected" ]]; then
+    local file=$(echo "$selected" | cut -d: -f1)
+    local line=$(echo "$selected" | cut -d: -f2)
+    
+    # Open in default VISUAL editor at specific line
+    if [[ -n "$VISUAL" ]]; then
+      # VS Code format: code --goto file:line:column
+      if [[ "$VISUAL" == *"code"* ]]; then
+        code --user-data-dir ~/.vscode --goto "${file}:${line}"
+      else
+        # Generic format for other editors (vim, nvim, etc.)
+        eval "$VISUAL \"+${line}\" \"${file}\""
+      fi
+    else
+      echo "VISUAL editor not set. File: ${file}:${line}"
+    fi
+  fi
+}
+
+# ZLE widget version of ftext for CTRL-F keybinding
+ftext-widget() {
+  # Save current buffer
+  local original_buffer="$BUFFER"
+  local original_cursor="$CURSOR"
+  
+  # Run ripgrep and fzf with --expect to capture key press
+  local result
+  result=$(rg --color=always --line-number --no-heading --smart-case "" 2>/dev/null |
+    fzf --ansi \
+        --color "hl:-1:underline,hl+:-1:underline:reverse" \
+        --delimiter : \
+        --preview 'bat --color=always {1} --highlight-line {2} 2>/dev/null' \
         --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
-        --bind 'enter:execute(code {})';
+        --expect=tab \
+        --header 'ENTER: open in editor | TAB: insert file path')
+  
+  # Restore terminal
+  zle reset-prompt
+  
+  # Parse result: first line is the key pressed, second line is the selection
+  local key=$(echo "$result" | head -n1)
+  local selected=$(echo "$result" | tail -n1)
+  
+  if [[ -n "$selected" ]]; then
+    local file=$(echo "$selected" | cut -d: -f1)
+    local line=$(echo "$selected" | cut -d: -f2)
+    
+    if [[ "$key" == "tab" ]]; then
+      # TAB pressed: Insert file path at cursor position
+      BUFFER="${original_buffer:0:$original_cursor}${file}${original_buffer:$original_cursor}"
+      CURSOR=$(( original_cursor + ${#file} ))
+    else
+      # ENTER pressed: Open in editor at specific line
+      if [[ -n "$VISUAL" ]]; then
+        if [[ "$VISUAL" == *"code"* ]]; then
+          code --user-data-dir ~/.vscode --goto "${file}:${line}" &
+        else
+          eval "$VISUAL \"+${line}\" \"${file}\"" &
+        fi
+      fi
+      # Restore original buffer
+      BUFFER="$original_buffer"
+      CURSOR="$original_cursor"
+    fi
+  else
+    # Cancelled: Restore original buffer
+    BUFFER="$original_buffer"
+    CURSOR="$original_cursor"
+  fi
 }
 
 # Update brew

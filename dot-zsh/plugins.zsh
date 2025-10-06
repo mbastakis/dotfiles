@@ -18,12 +18,16 @@ if [[ -f "${HOME}/.local/share/zinit/zinit.git/zinit.zsh" ]]; then
     # ==== Plugin Definitions ====
     # Add your plugins below
     
-    # Initialize completions
-    zinit ice wait lucid atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay"
-    
     # Completions should be loaded first
     zinit ice wait lucid blockf
     zinit load zsh-users/zsh-completions
+    
+    # Load fzf-tab for interactive completion menu (must load before compinit)
+    zinit ice wait lucid
+    zinit load Aloxaf/fzf-tab
+    
+    # Initialize completions
+    zinit ice wait lucid atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay"
     
     # Load Git plugin from Oh-My-Zsh
     zinit snippet OMZ::plugins/git/git.plugin.zsh

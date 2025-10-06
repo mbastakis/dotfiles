@@ -1,0 +1,24 @@
+style:
+  fg: "#CDD6F4"
+  bg: "#1E1E2E"
+  cursor: "#F5E0DC"
+  
+  description:
+    fg: "#CDD6F4"
+    bg: "#1E1E2E"
+  
+  error:
+    fg: "#F38BA8"
+    bg: "#1E1E2E"
+  
+  flag:
+    fg: "#89B4FA"
+    bg: "#1E1E2E"
+  
+  value:
+    fg: "#A6E3A1"
+    bg: "#1E1E2E"
+  
+  border:
+    fg: "#6C7086"
+    bg: "#1E1E2E"

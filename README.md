@@ -194,6 +194,66 @@ opencode               # AI-powered development environment
 claude-code            # Claude CLI integration
 ```
 
+### Keyboard Shortcuts
+
+#### Shell (Zsh) Global Shortcuts
+| Shortcut | Action | Description |
+|----------|--------|-------------|
+| `CTRL-T` | FZF file finder | Search and paste files/directories with bat preview |
+| `CTRL-F` | FZF text search | Interactive ripgrep search with preview (opens in VS Code) |
+| `CTRL-R` | Atuin history | Search command history with atuin (replaces fzf history) |
+| `CTRL-S` | Atuin search | Alternative atuin history search trigger |
+| `ALT-C` | Zoxide interactive | Jump to any directory using zoxide's frecency algorithm |
+| `TAB` | Interactive completion | Trigger fzf-tab for fuzzy completion with preview |
+| `<` / `>` | Switch groups | Navigate between completion groups in fzf-tab |
+| `/` | Continuous completion | Accept selection and continue completing |
+
+#### Ghostty Terminal Shortcuts
+| Shortcut | Action | Description |
+|----------|--------|-------------|
+| `CMD+D` | Split right | Create vertical split |
+| `CMD+SHIFT+D` | Split down | Create horizontal split |
+| `CMD+T` | New tab | Open new tab |
+| `CMD+W` | Close surface | Close current split/tab |
+| `CTRL+SHIFT+H` | Go left | Navigate to left split |
+| `CTRL+SHIFT+T` | Go down | Navigate to down split |
+| `CTRL+SHIFT+N` | Go up | Navigate to up split |
+| `CTRL+SHIFT+S` | Go right | Navigate to right split |
+| `CMD+CTRL+T` | Quick terminal | Toggle quick terminal overlay |
+| `CMD+SHIFT+E` | Editor integration | Write screen content to file and open in editor |
+| `CMD+C` | Copy (custom) | Copy with custom escape sequence |
+| `CMD+X` | Cut (custom) | Cut with custom escape sequence |
+| `SHIFT+ENTER` | Insert newline | Insert literal newline character |
+
+#### Yazi File Manager Shortcuts
+| Shortcut | Action | Description |
+|----------|--------|-------------|
+| `y` | Launch Yazi | Open Yazi file manager with directory tracking |
+| Navigation | Arrow keys / hjkl | Navigate files and directories |
+| `ENTER` | Open file | Open file with default application |
+| `q` | Quit | Exit Yazi and return to shell |
+
+#### Atuin History Search
+| Shortcut | Action | Description |
+|----------|--------|-------------|
+| `CTRL-R` | Search mode | Open interactive search |
+| `UP/DOWN` | Navigate | Move through history entries |
+| `CTRL-R` (again) | Toggle sort | Switch between relevance and chronological order |
+| `CTRL-/` or `ALT-/` | Toggle wrap | Toggle line wrapping in preview |
+| `ENTER` | Execute | Run selected command |
+| `ESC` | Cancel | Close search without executing |
+
+#### FZF Interactive Search
+| Shortcut | Action | Description |
+|----------|--------|-------------|
+| `CTRL-K/CTRL-J` | Navigate | Move cursor up/down |
+| `CTRL-P/CTRL-N` | Navigate (alt) | Alternative up/down navigation |
+| `ENTER` | Select | Select item and confirm |
+| `TAB` | Mark (multi) | Mark item in multi-select mode |
+| `SHIFT-TAB` | Unmark (multi) | Unmark item in multi-select mode |
+| `CTRL-/` | Toggle preview | Show/hide preview window |
+| `CTRL-Y` | Copy to clipboard | Copy selected item to clipboard (where available) |
+
 ### Warp Workflows
 The repository includes 20+ custom Warp workflows for common tasks:
 - File and directory operations
@@ -262,6 +322,19 @@ zinit update
 - **Stow verification**: Check for symlink conflicts
 - **Tool integration**: Verify AI tools and MCP connections
 - **Manual testing**: Test aliases, functions, and workflows
+
+### Testing Completions
+
+To verify carapace + fzf-tab integration is working:
+1. Reload your shell: `source ~/.zshrc` or `reload`
+2. Type a command with arguments: `aws <TAB>` or `docker <TAB>` or `kubectl <TAB>`
+3. You should see an interactive fzf menu with completions
+4. Type to filter, use arrows to navigate, Enter to select
+
+If you see the default zsh menu instead, check:
+- Carapace is installed: `which carapace`
+- fzf-tab is loaded: `zstyle -L ':fzf-tab:*' | head -3`
+- Carapace completers registered: `compdef -p | grep carapace`
 
 ## 🎨 Customization
 
