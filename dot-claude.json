@@ -1,5 +1,5 @@
 {
-  "numStartups": 60,
+  "numStartups": 61,
   "installMethod": "unknown",
   "autoUpdates": false,
   "tipsHistory": {
@@ -936,6 +936,30 @@
       "lastTotalCacheCreationInputTokens": 0,
       "lastTotalCacheReadInputTokens": 0,
       "lastSessionId": "069b18b7-9d59-427d-9a4e-3a91f3843e38"
+    },
+    "/Users/mbastakis/dev/personal/aws-qwen": {
+      "allowedTools": [],
+      "history": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": false,
+      "projectOnboardingSeenCount": 1,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "lastCost": 0,
+      "lastAPIDuration": 0,
+      "lastToolDuration": 0,
+      "lastDuration": 5153,
+      "lastLinesAdded": 0,
+      "lastLinesRemoved": 0,
+      "lastTotalInputTokens": 0,
+      "lastTotalOutputTokens": 0,
+      "lastTotalCacheCreationInputTokens": 0,
+      "lastTotalCacheReadInputTokens": 0,
+      "lastTotalWebSearchRequests": 0,
+      "lastSessionId": "9661984d-7649-482a-bf1f-ad0757c2a8ef"
     }
   },
   "shiftEnterKeyBindingInstalled": true,

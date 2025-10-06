@@ -173,6 +173,7 @@
         "browsh"
         "ffmpeg"
         "unity-hub"
+        "atuin-desktop"
       ];
       homebrew.masApps = 
         { 

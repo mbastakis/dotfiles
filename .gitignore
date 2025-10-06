@@ -39,3 +39,6 @@ dot-config/fabric
 
 # Helm 
 dot-config/helm
+
+# ArgoCD
+dot-config/argocd

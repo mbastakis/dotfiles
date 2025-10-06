@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
-      "OcCheckbox16",
       "OcTasklist24",
-      "FasDollarSign",
-      "SiObsidian",
-      "LiEye"
+      "RiTaskLine",
+      "LiEye",
+      "SiShortcut",
+      "LiDumbbell"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [
@@ -533,6 +533,120 @@
     "iconName": "OcTasklist24"
   },
   "Projects/Tasks/WhoCaresGames Tasks/to-be-deleted.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/DT Tasks/push mr for decouple.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/DT Tasks/push mr for deployment.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/DT Tasks/Architecture docs made with Philipe.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/DT Tasks/Do Istio + Keycloak.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/DT Tasks/Write an email to the two guys.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Obsidian Tasks/Transfer modz aws test to obsidian.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Extras/Exercises/Dips.md": {
+    "iconName": "LiDumbbell"
+  },
+  "Projects/Tasks/Opencode Tasks/setup crawl4ai .md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/Go to doctor and seteup yearly check up.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/Start procedures for joining the army and postponing.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Resources/Shortcuts/mac-shortcuts.md": {
+    "iconName": "SiShortcut"
+  },
+  "Resources/Shortcuts/vscode-shortcuts.md": {
+    "iconName": "SiShortcut"
+  },
+  "Resources/Shortcuts/yazi-shortcuts.md": {
+    "iconName": "SiShortcut"
+  },
+  "Archives/Personal/General/loukas-expenses-logistics.md": {
+    "iconName": "FasDollarSign"
+  },
+  "Archives/Personal/General/mike-readitlater.md": {
+    "iconName": "LiEye"
+  },
+  "Extras/Exercises/Bicep Curl.md": {
+    "iconName": "LiDumbbell"
+  },
+  "Extras/Exercises/Burpees.md": {
+    "iconName": "LiDumbbell"
+  },
+  "Extras/Exercises/Handstand.md": {
+    "iconName": "LiDumbbell"
+  },
+  "Extras/Exercises/Hanging Leg Raise.md": {
+    "iconName": "LiDumbbell"
+  },
+  "Extras/Exercises/Hollow Body Hold.md": {
+    "iconName": "LiDumbbell"
+  },
+  "Extras/Exercises/Lunges.md": {
+    "iconName": "LiDumbbell"
+  },
+  "Extras/Exercises/Plank.md": {
+    "iconName": "LiDumbbell"
+  },
+  "Extras/Exercises/Pull-Ups.md": {
+    "iconName": "LiDumbbell"
+  },
+  "Extras/Exercises/Push-Ups.md": {
+    "iconName": "LiDumbbell"
+  },
+  "Extras/Exercises/Squats.md": {
+    "iconName": "LiDumbbell"
+  },
+  "Projects/Tasks/DT Tasks/AICC meetup.md": {
+    "iconName": "RiTaskLine"
+  },
+  "Projects/Tasks/DT Tasks/Call with Philipe.md": {
+    "iconName": "RiTaskLine"
+  },
+  "Projects/Tasks/DT Tasks/Fix gitlab runner deprecated keys.md": {
+    "iconName": "RiTaskLine"
+  },
+  "Projects/Tasks/DT Tasks/GitOps transition.md": {
+    "iconName": "RiTaskLine"
+  },
+  "Projects/Tasks/DT Tasks/Setup kyverno to pull from artifactory.md": {
+    "iconName": "RiTaskLine"
+  },
+  "Projects/Tasks/DT Tasks/kyverno argocd fix, from docs.md": {
+    "iconName": "RiTaskLine"
+  },
+  "Projects/Tasks/DT Tasks/kyverno-destruction-job.md": {
+    "iconName": "RiTaskLine"
+  },
+  "Projects/Tasks/Kanban Tasks/Clean up Iphone.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/maybe check jj.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Kanban Tasks/watch youtube quantitization local llm.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Obsidian Tasks/Add pre-commit hooks in git were they check file size and suggest reduce, think of other pre-commit hooks.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Obsidian Tasks/Automatic way to discover and bring up old notes that needs cleaning or remembering.md": {
+    "iconName": "OcTasklist24"
+  },
+  "Projects/Tasks/Obsidian Tasks/create a book Area and book notes Areas.md": {
     "iconName": "OcTasklist24"
   }
 }

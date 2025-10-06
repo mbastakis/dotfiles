@@ -6,24 +6,22 @@
         "type": "split",
         "children": [
           {
-            "id": "d470c8604eece1c5",
+            "id": "b58837a8a4a585e7",
             "type": "tabs",
             "children": [
               {
-                "id": "0f004151c8d391e6",
+                "id": "4c2114ac6966dfd2",
                 "type": "leaf",
-                "pinned": true,
                 "state": {
                   "type": "canvas",
                   "state": {
                     "file": "Dashboards/Home.canvas",
                     "viewState": {
-                      "x": -657.5,
-                      "y": -420,
-                      "zoom": -0.3667043345078536
+                      "x": -760,
+                      "y": -168,
+                      "zoom": 0
                     }
                   },
-                  "pinned": true,
                   "icon": "lucide-layout-dashboard",
                   "title": "Home"
                 }
@@ -42,16 +40,13 @@
             "type": "tabs",
             "children": [
               {
-                "id": "1b9875d61959b663",
+                "id": "57d96e65db726e3a",
                 "type": "leaf",
                 "state": {
-                  "type": "file-explorer",
-                  "state": {
-                    "sortOrder": "alphabetical",
-                    "autoReveal": false
-                  },
-                  "icon": "lucide-folder-closed",
-                  "title": "Files"
+                  "type": "notebook-navigator",
+                  "state": {},
+                  "icon": "notebook",
+                  "title": "Notebook Navigator"
                 }
               },
               {
@@ -81,12 +76,12 @@
                   "title": "Bookmarks"
                 }
               }
-            ]
+            ],
+            "currentTab": 2
           }
         ],
         "direction": "horizontal",
-        "width": 368.5104179382324,
-        "collapsed": true
+        "width": 310.01103591918945
       },
       "right": {
         "id": "45a4c33d2d217b48",
@@ -149,7 +144,7 @@
           }
         ],
         "direction": "horizontal",
-        "width": 326.5,
+        "width": 672,
         "collapsed": true
       },
       "left-ribbon": {
@@ -159,7 +154,8 @@
           "pexels-banner:🚩 Pixel Banner Menu": true,
           "templates:Insert template": true,
           "pinned-notes:Homepage": false,
-          "cmdr:Files: Show file explorer": false,
+          "notebook-navigator:Notebook Navigator": false,
+          "cmdr:Files: Show file explorer": true,
           "obsidian-git:Open Git source control": false,
           "ribbon-divider:ribbon-divider-d6836d41-e02e-4707-a8f9-d737fd521486": false,
           "obsidian-projects:Open projects": false,
@@ -199,11 +195,12 @@
           "pdf-plus:PDF++: Toggle auto-paste": true,
           "vscode-editor:Create Code File": true,
           "janitor:Janitor: scan vault": false,
-          "homepage:Open homepage": true
+          "homepage:Open homepage": true,
+          "obsidian-book-search-plugin:Create new book note": true
         }
       },
-      "active": "0f004151c8d391e6",
-      "mtime": "2025-09-16T21:33:54+03:00"
+      "active": "444b15853621c1ac",
+      "mtime": "2025-10-02T10:11:01+03:00"
     }
   },
   "active": "mike-base"

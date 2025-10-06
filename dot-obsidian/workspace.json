@@ -4,34 +4,45 @@
     "type": "split",
     "children": [
       {
-        "id": "d366e2bafe19b3c0",
+        "id": "4509724f8bf84da7",
         "type": "tabs",
         "children": [
           {
-            "id": "647095cc7f15a2af",
+            "id": "e7a7b303c61786dc",
             "type": "leaf",
+            "pinned": true,
             "state": {
               "type": "canvas",
               "state": {
                 "file": "Dashboards/Home.canvas",
                 "viewState": {
-                  "x": -770,
+                  "x": -760,
                   "y": -168,
-                  "zoom": 0
+                  "zoom": -0.1610320592461759
                 }
               },
+              "pinned": true,
               "icon": "lucide-layout-dashboard",
               "title": "Home"
             }
           },
           {
-            "id": "f6e7a8873e8c0826",
+            "id": "9167ec34e6a9e99a",
             "type": "leaf",
+            "pinned": true,
             "state": {
-              "type": "obsidian-projects",
-              "state": {},
-              "icon": "projects-icon",
-              "title": "Projects"
+              "type": "canvas",
+              "state": {
+                "file": "Dashboards/Home.canvas",
+                "viewState": {
+                  "x": -760,
+                  "y": -168,
+                  "zoom": -0.1610320592461759
+                }
+              },
+              "pinned": true,
+              "icon": "lucide-layout-dashboard",
+              "title": "Home"
             }
           }
         ],
@@ -49,16 +60,13 @@
         "type": "tabs",
         "children": [
           {
-            "id": "1b9875d61959b663",
+            "id": "57d96e65db726e3a",
             "type": "leaf",
             "state": {
-              "type": "file-explorer",
-              "state": {
-                "sortOrder": "alphabetical",
-                "autoReveal": false
-              },
-              "icon": "lucide-folder-closed",
-              "title": "Files"
+              "type": "notebook-navigator",
+              "state": {},
+              "icon": "notebook",
+              "title": "Notebook Navigator"
             }
           },
           {
@@ -87,12 +95,25 @@
               "icon": "lucide-bookmark",
               "title": "Bookmarks"
             }
+          },
+          {
+            "id": "e9fbaa515f7ff637",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
           }
         ]
       }
     ],
     "direction": "horizontal",
-    "width": 368.5104179382324,
+    "width": 310.01103591918945,
     "collapsed": true
   },
   "right": {
@@ -166,7 +187,8 @@
       "pexels-banner:🚩 Pixel Banner Menu": true,
       "templates:Insert template": true,
       "pinned-notes:Homepage": false,
-      "cmdr:Files: Show file explorer": false,
+      "notebook-navigator:Notebook Navigator": false,
+      "cmdr:Files: Show file explorer": true,
       "obsidian-git:Open Git source control": false,
       "ribbon-divider:ribbon-divider-d6836d41-e02e-4707-a8f9-d737fd521486": false,
       "obsidian-projects:Open projects": false,
@@ -207,51 +229,53 @@
       "vscode-editor:Create Code File": true,
       "janitor:Janitor: scan vault": false,
       "homepage:Open homepage": true,
-      "obsidian-book-search-plugin:Create new book note": true
+      "obsidian-book-search-plugin:Create new book note": true,
+      "voice:Voice": false
     }
   },
-  "active": "f6e7a8873e8c0826",
+  "active": "9167ec34e6a9e99a",
   "lastOpenFiles": [
+    "Resources/Weblist/8 Key LLM Development Skills for AI Engineers.md",
     "Dashboards/Home.canvas",
-    "Resources/Shortform Books/My Name Is Barbra.md",
-    "Archives/Personal/lifestyle/TestBench Update - Forward Scenario.md",
-    "Projects/Tasks/Kanban Tasks/make terminal shortcuts-commands ?.md",
+    "Resources/Weblist/7 Best Practices for API Design 🔥.md",
     "Projects/Tasks/Obsidian Tasks/create mcp for obsidian, converse with AI about the design.md",
-    "Projects/Tasks/WhoCaresGames Tasks/to-be-deleted.md",
-    "Projects/Tasks/SpiritBind Tasks/to-be-deleted.md",
-    "Projects/whocaresgames.md",
+    "Projects/Tasks/Kanban Tasks/Start procedures for joining the army and postponing.md",
+    "Projects/Tasks/Kanban Tasks/Go to doctor and seteup yearly check up.md",
+    "Areas/Security-MOC.md",
+    "Extras/PDF/AI Agents in Action (Micheal Lanham) (Z-Library).pdf",
+    "Resources/Books/Marvel Comics For Dummies (Troy Brownfield) (Z-Library).epub",
+    "Resources/Books/Unconfirmed 421319.crdownload",
+    "Projects/Tasks/Opencode Tasks/Use Vertex AI from GCP.md",
+    "Resources/Career/Interview-Other-Country/Resources/Countries/work-visa-research-tier1.md",
+    "Resources/Career/Interview-Other-Country/Resources/chatgpt-research-work-visa.md",
+    "Projects/Tasks/Opencode Tasks/setup crawl4ai .md",
+    "platform-engineer-psa-proposal.md",
+    "Resources/Career/Interview-Other-Country/Resources/comet-research-work-visa.md",
+    "Resources/Career/Interview-Other-Country/Resources/comet-research-work-visa",
+    "Resources/Career/Interview-Other-Country/specs/combine-research.md",
+    "Resources/Career/Interview-Other-Country/specs/research-country-entry.md",
+    "Hi [Leadership / Security ",
+    "Hi [Leadership ",
+    "argocd-cm.yaml",
+    "Resources/AI/llm-compliance.md",
+    "Archives/Projects/Other/tasks-plugin-review-1.md",
+    "Projects/default.md",
     "Projects/spiritbind.md",
-    "Extras/Templates/Projects/default-card.md",
-    "Extras/Templates/Projects/spiritbind-card.md",
-    "Extras/Templates/Projects/whocaresgames-card.md",
-    "Extras/Templates/Projects/opencode-card.md",
-    "Extras/Templates/Projects/fitness-card 1 1.md",
-    "Extras/Templates/book-note.md",
-    "Projects/Tasks/Untitled",
-    "Projects/Tasks/WhoCaresGames Tasks",
-    "Projects/Tasks/SpiritBind Tasks",
-    "Areas/mike-logistics.md",
-    "Resources/Career/Interview-Other-Country/Resources/countries-with-lukas.md",
-    "Resources/Career/Interview-Other-Country/Resources/evaluation-report.md",
-    "Resources/Career/Interview-Other-Country/Resources/Countries/country-summary.md",
-    "Resources/Career/Interview-Other-Country/Resources/Countries/country-list.md",
-    "Resources/Career/Interview-Other-Country/Resources/Countries",
-    "Resources/Career/Interview-Other-Country/specs/evaluate-countries-criteria.md",
-    "Resources/Career/Interview-Other-Country/specs/country-list.md",
-    "Resources/Career/Interview-Other-Country/specs",
-    "Resources/Career/Interview-Other-Country/Resources/michail_bastakis_cv.md",
-    "Resources/Career/Interview-Other-Country/Resources",
-    "Resources/Career/Interview-Other-Country/AGENTS.md",
-    "Resources/Career/Interview-Other-Country",
-    "Extras/PDF/learning-coding-patterns.pdf",
-    "test.md",
-    "Extras/PDF/Building LLMs for Production Enhancing LLM Abilities and Reliability with Prompting, Fine-Tuning, and RAG (Louis-François Bouchard) (Z-Library).pdf",
-    "Resources/Books/How to Win at Chess The Ultimate Guide for Beginners and Beyond (Levy Rozman) (Z-Library).epub",
-    "Resources/Computing/operating-systems-concepts.md",
+    "Extras/Excalidraw/Magenta-Apprentice-Firewall-Opening-Diagram.md",
+    "Extras/Excalidraw/Drawing 2025-09-30 15.02.56.excalidraw.md",
+    "Dashboards/Fitness.canvas",
+    "Resources/Career/Interview-Prep/interview-cheatsheet.md",
+    "Remove Duplicates Sorted Array, Remove Element.md",
+    "Monotonic Array.md",
+    "Two Sum.md",
+    "Resources/Career/Interview-Prep/devops-specific-interview.md",
+    "Extras/Images/Pasted Image 20250926123516_998.png",
+    "Extras/Excalidraw/Libraries/my-notes-backup-20250920-133110.excalidrawlib",
+    "Extras/Excalidraw/Libraries/Unconfirmed 645193.crdownload",
+    "Extras/Excalidraw/Libraries",
     "Dashboards/Discovery.canvas",
     "Extras/Images/4001x3501-cartoon-tomato-clipart-freedesignfile.png",
     "Extras/Images/19852122_6195005.jpg",
-    "Dashboards/Fitness.canvas",
     "Dashboards/Global Tasks.canvas",
     "Dashboards/PARA.canvas",
     "Extras/Images/Cygnus.png",
@@ -261,7 +285,6 @@
     "Extras/Images/Beginners Guide-1756543416668.webp",
     "Extras/Images/corfu trip - chara + mike-1756481850047.webp",
     "Extras/Images/corfu trip - chara + mike-1756481779272.webp",
-    "Dashboards/Dashboards.canvas",
-    "Extras/Images/aicc-netbird-aiccvpn-access-1753264782490.webp"
+    "Dashboards/Dashboards.canvas"
   ]
 }

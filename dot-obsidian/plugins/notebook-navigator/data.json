@@ -1,0 +1,302 @@
+{
+  "autoRevealActiveFile": true,
+  "autoRevealIgnoreRightSidebar": true,
+  "showTooltips": false,
+  "homepage": null,
+  "startView": "navigation",
+  "fileVisibility": "documents",
+  "excludedFolders": [],
+  "excludedFiles": [],
+  "showShortcuts": true,
+  "showRecentNotes": true,
+  "recentNotesCount": 5,
+  "autoSelectFirstFileOnFocusChange": false,
+  "autoExpandFoldersTags": false,
+  "collapseBehavior": "all",
+  "smartCollapse": true,
+  "showIcons": true,
+  "showNoteCount": true,
+  "navIndent": 16,
+  "navItemHeight": 28,
+  "navItemHeightScaleText": true,
+  "externalIconProviders": {},
+  "showRootFolder": true,
+  "inheritFolderColors": false,
+  "enableFolderNotes": false,
+  "folderNoteType": "markdown",
+  "folderNoteName": "",
+  "folderNoteProperties": [],
+  "hideFolderNoteInList": true,
+  "showTags": true,
+  "showTagsAboveFolders": false,
+  "showFavoriteTagsFolder": true,
+  "showAllTagsFolder": true,
+  "showUntagged": false,
+  "showUntaggedInFavorites": false,
+  "favoriteTags": [],
+  "hiddenTags": [],
+  "defaultFolderSort": "modified-desc",
+  "multiSelectModifier": "cmdCtrl",
+  "groupByDate": true,
+  "optimizeNoteHeight": true,
+  "showQuickActions": true,
+  "quickActionRevealInFolder": true,
+  "quickActionPinNote": true,
+  "quickActionOpenInNewTab": true,
+  "dateFormat": "MMM d, yyyy",
+  "timeFormat": "h:mm a",
+  "useFrontmatterMetadata": false,
+  "frontmatterNameField": "",
+  "frontmatterCreatedField": "",
+  "frontmatterModifiedField": "",
+  "frontmatterDateFormat": "",
+  "fileNameRows": 1,
+  "showFileDate": true,
+  "showFileTags": true,
+  "showFileTagsInSlimMode": false,
+  "showParentFolderNames": true,
+  "showFilePreview": true,
+  "skipHeadingsInPreview": true,
+  "skipCodeBlocksInPreview": true,
+  "previewProperties": [],
+  "previewRows": 2,
+  "showFeatureImage": true,
+  "featureImageProperties": [
+    "thumbnail",
+    "featureResized",
+    "feature"
+  ],
+  "useEmbeddedImageFallback": true,
+  "confirmBeforeDelete": true,
+  "searchActive": false,
+  "searchProvider": "internal",
+  "showHiddenItems": false,
+  "keyboardShortcuts": {
+    "pane:move-up": [
+      {
+        "key": "ArrowUp",
+        "modifiers": []
+      }
+    ],
+    "pane:move-down": [
+      {
+        "key": "ArrowDown",
+        "modifiers": []
+      }
+    ],
+    "pane:page-up": [
+      {
+        "key": "PageUp",
+        "modifiers": []
+      }
+    ],
+    "pane:page-down": [
+      {
+        "key": "PageDown",
+        "modifiers": []
+      }
+    ],
+    "pane:home": [
+      {
+        "key": "Home",
+        "modifiers": []
+      }
+    ],
+    "pane:end": [
+      {
+        "key": "End",
+        "modifiers": []
+      }
+    ],
+    "navigation:collapse-or-parent": [
+      {
+        "key": "ArrowLeft",
+        "modifiers": []
+      }
+    ],
+    "navigation:expand-or-focus-list": [
+      {
+        "key": "ArrowRight",
+        "modifiers": []
+      }
+    ],
+    "navigation:focus-list": [
+      {
+        "key": "Tab",
+        "modifiers": []
+      }
+    ],
+    "pane:delete-selected": [
+      {
+        "key": "Delete",
+        "modifiers": []
+      },
+      {
+        "key": "Backspace",
+        "modifiers": []
+      }
+    ],
+    "list:focus-navigation": [
+      {
+        "key": "ArrowLeft",
+        "modifiers": []
+      },
+      {
+        "key": "Tab",
+        "modifiers": [
+          "Shift"
+        ]
+      }
+    ],
+    "list:focus-editor": [
+      {
+        "key": "ArrowRight",
+        "modifiers": []
+      },
+      {
+        "key": "Tab",
+        "modifiers": []
+      }
+    ],
+    "list:select-all": [
+      {
+        "key": "A",
+        "modifiers": [
+          "Mod"
+        ]
+      }
+    ],
+    "list:extend-selection-up": [
+      {
+        "key": "ArrowUp",
+        "modifiers": [
+          "Shift"
+        ]
+      }
+    ],
+    "list:extend-selection-down": [
+      {
+        "key": "ArrowDown",
+        "modifiers": [
+          "Shift"
+        ]
+      }
+    ],
+    "list:range-to-start": [
+      {
+        "key": "Home",
+        "modifiers": [
+          "Shift"
+        ]
+      }
+    ],
+    "list:range-to-end": [
+      {
+        "key": "End",
+        "modifiers": [
+          "Shift"
+        ]
+      }
+    ],
+    "search:focus-list": [
+      {
+        "key": "Tab",
+        "modifiers": []
+      },
+      {
+        "key": "Enter",
+        "modifiers": []
+      }
+    ],
+    "search:focus-navigation": [
+      {
+        "key": "Tab",
+        "modifiers": [
+          "Shift"
+        ]
+      }
+    ],
+    "search:close": [
+      {
+        "key": "Escape",
+        "modifiers": []
+      }
+    ]
+  },
+  "shortcuts": [],
+  "includeDescendantNotes": true,
+  "customVaultName": "",
+  "pinnedNotes": {
+    "Dashboards/Home.canvas": {
+      "folder": true,
+      "tag": false
+    },
+    "Projects/spiritbind.md": {
+      "folder": true,
+      "tag": false
+    },
+    "Projects/whocaresgames.md": {
+      "folder": true,
+      "tag": false
+    },
+    "Projects/fitness.md": {
+      "folder": true,
+      "tag": false
+    },
+    "Projects/dt-aicc.md": {
+      "folder": true,
+      "tag": false
+    },
+    "Projects/obsidian.md": {
+      "folder": true,
+      "tag": false
+    },
+    "Projects/opencode.md": {
+      "folder": true,
+      "tag": false
+    },
+    "Projects/default.md": {
+      "folder": true,
+      "tag": false
+    }
+  },
+  "fileIcons": {},
+  "fileColors": {},
+  "folderIcons": {
+    "Dashboards": "lucide-grid-2x-2",
+    "Calendar": "lucide-calendar",
+    "Extras": "lucide-x",
+    "Projects": "lucide-square-kanban",
+    "Areas": "lucide-map",
+    "Resources": "lucide-folders",
+    "Archives": "lucide-archive"
+  },
+  "folderColors": {
+    "Dashboards": "#ec4899",
+    "Calendar": "#3b82f6",
+    "Extras": "#ef4444",
+    "Projects": "#22c55e",
+    "Areas": "#22c55e",
+    "Resources": "#22c55e",
+    "Archives": "#22c55e"
+  },
+  "folderBackgroundColors": {},
+  "folderSortOverrides": {},
+  "folderAppearances": {
+    "Projects": {
+      "showDate": false,
+      "showPreview": false,
+      "showImage": false,
+      "titleRows": 1
+    }
+  },
+  "tagIcons": {},
+  "tagColors": {},
+  "tagBackgroundColors": {},
+  "tagSortOverrides": {},
+  "tagAppearances": {},
+  "recentColors": [],
+  "lastShownVersion": "",
+  "settingsVersion": 1,
+  "rootFolderOrder": []
+}

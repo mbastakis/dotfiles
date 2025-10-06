@@ -50,5 +50,6 @@
   "vscode-editor",
   "homepage",
   "obsidian-book-search-plugin",
-  "tag-wrangler"
+  "tag-wrangler",
+  "notebook-navigator"
 ]

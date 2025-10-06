@@ -240,6 +240,7 @@
             "Done",
             "ToDo",
             "InProgress",
+            "Today",
             "ToReport"
           ]
         }
@@ -294,22 +295,26 @@
                 ],
                 "collapse": true
               },
-              "No status": {
-                "weight": 1,
-                "records": []
-              },
               "ToDo": {
-                "weight": 2,
+                "weight": 1,
                 "records": [
                   "Projects/Tasks/DT Tasks/use the proxmox gpus to add the ollamas .md",
                   "Extras/Unkown/Learn about Image Generation Infra Setup.md"
                 ]
               },
               "InProgress": {
+                "weight": 2,
+                "records": [
+                  "Projects/Tasks/DT Tasks/Do Istio + Keycloak.md",
+                  "Projects/Tasks/DT Tasks/Bring Keycloak in front of Langfuse, Magenta Apprentice, LMStudio.md"
+                ]
+              },
+              "Today": {
                 "weight": 3,
                 "records": [
-                  "Projects/Tasks/DT Tasks/Bring Keycloak in front of Langfuse, Magenta Apprentice, LMStudio.md",
-                  "Projects/Tasks/DT Tasks/Create Prod with billing element.md"
+                  "Projects/Tasks/DT Tasks/push mr for decouple.md",
+                  "Projects/Tasks/DT Tasks/push mr for deployment.md",
+                  "Projects/Tasks/DT Tasks/Architecture docs made with Philipe.md"
                 ]
               },
               "ToReport": {
@@ -496,7 +501,11 @@
               "ToDo": {
                 "weight": 1,
                 "records": [
-                  "Projects/Tasks/Opencode Tasks/Use Hendriks machine for kimi k2, qwen coder.md"
+                  "Projects/Tasks/Opencode Tasks/Use Hendriks machine for kimi k2, qwen coder.md",
+                  "Projects/Tasks/Opencode Tasks/Add opencode to github agent.md",
+                  "Projects/Tasks/Opencode Tasks/Have drop zones in obsidian, with constant opencode.md",
+                  "Projects/Tasks/Opencode Tasks/Use Bedrock from Playground AWS.md",
+                  "Projects/Tasks/Opencode Tasks/Use Vertex AI from GCP.md"
                 ],
                 "collapse": false
               },

@@ -25,13 +25,6 @@
         "OBSIDIAN_PORT": "27124"
       }
     },
-    "firecrawl-mcp": {
-      "type": "local",
-      "command": ["npx", "-y", "firecrawl-mcp"],
-      "environment": {
-        "FIRECRAWL_API_KEY": "fc-8387be82dcd54262994da6c21442e473"
-      }
-    },
     "sequential-thinking": {
       "type": "local",
       "command": [

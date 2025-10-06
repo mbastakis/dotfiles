@@ -33,3 +33,6 @@ alias obs="obsidian-cli"
 
 # Debug key sequences for zsh
 alias keytest="cat -v"
+
+# BMAD Method
+alias bmad="npx bmad-method"

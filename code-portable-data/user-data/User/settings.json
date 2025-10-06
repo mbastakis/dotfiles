@@ -3,7 +3,7 @@
   // ----------------------------------------------------------------------
   // ----------------------------------------------------------------------
   // UI Themes
-  "workbench.colorTheme": "Vesper",
+  "workbench.colorTheme": "Catppuccin Mocha",
   "workbench.iconTheme": "material-icon-theme",
   // UI Editor
   "workbench.editor.showTabs": "single",
@@ -551,5 +551,19 @@
   "vscode_vibrancy.theme": "Catppuccin Mocha",
   "workbench.statusBar.visible": false,
   "@azure.argTenant": "",
-  "cSpell.enabled": false
+  "cSpell.enabled": false,
+  "[dockercompose]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "advanced",
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    },
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "[github-actions-workflow]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  }
 }

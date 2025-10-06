@@ -114,6 +114,14 @@ if.app-name-regex-substring = 'GitHub'
 run = 'move-node-to-workspace j'
 
 [[on-window-detected]]
+if.app-name-regex-substring = 'Comet'
+run = 'move-node-to-workspace j'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'NotebookLM'
+run = 'move-node-to-workspace j'
+
+[[on-window-detected]]
 if.app-name-regex-substring = 'ChatGPT'
 run = 'move-node-to-workspace j'
 
