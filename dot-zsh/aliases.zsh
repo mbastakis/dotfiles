@@ -34,5 +34,10 @@ alias obs="obsidian-cli"
 # Debug key sequences for zsh
 alias keytest="cat -v"
 
-# BMAD Method
+# Temporary Commands
+
+## BMAD Method
 alias bmad="npx bmad-method"
+
+## SpecKit
+alias speckit="uvx --from git+https://github.com/github/spec-kit.git specify"

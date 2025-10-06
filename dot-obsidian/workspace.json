@@ -18,26 +18,7 @@
                 "viewState": {
                   "x": -760,
                   "y": -168,
-                  "zoom": -0.1610320592461759
-                }
-              },
-              "pinned": true,
-              "icon": "lucide-layout-dashboard",
-              "title": "Home"
-            }
-          },
-          {
-            "id": "9167ec34e6a9e99a",
-            "type": "leaf",
-            "pinned": true,
-            "state": {
-              "type": "canvas",
-              "state": {
-                "file": "Dashboards/Home.canvas",
-                "viewState": {
-                  "x": -760,
-                  "y": -168,
-                  "zoom": -0.1610320592461759
+                  "zoom": 0
                 }
               },
               "pinned": true,
@@ -45,8 +26,7 @@
               "title": "Home"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -229,14 +209,13 @@
       "vscode-editor:Create Code File": true,
       "janitor:Janitor: scan vault": false,
       "homepage:Open homepage": true,
-      "obsidian-book-search-plugin:Create new book note": true,
-      "voice:Voice": false
+      "obsidian-book-search-plugin:Create new book note": true
     }
   },
-  "active": "9167ec34e6a9e99a",
+  "active": "e7a7b303c61786dc",
   "lastOpenFiles": [
-    "Resources/Weblist/8 Key LLM Development Skills for AI Engineers.md",
     "Dashboards/Home.canvas",
+    "Resources/Weblist/8 Key LLM Development Skills for AI Engineers.md",
     "Resources/Weblist/7 Best Practices for API Design 🔥.md",
     "Projects/Tasks/Obsidian Tasks/create mcp for obsidian, converse with AI about the design.md",
     "Projects/Tasks/Kanban Tasks/Start procedures for joining the army and postponing.md",
