@@ -1,7 +1,0 @@
-; This has been extracted from
-; https://github.com/tldr-pages/tldr/blob/master/pages/osx/nfcd.md
-
-% nfcd, osx
-
-# Start the daemon
-nfcd

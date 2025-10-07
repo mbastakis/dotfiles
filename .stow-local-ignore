@@ -7,3 +7,4 @@ bin
 setup.sh
 vscode_extensions
 .git
+.opencode

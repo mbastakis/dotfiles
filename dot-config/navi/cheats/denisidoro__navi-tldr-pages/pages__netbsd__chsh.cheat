@@ -1,7 +1,0 @@
-; This has been extracted from
-; https://github.com/tldr-pages/tldr/blob/master/pages/netbsd/chsh.md
-
-% chsh, netbsd
-
-# View documentation for the original command
-tldr chpass
