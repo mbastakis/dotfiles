@@ -50,6 +50,9 @@ keybind = ctrl+shift+t=goto_split:down
 keybind = ctrl+shift+n=goto_split:up
 keybind = ctrl+shift+s=goto_split:right
 
+# Quick Terminal
+quick-terminal-position = top
+quick-terminal-size = 100%, 100%
 keybind = global:cmd+ctrl+t=toggle_quick_terminal
 
 # Editor integration and command editing

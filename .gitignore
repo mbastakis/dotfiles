@@ -1,6 +1,7 @@
 .vsix
 .DS_Store
 local.zsh
+ai-docs
 
 # raycast
 dot-config/raycast/extensions

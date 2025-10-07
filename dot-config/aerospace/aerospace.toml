@@ -21,11 +21,6 @@ on-focus-changed = ['move-mouse window-lazy-center'] # Mouse lazily follows any 
 [key-mapping]
     preset = 'dvorak'
 
-# Workspace 1
-[[on-window-detected]]
-if.app-name-regex-substring = 'Wispr Flow'
-run = ['layout floating', 'move-node-to-workspace 1']
-
 # Workspace A
 [[on-window-detected]]
 if.app-name-regex-substring = 'Microsoft Edge'
@@ -59,7 +54,7 @@ run = 'move-node-to-workspace o'
 [[on-window-detected]]
 if.app-name-regex-substring = 'Ghostty'
 run= [
-  "layout floating",
+  # "layout floating",
   "move-node-to-workspace o",
 ]
 

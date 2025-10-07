@@ -90,6 +90,9 @@
         "appcleaner"
       	"betterdisplay"
         "SoundSource"
+        "unity-hub"
+        "atuin-desktop"
+        "keyclu"
       ];
       homebrew.brews = [
 	      "stow" 
@@ -172,8 +175,6 @@
         "bagels"
         "browsh"
         "ffmpeg"
-        "unity-hub"
-        "atuin-desktop"
       ];
       homebrew.masApps = 
         { 
