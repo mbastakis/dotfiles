@@ -1,4 +1,4 @@
-.vsix
+*.vsix
 .DS_Store
 local.zsh
 ai-docs
@@ -21,10 +21,17 @@ dot-claude/shell-snapshots
 dot-config/colima
 
 # Vscode
+code-portable-data/*
+!code-portable-data/extensions/
+code-portable-data/extensions/*
+!code-portable-data/extensions/local.tui-manager-1.0.0/
+!code-portable-data/extensions/extensions.json
+!code-portable-data/user-data/
+code-portable-data/user-data/*
+!code-portable-data/user-data/User/
+code-portable-data/user-data/User/*
 !code-portable-data/user-data/User/settings.json
 !code-portable-data/user-data/User/keybindings.json
-!code-portable-data/extensions/extensions.json
-code-portable-data/*
 
 # Wireshark
 dot-config/wireshark

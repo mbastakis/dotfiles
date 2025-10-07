@@ -89,10 +89,11 @@
         "the-unarchiver" 
         "appcleaner"
       	"betterdisplay"
-        "SoundSource"
+        "soundsource"
         "unity-hub"
         "atuin-desktop"
         "keyclu"
+        "kap"
       ];
       homebrew.brews = [
 	      "stow" 

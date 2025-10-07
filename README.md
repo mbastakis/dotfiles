@@ -1,420 +1,285 @@
-# Personal Dotfiles Repository
+# 🚀 Dotfiles
 
-A comprehensive macOS development environment configuration using GNU Stow, Nix Darwin, and extensive AI tooling integration.
-
-## 🚀 Quick Start
-
-```bash
-# Clone repository
-git clone <repo-url> ~/dev/dotfiles
-cd ~/dev/dotfiles
-
-# Run setup script (installs Homebrew, Stow, Nix)
-./setup.sh
-
-# Apply Nix Darwin configuration
-cd dot-config/nix-darwin
-darwin-rebuild switch --flake .#simple
-
-# Install VS Code extensions (optional)
-./bin/install_code_extensions.sh
-```
+macOS development environment using Nix Darwin and GNU Stow for reproducible, declarative configuration management.
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [Features](#features)
-- [Architecture](#architecture)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [AI Integration](#ai-integration)
-- [Development Workflow](#development-workflow)
-- [Customization](#customization)
-- [Troubleshooting](#troubleshooting)
-- [Contributing](#contributing)
+- [Quick Start](#-quick-start)
+- [Overview](#-overview)
+- [Architecture](#-architecture)
+  - [System Overview](#system-overview)
+  - [Directory Structure](#directory-structure)
+  - [Configuration Flow](#configuration-flow)
+  - [Package Management](#package-management)
+- [Features](#-features)
+  - [AI Integration](#ai-integration)
+  - [Shell Environment](#shell-environment)
+  - [Development Tools](#development-tools)
+  - [Interface](#interface)
+  - [Knowledge Management](#knowledge-management)
+- [Installation](#-installation)
+  - [Prerequisites](#prerequisites)
+  - [Steps](#steps)
+  - [Post-Installation](#post-installation)
 
-## 🎯 Overview
+## ⚡ Quick Start
 
-This dotfiles repository manages a sophisticated macOS development environment designed for:
+```bash
+git clone <repo-url> ~/dev/dotfiles && cd ~/dev/dotfiles
+./setup.sh
+cd dot-config/nix-darwin && darwin-rebuild switch --flake .#simple
+source ~/.zshrc
+```
 
-- **AI-Enhanced Development**: Extensive integration with Claude, OpenCode, and Gemini
-- **Productivity Optimization**: Custom workflows, automation, and keyboard-driven interfaces
-- **Reproducible Setup**: Declarative configuration using Nix Darwin and GNU Stow
-- **Consistent Theming**: Catppuccin Mocha theme across all applications
+## 📖 Overview
 
-### Key Stakeholders
-- Primary user: Software developer working across multiple projects
-- Focus: AI-assisted development workflows and productivity optimization
+Personal macOS development environment focused on AI-assisted workflows, keyboard-driven productivity, and reproducible configuration management. Built for software development across multiple projects with extensive terminal integration and automation.
 
-## ✨ Features
-
-### 🤖 AI-Powered Development
-- **OpenCode Integration**: AI development environment with MCP servers
-- **Context7**: Library documentation integration for better code understanding
-- **Obsidian MCP**: Knowledge base integration for project documentation
-- **Claude CLI**: Direct AI assistance in terminal workflows
-
-### 🔧 Development Tools
-- **Editor**: Neovim (Kickstart config) + VS Code with portable configuration
-- **Terminal**: Warp with 20+ custom workflows + Ghostty as backup
-- **Git**: Lazygit, Git Delta, GitHub CLI, GitLab CLI
-- **Containers**: Docker, Colima, Lazydocker, K9s
-- **File Management**: Yazi (terminal-based file manager)
-
-### 🎨 Interface & Productivity
-- **Window Manager**: AeroSpace (Dvorak-optimized tiling)
-- **Status Bar**: SketchyBar with custom plugins
-- **Shell**: Zsh with Zinit plugin manager and Starship prompt
-- **Theme**: Consistent Catppuccin Mocha across all tools
-
-### 📦 Package Management
-- **Hybrid Approach**: Nix Darwin for system packages + Homebrew for GUI apps
-- **Language Support**: Node.js, Go, Rust, Python, Java
-- **Version Control**: All configurations tracked in Git
+**🎯 Key Design Principles:**
+- ❄️ Declarative package management via Nix Darwin
+- 🔗 Symlink-based dotfile management via GNU Stow  
+- 🤖 AI-first development workflow (OpenCode, Claude, MCP)
+- 🎨 Consistent Catppuccin Mocha theming
+- 🐚 Shell-centric tools and workflows
 
 ## 🏗️ Architecture
 
-### Directory Structure
+### System Overview
+
+```mermaid
+graph TB
+    subgraph "Configuration Management"
+        Repo[📦 Dotfiles Repo]
+        Stow[🔗 GNU Stow]
+        Nix[❄️ Nix Darwin]
+        
+        Repo --> Stow
+        Repo --> Nix
+    end
+    
+    subgraph "Home Directory"
+        Config[~/.config/]
+        Claude[~/.claude/]
+        Obsidian[~/.obsidian/]
+        Warp[~/.warp/]
+        Zsh[~/.zshrc + ~/.zsh/]
+        Git[~/.gitconfig]
+        
+        Stow -.->|symlinks| Config
+        Stow -.->|symlinks| Claude
+        Stow -.->|symlinks| Obsidian
+        Stow -.->|symlinks| Warp
+        Stow -.->|symlinks| Zsh
+        Stow -.->|symlinks| Git
+    end
+    
+    subgraph "Package Management"
+        NixPkgs[Nix Packages]
+        Brew[🍺 Homebrew]
+        
+        Nix --> NixPkgs
+        Nix --> Brew
+    end
+    
+    subgraph "Development Environment"
+        Shell[🐚 Zsh + Zinit]
+        Terminal[💻 Warp/Ghostty]
+        Editor[✏️ Neovim/VS Code]
+        WM[🪟 AeroSpace]
+        AI[🤖 OpenCode/Claude]
+        
+        Zsh --> Shell
+        Config --> Terminal
+        Config --> Editor
+        Config --> WM
+        Config --> AI
+        Claude --> AI
+    end
+    
+    subgraph "Shell Completions"
+        Carapace[🐚 Carapace]
+        FzfTab[🔍 fzf-tab]
+        
+        NixPkgs --> Carapace
+        Brew --> FzfTab
+        Carapace --> Shell
+        FzfTab --> Shell
+    end
+    
+    subgraph "AI Workflow"
+        MCP[MCP Servers]
+        ObsidianMCP[Obsidian MCP]
+        Context7[Context7]
+        
+        AI --> MCP
+        MCP --> ObsidianMCP
+        MCP --> Context7
+        Obsidian -.->|reads| ObsidianMCP
+    end
+    
+    style Repo fill:#89b4fa
+    style Stow fill:#a6e3a1
+    style Nix fill:#89dceb
+    style AI fill:#f38ba8
+    style Shell fill:#fab387
+```
+
+### 📁 Directory Structure
+
 ```
 dotfiles/
-├── dot-*                    # Stow packages (symlinked to ~)
-│   ├── dot-config/          # Application configurations
-│   ├── dot-claude/          # Claude AI integration
-│   ├── dot-ai-core/         # AI workflow templates and agents
-│   ├── dot-gemini/          # Gemini AI integration
-│   ├── dot-obsidian/        # Obsidian configurations
-│   ├── dot-warp/            # Warp terminal workflows
-│   └── dot-zsh/             # Shell configurations
-├── bin/                     # Installation scripts
-├── setup.sh                # Main setup script
-└── PROJECT_CONTEXT.md       # Detailed project documentation
+├── 📦 bin/                           # Installation scripts
+│   ├── install_code_extensions.sh    # VS Code extension installer
+│   └── install_nix.sh                # Nix installation script
+├── ⚙️ dot-config/                    # ~/.config/ applications
+│   ├── ❄️ nix-darwin/                # System package management
+│   │   └── flake.nix                 # Nix Darwin configuration
+│   ├── ✏️ nvim/                      # Neovim (Kickstart config)
+│   ├── 🪟 aerospace/                 # Window manager (Dvorak-optimized)
+│   ├── 📊 sketchybar/                # Menu bar customization
+│   ├── 💻 ghostty/                   # Terminal emulator config
+│   ├── 📂 yazi/                      # File manager config
+│   ├── 🌿 lazygit/                   # Git UI config
+│   ├── ☸️ k9s/                       # Kubernetes UI config
+│   ├── 🤖 opencode/                  # AI development environment
+│   ├── ✨ starship.toml              # Shell prompt config
+│   └── [30+ more tools]              # See tree for full list
+├── 🤖 dot-claude/                    # ~/.claude/ AI integration
+│   ├── commands/                     # Custom Claude commands
+│   ├── hooks/                        # Tool execution hooks
+│   └── plugins/                      # Claude plugins
+├── 📚 dot-obsidian/                  # ~/.obsidian/ knowledge base
+│   ├── plugins/                      # 50+ Obsidian plugins
+│   ├── themes/                       # Custom themes
+│   └── snippets/                     # CSS snippets
+├── 🚀 dot-warp/                      # ~/.warp/ terminal workflows
+│   ├── workflows/                    # 20+ custom workflows
+│   └── themes/                       # Custom terminal themes
+├── 🐚 dot-zsh/                       # Zsh configuration modules
+│   ├── aliases.zsh                   # Command shortcuts
+│   ├── functions.zsh                 # Shell functions
+│   ├── exports.zsh                   # Environment variables
+│   ├── plugins.zsh                   # Zinit plugin config
+│   ├── fzf.zsh                       # Fuzzy finder integration
+│   └── fzf-tab.zsh                   # Interactive completions
+├── 🔧 utils/                         # Utility scripts
+│   └── brew-compare.sh               # Compare Nix/system brew deps
+├── dot-zshrc                         # ~/.zshrc (sources dot-zsh/)
+├── dot-zshenv                        # ~/.zshenv (environment setup)
+├── 🌿 dot-gitconfig                  # ~/.gitconfig (with conditional includes)
+├── dot-gitconfig-personal            # Personal git config
+├── dot-gitconfig-work                # Work git config
+├── ⚡ setup.sh                       # Main installation script
+└── .stowrc                           # Stow configuration
 ```
 
-### Configuration Modules
+### 🔄 Configuration Flow
 
-1. **Shell Environment** (`dot-zsh/`, `dot-zshrc`)
-   - Custom aliases, functions, and exports
-   - Plugin management with Zinit
-   - Tool integrations (atuin, zoxide, starship)
+1. 🔗 **Stow** symlinks `dot-*` directories to `~` (e.g., `dot-config/` → `~/.config/`)
+2. ❄️ **Nix Darwin** manages system packages, Homebrew formulas/casks, and system preferences
+3. 🐚 **Zsh** sources modular configs from `dot-zsh/` in order: `local.zsh`, `plugins.zsh`, `aliases.zsh`, `functions.zsh`, `custom_shortcuts.zsh`, `obsidian-cli.zsh`, `fzf.zsh`
+4. 🌿 **Git** uses conditional includes for work/personal configs based on repo path
 
-2. **AI Integration** (`dot-ai-core/`, `dot-claude/`, `dot-gemini/`)
-   - Agent prompts and task definitions
-   - Development workflow automation
-   - Knowledge base integration
+### 📦 Package Management
 
-3. **Development Tools** (`dot-config/`)
-   - Editor configurations (Neovim, VS Code)
-   - Git with conditional work/personal configs
-   - Container and cloud tool setups
+**❄️ Nix Darwin** (`dot-config/nix-darwin/flake.nix`):
+- System packages (vim, direnv, carapace, etc.)
+- Homebrew taps, formulas, and casks
+- macOS system preferences (dock, finder, etc.)
 
-4. **System Configuration** (`dot-config/nix-darwin/`)
-   - Declarative package management
-   - System preferences and defaults
-   - Homebrew integration
+**🍺 Homebrew** (managed by Nix):
+- 🔧 CLI tools: stow, git, starship, fzf, ripgrep, lazygit, docker, kubernetes-cli, awscli, terraform, etc.
+- 🖥️ GUI apps: raycast, aerospace, obsidian, warp, ghostty, claude, vivaldi, etc.
+- 🔤 Fonts: JetBrains Mono Nerd Font, SF Pro
 
-## 🔧 Installation
+**🔍 Utility**: `utils/brew-compare.sh` compares Nix-declared vs system-installed packages
 
-### Prerequisites
-- macOS (Apple Silicon recommended)
-- Xcode Command Line Tools
-- Internet connection
+## ✨ Features
 
-### Automated Setup
+### 🤖 AI Integration
+- **OpenCode**: MCP server integration (Obsidian, Context7)
+- **Claude Desktop**: Native app with custom commands/hooks
+- **Gemini CLI**: Terminal-based AI assistant
+- **Fabric AI**: AI workflow automation
+
+### 🐚 Shell Environment  
+- **Zsh**: Modular config with Zinit plugin manager
+- **Starship**: Fast, minimal prompt ✨
+- **Carapace + fzf-tab**: Interactive completions for 1000+ commands 🔍
+- **Atuin**: Shell history sync and search 📜
+- **Zoxide**: Frecency-based directory jumping 🚀
+- **FZF**: Fuzzy finder with custom keybindings 🔎
+
+### 🛠️ Development Tools
+- **✏️ Editors**: Neovim (Kickstart), VS Code (portable config)
+- **🌿 Git**: Delta diff viewer, Lazygit UI, gh/glab CLIs
+- **🐳 Containers**: Docker, Colima, Lazydocker, K9s, Helm
+- **💻 Languages**: Node, Bun, Go, Rust, Python (uv/pyenv), Java, Lua
+- **☁️ Cloud**: AWS CLI, Azure CLI, Terraform, Kubernetes
+
+### 🖥️ Interface
+- **🪟 Window Manager**: AeroSpace (Dvorak-optimized tiling)
+- **📊 Menu Bar**: SketchyBar (custom plugins)
+- **💻 Terminal**: Warp (primary) / Ghostty (backup)
+- **📂 File Manager**: Yazi (terminal-based)
+- **🚀 Launcher**: Raycast
+- **🎨 Theme**: Catppuccin Mocha (system-wide)
+
+### 📚 Knowledge Management
+- **Obsidian**: 50+ plugins, custom themes, MCP integration
+- **Navi**: Interactive cheatsheets (13 custom sheets in `dot-config/navi/cheats/`)
+- **TLDR**: Community-driven man pages 📖
+
+## 📥 Installation
+
+### ✅ Prerequisites
+- 🍎 macOS (Apple Silicon recommended)
+- 🔨 Xcode Command Line Tools: `xcode-select --install`
+- 🌐 Internet connection
+
+### 🔧 Steps
+
 ```bash
 # 1. Clone repository
 git clone <repo-url> ~/dev/dotfiles
 cd ~/dev/dotfiles
 
-# 2. Run setup script
+# 2. Run automated setup (installs Homebrew, Stow, Nix)
 ./setup.sh
-```
 
-The setup script will:
-- Install Homebrew if not present
-- Install GNU Stow and Nix
-- Create necessary symlinks
-- Set up basic shell configuration
-
-### Manual Steps
-```bash
-# Apply Nix Darwin configuration
+# 3. Apply Nix Darwin configuration
 cd dot-config/nix-darwin
 darwin-rebuild switch --flake .#simple
 
-# Install VS Code extensions (optional)
+# 4. (Optional) Install VS Code extensions
+cd ~/dev/dotfiles
 ./bin/install_code_extensions.sh
 
-# Reload shell configuration
+# 5. Reload shell
 source ~/.zshrc
+# or use alias: reload
 ```
 
-## ⚙️ Configuration
+### ✨ Post-Installation
 
-### Key Configuration Files
-- **System**: `dot-config/nix-darwin/flake.nix`
-- **Shell**: `dot-zshrc`, `dot-zsh/*.zsh`
-- **Git**: `dot-gitconfig`, `dot-gitconfig-personal`, `dot-gitconfig-work`
-- **AI Tools**: `dot-config/opencode/opencode.json`
-- **Editor**: `dot-config/nvim/init.lua`
-- **Window Manager**: `dot-config/aerospace/aerospace.toml`
-
-### Environment Variables
+**✅ Verify installation:**
 ```bash
-EDITOR=code                    # Default editor
-SHELL=/bin/zsh                # Default shell
-HOMEBREW_PREFIX=/opt/homebrew  # Homebrew installation path
+which stow                    # Should return Homebrew path
+nix --version                 # Should show Nix version
+darwin-rebuild --version      # Should show nix-darwin version
+carapace --version            # Should show carapace version
 ```
 
-### Git Configuration
-Conditional Git configurations for work and personal projects:
-- Work repositories: Uses work email and signing key
-- Personal repositories: Uses personal email and signing key
-
-## 🚀 Usage
-
-### Essential Commands
+**🧪 Test completions:**
 ```bash
-# Reload shell configuration
-reload
-
-# File navigation and search
-l, ll, la, ld          # Enhanced ls with eza
-r                      # Interactive history search with atuin
-cd <path>              # Enhanced cd with zoxide
-
-# Development tools
-v <file>               # Open in Neovim
-obs                    # Obsidian CLI
-lazygit                # Git interface
-k9s                    # Kubernetes interface
-
-# AI development
-opencode               # AI-powered development environment
-claude-code            # Claude CLI integration
+aws <TAB>                     # Should show interactive fzf menu
+kubectl <TAB>                 # Should show interactive fzf menu
 ```
 
-### Keyboard Shortcuts
+**🌿 Configure Git:**
+Edit `dot-gitconfig` conditional includes to match your work/personal repo paths
 
-#### Shell (Zsh) Global Shortcuts
-| Shortcut | Action | Description |
-|----------|--------|-------------|
-| `CTRL-T` | FZF file finder | Search and paste files/directories with bat preview |
-| `CTRL-F` | FZF text search | Interactive ripgrep search with preview (opens in VS Code) |
-| `CTRL-R` | Atuin history | Search command history with atuin (replaces fzf history) |
-| `CTRL-S` | Atuin search | Alternative atuin history search trigger |
-| `ALT-C` | Zoxide interactive | Jump to any directory using zoxide's frecency algorithm |
-| `TAB` | Interactive completion | Trigger fzf-tab for fuzzy completion with preview |
-| `<` / `>` | Switch groups | Navigate between completion groups in fzf-tab |
-| `/` | Continuous completion | Accept selection and continue completing |
+**🤖 Set up AI tools:**
+- 🔑 Add API keys to environment (see `dot-zsh/local.zsh.example`)
+- ⚙️ Configure OpenCode MCP servers in `dot-config/opencode/opencode.json`
 
-#### Ghostty Terminal Shortcuts
-| Shortcut | Action | Description |
-|----------|--------|-------------|
-| `CMD+D` | Split right | Create vertical split |
-| `CMD+SHIFT+D` | Split down | Create horizontal split |
-| `CMD+T` | New tab | Open new tab |
-| `CMD+W` | Close surface | Close current split/tab |
-| `CTRL+SHIFT+H` | Go left | Navigate to left split |
-| `CTRL+SHIFT+T` | Go down | Navigate to down split |
-| `CTRL+SHIFT+N` | Go up | Navigate to up split |
-| `CTRL+SHIFT+S` | Go right | Navigate to right split |
-| `CMD+CTRL+T` | Quick terminal | Toggle quick terminal overlay |
-| `CMD+SHIFT+E` | Editor integration | Write screen content to file and open in editor |
-| `CMD+C` | Copy (custom) | Copy with custom escape sequence |
-| `CMD+X` | Cut (custom) | Cut with custom escape sequence |
-| `SHIFT+ENTER` | Insert newline | Insert literal newline character |
-
-#### Yazi File Manager Shortcuts
-| Shortcut | Action | Description |
-|----------|--------|-------------|
-| `y` | Launch Yazi | Open Yazi file manager with directory tracking |
-| Navigation | Arrow keys / hjkl | Navigate files and directories |
-| `ENTER` | Open file | Open file with default application |
-| `q` | Quit | Exit Yazi and return to shell |
-
-#### Atuin History Search
-| Shortcut | Action | Description |
-|----------|--------|-------------|
-| `CTRL-R` | Search mode | Open interactive search |
-| `UP/DOWN` | Navigate | Move through history entries |
-| `CTRL-R` (again) | Toggle sort | Switch between relevance and chronological order |
-| `CTRL-/` or `ALT-/` | Toggle wrap | Toggle line wrapping in preview |
-| `ENTER` | Execute | Run selected command |
-| `ESC` | Cancel | Close search without executing |
-
-#### FZF Interactive Search
-| Shortcut | Action | Description |
-|----------|--------|-------------|
-| `CTRL-K/CTRL-J` | Navigate | Move cursor up/down |
-| `CTRL-P/CTRL-N` | Navigate (alt) | Alternative up/down navigation |
-| `ENTER` | Select | Select item and confirm |
-| `TAB` | Mark (multi) | Mark item in multi-select mode |
-| `SHIFT-TAB` | Unmark (multi) | Unmark item in multi-select mode |
-| `CTRL-/` | Toggle preview | Show/hide preview window |
-| `CTRL-Y` | Copy to clipboard | Copy selected item to clipboard (where available) |
-
-### Warp Workflows
-The repository includes 20+ custom Warp workflows for common tasks:
-- File and directory operations
-- Git operations
-- Docker and Kubernetes management
-- System monitoring and maintenance
-- AI tool integration
-
-### Window Management (AeroSpace)
-Dvorak-optimized keybindings for efficient window management:
-- Workspace switching and window movement
-- Tiling and floating window controls
-- Multi-monitor support
-
-## 🤖 AI Integration
-
-### OpenCode Setup
-The repository includes comprehensive OpenCode configuration with MCP servers:
-
-```json
-{
-  "mcpServers": {
-    "obsidian": {
-      "command": "npx",
-      "args": ["-y", "@executeautomation/mcp-obsidian"]
-    },
-    "context7": {
-      "command": "npx",
-      "args": ["-y", "@context7/mcp-server"]
-    }
-  }
-}
-```
-
-### AI Workflow Components
-- **Agent Prompts**: Specialized prompts for different development tasks
-- **Task Templates**: Reusable templates for common AI interactions
-- **Checklist Systems**: Quality assurance and process checklists
-- **Knowledge Integration**: Direct access to Obsidian notes and documentation
-
-## 🔄 Development Workflow
-
-### Making Changes
-1. **Edit configurations** in the dotfiles repository
-2. **Apply changes** with `stow .` for symlinks
-3. **Update system** with `darwin-rebuild switch --flake .#simple` for Nix changes
-4. **Commit and push** changes to Git
-5. **Sync across machines** by pulling and re-running setup
-
-### Package Management
-```bash
-# Update Homebrew packages
-brew update && brew upgrade
-
-# Update Nix packages
-cd dot-config/nix-darwin
-nix flake update
-darwin-rebuild switch --flake .#simple
-
-# Update shell plugins
-zinit update
-```
-
-### Testing Configuration
-- **Nix validation**: `nix flake check`
-- **Stow verification**: Check for symlink conflicts
-- **Tool integration**: Verify AI tools and MCP connections
-- **Manual testing**: Test aliases, functions, and workflows
-
-### Testing Completions
-
-To verify carapace + fzf-tab integration is working:
-1. Reload your shell: `source ~/.zshrc` or `reload`
-2. Type a command with arguments: `aws <TAB>` or `docker <TAB>` or `kubectl <TAB>`
-3. You should see an interactive fzf menu with completions
-4. Type to filter, use arrows to navigate, Enter to select
-
-If you see the default zsh menu instead, check:
-- Carapace is installed: `which carapace`
-- fzf-tab is loaded: `zstyle -L ':fzf-tab:*' | head -3`
-- Carapace completers registered: `compdef -p | grep carapace`
-
-## 🎨 Customization
-
-### Adding New Tools
-1. Create configuration in appropriate `dot-config/` subdirectory
-2. Add to Nix Darwin configuration if system package
-3. Add to Homebrew if GUI application
-4. Create aliases/functions in `dot-zsh/`
-5. Update documentation
-
-### Theming
-All tools use the Catppuccin Mocha theme for consistency:
-- Terminal applications
-- Editors and IDEs
-- System UI elements
-- Custom themes in `dot-config/*/themes/`
-
-### Custom Functions and Aliases
-Add to `dot-zsh/`:
-- `aliases.zsh`: Short command aliases
-- `functions.zsh`: Complex shell functions
-- `custom_shortcuts.zsh`: Workflow shortcuts
-
-## 🔍 Troubleshooting
-
-### Common Issues
-
-**Stow conflicts**
-```bash
-# Remove conflicting files and re-run stow
-stow --adopt .
-```
-
-**Nix Darwin build failures**
-```bash
-# Check flake syntax
-nix flake check
-
-# Clean build cache
-nix store gc
-```
-
-**AI tool connection issues**
-```bash
-# Verify MCP server installation
-npx -y @executeautomation/mcp-obsidian --version
-npx -y @context7/mcp-server --version
-```
-
-### Getting Help
-- Check `PROJECT_CONTEXT.md` for detailed architecture information
-- Review tool-specific documentation in configuration files
-- Use `opencode` for AI-assisted troubleshooting
-
-## 🤝 Contributing
-
-### Development Guidelines
-- Follow existing naming conventions (`dot-*` directories)
-- Maintain consistent theming (Catppuccin Mocha)
-- Document significant changes
-- Test configurations before committing
-
-### Areas for Improvement
-1. **Cross-platform support**: Extend to Linux/Windows
-2. **Configuration templates**: Create reusable templates
-3. **Automated testing**: Implement configuration validation
-4. **Documentation**: Add inline comments to complex configs
-
-## 📚 Resources
-
-- **Nix Darwin**: [nix-darwin documentation](https://github.com/LnL7/nix-darwin)
-- **GNU Stow**: [Stow manual](https://www.gnu.org/software/stow/manual/stow.html)
-- **OpenCode**: [OpenCode documentation](https://opencode.ai)
-- **AeroSpace**: [AeroSpace configuration](https://github.com/nikitabobko/AeroSpace)
-- **Catppuccin**: [Theme documentation](https://catppuccin.com)
-
-## 📄 License
-
-This repository is for personal use. Feel free to fork and adapt for your own dotfiles setup.
-
----
-
-**Note**: This is a living configuration that evolves with development needs. Regular updates and improvements are expected as new tools and workflows are adopted.
