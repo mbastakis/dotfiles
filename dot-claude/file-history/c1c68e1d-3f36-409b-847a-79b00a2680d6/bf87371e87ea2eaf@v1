@@ -1,9 +1,0 @@
-apiVersion: v2
-name: istio-base
-version: 1.0.0
-description: Istio Base CRDs for service mesh - installs Custom Resource Definitions required by Istio
-appVersion: 1.20.0
-dependencies:
-  - name: base
-    version: 1.20.0
-    repository: https://istio-release.storage.googleapis.com/charts

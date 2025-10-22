@@ -1,9 +1,0 @@
-apiVersion: v2
-name: istio-cni
-version: 1.0.0
-description: Istio CNI Plugin for transparent traffic interception - required for secure and performant service mesh operation
-appVersion: 1.26.3
-dependencies:
-  - name: cni
-    version: 1.26.3
-    repository: https://istio-release.storage.googleapis.com/charts

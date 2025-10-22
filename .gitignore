@@ -10,11 +10,18 @@ dot-config/raycast/config.json
 thefuck
 
 # Claude
+dot-claude.json
 dot-claude/ide
 dot-claude/statsig
 dot-claude/todos
 dot-claude/projects
 dot-claude/shell-snapshots
+dot-claude/config
+dot-claude/debug
+dot-claude/file-history
+dot-claude/plugins
+dot-claude/session-env
+dot-claude/history.jsonl
 
 # Colima
 dot-config/colima

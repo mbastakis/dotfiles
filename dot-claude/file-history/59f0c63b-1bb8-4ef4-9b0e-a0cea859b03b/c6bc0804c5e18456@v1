@@ -1,9 +1,0 @@
-apiVersion: v2
-name: istiod
-version: 1.0.0
-description: Istio Control Plane (istiod) for service mesh - manages configuration, security, and traffic policies
-appVersion: 1.20.0
-dependencies:
-  - name: istiod
-    version: 1.20.0
-    repository: https://istio-release.storage.googleapis.com/charts
