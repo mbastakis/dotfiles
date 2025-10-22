@@ -1,0 +1,105 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Directory Overview
+
+This is the `/docs/psa/shared-platform` subdirectory within the larger aicc-group repository. It contains documentation and diagrams for the **Shared Platform PSA (Product Security Assessment) Proposal** - a Platform Engineering initiative to create a Core infrastructure that standardizes compliance, security, and operational controls across all AICC products.
+
+## Purpose
+
+The Shared Platform proposal aims to:
+- Create a Platform Engineering-owned Core so one PSA covers shared runtime infrastructure
+- Allow product teams to scope their PSA assessments to application-layer risk only
+- Eliminate redundant PSA documentation for identical infrastructure components
+- Accelerate both POC and production releases
+
+## Directory Structure
+
+```
+shared-platform/
+├── doc/
+│   ├── leadership-shared-platform-proposal-v1.1.md   # Main proposal document
+│   └── diagrams/
+│       ├── core-infrastructure.mmd                    # Core infrastructure diagram (Mermaid)
+│       ├── core-infrastructure.svg                    # Rendered diagram
+│       └── render-diagrams.sh                         # Script to render Mermaid to SVG
+├── core-infrastructure-diagram.yaml                   # YAML-based diagram definition
+├── model-training-diagram.yaml                        # Model training footprint diagram
+├── spec-shared-platform-email.md                      # Email specification
+└── shared-platform-first-email-draft.md              # Draft communication
+```
+
+## Working with Diagrams
+
+### Mermaid Diagrams
+
+The `doc/diagrams/` directory contains Mermaid diagram source files (`.mmd`) and their rendered SVG outputs.
+
+To render diagrams:
+```bash
+cd doc/diagrams/
+./render-diagrams.sh
+```
+
+This script uses Docker to convert `.mmd` files to `.svg` using `minlag/mermaid-cli`:
+- Automatically processes all `.mmd` files in the directory
+- Outputs `.svg` files with the same base name
+- Uses white background for clean rendering
+
+### Diagram Content
+
+The `core-infrastructure.mmd` diagram illustrates:
+- **Internet environment**: OTC, AWS Green (Playground), GCP
+- **Intranet environment**: AWS Blue (Dev, Staging, Prod)
+- **Core Services**: Same across all environments (orange color)
+- **Shared Services**: Shared across environments (blue color)
+- **Applications**: Environment-specific apps (grey color)
+
+Key applications: Magenta Apprentice, DigiBB, Fiber (planned)
+
+## Relationship to Parent Repository
+
+This directory is part of the larger aicc-group GitLab group structure. The parent repository contains:
+- `fiber/` - Application layer (Magenta Apprentice, etc.)
+- `infrastructure/` - IaC, ArgoCD, Helm charts, Terraform
+- `docs/` - Documentation (including this PSA proposal)
+- `specs/` - Technical specifications
+
+See the root `CLAUDE.md` for comprehensive information about the parent repository structure, Terraform state configuration, and AWS/kubectl commands.
+
+## Key Concepts
+
+### Core Services (Platform Engineering-owned)
+Components consistent across all environments:
+- Istio service mesh
+- Network baselines (segmented VPCs, ingress rules)
+- Observability stack (Prometheus, Grafana, Loki)
+- Identity & Access (Keycloak, EntraID SSO)
+- Secrets Management (KMS, Secret Manager)
+- GitOps (ArgoCD)
+- Policy Enforcement (Kyverno, Gatekeeper)
+- GitLab Runners for CI/CD
+
+### Shared Services (Proposed)
+Services that product teams can inherit:
+- Application Databases (Postgres stacks)
+- Model Training (GPU access, cross-cloud pipelines)
+- LLM Gateway (provider access controls, rate limits)
+- LLM Observability (prompt/response tracing)
+
+### Environments
+- **Dev**: Development environment in AWS Blue
+- **Staging**: Pre-production environment in AWS Blue
+- **Prod**: Production environment in AWS Blue
+- **Playground**: Rapid prototyping in AWS Green
+
+## Editing Guidelines
+
+When updating documentation in this directory:
+1. Keep the proposal focused on PSA compliance and Platform Engineering ownership
+2. Update diagrams when infrastructure changes
+3. Maintain consistency between Mermaid source and rendered SVG
+4. Ensure color coding matches the standard (Core=orange, Shared=blue, Apps=grey)
+5. Use proper environment naming (AWS Blue vs AWS Green, Internet vs Intranet)
+6. Reference specific environment names consistently across all documents

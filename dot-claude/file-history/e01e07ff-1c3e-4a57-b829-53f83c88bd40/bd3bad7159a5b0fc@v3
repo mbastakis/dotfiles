@@ -1,0 +1,107 @@
+---
+description: Automated job application workflow - finds and applies to 10 jobs on a given website
+argument-hint: [job-site-url]
+allowed-tools: Read, mcp__playwright, Task, Glob, Write
+---
+
+# Automated Job Application Workflow
+
+You are executing an automated job application workflow. Your goal is to apply to 10 jobs on the provided website.
+
+## Job Site URL
+
+$ARGUMENTS
+
+## Workflow Overview
+
+You will:
+1. Navigate to the job site and search for relevant positions
+2. For each job found (target: 10 applications):
+   - Extract job details (title, company, description)
+   - Invoke the `job-application-researcher` subagent to research the company and create a cover letter
+   - Fill out the application form with information from resources/cv
+   - Attach the CV and generated cover letter
+   - Submit the application
+3. Track progress and continue until 10 applications are completed
+
+## Resources Available
+
+- CV: Check resources/ directory for CV file
+- Cover letter template: Check resources/ directory for template
+- These will be used by the subagent and for filling out applications
+
+## Step-by-Step Process
+
+### 1. Initial Navigation
+- Navigate to: $ARGUMENTS
+- Take a snapshot to see the page
+- Identify the job search interface
+- Search for jobs that match the candidate's profile from resources/cv
+
+### 2. For Each Job (Repeat 10 times)
+
+**A. Job Discovery**
+- Identify a relevant job listing
+- Extract key information:
+  - Job title
+  - Company name
+  - Job description/requirements
+  - Application link/button
+
+**B. Company Research & Cover Letter Creation**
+- Use the Task tool to invoke the `job-application-researcher` subagent
+- Provide the subagent with:
+  - Job title
+  - Company name
+  - Job description
+  - Paths to CV and cover letter template in resources/
+- Wait for the subagent to return:
+  - Company research summary
+  - Path to generated cover letter
+
+**C. Application Submission**
+- Click on the application link/button
+- Take a snapshot to see the application form
+- Fill out all required fields using information from:
+  - resources/cv (for personal info, experience, education)
+  - Generated cover letter path (for cover letter upload)
+- Upload required documents:
+  - CV from resources/
+  - Generated cover letter
+- Review the filled form
+- Submit the application
+- Confirm submission was successful
+
+**D. Progress Tracking**
+- Keep count of completed applications
+- Move to the next job listing
+- Continue until 10 applications are completed
+
+### 3. Error Handling
+
+If any step fails:
+- Log the error and job details
+- Attempt to recover if possible
+- Move to the next job if unable to complete current application
+- Ensure you still reach 10 total successful applications
+
+## Important Notes
+
+- **Accuracy**: Ensure all information is correctly filled from the CV
+- **Completeness**: Don't skip required fields
+- **Verification**: Check each form before submission
+- **Persistence**: If a job application fails, move to the next one
+- **Limit**: Stop after 10 successful applications
+- **Personalization**: Each application should have a unique, researched cover letter
+- **Context**: Use browser snapshots frequently to understand page state
+- **Navigation**: Handle pagination, search filters, and various form layouts
+
+## Success Criteria
+
+- 10 job applications successfully submitted
+- Each application has a unique, researched cover letter
+- All required fields filled accurately
+- Documents attached correctly
+- Confirmation received for each submission
+
+Begin by navigating to the job site and analyzing the page structure.

@@ -1,0 +1,52 @@
+{{/*
+AICC INFRA-001 Workaround: Patch gateway deployment image
+This post-install/post-upgrade hook patches the deployment to replace
+"image: auto" with explicit image since webhook is broken.
+*/}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.gateway.name }}-image-patcher
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "5"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+  labels:
+    app: {{ .Values.gateway.name }}
+    component: image-patcher
+spec:
+  ttlSecondsAfterFinished: 60
+  backoffLimit: 3
+  template:
+    metadata:
+      name: {{ .Values.gateway.name }}-image-patcher
+    spec:
+      serviceAccountName: {{ .Values.gateway.name }}
+      restartPolicy: OnFailure
+      containers:
+        - name: kubectl
+          image: bitnami/kubectl:latest
+          command:
+            - /bin/bash
+            - -c
+            - |
+              set -e
+              echo "Waiting for deployment to exist..."
+              until kubectl get deployment {{ .Values.gateway.name }} -n {{ .Release.Namespace }} 2>/dev/null; do
+                sleep 2
+              done
+              
+              echo "Patching deployment image..."
+              kubectl patch deployment {{ .Values.gateway.name }} -n {{ .Release.Namespace }} \
+                --type='json' \
+                -p='[{
+                  "op": "replace",
+                  "path": "/spec/template/spec/containers/0/image",
+                  "value": "{{ .Values.global.hub | default "docker.io/istio" }}/proxyv2:{{ .Values.global.tag | default "1.20.0" }}"
+                }]'
+              
+              echo "✓ Deployment patched successfully"
+              kubectl get deployment {{ .Values.gateway.name }} -n {{ .Release.Namespace }} \
+                -o jsonpath='{.spec.template.spec.containers[0].image}'
+              echo ""

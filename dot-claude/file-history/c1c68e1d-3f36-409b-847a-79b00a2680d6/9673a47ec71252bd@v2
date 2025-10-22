@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: "kiali"
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+  finalizers: ["resources-finalizer.argocd.argoproj.io"]
+spec:
+  project: infrastructure
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
+      - CreateNamespace=true
+      - PruneLast=true
+      - FailOnSharedResource=true
+      - ApplyOutOfSyncOnly=true
+  sources:
+    - repoURL: https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/kiali-helm.git
+      targetRevision: main
+      path: ./
+      helm:
+        valueFiles:
+          - default-values.yaml
+          - dev-values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: istio-system

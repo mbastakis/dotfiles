@@ -1,4 +1,7 @@
 {
+  "env": {
+    "DISABLE_AUTOUPDATER": "1"
+  },
   "permissions": {
     "allow": [
       "Write",
@@ -30,10 +33,7 @@
       "mcp__context7__resolve-library-id",
       "mcp__context7__get-library-docs"
     ],
-    "deny": [],
-    "additionalDirectories": [
-      "/Users/mbastakis/.bmad-core/",
-      "/Users/mbastakis/.bmad-infrastructure-devops/"
-    ]
-  }
+    "deny": []
+  },
+  "alwaysThinkingEnabled": true
 }

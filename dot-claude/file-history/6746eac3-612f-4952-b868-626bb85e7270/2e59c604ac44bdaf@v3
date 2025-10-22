@@ -1,0 +1,314 @@
+# AICC Dev Environment deployment values with MTR registry and internal.dev.aicc.aws.telekom.de domains
+
+# Global configuration
+global:
+  imagePullSecrets:
+    - name: mtr-regcred
+
+# Backend configuration
+backend:
+  image:
+    repository: mtr.devops.telekom.de/aicc-llm-assistant/magenta-apprentice-backend
+    tag: 0.1.1-42ea694d
+    pullPolicy: IfNotPresent
+
+  # Service account configuration for IRSA (IAM Roles for Service Accounts)
+  serviceAccount:
+    create: true
+    name: magenta-apprentice-backend
+    annotations:
+      eks.amazonaws.com/role-arn: "arn:aws:iam::076811069858:role/eks-bedrock-magenta-apprentice"
+
+  # Override command to fix Python path issue and bypass logfire
+  command: ["/bin/sh"]
+  args:
+    - "-c"
+    - |
+      cd /app && 
+      export PYTHONPATH=/app/src:$PYTHONPATH && 
+      export LOGFIRE_SEND_TO_LOGFIRE=false && 
+      python -c "import sys; sys.path.insert(0, '/app/src')" && 
+      python -m uvicorn apa.main:app \
+        --host 0.0.0.0 \
+        --port 8000 \
+        --log-level debug \
+        --reload
+
+  service:
+    type: ClusterIP # Use ClusterIP with Ingress
+    port: 80
+    targetPort: 8000
+
+  ingress:
+    enabled: true
+    className: "nginx"
+    annotations:
+      # For internal HTTP communication with AWS ALB
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    hosts:
+      - host: magenta-apprentice-api.internal.dev.aicc.aws.telekom.de
+        paths:
+          - path: /
+            pathType: Prefix
+    tls: [] # No TLS - termination at load balancer
+
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+
+  env:
+    LOG_LEVEL: "INFO"
+    DEV_MODE: "true"
+    CORS_ORIGINS: "https://magenta-apprentice.internal.dev.aicc.aws.telekom.de"
+    TRUST_PROXY: "true" # Trust X-Forwarded headers from ALB
+    # AGENT_GATEWAY_URL is automatically set by the template when agentGateway.enabled=true
+    PYTHONPATH: "/app/src" # Add src to Python path
+    UVICORN_APP: "apa.server.main:app" # Keep the same but ensure PYTHONPATH is set
+    LOGFIRE_SEND_TO_LOGFIRE: "false" # Disable logfire to avoid authentication issues
+    # Bedrock configuration - using Claude Sonnet 4 EU inference profile
+    DEFAULT_LLM_MODEL: "bedrock:eu.anthropic.claude-sonnet-4-20250514-v1:0"
+    AWS_REGION: "eu-central-1"
+    AWS_DEFAULT_REGION: "eu-central-1"
+    AWS_EC2_METADATA_DISABLED: "true" # Recommended for IRSA to avoid IMDS lookup
+
+  envFrom:
+    - secretRef:
+        name: magenta-apprentice-backend-secrets
+
+# Frontend configuration
+frontend:
+  image:
+    repository: mtr.devops.telekom.de/aicc-llm-assistant/magenta-apprentice-frontend
+    tag: 0.0.0-42ea694d
+    pullPolicy: IfNotPresent
+
+  service:
+    type: ClusterIP # Use ClusterIP with Ingress
+    port: 80
+    targetPort: 8080 # Frontend typically runs on 8080
+
+  ingress:
+    enabled: true
+    className: "nginx"
+    annotations:
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    hosts:
+      - host: magenta-apprentice.internal.dev.aicc.aws.telekom.de
+        paths:
+          - path: /
+            pathType: Prefix
+    tls: [] # No TLS - termination at load balancer
+
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 50m
+      memory: 128Mi
+
+  env:
+    VITE_BACKEND_URL: "https://magenta-apprentice-api.internal.dev.aicc.aws.telekom.de"
+
+# PostgreSQL database configuration
+postgresql:
+  enabled: true
+  global:
+    imageRegistry: dockerhub.devops.telekom.de
+  image:
+    registry: dockerhub.devops.telekom.de
+    repository: bitnami/postgresql
+    tag: 16.1.0-debian-11-r19 # Specify a stable version
+  volumePermissions:
+    enabled: false # Disable if not needed
+    image:
+      registry: dockerhub.devops.telekom.de
+      repository: bitnami/os-shell
+  auth:
+    username: magenta
+    database: magenta_apprentice
+    # Secret will be created via SOPS encrypted file
+    existingSecret: "postgresql-secret"
+    secretKeys:
+      adminPasswordKey: "postgres-password"
+      userPasswordKey: "password"
+  primary:
+    persistence:
+      enabled: false # Disabled due to EBS permissions issue in dev
+      size: 10Gi # Increased size for dev environment when enabled
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 256Mi
+
+# Disable production features for initial testing
+networkPolicy:
+  enabled: false
+
+podDisruptionBudget:
+  enabled: false
+
+autoscaling:
+  enabled: false
+
+# Desktop Use - enable MCP server for desktop automation
+desktopUse:
+  enabled: false
+
+# Evaluator Service configuration
+evaluator:
+  enabled: true
+  image:
+    repository: mtr.devops.telekom.de/aicc-llm-assistant/magenta-apprentice-evaluator
+    tag: 0.1.1-42ea694d
+    pullPolicy: IfNotPresent
+
+  podAnnotations:
+    sidecar.istio.io/inject: "false"
+
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+  env:
+    LOG_LEVEL: "INFO"
+    DEFAULT_LLM_MODEL: "bedrock:eu.anthropic.claude-sonnet-4-20250514-v1:0"
+    # Langfuse configuration - set via dev-fiber-secrets.enc.yaml
+    # LANGFUSE_HOST: "https://cloud.langfuse.com"
+    # LANGFUSE_PUBLIC_KEY: "" # Set via secret
+    # LANGFUSE_SECRET_KEY: "" # Set via secret
+
+  envFrom:
+    - secretRef:
+        name: evaluator-secrets
+        # Should contain: LANGFUSE_HOST, LANGFUSE_PUBLIC_KEY, LANGFUSE_SECRET_KEY
+
+# Agent Gateway configuration
+agentGateway:
+  enabled: true
+  image:
+    repository: mtr.devops.telekom.de/aicc-llm-assistant/magenta-apprentice-agent-gateway
+    tag: 42ea694-42ea694d
+    pullPolicy: IfNotPresent
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+
+  service:
+    type: ClusterIP
+    port: 8080
+    annotations: {}
+
+  logging:
+    level: info
+    format: json
+
+  env:
+    CORS_ORIGINS: "https://magenta-apprentice.internal.dev.aicc.aws.telekom.de"
+    BACKEND_URL: "http://magenta-apprentice-backend:8000"
+
+  # Resource limits
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+  # Observability configuration
+  observability:
+    metricsExporter: "prometheus"
+    tracesExporter: "none"
+    otlpEndpoint: ""
+
+  # Health probes
+  livenessProbe:
+    httpGet:
+      path: /live
+      port: http
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+
+  readinessProbe:
+    httpGet:
+      path: /ready
+      port: http
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 3
+    successThreshold: 1
+
+  # Pod placement
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  # Additional configurations
+  podAnnotations: {}
+  podLabels: {}
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 65534
+    fsGroup: 65534
+
+  securityContext:
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsUser: 65534
+
+  envFrom: []
+  volumeMounts: []
+  volumes: []
+
+  config:
+    # Optional TTL for auto-termination
+    mcpServerTTL: "2h"
+
+    # MCP Server definitions
+    mcpServers:
+      # Dynamic MCP server for Playwright automation
+      playwright-mcp:
+        image: "mcr.microsoft.com/playwright/mcp:latest"
+        command:
+          [
+            "node",
+            "cli.js",
+            "--headless",
+            "--browser",
+            "chromium",
+            "--no-sandbox",
+            "--host=0.0.0.0",
+            "--port=3000",
+          ]
+        port: 3000
+        mcpPath: "/mcp" # Note: camelCase as per schema
+        ssePath: "/sse" # Note: camelCase as per schema
+        env:
+          LOG_LEVEL: debug
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "1Gi"

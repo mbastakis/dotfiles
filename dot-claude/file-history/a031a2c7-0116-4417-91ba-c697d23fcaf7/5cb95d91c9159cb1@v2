@@ -1,0 +1,309 @@
+# Istio Ingress Gateway - Root Cause Analysis
+
+## The Real Problem
+
+The ingress gateway has been failing with `ImagePullBackOff` for **13 days** because of a fundamental misunderstanding about how Istio gateway injection works.
+
+## Root Cause
+
+### What We Thought ❌
+
+> "Gateway pods ARE the proxy, so they don't need injection"
+>
+> Therefore: `istio-injection: disabled` on the namespace
+
+### The Reality ✅
+
+**Gateway pods DO need injection**, but with a **special gateway template**, not a sidecar template.
+
+## How Istio Gateway Injection Works
+
+### Two Types of Injection
+
+1. **Sidecar Injection** (for applications):
+   ```yaml
+   podAnnotations:
+     # Default - creates application container + envoy sidecar
+   ```
+
+2. **Gateway Injection** (for gateways):
+   ```yaml
+   podAnnotations:
+     inject.istio.io/templates: gateway    # Use gateway template
+     sidecar.istio.io/inject: "true"       # Enable injection
+   ```
+
+### The Difference
+
+- **Sidecar**: Application container + Envoy proxy sidecar (2 containers)
+- **Gateway**: Single Envoy proxy container (1 container, but still "injected")
+
+## The Image "auto" Mystery Solved
+
+### Why "auto"?
+
+The gateway Helm chart uses `image: auto` as a placeholder that gets replaced during injection by Istio's mutating webhook.
+
+### The Injection Flow
+
+```
+1. Pod created with image: "auto"
+     ↓
+2. Istio mutating webhook intercepts
+     ↓
+3. Checks pod annotations:
+    - inject.istio.io/templates: gateway ✅
+    - sidecar.istio.io/inject: "true" ✅
+     ↓
+4. Checks namespace label:
+    - istio-injection: enabled ✅
+     ↓
+5. Replaces "auto" with actual image:
+    - dockerhub.devops.telekom.de/istio/proxyv2:1.26.3
+     ↓
+6. Pod starts with real image
+```
+
+### What Happened in Our Case ❌
+
+```
+1. Pod created with image: "auto"
+     ↓
+2. Istio mutating webhook intercepts
+     ↓
+3. Checks pod annotations:
+    - inject.istio.io/templates: gateway ✅
+    - sidecar.istio.io/inject: "FALSE" ❌  ← We set this to false!
+     ↓
+4. Webhook skips injection
+     ↓
+5. Image stays as "auto"
+     ↓
+6. Kubernetes tries to pull "docker.io/library/auto:latest"
+     ↓
+7. ImagePullBackOff - No such image exists!
+```
+
+## The Confusion
+
+### Why We Got It Wrong
+
+The documentation and my initial analysis said:
+
+> "Gateway v2 uses standalone gateway pods - they ARE the proxy (not sidecars)"
+
+This is **technically true**, but **misleading**:
+
+- ✅ True: Gateway pods are NOT sidecars (they're standalone proxies)
+- ❌ Wrong conclusion: Therefore they don't need injection
+
+### The Correct Understanding
+
+Gateway pods:
+- ✅ **ARE** standalone proxies (not sidecars)
+- ✅ **DO** need injection (with gateway template)
+- ✅ **DO** require `istio-injection: enabled` on namespace
+- ✅ **DO** require `sidecar.istio.io/inject: "true"` annotation
+
+The name "sidecar.istio.io/inject" is confusing - it controls ALL injection, not just sidecars!
+
+## The Fixes
+
+### Fix #1: Pod Annotations
+
+**Before (WRONG)**:
+```yaml
+podAnnotations:
+  sidecar.istio.io/inject: "false"  # ← Disables ALL injection!
+```
+
+**After (CORRECT)**:
+```yaml
+podAnnotations:
+  inject.istio.io/templates: gateway
+  sidecar.istio.io/inject: "true"  # ← Enables injection with gateway template
+```
+
+### Fix #2: Namespace Label
+
+**Before (WRONG)**:
+```yaml
+labels:
+  istio-injection: disabled  # ← Webhook skips the namespace!
+```
+
+**After (CORRECT)**:
+```yaml
+labels:
+  istio-injection: enabled  # ← Webhook processes the namespace
+```
+
+### Fix #3: Remove Invalid `image` Field
+
+**Before (WRONG)**:
+```yaml
+gateway:
+  image: proxyv2  # ← Not a valid field in gateway chart schema!
+```
+
+**After (CORRECT)**:
+```yaml
+gateway:
+  # No image field - let injection handle it
+```
+
+## Understanding the Webhook Namespace Selector
+
+The Istio mutating webhook has this configuration:
+
+```yaml
+namespaceSelector:
+  matchExpressions:
+  - key: istio-injection
+    operator: In
+    values:
+    - enabled
+```
+
+This means:
+- ✅ Namespace with `istio-injection: enabled` → Webhook runs
+- ❌ Namespace with `istio-injection: disabled` → Webhook skips
+- ❌ Namespace with no label → Webhook skips
+
+Even if individual pods have `sidecar.istio.io/inject: "true"`, if the namespace doesn't match, the webhook never even looks at them!
+
+## Timeline of Misunderstanding
+
+### October 7, 2025
+- Gateway deployed with `sidecar.istio.io/inject: "false"`
+- Image stays as "auto"
+- Pods enter ImagePullBackOff
+- Deployment marked as "Degraded"
+
+### October 21, 2025 (First Fix Attempt)
+- Analyzed issue
+- Concluded: "Gateway pods don't need injection"
+- Added `image: proxyv2` field
+- **Result**: Helm schema validation error
+
+### October 21, 2025 (Second Fix Attempt - Correct)
+- Re-analyzed injection mechanism
+- Discovered: Gateway pods DO need injection (with special template)
+- **Fixes**:
+  1. Enable `sidecar.istio.io/inject: "true"`
+  2. Add `inject.istio.io/templates: gateway`
+  3. Enable `istio-injection: enabled` on namespace
+  4. Remove invalid `image:` field
+
+## Key Learnings
+
+### 1. Terminology is Confusing
+
+The annotation `sidecar.istio.io/inject` doesn't just control sidecar injection - it controls **all injection types**, including gateways.
+
+Better naming would have been:
+- `istio.io/inject-proxy: "true"`
+
+### 2. Gateway ≠ No Injection
+
+Just because gateway pods are "standalone proxies" doesn't mean they don't use injection. They use a different injection **template**.
+
+### 3. Namespace Label is Critical
+
+Even with correct pod annotations, if the namespace label is wrong, the webhook never runs.
+
+### 4. "auto" is Not Optional
+
+For the official Istio gateway Helm chart, `image: auto` is the designed behavior. You can't just override it with a static image name - the chart schema won't allow it.
+
+## Verification After Fix
+
+After applying the fixes, the flow will be:
+
+```
+1. namespace-config-helm syncs
+     ↓
+2. istio-ingress namespace labeled: istio-injection=enabled
+     ↓
+3. istio-ingressgateway-helm syncs
+     ↓
+4. Deployment updated with correct pod annotations
+     ↓
+5. Pods recreated
+     ↓
+6. Webhook intercepts pod creation
+     ↓
+7. Checks namespace: istio-injection=enabled ✅
+     ↓
+8. Checks pod: sidecar.istio.io/inject=true ✅
+     ↓
+9. Checks template: inject.istio.io/templates=gateway ✅
+     ↓
+10. Replaces image "auto" with "dockerhub.devops.telekom.de/istio/proxyv2:1.26.3"
+     ↓
+11. Adds gateway-specific configuration
+     ↓
+12. Pod starts successfully
+     ↓
+13. Gateway Ready!
+```
+
+## Expected State After Deployment
+
+```bash
+# Namespace
+kubectl get ns istio-ingress -L istio-injection
+# istio-ingress   Active   20d   enabled
+
+# Pods
+kubectl get pods -n istio-ingress
+# NAME                                    READY   STATUS    RESTARTS   AGE
+# istio-ingressgateway-xxxxx-yyyyy        1/1     Running   0          2m
+# istio-ingressgateway-xxxxx-zzzzz        1/1     Running   0          2m
+# istio-ingressgateway-xxxxx-aaaaa        1/1     Running   0          2m
+
+# Image
+kubectl get deployment istio-ingressgateway -n istio-ingress -o jsonpath='{.spec.template.spec.containers[0].image}'
+# dockerhub.devops.telekom.de/istio/proxyv2:1.26.3
+
+# Service
+kubectl get svc istio-ingressgateway -n istio-ingress
+# NAME                   TYPE           CLUSTER-IP      EXTERNAL-IP                          PORT(S)
+# istio-ingressgateway   LoadBalancer   10.100.xxx.xxx  xxx.elb.eu-central-1.amazonaws.com   15021:xxx/TCP,80:xxx/TCP,443:xxx/TCP
+```
+
+## Related Documentation Updates
+
+Need to update:
+- ✅ `/docs/namespace-config-analysis-summary.md` - Fix the istio-ingress injection guidance
+- ✅ `/docs/istio-ingressgateway-fixes.md` - Superseded by this document
+- ✅ `namespace-config-helm/NAMESPACE-CONFIG-DOCS.md` - Already updated
+
+## Deployment Commands
+
+```bash
+# 1. Push namespace-config-helm changes
+cd /Users/mbastakis/dev/work/aicc-group/infrastructure/argocd/helm-charts/namespace-config-helm
+git add dev-values.yaml
+git commit -m "Enable istio-injection on istio-ingress namespace for gateway pod injection"
+git push
+
+# 2. Push istio-ingressgateway-helm changes
+cd /Users/mbastakis/dev/work/aicc-group/infrastructure/argocd/helm-charts/istio-ingressgateway-helm
+git add aicc-dev-values.yaml
+git commit -m "Fix gateway injection: enable sidecar.istio.io/inject and add gateway template"
+git push
+
+# 3. Wait for ArgoCD sync
+watch kubectl get applications -n argocd | grep istio
+
+# 4. Watch pods come up
+watch kubectl get pods -n istio-ingress
+```
+
+---
+
+**Document Version**: 1.0
+**Date**: October 21, 2025
+**Author**: Claude Code (AI Assistant)
+**Status**: Root cause identified, fixes applied, ready for deployment

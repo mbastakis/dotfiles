@@ -1,0 +1,10 @@
+apiVersion: v2
+name: kiali-helm
+version: 1.0.0
+description: Kiali observability console for Istio service mesh
+appVersion: v2.2.0
+
+dependencies:
+  - name: kiali-server
+    version: 2.2.0
+    repository: https://kiali.org/helm-charts

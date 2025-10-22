@@ -1,0 +1,23 @@
+# Default values for istio-base
+# This file contains the default configuration for Istio Base CRDs installation
+
+# Global configuration for Istio
+# Note: The base chart only installs CRDs and does not deploy any container images.
+# The imageRegistry configuration is included for consistency with other charts and 
+# for use by downstream Istio components (istiod, ingress gateway, etc.)
+global:
+  # Istio control plane revision - leave empty for default
+  istioNamespace: istio-system
+  
+  # Hub is the registry for Istio images (used by istiod and gateways, not base CRDs)
+  # Default hub will be overridden in environment-specific values
+  hub: dockerhub.devops.telekom.de/istio
+
+# Base chart configuration
+# The base chart installs the Custom Resource Definitions (CRDs) used by Istio
+base:
+  # Enable CRD validation webhooks
+  enableCRDTemplates: true
+  
+  # Validate CRDs before installation
+  validateReceivers: true

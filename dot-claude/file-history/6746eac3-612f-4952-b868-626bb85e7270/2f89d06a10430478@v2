@@ -1,0 +1,14 @@
+{{- if and .Values.evaluator.enabled .Values.secrets.evaluator }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: evaluator-secrets
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "apa.labels" . | nindent 4 }}
+type: Opaque
+stringData:
+  {{- range $key, $value := .Values.secrets.evaluator }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}
+{{- end }}

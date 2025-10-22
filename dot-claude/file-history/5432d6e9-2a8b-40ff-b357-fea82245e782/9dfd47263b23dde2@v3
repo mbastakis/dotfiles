@@ -1,0 +1,95 @@
+%%{init: {"flowchart": {"nodeSpacing": 80, "rankSpacing": 120, "padding": 20, "curve": "basis"}} }%%
+flowchart TB
+  classDef network fill:#fef3c7,stroke:#f59e0b,color:#78350f,stroke-width:3px
+  classDef observability fill:#dbeafe,stroke:#3b82f6,color:#1e3a8a,stroke-width:2px
+  classDef identity fill:#fce7f3,stroke:#ec4899,color:#831843,stroke-width:2px
+  classDef secrets fill:#e0e7ff,stroke:#6366f1,color:#312e81,stroke-width:2px
+  classDef gitops fill:#d1fae5,stroke:#10b981,color:#064e3b,stroke-width:2px
+  classDef policy fill:#fed7aa,stroke:#f97316,color:#7c2d12,stroke-width:2px
+  classDef cicd fill:#e9d5ff,stroke:#a855f7,color:#581c87,stroke-width:2px
+  classDef storage fill:#fecdd3,stroke:#f43f5e,color:#881337,stroke-width:2px
+  classDef external fill:#f3f4f6,stroke:#6b7280,color:#1f2937,stroke-width:2px
+  classDef account fill:#fff7ed,stroke:#ea580c,color:#7c2d12,stroke-width:3px
+
+  subgraph External["External Systems & Services"]
+    direction LR
+    GitLab["GitLab<br/>━━━━━━━━<br/>• Source Control<br/>• CI/CD Pipelines<br/>• Container Registry"]
+    EntraID["Microsoft EntraID<br/>━━━━━━━━<br/>• SSO Provider<br/>• User Directory<br/>• MFA"]
+    SOC["AICC SOC<br/>━━━━━━━━<br/>• Alert Ingestion<br/>• Security Monitoring<br/>• Incident Response"]
+  end
+
+  subgraph AWS["AWS Account (DTIT@AWS Landing Zone)"]
+    subgraph EKS["EKS Cluster - Core Infrastructure"]
+      direction TB
+
+      subgraph Network["Network Layer"]
+        Istio["Istio Service Mesh<br/>━━━━━━━━<br/>• mTLS encryption<br/>• Traffic management<br/>• Service mesh telemetry<br/>• Circuit breaking<br/>• Rate limiting"]
+        VPC["VPC & Subnets<br/>━━━━━━━━<br/>• Segmented VPCs<br/>• Private subnets (app tier)<br/>• Public subnets (LB tier)<br/>• Database subnets<br/>• NAT Gateway<br/>• VPC Flow Logs"]
+        IstioIngress["Istio Ingress Gateway<br/>━━━━━━━━<br/>• Gateway configuration<br/>• TLS termination<br/>• Virtual services<br/>• Certificate management"]
+      end
+
+      subgraph Observability["Observability & Monitoring"]
+        Prometheus["Prometheus<br/>━━━━━━━━<br/>• Metrics scraping<br/>• Time-series storage<br/>• Alert evaluation<br/>• Service monitors<br/>• Pod monitors"]
+        Grafana["Grafana<br/>━━━━━━━━<br/>• Unified dashboards<br/>• Multi-source visualization<br/>• Alert management<br/>• User RBAC<br/>• Alerting channels"]
+        Loki["Loki<br/>━━━━━━━━<br/>• Distributed logging<br/>• Log aggregation<br/>• LogQL queries<br/>• Retention policies<br/>• Compaction"]
+      end
+
+      subgraph Identity["Identity & Access Management"]
+        Keycloak["Keycloak<br/>━━━━━━━━<br/>• SSO broker<br/>• OIDC/SAML provider<br/>• User federation<br/>• Role mapping<br/>• Session management"]
+        IRSA["IRSA<br/>━━━━━━━━<br/>• Pod IAM roles<br/>• Service accounts<br/>• AWS credentials<br/>• Least privilege"]
+        EntraIntegration["EntraID Integration<br/>━━━━━━━━<br/>• Identity federation<br/>• Group sync<br/>• Conditional access"]
+      end
+
+      subgraph Secrets["Secrets Management"]
+        SecretManager["AWS Secrets Manager<br/>━━━━━━━━<br/>• Secret storage<br/>• Auto rotation<br/>• Versioning<br/>• Access logs"]
+        KMS["AWS KMS<br/>━━━━━━━━<br/>• Encryption keys<br/>• Key rotation<br/>• Envelope encryption<br/>• Audit trail"]
+      end
+
+      subgraph GitOps["GitOps & Deployment"]
+        ArgoCD["ArgoCD<br/>━━━━━━━━<br/>• Declarative GitOps<br/>• App of Apps pattern<br/>• Sync policies<br/>• Health checks<br/>• Rollback capability<br/>• Multi-cluster support"]
+        ArgoProjCRDs["Argo CD Projects<br/>━━━━━━━━<br/>• Team isolation<br/>• RBAC policies<br/>• Source restrictions<br/>• Destination limits"]
+      end
+
+      subgraph Policy["Policy & Security Enforcement"]
+        Kyverno["Kyverno<br/>━━━━━━━━<br/>• Admission webhooks<br/>• Policy as code<br/>• Validation rules<br/>• Mutation rules<br/>• Generation rules<br/>• Image verification"]
+      end
+
+      subgraph CICD["CI/CD Infrastructure"]
+        GitLabRunner["GitLab Runners<br/>━━━━━━━━<br/>• Kubernetes executor<br/>• Pipeline execution<br/>• Build cache<br/>• Docker-in-Docker<br/>• Auto-scaling"]
+      end
+
+      subgraph Storage["Storage"]
+        EBS["EBS CSI Driver<br/>━━━━━━━━<br/>• Persistent volumes<br/>• Dynamic provisioning<br/>• Encrypted volumes<br/>• Snapshots"]
+        EFS["EFS CSI Driver<br/>━━━━━━━━<br/>• Shared storage<br/>• Multi-AZ<br/>• Encrypted at rest<br/>• NFS protocol"]
+      end
+    end
+  end
+
+  %% External connections
+  GitLab -.->|CI/CD Pipelines| GitLabRunner
+  GitLab -.->|GitOps Source| ArgoCD
+
+  EntraID -.->|SSO Integration| Keycloak
+  EntraID -.->|Identity Federation| EntraIntegration
+
+  Prometheus -->|Alerts| SOC
+  Grafana -->|Alerts| SOC
+
+  %% Internal connections
+  Istio -->|Service Mesh| IstioIngress
+  ArgoCD -->|Deploys| Kyverno
+  Keycloak -->|Authentication| ArgoCD
+  KMS -->|Encrypts| SecretManager
+  IRSA -->|AWS Access| SecretManager
+
+  %% Styling
+  class Istio,VPC,IstioIngress network
+  class Prometheus,Grafana,Loki observability
+  class Keycloak,IRSA,EntraIntegration identity
+  class SecretManager,KMS secrets
+  class ArgoCD,ArgoProjCRDs gitops
+  class Kyverno policy
+  class GitLabRunner cicd
+  class EBS,EFS storage
+  class GitLab,EntraID,SOC external
+  class AWS account

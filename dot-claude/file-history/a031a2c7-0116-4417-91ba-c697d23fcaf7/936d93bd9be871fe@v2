@@ -1,0 +1,210 @@
+# Kiali Helm Chart
+
+Kiali is an observability console for Istio service mesh, providing:
+- Service mesh topology visualization
+- Traffic flow analysis
+- Real-time metrics and dashboards
+- Distributed tracing integration
+- Configuration validation
+- Health checks and troubleshooting
+
+## Architecture
+
+This chart wraps the official Kiali Server helm chart from https://kiali.org/helm-charts
+
+```
+kiali-helm/
+├── Chart.yaml            # Dependency on kiali-server:2.2.0
+├── default-values.yaml   # Production-ready defaults
+└── dev-values.yaml       # Development overrides
+```
+
+## Configuration
+
+### Authentication
+
+**Development** (current):
+- Strategy: `token`
+- Login: Get token from command line
+- No external IdP required
+
+**Production** (future):
+- Strategy: `openid`
+- Integration: Keycloak
+- SSO enabled
+
+### External Services
+
+Kiali integrates with:
+
+1. **Istio** (required): ✅ Configured
+   - Monitors: istiod, istio-ingressgateway
+   - Namespaces: istio-system, istio-ingress
+
+2. **Prometheus** (recommended): ⏳ Configure when available
+   - Provides metrics for service graphs
+   - Shows request rates, latencies, error rates
+
+3. **Grafana** (optional): ❌ Not configured
+   - Links to Grafana dashboards
+
+4. **Tracing** (optional): ❌ Not configured
+   - Jaeger or Zipkin integration
+
+## Accessing Kiali
+
+### Method 1: Port Forward (Quick Access)
+
+```bash
+kubectl port-forward -n istio-system svc/kiali 20001:20001
+```
+
+Then open: http://localhost:20001
+
+### Method 2: Get Token
+
+For token authentication:
+
+```bash
+# Get the service account token
+kubectl create token kiali-service-account -n istio-system --duration=24h
+```
+
+Copy the token and paste when accessing Kiali UI.
+
+### Method 3: Ingress/Gateway (Future)
+
+For external access, configure:
+- VirtualService for Istio gateway
+- Or Ingress with proper authentication
+
+## Features
+
+### Service Graph
+
+Visualize your service mesh:
+- All services and their connections
+- Traffic flow direction
+- Request rates per second
+- Response times
+- Error rates
+
+### Traffic Management
+
+Monitor Istio traffic rules:
+- VirtualServices
+- DestinationRules
+- Gateways
+- Traffic splitting
+- Fault injection
+
+### Configuration Validation
+
+Kiali validates:
+- Istio CRDs (VirtualService, DestinationRule, etc.)
+- mTLS configuration
+- Missing sidecars
+- Configuration conflicts
+
+### Wizards
+
+Step-by-step wizards for:
+- Traffic shifting (canary deployments)
+- Request routing
+- Fault injection
+- Request timeouts
+- Circuit breakers
+
+## Development Configuration
+
+Current dev setup:
+- **Replicas**: 1 (sufficient for dev)
+- **Resources**: 50m CPU, 128Mi memory
+- **Logging**: Debug level
+- **Refresh**: 15s (faster updates)
+- **Default namespaces**:
+  - fiber-magenta-apprentice
+  - istio-system
+  - istio-ingress
+
+## Upgrading
+
+To upgrade Kiali version:
+
+1. Update `Chart.yaml`:
+   ```yaml
+   dependencies:
+     - name: kiali-server
+       version: 2.3.0  # New version
+   ```
+
+2. Update `default-values.yaml`:
+   ```yaml
+   deployment:
+     image_version: v2.3.0
+   ```
+
+3. Commit and push - ArgoCD will sync automatically
+
+## Troubleshooting
+
+### Kiali Pod Not Starting
+
+Check logs:
+```bash
+kubectl logs -n istio-system deployment/kiali
+```
+
+Common issues:
+- Prometheus URL incorrect
+- RBAC permissions missing
+- Istio CRDs not found
+
+### No Metrics Shown
+
+Kiali requires Prometheus for metrics. If Prometheus is not deployed:
+- Graph will show topology but no traffic metrics
+- Deploy Prometheus using kube-prometheus-stack
+
+### Cannot Access UI
+
+Check service:
+```bash
+kubectl get svc -n istio-system kiali
+```
+
+Verify port-forward:
+```bash
+kubectl port-forward -n istio-system svc/kiali 20001:20001
+```
+
+## Next Steps
+
+1. ✅ Deploy Kiali
+2. ⏳ Access UI and verify service mesh visibility
+3. ⏳ Deploy Prometheus for metrics (if not present)
+4. ⏳ Configure VirtualService for external access
+5. ⏳ Enable OpenID authentication with Keycloak (production)
+6. ⏳ Integrate Grafana dashboards
+7. ⏳ Enable distributed tracing (Jaeger)
+
+## Security Notes
+
+- **Read-only root filesystem**: ✅ Enabled
+- **Non-root user**: ✅ Runs as UID 1001
+- **Dropped capabilities**: ✅ All dropped
+- **Istio sidecar**: ✅ Injected for mTLS
+
+## References
+
+- [Kiali Documentation](https://kiali.io/docs/)
+- [Kiali Helm Chart](https://github.com/kiali/helm-charts)
+- [Istio Integration](https://istio.io/latest/docs/ops/integrations/kiali/)
+- [Kiali Architecture](https://kiali.io/docs/architecture/)
+
+---
+
+**Chart Version**: 1.0.0
+**Kiali Version**: v2.2.0
+**Deployment**: istio-system namespace
+**Sync Wave**: 4 (after Istio components)

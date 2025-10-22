@@ -1,0 +1,38 @@
+# Default values for istio-cni
+# This file contains the default configuration for Istio CNI Plugin
+
+# Global configuration for Istio CNI
+cni:
+  global:
+    # Corporate container registry configuration
+    hub: dockerhub.devops.telekom.de/istio
+    logAsJson: true
+
+    # ImagePullSecrets for private registry access
+    imagePullSecrets:
+      - docker-config
+
+  # CNI configuration
+  # Exclude system namespaces from CNI processing
+  excludeNamespaces:
+    - kube-system
+    - kube-public
+    - kube-node-lease
+
+  # Repair controller configuration
+  # The repair controller ensures CNI is properly configured on all pods
+  repair:
+    enabled: true
+    # Delete broken pods so they can be rescheduled
+    deletePods: true
+    # Repair pods dynamically without deletion
+    repairPods: false
+
+  # Resource requests and limits for CNI DaemonSet
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi

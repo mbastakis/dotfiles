@@ -82,6 +82,7 @@ body {
 
     /* -- Navigation Pane -- */
     --nn-theme-nav-bg: var(--background-secondary);
+    --nn-theme-pinned-shortcut-shadow-color: rgba(0, 0, 0, 0.05);
 
     /* -- Folder & Tag Items -- */
     --nn-theme-navitem-chevron-color: var(--text-muted);
@@ -101,8 +102,10 @@ body {
     --nn-theme-navitem-selected-inactive-bg: var(--background-modifier-hover);
 
     /* -- Navigation Item Text Styling -- */
+    --nn-theme-navitem-file-name-font-weight: 400;
     --nn-theme-navitem-name-font-weight: 400;
     --nn-theme-navitem-count-font-weight: 400;
+    --nn-theme-navitem-custom-color-file-name-font-weight: 600;
     --nn-theme-navitem-custom-color-name-font-weight: 600;
     --nn-theme-navitem-folder-note-name-font-weight: 600;
     --nn-theme-navitem-folder-note-name-decoration: underline;
@@ -182,6 +185,10 @@ body {
     --nn-separator-height: 1px;
 }
 
+.theme-dark {
+    --nn-theme-pinned-shortcut-shadow-color: rgba(0, 0, 0, 0.2);
+}
+
 /* ========================================================================
    Base Layout & Container Styles
    ======================================================================== */
@@ -218,6 +225,175 @@ body {
     display: flex;
     height: 100%;
     overflow: hidden;
+    position: relative;
+}
+
+/* ========================================================================
+   Update notice banner
+   ======================================================================== */
+
+.nn-update-banner {
+    position: absolute;
+    top: calc(var(--nn-date-header-height) + 8px);
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 10;
+    min-width: 220px;
+    max-width: calc(100% - 32px);
+    background-color: var(--interactive-accent);
+    color: var(--text-on-accent);
+    padding: 10px 16px;
+    border-radius: 10px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    opacity: 1;
+    transition:
+        opacity 0.4s ease,
+        transform 0.4s ease;
+}
+
+.nn-update-banner.fade-out {
+    opacity: 0;
+    transform: translate(-50%, -18px);
+}
+
+.nn-update-banner__text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.nn-update-banner__label {
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.nn-update-banner__instruction {
+    font-size: 11px;
+    color: var(--text-on-accent);
+    opacity: 0.9;
+}
+
+/* Floating circular button that shows when updates are available */
+.nn-update-indicator {
+    position: absolute;
+    bottom: calc(4px + env(safe-area-inset-bottom, 0px));
+    left: calc(4px + env(safe-area-inset-left, 0px));
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: var(--interactive-accent) !important;
+    color: var(--text-on-accent);
+    border: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+    appearance: none;
+    line-height: 0;
+    cursor: pointer;
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease,
+        box-shadow 0.2s ease;
+    z-index: 11;
+}
+
+/* Hover state for update indicator */
+.nn-update-indicator:hover {
+    transform: scale(1.02);
+    opacity: 1;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.24);
+}
+
+/* Focus state for keyboard navigation */
+.nn-update-indicator:focus-visible {
+    outline: none;
+    box-shadow:
+        0 0 0 2px var(--background-primary),
+        0 0 0 4px var(--interactive-accent);
+    transform: scale(1.02);
+}
+
+/* Icon container within the update indicator button */
+.nn-update-indicator__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-on-accent);
+}
+
+/* Icon SVG sizing and styling */
+.nn-update-indicator__icon svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+}
+
+/* Mobile adjustments for update indicator positioning and size */
+.nn-mobile .nn-update-indicator {
+    bottom: calc(56px + var(--nn-mobile-safe-area-bottom, env(safe-area-inset-bottom, 0px)));
+    left: calc(8px + env(safe-area-inset-left, 0px));
+    width: 28px;
+    height: 28px;
+}
+
+/* Mobile icon size adjustments */
+.nn-mobile .nn-update-indicator__icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+/* Fade-out animation state for update indicator */
+.nn-update-indicator.fade-out {
+    opacity: 0;
+    transform: scale(0.88);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+.nn-update-status {
+    margin-top: 6px;
+    font-weight: 600;
+    color: var(--color-red);
+}
+
+.nn-update-status.is-hidden {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .nn-update-banner {
+        left: 8px;
+        right: 8px;
+        transform: none;
+        max-width: none;
+        width: auto;
+        justify-content: center;
+        top: 8px;
+    }
+
+    .nn-update-banner__text {
+        align-items: center;
+        text-align: center;
+    }
+
+    .nn-update-banner.fade-out {
+        transform: translateY(-12px);
+    }
+
+    .nn-update-indicator {
+        width: 24px;
+        height: 24px;
+    }
+
+    .nn-update-indicator__icon svg {
+        width: 20px;
+        height: 20px;
+    }
 }
 
 /* ========================================================================
@@ -408,8 +584,16 @@ body {
     top: 8px;
     width: 16px;
     height: 16px;
+    font-size: 16px;
+    line-height: 16px;
     color: var(--nn-theme-list-header-icon-color);
     pointer-events: none;
+}
+
+.nn-search-input-icon svg {
+    width: 16px;
+    height: 16px;
+    display: block;
 }
 
 /* Search input field */
@@ -491,7 +675,7 @@ body {
 
 /* Mobile clear button */
 .notebook-navigator-mobile .nn-search-clear-button {
-    top: 10px;
+    top: 0;
 }
 
 .nn-search-clear-button,
@@ -536,7 +720,16 @@ body {
 
 .notebook-navigator-mobile .nn-search-clear-button,
 .notebook-navigator-mobile .nn-search-star-button {
-    top: 10px;
+    top: 0;
+    height: 36px;
+}
+
+.notebook-navigator-mobile .nn-search-clear-button {
+    right: 10px;
+}
+
+.notebook-navigator-mobile .nn-search-star-button {
+    right: 44px;
 }
 
 /* Clickable path segments in header */
@@ -692,6 +885,7 @@ body {
    ======================================================================== */
 
 /* Scroller container for both folder tree and tag list */
+
 .nn-navigation-pane-scroller {
     flex: 1;
     overflow-y: auto;
@@ -703,6 +897,51 @@ body {
 
     /* Ensure scroll events work properly with virtualization */
     position: relative;
+}
+
+/* Container for pinned shortcuts displayed above the scrollable navigation tree */
+.nn-shortcut-pinned {
+    flex-shrink: 0;
+    padding: 8px var(--nn-scroller-padding) 4px;
+    border-bottom: 1px solid var(--nn-theme-divider-border-color);
+    border-right: 1px solid var(--nn-theme-divider-border-color);
+    background-color: var(--nn-theme-nav-bg);
+    position: relative;
+    z-index: 1;
+}
+
+/* Remove top padding when banner is present to avoid double spacing */
+.nn-shortcut-pinned[data-has-banner='true'] {
+    padding-top: 0;
+}
+
+/* Add top margin to banner inside pinned shortcuts area for consistent spacing */
+.nn-shortcut-pinned[data-has-banner='true'] .nn-nav-banner {
+    margin-top: 8px;
+}
+
+/* Inner wrapper for pinned shortcut items */
+.nn-shortcut-pinned-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.nn-shortcut-pinned::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 1px);
+    height: 8px;
+    pointer-events: none;
+    background: linear-gradient(to bottom, var(--nn-theme-pinned-shortcut-shadow-color) 0%, transparent 100%);
+}
+
+.notebook-navigator-mobile .nn-shortcut-pinned {
+    background-color: var(--nn-theme-mobile-nav-bg);
+    border-bottom: 1px solid var(--nn-theme-divider-border-color);
+    border-right: none;
 }
 
 /* Navigation banner displayed above tree items */
@@ -985,6 +1224,29 @@ body {
     white-space: nowrap;
 }
 
+.nn-shortcut-item .nn-shortcut-label {
+    font-weight: var(--nn-theme-navitem-file-name-font-weight);
+}
+
+.nn-shortcut-item .nn-shortcut-label[data-has-color='true'] {
+    font-weight: var(--nn-theme-navitem-custom-color-file-name-font-weight) !important;
+}
+
+.nn-shortcut-item--missing .nn-shortcut-label {
+    text-decoration: line-through;
+}
+
+/* Styles for shortcut labels that have an associated folder note */
+.nn-shortcut-item .nn-navitem-name.nn-has-folder-note .nn-shortcut-label {
+    font-weight: var(--nn-theme-navitem-folder-note-name-font-weight) !important;
+    text-decoration: var(--nn-theme-navitem-folder-note-name-decoration) !important;
+}
+
+/* Pointer cursor on hover for clickable folder note shortcuts */
+.nn-shortcut-item .nn-navitem-name.nn-has-folder-note:hover .nn-shortcut-label {
+    cursor: pointer;
+}
+
 .nn-drag-item .nn-shortcut-description {
     flex-shrink: 0;
 }
@@ -1002,7 +1264,7 @@ body {
 .nn-drag-handle {
     width: 28px;
     height: calc(var(--nn-setting-nav-item-height) - 4px);
-    margin-inline-start: 0.25rem;
+    margin-inline-start: 0;
     border-radius: 8px;
     display: inline-flex;
     align-items: center;
@@ -1010,6 +1272,7 @@ body {
     cursor: grab;
     touch-action: none;
     color: var(--nn-theme-navitem-icon-color);
+    flex-shrink: 0;
 }
 
 .nn-drag-handle:active,
@@ -1043,31 +1306,35 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    align-items: center;
 }
 
 .nn-root-reorder-title {
-    font-size: var(--font-small);
+    font-size: var(--nn-desktop-header-font-size);
     font-weight: var(--nn-theme-list-header-breadcrumb-font-weight);
+    line-height: 1.3;
 }
 
-.is-mobile .nn-root-reorder-title {
-    font-size: var(--font-normal);
+.notebook-navigator-mobile .nn-root-reorder-title {
+    font-size: var(--nn-mobile-header-font-size);
 }
 
 .nn-root-reorder-title,
 .nn-root-reorder-hint {
+    text-align: center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .nn-root-reorder-hint {
-    font-size: var(--font-smaller);
+    font-size: var(--font-ui-smaller);
     color: var(--text-muted);
+    line-height: 1.25;
 }
 
-.is-mobile .nn-root-reorder-hint {
-    font-size: var(--font-small);
+.notebook-navigator-mobile .nn-root-reorder-hint {
+    font-size: var(--font-ui-small);
 }
 
 .nn-root-reorder-list {
@@ -1077,15 +1344,76 @@ body {
     padding: 0;
 }
 
+.nn-root-reorder-section {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.nn-root-reorder-section[data-reorder-drop-after='true']::after {
+    content: '';
+    position: absolute;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
+    bottom: 0;
+    height: 2px;
+    background-color: var(--interactive-accent);
+    border-radius: 999px;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.nn-desktop .nn-root-reorder-section[data-reorder-drop-after='true']::after {
+    height: 3px;
+    bottom: -1px;
+    z-index: 5;
+}
+
+.nn-root-reorder-section-list {
+    display: flex;
+    flex-direction: column;
+}
+
 .nn-root-reorder-item {
     cursor: default;
 }
 
+.nn-root-reorder-item .nn-shortcut-label {
+    font-weight: var(--nn-theme-navitem-name-font-weight);
+}
+
+.nn-root-reorder-item .nn-shortcut-label[data-has-color='true'] {
+    font-weight: var(--nn-theme-navitem-custom-color-name-font-weight) !important;
+}
+
+.nn-root-reorder-item--missing .nn-shortcut-label {
+    text-decoration: line-through;
+    color: var(--text-muted);
+}
+
 .nn-root-reorder-actions {
-    margin-top: 1rem;
-    margin-bottom: 1.5rem;
+    margin-top: 0.75rem;
     display: flex;
     justify-content: center;
+}
+
+.nn-root-reorder-remove {
+    color: var(--text-accent);
+    font-size: var(--nn-setting-nav-font-size);
+    font-weight: var(--font-semibold);
+    cursor: pointer;
+    display: inline;
+    text-decoration: underline;
+}
+
+.nn-root-reorder-remove:hover,
+.nn-root-reorder-remove:focus {
+    color: var(--text-accent);
+    text-decoration: underline;
+}
+
+.nn-root-reorder-remove:focus-visible {
+    outline: none;
 }
 
 .nn-root-reorder-reset {
@@ -1249,6 +1577,10 @@ body {
     height: calc(var(--nn-file-title-line-height) * var(--filename-rows, 1));
 }
 
+.nn-file-name[data-has-color='true'] {
+    color: var(--nn-file-name-custom-color);
+}
+
 .nn-file-name-wrapper {
     display: flex;
     align-items: center;
@@ -1264,6 +1596,26 @@ body {
     min-width: 0;
 }
 
+.nn-file-name-row {
+    display: flex;
+    align-items: center;
+}
+
+.nn-file-name-row .nn-file-name {
+    flex: 1;
+    min-width: 0;
+}
+
+.nn-file-external-icon {
+    margin-inline-end: 4px;
+}
+
+.nn-file-external-icon svg,
+.nn-slim-file-type-icon svg {
+    width: 14px;
+    height: 14px;
+}
+
 .nn-file-icon {
     width: var(--nn-nav-icon-size);
     height: var(--nn-nav-icon-size);
@@ -1271,7 +1623,7 @@ body {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    color: var(--nn-theme-file-name-color);
+    color: var(--nn-theme-navitem-icon-color);
 }
 
 .nn-file-name-wrapper[data-multiline='true'] .nn-file-icon {
@@ -1295,11 +1647,11 @@ body {
 }
 
 .nn-file-icon[data-has-color='false'] {
-    color: var(--nn-theme-file-name-color);
+    color: var(--nn-theme-navitem-icon-color);
 }
 
 .nn-file.nn-selected .nn-file-icon[data-has-color='false'] {
-    color: var(--nn-theme-file-name-selected-color);
+    color: var(--nn-theme-navitem-selected-icon-color);
 }
 
 .nn-file-icon[data-has-color='true'] svg {
@@ -1517,6 +1869,10 @@ body {
     color: var(--nn-theme-file-selected-name-color);
 }
 
+.nn-file.nn-selected .nn-file-name[data-has-color='true'] {
+    color: var(--nn-file-name-custom-color);
+}
+
 .nn-file.nn-selected .nn-file-preview {
     color: var(--nn-theme-file-selected-preview-color);
 }
@@ -1546,9 +1902,30 @@ body {
     line-height: var(--nn-file-title-line-height);
 }
 
+/* Apply standard font weight to colored file names in slim mode */
+.nn-file.nn-slim .nn-file-name[data-has-color='true'] {
+    font-weight: var(--nn-theme-file-name-font-weight);
+}
+
+.nn-slim-file-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nn-slim-file-header .nn-file-name-wrapper {
+    flex: 1;
+    min-width: 0;
+}
+
 /* Selected slim file - maintain selection styles */
 .nn-file.nn-slim.nn-selected .nn-file-name {
     color: var(--nn-theme-file-selected-name-color);
+}
+
+/* Preserve custom color for colored file names even when selected in slim mode */
+.nn-file.nn-slim.nn-selected .nn-file-name[data-has-color='true'] {
+    color: var(--nn-file-name-custom-color);
 }
 
 /* ========================================================================
@@ -1557,15 +1934,23 @@ body {
 
 /* Feature image container - right-aligned image thumbnail */
 .nn-feature-image {
-    /* Default size */
-    width: var(--nn-feature-image-min-size);
-    height: var(--nn-feature-image-min-size);
     flex-shrink: 0;
     border-radius: min(32px, var(--nn-theme-file-feature-border-radius));
     overflow: hidden;
-    background-color: var(--background-secondary-alt);
+    background-color: transparent;
     position: relative;
     order: 2; /* Ensure it appears on the right */
+}
+
+.nn-feature-image--square {
+    width: var(--nn-feature-image-min-size);
+    height: var(--nn-feature-image-min-size);
+}
+
+.nn-feature-image--natural {
+    width: auto;
+    height: var(--nn-feature-image-min-size);
+    aspect-ratio: var(--nn-feature-image-aspect-ratio, 1);
 }
 
 /* Dynamic sizing based on calculated item height */
@@ -1576,16 +1961,32 @@ body {
         calc(var(--item-height) - var(--nn-file-padding-total)),
         var(--nn-feature-image-max-size)
     );
+}
+
+.nn-virtual-file-item .nn-feature-image--square {
     width: var(--image-size);
     height: var(--image-size);
+}
+
+.nn-virtual-file-item .nn-feature-image--natural {
+    height: var(--image-size);
+    max-height: var(--image-size);
 }
 
 /* Feature image element - covers container with proper aspect ratio */
 .nn-feature-image-img {
     width: 100%;
     height: 100%;
+}
+
+.nn-feature-image--square .nn-feature-image-img {
     object-fit: cover;
     object-position: center top;
+}
+
+.nn-feature-image--natural .nn-feature-image-img {
+    object-fit: contain;
+    object-position: center;
 }
 
 /* Selected file image - slightly transparent when selected */
@@ -1852,6 +2253,11 @@ body.nn-resizing {
 .nn-navitem.nn-drag-over {
     background-color: var(--text-selection);
     border-radius: min(14px, var(--nn-theme-navitem-border-radius));
+}
+
+.nn-list-pane-scroller.nn-drag-over {
+    outline: 2px solid var(--text-selection);
+    outline-offset: -2px;
 }
 
 /* Special visual feedback for tag drop zones */
@@ -2470,6 +2876,42 @@ body.nn-resizing {
     margin-inline-start: 20px;
     padding-left: 1em;
     border-left: 2px solid var(--background-modifier-border);
+}
+
+/* Settings tabs layout and navigation */
+.nn-settings-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-4-4);
+}
+
+.nn-settings-tabs-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--size-2-3);
+    padding-bottom: var(--size-2-2);
+    border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.nn-settings-tab-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    font-size: var(--font-ui-small);
+}
+
+.nn-settings-tabs-content {
+    position: relative;
+}
+
+/* Hide tabs by default, show only active tab */
+.nn-settings-tab {
+    display: none;
+}
+
+.nn-settings-tab.is-active {
+    display: block;
 }
 
 /* Settings section header spacing */
@@ -3291,6 +3733,10 @@ body.nn-resizing {
     align-items: center;
 }
 
+.notebook-navigator-mobile .nn-root-reorder-remove {
+    font-size: var(--nn-setting-nav-font-size-mobile);
+}
+
 /* ========================================================================
    Mobile Tab Bars - iOS-style bottom navigation
    ======================================================================== */
@@ -3405,7 +3851,7 @@ body.nn-resizing {
 
 /* Mobile list pane scroller - use mobile background */
 .notebook-navigator-mobile .nn-list-pane-scroller {
-    background-color: var(--nn-theme-mobile-nav-bg); /* Opaque background on scroller for GPU scroll layer (see .nn-list-pane-scroller) */
+    background-color: var(--nn-theme-list-bg); /* Opaque background on scroller for GPU scroll layer (see .nn-list-pane-scroller) */
 }
 
 /* Mobile slim file items - larger touch targets */
@@ -3524,7 +3970,7 @@ body.nn-resizing {
 
 .nn-iconfont-fa-solid {
     font-weight: 900;
-    font-family: 'NotebookNavigatorFontAwesomeSolid', 'Font Awesome 6 Free', sans-serif;
+    font-family: 'NotebookNavigatorFontAwesomeSolid', 'Font Awesome 7 Free', sans-serif;
 }
 
 .nn-iconfont-rpg-awesome,
@@ -3640,6 +4086,57 @@ body.nn-resizing {
     color: var(--text-error);
 }
 
+/* ========================================================================
+   Transparency Toggles
+   ======================================================================== */
+
+/* Navigation pane transparency - applied when toggle is enabled */
+body.nn-navigation-pane-transparent .notebook-navigator {
+    background-color: transparent !important;
+}
+
+body.nn-navigation-pane-transparent .nn-navigation-pane {
+    background-color: transparent !important;
+}
+
+body.nn-navigation-pane-transparent .nn-navigation-pane .nn-pane-header {
+    background-color: transparent !important;
+}
+
+body.nn-navigation-pane-transparent .nn-shortcut-pinned {
+    background-color: transparent !important;
+}
+
+body.nn-navigation-pane-transparent .nn-navigation-pane-scroller {
+    background-color: transparent !important;
+}
+
+/* List pane transparency - applied when toggle is enabled */
+body.nn-list-pane-transparent .notebook-navigator {
+    background-color: transparent !important;
+}
+
+body.nn-list-pane-transparent .nn-list-pane {
+    background-color: transparent !important;
+}
+
+body.nn-list-pane-transparent .nn-list-pane .nn-pane-header {
+    background-color: transparent !important;
+}
+
+body.nn-list-pane-transparent .nn-list-pane-scroller {
+    background-color: transparent !important;
+}
+
+body.nn-list-pane-transparent .nn-list-title-area {
+    background-color: transparent !important;
+}
+
+body.nn-list-pane-transparent .nn-search-bar-container,
+body.nn-list-pane-transparent .nn-search-input-wrapper {
+    background-color: transparent !important;
+}
+
 /* @settings
 
 name: Notebook Navigator
@@ -3662,6 +4159,12 @@ settings:
         format: hex
         default-light: '#'
         default-dark: '#'
+    -
+    -
+        id: nn-navigation-pane-transparent
+        title: Navigation pane transparency
+        description: Make the navigation pane transparent (removes background).
+        type: class-toggle
     -
     -
         id: nn-nav-pane-items-heading
@@ -3818,6 +4321,16 @@ settings:
         collapsed: false
     -
     -
+        id: nn-theme-navitem-file-name-font-weight
+        title: Default file name weight
+        description: Default font weight for file names in shortcuts and recent notes.
+        type: variable-number-slider
+        default: 400
+        min: 100
+        max: 900
+        step: 100
+    -
+    -
         id: nn-theme-navitem-name-font-weight
         title: Default folder/tag weight
         description: Default font weight for folder and tag names.
@@ -3838,9 +4351,19 @@ settings:
         step: 100
     -
     -
+        id: nn-theme-navitem-custom-color-file-name-font-weight
+        title: Custom color file name weight
+        description: Font weight for file names with custom colors (overrides default file weight).
+        type: variable-number-slider
+        default: 600
+        min: 100
+        max: 900
+        step: 100
+    -
+    -
         id: nn-theme-navitem-custom-color-name-font-weight
         title: Custom color folder/tag weight
-        description: Font weight for items with custom colors (overrides default).
+        description: Font weight for folders and tags with custom colors (overrides default folder/tag weight).
         type: variable-number-slider
         default: 600
         min: 100
@@ -3916,6 +4439,13 @@ settings:
         format: hex
         default-light: '#'
         default-dark: '#'
+    -
+    -
+        id: nn-list-pane-transparent
+        title: List pane transparency
+        description: Make the list pane transparent (removes background).
+        type: class-toggle
+    -
     -
         id: nn-theme-list-search-active-bg
         title: Search field active background
@@ -4381,15 +4911,6 @@ settings:
         type: heading
         level: 1
         collapsed: true
-    -
-    -
-        id: nn-theme-mobile-nav-bg
-        title: Mobile navigation background
-        description: Background color of the navigation pane on mobile.
-        type: variable-themed-color
-        format: hex
-        default-light: '#'
-        default-dark: '#'
     -
     -
         id: nn-theme-mobile-list-header-link-color

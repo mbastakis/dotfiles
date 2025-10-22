@@ -1,0 +1,320 @@
+{{/*
+Expand the name of the chart.
+*/}}
+{{- define "apa.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+If release name contains chart name it will be used as a full name.
+*/}}
+{{- define "apa.fullname" -}}
+{{- if .Values.fullnameOverride }}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- $name := default .Chart.Name .Values.nameOverride }}
+{{- if contains $name .Release.Name }}
+{{- .Release.Name | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "apa.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Common labels
+*/}}
+{{- define "apa.labels" -}}
+helm.sh/chart: {{ include "apa.chart" . }}
+{{ include "apa.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Selector labels
+*/}}
+{{- define "apa.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "apa.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
+Backend labels
+*/}}
+{{- define "apa.backend.labels" -}}
+{{ include "apa.labels" . }}
+app.kubernetes.io/component: backend
+contiamo.com/component: backend
+{{- end }}
+
+{{/*
+Backend selector labels
+*/}}
+{{- define "apa.backend.selectorLabels" -}}
+{{ include "apa.selectorLabels" . }}
+app.kubernetes.io/component: backend
+{{- end }}
+
+{{/*
+Frontend labels
+*/}}
+{{- define "apa.frontend.labels" -}}
+{{ include "apa.labels" . }}
+app.kubernetes.io/component: frontend
+contiamo.com/component: frontend
+{{- end }}
+
+{{/*
+Frontend selector labels
+*/}}
+{{- define "apa.frontend.selectorLabels" -}}
+{{ include "apa.selectorLabels" . }}
+app.kubernetes.io/component: frontend
+{{- end }}
+
+{{/*
+Database labels
+*/}}
+{{- define "apa.database.labels" -}}
+{{ include "apa.labels" . }}
+app.kubernetes.io/component: database
+contiamo.com/component: database
+{{- end }}
+
+{{/*
+Database selector labels
+*/}}
+{{- define "apa.database.selectorLabels" -}}
+{{ include "apa.selectorLabels" . }}
+app.kubernetes.io/component: database
+{{- end }}
+
+{{/*
+Create the name of the service account to use for backend
+*/}}
+{{- define "apa.backend.serviceAccountName" -}}
+{{- if .Values.backend.serviceAccount.create }}
+{{- default (printf "%s-backend" (include "apa.fullname" .)) .Values.backend.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.backend.serviceAccount.name }}
+{{- end }}
+{{- end }}
+
+{{/*
+Create the name of the service account to use for frontend
+*/}}
+{{- define "apa.frontend.serviceAccountName" -}}
+{{- if .Values.frontend.serviceAccount.create }}
+{{- default (printf "%s-frontend" (include "apa.fullname" .)) .Values.frontend.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.frontend.serviceAccount.name }}
+{{- end }}
+{{- end }}
+
+{{/*
+Create the name of the service account to use for database
+*/}}
+{{- define "apa.database.serviceAccountName" -}}
+{{- if .Values.database.serviceAccount.create }}
+{{- default (printf "%s-database" (include "apa.fullname" .)) .Values.database.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.database.serviceAccount.name }}
+{{- end }}
+{{- end }}
+
+{{/*
+Create the name of the service account to use for desktop-use
+*/}}
+{{- define "apa.desktop-use.serviceAccountName" -}}
+{{- if .Values.desktopUse.serviceAccount.create }}
+{{- default (printf "%s-desktop-use" (include "apa.fullname" .)) .Values.desktopUse.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.desktopUse.serviceAccount.name }}
+{{- end }}
+{{- end }}
+
+{{/*
+Backend image
+*/}}
+{{- define "apa.backend.image" -}}
+{{- $registryName := .Values.backend.image.registry | default .Values.global.imageRegistry -}}
+{{- $repositoryName := .Values.backend.image.repository -}}
+{{- $tag := .Values.backend.image.tag | default .Chart.AppVersion -}}
+{{- if $registryName }}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- else }}
+{{- printf "%s:%s" $repositoryName $tag -}}
+{{- end }}
+{{- end }}
+
+{{/*
+Frontend image
+*/}}
+{{- define "apa.frontend.image" -}}
+{{- $registryName := .Values.frontend.image.registry | default .Values.global.imageRegistry -}}
+{{- $repositoryName := .Values.frontend.image.repository -}}
+{{- $tag := .Values.frontend.image.tag | default .Chart.AppVersion -}}
+{{- if $registryName }}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- else }}
+{{- printf "%s:%s" $repositoryName $tag -}}
+{{- end }}
+{{- end }}
+
+{{/*
+Database image
+*/}}
+{{- define "apa.database.image" -}}
+{{- $registryName := .Values.database.image.registry | default .Values.global.imageRegistry -}}
+{{- $repositoryName := .Values.database.image.repository -}}
+{{- $tag := .Values.database.image.tag -}}
+{{- if $registryName }}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- else }}
+{{- printf "%s:%s" $repositoryName $tag -}}
+{{- end }}
+{{- end }}
+
+{{/*
+Database connection environment variables
+*/}}
+{{- define "apa.database.env" -}}
+{{- if .Values.postgresql.enabled }}
+# Using Bitnami PostgreSQL subchart
+- name: PGHOST
+  value: {{ .Release.Name }}-postgresql
+- name: PGPORT
+  value: "5432"
+- name: PGUSER
+  value: {{ .Values.postgresql.auth.username | quote }}
+- name: PGDATABASE
+  value: {{ .Values.postgresql.auth.database | quote }}
+- name: PGPASSWORD
+  {{- if .Values.postgresql.auth.existingSecret }}
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.postgresql.auth.existingSecret }}
+      key: {{ .Values.postgresql.auth.secretKeys.userPasswordKey | default "password" }}
+  {{- else }}
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "apa.fullname" . }}-postgresql
+      key: password
+  {{- end }}
+{{- else }}
+# Using built-in database (deprecated)
+- name: PGHOST
+  value: {{ include "apa.fullname" . }}-database
+- name: PGPORT
+  value: "5432"
+- name: PGUSER
+  value: {{ .Values.database.auth.username | quote }}
+- name: PGDATABASE
+  value: {{ .Values.database.auth.database | quote }}
+- name: PGPASSWORD
+  {{- if .Values.database.auth.existingSecret }}
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.database.auth.existingSecret }}
+      key: {{ .Values.database.auth.secretKeys.userPasswordKey }}
+  {{- else }}
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "apa.fullname" . }}-database
+      key: password
+  {{- end }}
+{{- end }}
+{{- end }}
+
+{{/*
+Agent Gateway labels
+*/}}
+{{- define "apa.agentGateway.labels" -}}
+{{ include "apa.labels" . }}
+app.kubernetes.io/component: agent-gateway
+contiamo.com/component: agent-gateway
+{{- end }}
+
+{{/*
+Agent Gateway selector labels
+*/}}
+{{- define "apa.agentGateway.selectorLabels" -}}
+{{ include "apa.selectorLabels" . }}
+app.kubernetes.io/component: agent-gateway
+{{- end }}
+
+{{/*
+Create the name of the agent gateway service account to use
+*/}}
+{{- define "apa.agentGateway.serviceAccountName" -}}
+{{- if .Values.agentGateway.serviceAccount.create }}
+{{- default (printf "%s-%s" (include "apa.fullname" .) "agent-gateway") .Values.agentGateway.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.agentGateway.serviceAccount.name }}
+{{- end }}
+{{- end }}
+
+{{/*
+Agent Gateway fullname
+*/}}
+{{- define "apa.agentGateway.fullname" -}}
+{{ include "apa.fullname" . }}-ag
+{{- end }}
+
+{{- define "apa.agentGateway.url" -}}
+http://{{ include "apa.agentGateway.fullname" . }}:8080
+{{- end }}
+
+{{/*
+Evaluator labels
+*/}}
+{{- define "apa.evaluator.labels" -}}
+{{ include "apa.labels" . }}
+app.kubernetes.io/component: evaluator
+contiamo.com/component: evaluator
+{{- end }}
+
+{{/*
+Evaluator selector labels
+*/}}
+{{- define "apa.evaluator.selectorLabels" -}}
+{{ include "apa.selectorLabels" . }}
+app.kubernetes.io/component: evaluator
+{{- end }}
+
+{{/*
+Create the name of the evaluator service account to use
+*/}}
+{{- define "apa.evaluator.serviceAccountName" -}}
+{{- if .Values.evaluator.serviceAccount.create }}
+{{- default (printf "%s-evaluator" (include "apa.fullname" .)) .Values.evaluator.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.evaluator.serviceAccount.name }}
+{{- end }}
+{{- end }}
+
+{{/*
+Evaluator image
+*/}}
+{{- define "apa.evaluator.image" -}}
+{{- $registryName := .Values.evaluator.image.registry | default .Values.global.imageRegistry -}}
+{{- $repositoryName := .Values.evaluator.image.repository -}}
+{{- $tag := .Values.evaluator.image.tag | default .Chart.AppVersion -}}
+{{- if $registryName }}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- else }}
+{{- printf "%s:%s" $repositoryName $tag -}}
+{{- end }}
+{{- end }}

@@ -1,0 +1,11 @@
+apiVersion: v2
+name: istio-ingressgateway
+description: Istio Ingress Gateway with NLB integration for AICC
+type: application
+version: 0.1.0
+appVersion: "1.26.3"
+
+dependencies:
+  - name: gateway
+    version: 1.26.3
+    repository: https://istio-release.storage.googleapis.com/charts

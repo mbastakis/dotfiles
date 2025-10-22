@@ -41,3 +41,6 @@ alias bmad="npx bmad-method"
 
 ## SpecKit
 alias speckit="uvx --from git+https://github.com/github/spec-kit.git specify"
+
+## Openspec
+alias openspec="npx @fission-ai/openspec"

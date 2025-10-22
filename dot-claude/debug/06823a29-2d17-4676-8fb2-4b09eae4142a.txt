@@ -1,0 +1,21 @@
+[DEBUG] Watching for changes in setting files /Users/mbastakis/.claude/settings.json...
+[DEBUG] Writing to temp file: /Users/mbastakis/.claude/settings.json.tmp.61610.1760309888759
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 1075 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/.claude/settings.json.tmp.61610.1760309888759 to /Users/mbastakis/.claude/settings.json
+[DEBUG] File /Users/mbastakis/.claude/settings.json written atomically
+[DEBUG] Writing through symlink: /Users/mbastakis/.claude.json -> /Users/mbastakis/dev/dotfiles/dot-claude.json
+[DEBUG] Writing to temp file: /Users/mbastakis/dev/dotfiles/dot-claude.json.tmp.61610.1760309888815
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 66325 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/dev/dotfiles/dot-claude.json.tmp.61610.1760309888815 to /Users/mbastakis/dev/dotfiles/dot-claude.json
+[DEBUG] File /Users/mbastakis/dev/dotfiles/dot-claude.json written atomically
+[DEBUG] Writing through symlink: /Users/mbastakis/.claude.json -> /Users/mbastakis/dev/dotfiles/dot-claude.json
+[DEBUG] Writing to temp file: /Users/mbastakis/dev/dotfiles/dot-claude.json.tmp.61610.1760309889041
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 66362 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/dev/dotfiles/dot-claude.json.tmp.61610.1760309889041 to /Users/mbastakis/dev/dotfiles/dot-claude.json
+[DEBUG] File /Users/mbastakis/dev/dotfiles/dot-claude.json written atomically

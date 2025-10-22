@@ -1,0 +1,184 @@
+%%{init: {"flowchart": {"nodeSpacing": 50, "rankSpacing": 80, "curve": "basis"}} }%%
+flowchart TB
+  classDef network fill:#fef3c7,stroke:#f59e0b,color:#78350f,stroke-width:3px
+  classDef observability fill:#dbeafe,stroke:#3b82f6,color:#1e3a8a,stroke-width:2px
+  classDef identity fill:#fce7f3,stroke:#ec4899,color:#831843,stroke-width:2px
+  classDef secrets fill:#e0e7ff,stroke:#6366f1,color:#312e81,stroke-width:2px
+  classDef gitops fill:#d1fae5,stroke:#10b981,color:#064e3b,stroke-width:2px
+  classDef policy fill:#fed7aa,stroke:#f97316,color:#7c2d12,stroke-width:2px
+  classDef cicd fill:#e9d5ff,stroke:#a855f7,color:#581c87,stroke-width:2px
+  classDef storage fill:#fecdd3,stroke:#f43f5e,color:#881337,stroke-width:2px
+  classDef external fill:#f3f4f6,stroke:#6b7280,color:#1f2937,stroke-width:2px
+  classDef account fill:#fff7ed,stroke:#ea580c,color:#7c2d12,stroke-width:3px
+  classDef playground fill:#f0fdf4,stroke:#22c55e,color:#14532d,stroke-width:2px
+
+  subgraph External["External Systems & Services"]
+    direction LR
+    GitLab["GitLab<br/>━━━━━━━━<br/>• Source Control<br/>• CI/CD Pipelines<br/>• Container Registry"]
+    EntraID["Microsoft EntraID<br/>━━━━━━━━<br/>• SSO Provider<br/>• User Directory<br/>• MFA"]
+    SOC["AICC SOC<br/>━━━━━━━━<br/>• Alert Ingestion<br/>• Security Monitoring<br/>• Incident Response"]
+  end
+
+  subgraph TSI["TSI Landing Zone (Outside PSA Scope)"]
+    subgraph PlaygroundAccount["AICC AWS Playground Account"]
+      subgraph PlaygroundEKS["Playground EKS Cluster"]
+        direction TB
+
+        subgraph PG_Network["Network Layer"]
+          PG_Istio["Istio Service Mesh<br/>━━━━━━━━<br/>• mTLS encryption<br/>• Traffic routing<br/>• Service discovery"]
+          PG_VPC["VPC & Subnets<br/>━━━━━━━━<br/>• Private subnets<br/>• Public subnets<br/>• NAT Gateway"]
+          PG_Ingress["Ingress Controllers<br/>━━━━━━━━<br/>• NGINX Ingress<br/>• Load Balancers<br/>• Certificate Mgmt"]
+        end
+
+        subgraph PG_Observability["Observability Stack"]
+          PG_Prometheus["Prometheus<br/>━━━━━━━━<br/>• Metrics collection<br/>• Time-series DB<br/>• Alert rules"]
+          PG_Grafana["Grafana<br/>━━━━━━━━<br/>• Dashboards<br/>• Visualization<br/>• Alerting UI"]
+          PG_Loki["Loki<br/>━━━━━━━━<br/>• Log aggregation<br/>• Log querying<br/>• Log retention"]
+        end
+
+        subgraph PG_Core["Core Services"]
+          PG_ArgoCD["ArgoCD<br/>━━━━━━━━<br/>• GitOps operator<br/>• App deployment<br/>• Sync automation"]
+          PG_Kyverno["Kyverno<br/>━━━━━━━━<br/>• Policy engine<br/>• Admission control<br/>• Resource validation"]
+        end
+      end
+    end
+  end
+
+  subgraph DTIT["DTIT@AWS Landing Zone (PSA Scope)"]
+    direction TB
+
+    subgraph NonProdAccount["AICC NonProd AWS Account"]
+      subgraph NonProdEKS["NonProd EKS Cluster (Dev + Staging)"]
+        direction TB
+
+        subgraph NP_Network["Network Layer"]
+          NP_Istio["Istio Service Mesh<br/>━━━━━━━━<br/>• mTLS encryption<br/>• Traffic management<br/>• Service mesh telemetry<br/>• Circuit breaking<br/>• Fault injection"]
+          NP_VPC["VPC & Subnets<br/>━━━━━━━━<br/>• Segmented VPCs<br/>• Private subnets (app tier)<br/>• Public subnets (LB tier)<br/>• Database subnets<br/>• NAT Gateway<br/>• VPC Flow Logs"]
+          NP_Ingress["Ingress Controllers<br/>━━━━━━━━<br/>• NGINX Ingress<br/>• ALB Controller<br/>• TLS termination<br/>• cert-manager (Let's Encrypt)"]
+        end
+
+        subgraph NP_Observability["Observability & Monitoring"]
+          NP_Prometheus["Prometheus<br/>━━━━━━━━<br/>• Metrics scraping<br/>• Time-series storage<br/>• Alert evaluation<br/>• Service monitors<br/>• Pod monitors"]
+          NP_Grafana["Grafana<br/>━━━━━━━━<br/>• Unified dashboards<br/>• Multi-source viz<br/>• Alert management<br/>• User RBAC<br/>• Alerting channels"]
+          NP_Loki["Loki<br/>━━━━━━━━<br/>• Distributed logging<br/>• Log aggregation<br/>• LogQL queries<br/>• Retention policies<br/>• Compaction"]
+          NP_Tempo["Tempo (Optional)<br/>━━━━━━━━<br/>• Distributed tracing<br/>• Trace storage<br/>• Integration with Grafana"]
+        end
+
+        subgraph NP_Identity["Identity & Access Management"]
+          NP_Keycloak["Keycloak<br/>━━━━━━━━<br/>• SSO broker<br/>• OIDC/SAML provider<br/>• User federation<br/>• Role mapping<br/>• Session management"]
+          NP_IRSA["IRSA<br/>━━━━━━━━<br/>• Pod IAM roles<br/>• Service accounts<br/>• AWS credentials<br/>• Least privilege"]
+          NP_EntraIntegration["EntraID Integration<br/>━━━━━━━━<br/>• Identity federation<br/>• Group sync<br/>• Conditional access"]
+        end
+
+        subgraph NP_Secrets["Secrets Management"]
+          NP_SecretManager["AWS Secrets Manager<br/>━━━━━━━━<br/>• Secret storage<br/>• Auto rotation<br/>• Versioning<br/>• Access logs"]
+          NP_KMS["AWS KMS<br/>━━━━━━━━<br/>• Encryption keys<br/>• Key rotation<br/>• Envelope encryption<br/>• Audit trail"]
+          NP_ESO["External Secrets Operator<br/>━━━━━━━━<br/>• K8s secret sync<br/>• Provider integration<br/>• Secret refresh"]
+        end
+
+        subgraph NP_GitOps["GitOps & Deployment"]
+          NP_ArgoCD["ArgoCD<br/>━━━━━━━━<br/>• Declarative GitOps<br/>• App of Apps pattern<br/>• Sync policies<br/>• Health checks<br/>• Rollback capability<br/>• Multi-cluster support"]
+          NP_ArgoProjCRDs["Argo CD Projects<br/>━━━━━━━━<br/>• Team isolation<br/>• RBAC policies<br/>• Source restrictions<br/>• Destination limits"]
+        end
+
+        subgraph NP_Policy["Policy & Security Enforcement"]
+          NP_Kyverno["Kyverno<br/>━━━━━━━━<br/>• Admission webhooks<br/>• Policy as code<br/>• Validation rules<br/>• Mutation rules<br/>• Generation rules<br/>• Image verification"]
+          NP_Gatekeeper["Gatekeeper (TBD)<br/>━━━━━━━━<br/>• OPA integration<br/>• Constraint templates<br/>• Audit mode<br/>• Compliance reports"]
+          NP_Falco["Falco (Optional)<br/>━━━━━━━━<br/>• Runtime security<br/>• Anomaly detection<br/>• Syscall monitoring"]
+        end
+
+        subgraph NP_CICD["CI/CD Infrastructure"]
+          NP_GitLabRunner["GitLab Runners<br/>━━━━━━━━<br/>• Kubernetes executor<br/>• Pipeline execution<br/>• Build cache<br/>• Docker-in-Docker<br/>• Auto-scaling"]
+          NP_Harbor["Harbor (Optional)<br/>━━━━━━━━<br/>• Container registry<br/>• Image scanning<br/>• Vulnerability reports<br/>• RBAC"]
+        end
+
+        subgraph NP_Storage["Storage & Backup"]
+          NP_EBS["EBS CSI Driver<br/>━━━━━━━━<br/>• Persistent volumes<br/>• Dynamic provisioning<br/>• Snapshots"]
+          NP_EFS["EFS CSI Driver<br/>━━━━━━━━<br/>• Shared storage<br/>• Multi-AZ<br/>• NFS protocol"]
+          NP_Velero["Velero<br/>━━━━━━━━<br/>• Cluster backup<br/>• Disaster recovery<br/>• Resource migration<br/>• Scheduled backups"]
+        end
+      end
+    end
+
+    subgraph ProdAccount["AICC Prod AWS Account"]
+      subgraph ProdEKS["Prod EKS Cluster"]
+        direction TB
+
+        subgraph P_Network["Network Layer"]
+          P_Istio["Istio Service Mesh<br/>━━━━━━━━<br/>• mTLS encryption<br/>• Traffic management<br/>• Service mesh telemetry<br/>• Circuit breaking<br/>• Rate limiting"]
+          P_VPC["VPC & Subnets<br/>━━━━━━━━<br/>• Segmented VPCs<br/>• Private subnets (app tier)<br/>• Public subnets (LB tier)<br/>• Database subnets<br/>• NAT Gateway<br/>• VPC Flow Logs"]
+          P_Ingress["Ingress Controllers<br/>━━━━━━━━<br/>• NGINX Ingress<br/>• ALB Controller<br/>• TLS termination<br/>• cert-manager (Let's Encrypt)"]
+        end
+
+        subgraph P_Observability["Observability & Monitoring"]
+          P_Prometheus["Prometheus<br/>━━━━━━━━<br/>• Metrics scraping<br/>• Time-series storage<br/>• Alert evaluation<br/>• Service monitors<br/>• High availability"]
+          P_Grafana["Grafana<br/>━━━━━━━━<br/>• Unified dashboards<br/>• Multi-source viz<br/>• Alert management<br/>• User RBAC<br/>• SLA tracking"]
+          P_Loki["Loki<br/>━━━━━━━━<br/>• Distributed logging<br/>• Log aggregation<br/>• LogQL queries<br/>• Long-term retention<br/>• Compaction"]
+          P_Tempo["Tempo<br/>━━━━━━━━<br/>• Distributed tracing<br/>• Trace storage<br/>• Integration with Grafana"]
+        end
+
+        subgraph P_Identity["Identity & Access Management"]
+          P_Keycloak["Keycloak<br/>━━━━━━━━<br/>• SSO broker<br/>• OIDC/SAML provider<br/>• User federation<br/>• Role mapping<br/>• HA deployment"]
+          P_IRSA["IRSA<br/>━━━━━━━━<br/>• Pod IAM roles<br/>• Service accounts<br/>• AWS credentials<br/>• Least privilege"]
+          P_EntraIntegration["EntraID Integration<br/>━━━━━━━━<br/>• Identity federation<br/>• Group sync<br/>• Conditional access"]
+        end
+
+        subgraph P_Secrets["Secrets Management"]
+          P_SecretManager["AWS Secrets Manager<br/>━━━━━━━━<br/>• Secret storage<br/>• Auto rotation<br/>• Versioning<br/>• Access logs<br/>• Cross-region replication"]
+          P_KMS["AWS KMS<br/>━━━━━━━━<br/>• Encryption keys<br/>• Key rotation<br/>• Envelope encryption<br/>• Audit trail<br/>• Multi-region keys"]
+          P_ESO["External Secrets Operator<br/>━━━━━━━━<br/>• K8s secret sync<br/>• Provider integration<br/>• Secret refresh"]
+        end
+
+        subgraph P_GitOps["GitOps & Deployment"]
+          P_ArgoCD["ArgoCD<br/>━━━━━━━━<br/>• Declarative GitOps<br/>• App of Apps pattern<br/>• Sync policies<br/>• Health checks<br/>• Automated rollback<br/>• HA deployment"]
+          P_ArgoProjCRDs["Argo CD Projects<br/>━━━━━━━━<br/>• Team isolation<br/>• RBAC policies<br/>• Source restrictions<br/>• Prod protections"]
+        end
+
+        subgraph P_Policy["Policy & Security Enforcement"]
+          P_Kyverno["Kyverno<br/>━━━━━━━━<br/>• Admission webhooks<br/>• Policy as code<br/>• Validation rules<br/>• Mutation rules<br/>• Generation rules<br/>• Image verification<br/>• HA deployment"]
+          P_Gatekeeper["Gatekeeper<br/>━━━━━━━━<br/>• OPA integration<br/>• Constraint templates<br/>• Enforce mode<br/>• Compliance reports"]
+          P_Falco["Falco<br/>━━━━━━━━<br/>• Runtime security<br/>• Anomaly detection<br/>• Syscall monitoring<br/>• Alert forwarding"]
+        end
+
+        subgraph P_CICD["CI/CD Infrastructure"]
+          P_GitLabRunner["GitLab Runners<br/>━━━━━━━━<br/>• Kubernetes executor<br/>• Pipeline execution<br/>• Build cache<br/>• Secure builds<br/>• Auto-scaling"]
+          P_Harbor["Harbor<br/>━━━━━━━━<br/>• Container registry<br/>• Image scanning<br/>• Vulnerability reports<br/>• RBAC<br/>• Replication"]
+        end
+
+        subgraph P_Storage["Storage & Backup"]
+          P_EBS["EBS CSI Driver<br/>━━━━━━━━<br/>• Persistent volumes<br/>• Dynamic provisioning<br/>• Encrypted volumes<br/>• Snapshots"]
+          P_EFS["EFS CSI Driver<br/>━━━━━━━━<br/>• Shared storage<br/>• Multi-AZ<br/>• Encrypted at rest"]
+          P_Velero["Velero<br/>━━━━━━━━<br/>• Cluster backup<br/>• Disaster recovery<br/>• Cross-region backup<br/>• RPO/RTO compliance"]
+        end
+      end
+    end
+  end
+
+  %% External connections
+  GitLab -.->|CI/CD Pipelines| NP_GitLabRunner
+  GitLab -.->|CI/CD Pipelines| P_GitLabRunner
+  GitLab -.->|GitOps Source| NP_ArgoCD
+  GitLab -.->|GitOps Source| P_ArgoCD
+
+  EntraID -.->|SSO Integration| NP_Keycloak
+  EntraID -.->|SSO Integration| P_Keycloak
+  EntraID -.->|Identity Federation| NP_EntraIntegration
+  EntraID -.->|Identity Federation| P_EntraIntegration
+
+  NP_Prometheus -->|Alerts| SOC
+  NP_Grafana -->|Alerts| SOC
+  P_Prometheus -->|Alerts| SOC
+  P_Grafana -->|Alerts| SOC
+
+  %% Styling
+  class NP_Istio,NP_VPC,NP_Ingress,P_Istio,P_VPC,P_Ingress,PG_Istio,PG_VPC,PG_Ingress network
+  class NP_Prometheus,NP_Grafana,NP_Loki,NP_Tempo,P_Prometheus,P_Grafana,P_Loki,P_Tempo,PG_Prometheus,PG_Grafana,PG_Loki observability
+  class NP_Keycloak,NP_IRSA,NP_EntraIntegration,P_Keycloak,P_IRSA,P_EntraIntegration identity
+  class NP_SecretManager,NP_KMS,NP_ESO,P_SecretManager,P_KMS,P_ESO secrets
+  class NP_ArgoCD,NP_ArgoProjCRDs,P_ArgoCD,P_ArgoProjCRDs,PG_ArgoCD gitops
+  class NP_Kyverno,NP_Gatekeeper,NP_Falco,P_Kyverno,P_Gatekeeper,P_Falco,PG_Kyverno policy
+  class NP_GitLabRunner,NP_Harbor,P_GitLabRunner,P_Harbor cicd
+  class NP_EBS,NP_EFS,NP_Velero,P_EBS,P_EFS,P_Velero storage
+  class GitLab,EntraID,SOC external
+  class NonProdAccount,ProdAccount account
+  class PlaygroundAccount,PlaygroundEKS playground

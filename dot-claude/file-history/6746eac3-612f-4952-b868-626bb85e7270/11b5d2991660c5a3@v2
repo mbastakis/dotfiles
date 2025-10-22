@@ -1,0 +1,455 @@
+
+spec:
+  inputs:
+    target_cluster:
+      options: ['playground', 'cn-dtag']
+      description: "Cluster to deploy to"
+      default: playground
+    environment:
+      options: ["dev", "stg", "prod"]
+      description: "Only Dev active"
+      default: dev
+---
+stages:
+  - test
+  - containerize
+  - release
+  - deploy
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_HOST: "tcp://docker:2375"
+  BACKEND_DIR: "backend"
+  FRONTEND_DIR: "frontend"
+  AGENT_GATEWAY_DIR: "agent_gateway"
+  EVALUATOR_DIR: "evaluator"
+  ARTIFACTORY_TOKEN: ""
+  ARTIFACTORY_USER: ""
+  PYPI_INDEX_URL: https://${ARTIFACTORY_USER}:${ARTIFACTORY_TOKEN}@artifactory.devops.telekom.de/artifactory/api/pypi/aicc-pypi-virtual/simple
+  REGESTRY_USER: $MTR_USER
+  REGESTRY_PW: $MTR_PASSWORD
+  FULL_REGISTRY: $MTR_REGISTRY/aicc-llm-assistant/$CI_PROJECT_NAME
+.python_job:
+  image: python:3.12.11@sha256:645df645815f1403566b103b2a2bb07f6a01516bbb15078ed004e41d198ba194
+  variables:
+    UV_CACHE_DIR: .cache/pip
+    PIP_CACHE_DIR: .cache/uv
+    PYLINTHOME: .cache/pylint
+    PYRIGHT_PYTHON_CACHE_DIR: .cache/pyright
+    UV_INDEX_ARTIFACTORY_USERNAME: $ARTIFACTORY_USER
+    UV_INDEX_ARTIFACTORY_PASSWORD: $ARTIFACTORY_TOKEN
+  before_script:
+    - chown -R $(whoami) .cache || echo no cache
+    - mkdir -p artifacts/
+    - python3 -m pip install -q uv
+    - cd $BACKEND_DIR
+    - export UV_CACHE_DIR=../$UV_CACHE_DIR
+    - export PYLINTHOME=../$PYLINTHOME
+    - export PYRIGHT_PYTHON_CACHE_DIR=../$PYRIGHT_PYTHON_CACHE_DIR
+    - uv sync --group dev
+  after_script:
+    - mv $BACKEND_DIR/uv.lock artifacts
+  artifacts:
+    paths:
+      - ./artifacts/
+    expire_in: 1 weeks
+  cache:
+    - key:
+        files:
+          - $BACKEND_DIR/pyproject.toml
+      fallback_keys:
+        - cache-$CI_COMMIT_BRANCH
+      paths:
+        - .cache/pip
+        - .cache/uv
+        - .cache/pytest
+        - .cache/pylint
+        - .cache/pyright
+  interruptible: true
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: always
+    - if: $CI_COMMIT_BRANCH
+      changes:
+        compare_to: 'refs/heads/main'
+        paths:
+          - $BACKEND_DIR/**
+#      when: always 
+      when: manual
+    - if: $CI_COMMIT_BRANCH
+      when: manual
+  allow_failure: true
+.node_job:
+  image: node:22-alpine
+  before_script:
+    - cd $FRONTEND_DIR
+    - mkdir -p artifacts/
+    - npm config set cache $NPM_CACHE --global
+    - npm ci --include dev
+  cache:
+    - key:
+        files:
+          - $FRONTEND_DIR/package.json
+      fallback_keys:
+        - cache-$CI_COMMIT_BRANCH
+      paths:
+        - .cache/npm
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: always
+    - if: $CI_COMMIT_BRANCH
+      changes:
+        compare_to: 'refs/heads/main'
+        paths:
+          - $FRONTEND_DIR/**
+#      when: always 
+      when: manual
+    - if: $CI_COMMIT_BRANCH
+      when: manual
+  allow_failure: true
+py_test:
+  stage: test
+  extends: .python_job
+  variables:
+    POSTGRES_USER: apa
+    POSTGRES_PASSWORD: apa_password
+    POSTGRES_DB: apa
+    PGDATABASE: $POSTGRES_DB
+    PGHOST: "postgres"
+    PGPASSWORD: $POSTGRES_PASSWORD
+    PGDATABASEL: $POSTGRES_DB
+    PGUSER: $POSTGRES_USER
+    DEFAULT_LLM_MODEL: anthropic:claude-sonnet-4-20250514
+  services:
+    - name: pgvector/pgvector:pg17
+      alias: postgres
+  script: ["exit 0"] 
+#    - uv run --frozen --active pytest -o cache_dir=../.cache/pytest--cov-branch --cov-report term --cov-report html:../artifacts --cov-fail-under=75  --cov=src/apa/
+py_lint:
+  stage: test
+  extends: .python_job
+  script:
+    - uv -q sync --only-group dev --active
+    - uv -q run --active --frozen ruff check
+    - uv -q run --active --frozen pyright
+    - uv -q run --active --frozen typos
+
+ts_lint:
+  stage: test
+  extends: .node_job
+  interruptible: true
+  script: ["exit 0"] #["npm run lint"]
+.only_on_main:
+  rules:
+      - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      - if: $CI_COMMIT_BRANCH == "cicd-main"
+        when: manual
+.not_on_main:
+  rules:
+      - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
+      - if: $CI_COMMIT_BRANCH != "cicd-main"
+      - if: $CI_COMMIT_BRANCH
+        when: manual
+
+.version_extraction:
+  before_script: &version_extraction_before_script
+    - apk add --update --no-cache python3 git && ln -sf python3 /usr/bin/python
+    - export BACKEND_BASE_VERSION=$(python3 -c "from pathlib import Path;import tomllib;print(tomllib.loads(Path('$BACKEND_DIR/pyproject.toml').read_text())['project']['version'])")
+    - export FRONTEND_BASE_VERSION=$(python3 -c "import json;print(json.load(open('$FRONTEND_DIR/package.json',encoding='UTF-8'))['version']);")
+    - export AGENT_GATEWAY_BASE_VERSION=$(git describe --tags --always --dirty 2>/dev/null || echo "0.1.0")
+    - export EVALUATOR_BASE_VERSION=$(python3 -c "from pathlib import Path;import tomllib;print(tomllib.loads(Path('$EVALUATOR_DIR/pyproject.toml').read_text())['project']['version'])")
+    - export BACKEND_IMAGE=$FULL_REGISTRY-backend
+    - export FRONTEND_IMAGE=$FULL_REGISTRY-frontend
+    - export AGENT_GATEWAY_IMAGE=$FULL_REGISTRY-agent-gateway
+    - export EVALUATOR_IMAGE=$FULL_REGISTRY-evaluator
+    - export BACKEND_DEV_CONTAINER_TAG=${BACKEND_BASE_VERSION}-${CI_COMMIT_SHORT_SHA}
+    - export FRONTEND_DEV_CONTAINER_TAG=${FRONTEND_BASE_VERSION}-${CI_COMMIT_SHORT_SHA}
+    - export AGENT_GATEWAY_DEV_CONTAINER_TAG=${AGENT_GATEWAY_BASE_VERSION}-${CI_COMMIT_SHORT_SHA}
+    - export EVALUATOR_DEV_CONTAINER_TAG=${EVALUATOR_BASE_VERSION}-${CI_COMMIT_SHORT_SHA}
+    - export BACKEND_CONTAINER_TAG=${BACKEND_BASE_VERSION}
+    - export FRONTEND_CONTAINER_TAG=${FRONTEND_BASE_VERSION}
+    - export AGENT_GATEWAY_CONTAINER_TAG=${AGENT_GATEWAY_BASE_VERSION}
+    - export EVALUATOR_CONTAINER_TAG=${EVALUATOR_BASE_VERSION}
+.containerize:
+  image: docker:28.3.3
+  before_script: &containerize-before-script
+    - mkdir -p ~/.docker
+    - echo "$DOCKER_AUTH_CONFIG" > ~/.docker/config.json
+    - cat ~/.docker/config.json
+    - *version_extraction_before_script
+    
+    - git config --global user.name "${GITLAB_SA_NAME:-pipeline}"
+    - git config --global user.email "${GITLAB_SA_EMAIL:-test@example.com}"
+  after_script:
+    - docker logout $REGISTRY
+  tags:
+    - otc_run_sysbox_s
+  services:
+  - name: docker:28.3.3-dind
+    command:
+    - "--tls=false"
+    - "--registry-mirror=https://dockerhub.devops.telekom.de"
+    alias: docker
+backend dev:
+  stage: containerize
+  extends: 
+    - .containerize
+    - .not_on_main
+  before_script:
+    - *containerize-before-script
+    - export IMAGE=$BACKEND_IMAGE:$BACKEND_DEV_CONTAINER_TAG && echo Building $IMAGE
+  script:
+    - cd $BACKEND_DIR
+    - docker build --cache-from $BACKEND_IMAGE:latest -t $IMAGE --build-arg UV_INDEX_URL=$PYPI_INDEX_URL .
+    - docker push $IMAGE
+#  needs:
+#    - py_test
+#    - py_lint
+frontend dev:
+  stage: containerize
+  extends:
+    - .containerize
+    - .not_on_main
+  before_script:
+    - *containerize-before-script
+    - export IMAGE=$FRONTEND_IMAGE:$FRONTEND_DEV_CONTAINER_TAG && echo Building $IMAGE
+  script:
+    - cd $FRONTEND_DIR
+    - docker build --cache-from $FRONTEND_IMAGE:latest -t $IMAGE --build-arg UV_INDEX_URL=$PYPI_INDEX_URL .
+    - docker push $IMAGE
+  needs:
+    - job: ts_lint
+      optional: true
+agent_gateway dev:
+  stage: containerize
+  extends:
+    - .containerize
+    - .not_on_main
+  before_script:
+    - *containerize-before-script
+    - export IMAGE=$AGENT_GATEWAY_IMAGE:$AGENT_GATEWAY_DEV_CONTAINER_TAG && echo Building $IMAGE
+  script:
+    - cd $AGENT_GATEWAY_DIR
+    - docker build --cache-from $AGENT_GATEWAY_IMAGE:latest -t $IMAGE --build-arg VERSION=$AGENT_GATEWAY_BASE_VERSION --build-arg SHA=$CI_COMMIT_SHORT_SHA .
+    - docker push $IMAGE
+evaluator dev:
+  stage: containerize
+  extends:
+    - .containerize
+    - .not_on_main
+  before_script:
+    - *containerize-before-script
+    - export IMAGE=$EVALUATOR_IMAGE:$EVALUATOR_DEV_CONTAINER_TAG && echo Building $IMAGE
+  script:
+    - cd $EVALUATOR_DIR
+    - docker build --cache-from $EVALUATOR_IMAGE:latest -t $IMAGE .
+    - docker push $IMAGE
+backend main:
+  extends:
+    - backend dev
+    - .only_on_main
+  before_script:
+    - *containerize-before-script
+    - export IMAGE=$BACKEND_IMAGE:$BACKEND_DEV_CONTAINER_TAG && echo Building $IMAGE
+agent_gateway main:
+  extends:
+    - agent_gateway dev
+    - .only_on_main
+  before_script:
+    - *containerize-before-script
+    - export IMAGE=$AGENT_GATEWAY_IMAGE:$AGENT_GATEWAY_DEV_CONTAINER_TAG && echo Building $IMAGE
+evaluator main:
+  extends:
+    - evaluator dev
+    - .only_on_main
+  before_script:
+    - *containerize-before-script
+    - export IMAGE=$EVALUATOR_IMAGE:$EVALUATOR_DEV_CONTAINER_TAG && echo Building $IMAGE
+
+.send_deployment:
+  script: &send_deployment_from_env_curl
+    - source .env
+    - |
+      curl --request POST \
+      --form token=$HELM_REPO_TRIGGER_TOKEN \
+      --form ref=main \
+      --form "variables[DOT_ENV]=$(cat .env)" \
+      --form "variables[DEPLOYMENT_ENV]=$DEPLOYMENT_ENV" \
+      --form "variables[DEPLOYMENT_BRANCH_NAME]=$DEPLOYMENT_BRANCH_NAME" \
+      --form "variables[DEPLOYMENT_MA_BACKEND_C_IMAGE]=$DEPLOYMENT_MA_BACKEND_C_IMAGE" \
+      --form "variables[DEPLOYMENT_MA_BACKEND_C_TAG]=$DEPLOYMENT_MA_BACKEND_C_TAG" \
+      --form "variables[DEPLOYMENT_MA_FRONTEND_C_IMAGE]=$DEPLOYMENT_MA_FRONTEND_C_IMAGE" \
+      --form "variables[DEPLOYMENT_MA_FRONTEND_C_TAG]=$DEPLOYMENT_MA_FRONTEND_C_TAG" \
+      --form "variables[DEPLOYMENT_MA_AGENT_GATEWAY_C_IMAGE]=$DEPLOYMENT_MA_AGENT_GATEWAY_C_IMAGE" \
+      --form "variables[DEPLOYMENT_MA_AGENT_GATEWAY_C_TAG]=$DEPLOYMENT_MA_AGENT_GATEWAY_C_TAG" \
+      --form "variables[DEPLOYMENT_MA_EVALUATOR_C_IMAGE]=$DEPLOYMENT_MA_EVALUATOR_C_IMAGE" \
+      --form "variables[DEPLOYMENT_MA_EVALUATOR_C_TAG]=$DEPLOYMENT_MA_EVALUATOR_C_TAG" \
+      --form "variables[DEPLOYMENT_PROJECT_PATH_SLUG]=$DEPLOYMENT_PROJECT_PATH_SLUG" \
+      "$CI_API_V4_URL/projects/385486/trigger/pipeline"
+
+
+
+deploy:
+  stage: deploy
+  extends: ["send dev deployment"]
+  script:
+    - |
+      case "$[[ inputs.target_cluster ]]"  in
+        playground|cn-dtag)
+          ;;
+        *)
+          printf "❌ target_cluster must be 'playground' or 'cn-dtag' (got '%s')\n" "$[[ inputs.target_cluster ]]" >&2
+          exit 1
+          ;;
+      esac
+    - |
+      case "$[[ inputs.environment ]]"  in
+        dev|stg|prod)
+          ;;
+        *)
+          printf "❌ environment must be 'dev', 'stg' or 'prod' (got '%s')\n" "$$[[ inputs.environment ]]" >&2
+          exit 1
+          ;;
+      esac
+    - |
+      case "$[[ inputs.environment ]]" in
+        dev)
+          case "$[[ inputs.target_cluster ]]" in
+            playground)
+              echo "Deploying to DEV on PLAYGROUND"
+            ;;
+            cn-dtag)
+              echo "Deploying to DEV on INTRANET"
+            ;;
+          esac
+          ;;
+        stg)
+          case "$[[ inputs.target_cluster ]]" in
+            playground)
+              echo "❌ THERE IS NO STG ON PLAYGROUND"
+              exit -1
+            ;;
+            cn-dtag)
+              echo "❌ THERE IS NO STG ON INTRANET (YET)"
+              curl --request POST \
+                --header "PRIVATE-TOKEN: $GITLAB_ACCESS_TOKEN" \
+                --form "id=385486" \
+                --form "source_branch=$DEPLOYMENT_BRANCH_NAME" \
+                --form "target_branch=main" \
+                --form "title=Merge request from $SOURCE_BRANCH to main" \
+                --form "remove_source_branch=true" \
+                --form "labels=ci,automated,mai" \
+                "$CI_API_V4_URL/projects/385486/merge_requests"
+            ;;
+          esac
+          ;;
+        prod)
+          case "$[[ inputs.target_cluster ]]" in
+            playground)
+              echo "❌ THERE IS NO PROD ON PLAYGROUND"
+              exit -1
+            ;;
+            cn-dtag)
+              echo "❌ THERE IS NO PROD ON INTRANET (YET)"
+              exit -1
+            ;;
+          esac
+          ;;
+        *)
+          echo "❌ UNKNOWN environment"
+          exit -1
+          ;;
+      esac
+
+send dev deployment:
+  image: registry.gitlab.com/gitlab-org/release-cli:v0.24.0
+  stage: release
+  extends:
+    - .not_on_main
+  before_script:
+    - apk add --update curl docker-cli && rm -rf /var/cache/apk/*
+    - *containerize-before-script
+    - glab auth login --hostname $CI_SERVER_HOST --job-token $CI_JOB_TOKEN
+    - | 
+      echo DEPLOYMENT_ENV=$[[ inputs.target_cluster ]] > .env
+      echo DEPLOYMENT_BRANCH_NAME=$CI_COMMIT_REF_NAME >> .env
+      echo DEPLOYMENT_PROJECT_PATH_SLUG=$CI_PROJECT_PATH_SLUG >> .env
+      source .env
+  script:
+    - |
+      if docker manifest inspect "$BACKEND_IMAGE:$BACKEND_DEV_CONTAINER_TAG" > /dev/null 2>&1; then
+          echo "✅ Manifest exists for image: $BACKEND_IMAGE:$BACKEND_DEV_CONTAINER_TAG"
+      else
+          echo "❌ Manifest not found for image: $BACKEND_IMAGE:$BACKEND_DEV_CONTAINER_TAG"
+          echo "Now Using $BACKEND_IMAGE:$BACKEND_CONTAINER_TAG"
+          export BACKEND_DEV_CONTAINER_TAG=$BACKEND_CONTAINER_TAG
+      fi
+    - |
+      if docker manifest inspect "$FRONTEND_IMAGE:$FRONTEND_DEV_CONTAINER_TAG" > /dev/null 2>&1; then
+          echo "✅ Manifest exists for image: $FRONTEND_IMAGE:$FRONTEND_DEV_CONTAINER_TAG"
+      else
+          echo "❌ Manifest not found for image: $FRONTEND_IMAGE:$FRONTEND_DEV_CONTAINER_TAG"
+          echo "Now Using $FRONTEND_IMAGE:$FRONTEND_CONTAINER_TAG"
+          export FRONTEND_DEV_CONTAINER_TAG=$FRONTEND_CONTAINER_TAG
+      fi
+    - |
+      if docker manifest inspect "$AGENT_GATEWAY_IMAGE:$AGENT_GATEWAY_DEV_CONTAINER_TAG" > /dev/null 2>&1; then
+          echo "✅ Manifest exists for image: $AGENT_GATEWAY_IMAGE:$AGENT_GATEWAY_DEV_CONTAINER_TAG"
+      else
+          echo "❌ Manifest not found for image: $AGENT_GATEWAY_IMAGE:$AGENT_GATEWAY_DEV_CONTAINER_TAG"
+          echo "Now Using $AGENT_GATEWAY_IMAGE:$AGENT_GATEWAY_CONTAINER_TAG"
+          export AGENT_GATEWAY_DEV_CONTAINER_TAG=$AGENT_GATEWAY_CONTAINER_TAG
+      fi
+    - |
+      if docker manifest inspect "$EVALUATOR_IMAGE:$EVALUATOR_DEV_CONTAINER_TAG" > /dev/null 2>&1; then
+          echo "✅ Manifest exists for image: $EVALUATOR_IMAGE:$EVALUATOR_DEV_CONTAINER_TAG"
+      else
+          echo "❌ Manifest not found for image: $EVALUATOR_IMAGE:$EVALUATOR_DEV_CONTAINER_TAG"
+          echo "Now Using $EVALUATOR_IMAGE:$EVALUATOR_CONTAINER_TAG"
+          export EVALUATOR_DEV_CONTAINER_TAG=$EVALUATOR_CONTAINER_TAG
+      fi
+    - |
+      echo DEPLOYMENT_MA_BACKEND_C_IMAGE=$BACKEND_IMAGE:$BACKEND_DEV_CONTAINER_TAG >> .env
+      echo DEPLOYMENT_MA_BACKEND_C_TAG=$BACKEND_DEV_CONTAINER_TAG >> .env
+      echo DEPLOYMENT_MA_FRONTEND_C_IMAGE=$FRONTEND_IMAGE:$FRONTEND_DEV_CONTAINER_TAG >> .env
+      echo DEPLOYMENT_MA_FRONTEND_C_TAG=$FRONTEND_DEV_CONTAINER_TAG >> .env
+      echo DEPLOYMENT_MA_AGENT_GATEWAY_C_IMAGE=$AGENT_GATEWAY_IMAGE:$AGENT_GATEWAY_DEV_CONTAINER_TAG >> .env
+      echo DEPLOYMENT_MA_AGENT_GATEWAY_C_TAG=$AGENT_GATEWAY_DEV_CONTAINER_TAG >> .env
+      echo DEPLOYMENT_MA_EVALUATOR_C_IMAGE=$EVALUATOR_IMAGE:$EVALUATOR_DEV_CONTAINER_TAG >> .env
+      echo DEPLOYMENT_MA_EVALUATOR_C_TAG=$EVALUATOR_DEV_CONTAINER_TAG >> .env
+      echo DEPLOYMENT_ID=$CI_COMMIT_SHORT_SHA-$CI_JOB_ID >> .env
+      echo RELEASE_TAG=$DEPLOYMENT_ENV-$DEPLOYMENT_ID >> .env
+    - *send_deployment_from_env_curl
+  after_script:
+    - |
+      if [ "$CI_JOB_STATUS" = "success" ]; then
+        echo "# Release on $[[ inputs.target_cluster ]]/$[[ inputs.environment ]]\n\`\`\`bash\n$(cat .env)\n\`\`\`" > tag_description.txt
+        glab release create $RELEASE_TAG -r $CI_COMMIT_SHA -f tag_description.txt
+      else
+        echo '=================================================='
+        echo "      CAN'T TAG VERSION SOMETHING WENT WRONG      "
+        echo '       SCRIPT DID NOT RETURN OK CHECK LOGS!       '
+        echo '=================================================='
+      fi
+  environment:
+    name: $[[ inputs.target_cluster ]]/$[[ inputs.environment ]]
+  artifacts:
+    reports:
+      dotenv: .env
+send main deployment:
+  extends:
+    - send dev deployment
+    - .only_on_main
+  script:
+    - |
+      echo DEPLOYMENT_MA_BACKEND_C_IMAGE=$BACKEND_IMAGE:$BACKEND_CONTAINER_TAG >> .env
+      echo DEPLOYMENT_MA_BACKEND_C_TAG=$BACKEND_CONTAINER_TAG >> .env
+      echo DEPLOYMENT_MA_FRONTEND_C_IMAGE=$FRONTEND_IMAGE:$FRONTEND_CONTAINER_TAG >> .env
+      echo DEPLOYMENT_MA_FRONTEND_C_TAG=$FRONTEND_CONTAINER_TAG >> .env
+      echo DEPLOYMENT_MA_AGENT_GATEWAY_C_IMAGE=$AGENT_GATEWAY_IMAGE:$AGENT_GATEWAY_CONTAINER_TAG >> .env
+      echo DEPLOYMENT_MA_AGENT_GATEWAY_C_TAG=$AGENT_GATEWAY_CONTAINER_TAG >> .env
+      echo DEPLOYMENT_MA_EVALUATOR_C_IMAGE=$EVALUATOR_IMAGE:$EVALUATOR_CONTAINER_TAG >> .env
+      echo DEPLOYMENT_MA_EVALUATOR_C_TAG=$EVALUATOR_CONTAINER_TAG >> .env
+      echo DEPLOYMENT_ID=$CI_COMMIT_SHORT_SHA-$CI_JOB_ID >> .env
+      echo RELEASE_TAG=$DEPLOYMENT_ENV-$DEPLOYMENT_ID >> .env
+    - *send_deployment_from_env_curl

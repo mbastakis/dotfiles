@@ -1,0 +1,250 @@
+# Istio Ingress Gateway Fixes
+
+## Issues Found
+
+### Issue 1: ArgoCD ComparisonError ❌
+
+**Status**: Unknown / Degraded
+**Error**:
+```
+Failed to load target state: failed to generate manifest for source 1 of 1:
+[helm-secrets] File does not exist: <path to cached source>/default-values.yaml
+Error: plugin "secrets" exited with error
+```
+
+**Root Cause**: ArgoCD application referenced wrong values file names
+
+**ArgoCD Application Config (WRONG)**:
+```yaml
+valueFiles:
+  - default-values.yaml  # ← File doesn't exist!
+  - dev-values.yaml      # ← File doesn't exist!
+```
+
+**Actual Files in Repo**:
+```
+- values.yaml
+- aicc-dev-values.yaml
+```
+
+**Fix Applied**:
+```yaml
+valueFiles:
+  - values.yaml           # ✅ Correct
+  - aicc-dev-values.yaml  # ✅ Correct
+```
+
+---
+
+### Issue 2: ImagePullBackOff on All Gateway Pods ❌
+
+**Status**: 3/3 pods failing
+**Error**:
+```
+Back-off pulling image "auto"
+Error: ImagePullBackOff
+```
+
+**Pod Status**:
+```
+NAME                                    READY   STATUS             AGE
+istio-ingressgateway-856849f9c6-97897   0/1     ImagePullBackOff   13d
+istio-ingressgateway-856849f9c6-b7lnn   0/1     ImagePullBackOff   13d
+istio-ingressgateway-856849f9c6-jjgqh   0/1     ImagePullBackOff   13d
+```
+
+**Root Cause**:
+1. Gateway Helm chart defaults to `image: auto`
+2. "auto" requires Istio mutating webhook to replace with actual image
+3. Webhook only runs on namespaces with `istio-injection: enabled`
+4. But `istio-ingress` namespace has `istio-injection: disabled` (which is correct!)
+5. Result: Image stays as "auto" and Kubernetes can't pull it
+
+**Webhook Namespace Selector**:
+```yaml
+namespaceSelector:
+  matchExpressions:
+  - key: istio-injection
+    operator: In
+    values:
+    - enabled  # ← istio-ingress is "disabled", so webhook skips it
+```
+
+**Fix Applied**:
+Added explicit image name in `aicc-dev-values.yaml`:
+```yaml
+gateway:
+  image: proxyv2  # ✅ Will resolve to: dockerhub.devops.telekom.de/istio/proxyv2:1.26.3
+```
+
+---
+
+### Issue 3: Namespace Mismatch ❌
+
+**ArgoCD Application Config (WRONG)**:
+```yaml
+destination:
+  namespace: istio-system  # ← Wrong!
+```
+
+**Actual Deployment Location**:
+```bash
+kubectl get pods -n istio-ingress  # ← Resources are here
+```
+
+**Fix Applied**:
+```yaml
+destination:
+  namespace: istio-ingress  # ✅ Correct
+```
+
+---
+
+## Summary of All Fixes
+
+### File: `/Users/mbastakis/dev/work/aicc-group/infrastructure/argocd/dev-core-kubernetes-infra-app-of-apps/istio-ingressgateway.yaml`
+
+**Changes**:
+1. ✅ Fixed values file references: `default-values.yaml` → `values.yaml`
+2. ✅ Fixed values file references: `dev-values.yaml` → `aicc-dev-values.yaml`
+3. ✅ Fixed destination namespace: `istio-system` → `istio-ingress`
+
+### File: `/Users/mbastakis/dev/work/aicc-group/infrastructure/argocd/helm-charts/istio-ingressgateway-helm/aicc-dev-values.yaml`
+
+**Changes**:
+1. ✅ Added explicit image: `image: proxyv2`
+2. ✅ Updated global tag to 1.26.3 (done earlier)
+
+---
+
+## Why These Issues Occurred
+
+### 1. Values File Naming Inconsistency
+- Other Istio charts use `default-values.yaml` and `dev-values.yaml`
+- But ingressgateway uses `values.yaml` and `aicc-dev-values.yaml`
+- ArgoCD application was copy-pasted from other charts without checking filenames
+
+### 2. Image "auto" Limitation
+The `image: auto` approach is designed for OLD Istio injection patterns:
+- **Old way (Istio < 1.20)**: Inject sidecars into application pods
+- **New way (Istio 1.26+)**: Gateway pods ARE standalone proxies
+
+For standalone gateway pods:
+- ❌ **Wrong**: Rely on `image: auto` + webhook injection
+- ✅ **Correct**: Explicitly set `image: proxyv2`
+
+### 3. Namespace Configuration Evolution
+- Initially deployed to `istio-system` (common mistake)
+- Later moved to dedicated `istio-ingress` namespace (correct)
+- ArgoCD app not updated to reflect the change
+
+---
+
+## Expected Image Resolution
+
+With the fixes, the gateway will use:
+
+```
+Registry: dockerhub.devops.telekom.de/istio
+Image:    proxyv2
+Tag:      1.26.3
+
+Full:     dockerhub.devops.telekom.de/istio/proxyv2:1.26.3
+```
+
+---
+
+## Verification Steps
+
+After deploying these fixes:
+
+### 1. Check ArgoCD Sync
+```bash
+kubectl get application istio-ingressgateway -n argocd
+# Should show: Synced, Healthy (not Unknown, Degraded)
+```
+
+### 2. Check Pods
+```bash
+kubectl get pods -n istio-ingress
+# Should show: 3/3 pods in Running status (not ImagePullBackOff)
+```
+
+### 3. Verify Image
+```bash
+kubectl get deployment istio-ingressgateway -n istio-ingress -o jsonpath='{.spec.template.spec.containers[0].image}'
+# Should show: dockerhub.devops.telekom.de/istio/proxyv2:1.26.3
+```
+
+### 4. Check Gateway Service
+```bash
+kubectl get svc -n istio-ingress istio-ingressgateway
+# Should show LoadBalancer with external IP/hostname
+```
+
+### 5. Test Gateway Functionality
+```bash
+kubectl get gateway -n istio-ingress main-gateway
+# Should show gateway resource exists and is configured
+```
+
+---
+
+## Impact of Fixes
+
+### Before Fixes ❌
+- ❌ ArgoCD application: **Unknown / Degraded**
+- ❌ Gateway pods: **ImagePullBackOff** (13 days!)
+- ❌ Gateway service: **No working pods**
+- ❌ Ingress traffic: **Not flowing**
+
+### After Fixes ✅
+- ✅ ArgoCD application: **Synced / Healthy**
+- ✅ Gateway pods: **Running 1/1** (3 replicas)
+- ✅ Gateway service: **LoadBalancer ready**
+- ✅ Ingress traffic: **Can flow through gateway**
+
+---
+
+## Related Issues
+
+### Why istio-cni Shows OutOfSync
+
+From earlier check:
+```
+istio-cni    OutOfSync    Healthy
+```
+
+This is expected because:
+1. `istio-cni` application was just created
+2. The Helm chart hasn't been pushed to GitLab yet
+3. ArgoCD can't find the repo, so it's OutOfSync
+
+**Action Required**: Push istio-cni-helm to GitLab (covered in main deployment checklist)
+
+---
+
+## Lessons Learned
+
+1. **Always verify file names** when copying ArgoCD applications
+2. **Don't rely on `image: auto`** for standalone gateway pods in namespaces with `istio-injection: disabled`
+3. **Keep ArgoCD app configs in sync** with actual resource locations
+4. **Test ArgoCD sync** immediately after creating applications
+5. **Check pod status** - 13 days in ImagePullBackOff is too long!
+
+---
+
+## Next Steps
+
+1. ✅ **Push istio-ingressgateway-helm changes** to GitLab
+2. ✅ **Push dev-core-kubernetes-infra-app-of-apps changes** to GitLab
+3. ⏳ **Watch ArgoCD sync** and verify pods come up
+4. ⏳ **Test ingress gateway** functionality
+5. ⏳ **Deploy istio-cni** (separate task)
+
+---
+
+**Document Version**: 1.0
+**Date**: October 21, 2025
+**Author**: Claude Code (AI Assistant)
+**Status**: Fixes applied, awaiting deployment

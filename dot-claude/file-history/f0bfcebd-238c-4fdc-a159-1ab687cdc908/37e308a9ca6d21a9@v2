@@ -1,0 +1,441 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+This is a GitLab group repository containing multiple repositories for an **Agentic Process Automation (APA)** platform built on Kubernetes. The platform implements a system where Process Agents orchestrate Service Agents that wrap tools (APIs, browser UIs, desktop apps) to achieve business objectives.
+
+The repository is organized into two main layers:
+- **`fiber/`**: Application code (Magenta Apprentice - the main APA application)
+- **`infrastructure/`**: Infrastructure as code, ArgoCD GitOps configurations, and platform services
+
+## Common Development Commands
+
+### Magenta Apprentice Application (Main App)
+
+The primary application development happens in `fiber/magenta-apprentice/`. All commands use Task (go-task):
+
+```bash
+cd fiber/magenta-apprentice
+
+# Initial setup
+cp .env.example .env        # Configure environment
+task setup                  # Install all dependencies
+
+# Development (full stack with hot reload)
+task run                    # Starts all services via Docker Compose
+task run-db                 # Start only PostgreSQL
+
+# Backend
+task backend:run-server-locally      # Run backend locally (needs DB)
+task backend:test                    # Run unit tests
+task backend:test -- src/apa/services/test.py  # Run specific test file
+task backend:test:integration        # Run integration tests
+task backend:lint                    # Lint Python code (ruff, pyright, typos)
+task backend:format                  # Auto-fix formatting
+
+# Frontend
+task frontend:lint          # ESLint check
+task frontend:format        # Prettier formatting
+task frontend:generate-api-types  # Generate TypeScript types from OpenAPI
+
+# Agent Gateway (Go)
+task agent_gateway:lint     # Lint Go code
+task agent_gateway:format   # Format Go code
+
+# Database migrations
+task alembic:auto TITLE="add new table"  # Generate migration
+task alembic:run            # Apply migrations
+task alembic:downgrade REVISION="-1"     # Rollback
+```
+
+When services are running locally:
+- Backend API: http://localhost:8000
+- Frontend UI: http://localhost:3000
+- Agent Gateway: http://localhost:8080
+- Desktop Use MCP: http://localhost:8001
+
+### Infrastructure Management
+
+#### AWS Authentication
+```bash
+# Must be run before any AWS or Terraform operations
+source infrastructure/iac/aws/eks/scripts/assume-role.sh
+```
+
+#### Terraform (Infrastructure as Code)
+```bash
+cd infrastructure/iac/aws/eks
+
+# Initialize with GitLab backend
+export GITLAB_ACCESS_TOKEN=<token>
+export TF_STATE_NAME=dev
+terraform init \
+    -backend-config="address=https://gitlab.devops.telekom.de/api/v4/projects/377761/terraform/state/$TF_STATE_NAME" \
+    -backend-config="lock_address=https://gitlab.devops.telekom.de/api/v4/projects/377761/terraform/state/$TF_STATE_NAME/lock" \
+    -backend-config="unlock_address=https://gitlab.devops.telekom.de/api/v4/projects/377761/terraform/state/$TF_STATE_NAME/lock" \
+    -backend-config="username=<username>" \
+    -backend-config="password=$GITLAB_ACCESS_TOKEN" \
+    -backend-config="lock_method=POST" \
+    -backend-config="unlock_method=DELETE" \
+    -backend-config="retry_wait_min=5"
+
+# Plan and apply
+terraform fmt -recursive
+terraform validate
+terraform plan -var-file=terraform/environments/dev/variables.tfvars
+terraform apply -var-file=terraform/environments/dev/variables.tfvars
+```
+
+#### Kubernetes Operations
+```bash
+# List available contexts
+kubectl config get-contexts
+
+# Switch to dev cluster
+kubectl config use-context arn:aws:eks:eu-central-1:076811069858:cluster/eks-dev
+
+# Verify connection
+kubectl get nodes
+kubectl auth can-i get pods
+```
+
+#### ArgoCD (GitOps)
+```bash
+# Check application status
+kubectl get applications -n argocd
+
+# Manual sync
+argocd app sync <app-name>
+
+# View application details
+argocd app get <app-name>
+```
+
+#### Helm Charts
+```bash
+# Infrastructure services
+cd infrastructure/argocd/helm-charts/keycloak-helm
+helm dependency update
+helm lint .
+helm template keycloak . -f values.yaml
+
+# Application deployment
+cd fiber/argocd/helm-charts/magenta-apprentice-helm
+helm upgrade --install magenta-apprentice . \
+  -n agentic-process-automation \
+  -f aicc-values.yaml \
+  --wait --timeout 5m
+```
+
+#### Work Horse Image (CI/CD Container)
+```bash
+cd infrastructure/work-horse-image
+
+# Build images
+make build-terraform
+make build-k8s
+
+# Test images
+make test-terraform
+make test-k8s
+
+# Push to registry
+make push-terraform
+make push-k8s
+```
+
+## Architecture Overview
+
+### Application Architecture (Magenta Apprentice)
+
+The system implements an **Agentic Process Automation** platform with the following components:
+
+1. **Backend (Python/FastAPI)**
+   - Process Agents: Orchestrate end-to-end business processes
+   - Service Agents: Domain-specific agents that wrap individual tools
+   - Heavy use of `asyncio.create_task` for parallel execution
+   - Located in: `fiber/magenta-apprentice/backend/src/apa/`
+
+2. **Frontend (React 19/TypeScript)**
+   - TanStack Router for file-based routing
+   - Tailwind 4 + shadcn components
+   - Server-Sent Events (SSE) for streaming updates
+   - Located in: `fiber/magenta-apprentice/frontend/src/`
+
+3. **Agent Gateway (Go)**
+   - Kubernetes controller managing MCP server lifecycle
+   - REST API for MCP server orchestration
+   - OpenTelemetry integration for observability
+   - Located in: `fiber/magenta-apprentice/agent_gateway/`
+
+4. **MCP Servers**
+   - Desktop automation (`desktop-use/`)
+   - Browser automation (playwright-mcp)
+   - Execute actual tool calls
+
+#### Component Interaction Flow
+1. Process Agent Run starts an instance
+2. Process Agents create Service Agent threads via `asyncio.create_task`
+3. Service Agents request MCP servers through Agent Gateway
+4. Agent Gateway provisions MCP servers as Kubernetes pods
+5. MCP servers execute tool calls
+6. Results flow back through Service Agents to Process Agent
+
+### Infrastructure Architecture
+
+The infrastructure follows a **GitOps model** with:
+
+1. **AWS EKS**: Kubernetes clusters per environment (dev, prod, playground)
+2. **Terraform**: Infrastructure provisioning
+   - VPC, EKS, IAM, KMS in `infrastructure/iac/aws/`
+   - State stored in GitLab
+3. **ArgoCD**: GitOps continuous deployment
+   - Root app-of-apps pattern
+   - Infrastructure apps: `infrastructure/argocd/`
+   - Fiber apps: `fiber/argocd/`
+4. **Karpenter**: Node autoscaling
+5. **Shared Services**:
+   - Keycloak (authentication)
+   - Langfuse (LLM observability)
+   - Label Studio (ML data labeling)
+   - n8n (workflow automation)
+
+#### Environment Structure
+- **dev**: Development environment (cluster: eks-dev, region: eu-central-1)
+- **playground**: Experimental environment for POCs
+- **prod**: Production environment with stricter controls
+
+#### ArgoCD Structure
+```
+infrastructure/argocd/
+├── root-app-of-apps/
+│   ├── dev-root-app-of-apps/         # Dev environment entry point
+│   ├── prod-root-app-of-apps/        # Prod environment entry point
+│   └── playground-root-app-of-apps/  # Playground entry point
+├── dev-core-kubernetes-infra-app-of-apps/  # Shared services (Keycloak, etc.)
+└── helm-charts/                       # Infrastructure Helm charts
+
+fiber/argocd/
+├── dev-root-fiber-app-of-apps/       # Fiber apps for dev
+├── prod-root-fiber-app-of-apps/      # Fiber apps for prod
+└── helm-charts/
+    └── magenta-apprentice-helm/      # Main app Helm chart
+```
+
+## Important Development Patterns
+
+### Python Backend (Magenta Apprentice)
+
+- **Python 3.12+** with strict type hints
+- Built-in generics: `list`, `dict`, `type`
+- Union pipe syntax: `str | None`
+- Avoid `Any`, `# type: ignore`
+- Heavy `asyncio.create_task` + `asyncio.wait(...FIRST_COMPLETED)` patterns for parallel execution
+- Lint/format with **ruff**; type-check with **pyright**
+
+**Concurrency Pattern:**
+```python
+import asyncio
+
+# Parallel execution of Service Agents
+tasks = [asyncio.create_task(agent.run()) for agent in service_agents]
+done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
+```
+
+**Database Migrations:**
+- ALWAYS use Alembic for schema changes
+- Edit SQLModel classes in `backend/src/apa/datalayer/models/`
+- Generate migration: `task alembic:auto TITLE="descriptive title"`
+- Apply: `task alembic:run`
+
+**Environment Variables:**
+- Configure in `.env` file
+- `PGHOST=localhost` for local development
+- `PGHOST=db` for Docker Compose
+- Never commit `.env` files
+
+### Go Backend (Agent Gateway)
+
+The agent gateway follows strict conventions in `fiber/magenta-apprentice/agent_gateway/CONVENTIONS.md`:
+
+- **Go 1.24+** with standard library routing
+- Accept interfaces, return concrete types (prevents import cycles)
+- Use dependency injection for testability
+- No mocks in tests - prefer interface implementations
+- Structured logging with `log/slog`
+- Configuration via `github.com/spf13/viper`
+
+**Important Git Workflow:**
+- NEVER commit directly to main
+- Always run `task format lint` before committing
+- Use semantic commit messages (feat:, fix:, docs:, etc.)
+- Sign all commits with GPG
+
+**OpenAPI Specification:**
+- Keep `openapi.yaml` in sync with implementation
+- Update when adding/modifying endpoints
+- Update when changing request/response models
+- Verify with: `curl -H "Accept: application/json" http://localhost:8080/api/v1/openapi`
+
+### React Frontend
+
+- **React 19** + TanStack Router
+- **Tailwind 4** + shadcn components
+- Add new components: `npx shadcn@canary add <component>`
+- Form handling: `react-hook-form` + Zod
+- Streaming updates over SSE (`use-sse.ts`)
+- ESLint + Prettier enforced
+
+### Terraform
+
+- State stored in GitLab (see `TOOLS.md` for init commands)
+- Must assume IAM role before operations: `source infrastructure/iac/aws/eks/scripts/assume-role.sh`
+- Credentials expire after ~1 hour
+- Run `terraform plan` in merge requests
+- Manual approval required for `terraform apply`
+
+## Repository Structure
+
+```
+aicc-group/
+├── fiber/                                    # Application layer
+│   ├── magenta-apprentice/                  # Main application
+│   │   ├── backend/                         # Python/FastAPI backend
+│   │   │   └── src/apa/
+│   │   │       ├── agents/                  # Agent implementations
+│   │   │       ├── datalayer/               # SQLModel models
+│   │   │       ├── schemas/                 # Pydantic schemas
+│   │   │       ├── services/                # Business logic
+│   │   │       └── server/                  # FastAPI app
+│   │   ├── frontend/                        # React 19/TypeScript UI
+│   │   ├── agent_gateway/                   # Go Kubernetes controller
+│   │   ├── desktop-use/                     # Desktop automation MCP
+│   │   ├── evaluator/                       # Evaluation service
+│   │   ├── Taskfile.yaml                    # Task runner config
+│   │   └── docker-compose.yaml              # Local dev orchestration
+│   └── argocd/
+│       ├── dev-root-fiber-app-of-apps/      # ArgoCD app-of-apps
+│       └── helm-charts/
+│           └── magenta-apprentice-helm/     # Helm chart
+│
+├── infrastructure/                           # Infrastructure layer
+│   ├── iac/aws/                             # Terraform IaC
+│   │   ├── eks/                             # EKS cluster
+│   │   ├── iam/                             # IAM roles/policies
+│   │   └── k8s-core/                        # Core K8s components
+│   ├── argocd/                              # ArgoCD configurations
+│   │   ├── root-app-of-apps/                # Environment entry points
+│   │   ├── dev-core-kubernetes-infra-app-of-apps/  # Shared services
+│   │   └── helm-charts/                     # Infrastructure charts
+│   └── work-horse-image/                    # CI/CD Docker images
+│       └── Makefile                         # Build system
+│
+├── docs/                                     # AI-managed documentation
+├── qa/                                       # AI-managed QA files
+├── specs/                                    # AI-managed specifications
+├── AGENTS.md                                 # Comprehensive project guide
+├── INDEX.md                                  # Repository index
+└── TOOLS.md                                  # Tool access and commands
+```
+
+## Testing
+
+### Backend Tests
+```bash
+# All tests
+task backend:test
+
+# Specific file
+task backend:test -- src/apa/services/agent_execution_service_test.py
+
+# Integration tests (requires running services)
+task backend:test:integration
+
+# Tests requiring LLM API keys
+task backend:test:genai
+```
+
+Tests use:
+- **pytest** with async support (`@pytest.mark.anyio`)
+- Integration tests marked with `@pytest.mark.integration`
+- Tests live next to code in `*_test.py` files
+
+### Agent Gateway Tests
+```bash
+cd fiber/magenta-apprentice/agent_gateway
+task test
+```
+
+## Deployment Workflow
+
+Deployments are managed through **GitLab CI/CD** and **ArgoCD**:
+
+1. **Application Deployment** (Magenta Apprentice):
+   - Merge to main triggers Docker build in GitLab CI
+   - Images pushed to ECR
+   - ArgoCD automatically syncs new images to cluster
+
+2. **Infrastructure Changes**:
+   - Terraform changes require plan output in MR
+   - Manual approval required for apply
+   - ArgoCD syncs updated Kubernetes manifests
+
+## Troubleshooting
+
+### Database Connection Failed
+```bash
+# Ensure PostgreSQL is running
+docker compose up db -d
+# Check connection
+psql -h localhost -U postgres -d apa
+```
+
+### Port Conflicts
+```bash
+# Find process using port
+lsof -i :8000
+# Stop conflicting service or change port in docker-compose.yaml
+```
+
+### Kubernetes Authentication
+```bash
+# Update kubeconfig
+aws eks update-kubeconfig --name eks-dev --region eu-central-1
+# Verify access
+kubectl auth can-i get pods
+```
+
+### ArgoCD Sync Issues
+```bash
+# Check application status
+argocd app get <app-name>
+# Force sync
+argocd app sync <app-name> --force
+# Check events
+kubectl get events -n <namespace> --sort-by='.lastTimestamp'
+```
+
+## Key Files and Documentation
+
+- **Main Application Guide**: `fiber/magenta-apprentice/AGENTS.md` (comprehensive app documentation)
+- **Agent Gateway**: `fiber/magenta-apprentice/agent_gateway/CLAUDE.md` (Go conventions and Git workflow)
+- **Agent Gateway API**: `fiber/magenta-apprentice/agent_gateway/README.md` (API endpoints)
+- **Helm Charts**: `fiber/magenta-apprentice/charts/CLAUDE.md` (schema generation)
+- **Infrastructure**: `infrastructure/iac/aws/eks/README.md` (EKS setup)
+- **CI/CD Images**: `infrastructure/work-horse-image/README.md` (Docker images)
+- **Repository Index**: `INDEX.md` (structure overview)
+- **Tool Access**: `TOOLS.md` (AWS CLI, kubectl, Terraform state)
+
+## Important Notes
+
+- **Environment Management**: Currently focused on dev environment (eks-dev cluster)
+- **GitOps Model**: All deployments through ArgoCD - avoid manual kubectl applies
+- **State Management**: Terraform state stored in GitLab (project-specific)
+- **AWS Access**: Always assume IAM role before Terraform/AWS operations
+- **Main Application**: Magenta Apprentice in `fiber/magenta-apprentice/` is the primary codebase
+- **Documentation Folders**: `docs/`, `qa/`, `specs/` are AI-managed - add content freely
+- **Secrets**: Never commit `.env` files or credentials
+- **Database**: Always use Alembic for schema changes
+- **Agent Gateway**: Follow strict Git workflow (no direct commits to main, signed commits)

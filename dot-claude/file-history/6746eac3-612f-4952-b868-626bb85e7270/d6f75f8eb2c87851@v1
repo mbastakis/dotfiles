@@ -1,0 +1,44 @@
+# ---- Base Stage ----
+# Use node:22-alpine as the base image
+FROM node:22-alpine AS base
+WORKDIR /app
+
+# Copy package.json and package-lock.json (or npm-shrinkwrap.json, yarn.lock)
+# Ensure there's a .dockerignore in the frontend directory that excludes node_modules
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# ---- Development Stage ----
+FROM base AS development
+WORKDIR /app
+
+# Copy the rest of the application code
+# This assumes .dockerignore is properly set up in the context (./frontend)
+COPY . .
+
+# Expose port 3000 for Vite dev server
+EXPOSE 3000
+
+# Command to run the development server on port 3000 and accessible externally
+CMD ["npm", "run", "dev", "--", "--host", "--port=3000"]
+
+# ---- Production Build Stage ----
+FROM base AS builder
+WORKDIR /app
+
+# Copy the rest of the application code
+COPY . .
+
+# Build the application
+# The 'build' script is "tsc -b && vite build" from package.json
+RUN npm run build
+
+# ---- Production Stage (for asset extraction) ----
+# This stage creates a minimal image with only the build artifacts.
+FROM alpine:latest AS production
+WORKDIR /app/dist
+
+# Copy built assets from the builder stage
+COPY --from=builder /app/dist .

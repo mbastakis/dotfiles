@@ -1,0 +1,35 @@
+# Default values for istio-ingressgateway
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Override with environment-specific values files:
+# - aicc-dev-values.yaml (dev environment)
+# - aicc-prod-values.yaml (prod environment)
+
+# Image patcher configuration
+imagePatcher:
+  kubectlImage: dockerhub.devops.telekom.de/bitnami/kubectl:latest
+
+gateway:
+  name: istio-ingressgateway
+  labels:
+    app: istio-ingressgateway
+    istio: ingressgateway
+
+# Gateway CRD configuration
+istioGateway:
+  enabled: true
+  name: main-gateway
+  hosts:
+    - "*.dev.aicc.aws.telekom.de"
+    - "*.internal.dev.aicc.aws.telekom.de"
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*.dev.aicc.aws.telekom.de"
+        - "*.internal.dev.aicc.aws.telekom.de"
+      tls:
+        httpsRedirect: true

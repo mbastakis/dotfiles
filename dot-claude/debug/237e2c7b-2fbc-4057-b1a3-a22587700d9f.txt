@@ -1,0 +1,709 @@
+[DEBUG] Watching for changes in setting files /Users/mbastakis/.claude/settings.json...
+[DEBUG] Applying permission update: Adding 28 allow rule(s) to destination 'userSettings': ["Write","MultiEdit","Edit","Bash","Bash(brew search:*)","Bash(npm run compile:*)","Bash(find:*)","Bash(grep:*)","Bash(mkdir:*)","Bash(uv:*)","Bash(mv:*)","Bash(npm:*)","Bash(ls:*)","Bash(cp:*)","Bash(chmod:*)","Bash(touch:*)","WebFetch(domain:code.visualstudio.com)","WebFetch(domain:opencode.ai)","WebFetch(domain:github.com)","WebFetch(domain:docs.anthropic.com)","WebFetch(domain:docs.anthropic.com)","WebFetch(domain:ghostty.org)","mcp__socat-docker__search_code","mcp__socat-docker__list_directory","mcp__snap-happy__ListWindows","mcp__snap-happy__TakeScreenshot","mcp__context7__resolve-library-id","mcp__context7__get-library-docs"]
+[DEBUG] Writing through symlink: /Users/mbastakis/.claude.json -> /Users/mbastakis/dev/dotfiles/dot-claude.json
+[DEBUG] Writing to temp file: /Users/mbastakis/dev/dotfiles/dot-claude.json.tmp.85475.1760312385563
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 75037 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/dev/dotfiles/dot-claude.json.tmp.85475.1760312385563 to /Users/mbastakis/dev/dotfiles/dot-claude.json
+[DEBUG] File /Users/mbastakis/dev/dotfiles/dot-claude.json written atomically
+[DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+[DEBUG] Creating shell snapshot for zsh (/bin/zsh)
+[DEBUG] Looking for shell config file: /Users/mbastakis/.zshrc
+[DEBUG] Snapshots directory: /Users/mbastakis/.claude/shell-snapshots
+[DEBUG] Creating snapshot at: /Users/mbastakis/.claude/shell-snapshots/snapshot-zsh-1760312385660-2e8t7i.sh
+[DEBUG] Shell binary exists: true
+[DEBUG] Execution timeout: 10000ms
+[DEBUG] Writing to temp file: /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json.tmp.85475.1760312385673
+[DEBUG] Temp file written successfully, size: 2 bytes
+[DEBUG] Renaming /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json.tmp.85475.1760312385673 to /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json
+[DEBUG] File /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json written atomically
+[DEBUG] Writing through symlink: /Users/mbastakis/.claude.json -> /Users/mbastakis/dev/dotfiles/dot-claude.json
+[DEBUG] Writing to temp file: /Users/mbastakis/dev/dotfiles/dot-claude.json.tmp.85475.1760312385694
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 74606 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/dev/dotfiles/dot-claude.json.tmp.85475.1760312385694 to /Users/mbastakis/dev/dotfiles/dot-claude.json
+[DEBUG] File /Users/mbastakis/dev/dotfiles/dot-claude.json written atomically
+[DEBUG] Registered 0 hooks from 0 plugins
+[DEBUG] Total plugin agents loaded: 0
+[DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=/opt/homebrew/lib/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/arm64-darwin/rg)
+[DEBUG] Loading skills from directories: managed=/Library/Application Support/ClaudeCode/.claude/skills, user=/Users/mbastakis/.claude/skills, project=/Users/mbastakis/dev/work/aicc-group/.claude/skills
+[DEBUG] Loaded 0 skills total (managed: 0, user: 0, project: 0)
+[DEBUG] Total plugin commands loaded: 0
+[DEBUG] Total plugin skills loaded: 0
+[DEBUG] MCP server "snap-happy": Starting connection with timeout of 30000ms
+[DEBUG] MCP server "context7": Starting connection with timeout of 30000ms
+[DEBUG] MCP server "fetch": Starting connection with timeout of 30000ms
+[DEBUG] Writing through symlink: /Users/mbastakis/.claude.json -> /Users/mbastakis/dev/dotfiles/dot-claude.json
+[DEBUG] Writing to temp file: /Users/mbastakis/dev/dotfiles/dot-claude.json.tmp.85475.1760312385808
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 74606 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/dev/dotfiles/dot-claude.json.tmp.85475.1760312385808 to /Users/mbastakis/dev/dotfiles/dot-claude.json
+[DEBUG] File /Users/mbastakis/dev/dotfiles/dot-claude.json written atomically
+[DEBUG] Executing hooks for SessionStart:startup
+[DEBUG] Getting matching hook commands for SessionStart with query: startup
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing through symlink: /Users/mbastakis/.claude.json -> /Users/mbastakis/dev/dotfiles/dot-claude.json
+[DEBUG] Writing to temp file: /Users/mbastakis/dev/dotfiles/dot-claude.json.tmp.85475.1760312385854
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 74498 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/dev/dotfiles/dot-claude.json.tmp.85475.1760312385854 to /Users/mbastakis/dev/dotfiles/dot-claude.json
+[DEBUG] File /Users/mbastakis/dev/dotfiles/dot-claude.json written atomically
+[DEBUG] Writing through symlink: /Users/mbastakis/.claude.json -> /Users/mbastakis/dev/dotfiles/dot-claude.json
+[DEBUG] Writing to temp file: /Users/mbastakis/dev/dotfiles/dot-claude.json.tmp.85475.1760312385875
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 74498 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/dev/dotfiles/dot-claude.json.tmp.85475.1760312385875 to /Users/mbastakis/dev/dotfiles/dot-claude.json
+[DEBUG] File /Users/mbastakis/dev/dotfiles/dot-claude.json written atomically
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] performStartupChecks called, ENABLE_PLUGINS=true
+[DEBUG] Trust not accepted for current directory - skipping plugin installations
+[DEBUG] Writing through symlink: /Users/mbastakis/.claude.json -> /Users/mbastakis/dev/dotfiles/dot-claude.json
+[DEBUG] Writing to temp file: /Users/mbastakis/dev/dotfiles/dot-claude.json.tmp.85475.1760312385917
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 74606 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/dev/dotfiles/dot-claude.json.tmp.85475.1760312385917 to /Users/mbastakis/dev/dotfiles/dot-claude.json
+[DEBUG] File /Users/mbastakis/dev/dotfiles/dot-claude.json written atomically
+[DEBUG] Loaded plugins - Enabled: 0, Disabled: 0, Commands: 0, Agents: 0, Errors: 0
+[DEBUG] Shell snapshot created successfully (143046 bytes)
+[ERROR] MCP server "context7" Server stderr: Context7 Documentation MCP Server running on stdio
+[DEBUG] MCP server "context7": Successfully connected to stdio server in 2700ms
+[DEBUG] MCP server "context7": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"Context7","version":"1.0.21"}}
+[ERROR] MCP server "snap-happy" Server stderr: Snap Happy MCP server running on stdio
+[DEBUG] MCP server "snap-happy": Successfully connected to stdio server in 3117ms
+[DEBUG] MCP server "snap-happy": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"snap-happy","version":"1.0.0"}}
+[DEBUG] MCP server "fetch": Successfully connected to stdio server in 5069ms
+[DEBUG] MCP server "fetch": Connection established with capabilities: {"hasTools":true,"hasPrompts":true,"hasResources":false,"serverVersion":{"name":"mcp-fetch","version":"1.17.0"}}
+[DEBUG] MCP server "filesystem": Starting connection with timeout of 30000ms
+[ERROR] MCP server "filesystem" Server stderr: Secure MCP Filesystem Server running on stdio
+[DEBUG] MCP server "filesystem": Successfully connected to stdio server in 1263ms
+[DEBUG] MCP server "filesystem": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"secure-filesystem-server","version":"0.2.0"}}
+[DEBUG] MCP server "filesystem": Received ListRoots request from server
+[ERROR] MCP server "filesystem" Server stderr: Updated allowed directories from MCP roots: 1 valid directories
+[DEBUG] Writing to temp file: /Users/mbastakis/.claude/settings.json.tmp.85475.1760312571373
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 979 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/.claude/settings.json.tmp.85475.1760312571373 to /Users/mbastakis/.claude/settings.json
+[DEBUG] File /Users/mbastakis/.claude/settings.json written atomically
+[DEBUG] Writing to temp file: /Users/mbastakis/.claude/settings.json.tmp.85475.1760312572423
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 978 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/.claude/settings.json.tmp.85475.1760312572423 to /Users/mbastakis/.claude/settings.json
+[DEBUG] File /Users/mbastakis/.claude/settings.json written atomically
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Writing through symlink: /Users/mbastakis/.claude.json -> /Users/mbastakis/dev/dotfiles/dot-claude.json
+[DEBUG] Writing to temp file: /Users/mbastakis/dev/dotfiles/dot-claude.json.tmp.85475.1760312671439
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 74606 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/dev/dotfiles/dot-claude.json.tmp.85475.1760312671439 to /Users/mbastakis/dev/dotfiles/dot-claude.json
+[DEBUG] File /Users/mbastakis/dev/dotfiles/dot-claude.json written atomically
+[DEBUG] Executing hooks for UserPromptSubmit
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] FileHistory: Added snapshot for 49e075d2-5861-4c79-bf32-e9396ad25ae7, tracking 0 files
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Executing hooks for PreToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json.tmp.85475.1760312688269
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 888 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json.tmp.85475.1760312688269 to /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json
+[DEBUG] File /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json written atomically
+[DEBUG] Executing hooks for PostToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Executing hooks for PreToolUse:Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] executePreToolHooks called for tool: Glob
+[DEBUG] Executing hooks for PreToolUse:Glob
+[DEBUG] Getting matching hook commands for PreToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Bash tool invoked with command: ls -la /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/
+[DEBUG] Bash tool description: List magenta-apprentice directory structure
+[DEBUG] Executing hooks for PostToolUse:Bash
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Executing hooks for PostToolUse:Glob
+[DEBUG] Getting matching hook commands for PostToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Executing hooks for PreToolUse:Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Executing hooks for PreToolUse:Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Executing hooks for PreToolUse:Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Executing hooks for PreToolUse:Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Executing hooks for PostToolUse:Read
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Bash tool invoked with command: ls -la /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/agent_gateway/ | head -20
+[DEBUG] Bash tool description: List agent_gateway directory contents
+[DEBUG] Bash tool invoked with command: ls -la /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/evaluator/ | head -20
+[DEBUG] Bash tool description: List evaluator directory contents
+[DEBUG] Executing hooks for PostToolUse:Read
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Executing hooks for PostToolUse:Bash
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Executing hooks for PostToolUse:Bash
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Executing hooks for PreToolUse:Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Executing hooks for PreToolUse:Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Executing hooks for PostToolUse:Read
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Executing hooks for PostToolUse:Read
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Executing hooks for PreToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json.tmp.85475.1760312717821
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 890 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json.tmp.85475.1760312717821 to /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json
+[DEBUG] File /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json written atomically
+[DEBUG] Executing hooks for PostToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Executing hooks for PreToolUse:Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] FileHistory: Tracked file modification for /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml
+[DEBUG] Writing to temp file: /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml.tmp.85475.1760312727280
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 7203 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml.tmp.85475.1760312727280 to /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml
+[DEBUG] File /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml written atomically
+[DEBUG] Executing hooks for PostToolUse:Edit
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Executing hooks for PreToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json.tmp.85475.1760312741724
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 1043 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json.tmp.85475.1760312741724 to /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json
+[DEBUG] File /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json written atomically
+[DEBUG] Executing hooks for PostToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Executing hooks for PreToolUse:Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml.tmp.85475.1760312741847
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 7791 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml.tmp.85475.1760312741847 to /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml
+[DEBUG] File /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml written atomically
+[DEBUG] Executing hooks for PostToolUse:Edit
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Executing hooks for PreToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json.tmp.85475.1760312753064
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 1045 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json.tmp.85475.1760312753064 to /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json
+[DEBUG] File /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json written atomically
+[DEBUG] Executing hooks for PostToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Executing hooks for PreToolUse:Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml.tmp.85475.1760312753149
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 7907 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml.tmp.85475.1760312753149 to /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml
+[DEBUG] File /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml written atomically
+[DEBUG] Executing hooks for PostToolUse:Edit
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Executing hooks for PreToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json.tmp.85475.1760312775042
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 1047 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json.tmp.85475.1760312775042 to /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json
+[DEBUG] File /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json written atomically
+[DEBUG] Executing hooks for PostToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Executing hooks for PreToolUse:Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml.tmp.85475.1760312775097
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 8565 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml.tmp.85475.1760312775097 to /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml
+[DEBUG] File /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml written atomically
+[DEBUG] Executing hooks for PostToolUse:Edit
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Executing hooks for PreToolUse:Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml.tmp.85475.1760312784744
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 8713 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml.tmp.85475.1760312784744 to /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml
+[DEBUG] File /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml written atomically
+[DEBUG] Executing hooks for PostToolUse:Edit
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Executing hooks for PreToolUse:Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml.tmp.85475.1760312807416
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 9480 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml.tmp.85475.1760312807416 to /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml
+[DEBUG] File /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml written atomically
+[DEBUG] Executing hooks for PostToolUse:Edit
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Executing hooks for PreToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json.tmp.85475.1760312833015
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 1049 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json.tmp.85475.1760312833015 to /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json
+[DEBUG] File /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json written atomically
+[DEBUG] Executing hooks for PostToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Executing hooks for PreToolUse:Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml.tmp.85475.1760312833112
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 11306 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml.tmp.85475.1760312833112 to /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml
+[DEBUG] File /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice/.gitlab-ci.yml written atomically
+[DEBUG] Executing hooks for PostToolUse:Edit
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Executing hooks for PreToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json.tmp.85475.1760312844264
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 2 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json.tmp.85475.1760312844264 to /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json
+[DEBUG] File /Users/mbastakis/.claude/todos/237e2c7b-2fbc-4057-b1a3-a22587700d9f-agent-237e2c7b-2fbc-4057-b1a3-a22587700d9f.json written atomically
+[DEBUG] Executing hooks for PostToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Executing hooks for Stop
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing through symlink: /Users/mbastakis/.claude.json -> /Users/mbastakis/dev/dotfiles/dot-claude.json
+[DEBUG] Writing to temp file: /Users/mbastakis/dev/dotfiles/dot-claude.json.tmp.85475.1760312874406
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 74899 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/dev/dotfiles/dot-claude.json.tmp.85475.1760312874406 to /Users/mbastakis/dev/dotfiles/dot-claude.json
+[DEBUG] File /Users/mbastakis/dev/dotfiles/dot-claude.json written atomically
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Executing hooks for UserPromptSubmit
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] FileHistory: Making snapshot for message f8d86450-08ee-4829-bb18-d6857a511ed6
+[DEBUG] FileHistory: Added snapshot for f8d86450-08ee-4829-bb18-d6857a511ed6, tracking 1 files
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Executing hooks for PreToolUse:Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Executing hooks for PreToolUse:Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Bash tool invoked with command: cd /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice && git branch --show-current
+[DEBUG] Bash tool description: Check current git branch
+[DEBUG] Bash tool invoked with command: cd /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice && git status
+[DEBUG] Bash tool description: Show git working tree status
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Executing hooks for PreToolUse:Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Bash tool invoked with command: git -C /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice branch --show-current
+[DEBUG] Bash tool description: Check current git branch
+[DEBUG] Executing hooks for PostToolUse:Bash
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Executing hooks for PreToolUse:Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Bash tool invoked with command: git -C /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice status
+[DEBUG] Bash tool description: Show git working tree status
+[DEBUG] Executing hooks for PostToolUse:Bash
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Executing hooks for PreToolUse:Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Bash tool invoked with command: git -C /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice diff .gitlab-ci.yml
+[DEBUG] Bash tool description: Show diff of gitlab-ci.yml changes
+[DEBUG] Executing hooks for PostToolUse:Bash
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Executing hooks for PreToolUse:Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Bash tool invoked with command: git -C /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice add .gitlab-ci.yml && git -C /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice commit -m "$(cat <<'EOF'
+feat: add CI/CD jobs for agent_gateway and evaluator
+
+- Add AGENT_GATEWAY_DIR and EVALUATOR_DIR variables
+- Add .go_job template for Go-based projects
+- Add go_lint job to test stage for agent_gateway
+- Add evaluator and agent_gateway containerize jobs
+- Add evaluator-release and agent-gateway-release jobs
+- Extract versions from pyproject.toml (evaluator) and git tags (agent_gateway)
+- Apply dev suffix to versions for non-main branches
+- Tag releases with component prefix (evaluator-, agent-gateway-)
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+EOF
+)"
+[DEBUG] Bash tool description: Stage and commit .gitlab-ci.yml changes
+[DEBUG] Executing hooks for PostToolUse:Bash
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Executing hooks for PreToolUse:Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Bash tool invoked with command: git -C /Users/mbastakis/dev/work/aicc-group/fiber/magenta-apprentice push --force
+[DEBUG] Bash tool description: Force push to remote cicd-main branch
+[DEBUG] Bash tool timeout: 30000ms
+[DEBUG] Executing hooks for PostToolUse:Bash
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Executing hooks for Stop
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing through symlink: /Users/mbastakis/.claude.json -> /Users/mbastakis/dev/dotfiles/dot-claude.json
+[DEBUG] Writing to temp file: /Users/mbastakis/dev/dotfiles/dot-claude.json.tmp.85475.1760313009235
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 74997 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/dev/dotfiles/dot-claude.json.tmp.85475.1760313009235 to /Users/mbastakis/dev/dotfiles/dot-claude.json
+[DEBUG] File /Users/mbastakis/dev/dotfiles/dot-claude.json written atomically
+[DEBUG] Getting matching hook commands for SessionEnd with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Cleaned up session snapshot: /Users/mbastakis/.claude/shell-snapshots/snapshot-zsh-1760312385660-2e8t7i.sh
+[DEBUG] MCP server "context7": Sending SIGINT to MCP server process
+[DEBUG] MCP server "snap-happy": Sending SIGINT to MCP server process
+[DEBUG] MCP server "fetch": Sending SIGINT to MCP server process
+[DEBUG] MCP server "filesystem": Sending SIGINT to MCP server process
+[DEBUG] MCP server "context7": MCP server process exited cleanly
+[DEBUG] MCP server "snap-happy": MCP server process exited cleanly
+[DEBUG] MCP server "filesystem": MCP server process exited cleanly
+[DEBUG] MCP server "fetch": SIGINT failed, sending SIGTERM to MCP server process
+[DEBUG] MCP server "fetch": MCP server process exited cleanly
+[DEBUG] Writing through symlink: /Users/mbastakis/.claude.json -> /Users/mbastakis/dev/dotfiles/dot-claude.json
+[DEBUG] Writing to temp file: /Users/mbastakis/dev/dotfiles/dot-claude.json.tmp.85475.1760313404586
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 75413 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/mbastakis/dev/dotfiles/dot-claude.json.tmp.85475.1760313404586 to /Users/mbastakis/dev/dotfiles/dot-claude.json
+[DEBUG] File /Users/mbastakis/dev/dotfiles/dot-claude.json written atomically

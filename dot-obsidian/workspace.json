@@ -18,15 +18,46 @@
                 "viewState": {
                   "x": -760,
                   "y": -168,
-                  "zoom": -0.16998114726710953
+                  "zoom": 0
                 }
               },
               "pinned": true,
               "icon": "lucide-layout-dashboard",
               "title": "Home"
             }
+          },
+          {
+            "id": "afee3f4a29968788",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "tools.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "tools"
+            }
+          },
+          {
+            "id": "f130348a10a12b77",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "todo.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "todo"
+            }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -136,7 +167,7 @@
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       },
       {
         "id": "014043c44890df20",
@@ -157,7 +188,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 672,
+    "width": 671,
     "collapsed": true
   },
   "left-ribbon": {
@@ -212,10 +243,25 @@
       "obsidian-book-search-plugin:Create new book note": true
     }
   },
-  "active": "e7a7b303c61786dc",
+  "active": "f130348a10a12b77",
   "lastOpenFiles": [
+    "tools.md",
     "Dashboards/Home.canvas",
+    "todo.md",
+    "Resources/Career/Templates/cover-letter-prompt.md",
+    "Resources/Career/Templates/cover-letter-prompt-template.md",
+    "Archives/Career/cover-letters/cover-letter-rivero.md",
+    "Extras/Images/Cygnus.png",
+    "Archives/Career/mike-cover-letter.md",
+    "Resources/Exandria/Cygnus.md",
+    "homeserver.md",
+    "Extras/Excalidraw/homeserver.md",
+    "Resources/Homeserver",
+    "Extras/Excalidraw/Drawing 2025-10-15 22.01.33.excalidraw.md",
     "Extras/Excalidraw/Magenta-Apprentice-Firewall-Opening-Diagram.md",
+    "platform-engineer-psa-proposal.md",
+    "Pokemon Unbound.md",
+    "Extras/Images/Pokemon Unbound-1760427521033.webp",
     "Resources/Weblist/8 Key LLM Development Skills for AI Engineers.md",
     "Resources/Weblist/7 Best Practices for API Design 🔥.md",
     "Projects/Tasks/Obsidian Tasks/create mcp for obsidian, converse with AI about the design.md",
@@ -229,7 +275,6 @@
     "Resources/Career/Interview-Other-Country/Resources/Countries/work-visa-research-tier1.md",
     "Resources/Career/Interview-Other-Country/Resources/chatgpt-research-work-visa.md",
     "Projects/Tasks/Opencode Tasks/setup crawl4ai .md",
-    "platform-engineer-psa-proposal.md",
     "Resources/Career/Interview-Other-Country/Resources/comet-research-work-visa.md",
     "Resources/Career/Interview-Other-Country/Resources/comet-research-work-visa",
     "Resources/Career/Interview-Other-Country/specs/combine-research.md",
@@ -237,33 +282,20 @@
     "Hi [Leadership / Security ",
     "Hi [Leadership ",
     "argocd-cm.yaml",
-    "Resources/AI/llm-compliance.md",
-    "Archives/Projects/Other/tasks-plugin-review-1.md",
-    "Projects/default.md",
-    "Projects/spiritbind.md",
-    "Extras/Excalidraw/Drawing 2025-09-30 15.02.56.excalidraw.md",
     "Dashboards/Fitness.canvas",
-    "Resources/Career/Interview-Prep/interview-cheatsheet.md",
-    "Remove Duplicates Sorted Array, Remove Element.md",
-    "Monotonic Array.md",
-    "Two Sum.md",
-    "Resources/Career/Interview-Prep/devops-specific-interview.md",
     "Extras/Images/Pasted Image 20250926123516_998.png",
     "Extras/Excalidraw/Libraries/my-notes-backup-20250920-133110.excalidrawlib",
     "Extras/Excalidraw/Libraries/Unconfirmed 645193.crdownload",
-    "Extras/Excalidraw/Libraries",
     "Dashboards/Discovery.canvas",
     "Extras/Images/4001x3501-cartoon-tomato-clipart-freedesignfile.png",
     "Extras/Images/19852122_6195005.jpg",
     "Dashboards/Global Tasks.canvas",
     "Dashboards/PARA.canvas",
-    "Extras/Images/Cygnus.png",
     "Extras/Images/corfu trip - chara + mike-1756481741800.webp",
     "Extras/Images/corfu trip - chara + mike-1756481721378.webp",
     "Extras/Images/character_cheatsheet.png",
     "Extras/Images/Beginners Guide-1756543416668.webp",
     "Extras/Images/corfu trip - chara + mike-1756481850047.webp",
-    "Extras/Images/corfu trip - chara + mike-1756481779272.webp",
     "Dashboards/Dashboards.canvas"
   ]
 }

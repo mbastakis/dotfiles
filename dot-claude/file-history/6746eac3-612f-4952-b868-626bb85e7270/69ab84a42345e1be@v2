@@ -1,0 +1,101 @@
+{{- if .Values.agentGateway.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "apa.agentGateway.fullname" . }}
+  labels:
+    {{- include "apa.agentGateway.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.agentGateway.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "apa.agentGateway.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/agent-gateway/configmap.yaml") . | sha256sum }}
+        {{- with .Values.agentGateway.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "apa.agentGateway.selectorLabels" . | nindent 8 }}
+        {{- with .Values.agentGateway.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "apa.agentGateway.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.agentGateway.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.agentGateway.securityContext | nindent 12 }}
+          image: "{{ .Values.agentGateway.image.repository }}:{{ .Values.agentGateway.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.agentGateway.image.pullPolicy }}
+          {{- with .Values.agentGateway.args }}
+          args:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.agentGateway.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.agentGateway.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.agentGateway.resources | nindent 12 }}
+          env:
+            - name: AGENT_GATEWAY_CONFIG_FILE
+              value: "/config/config.yaml"
+            # OpenTelemetry configuration
+            - name: OTEL_SERVICE_NAME
+              value: "agent-gateway"
+            - name: OTEL_METRICS_EXPORTER
+              value: {{ .Values.agentGateway.observability.metricsExporter | quote }}
+            - name: OTEL_TRACES_EXPORTER
+              value: {{ .Values.agentGateway.observability.tracesExporter | quote }}
+            {{- if and .Values.agentGateway.observability.otlpEndpoint (or (eq .Values.agentGateway.observability.tracesExporter "otlp") (eq .Values.agentGateway.observability.metricsExporter "otlp")) }}
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: {{ .Values.agentGateway.observability.otlpEndpoint | quote }}
+            {{- end }}
+            {{- range $key, $value := .Values.agentGateway.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          {{- with .Values.agentGateway.envFrom }}
+          envFrom:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+            {{- with .Values.agentGateway.volumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "apa.agentGateway.fullname" . }}
+        {{- with .Values.agentGateway.volumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.agentGateway.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.agentGateway.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.agentGateway.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

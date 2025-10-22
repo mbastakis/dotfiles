@@ -1,0 +1,36 @@
+import { useFormContext } from "react-hook-form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  FormDescription,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import type { ServiceAgentCreateSchema } from "@/lib/form-schemas/service-agent-create";
+
+export function RemoteMcpToolConfigForm() {
+  const form = useFormContext<ServiceAgentCreateSchema>();
+
+  return (
+    <div className="space-y-8">
+      <FormField
+        control={form.control}
+        name="tool_config.mcp_url"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>MCP URL</FormLabel>
+            <FormDescription>
+              The URL of the remote MCP server to connect to.
+            </FormDescription>
+            <FormControl>
+              <Input placeholder="http://localhost:8931/sse" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    </div>
+  );
+}

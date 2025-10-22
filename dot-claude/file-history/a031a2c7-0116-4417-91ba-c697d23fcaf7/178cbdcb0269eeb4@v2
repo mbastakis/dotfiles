@@ -1,0 +1,31 @@
+# Istio CNI Helm Chart
+
+This Helm chart deploys the Istio CNI plugin to the Kubernetes cluster. The CNI plugin is responsible for setting up network configuration for pods in the service mesh, enabling transparent traffic interception without requiring elevated privileges for application containers.
+
+## Overview
+
+The Istio CNI plugin:
+- Replaces the init container approach for traffic interception
+- Improves security by removing the need for `NET_ADMIN` and `NET_RAW` capabilities in application pods
+- Reduces pod startup time
+- Enables service mesh functionality for workloads with restricted pod security policies
+
+## Prerequisites
+
+- Kubernetes cluster (1.24+)
+- Istio Base (CRDs) must be installed first
+- Access to container registry: `dockerhub.devops.telekom.de`
+
+## Installation
+
+This chart is deployed via ArgoCD in the AICC infrastructure.
+
+## Configuration
+
+The chart includes two value files:
+- `default-values.yaml`: Base configuration applicable to all environments
+- `dev-values.yaml`: Development environment specific overrides
+
+## Dependencies
+
+This chart depends on the official Istio CNI chart (version 1.26.3) from `https://istio-release.storage.googleapis.com/charts`

@@ -1,0 +1,40 @@
+# Development environment specific values
+# Inherits from values.yaml and overrides as needed
+
+namespaces:
+  # Application namespaces - enable injection for development
+  injectionEnabled:
+    - name: fiber-magenta-apprentice
+      labels:
+        istio-injection: disabled
+        environment: development
+      annotations:
+        purpose: "Multi-service application requiring mesh features"
+        deployment.environment: "dev"
+
+  # Infrastructure/Database namespaces - disable injection
+  injectionDisabled:
+    - name: keycloak
+      labels:
+        istio-injection: disabled
+        environment: development
+      annotations:
+        purpose: "PostgreSQL database compatibility exception"
+        deployment.environment: "dev"
+
+  # Infrastructure namespaces
+  infrastructure:
+    - name: istio-ingress
+      labels:
+        name: istio-ingress
+        environment: development
+        istio-injection: disabled # Gateway pods ARE the proxy - no sidecar needed
+      annotations:
+        purpose: "Istio gateway components namespace"
+        deployment.environment: "dev"
+        note: "Gateway pods have specialized proxy configuration, not sidecars"
+
+# Development specific settings
+global:
+  createNamespaces: true
+  manageExistingNamespaces: true

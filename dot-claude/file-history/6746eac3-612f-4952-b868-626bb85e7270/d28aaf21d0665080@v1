@@ -1,0 +1,248 @@
+package kubernetes
+
+import (
+	"fmt"
+	"sort"
+	"time"
+
+	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/resource"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
+	"github.com/contiamo/apa/agent_gateway/pkg/config"
+)
+
+// BuildMCPPod creates a pod specification for an MCP server
+func BuildMCPPod(name, namespace, clientID, mcpType string, mcpConfig *config.MCPServer, additionalFlags, additionalEnv map[string]string) *corev1.Pod {
+	labels := map[string]string{
+		"app.kubernetes.io/managed-by": "apa-agent-gateway",
+		"app.kubernetes.io/component":  "mcp-server",
+		"apa.io/mcp-type":              mcpType,
+		"apa.io/client-id":             clientID,
+		"apa.io/mcp-server-id":         name,
+	}
+
+	annotations := map[string]string{
+		"apa.io/created-at":   time.Now().UTC().Format(time.RFC3339),
+		"apa.io/requested-by": "service-agent",
+	}
+
+	// Build environment variable map from config
+	envMap := make(map[string]corev1.EnvVar)
+	for _, env := range mcpConfig.Env {
+		k8sEnv := corev1.EnvVar{
+			Name: env.Name,
+		}
+
+		// Handle direct value or valueFrom
+		if env.Value != "" {
+			k8sEnv.Value = env.Value
+		} else if env.ValueFrom != nil && env.ValueFrom.SecretKeyRef != nil {
+			k8sEnv.ValueFrom = &corev1.EnvVarSource{
+				SecretKeyRef: &corev1.SecretKeySelector{
+					LocalObjectReference: corev1.LocalObjectReference{
+						Name: env.ValueFrom.SecretKeyRef.Name,
+					},
+					Key: env.ValueFrom.SecretKeyRef.Key,
+				},
+			}
+		}
+
+		envMap[env.Name] = k8sEnv
+	}
+
+	// Override with additional environment variables
+	for key, value := range additionalEnv {
+		envMap[key] = corev1.EnvVar{
+			Name:  key,
+			Value: value,
+		}
+	}
+
+	// Convert map to slice
+	envVars := make([]corev1.EnvVar, 0, len(envMap))
+	for _, env := range envMap {
+		envVars = append(envVars, env)
+	}
+
+	envVars = append(envVars,
+		corev1.EnvVar{
+			Name: "POD_NAME",
+			ValueFrom: &corev1.EnvVarSource{
+				FieldRef: &corev1.ObjectFieldSelector{
+					FieldPath: "metadata.name",
+				},
+			},
+		},
+		corev1.EnvVar{
+			Name: "POD_NAMESPACE",
+			ValueFrom: &corev1.EnvVarSource{
+				FieldRef: &corev1.ObjectFieldSelector{
+					FieldPath: "metadata.namespace",
+				},
+			},
+		},
+	)
+
+	volumes := buildVolumes(mcpConfig.Volumes)
+	volumeMounts := buildVolumeMounts(mcpConfig.VolumeMounts)
+
+	// Build command with additional flags
+	command := make([]string, len(mcpConfig.Command))
+	copy(command, mcpConfig.Command)
+
+	// Sort flags for deterministic ordering
+	if len(additionalFlags) > 0 {
+		var flagKeys []string
+		for key := range additionalFlags {
+			flagKeys = append(flagKeys, key)
+		}
+		sort.Strings(flagKeys)
+
+		for _, key := range flagKeys {
+			command = append(command, fmt.Sprintf("--%s=%s", key, additionalFlags[key]))
+		}
+	}
+
+	container := corev1.Container{
+		Name:         "mcp-server",
+		Image:        mcpConfig.Image,
+		Command:      command,
+		Env:          envVars,
+		VolumeMounts: volumeMounts,
+		Ports: []corev1.ContainerPort{
+			{
+				Name:          "http",
+				ContainerPort: int32(mcpConfig.Port),
+				Protocol:      corev1.ProtocolTCP,
+			},
+		},
+		Resources: buildResourceRequirements(mcpConfig.Resources),
+	}
+
+	return &corev1.Pod{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:        name,
+			Namespace:   namespace,
+			Labels:      labels,
+			Annotations: annotations,
+		},
+		Spec: corev1.PodSpec{
+			RestartPolicy: corev1.RestartPolicyAlways,
+			Containers:    []corev1.Container{container},
+			Volumes:       volumes,
+		},
+	}
+}
+
+// buildResourceRequirements converts config resources to Kubernetes resources
+func buildResourceRequirements(resources config.ResourceRequirements) corev1.ResourceRequirements {
+	req := corev1.ResourceRequirements{
+		Requests: corev1.ResourceList{},
+		Limits:   corev1.ResourceList{},
+	}
+
+	if resources.Requests.CPU != "" {
+		if quantity, err := resource.ParseQuantity(resources.Requests.CPU); err == nil {
+			req.Requests[corev1.ResourceCPU] = quantity
+		}
+	}
+	if resources.Requests.Memory != "" {
+		if quantity, err := resource.ParseQuantity(resources.Requests.Memory); err == nil {
+			req.Requests[corev1.ResourceMemory] = quantity
+		}
+	}
+
+	if resources.Limits.CPU != "" {
+		if quantity, err := resource.ParseQuantity(resources.Limits.CPU); err == nil {
+			req.Limits[corev1.ResourceCPU] = quantity
+		}
+	}
+	if resources.Limits.Memory != "" {
+		if quantity, err := resource.ParseQuantity(resources.Limits.Memory); err == nil {
+			req.Limits[corev1.ResourceMemory] = quantity
+		}
+	}
+
+	return req
+}
+
+// buildVolumes converts config volumes to Kubernetes volumes
+func buildVolumes(configVolumes []config.Volume) []corev1.Volume {
+	if len(configVolumes) == 0 {
+		return nil
+	}
+
+	volumes := make([]corev1.Volume, len(configVolumes))
+	for i, vol := range configVolumes {
+		k8sVol := corev1.Volume{
+			Name: vol.Name,
+		}
+
+		if vol.Secret != nil {
+			k8sVol.VolumeSource = corev1.VolumeSource{
+				Secret: &corev1.SecretVolumeSource{
+					SecretName: vol.Secret.SecretName,
+				},
+			}
+
+			if len(vol.Secret.Items) > 0 {
+				items := make([]corev1.KeyToPath, len(vol.Secret.Items))
+				for j, item := range vol.Secret.Items {
+					items[j] = corev1.KeyToPath{
+						Key:  item.Key,
+						Path: item.Path,
+					}
+				}
+				k8sVol.VolumeSource.Secret.Items = items
+			}
+		}
+
+		volumes[i] = k8sVol
+	}
+
+	return volumes
+}
+
+// buildVolumeMounts converts config volume mounts to Kubernetes volume mounts
+func buildVolumeMounts(configMounts []config.VolumeMount) []corev1.VolumeMount {
+	if len(configMounts) == 0 {
+		return nil
+	}
+
+	mounts := make([]corev1.VolumeMount, len(configMounts))
+	for i, mount := range configMounts {
+		mounts[i] = corev1.VolumeMount{
+			Name:      mount.Name,
+			MountPath: mount.MountPath,
+			ReadOnly:  mount.ReadOnly,
+		}
+	}
+
+	return mounts
+}
+
+// GetPodStatus returns a simplified status from a pod
+func GetPodStatus(pod *corev1.Pod) (string, string) {
+	if pod == nil {
+		return "unknown", "Pod not found"
+	}
+
+	switch pod.Status.Phase {
+	case corev1.PodPending:
+		return "pending", "Pod is being created"
+	case corev1.PodRunning:
+		for _, condition := range pod.Status.Conditions {
+			if condition.Type == corev1.PodReady && condition.Status == corev1.ConditionTrue {
+				return "running", "Pod is running and ready"
+			}
+		}
+		return "starting", "Pod is running but not ready"
+	case corev1.PodSucceeded:
+		return "succeeded", "Pod completed successfully"
+	case corev1.PodFailed:
+		return "failed", fmt.Sprintf("Pod failed: %s", pod.Status.Message)
+	default:
+		return "unknown", fmt.Sprintf("Unknown pod phase: %s", pod.Status.Phase)
+	}
+}

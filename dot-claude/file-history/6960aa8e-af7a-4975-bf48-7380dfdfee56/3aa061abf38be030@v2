@@ -1,0 +1,764 @@
+# PSA Document - Required Additions Commentary
+
+**Document Purpose**: This document provides detailed commentary on the additions required for the Magenta Apprentice PSA (Preliminary Security Assessment) document to meet Deutsche Telekom's security audit and compliance requirements.
+
+**Last Updated**: 2025-10-13
+**Reviewer**: Security & Compliance Team
+**Target Document**: `preliminary-psa-doc.md`
+
+---
+
+## Executive Summary
+
+The current PSA document provides a good foundation describing the application architecture and business processes. However, for security audits and compliance verification, additional technical infrastructure details are required in three key areas:
+
+1. **AWS Hosting Setup** - Infrastructure layer details
+2. **Logging Architecture** - Log management and retention
+3. **Observability & Tracing** - Monitoring and auditability
+
+---
+
+## 1. AWS Hosting Setup (Critical Gap)
+
+### Current State
+The document mentions:
+- AWS Region: EU-Central-1 (Frankfurt) ✓
+- Orchestration: Kubernetes (AWS EKS) ✓
+- General features: Multi-AZ, auto-scaling, load balancing ✓
+
+### What's Missing
+
+#### 1.1 Network Segmentation Details
+**Location in document**: Section "Production Platform" (lines 712-727)
+
+**Required Information**:
+- **VPC Configuration**
+  - VPC CIDR block(s) used for the EKS cluster
+  - Whether it's a dedicated VPC or shared
+  - Internet Gateway and NAT Gateway setup
+
+- **Subnet Structure**
+  - Private subnets for EKS worker nodes (with CIDR ranges)
+  - Public subnets for load balancers (with CIDR ranges)
+  - Database subnets for RDS (if separate)
+  - Availability Zone distribution
+
+- **Security Groups**
+  - Ingress/egress rules for each component layer:
+    - Frontend security group (port 443, 80)
+    - Backend API security group (port 8080, internal only)
+    - Database security group (port 5432, restricted to backend)
+    - Agent containers security group
+    - MCP server pods security group
+  - Principle of least privilege application
+
+**Why This Matters**:
+Auditors need to verify network isolation between components and ensure that sensitive data flows are properly segmented. Security groups define the attack surface and must be documented for compliance.
+
+**Example Content to Add**:
+```
+### Network Architecture
+
+**VPC Configuration**:
+- VPC CIDR: 10.0.0.0/16 (dedicated VPC)
+- Region: eu-central-1 (Frankfurt)
+- Availability Zones: eu-central-1a, eu-central-1b, eu-central-1c
+
+**Subnet Layout**:
+- Private Subnets (EKS Worker Nodes):
+  - AZ-a: 10.0.1.0/24
+  - AZ-b: 10.0.2.0/24
+  - AZ-c: 10.0.3.0/24
+- Public Subnets (Load Balancers):
+  - AZ-a: 10.0.101.0/24
+  - AZ-b: 10.0.102.0/24
+  - AZ-c: 10.0.103.0/24
+- Database Subnets (RDS):
+  - AZ-a: 10.0.201.0/24
+  - AZ-b: 10.0.202.0/24
+
+**Security Group Matrix**:
+[Table showing SG rules per component]
+```
+
+---
+
+#### 1.2 Kubernetes Cluster Details
+**Location in document**: Section "Production Platform" (lines 712-727)
+
+**Required Information**:
+- **EKS Version**: Specify the exact Kubernetes version (e.g., 1.28, 1.29)
+- **Control Plane**: Managed by AWS (specify access restrictions)
+- **Node Groups**:
+  - Node group types (managed node groups vs self-managed)
+  - Instance types used (e.g., t3.large, m5.xlarge)
+  - Min/max/desired capacity for each node group
+  - Auto-scaling configuration (Cluster Autoscaler or Karpenter)
+- **Add-ons Installed**:
+  - CoreDNS version
+  - kube-proxy version
+  - AWS VPC CNI plugin version
+  - EBS CSI driver for persistent storage
+
+**Why This Matters**:
+Kubernetes version affects available security features and patch levels. Node configuration impacts resource isolation and scaling behavior. Auditors need to verify that the cluster is properly maintained and secured.
+
+**Example Content to Add**:
+```
+### EKS Cluster Configuration
+
+**Control Plane**:
+- EKS Version: 1.28.x
+- Control Plane Access: Private endpoint only (VPC-internal)
+- Cluster Endpoint: https://[cluster-id].eks.eu-central-1.amazonaws.com
+- Authentication: AWS IAM + RBAC
+
+**Worker Node Groups**:
+1. **Application Node Group**:
+   - Instance Type: m5.xlarge (4 vCPU, 16GB RAM)
+   - AMI: Amazon EKS-optimized Linux AMI
+   - Min: 3, Max: 10, Desired: 5
+   - Auto-scaling: Karpenter-based
+
+2. **Agent Workload Node Group** (if separate):
+   - Instance Type: c5.2xlarge (8 vCPU, 16GB RAM)
+   - Min: 2, Max: 8, Desired: 3
+   - Taints: workload=agents:NoSchedule
+
+**Cluster Add-ons**:
+- CoreDNS: v1.10.x
+- kube-proxy: v1.28.x
+- VPC CNI: v1.15.x
+- EBS CSI Driver: v1.25.x
+```
+
+---
+
+#### 1.3 Deployment and CI/CD Structure
+**Location in document**: Section "Software Components" (lines 750-809)
+
+**Required Information**:
+- **Helm Chart Structure**:
+  - Chart repository location (e.g., GitLab registry, ChartMuseum)
+  - Chart versioning strategy
+  - Values files per environment (dev, prod)
+
+- **ArgoCD Configuration**:
+  - ArgoCD version
+  - App-of-Apps pattern structure (already mentioned in CLAUDE.md)
+  - Sync policy (automatic vs manual)
+  - Health check configuration
+  - Rollback capabilities
+
+- **CI/CD Pipeline**:
+  - Pipeline tool (GitLab CI mentioned in docs)
+  - Build stages: test → build → push → deploy
+  - Container registry (ECR, GitLab registry)
+  - Image tagging strategy
+  - Security scanning (Trivy, Snyk, etc.)
+
+**Why This Matters**:
+Deployment processes affect system reliability and security. Auditors need to understand how code changes are validated, approved, and deployed to production.
+
+**Example Content to Add**:
+```
+### Deployment Architecture
+
+**GitOps with ArgoCD**:
+- ArgoCD Version: v2.9.x
+- Deployment Model: App-of-Apps pattern
+- Repository Structure:
+  - Infrastructure apps: `infrastructure/argocd/dev-core-kubernetes-infra-app-of-apps`
+  - Application apps: `fiber/argocd/dev-root-fiber-app-of-apps`
+- Sync Policy: Automatic sync with self-healing enabled
+- Pruning: Enabled (removes resources not in Git)
+- Approval Process: GitLab merge requests with required approvals
+
+**CI/CD Pipeline** (GitLab CI):
+1. **Build Stage**:
+   - Lint and unit tests
+   - Security scan (Trivy for container vulnerabilities)
+   - Build Docker images (backend, frontend, evaluator)
+
+2. **Push Stage**:
+   - Tag images with commit SHA and semantic version
+   - Push to AWS ECR (eu-central-1)
+
+3. **Deploy Stage**:
+   - Update Helm chart values with new image tags
+   - Commit to GitLab (triggers ArgoCD sync)
+   - ArgoCD applies changes to EKS cluster
+
+**Container Registry**:
+- AWS Elastic Container Registry (ECR)
+- Repository per component (e.g., `magenta-apprentice/backend`, `magenta-apprentice/frontend`)
+- Image retention: Last 10 tagged versions kept
+- Image scanning: Automatic on push
+```
+
+---
+
+#### 1.4 Storage Setup
+**Location in document**: Section "Hardware Components" (lines 729-747)
+
+**Required Information**:
+- **RDS Configuration**:
+  - PostgreSQL version
+  - Instance class (e.g., db.t3.medium)
+  - Multi-AZ deployment (yes/no)
+  - Backup retention period
+  - Encryption at rest (KMS key)
+  - Automated backups schedule
+
+- **EBS Volumes**:
+  - Volume types (gp3, io2, etc.)
+  - Encryption enabled
+  - Snapshot policy
+  - Use cases (persistent volume claims for pods)
+
+- **S3 Usage** (if applicable):
+  - Bucket names and purposes
+  - Encryption (SSE-S3 or SSE-KMS)
+  - Access control (bucket policies, IAM roles)
+  - Lifecycle policies
+
+**Why This Matters**:
+Data persistence and backup strategies are critical for business continuity and compliance. Auditors need to verify that data is protected, encrypted, and recoverable.
+
+**Example Content to Add**:
+```
+### Data Storage Architecture
+
+**Amazon RDS (PostgreSQL)**:
+- PostgreSQL Version: 15.x
+- Instance Class: db.t3.large (2 vCPU, 8GB RAM)
+- Multi-AZ: Yes (primary in eu-central-1a, standby in eu-central-1b)
+- Storage: 100GB gp3 SSD (3000 IOPS)
+- Encryption: At rest using AWS KMS (dedicated CMK)
+- Backup:
+  - Automated daily backups with 7-day retention
+  - Backup window: 02:00-03:00 UTC
+  - Point-in-time recovery enabled
+- Maintenance Window: Sunday 03:00-04:00 UTC
+- Access: Private subnet only, security group restricted to backend pods
+
+**EBS Volumes** (Persistent Storage):
+- Volume Type: gp3 (general purpose SSD)
+- Encryption: Enabled (AWS managed KMS key)
+- Use Cases:
+  - Langfuse database (if self-hosted)
+  - Agent workspace volumes (temporary execution data)
+- Snapshots: Daily via EBS snapshot lifecycle policy (7-day retention)
+
+**S3 Buckets** (if used):
+- Bucket: `magenta-apprentice-artifacts-{env}`
+  - Purpose: Build artifacts, logs archive
+  - Encryption: SSE-S3
+  - Versioning: Enabled
+  - Lifecycle: Transition to Glacier after 90 days
+- Bucket: `magenta-apprentice-traces-{env}` (if applicable)
+  - Purpose: Long-term trace storage
+  - Encryption: SSE-KMS
+  - Access: IAM role-based, restricted to backend service account
+```
+
+---
+
+## 2. Logging Architecture (Critical Gap)
+
+### Current State
+The document has a placeholder:
+> "Logs are stored in ????. Also OpenTelemetry Traces are stored in langfuse for proper documentation of llm and tool-calls." (line 726)
+
+This is insufficient for a security audit.
+
+### What's Missing
+
+#### 2.1 Log Generation Points
+**Location in document**: New subsection needed in "Production Platform" or "Software Components"
+
+**Required Information**:
+- **Application-Level Logs**:
+  - Backend services (FastAPI logs, application logs)
+  - Frontend server logs (Nginx/web server)
+  - Agent execution logs (process and service agents)
+  - Evaluator logs
+
+- **Infrastructure-Level Logs**:
+  - Kubernetes audit logs
+  - EKS control plane logs
+  - Load balancer access logs
+  - VPC Flow Logs (if enabled)
+
+- **Database Logs**:
+  - RDS PostgreSQL logs (error logs, slow query logs)
+  - Query audit logs (if enabled)
+
+**Why This Matters**:
+Complete log coverage is necessary for security incident response, debugging, and compliance audits. Auditors need to know what events are captured.
+
+---
+
+#### 2.2 Log Collection and Aggregation
+**Location in document**: New subsection needed in "Production Platform"
+
+**Required Information**:
+- **Log Shipping Mechanism**:
+  - FluentBit (or Fluentd) deployed as DaemonSet in EKS
+  - Log routing rules (which logs go where)
+  - Buffer and retry configuration
+
+- **Log Destination**:
+  - AWS CloudWatch Logs (log groups per component)
+  - OpenSearch (if used for centralized logging)
+  - S3 (for long-term archival)
+
+- **Log Format**:
+  - Structured logging (JSON format recommended)
+  - Standard fields (timestamp, level, service, trace_id, etc.)
+
+**Why This Matters**:
+Reliable log collection ensures that security events are not lost. Standardized formats enable automated analysis and correlation.
+
+**Example Content to Add**:
+```
+### Logging Architecture
+
+**Log Collection**:
+- **FluentBit DaemonSet**: Deployed on every EKS node
+  - Collects container stdout/stderr logs
+  - Parses JSON-formatted application logs
+  - Filters and enriches with Kubernetes metadata (pod name, namespace, labels)
+  - Buffers logs locally (5MB buffer per input)
+
+**Log Destinations**:
+1. **AWS CloudWatch Logs**:
+   - Log Groups:
+     - `/aws/eks/magenta-apprentice/backend`
+     - `/aws/eks/magenta-apprentice/frontend`
+     - `/aws/eks/magenta-apprentice/agents`
+     - `/aws/eks/magenta-apprentice/evaluator`
+     - `/aws/eks/magenta-apprentice/k8s-audit`
+   - Retention: 90 days
+   - Encryption: CloudWatch default encryption
+
+2. **OpenSearch** (optional, if centralized dashboard needed):
+   - Domain: magenta-apprentice-logs-dev
+   - Instance: t3.medium.search (3 nodes for HA)
+   - Access: VPC-internal only, IAM authentication
+   - Index rotation: Daily indices with 30-day retention
+
+3. **S3 Archival**:
+   - Bucket: `magenta-apprentice-logs-archive-{env}`
+   - Lifecycle: CloudWatch logs exported to S3 after 90 days
+   - Retention: 365 days, then deleted
+   - Encryption: SSE-KMS
+```
+
+---
+
+#### 2.3 Log Retention Policy
+**Location in document**: Within the Logging Architecture subsection
+
+**Required Information**:
+- **Short-term Retention** (hot storage):
+  - CloudWatch: 90 days
+  - OpenSearch: 30 days
+
+- **Long-term Retention** (cold storage):
+  - S3 archival: 1 year
+  - Glacier (if applicable): 7 years for compliance
+
+- **Deletion Policy**:
+  - Automated deletion after retention period
+  - Manual deletion procedures (if needed for GDPR/data requests)
+
+**Why This Matters**:
+Retention policies must balance compliance requirements (e.g., GDPR data minimization) with investigative needs (e.g., 90-day lookback for security incidents).
+
+---
+
+#### 2.4 Access Control and Compliance
+**Location in document**: Within the Logging Architecture subsection
+
+**Required Information**:
+- **Access Control**:
+  - IAM roles for log access (read-only vs admin)
+  - Principle of least privilege (only authorized personnel)
+  - MFA requirement for production log access
+
+- **Log Integrity**:
+  - Logs are immutable once written
+  - TLS-encrypted transmission (FluentBit to CloudWatch)
+  - Encryption at rest (KMS for S3, CloudWatch default)
+
+- **Audit Trail**:
+  - CloudTrail logs all access to log data (who accessed what)
+  - Log access events are themselves logged
+
+**Why This Matters**:
+Logs may contain sensitive data. Access controls prevent unauthorized viewing. Immutability ensures logs can't be tampered with after security incidents.
+
+**Example Content to Add**:
+```
+### Log Retention and Access Control
+
+**Retention Policy**:
+- **Hot Storage** (CloudWatch): 90 days
+- **Warm Storage** (OpenSearch): 30 days (optional)
+- **Cold Storage** (S3): 365 days
+- **Deletion**: Automatic lifecycle policies
+
+**Access Control**:
+- **IAM Roles**:
+  - `MagentaApprentice-LogViewer`: Read-only access to CloudWatch and S3 logs
+  - `MagentaApprentice-LogAdmin`: Full access for troubleshooting
+  - `SecurityTeam-Auditor`: Cross-account access for security reviews
+- **MFA Requirement**: Enabled for all production log access
+- **Access Logging**: All log access logged via CloudTrail to dedicated audit bucket
+
+**Compliance**:
+- **GDPR**: Personal data masked or pseudonymized in logs (e.g., customer addresses)
+- **Encryption**: TLS 1.3 in transit, KMS encryption at rest
+- **Immutability**: CloudWatch and S3 logs cannot be modified after write
+```
+
+---
+
+## 3. Langfuse & Observability Stack (Moderate Gap)
+
+### Current State
+The document mentions:
+- Langfuse is used for storing OpenTelemetry traces (line 726)
+- Evaluator polls Langfuse for traces (lines 600-673)
+
+### What's Missing
+
+#### 3.1 Langfuse Integration Details
+**Location in document**: New subsection in "Software Components" or under "Observability"
+
+**Required Information**:
+- **Langfuse Deployment Model**:
+  - Self-hosted within EKS cluster (preferred for data sovereignty)
+  - OR SaaS-hosted (Langfuse Cloud)
+  - If self-hosted: Helm chart details, database backend, resource allocation
+
+- **OpenTelemetry Integration**:
+  - OpenTelemetry SDK version used in backend
+  - Instrumentation libraries (auto-instrumentation vs manual)
+  - Trace exporter configuration (OTLP protocol)
+
+- **What is Traced**:
+  - LLM requests and responses (prompts, completions, token counts)
+  - Tool calls (MCP server invocations, Playwright actions)
+  - Agent lifecycle events (start, pause, resume, complete)
+  - Service-to-service calls (backend → agent-gateway → MCP servers)
+
+**Why This Matters**:
+Langfuse traces provide the audit trail for AI agent actions. Auditors need to verify that all relevant actions are traceable and that trace data is securely stored.
+
+---
+
+#### 3.2 Observability Stack Components
+**Location in document**: New subsection in "Software Components"
+
+**Required Information**:
+- **Metrics**:
+  - Prometheus for metrics collection (if used)
+  - Grafana for dashboards (if used)
+  - Key metrics monitored:
+    - Agent run success/failure rates
+    - LLM token usage and costs
+    - API response times
+    - Database query performance
+
+- **Tracing**:
+  - Langfuse for LLM-specific traces
+  - Jaeger or Tempo (if used for distributed tracing)
+
+- **Alerting**:
+  - Prometheus Alertmanager (if used)
+  - CloudWatch Alarms for critical metrics
+  - Notification channels (PagerDuty, Slack, email)
+
+**Why This Matters**:
+Observability enables proactive incident detection and performance optimization. Auditors need to know how system health is monitored.
+
+**Example Content to Add**:
+```
+### Observability and Tracing Architecture
+
+**Langfuse Configuration**:
+- **Deployment**: Self-hosted within EKS cluster
+  - Namespace: `monitoring`
+  - Helm Chart: `langfuse/langfuse` (version 2.x)
+  - Database: Dedicated PostgreSQL instance (db.t3.medium)
+  - Ingress: Internal-only (no public exposure)
+  - Authentication: OAuth2 via Keycloak
+
+**OpenTelemetry Integration**:
+- **SDK Version**: Python OpenTelemetry SDK 1.21.x
+- **Instrumentation**:
+  - Auto-instrumentation for FastAPI (HTTP traces)
+  - Manual instrumentation for agent workflows
+  - Langfuse SDK for LLM tracing
+- **Trace Exporter**: OTLP/HTTP to Langfuse endpoint
+- **Sampling**: 100% sampling in dev, 10% sampling in prod (except agent runs, which are always traced)
+
+**What is Traced**:
+1. **LLM Interactions**:
+   - Model requests (model name, temperature, max tokens)
+   - Prompts (full prompt text, including agent directives and guidance)
+   - Completions (response text, finish reason, token counts)
+   - Latency and cost per request
+
+2. **Tool Invocations**:
+   - MCP server calls (tool name, parameters, response)
+   - Playwright actions (navigate, click, type, screenshot)
+   - WFM-T interactions (login, order creation, status checks)
+
+3. **Agent Lifecycle**:
+   - Run start/stop events
+   - State transitions (planning → executing → observing → completed)
+   - User guidance interventions (pause, resume, manual corrections)
+
+4. **Service Calls**:
+   - Backend API calls (endpoint, status code, latency)
+   - Database queries (SQL statements, execution time)
+   - Agent Gateway routing (target MCP server, pod selection)
+
+**Metrics and Monitoring**:
+- **Prometheus** (self-hosted in EKS):
+  - Scrapes metrics from:
+    - Kubernetes nodes (node-exporter)
+    - Application pods (custom /metrics endpoints)
+    - RDS (CloudWatch Exporter)
+  - Retention: 15 days
+
+- **Grafana** (self-hosted in EKS):
+  - Dashboards:
+    - EKS Cluster Health
+    - Magenta Apprentice Application Metrics
+    - Agent Performance (run durations, success rates)
+    - LLM Usage and Costs
+  - Alerting: Integrated with Prometheus Alertmanager
+
+- **CloudWatch Alarms**:
+  - EKS node CPU/memory > 80% for 5 minutes
+  - RDS connections > 90% of max
+  - Backend API 5xx errors > 10 per minute
+  - Agent run failure rate > 20%
+
+**Auditability**:
+- All traces stored in Langfuse for 90 days
+- Critical agent runs (production orders) have traces exported to S3 for 1-year retention
+- Traces include:
+  - User who initiated the run
+  - Timestamp of each action
+  - Full context (prompts, tool outputs, decisions)
+  - LLM judge scores (from Evaluator)
+```
+
+---
+
+#### 3.3 Data Sovereignty and Privacy
+**Location in document**: Within the Observability subsection or new "Data Protection" section
+
+**Required Information**:
+- **Data Location**:
+  - Langfuse hosted in EU (Frankfurt region if self-hosted)
+  - No data transfer outside EU
+
+- **Sensitive Data Handling**:
+  - PII masking in traces (e.g., customer names, addresses)
+  - Redaction of credentials and secrets
+  - Anonymization of user identifiers where possible
+
+- **Compliance**:
+  - GDPR compliance (data minimization, right to erasure)
+  - Telekom internal data classification (e.g., "Telekom Confidential")
+
+**Why This Matters**:
+Traces may contain sensitive business and personal data. Auditors need assurance that data protection regulations are followed.
+
+**Example Content to Add**:
+```
+### Data Protection and Privacy
+
+**Data Sovereignty**:
+- All observability data (logs, traces, metrics) stored in AWS eu-central-1 (Frankfurt)
+- No cross-border data transfer
+- Langfuse self-hosted to ensure full control over trace data
+
+**Sensitive Data Handling**:
+- **Automatic Redaction**:
+  - API keys and passwords automatically masked in traces
+  - Database connection strings stripped of credentials
+  - AWS IAM secrets never logged
+
+- **PII Minimization**:
+  - Customer addresses replaced with pseudonymized IDs in traces
+  - Names replaced with "User_{hashed_id}"
+  - Order numbers retained (necessary for traceability)
+
+- **Manual Review**:
+  - High-sensitivity traces flagged for manual review before long-term storage
+  - Security team can request trace deletion for GDPR compliance
+
+**Compliance**:
+- **GDPR**: Right to erasure implemented via Langfuse API (delete traces by user_id)
+- **Data Classification**: Traces classified as "Telekom Confidential - Internal"
+- **Access Audit**: All access to Langfuse logged and reviewed quarterly
+```
+
+---
+
+## 4. Summary of Required Actions
+
+### Immediate Actions (Critical for PSA Approval)
+
+1. **AWS Infrastructure Section** (add to lines 712-727):
+   - [ ] Document VPC and subnet architecture with CIDR blocks
+   - [ ] List security group rules in a table
+   - [ ] Specify EKS version and node group details
+   - [ ] Describe ArgoCD deployment process
+   - [ ] Detail RDS configuration (version, Multi-AZ, encryption, backups)
+   - [ ] Document EBS and S3 usage (if applicable)
+
+2. **Logging Architecture Section** (replace "????" at line 726):
+   - [ ] Map out all log generation points
+   - [ ] Describe FluentBit collection mechanism
+   - [ ] Specify CloudWatch log groups and retention
+   - [ ] Define access control for log data
+   - [ ] Document log encryption and immutability
+
+3. **Observability Section** (expand on line 726 mention):
+   - [ ] Confirm Langfuse deployment model (self-hosted vs SaaS)
+   - [ ] Detail OpenTelemetry instrumentation
+   - [ ] List all traced interactions (LLM, tools, agents)
+   - [ ] Describe metrics and alerting setup
+   - [ ] Document PII handling in traces
+
+### Supporting Actions (Enhance Document Quality)
+
+4. **Communications Matrix Enhancement** (lines 827-1120):
+   - [ ] Add specific port numbers for each component
+   - [ ] Document firewall rules and network policies
+   - [ ] Include AWS service endpoints (if using PrivateLink)
+
+5. **Security Functions Section** (lines 705-709):
+   - [ ] Detail authentication mechanism (Keycloak integration)
+   - [ ] Describe authorization model (RBAC in EKS, IAM roles)
+   - [ ] Document secrets management (AWS Secrets Manager or SOPS)
+   - [ ] Explain certificate management (TLS certificates from Let's Encrypt, AWS ACM)
+
+6. **Disaster Recovery Section** (new):
+   - [ ] RDS automated backups and point-in-time recovery
+   - [ ] EBS snapshot strategy
+   - [ ] ArgoCD GitOps as infrastructure-as-code backup
+   - [ ] Recovery Time Objective (RTO) and Recovery Point Objective (RPO)
+
+---
+
+## 5. Document Structure Recommendation
+
+Suggested revised outline for `preliminary-psa-doc.md`:
+
+```
+1. Technical Implementation
+   1.1 Architecture Overview (existing)
+   1.2 AWS Infrastructure (NEW - expand)
+       1.2.1 Network Architecture (VPC, Subnets, Security Groups)
+       1.2.2 EKS Cluster Configuration
+       1.2.3 Storage Architecture (RDS, EBS, S3)
+   1.3 Software Components (existing)
+   1.4 Deployment and CI/CD (NEW - expand)
+       1.4.1 GitOps with ArgoCD
+       1.4.2 CI/CD Pipeline
+   1.5 Logging Architecture (NEW - replace "????")
+       1.5.1 Log Collection and Aggregation
+       1.5.2 Log Retention and Access Control
+   1.6 Observability and Tracing (NEW - expand Langfuse)
+       1.6.1 Langfuse Configuration
+       1.6.2 OpenTelemetry Integration
+       1.6.3 Metrics and Monitoring
+   1.7 Security and Compliance (existing, expand)
+       1.7.1 Authentication and Authorization
+       1.7.2 Secrets Management
+       1.7.3 Data Protection and Privacy
+
+2. Communications Matrix (existing)
+
+3. Business Process and Data Flow (existing)
+
+4. Disaster Recovery and Business Continuity (NEW)
+```
+
+---
+
+## 6. Next Steps
+
+1. **Information Gathering**:
+   - Work with DevOps team to get exact AWS configuration details
+   - Review Terraform state for infrastructure details (commands in CLAUDE.md)
+   - Check ArgoCD applications for current deployment configuration
+   - Verify Langfuse deployment (kubectl get pods -n monitoring)
+
+2. **Validation**:
+   - Run `kubectl` commands to confirm EKS setup
+   - Check AWS Console for VPC, Security Groups, RDS configuration
+   - Review CloudWatch log groups and retention settings
+   - Verify Langfuse traces are being collected
+
+3. **Documentation**:
+   - Use the examples in this commentary to draft new sections
+   - Create diagrams (Mermaid or architecture tools) for network layout
+   - Get peer review from security team before submitting
+
+4. **Compliance Check**:
+   - Cross-reference with Deutsche Telekom's PSA template requirements
+   - Ensure all mandatory sections are complete
+   - Prepare for auditor questions (use this document as Q&A prep)
+
+---
+
+## 7. Key Contacts
+
+- **System Owner**: Michail Bastakis (confirm deployment details)
+- **DevOps Team**: Infrastructure configuration and AWS setup
+- **Security Team**: Compliance requirements and audit preparation
+- **Document Reviewer**: Martin Jacob (as per change history)
+
+---
+
+## Appendix: Useful Commands for Information Gathering
+
+```bash
+# EKS Cluster Info
+aws eks describe-cluster --name <cluster-name> --region eu-central-1
+
+# VPC and Subnet Info
+aws ec2 describe-vpcs --filters "Name=tag:Name,Values=*magenta*"
+aws ec2 describe-subnets --filters "Name=tag:Name,Values=*magenta*"
+
+# Security Groups
+aws ec2 describe-security-groups --filters "Name=tag:Name,Values=*magenta*"
+
+# RDS Info
+aws rds describe-db-instances --region eu-central-1
+
+# Check Langfuse Deployment
+kubectl get pods -n monitoring -l app=langfuse
+kubectl describe svc langfuse -n monitoring
+
+# Check Log Collection
+kubectl get ds -n kube-system fluentbit
+kubectl logs -n kube-system -l app=fluentbit --tail=20
+
+# ArgoCD Applications
+kubectl get applications -n argocd
+```
+
+---
+
+**End of Commentary Document**

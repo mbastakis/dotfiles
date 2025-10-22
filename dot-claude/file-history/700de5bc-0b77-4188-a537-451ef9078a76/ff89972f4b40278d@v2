@@ -1,0 +1,313 @@
+# Istio Implementation Guide for AICC Dev Cluster
+
+## Overview
+
+This document describes the implementation of Istio service mesh in the AICC dev Kubernetes cluster, based on the reference architecture from the oneAI-infra tools cluster.
+
+## Implementation Date
+
+October 21, 2025
+
+## Istio Version
+
+**1.26.3** (upgraded from 1.20.0)
+
+## Architecture
+
+The Istio implementation consists of four main components deployed in the following order:
+
+### Component Deployment Order
+
+1. **istio-base** (Sync Wave 0)
+   - Custom Resource Definitions (CRDs)
+   - Namespace: `istio-system`
+   - Repository: `istio-base-helm.git`
+
+2. **istio-cni** (Sync Wave 1) - **NEW**
+   - CNI Plugin for transparent traffic interception
+   - Runs as DaemonSet on all nodes
+   - Namespace: `istio-system`
+   - Repository: `istio-cni-helm.git`
+
+3. **istiod** (Sync Wave 2)
+   - Istio control plane
+   - 3 replicas with HA configuration
+   - CNI enabled
+   - Namespace: `istio-system`
+   - Repository: `istiod-helm.git`
+
+4. **istio-ingressgateway** (Sync Wave 3)
+   - Ingress gateway with AWS NLB integration
+   - 3 replicas with HA configuration
+   - Namespace: `istio-ingress`
+   - Repository: `istio-ingressgateway-helm.git`
+
+## Key Changes from Previous Setup
+
+### 1. CNI Plugin Added
+- **Critical change**: CNI plugin is now deployed and enabled
+- Benefits:
+  - Removes need for `NET_ADMIN` and `NET_RAW` capabilities in application pods
+  - Improved security posture
+  - Faster pod startup times
+  - Compatible with restricted pod security policies
+
+### 2. Version Upgrade
+- Upgraded from **1.20.0** to **1.26.3**
+- Latest stable version with security patches and improvements
+
+### 3. Enhanced Security
+- MTLS minimum protocol version set to **TLS 1.3**
+- Structured JSON logging enabled
+- Access logs enabled for audit and debugging
+
+### 4. High Availability
+- istiod: 3 replicas with pod anti-affinity and topology spread
+- ingress gateway: 3 replicas with zone distribution
+- CNI: DaemonSet on all nodes
+
+## Deployment Structure
+
+```
+aicc-group/
+├── infrastructure/
+│   └── argocd/
+│       ├── dev-core-kubernetes-infra-app-of-apps/
+│       │   ├── istio-base.yaml         (Wave 0)
+│       │   ├── istio-cni.yaml          (Wave 1) ← NEW
+│       │   ├── istiod.yaml             (Wave 2)
+│       │   └── istio-ingressgateway.yaml (Wave 3)
+│       │
+│       └── helm-charts/
+│           ├── istio-base-helm/         (v1.26.3)
+│           ├── istio-cni-helm/          (v1.26.3) ← NEW
+│           ├── istiod-helm/             (v1.26.3, CNI enabled)
+│           └── istio-ingressgateway-helm/ (v1.26.3)
+```
+
+## Helm Chart Repositories
+
+Each component is a separate GitLab repository:
+
+1. `https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/istio-base-helm.git`
+2. `https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/istio-cni-helm.git` ← NEW
+3. `https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/istiod-helm.git`
+4. `https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/istio-ingressgateway-helm.git`
+
+## Configuration Highlights
+
+### istio-base-helm
+- Version: 1.26.3
+- Hub: `dockerhub.devops.telekom.de/istio`
+- Installs all Istio CRDs
+
+### istio-cni-helm (NEW)
+```yaml
+cni:
+  global:
+    hub: dockerhub.devops.telekom.de/istio
+    logAsJson: true
+    imagePullSecrets:
+      - docker-config
+
+  repair:
+    enabled: true
+    deletePods: true
+
+  affinity:
+    nodeAffinity:
+      # Runs on ON_DEMAND and Karpenter nodes
+```
+
+### istiod-helm
+```yaml
+pilot:
+  cni:
+    enabled: true  # ← CRITICAL CHANGE
+
+  autoscaleMin: 3
+  autoscaleMax: 5
+  replicaCount: 3
+
+meshConfig:
+  accessLogFile: /dev/stdout
+  accessLogEncoding: JSON
+  meshMTLS:
+    minProtocolVersion: TLSV1_3  # ← Enhanced security
+```
+
+### istio-ingressgateway-helm
+- Type: LoadBalancer (AWS NLB)
+- TLS termination at NLB
+- 3 replicas with HA
+- Internal load balancer
+
+## Deployment Steps
+
+### Prerequisites
+
+Before deploying, ensure:
+1. AWS credentials configured for dev environment
+2. kubectl access to the dev cluster
+3. All helm chart repositories are pushed to GitLab
+
+### Deployment Order
+
+ArgoCD will automatically deploy components in the correct order based on sync waves:
+
+```bash
+# Check ArgoCD applications
+kubectl get applications -n argocd | grep istio
+
+# Expected order of deployment:
+# 1. istio-base (Wave 0)
+# 2. istio-cni (Wave 1)
+# 3. istiod (Wave 2)
+# 4. istio-ingressgateway (Wave 3)
+```
+
+### Manual Sync (if needed)
+
+```bash
+# Sync all Istio components
+argocd app sync istio-base
+argocd app sync istio-cni
+argocd app sync istiod
+argocd app sync istio-ingressgateway
+```
+
+## Verification
+
+### 1. Check Namespaces
+```bash
+kubectl get namespaces | grep istio
+# Expected:
+# istio-system
+# istio-ingress
+```
+
+### 2. Check Pods
+```bash
+# CNI DaemonSet (should be on all nodes)
+kubectl get daemonset -n istio-system istio-cni-node
+
+# Istiod pods (should be 3)
+kubectl get pods -n istio-system -l app=istiod
+
+# Ingress gateway pods (should be 3)
+kubectl get pods -n istio-ingress -l app=istio-ingressgateway
+```
+
+### 3. Check ArgoCD Application Status
+```bash
+kubectl get applications -n argocd | grep istio
+# All should show: Synced, Healthy
+```
+
+### 4. Verify CNI Installation
+```bash
+# Check CNI config on nodes
+kubectl exec -n istio-system ds/istio-cni-node -- ls -la /etc/cni/net.d/
+
+# Check istiod has CNI enabled
+kubectl get cm -n istio-system istio -o yaml | grep -A5 "cni"
+```
+
+## Troubleshooting
+
+### Issue: istiod OutOfSync
+**Symptom**: ArgoCD shows istiod as OutOfSync
+**Solution**:
+1. Check if CNI is deployed and ready
+2. Verify CNI is enabled in istiod config
+3. Manually sync: `argocd app sync istiod`
+
+### Issue: Ingress Gateway Degraded
+**Symptom**: Pods running but service degraded
+**Solution**:
+1. Check NLB creation: `kubectl describe svc -n istio-ingress`
+2. Verify subnet configuration in values
+3. Check AWS NLB console for health checks
+
+### Issue: CNI Pods CrashLooping
+**Symptom**: istio-cni-node pods not starting
+**Solution**:
+1. Check node affinity matches your cluster nodes
+2. Verify imagePullSecret `docker-config` exists
+3. Check logs: `kubectl logs -n istio-system ds/istio-cni-node`
+
+### Issue: Application Pods Not Getting Sidecar
+**Symptom**: New pods don't have Envoy sidecar
+**Solution**:
+1. Verify namespace has injection label: `kubectl get ns <namespace> --show-labels`
+2. Add label if missing: `kubectl label namespace <namespace> istio-injection=enabled`
+3. Restart pods to trigger injection
+
+## Monitoring
+
+### Key Metrics to Watch
+
+1. **Istiod Health**
+   ```bash
+   kubectl get pods -n istio-system -l app=istiod
+   kubectl top pods -n istio-system -l app=istiod
+   ```
+
+2. **CNI DaemonSet Coverage**
+   ```bash
+   kubectl get daemonset -n istio-system istio-cni-node
+   # Desired = Current = Ready
+   ```
+
+3. **Gateway Traffic**
+   ```bash
+   kubectl logs -n istio-ingress -l app=istio-ingressgateway --tail=100
+   ```
+
+## Next Steps
+
+1. **Push Helm Charts to GitLab**
+   - Create GitLab repository for istio-cni-helm
+   - Push all updated helm charts
+   - Verify ArgoCD can access the repositories
+
+2. **Test Deployment**
+   - Monitor ArgoCD sync process
+   - Verify all pods are running
+   - Check for any errors in logs
+
+3. **Validate Service Mesh**
+   - Deploy test application with sidecar injection
+   - Verify traffic flows through Istio
+   - Test mTLS between services
+
+4. **Enable Service Mesh for Applications**
+   - Label application namespaces: `istio-injection=enabled`
+   - Restart application pods to inject sidecars
+   - Verify connectivity through Istio
+
+5. **Configure Observability**
+   - Set up Prometheus metrics scraping
+   - Configure distributed tracing
+   - Set up Grafana dashboards for Istio
+
+## References
+
+- [Istio Documentation](https://istio.io/latest/docs/)
+- [Istio CNI Plugin](https://istio.io/latest/docs/setup/additional-setup/cni/)
+- Reference Implementation: `/Users/mbastakis/dev/work/oneAI-infra/infrastructure/`
+- AICC Infrastructure: `/Users/mbastakis/dev/work/aicc-group/infrastructure/`
+
+## Support
+
+For issues or questions:
+1. Check ArgoCD UI for sync status
+2. Review pod logs for errors
+3. Consult this documentation
+4. Review Istio official documentation
+
+---
+
+**Document Version**: 1.0
+**Last Updated**: October 21, 2025
+**Author**: Claude Code (AI Assistant)

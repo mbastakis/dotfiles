@@ -1,0 +1,144 @@
+# Production values for Kiali Server
+# Kiali is the observability console for Istio service mesh
+
+kiali-server:
+  # Installation configuration
+  installation_tag: "kiali"
+  istio_namespace: "istio-system"
+
+  # Deployment configuration
+  deployment:
+    # Official kiali image from quay.io
+    image_name: quay.io/kiali/kiali
+    image_version: v2.2.0
+    image_pull_policy: IfNotPresent
+
+    # Replicas for high availability
+    replicas: 2
+
+    # Resource management
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+
+    # Security context - non-root, read-only filesystem
+    security_context:
+      allowPrivilegeEscalation: false
+      runAsGroup: 1001
+      runAsNonRoot: true
+      runAsUser: 1001
+      seccompProfile:
+        type: RuntimeDefault
+      privileged: false
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop:
+          - ALL
+
+    # Enable Istio sidecar injection for Kiali
+    pod_labels:
+      sidecar.istio.io/inject: "true"
+
+    # Logging configuration
+    logger:
+      log_format: json
+      log_level: info
+      time_field_format: "2006-01-02T15:04:05Z07:00"
+      sampler_rate: "1"
+
+    # Service configuration
+    service_type: ClusterIP
+
+    # Affinity for HA
+    affinity:
+      pod_anti_affinity:
+        preferred_during_scheduling_ignored_during_execution:
+          - weight: 100
+            pod_affinity_term:
+              label_selector:
+                match_expressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - kiali
+              topology_key: kubernetes.io/hostname
+
+  # External services integration
+  external_services:
+    # Istio configuration
+    istio:
+      root_namespace: istio-system
+      config_map_name: istio
+      istio_sidecar_injector_config_map_name: istio-sidecar-injector
+      istiod_deployment_name: istiod
+
+      # Component status monitoring
+      component_status:
+        enabled: true
+        components:
+          - app_label: istiod
+            is_core: true
+            is_proxy: false
+          - app_label: istio-ingressgateway
+            is_core: true
+            is_proxy: true
+            namespace: istio-ingress
+
+    # Prometheus for metrics (configure based on your monitoring setup)
+    prometheus:
+      # Update this URL based on your Prometheus deployment
+      url: "http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090/"
+      # For custom Prometheus setup, update accordingly
+      # url: "http://prometheus-server.prometheus.svc.cluster.local"
+
+    # Grafana integration (optional)
+    grafana:
+      enabled: false
+      # Configure if Grafana is available
+      # in_cluster_url: 'http://grafana.monitoring.svc.cluster.local:3000/'
+      # url: 'https://grafana.example.com'
+
+    # Tracing (optional - Jaeger/Zipkin)
+    tracing:
+      enabled: false
+      # Configure if tracing is deployed
+      # in_cluster_url: "http://jaeger-query.istio-system:16685/jaeger"
+
+  # Authentication strategy
+  auth:
+    # For development: token auth (no external IdP required)
+    # For production: consider openid with Keycloak
+    strategy: "token"
+
+  # Server configuration
+  server:
+    web_root: "/"
+    # Port inside the pod (ClusterIP)
+    web_port: 20001
+
+    # Observability
+    observability:
+      metrics:
+        enabled: true
+        port: 9090
+      tracing:
+        enabled: false
+
+  # Login token signing key (change in production!)
+  login_token:
+    signing_key: "CHANGE_THIS_SECRET_KEY_12345678"
+
+  # Kiali feature flags
+  kiali_feature_flags:
+    ui_defaults:
+      # Set default namespaces to show in UI
+      namespaces: []
+      # Refresh intervals
+      refresh_interval: "60s"
+
+    # Disable telemetry collection
+    disable_telemetry: true

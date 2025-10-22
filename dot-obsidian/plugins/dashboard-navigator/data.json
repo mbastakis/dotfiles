@@ -27,6 +27,7 @@
   "hide_outgoing": false,
   "hide_columns": [],
   "show_dashboard_piechart": true,
+  "remember_last_search": true,
   "image_thumbnail": true,
   "thumbnail_size": 82,
   "primary_tags_results_visible": true,

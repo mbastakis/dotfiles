@@ -1,0 +1,16 @@
+# Secrets values for the Helm templates
+# These values will be used by the Secret templates in templates/secrets/
+secrets:
+    # PostgreSQL passwords
+    postgresql:
+        password: dev-magenta-db-password-2025
+        postgresPassword: dev-postgres-admin-password-2025
+    # Backend secrets - only what's needed for the application
+    backend:
+        # ANTHROPIC_API_KEY is no longer needed when using AWS Bedrock via IRSA
+        # OPENAI_API_KEY: "sk-..." # Uncomment and add if needed
+        LOGFIRE_TOKEN: test
+    # Docker registry credentials
+    dockerRegistry:
+        # Base64 encoded Docker config for mtr.devops.telekom.de
+        dockerConfigJson: eyJhdXRocyI6eyJtdHIuZGV2b3BzLnRlbGVrb20uZGUiOnsiYXV0aCI6IllXbGpZeTFzYkcwdFlYTnphWE4wWVc1MEsyOXVaV0ZwWDJ4c2JWOWhjM05wYzNSaGJuUmZaR1YyWDJzNGN6bzFRbGxHVTFoRE0wcGFOazFQT0VwRU5VZEZXVmRCVmtNd05FcFZRMVZWTjBNMlIxSkhSVm96VjA0d1IwZEdWVEZVV0UwMldrUldXa0ZET1RoTVdVSXkiLCJlbWFpbCI6IiJ9fX0K
