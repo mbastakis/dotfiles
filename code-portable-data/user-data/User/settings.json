@@ -69,7 +69,12 @@
   "custom-ui-style.font.sansSerif": "JetBrainsMono Nerd Font Mono",
   "editor.tokenColorCustomizations": {
     "textMateRules": [
-      { "scope": "comment", "settings": { "fontStyle": "italic" } }
+      {
+        "scope": "comment",
+        "settings": {
+          "fontStyle": "italic"
+        }
+      }
     ]
   },
   // Editor Options
@@ -94,7 +99,6 @@
   // ----------------------------------------------------------------------
   // END OF THEMES
   // ----------------------------------------------------------------------
-
   // ----------------------------------------------------------------------
   // ----------------------------------------------------------------------
   // FORMATTING
@@ -147,7 +151,6 @@
   // ----------------------------------------------------------------------
   // END OF FORMATTING
   // ----------------------------------------------------------------------
-
   // ----------------------------------------------------------------------
   // ----------------------------------------------------------------------
   // DEFAULT SETTINGS
@@ -197,7 +200,6 @@
   // ----------------------------------------------------------------------
   // END OF DEFAULT SETTINGS
   // ----------------------------------------------------------------------
-
   // ----------------------------------------------------------------------
   // ----------------------------------------------------------------------
   // EXTENSIONS
@@ -262,36 +264,33 @@
       "text": "- @azure Rule - Summarize topic before taking action: When the user asks about Azure Functions, invoke the azure_development-summarize_topic tool once first to see if any existing custom mode could be a good fit to what user is asking."
     }
   ],
-
   // Sops
   "sops.binPath": "/opt/homebrew/bin/sops",
-
   // Project Manager
   "application.shellEnvironmentResolutionTimeout": 30,
   "projectManager.any.maxDepthRecursion": 10,
   "projectManager.git.maxDepthRecursion": 10,
-  "projectManager.git.baseFolders": ["~/dev"],
-
+  "projectManager.git.baseFolders": [
+    "~/dev"
+  ],
   // Code Clipper
   "codeclipper.obsidianVault": "my-notes",
   "codeclipper.defaultFolder": "Resources/Snippets/Code",
   "codeclipper.storeWorkItems": false,
-  "codeclipper.frontmatterTags": ["mcode-snippet"],
+  "codeclipper.frontmatterTags": [
+    "mcode-snippet"
+  ],
   "codeclipper.sortOrder": "date",
-
   // Docker
   "docker.extension.enableComposeLanguageServer": false,
   "containers.containerClient": "com.microsoft.visualstudio.containers.docker",
-
   // Svelte
   "svelte.enable-ts-plugin": true,
-
   // Makefile Tools
   "makefile.configureOnOpen": true,
   // ----------------------------------------------------------------------
   // END OF EXTENSIONS
   // ----------------------------------------------------------------------
-
   // ----------------------------------------------------------------------
   // MCP (Multi-Cloud Platform) Settings
   // ----------------------------------------------------------------------
@@ -301,7 +300,6 @@
   // ----------------------------------------------------------------------
   // END OF MCP Settings
   // ----------------------------------------------------------------------
-
   // ----------------------------------------------------------------------
   // TUI Manager Settings
   // ----------------------------------------------------------------------
@@ -376,7 +374,6 @@
   // ----------------------------------------------------------------------
   // END OF TUI Manager Settings
   // ----------------------------------------------------------------------
-
   // ----------------------------------------------------------------------
   // ----------------------------------------------------------------------
   // DICTIONARY
@@ -525,7 +522,6 @@
   // ----------------------------------------------------------------------
   // END OF DICTIONARY
   // ----------------------------------------------------------------------
-
   // ----------------------------------------------------------------------
   // ----------------------------------------------------------------------
   // OTHER SETTINGS
@@ -568,5 +564,6 @@
   },
   "gitlab.duoCodeSuggestions.enabled": false,
   "gitlab.duoChat.enabled": false,
-  "gitlab.duoAgentPlatform.enabled": false
+  "gitlab.duoAgentPlatform.enabled": false,
+  "editor.largeFileOptimizations": false
 }

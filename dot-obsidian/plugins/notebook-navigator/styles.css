@@ -2,6 +2,37 @@
    CSS Variables - Defined at body level for Style Settings compatibility
    ======================================================================== */
 
+/* Utility class for text that should only be exposed to assistive tech */
+.nn-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/**
+ * Hidden element used to resolve CSS variable colors to computed RGBA values.
+ * Positioned offscreen and invisible to avoid layout impact while allowing getComputedStyle access.
+ */
+.nn-color-resolver {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    z-index: -1;
+    margin: 0;
+    padding: 0;
+    color: var(--nn-color-resolver-value, transparent);
+    background-color: var(--nn-color-resolver-value, transparent);
+}
+
 body {
     /* ========================================================================
        Padding Variables for Items and Containers
@@ -23,8 +54,8 @@ body {
     /* File item heights - fixed pixel values to prevent fractional rendering */
     --nn-file-title-line-height: 20px; /* Height of file title text */
     --nn-file-padding-vertical: 8px; /* 8px */
-    --nn-file-padding-vertical-slim: 5px; /* Reduced padding for slim mode */
-    --nn-file-padding-vertical-slim-mobile: 8px; /* Mobile slim mode padding for touch targets */
+    --nn-file-padding-vertical-slim: 4px; /* Desktop slim mode padding */
+    --nn-file-padding-vertical-slim-mobile: 8px; /* Mobile slim mode padding */
     --nn-file-padding-total: calc(var(--nn-file-padding-vertical) * 2); /* Total vertical padding (top + bottom) */
     --nn-file-single-text-line-height: 19px; /* Height for single-line text (metadata, date, or single preview) */
     --nn-file-multiline-text-line-height: 18px; /* Height for multi-line preview text */
@@ -34,6 +65,8 @@ body {
     /* Font sizes - fixed pixel values to prevent scaling with Obsidian font size */
     --nn-file-name-size: 14px; /* Fixed 14px */
     --nn-file-small-size: 13px; /* Fixed 13px */
+    --nn-slim-font-size: 13px; /* Slim mode desktop font size */
+    --nn-slim-font-size-mobile: 15px; /* Slim mode mobile font size */
 
     /* Date header heights and padding */
     --nn-date-header-height: 35px; /* First header */
@@ -75,6 +108,8 @@ body {
     /* Minimum widths for panes */
     --nn-navigation-pane-min-width: 150px; /* Minimum width for navigation pane */
     --nn-list-pane-min-width: 250px; /* Minimum width for list pane */
+    --nn-navigation-pane-min-height: 160px; /* Minimum height for navigation pane (vertical split) */
+    --nn-list-pane-min-height: 250px; /* Minimum height for list pane (vertical split) */
 
     /* ========================================================================
        Notebook Navigator Theme Variables
@@ -100,6 +135,9 @@ body {
     --nn-theme-navitem-selected-count-color: var(--nn-theme-navitem-count-color);
     --nn-theme-navitem-selected-count-bg: var(--nn-theme-navitem-count-bg);
     --nn-theme-navitem-selected-inactive-bg: var(--background-modifier-hover);
+    --nn-theme-navitem-selected-inactive-name-color: var(--nn-theme-navitem-name-color);
+    --nn-theme-tag-positive-bg: #00800033;
+    --nn-theme-tag-negative-bg: #ff000033;
 
     /* -- Navigation Item Text Styling -- */
     --nn-theme-navitem-file-name-font-weight: 400;
@@ -124,6 +162,7 @@ body {
     --nn-theme-list-heading-color: var(--text-muted);
     --nn-theme-list-heading-font-weight: 600;
     --nn-theme-list-group-header-color: var(--text-muted);
+    --nn-style-pinned-section-icon: 'lucide-pin';
     --nn-theme-list-separator-color: var(--background-modifier-border);
 
     /* -- File Items -- */
@@ -145,6 +184,7 @@ body {
     --nn-theme-file-selected-tag-color: var(--nn-theme-file-tag-color);
     --nn-theme-file-selected-tag-bg: var(--nn-theme-file-tag-bg);
     --nn-theme-file-selected-inactive-bg: var(--background-modifier-hover);
+    --nn-theme-file-selected-inactive-name-color: var(--nn-theme-file-selected-name-color);
 
     /* -- File Item Text Styling -- */
     --nn-theme-list-group-header-font-weight: 600;
@@ -171,7 +211,6 @@ body {
     --nn-theme-header-button-disabled-icon-color: var(--text-muted);
 
     /* -- Mobile Styles -- */
-    --nn-theme-mobile-nav-bg: var(--background-primary);
     --nn-theme-mobile-list-header-link-color: var(--link-color);
     --nn-theme-mobile-list-header-breadcrumb-color: var(--text-normal);
     --nn-theme-mobile-list-header-breadcrumb-font-weight: 600;
@@ -226,6 +265,24 @@ body {
     height: 100%;
     overflow: hidden;
     position: relative;
+}
+
+.nn-scale-wrapper {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.nn-scale-wrapper > .nn-split-container {
+    width: 100%;
+    height: 100%;
+    transform-origin: top left;
+}
+
+.nn-scale-wrapper[data-ui-scale] > .nn-split-container {
+    width: calc(100% / var(--nn-ui-scale, 1));
+    height: calc(100% / var(--nn-ui-scale, 1));
+    transform: scale(var(--nn-ui-scale, 1));
 }
 
 /* ========================================================================
@@ -427,6 +484,57 @@ body {
     contain: layout style;
 }
 
+/* Override backgrounds when desktop background mode is set to primary or secondary */
+/* Primary mode: use list background for navigation pane */
+.nn-split-container.nn-desktop.nn-bg-primary {
+    --nn-theme-nav-bg: var(--nn-theme-list-bg);
+}
+
+/* Secondary mode: use navigation background for list pane */
+.nn-split-container.nn-desktop.nn-bg-secondary {
+    --nn-theme-list-bg: var(--nn-theme-nav-bg);
+}
+
+/* Apply the same background overrides on mobile single-pane layout */
+.nn-split-container.nn-mobile.nn-bg-primary {
+    --nn-theme-nav-bg: var(--nn-theme-list-bg);
+}
+
+.nn-split-container.nn-mobile.nn-bg-secondary {
+    --nn-theme-list-bg: var(--nn-theme-nav-bg);
+}
+
+.nn-split-container.nn-orientation-vertical {
+    flex-direction: column;
+}
+
+.nn-split-container.nn-orientation-vertical .nn-navigation-pane {
+    width: 100%;
+    min-width: 0;
+    min-height: var(--nn-navigation-pane-min-height);
+    flex: 0 1 auto;
+}
+
+.nn-split-container.nn-orientation-vertical .nn-list-pane {
+    min-width: 0;
+    width: 100%;
+    min-height: var(--nn-list-pane-min-height);
+}
+
+.nn-split-container.nn-orientation-vertical .nn-navigation-pane .nn-pane-header {
+    border-right: none;
+}
+
+.nn-split-container.nn-orientation-vertical .nn-navigation-pane-scroller,
+.nn-split-container.nn-orientation-vertical .nn-shortcut-pinned {
+    border-right: none;
+}
+
+.nn-split-container.nn-orientation-vertical:not(.nn-single-pane) .nn-navigation-pane-scroller,
+.nn-split-container.nn-orientation-vertical:not(.nn-single-pane) .nn-shortcut-pinned {
+    border-bottom: 1px solid var(--nn-theme-divider-border-color);
+}
+
 /* Pane divider resize handle - overlay on the left edge of list pane */
 .nn-resize-handle {
     width: 3px;
@@ -437,6 +545,14 @@ body {
     top: 0;
     bottom: 0;
     z-index: 10;
+}
+
+.nn-split-container.nn-orientation-vertical .nn-resize-handle {
+    width: 100%;
+    height: 3px;
+    cursor: row-resize;
+    bottom: auto;
+    right: 0;
 }
 
 /* Pane divider resize handle hover state - provides visual feedback */
@@ -476,8 +592,8 @@ body {
     background-color: var(--nn-theme-nav-bg);
 }
 
-/* Add right border to nav header in dual pane mode */
-:not(.nn-single-pane) .nn-navigation-pane .nn-pane-header {
+/* Add divider to nav header in dual pane mode */
+.nn-split-container.nn-orientation-horizontal:not(.nn-single-pane) .nn-navigation-pane .nn-pane-header {
     border-right: 1px solid var(--nn-theme-divider-border-color);
 }
 
@@ -871,6 +987,12 @@ body {
     flex-shrink: 0;
 }
 
+.nn-nav-root-spacer {
+    height: var(--nn-nav-root-spacing, 0px);
+    flex-shrink: 0;
+    pointer-events: none;
+}
+
 /* List pane spacers - match navigation pane for consistency */
 .nn-list-top-spacer {
     height: 8px;
@@ -878,6 +1000,11 @@ body {
 
 .nn-list-bottom-spacer {
     height: 20px;
+}
+
+.nn-group-spacer {
+    height: var(--nn-date-header-padding-top);
+    flex-shrink: 0;
 }
 
 /* ========================================================================
@@ -897,6 +1024,13 @@ body {
 
     /* Ensure scroll events work properly with virtualization */
     position: relative;
+}
+
+.nn-navigation-pane-scroller[data-banner='true'] {
+    /* Classic Windows scrollbars consume layout width when they appear. Setting a stable gutter
+       keeps the width constant so TanStack Virtual's ResizeObserver doesn't retrigger endlessly
+       when the navigation banner forces the content to overflow during resizing. */
+    scrollbar-gutter: stable;
 }
 
 /* Container for pinned shortcuts displayed above the scrollable navigation tree */
@@ -939,7 +1073,7 @@ body {
 }
 
 .notebook-navigator-mobile .nn-shortcut-pinned {
-    background-color: var(--nn-theme-mobile-nav-bg);
+    background-color: var(--nn-theme-nav-bg);
     border-bottom: 1px solid var(--nn-theme-divider-border-color);
     border-right: none;
 }
@@ -977,34 +1111,66 @@ body {
     height: var(--nn-setting-nav-item-height); /* Fixed height for virtualizer accuracy */
     box-sizing: border-box;
     padding-inline-start: calc(var(--level, 0) * var(--nn-setting-nav-indent));
-    contain: paint; /* Isolate per-item painting */
+    /* Isolate layout and style calculations per item while allowing ::before/::after to extend beyond bounds */
+    contain: layout style;
 }
 
-.nn-navitem.nn-has-custom-background {
+/* Nav rows that display a background overlay need positioning for the pseudo elements */
+.nn-navitem.nn-has-custom-background,
+.nn-navitem.nn-has-search-match,
+.nn-navitem.nn-selected {
     position: relative;
 }
 
-.nn-navitem.nn-has-custom-background:not(.nn-selected)::before {
+/* Render the custom background color behind the nav item content */
+.nn-navitem.nn-has-custom-background::before {
     content: '';
     position: absolute;
-    top: 0;
+    top: 0px;
     inset-inline-start: 0;
     inset-inline-end: 0;
-    bottom: 0;
+    /* Extend slightly beyond bottom item bounds (height rounding issue) to prevent hairline gaps when zoomed */
+    bottom: -0.2px;
     background-color: var(--nn-navitem-custom-bg-color);
-    border-radius: min(14px, var(--nn-theme-navitem-border-radius));
+    border-top-left-radius: var(--nn-navitem-top-left-radius, min(14px, var(--nn-theme-navitem-border-radius)));
+    border-top-right-radius: var(--nn-navitem-top-right-radius, min(14px, var(--nn-theme-navitem-border-radius)));
+    border-bottom-left-radius: var(--nn-navitem-bottom-left-radius, min(14px, var(--nn-theme-navitem-border-radius)));
+    border-bottom-right-radius: var(--nn-navitem-bottom-right-radius, min(14px, var(--nn-theme-navitem-border-radius)));
     z-index: 0;
     pointer-events: none;
 }
 
-.nn-navitem.nn-has-custom-background > .nn-navitem-content {
+.nn-navitem.nn-has-custom-background > .nn-navitem-content,
+.nn-navitem.nn-has-custom-background > .nn-navitem-content > * {
     position: relative;
     z-index: 2;
 }
 
-.nn-navitem.nn-has-custom-background > .nn-navitem-content > * {
-    position: relative;
-    z-index: 2;
+/* Zero shared corners when consecutive background overlays touch */
+.nn-navitem:is(.nn-has-custom-background, .nn-has-search-match) + .nn-navitem:is(.nn-has-custom-background, .nn-has-search-match) {
+    --nn-navitem-top-left-radius: 0;
+    --nn-navitem-top-right-radius: 0;
+}
+
+.nn-navitem:is(.nn-has-custom-background, .nn-has-search-match):has(+ .nn-navitem:is(.nn-has-custom-background, .nn-has-search-match)) {
+    --nn-navitem-bottom-left-radius: 0;
+    --nn-navitem-bottom-right-radius: 0;
+}
+
+/* Apply the same corner trimming within the virtualized row wrapper */
+.nn-virtual-nav-item:has(> .nn-navitem:is(.nn-has-custom-background, .nn-has-search-match))
+    + .nn-virtual-nav-item:has(> .nn-navitem:is(.nn-has-custom-background, .nn-has-search-match))
+    > .nn-navitem:is(.nn-has-custom-background, .nn-has-search-match) {
+    --nn-navitem-top-left-radius: 0;
+    --nn-navitem-top-right-radius: 0;
+}
+
+.nn-virtual-nav-item:has(> .nn-navitem:is(.nn-has-custom-background, .nn-has-search-match)):has(
+        + .nn-virtual-nav-item > .nn-navitem:is(.nn-has-custom-background, .nn-has-search-match)
+    )
+    > .nn-navitem:is(.nn-has-custom-background, .nn-has-search-match) {
+    --nn-navitem-bottom-left-radius: 0;
+    --nn-navitem-bottom-right-radius: 0;
 }
 
 /* Folder content - contains folder UI elements */
@@ -1021,12 +1187,45 @@ body {
     box-sizing: border-box;
 }
 
+.nn-navitem-content--search-include,
+.nn-navitem-content--search-exclude {
+    position: relative;
+    z-index: 1;
+}
+
+.nn-navitem-content--search-include::before,
+.nn-navitem-content--search-exclude::before {
+    content: '';
+    position: absolute;
+    top: 0px;
+    /* Extend slightly beyond bottom item bounds (height rounding issue) to prevent hairline gaps when zoomed */
+    bottom: -0.2px;
+    inset-inline-end: 0;
+    inset-inline-start: calc(var(--level, 0) * var(--nn-setting-nav-indent) * -1);
+    border-top-left-radius: var(--nn-navitem-top-left-radius, min(14px, var(--nn-theme-navitem-border-radius)));
+    border-top-right-radius: var(--nn-navitem-top-right-radius, min(14px, var(--nn-theme-navitem-border-radius)));
+    border-bottom-left-radius: var(--nn-navitem-bottom-left-radius, min(14px, var(--nn-theme-navitem-border-radius)));
+    border-bottom-right-radius: var(--nn-navitem-bottom-right-radius, min(14px, var(--nn-theme-navitem-border-radius)));
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Pre-composited solid color prevents hairlines by blending alpha with pane background */
+.nn-navitem-content--search-include::before {
+    background-color: var(--nn-theme-tag-positive-bg-solid, var(--nn-theme-tag-positive-bg));
+}
+
+/* Pre-composited solid color prevents hairlines by blending alpha with pane background */
+.nn-navitem-content--search-exclude::before {
+    background-color: var(--nn-theme-tag-negative-bg-solid, var(--nn-theme-tag-negative-bg));
+}
+
 /* Folder hover state - desktop only, using pseudo-element for padding control */
 .nn-desktop .nn-navitem:hover {
     position: relative;
 }
 
-.nn-desktop .nn-navitem:hover::after {
+.nn-desktop .nn-navitem:not([data-search-match]):hover::after {
     content: '';
     position: absolute;
     top: 0;
@@ -1251,7 +1450,7 @@ body {
     flex-shrink: 0;
 }
 
-.nn-shortcut-actions {
+.nn-navitem-accessory {
     display: flex;
     gap: 0.25rem;
     margin-inline-start: 0.5rem;
@@ -1481,7 +1680,8 @@ body {
     position: relative;
 
     /* CSS Custom Properties for file items - themes can override these */
-    contain: paint; /* Isolate per-item painting */
+    /* Isolate layout and style calculations per item while allowing ::before to extend beyond bounds */
+    contain: layout style;
 }
 
 /* Remove shadows */
@@ -1663,7 +1863,7 @@ body {
     position: absolute;
     top: 8px; /* Default: 8px for normal mode */
     inset-inline-end: 8px;
-    height: 24px;
+    height: 20px;
     display: none;
     background: var(--nn-theme-quick-actions-bg);
     border: 1px solid var(--nn-theme-quick-actions-border);
@@ -1702,15 +1902,15 @@ body {
     flex-shrink: 0;
 }
 
-/* Slim mode with 1 title row and no tags: center vertically (4px offset) */
+/* Slim mode with 1 title row and no tags: center vertically */
 .nn-quick-actions-panel.nn-slim-mode[data-title-rows='1'][data-has-tags='false'] {
-    top: 3px; /* (20px line height + 10px padding - 24px icon) / 2 = 3px */
+    top: max(0px, calc((var(--nn-file-title-line-height) + var(--nn-file-padding-vertical-slim) * 2 - 20px) / 2));
 }
 
-/* Slim mode with tags or 2 title rows: use default slim padding (6px) */
+/* Slim mode with tags or 2 title rows: align with slim padding */
 .nn-quick-actions-panel.nn-slim-mode[data-title-rows='2'],
 .nn-quick-actions-panel.nn-slim-mode[data-has-tags='true'] {
-    top: 5px; /* Match slim mode padding */
+    top: var(--nn-file-padding-vertical-slim);
 }
 
 /* Panel appears when hovering anywhere on file row */
@@ -1797,6 +1997,18 @@ body {
     flex-shrink: 0;
 }
 
+.nn-file-folder-icon[data-has-color='true'] svg {
+    stroke-width: 2.4;
+}
+
+.nn-file-folder-label {
+    font-weight: var(--nn-theme-file-parent-font-weight);
+}
+
+.nn-file-folder-label.nn-file-folder-label--colored {
+    font-weight: var(--nn-theme-navitem-custom-color-name-font-weight);
+}
+
 /* ========================================================================
    Tag Display Styles
    ======================================================================== */
@@ -1807,9 +2019,16 @@ body {
     flex-wrap: nowrap;
     gap: 4px;
     margin-top: 4px;
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
     height: 22px; /* Fixed height for single row */
     position: relative;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.nn-file-tags::-webkit-scrollbar {
+    display: none;
 }
 
 /* Individual tag pill */
@@ -1881,7 +2100,7 @@ body {
     color: var(--nn-theme-file-selected-date-color);
 }
 
-.nn-file.nn-selected .nn-file-parent {
+.nn-file.nn-selected .nn-file-folder {
     color: var(--nn-theme-file-selected-parent-color);
 }
 
@@ -1892,11 +2111,12 @@ body {
 /* Slim file item - more compact list appearance */
 .nn-file.nn-slim .nn-file-content {
     padding: var(--nn-file-padding-vertical-slim) var(--nn-file-item-padding-horizontal); /* Reduced vertical padding */
+    border-radius: min(14px, var(--nn-theme-navitem-border-radius));
 }
 
 /* Slim file name - no bold, smaller font like folder items */
 .nn-file.nn-slim .nn-file-name {
-    font-size: var(--nn-file-small-size);
+    font-size: var(--nn-slim-font-size, var(--nn-file-small-size));
     font-weight: var(--nn-theme-file-slim-name-font-weight);
     margin-bottom: 0;
     line-height: var(--nn-file-title-line-height);
@@ -1926,6 +2146,17 @@ body {
 /* Preserve custom color for colored file names even when selected in slim mode */
 .nn-file.nn-slim.nn-selected .nn-file-name[data-has-color='true'] {
     color: var(--nn-file-name-custom-color);
+}
+
+/* Inactive file name color when list pane is not focused */
+.nn-split-container[data-navigator-focused='false'] .nn-file.nn-selected .nn-file-name:not([data-has-color='true']),
+.nn-split-container[data-navigator-focused='true'][data-focus-pane='navigation']
+    .nn-file.nn-selected
+    .nn-file-name:not([data-has-color='true']),
+.nn-split-container[data-navigator-focused='true'][data-focus-pane='search']
+    .nn-file.nn-selected
+    .nn-file-name:not([data-has-color='true']) {
+    color: var(--nn-theme-file-selected-inactive-name-color);
 }
 
 /* ========================================================================
@@ -2034,12 +2265,32 @@ body {
     text-overflow: ellipsis;
     display: flex;
     align-items: flex-start;
+    gap: 6px;
 }
 
 /* First date header - no top margin or extra padding for first group */
 .nn-date-group-header.nn-first-header {
     height: var(--nn-date-header-height);
     padding: 0 var(--nn-file-item-padding-horizontal);
+    align-items: center;
+}
+
+.nn-date-group-header-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--nn-nav-icon-size);
+    height: var(--nn-nav-icon-size);
+    color: var(--nn-theme-list-group-header-color);
+    flex: 0 0 auto;
+}
+
+.nn-date-group-header-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nn-pinned-section-header {
     align-items: center;
 }
 
@@ -2068,6 +2319,16 @@ body {
     flex-direction: column;
 }
 
+.nn-skeleton-navigation-pane-vertical {
+    width: 100%;
+    min-height: var(--nn-navigation-pane-min-height);
+    flex: 0 1 auto;
+}
+
+.nn-skeleton-list-pane-vertical {
+    min-height: var(--nn-list-pane-min-height);
+}
+
 .nn-skeleton-nav-header {
     height: 32px;
     background-color: var(--nn-theme-nav-bg);
@@ -2075,8 +2336,13 @@ body {
 }
 
 /* Add right border to nav header in dual pane mode */
-:not(.nn-single-pane) .nn-skeleton-nav-header {
+.nn-split-container.nn-orientation-horizontal:not(.nn-single-pane) .nn-skeleton-nav-header {
     border-right: 1px solid var(--nn-theme-divider-border-color);
+}
+
+.nn-split-container.nn-orientation-vertical:not(.nn-single-pane) .nn-skeleton-nav-header {
+    border-right: none;
+    border-bottom: 1px solid var(--nn-theme-divider-border-color);
 }
 
 .nn-skeleton-list-header {
@@ -2098,8 +2364,13 @@ body {
 }
 
 /* Add right border only to nav content area in dual pane mode */
-:not(.nn-single-pane) .nn-skeleton-navigation-pane .nn-skeleton-content {
+.nn-split-container.nn-orientation-horizontal:not(.nn-single-pane) .nn-skeleton-navigation-pane .nn-skeleton-content {
     border-right: 1px solid var(--nn-theme-divider-border-color);
+}
+
+.nn-split-container.nn-orientation-vertical:not(.nn-single-pane) .nn-skeleton-navigation-pane .nn-skeleton-content {
+    border-right: none;
+    border-bottom: 1px solid var(--nn-theme-divider-border-color);
 }
 
 /* ========================================================================
@@ -2131,13 +2402,19 @@ body {
 .nn-file.nn-selected .nn-file-content::before {
     content: '';
     position: absolute;
-    top: 0;
+    top: 0px;
     inset-inline-start: 0;
     inset-inline-end: 0;
-    bottom: 0; /* Extend all the way down */
-    background-color: var(--nn-theme-navitem-selected-bg);
+    /* Extend slightly beyond bottom item bounds (height rounding issue) to prevent hairline gaps when zoomed */
+    bottom: -0.2px;
+    /* Pre-composited solid color prevents hairlines by blending alpha with pane background */
+    background-color: var(--nn-theme-file-selected-bg-solid, var(--nn-theme-file-selected-bg));
     border-radius: min(16px, var(--nn-theme-file-border-radius));
     z-index: 0; /* Below separator lines */
+}
+
+.nn-file.nn-slim.nn-selected .nn-file-content::before {
+    border-radius: min(14px, var(--nn-theme-navitem-border-radius));
 }
 
 /* Adjust rounded corners for multiselection */
@@ -2151,32 +2428,33 @@ body {
     border-bottom-right-radius: 0;
 }
 
-/* Selected folder - transparent background for pseudo-element approach */
-.nn-navitem.nn-selected {
-    position: relative;
-}
-
-.nn-navitem.nn-selected > .nn-navitem-content {
+.nn-navitem.nn-selected > .nn-navitem-content:not(.nn-navitem-content--search-include):not(.nn-navitem-content--search-exclude) {
     background: transparent;
 }
 
-/* Selected folder background - uses pseudo-element for better control */
-.nn-navitem.nn-selected::before {
+/* Selection overlay lives above the custom background while mirroring trimmed corners */
+.nn-navitem.nn-selected::after {
     content: '';
     position: absolute;
-    top: 0;
+    top: 0px;
     inset-inline-start: 0;
     inset-inline-end: 0;
-    bottom: 0;
-    background-color: var(--nn-theme-navitem-selected-bg);
-    border-radius: min(14px, var(--nn-theme-navitem-border-radius));
-    z-index: 0;
+    /* Extend slightly beyond bottom item bounds (height rounding issue) to prevent hairline gaps when zoomed */
+    bottom: -0.2px;
+    /* Pre-composited solid color prevents hairlines by blending alpha with pane background */
+    background-color: var(--nn-theme-navitem-selected-bg-solid, var(--nn-theme-navitem-selected-bg));
+    border-top-left-radius: var(--nn-navitem-top-left-radius, min(14px, var(--nn-theme-navitem-border-radius)));
+    border-top-right-radius: var(--nn-navitem-top-right-radius, min(14px, var(--nn-theme-navitem-border-radius)));
+    border-bottom-left-radius: var(--nn-navitem-bottom-left-radius, min(14px, var(--nn-theme-navitem-border-radius)));
+    border-bottom-right-radius: var(--nn-navitem-bottom-right-radius, min(14px, var(--nn-theme-navitem-border-radius)));
+    z-index: 1;
+    pointer-events: none;
 }
 
-/* Selected folder content z-index - ensures text appears above background */
+.nn-navitem.nn-selected > .nn-navitem-content,
 .nn-navitem.nn-selected > .nn-navitem-content > * {
     position: relative;
-    z-index: 1;
+    z-index: 2;
 }
 
 /* Selected file inner content z-index - ensures content above background */
@@ -2193,13 +2471,25 @@ body {
    1. Navigator unfocused (all selections dimmed)
    2. Navigator focused but inactive pane (cross-pane dimming)
    3. Search field is focused (both panes dimmed) */
+/* Pre-composited solid colors for inactive selection states */
 .nn-split-container[data-navigator-focused='false'] .nn-file.nn-selected .nn-file-content::before,
-.nn-split-container[data-navigator-focused='false'] .nn-navitem.nn-selected::before,
 .nn-split-container[data-navigator-focused='true'][data-focus-pane='navigation'] .nn-file.nn-selected .nn-file-content::before,
-.nn-split-container[data-navigator-focused='true'][data-focus-pane='files'] .nn-navitem.nn-selected::before,
-.nn-split-container[data-navigator-focused='true'][data-focus-pane='search'] .nn-file.nn-selected .nn-file-content::before,
-.nn-split-container[data-navigator-focused='true'][data-focus-pane='search'] .nn-navitem.nn-selected::before {
-    background-color: var(--nn-theme-navitem-selected-inactive-bg);
+.nn-split-container[data-navigator-focused='true'][data-focus-pane='search'] .nn-file.nn-selected .nn-file-content::before {
+    background-color: var(--nn-theme-file-selected-inactive-bg-solid, var(--nn-theme-file-selected-inactive-bg));
+}
+
+/* Pre-composited solid colors for inactive navigation selection states */
+.nn-split-container[data-navigator-focused='false'] .nn-navitem.nn-selected::after,
+.nn-split-container[data-navigator-focused='true'][data-focus-pane='files'] .nn-navitem.nn-selected::after,
+.nn-split-container[data-navigator-focused='true'][data-focus-pane='search'] .nn-navitem.nn-selected::after {
+    background-color: var(--nn-theme-navitem-selected-inactive-bg-solid, var(--nn-theme-navitem-selected-inactive-bg));
+}
+
+/* Inactive navigation item name color when navigation pane is not focused */
+.nn-split-container[data-navigator-focused='false'] .nn-navitem.nn-selected .nn-navitem-name,
+.nn-split-container[data-navigator-focused='true'][data-focus-pane='files'] .nn-navitem.nn-selected .nn-navitem-name,
+.nn-split-container[data-navigator-focused='true'][data-focus-pane='search'] .nn-navitem.nn-selected .nn-navitem-name {
+    color: var(--nn-theme-navitem-selected-inactive-name-color);
 }
 
 /* Active navigation item selection styles - only when navigation pane is focused */
@@ -2260,15 +2550,15 @@ body.nn-resizing {
     outline-offset: -2px;
 }
 
-/* Special visual feedback for tag drop zones */
+/* Special visual feedback for tag drop zones - uses pre-composited solid color */
 [data-drop-zone='tag'].nn-drag-over {
-    background-color: var(--background-modifier-success);
+    background-color: var(--nn-theme-tag-positive-bg-solid, var(--nn-theme-tag-positive-bg));
     border-radius: min(14px, var(--nn-theme-navitem-border-radius));
 }
 
-/* Different style for untagged drop zone */
+/* Different style for untagged drop zone - uses pre-composited solid color */
 [data-drop-zone='tag'][data-tag='__untagged__'].nn-drag-over {
-    background-color: var(--background-modifier-error-hover);
+    background-color: var(--nn-theme-tag-negative-bg-solid, var(--nn-theme-tag-negative-bg));
     border-radius: min(14px, var(--nn-theme-navitem-border-radius));
 }
 
@@ -2388,7 +2678,8 @@ body.nn-resizing {
     inset-inline-start: 0;
     inset-inline-end: 0;
     bottom: 0;
-    border: 2px solid var(--nn-theme-navitem-selected-bg);
+    /* Use pre-composited solid color for consistent border appearance */
+    border: 2px solid var(--nn-theme-navitem-selected-bg-solid, var(--nn-theme-navitem-selected-bg));
     border-radius: min(14px, var(--nn-theme-navitem-border-radius));
     pointer-events: none;
     z-index: 10;
@@ -2407,10 +2698,15 @@ body.nn-resizing {
     inset-inline-start: 0;
     inset-inline-end: 0;
     bottom: 0; /* Extend to bottom edge to cover separator space */
-    border: 2px solid var(--nn-theme-navitem-selected-bg);
+    /* Use pre-composited solid color for consistent border appearance */
+    border: 2px solid var(--nn-theme-navitem-selected-bg-solid, var(--nn-theme-navitem-selected-bg));
     border-radius: min(16px, var(--nn-theme-file-border-radius));
     pointer-events: none;
     z-index: 10;
+}
+
+.nn-file.nn-slim.nn-context-menu-active:not(.nn-selected) .nn-file-content::after {
+    border-radius: min(14px, var(--nn-theme-navitem-border-radius));
 }
 
 /* ========================================================================
@@ -2423,6 +2719,11 @@ body.nn-resizing {
 .nn-navitem.nn-excluded .nn-navitem-name,
 .nn-navitem.nn-excluded .nn-navitem-count {
     opacity: 0.5;
+}
+
+/* Hidden files surfaced via "show hidden" toggle */
+.nn-file.nn-hidden-file {
+    opacity: 0.55;
 }
 
 /* ========================================================================
@@ -2453,6 +2754,32 @@ body.nn-resizing {
     justify-content: flex-end;
     gap: 8px;
     margin-top: 16px;
+}
+
+.nn-folder-note-type-modal .modal-content {
+    padding-top: 16px;
+}
+
+.nn-folder-note-type-modal .modal-title {
+    width: 100%;
+    text-align: center;
+}
+
+.nn-folder-note-type-info {
+    margin-bottom: 4px;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.nn-folder-note-type-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.nn-folder-note-type-buttons button {
+    width: 100%;
 }
 
 /* ========================================================================
@@ -2864,7 +3191,8 @@ body.nn-resizing {
 /* Virtual file item wrapper - position relative for separator positioning */
 .nn-virtual-file-item {
     position: relative;
-    contain: paint; /* Isolate per-item painting */
+    /* Isolate layout and style calculations per item while allowing overlays to extend beyond bounds */
+    contain: layout style;
 }
 
 /* ========================================================================
@@ -2878,11 +3206,22 @@ body.nn-resizing {
     border-left: 2px solid var(--background-modifier-border);
 }
 
+/* Settings layout root to keep tab header fixed */
+.nn-settings-tab-root {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+}
+
 /* Settings tabs layout and navigation */
 .nn-settings-tabs {
     display: flex;
     flex-direction: column;
     gap: var(--size-4-4);
+    flex: 1;
+    min-height: 0;
 }
 
 .nn-settings-tabs-nav {
@@ -2890,7 +3229,7 @@ body.nn-resizing {
     flex-wrap: wrap;
     gap: var(--size-2-3);
     padding-bottom: var(--size-2-2);
-    border-bottom: 1px solid var(--background-modifier-border);
+    flex-shrink: 0;
 }
 
 .nn-settings-tab-button {
@@ -2903,6 +3242,12 @@ body.nn-resizing {
 
 .nn-settings-tabs-content {
     position: relative;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    box-sizing: border-box;
+    scrollbar-gutter: stable;
+    padding-inline-end: var(--nn-scroller-padding);
 }
 
 /* Hide tabs by default, show only active tab */
@@ -2945,9 +3290,19 @@ body.nn-resizing {
 }
 
 /* Wider text inputs for settings that benefit from more space */
-.nn-setting-wide-input input[type='text'] {
+.nn-setting-wide-input input[type='text'],
+.nn-setting-wide-input textarea {
     width: 300px;
     max-width: 100%;
+}
+
+.nn-slider-value {
+    margin-left: 12px;
+    font-size: var(--font-ui-smaller);
+    color: var(--text-muted);
+    min-width: 48px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
 }
 
 /* ========================================================================
@@ -2964,7 +3319,8 @@ body.nn-resizing {
    ======================================================================== */
 
 /* Mobile-specific wide input fields - full width on mobile */
-.is-mobile .nn-setting-wide-input input[type='text'] {
+.is-mobile .nn-setting-wide-input input[type='text'],
+.is-mobile .nn-setting-wide-input textarea {
     width: 100%;
 }
 
@@ -3032,7 +3388,7 @@ body.nn-resizing {
 /* Make navigation pane flexible on mobile to handle resize gracefully */
 .notebook-navigator-mobile .nn-navigation-pane {
     flex: 1;
-    background-color: var(--nn-theme-mobile-nav-bg) !important;
+    background-color: var(--nn-theme-nav-bg) !important;
 }
 
 /* Hide resize handle on mobile */
@@ -3198,12 +3554,10 @@ body.nn-resizing {
     -webkit-overflow-scrolling: touch;
 }
 
-/* Hide navigation pane border on mobile and use mobile background */
+/* Hide navigation pane border on mobile and apply navigation background */
 .notebook-navigator-mobile .nn-navigation-pane-scroller {
     border-right: none;
-    background-color: var(
-        --nn-theme-mobile-nav-bg
-    ); /* Opaque background on scroller for GPU scroll layer (see .nn-navigation-pane-scroller) */
+    background-color: var(--nn-theme-nav-bg); /* Opaque background on scroller for GPU scroll layer (see .nn-navigation-pane-scroller) */
 }
 
 /* Note: Bottom spacing is handled by a spacer item in the virtualized list */
@@ -3859,9 +4213,9 @@ body.nn-resizing {
     padding: var(--nn-file-padding-vertical-slim-mobile) var(--nn-file-item-padding-horizontal);
 }
 
-/* Mobile slim mode file names - larger font for better readability */
+/* Mobile slim mode file names - use dedicated font variable */
 .notebook-navigator-mobile .nn-file.nn-slim .nn-file-name {
-    font-size: 15px;
+    font-size: var(--nn-slim-font-size-mobile, var(--nn-slim-font-size, 15px));
 }
 
 /* ========================================================================
@@ -4154,7 +4508,7 @@ settings:
     -
         id: nn-theme-nav-bg
         title: Navigation pane background
-        description: Background color of the navigation pane. See Mobile navigation background for mobile.
+        description: Background color of the navigation pane.
         type: variable-themed-color
         format: hex
         default-light: '#'
@@ -4307,6 +4661,33 @@ settings:
         id: nn-theme-navitem-selected-inactive-bg
         title: Selection background (inactive)
         description: Selected item background color when pane is inactive.
+        type: variable-themed-color
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+    -
+        id: nn-theme-navitem-selected-inactive-name-color
+        title: Selected name color (inactive)
+        description: Folder/tag name color when selected and pane is inactive.
+        type: variable-themed-color
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+    -
+        id: nn-theme-tag-positive-bg
+        title: Tag highlight (include)
+        description: Background color for positive tag highlights and tag drop targets.
+        type: variable-themed-color
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+    -
+        id: nn-theme-tag-negative-bg
+        title: Tag highlight (exclude)
+        description: Background color for negative tag highlights and the untagged drop target.
         type: variable-themed-color
         format: hex
         default-light: '#'
@@ -4521,6 +4902,13 @@ settings:
         default-dark: '#'
     -
     -
+        id: nn-style-pinned-section-icon
+        title: Pinned section icon
+        description: Icon name used for the pinned notes header.
+        type: variable-text
+        default: 'lucide-pin'
+    -
+    -
         id: nn-theme-list-separator-color
         title: List separator color
         description: Divider line color between files.
@@ -4699,6 +5087,15 @@ settings:
         id: nn-theme-file-selected-inactive-bg
         title: Selection background (inactive)
         description: Selected file background color when pane is inactive.
+        type: variable-themed-color
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+    -
+        id: nn-theme-file-selected-inactive-name-color
+        title: Selected file name color (inactive)
+        description: File name color when selected and pane is inactive.
         type: variable-themed-color
         format: hex
         default-light: '#'

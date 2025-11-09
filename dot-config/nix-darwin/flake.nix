@@ -176,6 +176,8 @@
         "bagels"
         "browsh"
         "ffmpeg"
+        "dua-cli"
+        "parallel-disk-usage"
       ];
       homebrew.masApps = 
         { 

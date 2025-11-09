@@ -1,0 +1,1 @@
+{"path":"Extras/Images/cka-test-1761155318099.webp","text":"[y Solve this question on: ssh cka3962 Create a new ServiceAccount processor in Namespace Project-hamster . Create a Role and RoleBinding, both Named processor as well, These should allow the new SA to only create Secrets and ConfigMaps in that Namespace.","libVersion":"0.5.0","langs":"eng"}
