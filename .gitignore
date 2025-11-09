@@ -1,6 +1,10 @@
 *.vsix
 .DS_Store
 local.zsh
+*.log
+*.bak
+*.swp
+*.tmp
 
 # raycast
 dot-config/raycast/extensions
