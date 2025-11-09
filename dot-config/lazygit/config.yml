@@ -1,7 +1,7 @@
 git:
-  paging:
-    colorArg: always
-    pager: delta --dark --paging=never
+  pagers:
+    - colorArg: always
+      pager: delta --dark --paging=never
 os:
   # Command for editing a file. Should contain "{{filename}}".
   edit: "code --user-data-dir ~/.vscode {{filename}}"
@@ -26,7 +26,6 @@ gui:
       - "#cdd6f4"
     searchingActiveBorderColor:
       - "#f9e2af"
-
   authorColors:
     "*": "#b4befe"
   showCommandLog: false
