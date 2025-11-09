@@ -63,3 +63,6 @@ dot-config/helm
 
 # ArgoCD
 dot-config/argocd
+
+# Obsidian icon archives (keep extracted directories only)
+dot-obsidian/icons/*.zip
