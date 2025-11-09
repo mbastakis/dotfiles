@@ -5,6 +5,9 @@ local.zsh
 *.bak
 *.swp
 *.tmp
+node_modules/
+bun.lock
+package-lock.json
 
 # raycast
 dot-config/raycast/extensions
