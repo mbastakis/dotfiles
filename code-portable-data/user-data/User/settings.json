@@ -184,7 +184,7 @@
   },
   "redhat.telemetry.enabled": false,
   // GIT Settings
-  "git.autofetch": true,
+  "git.autofetch": false,
   "git.allowForcePush": true,
   "git.ignoreRebaseWarning": true,
   "git.openRepositoryInParentFolders": "never",
@@ -195,7 +195,7 @@
   "terminal.integrated.defaultProfile.linux": "editor",
   "terminal.integrated.defaultProfile.osx": "zsh",
   "terminal.integrated.hideOnStartup": "whenEmpty",
-  "terminal.integrated.inheritEnv": false,
+  "terminal.integrated.inheritEnv": true,
   "terminal.external.osxExec": "Warp.app",
   // ----------------------------------------------------------------------
   // END OF DEFAULT SETTINGS
@@ -565,5 +565,21 @@
   "gitlab.duoCodeSuggestions.enabled": false,
   "gitlab.duoChat.enabled": false,
   "gitlab.duoAgentPlatform.enabled": false,
-  "editor.largeFileOptimizations": false
+  "editor.largeFileOptimizations": true,
+  // Performance Settings
+  "extensions.experimental.affinity": {
+    "ms-python.python": 1,
+    "ms-python.pylance": 1,
+    "golang.go": 1
+  },
+  "search.followSymlinks": false,
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/.hg/store/**": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/.next/**": true
+  }
 }

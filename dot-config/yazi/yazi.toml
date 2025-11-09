@@ -30,41 +30,33 @@ ueberzug_offset = [ 0, 0, 0, 0 ]
 
 [opener]
 edit = [
-	{ run = 'code  "$@"', orphan = true, desc = "VS Code", for = "unix" },
-	{ run = 'code  %*',    orphan = true, desc = "code",           for = "windows" },
-	{ run = 'code  -w %*', block = true,  desc = "code (block)",   for = "windows" },
+	{ run = 'code -r "$@"', orphan = true, desc = "VS Code" },
 ]
 open = [
-	{ run = 'xdg-open "$1"',                desc = "Open", for = "linux" },
-	{ run = 'open "$@"',                    desc = "Open", for = "macos" },
-	{ run = 'start "" "%1"', orphan = true, desc = "Open", for = "windows" },
-	{ run = 'termux-open "$1"',             desc = "Open", for = "android" },
+	{ run = 'xdg-open "$1"', desc = "Open", for = "linux" },
+	{ run = 'open "$@"',     desc = "Open", for = "macos" },
 ]
 reveal = [
-	{ run = 'xdg-open "$(dirname "$1")"',           desc = "Reveal", for = "linux" },
-	{ run = 'open "$1"',                 desc = "Reveal", for = "macos" },
-	{ run = 'explorer /select,"%1"', orphan = true, desc = "Reveal", for = "windows" },
-	{ run = 'termux-open "$(dirname "$1")"',        desc = "Reveal", for = "android" },
-	{ run = '''clear; exiftool "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show EXIF", for = "unix" },
+	{ run = 'xdg-open "$(dirname "$1")"', desc = "Reveal", for = "linux" },
+	{ run = 'open "$1"',                  desc = "Reveal", for = "macos" },
+	{ run = '''clear; exiftool "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show EXIF" },
 ]
 
 render_markdown = [
-	{ run = 'glow "$1"', block = true, desc = "Render Markdown", for = "unix" },
-	{ run = 'glow "%1"', block = true, desc = "Render Markdown", for = "windows" },
+	{ run = '''sh -c 'if [ -f "$1" ]; then glow "$1"; else glow "$1"; fi' -- "$1"''', block = true, desc = "Render Markdown" },
 ]
 
 terminal = [
-	{ run = 'zsh -c "cd $(dirname "$1") && exec $SHELL"', block = true, desc = "Open terminal here", for = "macos" },
+	{ run = 'open -na "Ghostty" --args --working-directory="$(dirname "$1")"', orphan = true, desc = "Open Ghostty here", for = "macos" },
+	{ run = '''xdg-terminal-exec sh -c "cd $(dirname "$1") && exec $SHELL"''', orphan = true, desc = "Open terminal here", for = "linux" },
 ]
 
 extract = [
-	{ run = 'ya pub extract --list "$@"', desc = "Extract here", for = "unix" },
-	{ run = 'ya pub extract --list %*',   desc = "Extract here", for = "windows" },
+	{ run = 'ya pub extract --list "$@"', desc = "Extract here" },
 ]
 play = [
-	{ run = 'mpv --force-window "$@"', orphan = true, for = "unix" },
-	{ run = 'mpv --force-window %*', orphan = true, for = "windows" },
-	{ run = '''mediainfo "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show media info", for = "unix" },
+	{ run = 'mpv --force-window "$@"', orphan = true, desc = "Play" },
+	{ run = '''mediainfo "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show media info" },
 ]
 
 [open]
