@@ -95,4 +95,5 @@ source "$HOME/.zsh/custom_shortcuts.zsh"
 source "$HOME/.zsh/obsidian-cli.zsh"
 source "$HOME/.zsh/fzf.zsh"
 source "$HOME/.zsh/fzf-tab.zsh"
+source "$HOME/.zsh/direnv.zsh"
 # ----------------------------------------------------

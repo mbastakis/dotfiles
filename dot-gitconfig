@@ -1,7 +1,9 @@
 [user]
 	email = mbastakis@gmail.com
 	name = Michail Bastakis
-[includeIf "gitdir:~/dev/work/"]
+[includeIf "gitdir:~/dev/work/aivertical/"]
+	path = ~/.gitconfig-work
+[includeIf "gitdir:~/dev/work/archive/"]
 	path = ~/.gitconfig-work
 [includeIf "gitdir:~/dev/personal/"]
 	path = ~/.gitconfig-personal

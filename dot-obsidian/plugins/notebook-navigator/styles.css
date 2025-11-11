@@ -609,6 +609,34 @@ body {
     align-items: center;
 }
 
+.nn-header-actions-profile {
+    gap: 8px;
+    flex: 1 1 auto;
+    overflow: hidden;
+}
+
+.nn-pane-header-profile {
+    cursor: pointer;
+    gap: 4px;
+    padding-right: 0;
+    justify-content: flex-start;
+}
+
+.nn-pane-header-profile:focus-visible {
+    outline: 1px solid var(--interactive-accent);
+    outline-offset: 1px;
+    border-radius: 6px;
+}
+
+.nn-pane-header-profile-chevron {
+    width: var(--nn-nav-icon-size);
+    height: var(--nn-nav-icon-size);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--nn-theme-list-header-breadcrumb-color);
+}
+
 .nn-pane-header-title {
     font-size: var(--nn-desktop-header-font-size);
     font-weight: var(--nn-theme-list-header-breadcrumb-font-weight);
@@ -618,6 +646,10 @@ body {
     min-width: 0;
     display: flex;
     align-items: center;
+}
+
+.nn-pane-header-title.nn-pane-header-profile {
+    padding-left: 0;
 }
 
 .nn-single-pane .nn-list-pane .nn-pane-header-title {
@@ -664,6 +696,10 @@ body {
     color: var(--nn-theme-list-header-breadcrumb-color);
     flex: 1;
     min-width: 0;
+}
+
+.nn-pane-header-profile .nn-pane-header-text {
+    flex: 0 1 auto;
 }
 
 /* Search bar container */
@@ -2184,6 +2220,10 @@ body {
     aspect-ratio: var(--nn-feature-image-aspect-ratio, 1);
 }
 
+.nn-feature-image--hidden {
+    display: none;
+}
+
 /* Dynamic sizing based on calculated item height */
 .nn-virtual-file-item .nn-feature-image {
     /* Size based on item height minus total padding */
@@ -2556,6 +2596,11 @@ body.nn-resizing {
     border-radius: min(14px, var(--nn-theme-navitem-border-radius));
 }
 
+[data-drop-zone='tag-root'].nn-drag-over {
+    background-color: var(--nn-theme-tag-positive-bg-solid, var(--nn-theme-tag-positive-bg));
+    border-radius: min(14px, var(--nn-theme-navitem-border-radius));
+}
+
 /* Different style for untagged drop zone - uses pre-composited solid color */
 [data-drop-zone='tag'][data-tag='__untagged__'].nn-drag-over {
     background-color: var(--nn-theme-tag-negative-bg-solid, var(--nn-theme-tag-negative-bg));
@@ -2754,6 +2799,26 @@ body.nn-resizing {
     justify-content: flex-end;
     gap: 8px;
     margin-top: 16px;
+}
+
+/* Tag suggest modal create toggle */
+.nn-tag-suggest-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0 0 8px;
+    padding: 0 4px;
+}
+
+.nn-tag-suggest-toggle-label {
+    font-size: var(--font-ui-small);
+    color: var(--text-muted);
+}
+
+.nn-tag-suggest-toggle-control {
+    display: flex;
+    align-items: center;
 }
 
 .nn-folder-note-type-modal .modal-content {
@@ -3206,21 +3271,15 @@ body.nn-resizing {
     border-left: 2px solid var(--background-modifier-border);
 }
 
-/* Settings layout root to keep tab header fixed */
+/* Settings layout root */
 .nn-settings-tab-root {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+    display: block;
     min-height: 0;
-    overflow: hidden;
 }
 
 /* Settings tabs layout and navigation */
 .nn-settings-tabs {
-    display: flex;
-    flex-direction: column;
-    gap: var(--size-4-4);
-    flex: 1;
+    display: block;
     min-height: 0;
 }
 
@@ -3228,8 +3287,8 @@ body.nn-resizing {
     display: flex;
     flex-wrap: wrap;
     gap: var(--size-2-3);
-    padding-bottom: var(--size-2-2);
     flex-shrink: 0;
+    margin-bottom: var(--size-4-4);
 }
 
 .nn-settings-tab-button {
@@ -3241,13 +3300,11 @@ body.nn-resizing {
 }
 
 .nn-settings-tabs-content {
-    position: relative;
-    flex: 1;
+    position: static;
     min-height: 0;
-    overflow-y: auto;
+    overflow: visible;
     box-sizing: border-box;
-    scrollbar-gutter: stable;
-    padding-inline-end: var(--nn-scroller-padding);
+    padding-inline-end: 0;
 }
 
 /* Hide tabs by default, show only active tab */
@@ -3294,6 +3351,129 @@ body.nn-resizing {
 .nn-setting-wide-input textarea {
     width: 300px;
     max-width: 100%;
+}
+
+.nn-toolbar-visibility-control {
+    width: 100%;
+}
+
+.nn-toolbar-visibility-sections {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-4-4);
+}
+
+.nn-toolbar-visibility-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-2-2);
+}
+
+.nn-toolbar-visibility-group-label {
+    font-size: var(--font-ui-small);
+    font-weight: var(--font-semibold);
+    color: var(--text-muted);
+}
+
+.nn-toolbar-visibility-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--size-2-3);
+}
+
+.nn-toolbar-visibility-toggle {
+    position: relative;
+    padding: 0;
+    /* Override mobile toolbar button dimensions for settings */
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+}
+
+.nn-toolbar-visibility-toggle:not(.nn-mobile-toolbar-button-active) {
+    opacity: 0.6;
+}
+
+.nn-toolbar-visibility-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    color: var(--text-normal);
+}
+
+.nn-toolbar-visibility-icon svg {
+    width: 18px;
+    height: 18px;
+    stroke-width: 1.5;
+}
+
+/* Mobile-specific toolbar visibility button styles */
+.is-mobile .nn-toolbar-visibility-control {
+    width: 100%;
+}
+
+.is-mobile .nn-toolbar-visibility-sections {
+    width: 100%;
+}
+
+.is-mobile .nn-toolbar-visibility-group {
+    width: 100%;
+}
+
+.is-mobile .nn-toolbar-visibility-grid {
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0;
+    justify-content: space-between;
+}
+
+.is-mobile .nn-toolbar-visibility-toggle {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+}
+
+.is-mobile .nn-toolbar-visibility-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.is-mobile .nn-toolbar-visibility-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Android-specific adjustments for smaller buttons */
+.notebook-navigator-android .nn-toolbar-visibility-toggle {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+}
+
+.notebook-navigator-android .nn-toolbar-visibility-icon {
+    width: 22px;
+    height: 22px;
+}
+
+.notebook-navigator-android .nn-toolbar-visibility-icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.nn-setting-profile-dropdown select {
+    width: 160px;
+    max-width: 100%;
+}
+
+.is-mobile .nn-setting-profile-dropdown select {
+    width: 100%;
+    max-width: none;
 }
 
 .nn-slider-value {
@@ -3435,12 +3615,28 @@ body.nn-resizing {
     text-align: center;
 }
 
+.notebook-navigator-mobile .nn-navigation-pane .nn-pane-header-simple {
+    justify-content: center;
+    text-align: center;
+}
+
+.notebook-navigator-mobile .nn-pane-header-simple .nn-pane-header-profile {
+    width: 100%;
+    flex: 1 1 auto;
+    justify-content: center;
+    text-align: center;
+}
+
 .notebook-navigator-mobile .nn-pane-header-simple .nn-pane-header-title {
     font-size: var(--nn-mobile-header-font-size);
     font-weight: var(--nn-theme-mobile-list-header-breadcrumb-font-weight);
     color: var(--nn-theme-mobile-list-header-breadcrumb-color);
     width: 100%;
     text-align: center;
+}
+
+.notebook-navigator-mobile .nn-pane-header-simple .nn-pane-header-profile .nn-pane-header-text {
+    color: var(--nn-theme-mobile-list-header-breadcrumb-color);
 }
 
 /* Mobile header container */

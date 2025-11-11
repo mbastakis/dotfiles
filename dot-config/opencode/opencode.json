@@ -16,15 +16,15 @@
       "type": "local",
       "command": ["npx", "-y", "@upstash/context7-mcp"]
     },
-    "mcp-obsidian": {
-      "type": "local",
-      "command": ["uvx", "mcp-obsidian"],
-      "environment": {
-        "OBSIDIAN_API_KEY": "fc66e63d54ee9f23e95b48ef533c62910d388af3db4408b76da25f0129beffeb",
-        "OBSIDIAN_HOST": "127.0.0.1",
-        "OBSIDIAN_PORT": "27124"
-      }
-    },
+    // "mcp-obsidian": {
+    //   "type": "local",
+    //   "command": ["uvx", "mcp-obsidian"],
+    //   "environment": {
+    //     "OBSIDIAN_API_KEY": "fc66e63d54ee9f23e95b48ef533c62910d388af3db4408b76da25f0129beffeb",
+    //     "OBSIDIAN_HOST": "127.0.0.1",
+    //     "OBSIDIAN_PORT": "27124"
+      // }
+    // },
     "sequential-thinking": {
       "type": "local",
       "command": [
@@ -32,6 +32,21 @@
         "-y",
         "@modelcontextprotocol/server-sequential-thinking"
       ]
+    },
+    "crawl4ai-rag": {
+      "type": "local",
+      "command": ["/Users/mbastakis/.config/opencode/mcp-crawl4ai-rag/.venv/bin/python", "/Users/mbastakis/.config/opencode/mcp-crawl4ai-rag/src/crawl4ai_mcp.py"],
+      "environment": {
+        "TRANSPORT": "stdio",
+        "OPENAI_API_KEY": "${OPENAI_API_KEY}",
+        "SUPABASE_URL": "${SUPABASE_URL:-}",
+        "SUPABASE_SERVICE_KEY": "${SUPABASE_SERVICE_KEY:-}",
+        "USE_KNOWLEDGE_GRAPH": "false",
+        "USE_CONTEXTUAL_EMBEDDINGS": "false",
+        "USE_HYBRID_SEARCH": "true",
+        "USE_AGENTIC_RAG": "false",
+        "USE_RERANKING": "false"
+      }
     }
   },
   "permission": {

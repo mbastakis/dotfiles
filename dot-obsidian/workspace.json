@@ -18,15 +18,31 @@
                 "viewState": {
                   "x": -760,
                   "y": -168,
-                  "zoom": 0
+                  "zoom": -0.03041187575066307
                 }
               },
               "pinned": true,
               "icon": "lucide-layout-dashboard",
               "title": "Home"
             }
+          },
+          {
+            "id": "ade83be414083bcf",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "todo.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "todo"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -47,6 +63,19 @@
               "state": {},
               "icon": "notebook",
               "title": "Notebook Navigator"
+            }
+          },
+          {
+            "id": "e9fbaa515f7ff637",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
             }
           },
           {
@@ -75,25 +104,13 @@
               "icon": "lucide-bookmark",
               "title": "Bookmarks"
             }
-          },
-          {
-            "id": "e9fbaa515f7ff637",
-            "type": "leaf",
-            "state": {
-              "type": "file-explorer",
-              "state": {
-                "sortOrder": "alphabetical",
-                "autoReveal": false
-              },
-              "icon": "lucide-folder-closed",
-              "title": "Files"
-            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
-    "width": 310.01103591918945,
+    "width": 325,
     "collapsed": true
   },
   "right": {
@@ -135,8 +152,7 @@
               "title": "History"
             }
           }
-        ],
-        "currentTab": 2
+        ]
       },
       {
         "id": "014043c44890df20",
@@ -212,48 +228,48 @@
       "obsidian-book-search-plugin:Create new book note": true
     }
   },
-  "active": "e7a7b303c61786dc",
+  "active": "ade83be414083bcf",
   "lastOpenFiles": [
-    "tes.md",
     "Dashboards/Home.canvas",
     "todo.md",
+    "cka-lukas.md",
+    "cka-test.md",
+    "homeserver.md",
+    "Monotonic Array.md",
+    "platform-engineer-psa-proposal.md",
+    "Pokemon Unbound.md",
+    "Remove Duplicates Sorted Array, Remove Element.md",
+    "spiritbind-moc.md",
+    "tes.md",
+    "tools.md",
+    "Two Sum.md",
+    "WARP.md",
+    "Untitled.md",
+    "Projects/dt-aicc.md",
+    "Resources/Shortcuts/vscode-shortcuts.md",
     "Resources/Exandria/Cygnus.md",
     "Extras/Images/Cygnus.png",
     "Extras/Images/todo-1761453162422.webp",
     "Extras/Images/todo-1761453159845.webp",
-    "cka-lukas.md",
     "Extras/Images/cka-lukas-1761231522297.webp",
-    "tools.md",
-    "cka-test.md",
     "Extras/Images/cka-test-1761155373921.webp",
     "Extras/Images/cka-test-1761155360802.webp",
     "Extras/Images/cka-test-1761155353264.webp",
     "Extras/Images/cka-test-1761155345691.webp",
     "Extras/Images/cka-test-1761155338466.webp",
     "Extras/Images/cka-test-1761155330722.webp",
-    "Untitled.md",
     "Resources/Career/Templates/cover-letter-prompt.md",
     "Resources/Career/Templates/cover-letter-prompt-template.md",
     "Archives/Career/cover-letters/cover-letter-rivero.md",
     "Archives/Career/mike-cover-letter.md",
-    "homeserver.md",
     "Extras/Excalidraw/homeserver.md",
     "Resources/Homeserver",
     "Extras/Excalidraw/Drawing 2025-10-15 22.01.33.excalidraw.md",
     "Extras/Excalidraw/Magenta-Apprentice-Firewall-Opening-Diagram.md",
-    "platform-engineer-psa-proposal.md",
-    "Pokemon Unbound.md",
     "Resources/Weblist/8 Key LLM Development Skills for AI Engineers.md",
-    "Resources/Weblist/7 Best Practices for API Design 🔥.md",
-    "Projects/Tasks/Obsidian Tasks/create mcp for obsidian, converse with AI about the design.md",
-    "Projects/Tasks/Kanban Tasks/Start procedures for joining the army and postponing.md",
-    "Projects/Tasks/Kanban Tasks/Go to doctor and seteup yearly check up.md",
-    "Areas/Security-MOC.md",
     "Extras/PDF/AI Agents in Action (Micheal Lanham) (Z-Library).pdf",
     "Resources/Books/Marvel Comics For Dummies (Troy Brownfield) (Z-Library).epub",
     "Resources/Books/Unconfirmed 421319.crdownload",
-    "Projects/Tasks/Opencode Tasks/Use Vertex AI from GCP.md",
-    "Resources/Career/Interview-Other-Country/Resources/Countries/work-visa-research-tier1.md",
     "Resources/Career/Interview-Other-Country/Resources/comet-research-work-visa",
     "Hi [Leadership / Security ",
     "Hi [Leadership ",

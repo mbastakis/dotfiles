@@ -178,6 +178,7 @@
         "ffmpeg"
         "dua-cli"
         "parallel-disk-usage"
+        "direnv"
       ];
       homebrew.masApps = 
         { 
