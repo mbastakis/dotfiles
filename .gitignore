@@ -33,6 +33,10 @@ dot-claude/history.jsonl
 # Colima
 dot-config/colima
 
+# Docker
+dot-docker/*
+!dot-docker/config.json
+
 # Vscode
 code-portable-data/*
 !code-portable-data/extensions/

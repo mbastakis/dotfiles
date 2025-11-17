@@ -27,6 +27,13 @@ if [[ -d "$HOME/.cargo/bin" ]] ; then
     PATH="$HOME/.cargo/bin:$PATH"
 fi
 
+# Set PATH for postgresql@17
+if [[ -d "/opt/homebrew/opt/postgresql@17/bin" ]] ; then
+    PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
+    LDFLAGS="-L/opt/homebrew/opt/postgresql@17/lib"
+    CPPFLAGS="-I/opt/homebrew/opt/postgresql@17/include"
+fi
+
 ## End of path configuration
 
 ## Programming language environments

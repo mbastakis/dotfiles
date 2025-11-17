@@ -18,7 +18,7 @@
                 "viewState": {
                   "x": -760,
                   "y": -168,
-                  "zoom": -0.03041187575066307
+                  "zoom": 0
                 }
               },
               "pinned": true,
@@ -27,7 +27,7 @@
             }
           },
           {
-            "id": "ade83be414083bcf",
+            "id": "735dc9e3af559e8f",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -228,7 +228,7 @@
       "obsidian-book-search-plugin:Create new book note": true
     }
   },
-  "active": "ade83be414083bcf",
+  "active": "735dc9e3af559e8f",
   "lastOpenFiles": [
     "Dashboards/Home.canvas",
     "todo.md",
