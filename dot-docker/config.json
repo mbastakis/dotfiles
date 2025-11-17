@@ -1,5 +1,8 @@
 {
 	"auths": {
+		"076811069858.dkr.ecr.eu-central-1.amazonaws.com": {},
+		"730335500405.dkr.ecr.eu-central-1.amazonaws.com": {},
+		"970547348009.dkr.ecr.eu-central-1.amazonaws.com": {}
 	},
 	"credsStore": "osxkeychain",
 	"currentContext": "colima",

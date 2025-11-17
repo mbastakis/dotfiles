@@ -15,7 +15,6 @@
       environment.systemPackages =
         [ 
           pkgs.vim
-          pkgs.direnv
           pkgs.sshs
           pkgs.glow
           pkgs.nushell
@@ -96,6 +95,7 @@
         "kap"
       ];
       homebrew.brews = [
+        "argocd"
 	      "stow" 
         "git"
         "starship" 
@@ -179,6 +179,8 @@
         "dua-cli"
         "parallel-disk-usage"
         "direnv"
+        "docker-buildx"
+        "docker-completion"
       ];
       homebrew.masApps = 
         { 
