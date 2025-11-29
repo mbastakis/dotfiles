@@ -30,7 +30,7 @@ ueberzug_offset = [ 0, 0, 0, 0 ]
 
 [opener]
 edit = [
-	{ run = 'code -r "$@"', orphan = true, desc = "VS Code" },
+	{ run = 'nvim "$@"', block = true, desc = "Neovim" },
 ]
 open = [
 	{ run = 'xdg-open "$1"', desc = "Open", for = "linux" },

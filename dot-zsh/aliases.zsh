@@ -34,6 +34,10 @@ alias obs="obsidian-cli"
 # Debug key sequences for zsh
 alias keytest="cat -v"
 
+# Opencode
+alias oc="opencode"
+alias ocr="opencode -m amazon-bedrock/anthropic.claude-haiku-4-5-20251001-v1:0 run"
+
 # Temporary Commands
 
 ## BMAD Method
