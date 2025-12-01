@@ -3,12 +3,6 @@
 -- mason-tool-installer: Automatically install tools via Mason
 
 return {
-  -- nvim-lspconfig: Quickstart configs for Neovim LSP
-  -- Must be in runtimepath before mason-lspconfig
-  {
-    "neovim/nvim-lspconfig",
-  },
-
   -- Mason core
   {
     "mason-org/mason.nvim",
@@ -17,10 +11,10 @@ return {
         icons = {
           package_installed = "✓",
           package_pending = "➜",
-          package_uninstalled = "✗"
-        }
-      }
-    }
+          package_uninstalled = "✗",
+        },
+      },
+    },
   },
 
   -- Mason-lspconfig bridge
@@ -33,14 +27,12 @@ return {
     opts = {
       -- Servers to auto-install if not present
       ensure_installed = {
-        "lua_ls",      -- Lua
-        "ts_ls",       -- TypeScript/JavaScript
-        "eslint",      -- ESLint
+        "lua_ls", -- Lua
+        "ts_ls", -- TypeScript/JavaScript
+        "eslint", -- ESLint
       },
-      -- Automatically enable installed servers (default: true)
-      -- Custom per-server configs in lua/plugins/lsp/servers/
       automatic_enable = true,
-    }
+    },
   },
 
   -- Mason tool installer (for formatters, linters, etc.)
@@ -49,10 +41,25 @@ return {
     dependencies = { "mason.nvim" },
     opts = {
       ensure_installed = {
-        "prettier",    -- Formatter
-        "eslint_d",    -- Linter
-        "stylua",      -- Lua formatter
-      }
-    }
+        -- Formatters
+        "prettier", -- JS/TS/JSON/YAML/Markdown formatter
+        "prettierd", -- Faster prettier daemon
+        "stylua", -- Lua formatter
+        "black", -- Python formatter
+        "isort", -- Python import sorter
+        "shfmt", -- Shell script formatter
+
+        -- Linters
+        "eslint_d", -- JS/TS linter (fast daemon)
+        "selene", -- Lua linter (modern, doesn't require luarocks)
+        "shellcheck", -- Shell script linter
+        "markdownlint", -- Markdown linter
+        "pylint", -- Python linter
+        "ruff", -- Fast Python linter
+        "yamllint", -- YAML linter
+        "jsonlint", -- JSON linter
+        "hadolint", -- Dockerfile linter
+      },
+    },
   },
 }

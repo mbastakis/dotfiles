@@ -1,16 +1,16 @@
 return {
-  'folke/which-key.nvim',
-  event = 'VeryLazy',
+  "folke/which-key.nvim",
+  event = "VeryLazy",
   opts = {
-    preset = 'modern',
+    preset = "modern",
     delay = 500,
     icons = {
-      breadcrumb = '»',
-      separator = '➜',
-      group = '+',
+      breadcrumb = "»",
+      separator = "➜",
+      group = "+",
     },
     win = {
-      border = 'rounded',
+      border = "rounded",
       padding = { 1, 2 },
     },
     layout = {
@@ -18,13 +18,13 @@ return {
     },
   },
   config = function(_, opts)
-    local wk = require('which-key')
+    local wk = require("which-key")
     wk.setup(opts)
 
     -- Register leader key groups
     wk.add({
-      { '<leader>f', group = 'Find' },
-      { '<leader>e', group = 'Explorer' },
+      { "<leader>f", group = "Find" },
+      { "<leader>e", group = "Explorer" },
     })
   end,
 }

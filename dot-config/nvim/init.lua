@@ -5,4 +5,3 @@ require("config.autocmds")
 
 -- Bootstrap lazy.nvim and load plugins
 require("config.lazy")
-
