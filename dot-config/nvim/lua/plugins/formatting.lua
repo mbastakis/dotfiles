@@ -10,7 +10,11 @@ return {
         -- Python (run isort first for imports, then black for code)
         python = { "isort", "black" },
 
-        -- JavaScript/TypeScript (prettierd is faster)
+        -- HTML/CSS/JavaScript/TypeScript
+        html = { "prettierd", "prettier", stop_after_first = true },
+        css = { "prettierd", "prettier", stop_after_first = true },
+        scss = { "prettierd", "prettier", stop_after_first = true },
+        less = { "prettierd", "prettier", stop_after_first = true },
         javascript = { "prettierd", "prettier", stop_after_first = true },
         typescript = { "prettierd", "prettier", stop_after_first = true },
         javascriptreact = { "prettierd", "prettier", stop_after_first = true },

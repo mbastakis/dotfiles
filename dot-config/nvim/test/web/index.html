@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Page</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Inconsistent indentation -->
+    <header>
+      <h1>Welcome</h1>
+      <nav>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <!-- Missing alt attribute -->
+      <img src="image.jpg" />
+
+      <!-- Inline styles (should be in CSS) -->
+      <div style="color: red; font-size: 20px; margin: 10px">
+        <p>This is a paragraph with inline styles</p>
+      </div>
+
+      <!-- Unclosed tag -->
+      <section>
+        <h2>Section Title</h2>
+        <p>Some content here</p>
+      </section>
+
+      <!-- Deprecated attribute -->
+      <div align="center">
+        <p>Centered content</p>
+      </div>
+
+      <!-- Missing closing tags -->
+      <ul>
+        <li>Item 1</li>
+        <li>Item 2</li>
+        <li>Item 3</li>
+      </ul>
+
+      <!-- Empty elements -->
+      <div></div>
+      <span></span>
+
+      <!-- Inconsistent quote style -->
+      <button onclick="alert('Hello')" class="btn">Click Me</button>
+    </main>
+
+    <footer>
+      <p>&copy; 2024 Test Site</p>
+    </footer>
+
+    <!-- Script tag without type -->
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,76 @@
+/* CSS test file with intentional format/lint issues */
+
+/* Inconsistent spacing */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Missing semicolon */
+.container {
+  width: 100%;
+  max-width: "1200px";
+  margin: 0 auto;
+}
+
+/* Very long line */
+.header {
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Duplicate properties */
+.button {
+  color: red;
+  padding: 10px;
+  color: blue;
+}
+
+/* Missing vendor prefixes */
+.box {
+  transform: rotate(45deg);
+  transition: all 0.3s;
+}
+
+/* !important overuse */
+.text {
+  color: red !important;
+  font-size: 16px !important;
+}
+
+/* Inconsistent color formats */
+.colors {
+  background: #fff;
+  border: 1px solid rgb(0, 0, 0);
+  color: red;
+}
+
+/* Unused selector */
+.unused-class {
+  display: none;
+}
+
+/* Missing spaces */
+h1,
+h2,
+h3 {
+  margin: 0;
+  padding: 0;
+}
+
+/* Zero with units */
+.spacing {
+  margin: 0px;
+  padding: 0em;
+}
+
+/* Missing fallback fonts */
+.custom-font {
+  font-family: "CustomFont";
+}

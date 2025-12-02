@@ -5,18 +5,65 @@ return {
   -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
   opts = {
     ensure_installed = {
-      "bash",
-      "c",
-      "diff",
-      "html",
-      "lua",
-      "luadoc",
-      "markdown",
-      "markdown_inline",
-      "query",
+      -- Core/Vim
       "vim",
       "vimdoc",
+      "lua",
+      "luadoc",
+      "query",
       "comment",
+
+      -- Web Development
+      "html",
+      "css",
+      "javascript",
+      "typescript",
+      "tsx",
+      "json",
+      "jsonc", -- JSON with Comments
+      "jsdoc", -- JSDoc comments
+      "graphql", -- GraphQL
+
+      -- Programming Languages
+      "python",
+      "go",
+      "gomod",
+      "gowork",
+      "rust",
+      "c",
+
+      -- DevOps/IaC
+      "yaml",
+      "terraform",
+      "hcl", -- HashiCorp Config
+      "dockerfile",
+      "make",
+      "nix",
+      "toml",
+      "sql",
+
+      -- Git
+      "git_config",
+      "git_rebase",
+      "gitcommit",
+      "gitignore",
+      "gitattributes",
+
+      -- Documentation
+      "markdown",
+      "markdown_inline",
+
+      -- Config/Data Formats
+      "xml",
+      "proto", -- Protocol Buffers
+      "requirements", -- Python requirements.txt
+
+      -- Utilities
+      "bash",
+      "diff",
+      "regex",
+      "jq", -- JSON query
+      "ssh_config",
     },
     -- Autoinstall languages that are not installed
     auto_install = false,

@@ -12,6 +12,14 @@ return {
       -- Python (ruff is faster, pylint is more thorough)
       python = { "ruff" },
 
+      -- HTML
+      html = { "htmlhint" },
+
+      -- CSS/SCSS/Less
+      css = { "stylelint" },
+      scss = { "stylelint" },
+      less = { "stylelint" },
+
       -- JavaScript/TypeScript
       javascript = { "eslint_d" },
       typescript = { "eslint_d" },

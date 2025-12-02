@@ -34,7 +34,9 @@ return {
         map("gy", vim.lsp.buf.type_definition, "Go to type definition")
 
         -- Documentation
-        map("K", vim.lsp.buf.hover, "Hover documentation")
+        map("K", function()
+          vim.lsp.buf.hover({ border = "rounded", max_height = 25, max_width = 120 })
+        end, "Hover documentation")
 
         -- Code actions
         map("<leader>ca", vim.lsp.buf.code_action, "Code action")
@@ -44,5 +46,6 @@ return {
         map("<leader>d", vim.diagnostic.open_float, "Show line diagnostics")
       end,
     })
+
   end,
 }
