@@ -1,0 +1,123 @@
+# YAML Test File - For LSP, Linting, and Formatting
+# This file contains various YAML features and intentional issues to test:
+# - yamlls (LSP server)
+# - yamllint (linter)
+# - prettier/prettierd (formatter)
+
+# Basic key-value pairs
+name: test-application
+version: 1.0.0
+description: A test YAML file for validating Neovim configuration
+
+# Nested objects
+metadata:
+  author: Test User
+  created: 2025-12-02
+  tags:
+    - testing
+    - yaml
+    - neovim
+
+# Arrays/Lists
+dependencies:
+  - name: package-one
+    version: "^1.0.0"
+  - name: package-two
+    version: "~2.3.4"
+
+# Multi-line strings
+long_description: |
+  This is a multi-line string
+  that preserves line breaks.
+  It's useful for longer text content.
+
+folded_string: >
+  This is a folded string
+  that will be converted
+  to a single line.
+
+# Anchors and aliases
+default_settings: &defaults
+  timeout: 30
+  retry: 3
+  log_level: info
+
+production:
+  <<: *defaults
+  log_level: warn
+  timeout: 60
+
+development:
+  <<: *defaults
+  debug: true
+
+# Complex nested structure
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      NODE_ENV: production
+      API_KEY: ${API_KEY}
+    volumes:
+      - ./html:/usr/share/nginx/html:ro
+    networks:
+      - frontend
+
+  api:
+    image: node:18-alpine
+    command: npm start
+    depends_on:
+      - database
+    environment:
+      DB_HOST: database
+      DB_PORT: 5432
+
+  database:
+    image: postgres:15
+    environment:
+      POSTGRES_PASSWORD: secretpassword
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+# Boolean values
+feature_flags:
+  enable_cache: true
+  enable_debug: false
+  enable_metrics: true
+  enable_logging: false
+
+# Numbers
+configuration:
+  port: 8080
+  max_connections: 100
+  timeout_seconds: 30.5
+  ratio: 0.95
+
+# Null values
+optional_field: null
+another_optional: ~
+
+# Comments testing
+inline_value: some_value # This is an inline comment
+
+# Intentional issues for linting (uncomment to test):
+# trailing-spaces:
+# document-start-missing (yamllint may warn about missing ---)
+# line-length-exceeding-limit: This is a very long line that exceeds the typical yamllint line length limit and should trigger a warning about line being too long
+
+# Empty collections
+empty_object: {}
+empty_array: []
+
+# Complex value types
+mixed_types:
+  string: "quoted string"
+  number: 42
+  float: 3.14159
+  bool: true
+  null_value: null
+  date: 2025-12-02
+  timestamp: 2025-12-02T10:30:00Z

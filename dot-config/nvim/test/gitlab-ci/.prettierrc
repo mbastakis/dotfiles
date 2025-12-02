@@ -1,0 +1,19 @@
+{
+  "printWidth": 120,
+  "tabWidth": 2,
+  "useTabs": false,
+  "proseWrap": "preserve",
+  "bracketSpacing": true,
+  "singleQuote": false,
+  "trailingComma": "none",
+  "overrides": [
+    {
+      "files": ["*.yaml", "*.yml"],
+      "options": {
+        "printWidth": 120,
+        "proseWrap": "preserve",
+        "singleQuote": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+# GitLab CI/CD test file with intentional format issues
+
+stages:
+  - build
+  - test
+  - deploy
+
+# Inconsistent indentation
+variables:
+  NODE_VERSION: "18"
+  DOCKER_IMAGE: "node:18-alpine"
+
+# Missing cache configuration
+build:
+  stage: build
+  script:
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+
+# Very long line
+test:unit:
+  stage: test
+  script: npm install && npm run test:unit && npm run test:integration && npm run test:e2e && npm run coverage
+  coverage: '/Coverage: \d+\.\d+%/'
+
+# Missing dependencies
+test:lint:
+  stage: test
+  script:
+    - npm run lint
+
+# Inconsistent job naming
+Deploy_Production:
+  stage: deploy
+  script:
+    - echo "Deploying to production"
+    - npm run deploy
+  only:
+    - master
+  environment:
+    name: production
+    url: https://example.com
+
+# Missing resource limits
+docker:build:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build -t myapp:latest .
+    - docker push myapp:latest
+
+# Hardcoded secrets (bad practice)
+deploy:staging:
+  stage: deploy
+  script:
+    - export AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
+    - export AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+    - aws s3 sync dist/ s3://my-bucket/
+
+# Missing retry configuration
+deploy:rollback:
+  stage: deploy
+  script:
+    - ./rollback.sh
+  when: manual

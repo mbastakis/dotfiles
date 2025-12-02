@@ -34,6 +34,7 @@ return {
 
       -- DevOps/IaC
       "yaml",
+      "helm", -- Helm templates
       "terraform",
       "hcl", -- HashiCorp Config
       "dockerfile",

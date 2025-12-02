@@ -52,5 +52,18 @@ vim.filetype.add({
   pattern = {
     ["docker%-compose%..*%.ya?ml"] = "yaml.docker-compose", -- docker-compose.*.yml or docker-compose.*.yaml
     [".*%.gitlab%-ci%.ya?ml"] = "yaml.gitlab", -- *.gitlab-ci.yml or *.gitlab-ci.yaml
+    [".*/templates/.*%.ya?ml"] = function(path, bufnr)
+      -- Check if we're in a Helm chart (has Chart.yaml in parent dirs)
+      if vim.fs.root(path, { "Chart.yaml" }) then
+        return "helm"
+      end
+      return "yaml"
+    end,
+    [".*/templates/.*%.tpl"] = function(path, bufnr)
+      -- Check if we're in a Helm chart (has Chart.yaml in parent dirs)
+      if vim.fs.root(path, { "Chart.yaml" }) then
+        return "helm"
+      end
+    end,
   },
 })

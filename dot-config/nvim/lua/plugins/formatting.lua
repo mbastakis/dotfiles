@@ -25,6 +25,7 @@ return {
         yaml = { "prettierd", "prettier", stop_after_first = true },
         ["yaml.docker-compose"] = { "prettierd", "prettier", stop_after_first = true },
         ["yaml.gitlab"] = { "prettierd", "prettier", stop_after_first = true },
+
         markdown = { "prettierd", "prettier", stop_after_first = true },
 
         -- Shell scripts
@@ -58,7 +59,6 @@ return {
         },
       },
       format_on_save = {
-        -- These options will be passed to conform.format()
         timeout_ms = 500,
         lsp_format = "fallback",
       },

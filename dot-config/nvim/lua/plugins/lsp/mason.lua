@@ -42,6 +42,7 @@ return {
         "docker_compose_language_service", -- Docker Compose
         "yamlls", -- YAML
         "ansiblels", -- Ansible
+        "helm_ls", -- Helm templates
       },
       automatic_enable = true,
     },
