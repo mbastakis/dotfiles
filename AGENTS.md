@@ -12,7 +12,7 @@
 - **Apply symlinks**: `stow .` (from repo root)
 - **Validate Nix**: `nix flake check` (from dot-config/nix-darwin/)
 - **Reload shell**: `source ~/.zshrc` or `reload`
-- **Test completions**: `aws <TAB>` or `kubectl <TAB>` should show fzf menu
+- **Test Neovim config**: `nvim --headless +q` (validates syntax), then open nvim and check `:checkhealth`
 
 ## Code Style
 - **Shell scripts**: Use `#!/usr/bin/env sh` or `#!/bin/bash`, lowercase_with_underscores for functions/variables, long-form flags for clarity

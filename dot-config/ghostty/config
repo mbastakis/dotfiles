@@ -30,6 +30,8 @@ cursor-style = block
 cursor-style-blink = true
 mouse-hide-while-typing = true
 mouse-shift-capture = true
+copy-on-select = clipboard
+right-click-action = paste
 
 # ============================================================================
 # Shell Integration
