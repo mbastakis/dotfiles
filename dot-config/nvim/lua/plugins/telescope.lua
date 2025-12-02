@@ -12,13 +12,25 @@ return {
     local builtin = require("telescope.builtin")
     local themes = require("telescope.themes")
 
+    -- Find files (includes hidden by default)
     vim.keymap.set("n", "<leader>ff", function()
-      builtin.find_files(themes.get_ivy())
-    end, { desc = "Telescope find files" })
+      builtin.find_files(themes.get_ivy({ hidden = true }))
+    end, { desc = "Telescope find files (with hidden)" })
 
+    -- Find files (no hidden) - toggle with Shift
+    vim.keymap.set("n", "<leader>fF", function()
+      builtin.find_files(themes.get_ivy({ hidden = false }))
+    end, { desc = "Telescope find files (no hidden)" })
+
+    -- Live grep (includes hidden by default)
     vim.keymap.set("n", "<leader>fg", function()
-      builtin.live_grep(themes.get_ivy())
-    end, { desc = "Telescope live grep" })
+      builtin.live_grep(themes.get_ivy({ hidden = true }))
+    end, { desc = "Telescope live grep (with hidden)" })
+
+    -- Live grep (no hidden) - toggle with Shift
+    vim.keymap.set("n", "<leader>fG", function()
+      builtin.live_grep(themes.get_ivy({ hidden = false }))
+    end, { desc = "Telescope live grep (no hidden)" })
 
     vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Telescope find help tags" })
 

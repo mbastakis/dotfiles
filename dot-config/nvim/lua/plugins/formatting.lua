@@ -24,6 +24,7 @@ return {
         json = { "prettierd", "prettier", stop_after_first = true },
         yaml = { "prettierd", "prettier", stop_after_first = true },
         ["yaml.docker-compose"] = { "prettierd", "prettier", stop_after_first = true },
+        ["yaml.gitlab"] = { "prettierd", "prettier", stop_after_first = true },
         markdown = { "prettierd", "prettier", stop_after_first = true },
 
         -- Shell scripts
@@ -37,12 +38,13 @@ return {
         -- Rust (use rustfmt via LSP as fallback)
         rust = { "rustfmt", lsp_format = "fallback" },
       },
-      -- Configure prettier to handle yaml.docker-compose as yaml
+      -- Configure prettier to handle yaml subtypes as yaml
       formatters = {
         prettier = {
           options = {
             ft_parsers = {
               ["yaml.docker-compose"] = "yaml",
+              ["yaml.gitlab"] = "yaml",
             },
           },
         },
@@ -50,6 +52,7 @@ return {
           options = {
             ft_parsers = {
               ["yaml.docker-compose"] = "yaml",
+              ["yaml.gitlab"] = "yaml",
             },
           },
         },
@@ -60,11 +63,6 @@ return {
         lsp_format = "fallback",
       },
     })
-    vim.api.nvim_create_autocmd("BufWritePre", {
-      pattern = "*",
-      callback = function(args)
-        require("conform").format({ bufnr = args.buf })
-      end,
-    })
+    -- No need for manual BufWritePre autocmd - format_on_save handles it
   end,
 }

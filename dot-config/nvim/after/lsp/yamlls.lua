@@ -1,5 +1,6 @@
 -- Override yamlls to NOT attach to docker-compose files
 -- docker_compose_language_service handles docker-compose files
+-- Also configure GitLab CI schema support
 
 vim.lsp.config('yamlls', {
   on_attach = function(client, bufnr)
@@ -14,6 +15,20 @@ vim.lsp.config('yamlls', {
     yaml = {
       format = {
         enable = true,
+      },
+      -- Schema store configuration
+      schemaStore = {
+        enable = true,
+        url = "https://www.schemastore.org/api/json/catalog.json",
+      },
+      -- GitLab CI schema mapping
+      schemas = {
+        ["https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/editor/schema/ci.json"] = {
+          ".gitlab-ci.yml",
+          ".gitlab-ci.yaml",
+          "**/.gitlab-ci.yml",
+          "**/.gitlab-ci.yaml",
+        },
       },
     },
     redhat = {

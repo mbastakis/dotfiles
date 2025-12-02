@@ -46,8 +46,11 @@ vim.filetype.add({
     ["docker-compose.yaml"] = "yaml.docker-compose",
     ["compose.yml"] = "yaml.docker-compose",
     ["compose.yaml"] = "yaml.docker-compose",
+    [".gitlab-ci.yml"] = "yaml.gitlab",
+    [".gitlab-ci.yaml"] = "yaml.gitlab",
   },
   pattern = {
     ["docker%-compose%..*%.ya?ml"] = "yaml.docker-compose", -- docker-compose.*.yml or docker-compose.*.yaml
+    [".*%.gitlab%-ci%.ya?ml"] = "yaml.gitlab", -- *.gitlab-ci.yml or *.gitlab-ci.yaml
   },
 })

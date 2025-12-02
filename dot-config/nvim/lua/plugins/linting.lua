@@ -36,6 +36,7 @@ return {
 
       -- YAML
       yaml = { "yamllint" },
+      ["yaml.gitlab"] = { "yamllint" },
 
       -- JSON
       json = { "jsonlint" },
