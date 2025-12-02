@@ -38,7 +38,9 @@ return {
         "rust_analyzer", -- Rust
         "taplo", -- TOML (has LSP capabilities)
         "gitlab_ci_ls", -- GitLab CI
+        "dockerls", -- Dockerfile
         "docker_compose_language_service", -- Docker Compose
+        "yamlls", -- YAML
         "ansiblels", -- Ansible
       },
       automatic_enable = true,

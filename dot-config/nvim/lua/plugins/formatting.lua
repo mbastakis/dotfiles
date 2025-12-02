@@ -23,6 +23,7 @@ return {
         -- JSON/YAML/Markdown (prettier handles these well)
         json = { "prettierd", "prettier", stop_after_first = true },
         yaml = { "prettierd", "prettier", stop_after_first = true },
+        ["yaml.docker-compose"] = { "prettierd", "prettier", stop_after_first = true },
         markdown = { "prettierd", "prettier", stop_after_first = true },
 
         -- Shell scripts
@@ -30,8 +31,28 @@ return {
         bash = { "shfmt" },
         zsh = { "shfmt" },
 
+        -- Dockerfile
+        dockerfile = { "dockerfmt" },
+
         -- Rust (use rustfmt via LSP as fallback)
         rust = { "rustfmt", lsp_format = "fallback" },
+      },
+      -- Configure prettier to handle yaml.docker-compose as yaml
+      formatters = {
+        prettier = {
+          options = {
+            ft_parsers = {
+              ["yaml.docker-compose"] = "yaml",
+            },
+          },
+        },
+        prettierd = {
+          options = {
+            ft_parsers = {
+              ["yaml.docker-compose"] = "yaml",
+            },
+          },
+        },
       },
       format_on_save = {
         -- These options will be passed to conform.format()

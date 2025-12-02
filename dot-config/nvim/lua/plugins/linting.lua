@@ -42,6 +42,9 @@ return {
 
       -- Docker
       dockerfile = { "hadolint" },
+
+      -- Docker Compose (yamllint + docker-compose LSP diagnostics)
+      ["yaml.docker-compose"] = { "yamllint" },
     }
 
     -- Create autocommand to trigger linting

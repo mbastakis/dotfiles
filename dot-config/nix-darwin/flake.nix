@@ -188,6 +188,7 @@
             "direnv"
             "docker-buildx"
             "docker-completion"
+            "dockerfmt"
             "serie"
           ];
           homebrew.masApps = {

@@ -46,6 +46,5 @@ return {
         map("<leader>d", vim.diagnostic.open_float, "Show line diagnostics")
       end,
     })
-
   end,
 }

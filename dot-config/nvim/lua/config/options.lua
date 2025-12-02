@@ -38,3 +38,16 @@ vim.cmd("set expandtab")
 vim.cmd("set tabstop=2")
 vim.cmd("set softtabstop=2")
 vim.cmd("set shiftwidth=2")
+
+-- Custom filetype mappings
+vim.filetype.add({
+  filename = {
+    ["docker-compose.yml"] = "yaml.docker-compose",
+    ["docker-compose.yaml"] = "yaml.docker-compose",
+    ["compose.yml"] = "yaml.docker-compose",
+    ["compose.yaml"] = "yaml.docker-compose",
+  },
+  pattern = {
+    ["docker%-compose%..*%.ya?ml"] = "yaml.docker-compose", -- docker-compose.*.yml or docker-compose.*.yaml
+  },
+})
