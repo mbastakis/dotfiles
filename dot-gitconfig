@@ -12,20 +12,25 @@
 
 [core]
 	pager = delta
-	editor = code --wait
+	editor = nvim
+
 [interactive]
 	diffFilter = delta --color-only
+
 [delta]
 features = catppuccin-mocha
 	navigate = true  # use n and N to move between diff sections
 	dark = true      # or light = true, or omit for auto-detection
+
 [color]
 	ui = true
+
 [color "diff-highlight"]
 	oldNormal = red bold
 	oldHighlight = red bold 52
 	newNormal = green bold
 	newHighlight = green bold 22
+
 [color "diff"]
 	meta = 11
 	frag = magenta bold
@@ -34,7 +39,13 @@ features = catppuccin-mocha
 	old = red bold
 	new = green bold
 	whitespace = red reverse
+
 [init]
 	defaultBranch = master
+
+[diff]
+  tool = nvim
+
 [merge]
-    conflictstyle = zdiff3
+  tool = nvim
+  conflictstyle = zdiff3

@@ -1,37 +1,38 @@
-# exports.zsh - Environment variables
+#!/usr/bin/bash
 
 # Default programs
 export EDITOR="nvim"
-export VISUAL="code --user-data-dir ~/.vscode --wait"
+export VISUAL="nvim"
+# export VISUAL="code --user-data-dir ~/.vscode --wait"
 export PAGER="bat"
 
 ## Path configuration
 
 # Set PATH so it includes user's private bin if it exists
-if [[ -d "$HOME/bin" ]] ; then
-    PATH="$HOME/bin:$PATH"
+if [[ -d "$HOME/bin" ]]; then
+  PATH="$HOME/bin:$PATH"
 fi
 
 # Set PATH so it includes user's private bin if it exists
-if [[ -d "$HOME/.local/bin" ]] ; then
-    PATH="$HOME/.local/bin:$PATH"
+if [[ -d "$HOME/.local/bin" ]]; then
+  PATH="$HOME/.local/bin:$PATH"
 fi
 
 # Set PATH for dotfiles bin
-if [[ -d "$DOTFILES_PATH/bin" ]] ; then
-    PATH="$DOTFILES_PATH/bin:$PATH"
+if [[ -d "$DOTFILES_PATH/bin" ]]; then
+  PATH="$DOTFILES_PATH/bin:$PATH"
 fi
 
 # Set PATH for cargo bin
-if [[ -d "$HOME/.cargo/bin" ]] ; then
-    PATH="$HOME/.cargo/bin:$PATH"
+if [[ -d "$HOME/.cargo/bin" ]]; then
+  PATH="$HOME/.cargo/bin:$PATH"
 fi
 
 # Set PATH for postgresql@17
-if [[ -d "/opt/homebrew/opt/postgresql@17/bin" ]] ; then
-    PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
-    LDFLAGS="-L/opt/homebrew/opt/postgresql@17/lib"
-    CPPFLAGS="-I/opt/homebrew/opt/postgresql@17/include"
+if [[ -d "/opt/homebrew/opt/postgresql@17/bin" ]]; then
+  PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
+  LDFLAGS="-L/opt/homebrew/opt/postgresql@17/lib"
+  CPPFLAGS="-I/opt/homebrew/opt/postgresql@17/include"
 fi
 
 ## End of path configuration
@@ -39,7 +40,7 @@ fi
 ## Programming language environments
 
 # Python
-export PYTHONDONTWRITEBYTECODE=1  # Don't write .pyc files
+export PYTHONDONTWRITEBYTECODE=1 # Don't write .pyc files
 
 # Go
 export GOPATH="$HOME/go"

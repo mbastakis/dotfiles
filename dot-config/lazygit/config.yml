@@ -4,9 +4,6 @@ git:
   pagers:
     - colorArg: always
       pager: delta --dark --paging=never
-os:
-  # Command for editing a file. Should contain "{{filename}}".
-  edit: "code --user-data-dir ~/.vscode {{filename}}"
 gui:
   showBottomLine: false
   theme:
