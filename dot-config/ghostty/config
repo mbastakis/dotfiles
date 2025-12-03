@@ -4,7 +4,7 @@
 # ============================================================================
 # Appearance & Theming
 # ============================================================================
-theme = catppuccin-mocha
+theme = Catppuccin Mocha
 background-opacity = 0.8
 background-blur = true
 
@@ -20,7 +20,7 @@ font-feature = calt=1
 # Window Management
 # ============================================================================
 window-padding-x = 0
-window-padding-y = 0
+window-padding-y = 10, 0
 window-save-state = default
 
 # ============================================================================

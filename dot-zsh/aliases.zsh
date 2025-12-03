@@ -1,4 +1,4 @@
-# aliases.zsh - Shell aliases
+#!/usr/bin/bash
 
 # Navigation
 alias ..="cd .."
@@ -37,6 +37,9 @@ alias keytest="cat -v"
 # Opencode
 alias oc="opencode"
 alias ocr="opencode -m amazon-bedrock/anthropic.claude-haiku-4-5-20251001-v1:0 run"
+
+# Ghostty
+alias ghostty-settings="nvim ~/.config/ghostty/config"
 
 # Temporary Commands
 
