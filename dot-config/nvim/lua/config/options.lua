@@ -9,6 +9,8 @@ vim.o.winborder = "rounded"
 
 vim.o.mouse = "a"
 vim.o.showmode = false
+vim.o.wrap = false
+vim.o.textwidth = 0
 
 vim.schedule(function()
   vim.o.clipboard = "unnamedplus"
@@ -34,10 +36,20 @@ vim.o.cursorline = true
 vim.o.scrolloff = 10
 vim.o.confirm = true
 vim.o.breakindent = true
-vim.cmd("set expandtab")
-vim.cmd("set tabstop=2")
-vim.cmd("set softtabstop=2")
-vim.cmd("set shiftwidth=2")
+vim.o.expandtab = true
+vim.o.tabstop = 2
+vim.o.softtabstop = 2
+vim.o.shiftwidth = 2
+
+-- Fold
+vim.o.foldlevel = 99
+vim.o.foldmethod = "expr"
+vim.o.foldexpr = "nvim_treesitter#foldexpr()"
+vim.o.foldcolumn = "0"
+vim.o.foldenable = true
+vim.o.foldtext =
+  [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').' ... ' . '(' . (v:foldend - v:foldstart + 1) . ' lines)']]
+vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 
 -- Custom filetype mappings
 vim.filetype.add({
@@ -52,14 +64,14 @@ vim.filetype.add({
   pattern = {
     ["docker%-compose%..*%.ya?ml"] = "yaml.docker-compose", -- docker-compose.*.yml or docker-compose.*.yaml
     [".*%.gitlab%-ci%.ya?ml"] = "yaml.gitlab", -- *.gitlab-ci.yml or *.gitlab-ci.yaml
-    [".*/templates/.*%.ya?ml"] = function(path, bufnr)
+    [".*/templates/.*%.ya?ml"] = function(path)
       -- Check if we're in a Helm chart (has Chart.yaml in parent dirs)
       if vim.fs.root(path, { "Chart.yaml" }) then
         return "helm"
       end
       return "yaml"
     end,
-    [".*/templates/.*%.tpl"] = function(path, bufnr)
+    [".*/templates/.*%.tpl"] = function(path)
       -- Check if we're in a Helm chart (has Chart.yaml in parent dirs)
       if vim.fs.root(path, { "Chart.yaml" }) then
         return "helm"

@@ -2,12 +2,12 @@ return {
   "folke/which-key.nvim",
   event = "VeryLazy",
   opts = {
-    preset = "modern",
+    preset = "helix",
     delay = 500,
     icons = {
       breadcrumb = "»",
       separator = "➜",
-      group = "+",
+      group = " ",
     },
     win = {
       border = "rounded",
@@ -23,8 +23,11 @@ return {
 
     -- Register leader key groups
     wk.add({
-      { "<leader>f", group = "Find" },
-      { "<leader>e", group = "Explorer" },
+      { "<leader>f", group = "Find", icon = " " },
+      { "<leader>e", group = "Explorer", icon = " " },
+      { "<leader>o", group = "Opencode", icon = "󱚟 " },
+      { "<leader>g", group = "Git" },
+      { "<leader>u", group = "Utilities", icon = " " },
     })
   end,
 }

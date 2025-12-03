@@ -3,20 +3,6 @@
 
 return {
   "neovim/nvim-lspconfig",
-  dependencies = {
-    -- lazydev.nvim: Lua development for Neovim config
-    {
-      "folke/lazydev.nvim",
-      ft = "lua",
-      opts = {
-        library = {
-          { path = "LazyVim", words = { "LazyVim" } },
-          { path = "lazy.nvim", words = { "LazyVim" } },
-          { path = "{3rd/luv/library}", words = { "vim%.uv" } },
-        },
-      },
-    },
-  },
   config = function()
     -- Setup LSP keymaps when LSP attaches to a buffer
     vim.api.nvim_create_autocmd("LspAttach", {

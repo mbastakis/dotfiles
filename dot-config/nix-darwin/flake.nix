@@ -101,6 +101,8 @@
             "kap"
           ];
           homebrew.brews = [
+            "graphicsmagick"
+            "chafa"
             "argocd"
             "stow"
             "nixfmt"
