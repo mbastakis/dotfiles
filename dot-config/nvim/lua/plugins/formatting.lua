@@ -36,8 +36,17 @@ return {
         -- Dockerfile
         dockerfile = { "dockerfmt" },
 
+        -- Nix
+        nix = { "alejandra" },
+
         -- Rust (use rustfmt via LSP as fallback)
         rust = { "rustfmt", lsp_format = "fallback" },
+
+        -- Go (gofumpt is stricter than gofmt, golines wraps long lines)
+        go = { "gofumpt", "golines" },
+
+        -- Terraform (use LSP's terraform fmt)
+        terraform = { "terraform_fmt", lsp_format = "fallback" },
       },
       -- Configure prettier to handle yaml subtypes as yaml
       formatters = {
@@ -59,10 +68,13 @@ return {
         },
       },
       format_on_save = {
+        lsp_format = "fallback",
         timeout_ms = 500,
+      },
+      format_after_save = {
         lsp_format = "fallback",
       },
+      log_level = vim.log.levels.WARN, -- Reduce log noise
     })
-    -- No need for manual BufWritePre autocmd - format_on_save handles it
   end,
 }

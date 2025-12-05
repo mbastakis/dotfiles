@@ -46,6 +46,12 @@ return {
 
       -- Docker Compose (yamllint + docker-compose LSP diagnostics)
       ["yaml.docker-compose"] = { "yamllint" },
+
+      -- Nix
+      nix = { "statix" },
+
+      -- Go
+      go = { "golangci-lint" },
     }
 
     -- Create autocommand to trigger linting

@@ -1,6 +1,3 @@
--- Snacks.nvim: Collection of useful Neovim utilities
--- Dashboard setup with session management, chafa image, and quick actions
-
 return {
   "folke/snacks.nvim",
   priority = 1000,
@@ -37,6 +34,12 @@ return {
             action = "<leader>e",
           },
           {
+            icon = " ",
+            key = "p",
+            desc = "Explorer",
+            action = "<leader>fp",
+          },
+          {
             icon = " ",
             key = "c",
             desc = "Config",
@@ -57,8 +60,6 @@ return {
           },
         },
       },
-
-      -- Dashboard sections layout
       sections = {
         {
           { section = "keys", gap = 1, padding = 1 },

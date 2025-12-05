@@ -1,6 +1,5 @@
 // JavaScript test file with intentional format/lint issues
 const fs = require("fs");
-
 const path = require("path");
 
 // Unused variable
@@ -31,6 +30,7 @@ class UserService {
 // Function with inconsistent spacing
 function calculateTotal(items, tax, discount) {
   let total = 0;
+
   for (let i = 0; i < items.length; i++) {
     total = total + items[i].price;
   }

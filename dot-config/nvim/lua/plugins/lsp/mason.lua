@@ -37,6 +37,7 @@ return {
         "terraformls", -- Terraform
         "rust_analyzer", -- Rust
         "taplo", -- TOML (has LSP capabilities)
+        "nil_ls", -- Nix LSP
         "gitlab_ci_ls", -- GitLab CI
         "dockerls", -- Dockerfile
         "docker_compose_language_service", -- Docker Compose
@@ -63,7 +64,7 @@ return {
         "shfmt", -- Shell script formatter
         "gofumpt", -- Go formatter (opinionated)
         "golines", -- Go line length formatter
-        "nixpkgs-fmt", -- Nix formatter
+        "alejandra", -- Nix formatter (modern, fast)
 
         -- Linters
         "eslint_d", -- JS/TS linter (fast daemon)

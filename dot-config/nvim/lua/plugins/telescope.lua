@@ -12,25 +12,47 @@ return {
     local builtin = require("telescope.builtin")
     local themes = require("telescope.themes")
 
-    -- Find files (includes hidden by default)
+    -- Array of patterns to filter out in lowercase commands
+    local filter_patterns = {
+      "node_modules",
+      ".git",
+      "*.lock",
+      "package-lock.json",
+      "yarn.lock",
+      "pnpm-lock.yaml",
+    }
+
+    -- Find files (filtered - excludes patterns in array)
     vim.keymap.set("n", "<leader>ff", function()
-      builtin.find_files(themes.get_ivy({ hidden = true }))
-    end, { desc = "Telescope find files (with hidden)" })
+      builtin.find_files(themes.get_ivy({
+        hidden = true,
+        file_ignore_patterns = filter_patterns,
+      }))
+    end, { desc = "Telescope find files (filtered)" })
 
-    -- Find files (no hidden) - toggle with Shift
+    -- Find files (show everything - no filtering)
     vim.keymap.set("n", "<leader>fF", function()
-      builtin.find_files(themes.get_ivy({ hidden = false }))
-    end, { desc = "Telescope find files (no hidden)" })
+      builtin.find_files(themes.get_ivy({
+        hidden = true,
+        file_ignore_patterns = {},
+      }))
+    end, { desc = "Telescope find files (show all)" })
 
-    -- Live grep (includes hidden by default)
+    -- Live grep (filtered - excludes patterns in array)
     vim.keymap.set("n", "<leader>fg", function()
-      builtin.live_grep(themes.get_ivy({ hidden = true }))
-    end, { desc = "Telescope live grep (with hidden)" })
+      builtin.live_grep(themes.get_ivy({
+        hidden = true,
+        file_ignore_patterns = filter_patterns,
+      }))
+    end, { desc = "Telescope live grep (filtered)" })
 
-    -- Live grep (no hidden) - toggle with Shift
+    -- Live grep (show everything - no filtering)
     vim.keymap.set("n", "<leader>fG", function()
-      builtin.live_grep(themes.get_ivy({ hidden = false }))
-    end, { desc = "Telescope live grep (no hidden)" })
+      builtin.live_grep(themes.get_ivy({
+        hidden = true,
+        file_ignore_patterns = {},
+      }))
+    end, { desc = "Telescope live grep (show all)" })
 
     vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Telescope find help tags" })
 
