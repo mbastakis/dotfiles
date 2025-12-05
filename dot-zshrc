@@ -1,10 +1,6 @@
 #!/bin/bash
 # shellcheck disable=SC1091
 
-# Completion system
-autoload -Uz compinit
-compinit
-
 # Set ZSH options
 setopt AUTO_CD           # Change directory without cd
 setopt EXTENDED_HISTORY  # Record timestamp in history
@@ -43,6 +39,11 @@ autoload -Uz _zinit
 ### End of Zinit's installer chunk
 # ----------------------------------------------------
 
+# Carapace - Must load BEFORE compinit for proper completion precedence
+# Hide completion group descriptions (remove the format line below to show them)
+# zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
+command -v carapace &>/dev/null && source <(carapace _carapace)
+
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
@@ -67,13 +68,6 @@ if alias zi &>/dev/null; then
   unalias zi
 fi
 command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
-
-# Carapace
-command -v carapace &>/dev/null && eval "$(carapace zsh)"
-
-# Carapace autocompletion
-zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
-command -v carapace &>/dev/null && eval "$(carapace _carapace)"
 
 # ----------------------------------------------------
 
