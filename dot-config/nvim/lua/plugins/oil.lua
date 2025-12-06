@@ -1,7 +1,6 @@
 return {
   "stevearc/oil.nvim",
   ---@module 'oil'
-  ---@type oil.SetupOpts
   opts = {},
   dependencies = { "nvim-tree/nvim-web-devicons" },
   lazy = false,
@@ -64,8 +63,6 @@ return {
       keymaps = {
         ["g?"] = { "actions.show_help", mode = "n" },
         ["<CR>"] = "actions.select",
-        ["<C-s>"] = { "actions.select", opts = { vertical = true } },
-        ["<C-h>"] = { "actions.select", opts = { horizontal = true } },
         ["<C-t>"] = { "actions.select", opts = { tab = true } },
         ["<C-p>"] = "actions.preview",
         ["<C-c>"] = { "actions.close", mode = "n" },
@@ -81,7 +78,7 @@ return {
         ["g\\"] = { "actions.toggle_trash", mode = "n" },
       },
       -- Set to false to disable all of the above keymaps
-      use_default_keymaps = true,
+      use_default_keymaps = false,
       view_options = {
         -- Show files and directories that start with "."
         show_hidden = true,
