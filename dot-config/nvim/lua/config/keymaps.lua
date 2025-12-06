@@ -1,12 +1,6 @@
 -- Global keymaps
 -- For plugin-specific keymaps, see the respective plugin files in lua/plugins/
 
--- Clear search highlight and dismiss notifications
-vim.keymap.set("n", "<Esc>", function()
-  vim.cmd("nohlsearch")
-  require("notify").dismiss({ silent = true, pending = true })
-end, { desc = "Clear search highlight and dismiss notifications" })
-
 -- Window navigation
 vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move to left window" })
 vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Move to bottom window" })
