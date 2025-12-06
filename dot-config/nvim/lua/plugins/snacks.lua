@@ -151,6 +151,29 @@ return {
         Snacks.toggle.inlay_hints():map("<leader>uh")
         Snacks.toggle.indent():map("<leader>ug")
         Snacks.toggle.dim():map("<leader>uD")
+        Snacks.toggle.diagnostics():map("<leader>uv")
+        Snacks.toggle
+          .new({
+            name = "Diagnostic Virtual Text",
+            get = function()
+              return vim.diagnostic.config().virtual_text ~= false
+            end,
+            set = function(state)
+              vim.diagnostic.config({ virtual_text = state })
+            end,
+          })
+          :map("<leader>uV")
+        Snacks.toggle
+          .new({
+            name = "Diagnostic Underlines",
+            get = function()
+              return vim.diagnostic.config().underline ~= false
+            end,
+            set = function(state)
+              vim.diagnostic.config({ underline = state })
+            end,
+          })
+          :map("<leader>ux")
       end,
     })
   end,

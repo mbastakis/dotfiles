@@ -7,8 +7,8 @@ return {
         -- Lua
         lua = { "stylua" },
 
-        -- Python (run isort first for imports, then black for code)
-        python = { "isort", "black" },
+        -- Python (ruff handles both formatting and import sorting)
+        python = { "ruff_format" },
 
         -- HTML/CSS/JavaScript/TypeScript
         html = { "prettierd", "prettier", stop_after_first = true },
@@ -47,6 +47,9 @@ return {
 
         -- Terraform (use LSP's terraform fmt)
         terraform = { "terraform_fmt", lsp_format = "fallback" },
+
+        -- TOML
+        toml = { "taplo" },
       },
       -- Configure prettier to handle yaml subtypes as yaml
       formatters = {
@@ -69,7 +72,7 @@ return {
       },
       format_on_save = {
         lsp_format = "fallback",
-        timeout_ms = 500,
+        timeout_ms = 2000,
       },
       format_after_save = {
         lsp_format = "fallback",

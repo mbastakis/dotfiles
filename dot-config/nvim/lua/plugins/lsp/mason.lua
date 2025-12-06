@@ -31,6 +31,8 @@ return {
         "ts_ls", -- TypeScript/JavaScript
         "html", -- HTML
         "cssls", -- CSS/SCSS/Less
+        "jsonls", -- JSON
+        "bashls", -- Bash/Shell
         "eslint", -- ESLint
         "pyright", -- Python
         "gopls", -- Go
@@ -59,8 +61,6 @@ return {
         "prettier", -- JS/TS/HTML/CSS/JSON/YAML/Markdown formatter
         "prettierd", -- Faster prettier daemon
         "stylua", -- Lua formatter
-        "black", -- Python formatter
-        "isort", -- Python import sorter
         "shfmt", -- Shell script formatter
         "gofumpt", -- Go formatter (opinionated)
         "golines", -- Go line length formatter

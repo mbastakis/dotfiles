@@ -51,7 +51,10 @@ return {
       nix = { "statix" },
 
       -- Go
-      go = { "golangci-lint" },
+      go = { "golangcilint" },
+
+      -- Terraform
+      terraform = { "tflint", "tfsec" },
     }
 
     -- Create autocommand to trigger linting

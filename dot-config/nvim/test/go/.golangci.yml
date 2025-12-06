@@ -1,19 +1,18 @@
 # golangci-lint configuration
 # https://golangci-lint.run/usage/configuration/
 
+version: "2"
+
 linters:
   enable:
     # Enabled by default
     - errcheck      # Check for unchecked errors
-    - gosimple      # Simplify code
     - govet         # Vet examines Go source code
     - ineffassign   # Detect ineffectual assignments
-    - staticcheck   # Advanced Go linter
+    - staticcheck   # Advanced Go linter (includes gosimple)
     - unused        # Check for unused code
 
     # Additional recommended linters
-    - gofmt         # Check formatting (even though gofumpt is used)
-    - goimports     # Check imports
     - misspell      # Spell checker
     - revive        # Fast, configurable, extensible linter
     - gosec         # Security problems
@@ -23,8 +22,10 @@ linters:
     - dupl          # Code clone detection
     - gocritic      # Opinionated linter with many checks
 
-  disable:
-    - typecheck     # Often conflicts with gopls
+formatters:
+  enable:
+    - gofmt         # Check formatting (even though gofumpt is used)
+    - goimports     # Check imports
 
 run:
   timeout: 5m
