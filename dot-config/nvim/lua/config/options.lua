@@ -62,6 +62,7 @@ vim.filetype.add({
     [".gitlab-ci.yaml"] = "yaml.gitlab",
   },
   pattern = {
+    [".*/git/config"] = "gitconfig", -- git/config files
     ["docker%-compose%..*%.ya?ml"] = "yaml.docker-compose", -- docker-compose.*.yml or docker-compose.*.yaml
     [".*%.gitlab%-ci%.ya?ml"] = "yaml.gitlab", -- *.gitlab-ci.yml or *.gitlab-ci.yaml
     [".*/templates/.*%.ya?ml"] = function(path)
