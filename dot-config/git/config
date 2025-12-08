@@ -1,12 +1,13 @@
 [user]
 	email = mbastakis@gmail.com
 	name = Michail Bastakis
-[includeIf "gitdir:~/dev/work/aivertical/"]
-	path = ~/.gitconfig-work
-[includeIf "gitdir:~/dev/work/archive/"]
-	path = ~/.gitconfig-work
-[includeIf "gitdir:~/dev/personal/"]
-	path = ~/.gitconfig-personal
+
+[includeIf "hasconfig:remote.*.url:https://gitlab.devops.telekom.de/**"]
+  path = ~/.config/git/.gitconfig-work
+
+[includeIf "hasconfig:remote.*.url:git@gitlab.devops.telekom.de:*/**"]
+  path = ~/.config/git/.gitconfig-work
+
 [include]
 	path = ~/.config/delta/themes/catppuccin.gitconfig
 
@@ -19,8 +20,8 @@
 
 [delta]
 features = catppuccin-mocha
-	navigate = true  # use n and N to move between diff sections
-	dark = true      # or light = true, or omit for auto-detection
+	navigate = true
+	dark = true
 
 [color]
 	ui = true
