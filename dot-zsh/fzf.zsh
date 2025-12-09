@@ -1,3 +1,6 @@
+#!/usr/bin/env zsh
+# fzf.zsh - fzf configuration and keybindings
+
 # Catppuccin Mocha theme for fzf
 export FZF_DEFAULT_OPTS=" \
 --color=bg+:#313244,bg:#1E1E2E,spinner:#F5E0DC,hl:#F38BA8 \
@@ -34,15 +37,4 @@ if command -v fzf &>/dev/null; then
   eval "$(fzf --zsh)"
 fi
 
-# Custom keybinding for ftext function (CTRL-F)
-# This provides ripgrep search with fzf preview and inserts file path
-zle -N ftext-widget
-bindkey '^F' ftext-widget
-
-# ALT-C: Zoxide interactive selection
-function run_zoxide_interactive() {
-  BUFFER="zi"
-  zle accept-line
-}
-zle -N run_zoxide_interactive
-bindkey '\ec' run_zoxide_interactive
+# Custom keybindings moved to keybindings.zsh

@@ -1,3 +1,6 @@
+#!/usr/bin/env zsh
+# direnv.zsh - Direnv shell integration
+
 _direnv_hook() {
   trap -- '' SIGINT
   eval "$("/opt/homebrew/bin/direnv" export zsh)"

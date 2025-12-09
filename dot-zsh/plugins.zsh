@@ -1,7 +1,16 @@
-# Zinit plugins management
-# This file manages all ZSH plugins via Zinit
+#!/usr/bin/env zsh
+# plugins.zsh - Zinit plugins management
 
-# Load and initialize zinit if installed
+# Auto-install zinit if not present
+if [[ ! -f "${HOME}/.local/share/zinit/zinit.git/zinit.zsh" ]]; then
+    print -P "%F{33}Installing %F{220}zinit%F{33}...%f"
+    command mkdir -p "${HOME}/.local/share/zinit" && command chmod g-rwX "${HOME}/.local/share/zinit"
+    command git clone https://github.com/zdharma-continuum/zinit "${HOME}/.local/share/zinit/zinit.git" && \
+        print -P "%F{34}Installation successful.%f" || \
+        print -P "%F{160}Clone failed.%f"
+fi
+
+# Load and initialize zinit
 if [[ -f "${HOME}/.local/share/zinit/zinit.git/zinit.zsh" ]]; then
     source "${HOME}/.local/share/zinit/zinit.git/zinit.zsh"
     autoload -Uz _zinit

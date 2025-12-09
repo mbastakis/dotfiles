@@ -1,8 +1,58 @@
 # .zshenv - ZSH environment file loaded for all shell types (login, interactive, neither)
-# This file should be kept as minimal as possible and only contain environment
-# variables that need to be set for all shell types
+# This file contains environment variables needed by all shell types (scripts, cron, etc.)
 
-# Ensure user-level bin directory exists and is in PATH
-if [[ ! -d "$HOME/bin" ]]; then
-    mkdir -p "$HOME/bin"
+# Dotfiles path (needed early for PATH additions)
+export DOTFILES_PATH="$HOME/dev/dotfiles"
+
+# XDG base directories
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CACHE_HOME="$HOME/.cache"
+
+# Default programs
+export EDITOR="nvim"
+export VISUAL="nvim"
+
+# Language preference
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+
+## PATH configuration
+
+# Ensure user-level bin directories exist
+[[ ! -d "$HOME/bin" ]] && mkdir -p "$HOME/bin"
+[[ ! -d "$HOME/.local/bin" ]] && mkdir -p "$HOME/.local/bin"
+
+# User bin directories
+[[ -d "$HOME/bin" ]] && PATH="$HOME/bin:$PATH"
+[[ -d "$HOME/.bin" ]] && PATH="$HOME/.bin:$PATH"
+[[ -d "$HOME/.local/bin" ]] && PATH="$HOME/.local/bin:$PATH"
+
+# Dotfiles bin
+[[ -d "$DOTFILES_PATH/bin" ]] && PATH="$DOTFILES_PATH/bin:$PATH"
+
+# Cargo (Rust)
+[[ -d "$HOME/.cargo/bin" ]] && PATH="$HOME/.cargo/bin:$PATH"
+
+# Go
+export GOPATH="$HOME/go"
+[[ -d "$GOPATH/bin" ]] && PATH="$GOPATH/bin:$PATH"
+
+# Bun
+export BUN_INSTALL="$HOME/.bun"
+[[ -d "$BUN_INSTALL/bin" ]] && PATH="$BUN_INSTALL/bin:$PATH"
+
+# PostgreSQL
+if [[ -d "/opt/homebrew/opt/postgresql@17/bin" ]]; then
+  PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
+  export LDFLAGS="-L/opt/homebrew/opt/postgresql@17/lib"
+  export CPPFLAGS="-I/opt/homebrew/opt/postgresql@17/include"
 fi
+
+# Nix configuration directory
+export NIX_CONF_DIR="$HOME/.config/nix"
+
+## Programming language settings
+
+# Python - don't write .pyc files
+export PYTHONDONTWRITEBYTECODE=1

@@ -1,4 +1,5 @@
-#!/usr/bin/bash
+#!/usr/bin/env zsh
+# aliases.zsh - Shell aliases
 
 # Navigation
 alias ..="cd .."

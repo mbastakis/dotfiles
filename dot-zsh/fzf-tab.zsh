@@ -1,5 +1,5 @@
-# fzf-tab configuration
-# Interactive completion menu using fzf
+#!/usr/bin/env zsh
+# fzf-tab.zsh - fzf-tab configuration for interactive completion menu
 
 # Disable sort when completing `git checkout`
 zstyle ':completion:*:git-checkout:*' sort false

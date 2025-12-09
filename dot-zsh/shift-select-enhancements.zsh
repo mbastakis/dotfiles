@@ -1,3 +1,4 @@
+#!/usr/bin/env zsh
 # shift-select-enhancements.zsh - Custom enhancements for zsh-shift-select plugin
 # Adds Shift+Cmd+arrow support and clipboard integration
 
