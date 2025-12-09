@@ -1,13 +1,16 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "theme": "system",
+  "theme": "catppuccin",
   "autoshare": false,
   "share": "manual",
   "autoupdate": true,
   "mcp": {
     // "snap-happy": {
     //   "type": "local",
-    //   "command": ["npx", "@mariozechner/snap-happy"],
+    //   "command": [
+    //     "npx",
+    //     "@mariozechner/snap-happy"
+    //   ],
     //   "environment": {
     //     "SNAP_HAPPY_SCREENSHOT_PATH": "${HOME}/Screenshots"
     //   }
@@ -22,38 +25,24 @@
     // },
     // "mcp-obsidian": {
     //   "type": "local",
-    //   "command": ["uvx", "mcp-obsidian"],
+    //   "command": [
+    //     "uvx",
+    //     "mcp-obsidian"
+    //   ],
     //   "environment": {
     //     "OBSIDIAN_API_KEY": "fc66e63d54ee9f23e95b48ef533c62910d388af3db4408b76da25f0129beffeb",
     //     "OBSIDIAN_HOST": "127.0.0.1",
     //     "OBSIDIAN_PORT": "27124"
-    // }
-    // },
-    "sequential-thinking": {
-      "type": "local",
-      "command": [
-        "npx",
-        "-y",
-        "@modelcontextprotocol/server-sequential-thinking"
-      ]
-    },
-    // "crawl4ai-rag": {
-    //   "type": "local",
-    //   "command": ["/Users/mbastakis/.config/opencode/mcp-crawl4ai-rag/.venv/bin/python", "/Users/mbastakis/.config/opencode/mcp-crawl4ai-rag/src/crawl4ai_mcp.py"],
-    //   "environment": {
-    //     "TRANSPORT": "stdio",
-    //     "USE_BEDROCK": "true",
-    //     "AWS_REGION": "eu-central-1",
-    //     "AWS_ACCESS_KEY_ID": "{env:AWS_ACCESS_KEY_ID}",
-    //     "AWS_SECRET_ACCESS_KEY": "{env:AWS_SECRET_ACCESS_KEY}",
-    //     "MODEL_CHOICE": "eu.anthropic.claude-sonnet-4-20250514-v1:0",
-    //     "USE_KNOWLEDGE_GRAPH": "false",
-    //     "USE_CONTEXTUAL_EMBEDDINGS": "false",
-    //     "USE_HYBRID_SEARCH": "true",
-    //     "USE_AGENTIC_RAG": "false",
-    //     "USE_RERANKING": "false"
     //   }
-    // }
+    // },
+    // "sequential-thinking": {
+    //   "type": "local",
+    //   "command": [
+    //     "npx",
+    //     "-y",
+    //     "@modelcontextprotocol/server-sequential-thinking"
+    //   ]
+    // },
   },
   "permission": {
     "edit": "allow",

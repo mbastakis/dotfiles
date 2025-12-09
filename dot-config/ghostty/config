@@ -21,7 +21,7 @@ font-feature = calt=1
 # ============================================================================
 window-padding-x = 5, 0
 window-padding-y = 10, 0
-window-save-state = default
+# window-save-state = default
 
 # ============================================================================
 # Cursor & Mouse
@@ -71,7 +71,7 @@ keybind = ctrl+shift+s=goto_split:right
 
 # Quick Terminal
 quick-terminal-position = top
-quick-terminal-size = 50%
+quick-terminal-size = 100%
 keybind = global:cmd+ctrl+t=toggle_quick_terminal
 
 # Editor Integration
