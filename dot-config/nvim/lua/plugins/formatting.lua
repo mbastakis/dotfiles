@@ -28,6 +28,9 @@ return {
 
         markdown = { "prettierd", "prettier", stop_after_first = true },
 
+        -- Helm templates - no formatting (Go templates break with prettier)
+        helm = {},
+
         -- Shell scripts
         sh = { "shfmt" },
         bash = { "shfmt" },

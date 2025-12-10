@@ -11,3 +11,21 @@ autocmd("TextYankPost", {
     vim.hl.on_yank()
   end,
 })
+
+-- Detect Helm template files and set filetype to 'helm'
+autocmd({ "BufRead", "BufNewFile" }, {
+  desc = "Detect Helm template files in templates/ directories",
+  group = augroup("helm-filetype", { clear = true }),
+  pattern = { "*/templates/*.yaml", "*/templates/*.tpl", "*/templates/*.yml" },
+  callback = function()
+    -- Check if we're in a Helm chart directory (contains Chart.yaml)
+    local chart_file = vim.fs.find("Chart.yaml", {
+      upward = true,
+      path = vim.fn.expand("%:p:h"),
+    })[1]
+
+    if chart_file then
+      vim.bo.filetype = "helm"
+    end
+  end,
+})

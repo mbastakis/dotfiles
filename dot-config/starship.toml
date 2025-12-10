@@ -5,57 +5,236 @@ format = "$all"
 
 # CMD duration
 [cmd_duration]
-min_time = 2_000  # Show command duration over 2,000 milliseconds (=2 sec)
+min_time = 2_000                      # Show command duration over 2,000 milliseconds (=2 sec)
 format = " took [$duration]($style) "
 
 # Configure directory display
 [directory]
+read_only = " 󰌾"
 truncation_length = 4
 style = "bold lavender"
 truncation_symbol = "…/"
 
-# Configure Git branch display
+[kubernetes]
+disabled = false
+symbol = "☸ "
+format = "[$symbol$context]($style) in "
+
+[[kubernetes.contexts]]
+context_pattern = "arn:aws:eks:.*:.*:cluster/(?P<cluster>[\\w-]+)"
+context_alias = "$cluster"
+
+[aws]
+symbol = " "
+format = "on [$symbol($profile ) (\\[$duration\\] )]($style)"
+
+[buf]
+symbol = " "
+
+[bun]
+symbol = " "
+
+[c]
+symbol = " "
+
+[cpp]
+symbol = " "
+
+[cmake]
+symbol = " "
+
+[conda]
+symbol = " "
+
+[crystal]
+symbol = " "
+
+[dart]
+symbol = " "
+
+[deno]
+symbol = " "
+
+[docker_context]
+symbol = " "
+
+[elixir]
+symbol = " "
+
+[elm]
+symbol = " "
+
+[fennel]
+symbol = " "
+
+[fortran]
+symbol = " "
+
+[fossil_branch]
+symbol = " "
+
+[gcloud]
+symbol = " "
+
 [git_branch]
-style = 'fg:green'
-symbol = ' '
-format = '[on](white) [$symbol$branch ]($style)'
+symbol = " "
 
 [git_commit]
-commit_hash_length = 8
-style = "bold white"
+tag_symbol = '  '
 
-[git_state]
-format = '[\($state( $progress_current of $progress_total)\)]($style) '
+[golang]
+symbol = " "
 
-[git_status]
-conflicted = "⚔️ "
-ahead = "🏎️ 💨 ×${count} "
-behind = "🐢 ×${count} "
-diverged = "🔱 🏎️ 💨 ×${ahead_count} 🐢 ×${behind_count} "
-untracked = "🛤️  ×${count} "
-stashed = "📦 "
-modified = "📝 ×${count} "
-staged = "🗃️  ×${count} "
-renamed = "📛 ×${count} "
-deleted = "🗑️  ×${count} "
-style = "flamingo"
-format = "$all_status$ahead_behind"
+[gradle]
+symbol = " "
 
-# Configure Node.js display
+[guix_shell]
+symbol = " "
+
+[haskell]
+symbol = " "
+
+[haxe]
+symbol = " "
+
+[hg_branch]
+symbol = " "
+
+[hostname]
+ssh_symbol = " "
+
+[java]
+symbol = " "
+
+[julia]
+symbol = " "
+
+[kotlin]
+symbol = " "
+
+[lua]
+symbol = " "
+
+[memory_usage]
+symbol = "󰍛 "
+
+[meson]
+symbol = "󰔷 "
+
+[nim]
+symbol = "󰆥 "
+
+[nix_shell]
+symbol = " "
+
 [nodejs]
-format = "via [$symbol($version )]($style)"
-symbol = "⬢ "
-style = "bold yellow"
-detect_extensions = ["js", "mjs", "cjs", "ts", "mts", "cts", "jsx", "tsx", "package.json", "node_modules"]
-detect_files = ["package.json", ".node-version", ".nvmrc"]
-detect_folders = ["node_modules"]
-version_format = "v${raw}"
-disabled = false
+symbol = " "
+
+[ocaml]
+symbol = " "
+
+[os.symbols]
+Alpaquita = " "
+Alpine = " "
+AlmaLinux = " "
+Amazon = " "
+Android = " "
+AOSC = " "
+Arch = " "
+Artix = " "
+CachyOS = " "
+CentOS = " "
+Debian = " "
+DragonFly = " "
+Emscripten = " "
+EndeavourOS = " "
+Fedora = " "
+FreeBSD = " "
+Garuda = "󰛓 "
+Gentoo = " "
+HardenedBSD = "󰞌 "
+Illumos = "󰈸 "
+Kali = " "
+Linux = " "
+Mabox = " "
+Macos = " "
+Manjaro = " "
+Mariner = " "
+MidnightBSD = " "
+Mint = " "
+NetBSD = " "
+NixOS = " "
+Nobara = " "
+OpenBSD = "󰈺 "
+openSUSE = " "
+OracleLinux = "󰌷 "
+Pop = " "
+Raspbian = " "
+Redhat = " "
+RedHatEnterprise = " "
+RockyLinux = " "
+Redox = "󰀘 "
+Solus = "󰠳 "
+SUSE = " "
+Ubuntu = " "
+Unknown = " "
+Void = " "
+Windows = "󰍲 "
+
+[package]
+symbol = "󰏗 "
+
+[perl]
+symbol = " "
+
+[php]
+symbol = " "
+
+[pijul_channel]
+symbol = " "
+
+[pixi]
+symbol = "󰏗 "
 
 [python]
-style = 'green'
-pyenv_version_name = true
-pyenv_prefix = ''
+symbol = " "
+
+[rlang]
+symbol = "󰟔 "
+
+[ruby]
+symbol = " "
+
+[rust]
+symbol = "󱘗 "
+
+[scala]
+symbol = " "
+
+[status]
+symbol = " "
+
+[swift]
+symbol = " "
+
+[xmake]
+symbol = " "
+
+[zig]
+symbol = " "
+
+[git_status]
+conflicted = "  "
+ahead = " ⇡ "
+behind = "⇣"
+diverged = "⇕"
+deleted = "✘:(${count})"
+modified = " :(${count})"
+stashed = "  "
+staged = " :(${count})"
+renamed = "  "
+untracked = " :(${count})"
+style = "overlay2"
 
 [palettes.catppuccin_mocha]
 rosewater = "#f5e0dc"

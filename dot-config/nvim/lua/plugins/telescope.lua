@@ -13,13 +13,14 @@ return {
     local themes = require("telescope.themes")
 
     -- Array of patterns to filter out in lowercase commands
+    -- NOTE: These are Lua patterns, not globs. Special chars like . must be escaped with %
     local filter_patterns = {
       "node_modules",
-      ".git",
-      "*.lock",
-      "package-lock.json",
-      "yarn.lock",
-      "pnpm-lock.yaml",
+      "%.git/", -- Only match .git directory, not .gitignore or other git* files
+      "%.lock$",
+      "package%-lock%.json",
+      "yarn%.lock",
+      "pnpm%-lock%.yaml",
     }
 
     -- Find files (filtered - excludes patterns in array)

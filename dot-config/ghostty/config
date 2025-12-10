@@ -5,7 +5,7 @@
 # Appearance & Theming
 # ============================================================================
 theme = Catppuccin Mocha
-background-opacity = 0.8
+background-opacity = 0.75
 background-blur = true
 
 # ============================================================================

@@ -11,6 +11,7 @@ return {
     git = { enabled = true },
     gitbrowse = { enabled = true },
     image = { enabled = true },
+    scratch = { enabled = false },
     dashboard = {
       enabled = true,
       preset = {

@@ -10,3 +10,8 @@ vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
 -- Save file (works in normal and insert mode)
 vim.keymap.set("n", "<C-s>", "<cmd>w<CR>", { desc = "Save file" })
 vim.keymap.set("i", "<C-s>", "<Esc><cmd>w<CR>a", { desc = "Save file and return to insert mode" })
+
+-- Format buffer manually
+vim.keymap.set("n", "<leader>fm", function()
+  require("conform").format({ async = true, lsp_fallback = true })
+end, { desc = "Format buffer" })
