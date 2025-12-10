@@ -175,6 +175,22 @@ return {
             end,
           })
           :map("<leader>ux")
+        Snacks.toggle
+          .new({
+            name = "Supermaven",
+            get = function()
+              local ok, api = pcall(require, "supermaven-nvim.api")
+              return ok and api.is_running()
+            end,
+            set = function(state)
+              if state then
+                vim.cmd("SupermavenStart")
+              else
+                vim.cmd("SupermavenStop")
+              end
+            end,
+          })
+          :map("<leader>ua")
       end,
     })
   end,
