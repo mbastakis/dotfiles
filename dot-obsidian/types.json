@@ -48,6 +48,7 @@
     "xp": "number",
     "target": "number",
     "current_increment": "number",
-    "excalidraw-embed-md": "checkbox"
+    "excalidraw-embed-md": "checkbox",
+    "excalidraw-export-internal-links": "checkbox"
   }
 }

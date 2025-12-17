@@ -152,6 +152,18 @@ return {
         Snacks.toggle.inlay_hints():map("<leader>uh")
         Snacks.toggle.indent():map("<leader>ug")
         Snacks.toggle.dim():map("<leader>uD")
+        Snacks.toggle
+          .new({
+            name = "Wrap",
+            get = function()
+              return vim.o.wrap
+            end,
+            set = function(state)
+              vim.o.wrap = state
+              vim.o.linebreak = state
+            end,
+          })
+          :map("<leader>uw")
         Snacks.toggle.diagnostics():map("<leader>uv")
         Snacks.toggle
           .new({
