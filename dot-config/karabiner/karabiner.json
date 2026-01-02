@@ -13,6 +13,7 @@
                             {
                                 "conditions": [
                                     { "type": "variable_if", "name": "left_hrm", "value": 1 },
+                                    { "type": "variable_if", "name": "right_hrm", "value": 0 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
                                 "from": {
@@ -29,6 +30,7 @@
                             },
                             {
                                 "conditions": [
+                                    { "type": "variable_if", "name": "right_hrm", "value": 0 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
                                 "from": {
@@ -59,6 +61,7 @@
                             {
                                 "conditions": [
                                     { "type": "variable_if", "name": "left_hrm", "value": 1 },
+                                    { "type": "variable_if", "name": "right_hrm", "value": 0 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
                                 "from": {
@@ -75,6 +78,7 @@
                             },
                             {
                                 "conditions": [
+                                    { "type": "variable_if", "name": "right_hrm", "value": 0 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
                                 "from": {
@@ -105,6 +109,7 @@
                             {
                                 "conditions": [
                                     { "type": "variable_if", "name": "left_hrm", "value": 1 },
+                                    { "type": "variable_if", "name": "right_hrm", "value": 0 },
                                     { "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
@@ -122,6 +127,7 @@
                             },
                             {
                                 "conditions": [
+                                    { "type": "variable_if", "name": "right_hrm", "value": 0 },
                                     { "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
@@ -153,6 +159,7 @@
                             {
                                 "conditions": [
                                     { "type": "variable_if", "name": "left_hrm", "value": 1 },
+                                    { "type": "variable_if", "name": "right_hrm", "value": 0 },
                                     { "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
@@ -170,6 +177,7 @@
                             },
                             {
                                 "conditions": [
+                                    { "type": "variable_if", "name": "right_hrm", "value": 0 },
                                     { "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
@@ -201,6 +209,7 @@
                             {
                                 "conditions": [
                                     { "type": "variable_if", "name": "right_hrm", "value": 1 },
+                                    { "type": "variable_if", "name": "left_hrm", "value": 0 },
                                     { "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
@@ -218,6 +227,7 @@
                             },
                             {
                                 "conditions": [
+                                    { "type": "variable_if", "name": "left_hrm", "value": 0 },
                                     { "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
@@ -249,6 +259,7 @@
                             {
                                 "conditions": [
                                     { "type": "variable_if", "name": "right_hrm", "value": 1 },
+                                    { "type": "variable_if", "name": "left_hrm", "value": 0 },
                                     { "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
@@ -266,6 +277,7 @@
                             },
                             {
                                 "conditions": [
+                                    { "type": "variable_if", "name": "left_hrm", "value": 0 },
                                     { "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
@@ -297,6 +309,7 @@
                             {
                                 "conditions": [
                                     { "type": "variable_if", "name": "right_hrm", "value": 1 },
+                                    { "type": "variable_if", "name": "left_hrm", "value": 0 },
                                     { "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
@@ -314,6 +327,7 @@
                             },
                             {
                                 "conditions": [
+                                    { "type": "variable_if", "name": "left_hrm", "value": 0 },
                                     { "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
@@ -345,6 +359,7 @@
                             {
                                 "conditions": [
                                     { "type": "variable_if", "name": "right_hrm", "value": 1 },
+                                    { "type": "variable_if", "name": "left_hrm", "value": 0 },
                                     { "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
@@ -362,6 +377,7 @@
                             },
                             {
                                 "conditions": [
+                                    { "type": "variable_if", "name": "left_hrm", "value": 0 },
                                     { "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
