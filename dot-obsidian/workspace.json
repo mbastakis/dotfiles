@@ -25,34 +25,8 @@
               "icon": "lucide-layout-dashboard",
               "title": "Home"
             }
-          },
-          {
-            "id": "02beaf52e9e0f43a",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Projects/opencode.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": false
-              },
-              "icon": "lucide-file",
-              "title": "opencode"
-            }
-          },
-          {
-            "id": "c3a24e18957dc039",
-            "type": "leaf",
-            "state": {
-              "type": "obsidian-projects",
-              "state": {},
-              "icon": "projects-icon",
-              "title": "Projects"
-            }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -239,13 +213,14 @@
       "obsidian-book-search-plugin:Create new book note": true
     }
   },
-  "active": "c3a24e18957dc039",
+  "active": "e7a7b303c61786dc",
   "lastOpenFiles": [
-    "Projects/opencode.md",
     "Dashboards/Home.canvas",
+    "todo.md",
+    "philippes age key.md",
+    "Projects/opencode.md",
     "Projects/Tasks/Opencode Tasks/Use Bedrock from Playground AWS.md",
     "Extras/Excalidraw/obsidian-new-restructuring.md",
-    "todo.md",
     "Extras/Excalidraw/Drawing 2025-12-12 20.00.32.excalidraw.restored.md",
     "Extras/Excalidraw/Drawing 2025-12-12 20.00.32.excalidraw.md",
     "Resources/Books/Vibe Coding Building Production-Grade Software With GenAI, Chat, Agents, and Beyond (Gene Kim, Steve Yegge) (Z-Library).epub",
@@ -273,7 +248,6 @@
     "platform-engineer-psa-proposal.md",
     "Pokemon Unbound.md",
     "Remove Duplicates Sorted Array, Remove Element.md",
-    "spiritbind-moc.md",
     "Extras/Images/Cygnus.png",
     "Extras/Images/todo-1761453162422.webp",
     "Extras/Images/todo-1761453159845.webp",

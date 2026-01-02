@@ -1,0 +1,225 @@
+{
+    "description": "Change hyper+hjkl to arrow keys and navigation",
+    "manipulators": [
+        {
+            "conditions": [
+                {
+                    "name": "hyper_caps_lock",
+                    "type": "variable_if",
+                    "value": 1
+                }
+            ],
+            "from": {
+                "key_code": "j",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [{ "key_code": "left_arrow" }],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                {
+                    "name": "hyper_caps_lock",
+                    "type": "variable_if",
+                    "value": 1
+                }
+            ],
+            "from": {
+                "key_code": "h",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [{ "key_code": "escape" }],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                {
+                    "name": "hyper_caps_lock",
+                    "type": "variable_if",
+                    "value": 1
+                }
+            ],
+            "from": {
+                "key_code": "k",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [{ "key_code": "down_arrow" }],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                {
+                    "name": "hyper_caps_lock",
+                    "type": "variable_if",
+                    "value": 1
+                }
+            ],
+            "from": {
+                "key_code": "i",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [{ "key_code": "up_arrow" }],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                {
+                    "name": "hyper_caps_lock",
+                    "type": "variable_if",
+                    "value": 1
+                }
+            ],
+            "from": {
+                "key_code": "l",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [{ "key_code": "right_arrow" }],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                {
+                    "name": "hyper_caps_lock",
+                    "type": "variable_if",
+                    "value": 1
+                }
+            ],
+            "from": {
+                "key_code": "d",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "key_code": "left_arrow",
+                    "modifiers": ["command"]
+                }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                {
+                    "name": "hyper_caps_lock",
+                    "type": "variable_if",
+                    "value": 1
+                }
+            ],
+            "from": {
+                "key_code": "f",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "key_code": "right_arrow",
+                    "modifiers": ["command"]
+                }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                {
+                    "name": "hyper_caps_lock",
+                    "type": "variable_if",
+                    "value": 1
+                }
+            ],
+            "from": {
+                "key_code": "semicolon",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [{ "key_code": "left_option" }],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                {
+                    "name": "hyper_caps_lock",
+                    "type": "variable_if",
+                    "value": 1
+                }
+            ],
+            "from": {
+                "key_code": "u",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [{ "key_code": "page_up" }],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                {
+                    "name": "hyper_caps_lock",
+                    "type": "variable_if",
+                    "value": 1
+                }
+            ],
+            "from": {
+                "key_code": "n",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [{ "key_code": "page_down" }],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                {
+                    "name": "hyper_caps_lock",
+                    "type": "variable_if",
+                    "value": 1
+                }
+            ],
+            "from": {
+                "key_code": "y",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [{ "key_code": "home" }],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                {
+                    "name": "hyper_caps_lock",
+                    "type": "variable_if",
+                    "value": 1
+                }
+            ],
+            "from": {
+                "key_code": "o",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [{ "key_code": "end" }],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                {
+                    "name": "hyper_caps_lock",
+                    "type": "variable_if",
+                    "value": 1
+                }
+            ],
+            "from": {
+                "key_code": "m",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [{ "key_code": "delete_or_backspace" }],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                {
+                    "name": "hyper_caps_lock",
+                    "type": "variable_if",
+                    "value": 1
+                }
+            ],
+            "from": {
+                "key_code": "comma",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [{ "key_code": "delete_forward" }],
+            "type": "basic"
+        }
+    ]
+}

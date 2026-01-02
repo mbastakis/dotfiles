@@ -1,0 +1,205 @@
+{
+    "description": "Crossover timing - Cancel cross-hand shortcuts within 80ms",
+    "manipulators": [
+        {
+            "description": "Right-hand j pressed within 80ms of left-hand HRM",
+            "conditions": [
+                { "type": "variable_if", "name": "left_hrm", "value": 1 },
+                {
+                    "type": "expression_if",
+                    "expression": "left_hand_press_time > system.now.milliseconds - 80"
+                },
+                { "type": "variable_if", "name": "typing_mode", "value": 0 }
+            ],
+            "from": {
+                "key_code": "j",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "j" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "Right-hand k pressed within 80ms of left-hand HRM",
+            "conditions": [
+                { "type": "variable_if", "name": "left_hrm", "value": 1 },
+                {
+                    "type": "expression_if",
+                    "expression": "left_hand_press_time > system.now.milliseconds - 80"
+                },
+                { "type": "variable_if", "name": "typing_mode", "value": 0 }
+            ],
+            "from": {
+                "key_code": "k",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "k" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "Right-hand l pressed within 80ms of left-hand HRM",
+            "conditions": [
+                { "type": "variable_if", "name": "left_hrm", "value": 1 },
+                {
+                    "type": "expression_if",
+                    "expression": "left_hand_press_time > system.now.milliseconds - 80"
+                },
+                { "type": "variable_if", "name": "typing_mode", "value": 0 }
+            ],
+            "from": {
+                "key_code": "l",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "l" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "Right-hand semicolon pressed within 80ms of left-hand HRM",
+            "conditions": [
+                { "type": "variable_if", "name": "left_hrm", "value": 1 },
+                {
+                    "type": "expression_if",
+                    "expression": "left_hand_press_time > system.now.milliseconds - 80"
+                },
+                { "type": "variable_if", "name": "typing_mode", "value": 0 }
+            ],
+            "from": {
+                "key_code": "semicolon",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "semicolon" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "Left-hand a pressed within 80ms of right-hand HRM",
+            "conditions": [
+                { "type": "variable_if", "name": "right_hrm", "value": 1 },
+                {
+                    "type": "expression_if",
+                    "expression": "right_hand_press_time > system.now.milliseconds - 80"
+                },
+                { "type": "variable_if", "name": "typing_mode", "value": 0 }
+            ],
+            "from": {
+                "key_code": "a",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "a" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "Left-hand s pressed within 80ms of right-hand HRM",
+            "conditions": [
+                { "type": "variable_if", "name": "right_hrm", "value": 1 },
+                {
+                    "type": "expression_if",
+                    "expression": "right_hand_press_time > system.now.milliseconds - 80"
+                },
+                { "type": "variable_if", "name": "typing_mode", "value": 0 }
+            ],
+            "from": {
+                "key_code": "s",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "s" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "Left-hand d pressed within 80ms of right-hand HRM",
+            "conditions": [
+                { "type": "variable_if", "name": "right_hrm", "value": 1 },
+                {
+                    "type": "expression_if",
+                    "expression": "right_hand_press_time > system.now.milliseconds - 80"
+                },
+                { "type": "variable_if", "name": "typing_mode", "value": 0 }
+            ],
+            "from": {
+                "key_code": "d",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "d" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "Left-hand f pressed within 80ms of right-hand HRM",
+            "conditions": [
+                { "type": "variable_if", "name": "right_hrm", "value": 1 },
+                {
+                    "type": "expression_if",
+                    "expression": "right_hand_press_time > system.now.milliseconds - 80"
+                },
+                { "type": "variable_if", "name": "typing_mode", "value": 0 }
+            ],
+            "from": {
+                "key_code": "f",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "f" }
+            ],
+            "type": "basic"
+        }
+    ]
+}
