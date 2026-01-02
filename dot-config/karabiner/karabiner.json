@@ -8,6 +8,211 @@
                 },
                 "rules": [
                     {
+                        "description": "Crossover timing - Cancel cross-hand shortcuts within 80ms",
+                        "manipulators": [
+                            {
+                                "description": "Right-hand j pressed within 80ms of left-hand HRM",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "left_hrm", "value": 1 },
+                                    {
+                                        "type": "expression_if",
+                                        "expression": "left_hand_press_time > system.now.milliseconds - 80"
+                                    },
+                                    { "type": "variable_if", "name": "typing_mode", "value": 0 }
+                                ],
+                                "from": {
+                                    "key_code": "j",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "last_keypress_time",
+                                            "expression": "system.now.milliseconds"
+                                        }
+                                    },
+                                    { "key_code": "j" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "Right-hand k pressed within 80ms of left-hand HRM",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "left_hrm", "value": 1 },
+                                    {
+                                        "type": "expression_if",
+                                        "expression": "left_hand_press_time > system.now.milliseconds - 80"
+                                    },
+                                    { "type": "variable_if", "name": "typing_mode", "value": 0 }
+                                ],
+                                "from": {
+                                    "key_code": "k",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "last_keypress_time",
+                                            "expression": "system.now.milliseconds"
+                                        }
+                                    },
+                                    { "key_code": "k" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "Right-hand l pressed within 80ms of left-hand HRM",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "left_hrm", "value": 1 },
+                                    {
+                                        "type": "expression_if",
+                                        "expression": "left_hand_press_time > system.now.milliseconds - 80"
+                                    },
+                                    { "type": "variable_if", "name": "typing_mode", "value": 0 }
+                                ],
+                                "from": {
+                                    "key_code": "l",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "last_keypress_time",
+                                            "expression": "system.now.milliseconds"
+                                        }
+                                    },
+                                    { "key_code": "l" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "Right-hand semicolon pressed within 80ms of left-hand HRM",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "left_hrm", "value": 1 },
+                                    {
+                                        "type": "expression_if",
+                                        "expression": "left_hand_press_time > system.now.milliseconds - 80"
+                                    },
+                                    { "type": "variable_if", "name": "typing_mode", "value": 0 }
+                                ],
+                                "from": {
+                                    "key_code": "semicolon",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "last_keypress_time",
+                                            "expression": "system.now.milliseconds"
+                                        }
+                                    },
+                                    { "key_code": "semicolon" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "Left-hand a pressed within 80ms of right-hand HRM",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "right_hrm", "value": 1 },
+                                    {
+                                        "type": "expression_if",
+                                        "expression": "right_hand_press_time > system.now.milliseconds - 80"
+                                    },
+                                    { "type": "variable_if", "name": "typing_mode", "value": 0 }
+                                ],
+                                "from": {
+                                    "key_code": "a",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "last_keypress_time",
+                                            "expression": "system.now.milliseconds"
+                                        }
+                                    },
+                                    { "key_code": "a" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "Left-hand s pressed within 80ms of right-hand HRM",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "right_hrm", "value": 1 },
+                                    {
+                                        "type": "expression_if",
+                                        "expression": "right_hand_press_time > system.now.milliseconds - 80"
+                                    },
+                                    { "type": "variable_if", "name": "typing_mode", "value": 0 }
+                                ],
+                                "from": {
+                                    "key_code": "s",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "last_keypress_time",
+                                            "expression": "system.now.milliseconds"
+                                        }
+                                    },
+                                    { "key_code": "s" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "Left-hand d pressed within 80ms of right-hand HRM",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "right_hrm", "value": 1 },
+                                    {
+                                        "type": "expression_if",
+                                        "expression": "right_hand_press_time > system.now.milliseconds - 80"
+                                    },
+                                    { "type": "variable_if", "name": "typing_mode", "value": 0 }
+                                ],
+                                "from": {
+                                    "key_code": "d",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "last_keypress_time",
+                                            "expression": "system.now.milliseconds"
+                                        }
+                                    },
+                                    { "key_code": "d" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "Left-hand f pressed within 80ms of right-hand HRM",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "right_hrm", "value": 1 },
+                                    {
+                                        "type": "expression_if",
+                                        "expression": "right_hand_press_time > system.now.milliseconds - 80"
+                                    },
+                                    { "type": "variable_if", "name": "typing_mode", "value": 0 }
+                                ],
+                                "from": {
+                                    "key_code": "f",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "last_keypress_time",
+                                            "expression": "system.now.milliseconds"
+                                        }
+                                    },
+                                    { "key_code": "f" }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
                         "description": "Home row mods - a (ctrl) - pinky finger",
                         "manipulators": [
                             {
@@ -75,7 +280,13 @@
                                 },
                                 "to": [
                                     { "set_variable": { "name": "left_hrm", "value": 1 } },
-                                    { "set_variable": { "name": "left_pinky_held", "value": 1 } }
+                                    { "set_variable": { "name": "left_pinky_held", "value": 1 } },
+                                    {
+                                        "set_variable": {
+                                            "name": "left_hand_press_time",
+                                            "expression": "system.now.milliseconds"
+                                        }
+                                    }
                                 ],
                                 "to_after_key_up": [
                                     { "set_variable": { "name": "left_hrm", "value": 0 } },
@@ -160,7 +371,7 @@
                                     { "set_variable": { "name": "left_ring_held", "value": 0 } }
                                 ],
                                 "to_if_alone": [{ "key_code": "s", "halt": true }],
-                                "to_if_held_down": [{ "key_code": "left_option" }],
+                                "to_if_held_down": [{ "key_code": "left_option", "lazy": true }],
                                 "to_delayed_action": {
                                     "to_if_canceled": [{ "key_code": "s" }]
                                 },
@@ -183,7 +394,13 @@
                                 },
                                 "to": [
                                     { "set_variable": { "name": "left_hrm", "value": 1 } },
-                                    { "set_variable": { "name": "left_ring_held", "value": 1 } }
+                                    { "set_variable": { "name": "left_ring_held", "value": 1 } },
+                                    {
+                                        "set_variable": {
+                                            "name": "left_hand_press_time",
+                                            "expression": "system.now.milliseconds"
+                                        }
+                                    }
                                 ],
                                 "to_after_key_up": [
                                     { "set_variable": { "name": "left_hrm", "value": 0 } },
@@ -201,7 +418,7 @@
                                 ],
                                 "to_if_held_down": [
                                     { "set_variable": { "name": "left_mod_active", "value": 1 } },
-                                    { "key_code": "left_option" }
+                                    { "key_code": "left_option", "lazy": true }
                                 ],
                                 "to_delayed_action": {
                                     "to_if_canceled": [
@@ -270,7 +487,7 @@
                                     { "set_variable": { "name": "left_middle_held", "value": 0 } }
                                 ],
                                 "to_if_alone": [{ "key_code": "d", "halt": true }],
-                                "to_if_held_down": [{ "key_code": "left_command" }],
+                                "to_if_held_down": [{ "key_code": "left_command", "lazy": true }],
                                 "to_delayed_action": {
                                     "to_if_canceled": [{ "key_code": "d" }]
                                 },
@@ -294,7 +511,13 @@
                                 },
                                 "to": [
                                     { "set_variable": { "name": "left_hrm", "value": 1 } },
-                                    { "set_variable": { "name": "left_middle_held", "value": 1 } }
+                                    { "set_variable": { "name": "left_middle_held", "value": 1 } },
+                                    {
+                                        "set_variable": {
+                                            "name": "left_hand_press_time",
+                                            "expression": "system.now.milliseconds"
+                                        }
+                                    }
                                 ],
                                 "to_after_key_up": [
                                     { "set_variable": { "name": "left_hrm", "value": 0 } },
@@ -312,7 +535,7 @@
                                 ],
                                 "to_if_held_down": [
                                     { "set_variable": { "name": "left_mod_active", "value": 1 } },
-                                    { "key_code": "left_command" }
+                                    { "key_code": "left_command", "lazy": true }
                                 ],
                                 "to_delayed_action": {
                                     "to_if_canceled": [
@@ -405,7 +628,13 @@
                                 },
                                 "to": [
                                     { "set_variable": { "name": "left_hrm", "value": 1 } },
-                                    { "set_variable": { "name": "left_index_held", "value": 1 } }
+                                    { "set_variable": { "name": "left_index_held", "value": 1 } },
+                                    {
+                                        "set_variable": {
+                                            "name": "left_hand_press_time",
+                                            "expression": "system.now.milliseconds"
+                                        }
+                                    }
                                 ],
                                 "to_after_key_up": [
                                     { "set_variable": { "name": "left_hrm", "value": 0 } },
@@ -516,7 +745,13 @@
                                 },
                                 "to": [
                                     { "set_variable": { "name": "right_hrm", "value": 1 } },
-                                    { "set_variable": { "name": "right_index_held", "value": 1 } }
+                                    { "set_variable": { "name": "right_index_held", "value": 1 } },
+                                    {
+                                        "set_variable": {
+                                            "name": "right_hand_press_time",
+                                            "expression": "system.now.milliseconds"
+                                        }
+                                    }
                                 ],
                                 "to_after_key_up": [
                                     { "set_variable": { "name": "right_hrm", "value": 0 } },
@@ -603,7 +838,7 @@
                                     { "set_variable": { "name": "right_middle_held", "value": 0 } }
                                 ],
                                 "to_if_alone": [{ "key_code": "k", "halt": true }],
-                                "to_if_held_down": [{ "key_code": "right_command" }],
+                                "to_if_held_down": [{ "key_code": "right_command", "lazy": true }],
                                 "to_delayed_action": {
                                     "to_if_canceled": [{ "key_code": "k" }]
                                 },
@@ -627,7 +862,13 @@
                                 },
                                 "to": [
                                     { "set_variable": { "name": "right_hrm", "value": 1 } },
-                                    { "set_variable": { "name": "right_middle_held", "value": 1 } }
+                                    { "set_variable": { "name": "right_middle_held", "value": 1 } },
+                                    {
+                                        "set_variable": {
+                                            "name": "right_hand_press_time",
+                                            "expression": "system.now.milliseconds"
+                                        }
+                                    }
                                 ],
                                 "to_after_key_up": [
                                     { "set_variable": { "name": "right_hrm", "value": 0 } },
@@ -645,7 +886,7 @@
                                 ],
                                 "to_if_held_down": [
                                     { "set_variable": { "name": "right_mod_active", "value": 1 } },
-                                    { "key_code": "right_command" }
+                                    { "key_code": "right_command", "lazy": true }
                                 ],
                                 "to_delayed_action": {
                                     "to_if_canceled": [
@@ -714,7 +955,7 @@
                                     { "set_variable": { "name": "right_ring_held", "value": 0 } }
                                 ],
                                 "to_if_alone": [{ "key_code": "l", "halt": true }],
-                                "to_if_held_down": [{ "key_code": "right_option" }],
+                                "to_if_held_down": [{ "key_code": "right_option", "lazy": true }],
                                 "to_delayed_action": {
                                     "to_if_canceled": [{ "key_code": "l" }]
                                 },
@@ -738,7 +979,13 @@
                                 },
                                 "to": [
                                     { "set_variable": { "name": "right_hrm", "value": 1 } },
-                                    { "set_variable": { "name": "right_ring_held", "value": 1 } }
+                                    { "set_variable": { "name": "right_ring_held", "value": 1 } },
+                                    {
+                                        "set_variable": {
+                                            "name": "right_hand_press_time",
+                                            "expression": "system.now.milliseconds"
+                                        }
+                                    }
                                 ],
                                 "to_after_key_up": [
                                     { "set_variable": { "name": "right_hrm", "value": 0 } },
@@ -756,7 +1003,7 @@
                                 ],
                                 "to_if_held_down": [
                                     { "set_variable": { "name": "right_mod_active", "value": 1 } },
-                                    { "key_code": "right_option" }
+                                    { "key_code": "right_option", "lazy": true }
                                 ],
                                 "to_delayed_action": {
                                     "to_if_canceled": [
@@ -849,7 +1096,13 @@
                                 },
                                 "to": [
                                     { "set_variable": { "name": "right_hrm", "value": 1 } },
-                                    { "set_variable": { "name": "right_pinky_held", "value": 1 } }
+                                    { "set_variable": { "name": "right_pinky_held", "value": 1 } },
+                                    {
+                                        "set_variable": {
+                                            "name": "right_hand_press_time",
+                                            "expression": "system.now.milliseconds"
+                                        }
+                                    }
                                 ],
                                 "to_after_key_up": [
                                     { "set_variable": { "name": "right_hrm", "value": 0 } },
