@@ -237,6 +237,11 @@
                                     },
                                     { "key_code": "a" }
                                 ],
+                                "to_after_key_up": [
+                                    { "set_variable": { "name": "left_hrm", "value": 0 } },
+                                    { "set_variable": { "name": "left_pinky_held", "value": 0 } },
+                                    { "set_variable": { "name": "left_mod_active", "value": 0 } }
+                                ],
                                 "type": "basic"
                             },
                             {
@@ -350,6 +355,11 @@
                                         }
                                     },
                                     { "key_code": "s" }
+                                ],
+                                "to_after_key_up": [
+                                    { "set_variable": { "name": "left_hrm", "value": 0 } },
+                                    { "set_variable": { "name": "left_ring_held", "value": 0 } },
+                                    { "set_variable": { "name": "left_mod_active", "value": 0 } }
                                 ],
                                 "type": "basic"
                             },
@@ -465,6 +475,11 @@
                                         }
                                     },
                                     { "key_code": "d" }
+                                ],
+                                "to_after_key_up": [
+                                    { "set_variable": { "name": "left_hrm", "value": 0 } },
+                                    { "set_variable": { "name": "left_middle_held", "value": 0 } },
+                                    { "set_variable": { "name": "left_mod_active", "value": 0 } }
                                 ],
                                 "type": "basic"
                             },
@@ -583,6 +598,11 @@
                                     },
                                     { "key_code": "f" }
                                 ],
+                                "to_after_key_up": [
+                                    { "set_variable": { "name": "left_hrm", "value": 0 } },
+                                    { "set_variable": { "name": "left_index_held", "value": 0 } },
+                                    { "set_variable": { "name": "left_mod_active", "value": 0 } }
+                                ],
                                 "type": "basic"
                             },
                             {
@@ -699,6 +719,11 @@
                                         }
                                     },
                                     { "key_code": "j" }
+                                ],
+                                "to_after_key_up": [
+                                    { "set_variable": { "name": "right_hrm", "value": 0 } },
+                                    { "set_variable": { "name": "right_index_held", "value": 0 } },
+                                    { "set_variable": { "name": "right_mod_active", "value": 0 } }
                                 ],
                                 "type": "basic"
                             },
@@ -817,6 +842,11 @@
                                     },
                                     { "key_code": "k" }
                                 ],
+                                "to_after_key_up": [
+                                    { "set_variable": { "name": "right_hrm", "value": 0 } },
+                                    { "set_variable": { "name": "right_middle_held", "value": 0 } },
+                                    { "set_variable": { "name": "right_mod_active", "value": 0 } }
+                                ],
                                 "type": "basic"
                             },
                             {
@@ -934,6 +964,11 @@
                                     },
                                     { "key_code": "l" }
                                 ],
+                                "to_after_key_up": [
+                                    { "set_variable": { "name": "right_hrm", "value": 0 } },
+                                    { "set_variable": { "name": "right_ring_held", "value": 0 } },
+                                    { "set_variable": { "name": "right_mod_active", "value": 0 } }
+                                ],
                                 "type": "basic"
                             },
                             {
@@ -1050,6 +1085,11 @@
                                         }
                                     },
                                     { "key_code": "semicolon" }
+                                ],
+                                "to_after_key_up": [
+                                    { "set_variable": { "name": "right_hrm", "value": 0 } },
+                                    { "set_variable": { "name": "right_pinky_held", "value": 0 } },
+                                    { "set_variable": { "name": "right_mod_active", "value": 0 } }
                                 ],
                                 "type": "basic"
                             },
@@ -1353,7 +1393,8 @@
                             {
                                 "conditions": [
                                     { "type": "variable_unless", "name": "left_hrm", "value": 1 },
-                                    { "type": "variable_unless", "name": "right_hrm", "value": 1 }
+                                    { "type": "variable_unless", "name": "right_hrm", "value": 1 },
+                                    { "type": "variable_unless", "name": "hyper_caps_lock", "value": 1 }
                                 ],
                                 "from": {
                                     "key_code": "i",
