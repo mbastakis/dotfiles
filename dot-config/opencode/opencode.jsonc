@@ -4,6 +4,15 @@
   "autoshare": false,
   "share": "manual",
   "autoupdate": true,
+  "provider": {
+    "amazon-bedrock": {
+      "models": {
+        "anthropic.claude-opus-4-5-20251101-v1:0": {
+          "name": "Claude Opus 4.5 (Bedrock)"
+        }
+      }
+    }
+  },
   "mcp": {
     // "snap-happy": {
     //   "type": "local",
