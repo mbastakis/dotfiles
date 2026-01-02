@@ -1,0 +1,65 @@
+{
+    "description": "Typing mode toggle - Right Cmd + Space (with notification)",
+    "manipulators": [
+        {
+            "description": "Toggle ON with HRM k (right_command) + Space",
+            "from": {
+                "key_code": "spacebar",
+                "modifiers": { "mandatory": ["right_command"] }
+            },
+            "to": [
+                { "set_variable": { "name": "typing_mode", "value": 1 } },
+                {
+                    "set_notification_message": {
+                        "id": "typing_mode",
+                        "text": "TYPING MODE ON"
+                    }
+                }
+            ],
+            "conditions": [
+                { "type": "variable_if", "name": "typing_mode", "value": 0 }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "Toggle OFF with Right Cmd + Space",
+            "from": {
+                "key_code": "spacebar",
+                "modifiers": { "mandatory": ["right_command"] }
+            },
+            "to": [
+                { "set_variable": { "name": "typing_mode", "value": 0 } },
+                {
+                    "set_notification_message": {
+                        "id": "typing_mode",
+                        "text": ""
+                    }
+                }
+            ],
+            "conditions": [
+                { "type": "variable_if", "name": "typing_mode", "value": 1 }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "Toggle OFF with Left Cmd + Space (escape hatch)",
+            "from": {
+                "key_code": "spacebar",
+                "modifiers": { "mandatory": ["left_command"] }
+            },
+            "to": [
+                { "set_variable": { "name": "typing_mode", "value": 0 } },
+                {
+                    "set_notification_message": {
+                        "id": "typing_mode",
+                        "text": ""
+                    }
+                }
+            ],
+            "conditions": [
+                { "type": "variable_if", "name": "typing_mode", "value": 1 }
+            ],
+            "type": "basic"
+        }
+    ]
+}

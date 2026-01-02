@@ -1,0 +1,341 @@
+{
+    "description": "Bilateral cancellation - Same-hand rollover outputs both letters",
+    "manipulators": [
+        {
+            "description": "a held + s tapped = 'as'",
+            "conditions": [
+                { "type": "variable_if", "name": "left_pinky_held", "value": 1 },
+                { "type": "variable_unless", "name": "left_mod_active", "value": 1 }
+            ],
+            "from": { "key_code": "s", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                { "key_code": "a" },
+                { "key_code": "s" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "a held + d tapped = 'ad'",
+            "conditions": [
+                { "type": "variable_if", "name": "left_pinky_held", "value": 1 },
+                { "type": "variable_unless", "name": "left_mod_active", "value": 1 }
+            ],
+            "from": { "key_code": "d", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                { "key_code": "a" },
+                { "key_code": "d" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "a held + f tapped = 'af'",
+            "conditions": [
+                { "type": "variable_if", "name": "left_pinky_held", "value": 1 },
+                { "type": "variable_unless", "name": "left_mod_active", "value": 1 }
+            ],
+            "from": { "key_code": "f", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                { "key_code": "a" },
+                { "key_code": "f" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "s held + a tapped = 'sa'",
+            "conditions": [
+                { "type": "variable_if", "name": "left_ring_held", "value": 1 },
+                { "type": "variable_unless", "name": "left_mod_active", "value": 1 }
+            ],
+            "from": { "key_code": "a", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                { "key_code": "s" },
+                { "key_code": "a" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "s held + d tapped = 'sd'",
+            "conditions": [
+                { "type": "variable_if", "name": "left_ring_held", "value": 1 },
+                { "type": "variable_unless", "name": "left_mod_active", "value": 1 }
+            ],
+            "from": { "key_code": "d", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                { "key_code": "s" },
+                { "key_code": "d" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "s held + f tapped = 'sf'",
+            "conditions": [
+                { "type": "variable_if", "name": "left_ring_held", "value": 1 },
+                { "type": "variable_unless", "name": "left_mod_active", "value": 1 }
+            ],
+            "from": { "key_code": "f", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                { "key_code": "s" },
+                { "key_code": "f" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "d held + a tapped = 'da'",
+            "conditions": [
+                { "type": "variable_if", "name": "left_middle_held", "value": 1 },
+                { "type": "variable_unless", "name": "left_mod_active", "value": 1 }
+            ],
+            "from": { "key_code": "a", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                { "key_code": "d" },
+                { "key_code": "a" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "d held + s tapped = 'ds'",
+            "conditions": [
+                { "type": "variable_if", "name": "left_middle_held", "value": 1 },
+                { "type": "variable_unless", "name": "left_mod_active", "value": 1 }
+            ],
+            "from": { "key_code": "s", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                { "key_code": "d" },
+                { "key_code": "s" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "d held + f tapped = 'df'",
+            "conditions": [
+                { "type": "variable_if", "name": "left_middle_held", "value": 1 },
+                { "type": "variable_unless", "name": "left_mod_active", "value": 1 }
+            ],
+            "from": { "key_code": "f", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                { "key_code": "d" },
+                { "key_code": "f" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "f held + a tapped = 'fa'",
+            "conditions": [
+                { "type": "variable_if", "name": "left_index_held", "value": 1 },
+                { "type": "variable_unless", "name": "left_mod_active", "value": 1 }
+            ],
+            "from": { "key_code": "a", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                { "key_code": "f" },
+                { "key_code": "a" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "f held + s tapped = 'fs'",
+            "conditions": [
+                { "type": "variable_if", "name": "left_index_held", "value": 1 },
+                { "type": "variable_unless", "name": "left_mod_active", "value": 1 }
+            ],
+            "from": { "key_code": "s", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                { "key_code": "f" },
+                { "key_code": "s" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "f held + d tapped = 'fd'",
+            "conditions": [
+                { "type": "variable_if", "name": "left_index_held", "value": 1 },
+                { "type": "variable_unless", "name": "left_mod_active", "value": 1 }
+            ],
+            "from": { "key_code": "d", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                { "key_code": "f" },
+                { "key_code": "d" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "j held + k tapped = 'jk'",
+            "conditions": [
+                { "type": "variable_if", "name": "right_index_held", "value": 1 },
+                { "type": "variable_unless", "name": "right_mod_active", "value": 1 }
+            ],
+            "from": { "key_code": "k", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                { "key_code": "j" },
+                { "key_code": "k" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "j held + l tapped = 'jl'",
+            "conditions": [
+                { "type": "variable_if", "name": "right_index_held", "value": 1 },
+                { "type": "variable_unless", "name": "right_mod_active", "value": 1 }
+            ],
+            "from": { "key_code": "l", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                { "key_code": "j" },
+                { "key_code": "l" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "j held + ; tapped = 'j;'",
+            "conditions": [
+                { "type": "variable_if", "name": "right_index_held", "value": 1 },
+                { "type": "variable_unless", "name": "right_mod_active", "value": 1 }
+            ],
+            "from": { "key_code": "semicolon", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                { "key_code": "j" },
+                { "key_code": "semicolon" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "k held + j tapped = 'kj'",
+            "conditions": [
+                { "type": "variable_if", "name": "right_middle_held", "value": 1 },
+                { "type": "variable_unless", "name": "right_mod_active", "value": 1 }
+            ],
+            "from": { "key_code": "j", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                { "key_code": "k" },
+                { "key_code": "j" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "k held + l tapped = 'kl'",
+            "conditions": [
+                { "type": "variable_if", "name": "right_middle_held", "value": 1 },
+                { "type": "variable_unless", "name": "right_mod_active", "value": 1 }
+            ],
+            "from": { "key_code": "l", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                { "key_code": "k" },
+                { "key_code": "l" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "k held + ; tapped = 'k;'",
+            "conditions": [
+                { "type": "variable_if", "name": "right_middle_held", "value": 1 },
+                { "type": "variable_unless", "name": "right_mod_active", "value": 1 }
+            ],
+            "from": { "key_code": "semicolon", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                { "key_code": "k" },
+                { "key_code": "semicolon" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "l held + j tapped = 'lj'",
+            "conditions": [
+                { "type": "variable_if", "name": "right_ring_held", "value": 1 },
+                { "type": "variable_unless", "name": "right_mod_active", "value": 1 }
+            ],
+            "from": { "key_code": "j", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                { "key_code": "l" },
+                { "key_code": "j" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "l held + k tapped = 'lk'",
+            "conditions": [
+                { "type": "variable_if", "name": "right_ring_held", "value": 1 },
+                { "type": "variable_unless", "name": "right_mod_active", "value": 1 }
+            ],
+            "from": { "key_code": "k", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                { "key_code": "l" },
+                { "key_code": "k" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "l held + ; tapped = 'l;'",
+            "conditions": [
+                { "type": "variable_if", "name": "right_ring_held", "value": 1 },
+                { "type": "variable_unless", "name": "right_mod_active", "value": 1 }
+            ],
+            "from": { "key_code": "semicolon", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                { "key_code": "l" },
+                { "key_code": "semicolon" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "; held + j tapped = ';j'",
+            "conditions": [
+                { "type": "variable_if", "name": "right_pinky_held", "value": 1 },
+                { "type": "variable_unless", "name": "right_mod_active", "value": 1 }
+            ],
+            "from": { "key_code": "j", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                { "key_code": "semicolon" },
+                { "key_code": "j" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "; held + k tapped = ';k'",
+            "conditions": [
+                { "type": "variable_if", "name": "right_pinky_held", "value": 1 },
+                { "type": "variable_unless", "name": "right_mod_active", "value": 1 }
+            ],
+            "from": { "key_code": "k", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                { "key_code": "semicolon" },
+                { "key_code": "k" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "; held + l tapped = ';l'",
+            "conditions": [
+                { "type": "variable_if", "name": "right_pinky_held", "value": 1 },
+                { "type": "variable_unless", "name": "right_mod_active", "value": 1 }
+            ],
+            "from": { "key_code": "l", "modifiers": { "optional": ["any"] } },
+            "to": [
+                { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                { "key_code": "semicolon" },
+                { "key_code": "l" }
+            ],
+            "type": "basic"
+        }
+    ]
+}

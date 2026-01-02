@@ -1,0 +1,39 @@
+{
+    "description": "Mac OSX: double-tap right shift key -> caps lock toggle",
+    "manipulators": [
+        {
+            "description": "Double-tap right shift -> Caps Lock (expression-based)",
+            "conditions": [
+                {
+                    "type": "expression_if",
+                    "expression": "right_shift_last_tap > system.now.milliseconds - 300"
+                }
+            ],
+            "from": {
+                "key_code": "right_shift",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                { "key_code": "caps_lock" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "First tap - track timestamp",
+            "from": {
+                "key_code": "right_shift",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "right_shift_last_tap",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "right_shift" }
+            ],
+            "type": "basic"
+        }
+    ]
+}
