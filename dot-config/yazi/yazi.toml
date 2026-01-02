@@ -29,36 +29,36 @@ ueberzug_scale = 1
 ueberzug_offset = [0, 0, 0, 0]
 
 [opener]
-edit = [{ run = 'nvim "$@"', block = true, desc = "Neovim" }]
+edit = [{ run = 'nvim %s', block = true, desc = "Neovim" }]
 open = [
-  { run = 'xdg-open "$1"', desc = "Open", for = "linux" },
-  { run = 'open "$@"', desc = "Open", for = "macos" },
+  { run = 'xdg-open %s', desc = "Open", for = "linux" },
+  { run = 'open %s', desc = "Open", for = "macos" },
 ]
 reveal = [
-  { run = 'xdg-open "$(dirname "$1")"', desc = "Reveal", for = "linux" },
-  { run = 'open "$1"', desc = "Reveal", for = "macos" },
-  { run = '''clear; exiftool "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show EXIF" },
+  { run = 'xdg-open %d', desc = "Reveal", for = "linux" },
+  { run = 'open -R %s', desc = "Reveal", for = "macos" },
+  { run = 'exiftool %s; echo "Press enter to exit"; read _', block = true, desc = "Show EXIF" },
 ]
 
 render_markdown = [
-  { run = '''sh -c 'if [ -f "$1" ]; then glow "$1"; else glow "$1"; fi' -- "$1"''', block = true, desc = "Render Markdown" },
+  { run = 'glow %s', block = true, desc = "Render Markdown" },
 ]
 
 terminal = [
-  { run = 'open -na "Ghostty" --args --working-directory="$(dirname "$1")"', orphan = true, desc = "Open Ghostty here", for = "macos" },
-  { run = '''xdg-terminal-exec sh -c "cd $(dirname "$1") && exec $SHELL"''', orphan = true, desc = "Open terminal here", for = "linux" },
+  { run = 'open -na "Ghostty" --args --working-directory=%d', orphan = true, desc = "Open Ghostty here", for = "macos" },
+  { run = 'xdg-terminal-exec sh -c "cd %d && exec $SHELL"', orphan = true, desc = "Open terminal here", for = "linux" },
 ]
 
-extract = [{ run = 'ya pub extract --list "$@"', desc = "Extract here" }]
+extract = [{ run = 'ya pub extract --list %s', desc = "Extract here" }]
 play = [
-  { run = 'mpv --force-window "$@"', orphan = true, desc = "Play" },
-  { run = '''mediainfo "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show media info" },
+  { run = 'mpv --force-window %s', orphan = true, desc = "Play" },
+  { run = 'mediainfo %s; echo "Press enter to exit"; read _', block = true, desc = "Show media info" },
 ]
 
 [open]
 rules = [
   # Folder
-  { name = "*/", use = [
+  { url = "*/", use = [
     "edit",
     "open",
     "reveal",
@@ -112,7 +112,7 @@ rules = [
     "reveal",
   ] },
   # Fallback
-  { name = "*", use = [
+  { url = "*", use = [
     "open",
     "reveal",
     "terminal",
@@ -130,17 +130,18 @@ suppress_preload = false
 [plugin]
 fetchers = [
   # Mimetype
-  { id = "mime", name = "*", run = "mime", prio = "high" },
+  { id = "mime", url = "*", run = "mime.local", prio = "high" },
+  { id = "mime", url = "*/", run = "mime.dir", prio = "high" },
 ]
 
 [[plugin.prepend_fetchers]]
 id = "git"
-name = "*"
+url = "*"
 run = "git"
 
 [[plugin.prepend_fetchers]]
 id = "git"
-name = "*/"
+url = "*/"
 run = "git"
 
 spotters = [

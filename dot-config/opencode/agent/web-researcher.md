@@ -50,6 +50,11 @@ You are a specialized agent for web crawling and URL research. Your primary purp
 
 4. **Return results** - Provide the extracted content or file locations to the calling agent.
 
+5. **Output to ai-docs** - When crawling documentation sites, save output to `./ai-docs/<tool-name>/`:
+   ```bash
+   uvx --from crawl4ai python ~/.config/opencode/skill/crawl4ai/scripts/site_crawler.py <url> --headless -o ./ai-docs/<tool-name>
+   ```
+
 ## Available Scripts
 
 | Script | Use Case | Output |
@@ -78,5 +83,13 @@ When another agent says "@web-researcher fetch https://docs.example.com":
 
 When asked to "crawl the entire documentation site":
 1. Load crawl4ai skill  
-2. Run: `uvx --from crawl4ai python ~/.config/opencode/skill/crawl4ai/scripts/site_crawler.py <url> --headless -o ./crawled_docs`
+2. Run: `uvx --from crawl4ai python ~/.config/opencode/skill/crawl4ai/scripts/site_crawler.py <url> --headless -o ./ai-docs/<tool-name>`
 3. Report the number of pages crawled and location of output files
+
+## Default Output Location
+
+When crawling documentation for tools/projects, always output to `./ai-docs/<tool-name>/` directory structure:
+- `./ai-docs/<tool-name>/pages/*.md` - Individual markdown files for each page
+- `./ai-docs/<tool-name>/site_index.json` - Crawl metadata and URL mappings
+
+This ensures documentation is stored consistently and can be referenced by other agents.

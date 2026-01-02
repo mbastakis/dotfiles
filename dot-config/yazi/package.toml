@@ -1,19 +1,9 @@
 [[plugin.deps]]
 use = "yazi-rs/plugins:git"
-rev = "7c174cc"
-hash = "e01006bfb38951ea89031bd918b20dbb"
+rev = "03cdd4b"
+hash = "36a484acf6a0a0219c543ccb4cee218f"
 
 [[plugin.deps]]
 use = "AnirudhG07/plugins-yazi:copy-file-contents"
 rev = "71545f4"
 hash = "f8530ee84fee95dbcc26bb1d8d8019c7"
-
-[[flavor.deps]]
-use = "yazi-rs/flavors:catppuccin-mocha"
-rev = "d04a298"
-hash = "288a0dedd5d13b28605cf82c05326dcd"
-
-[[flavor.deps]]
-use = "yazi-rs/flavors:catppuccin-frappe"
-rev = "d04a298"
-hash = "d659c6fde5148fb5c066518d7fdecddc"
