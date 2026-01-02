@@ -8,6 +8,347 @@
                 },
                 "rules": [
                     {
+                        "description": "Bilateral cancellation - Same-hand rollover outputs both letters",
+                        "manipulators": [
+                            {
+                                "description": "a held + s tapped = 'as'",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "left_pinky_held", "value": 1 },
+                                    { "type": "variable_unless", "name": "left_mod_active", "value": 1 }
+                                ],
+                                "from": { "key_code": "s", "modifiers": { "optional": ["any"] } },
+                                "to": [
+                                    { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                                    { "key_code": "a" },
+                                    { "key_code": "s" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "a held + d tapped = 'ad'",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "left_pinky_held", "value": 1 },
+                                    { "type": "variable_unless", "name": "left_mod_active", "value": 1 }
+                                ],
+                                "from": { "key_code": "d", "modifiers": { "optional": ["any"] } },
+                                "to": [
+                                    { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                                    { "key_code": "a" },
+                                    { "key_code": "d" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "a held + f tapped = 'af'",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "left_pinky_held", "value": 1 },
+                                    { "type": "variable_unless", "name": "left_mod_active", "value": 1 }
+                                ],
+                                "from": { "key_code": "f", "modifiers": { "optional": ["any"] } },
+                                "to": [
+                                    { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                                    { "key_code": "a" },
+                                    { "key_code": "f" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "s held + a tapped = 'sa'",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "left_ring_held", "value": 1 },
+                                    { "type": "variable_unless", "name": "left_mod_active", "value": 1 }
+                                ],
+                                "from": { "key_code": "a", "modifiers": { "optional": ["any"] } },
+                                "to": [
+                                    { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                                    { "key_code": "s" },
+                                    { "key_code": "a" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "s held + d tapped = 'sd'",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "left_ring_held", "value": 1 },
+                                    { "type": "variable_unless", "name": "left_mod_active", "value": 1 }
+                                ],
+                                "from": { "key_code": "d", "modifiers": { "optional": ["any"] } },
+                                "to": [
+                                    { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                                    { "key_code": "s" },
+                                    { "key_code": "d" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "s held + f tapped = 'sf'",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "left_ring_held", "value": 1 },
+                                    { "type": "variable_unless", "name": "left_mod_active", "value": 1 }
+                                ],
+                                "from": { "key_code": "f", "modifiers": { "optional": ["any"] } },
+                                "to": [
+                                    { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                                    { "key_code": "s" },
+                                    { "key_code": "f" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "d held + a tapped = 'da'",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "left_middle_held", "value": 1 },
+                                    { "type": "variable_unless", "name": "left_mod_active", "value": 1 }
+                                ],
+                                "from": { "key_code": "a", "modifiers": { "optional": ["any"] } },
+                                "to": [
+                                    { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                                    { "key_code": "d" },
+                                    { "key_code": "a" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "d held + s tapped = 'ds'",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "left_middle_held", "value": 1 },
+                                    { "type": "variable_unless", "name": "left_mod_active", "value": 1 }
+                                ],
+                                "from": { "key_code": "s", "modifiers": { "optional": ["any"] } },
+                                "to": [
+                                    { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                                    { "key_code": "d" },
+                                    { "key_code": "s" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "d held + f tapped = 'df'",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "left_middle_held", "value": 1 },
+                                    { "type": "variable_unless", "name": "left_mod_active", "value": 1 }
+                                ],
+                                "from": { "key_code": "f", "modifiers": { "optional": ["any"] } },
+                                "to": [
+                                    { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                                    { "key_code": "d" },
+                                    { "key_code": "f" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "f held + a tapped = 'fa'",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "left_index_held", "value": 1 },
+                                    { "type": "variable_unless", "name": "left_mod_active", "value": 1 }
+                                ],
+                                "from": { "key_code": "a", "modifiers": { "optional": ["any"] } },
+                                "to": [
+                                    { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                                    { "key_code": "f" },
+                                    { "key_code": "a" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "f held + s tapped = 'fs'",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "left_index_held", "value": 1 },
+                                    { "type": "variable_unless", "name": "left_mod_active", "value": 1 }
+                                ],
+                                "from": { "key_code": "s", "modifiers": { "optional": ["any"] } },
+                                "to": [
+                                    { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                                    { "key_code": "f" },
+                                    { "key_code": "s" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "f held + d tapped = 'fd'",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "left_index_held", "value": 1 },
+                                    { "type": "variable_unless", "name": "left_mod_active", "value": 1 }
+                                ],
+                                "from": { "key_code": "d", "modifiers": { "optional": ["any"] } },
+                                "to": [
+                                    { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                                    { "key_code": "f" },
+                                    { "key_code": "d" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "j held + k tapped = 'jk'",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "right_index_held", "value": 1 },
+                                    { "type": "variable_unless", "name": "right_mod_active", "value": 1 }
+                                ],
+                                "from": { "key_code": "k", "modifiers": { "optional": ["any"] } },
+                                "to": [
+                                    { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                                    { "key_code": "j" },
+                                    { "key_code": "k" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "j held + l tapped = 'jl'",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "right_index_held", "value": 1 },
+                                    { "type": "variable_unless", "name": "right_mod_active", "value": 1 }
+                                ],
+                                "from": { "key_code": "l", "modifiers": { "optional": ["any"] } },
+                                "to": [
+                                    { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                                    { "key_code": "j" },
+                                    { "key_code": "l" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "j held + ; tapped = 'j;'",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "right_index_held", "value": 1 },
+                                    { "type": "variable_unless", "name": "right_mod_active", "value": 1 }
+                                ],
+                                "from": { "key_code": "semicolon", "modifiers": { "optional": ["any"] } },
+                                "to": [
+                                    { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                                    { "key_code": "j" },
+                                    { "key_code": "semicolon" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "k held + j tapped = 'kj'",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "right_middle_held", "value": 1 },
+                                    { "type": "variable_unless", "name": "right_mod_active", "value": 1 }
+                                ],
+                                "from": { "key_code": "j", "modifiers": { "optional": ["any"] } },
+                                "to": [
+                                    { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                                    { "key_code": "k" },
+                                    { "key_code": "j" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "k held + l tapped = 'kl'",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "right_middle_held", "value": 1 },
+                                    { "type": "variable_unless", "name": "right_mod_active", "value": 1 }
+                                ],
+                                "from": { "key_code": "l", "modifiers": { "optional": ["any"] } },
+                                "to": [
+                                    { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                                    { "key_code": "k" },
+                                    { "key_code": "l" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "k held + ; tapped = 'k;'",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "right_middle_held", "value": 1 },
+                                    { "type": "variable_unless", "name": "right_mod_active", "value": 1 }
+                                ],
+                                "from": { "key_code": "semicolon", "modifiers": { "optional": ["any"] } },
+                                "to": [
+                                    { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                                    { "key_code": "k" },
+                                    { "key_code": "semicolon" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "l held + j tapped = 'lj'",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "right_ring_held", "value": 1 },
+                                    { "type": "variable_unless", "name": "right_mod_active", "value": 1 }
+                                ],
+                                "from": { "key_code": "j", "modifiers": { "optional": ["any"] } },
+                                "to": [
+                                    { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                                    { "key_code": "l" },
+                                    { "key_code": "j" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "l held + k tapped = 'lk'",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "right_ring_held", "value": 1 },
+                                    { "type": "variable_unless", "name": "right_mod_active", "value": 1 }
+                                ],
+                                "from": { "key_code": "k", "modifiers": { "optional": ["any"] } },
+                                "to": [
+                                    { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                                    { "key_code": "l" },
+                                    { "key_code": "k" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "l held + ; tapped = 'l;'",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "right_ring_held", "value": 1 },
+                                    { "type": "variable_unless", "name": "right_mod_active", "value": 1 }
+                                ],
+                                "from": { "key_code": "semicolon", "modifiers": { "optional": ["any"] } },
+                                "to": [
+                                    { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                                    { "key_code": "l" },
+                                    { "key_code": "semicolon" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "; held + j tapped = ';j'",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "right_pinky_held", "value": 1 },
+                                    { "type": "variable_unless", "name": "right_mod_active", "value": 1 }
+                                ],
+                                "from": { "key_code": "j", "modifiers": { "optional": ["any"] } },
+                                "to": [
+                                    { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                                    { "key_code": "semicolon" },
+                                    { "key_code": "j" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "; held + k tapped = ';k'",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "right_pinky_held", "value": 1 },
+                                    { "type": "variable_unless", "name": "right_mod_active", "value": 1 }
+                                ],
+                                "from": { "key_code": "k", "modifiers": { "optional": ["any"] } },
+                                "to": [
+                                    { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                                    { "key_code": "semicolon" },
+                                    { "key_code": "k" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "; held + l tapped = ';l'",
+                                "conditions": [
+                                    { "type": "variable_if", "name": "right_pinky_held", "value": 1 },
+                                    { "type": "variable_unless", "name": "right_mod_active", "value": 1 }
+                                ],
+                                "from": { "key_code": "l", "modifiers": { "optional": ["any"] } },
+                                "to": [
+                                    { "set_variable": { "name": "last_keypress_time", "expression": "system.now.milliseconds" } },
+                                    { "key_code": "semicolon" },
+                                    { "key_code": "l" }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
                         "description": "Crossover timing - Cancel cross-hand shortcuts within 80ms",
                         "manipulators": [
                             {
@@ -222,6 +563,7 @@
                                         "type": "expression_if",
                                         "expression": "last_keypress_time > system.now.milliseconds - 230"
                                     },
+                                    { "type": "variable_unless", "name": "left_mod_active", "value": 1 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
                                 "from": {
@@ -237,11 +579,6 @@
                                     },
                                     { "key_code": "a" }
                                 ],
-                                "to_after_key_up": [
-                                    { "set_variable": { "name": "left_hrm", "value": 0 } },
-                                    { "set_variable": { "name": "left_pinky_held", "value": 0 } },
-                                    { "set_variable": { "name": "left_mod_active", "value": 0 } }
-                                ],
                                 "type": "basic"
                             },
                             {
@@ -256,18 +593,21 @@
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [
-                                    { "set_variable": { "name": "left_pinky_held", "value": 1 } }
-                                ],
-                                "to_after_key_up": [
-                                    { "set_variable": { "name": "left_pinky_held", "value": 0 } }
+                                    { 
+                                        "set_variable": { 
+                                            "name": "left_pinky_held", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    }
                                 ],
                                 "to_if_alone": [{ "key_code": "a", "halt": true }],
-                                "to_if_held_down": [{ "key_code": "left_control" }],
+                                "to_if_held_down": [{ "key_code": "left_control", "lazy": true }],
                                 "to_delayed_action": {
                                     "to_if_canceled": [{ "key_code": "a" }]
                                 },
                                 "parameters": {
-                                    "basic.to_if_alone_timeout_milliseconds": 200,
+                                    "basic.to_if_alone_timeout_milliseconds": 0,
                                     "basic.to_if_held_down_threshold_milliseconds": 0,
                                     "basic.to_delayed_action_delay_milliseconds": 200
                                 },
@@ -284,19 +624,26 @@
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [
-                                    { "set_variable": { "name": "left_hrm", "value": 1 } },
-                                    { "set_variable": { "name": "left_pinky_held", "value": 1 } },
+                                    { 
+                                        "set_variable": { 
+                                            "name": "left_hrm", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    },
+                                    { 
+                                        "set_variable": { 
+                                            "name": "left_pinky_held", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    },
                                     {
                                         "set_variable": {
                                             "name": "left_hand_press_time",
                                             "expression": "system.now.milliseconds"
                                         }
                                     }
-                                ],
-                                "to_after_key_up": [
-                                    { "set_variable": { "name": "left_hrm", "value": 0 } },
-                                    { "set_variable": { "name": "left_pinky_held", "value": 0 } },
-                                    { "set_variable": { "name": "left_mod_active", "value": 0 } }
                                 ],
                                 "to_if_alone": [
                                     {
@@ -308,8 +655,14 @@
                                     { "key_code": "a", "halt": true }
                                 ],
                                 "to_if_held_down": [
-                                    { "set_variable": { "name": "left_mod_active", "value": 1 } },
-                                    { "key_code": "left_control" }
+                                    { 
+                                        "set_variable": { 
+                                            "name": "left_mod_active", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    },
+                                    { "key_code": "left_control", "lazy": true }
                                 ],
                                 "to_delayed_action": {
                                     "to_if_canceled": [
@@ -341,6 +694,7 @@
                                         "type": "expression_if",
                                         "expression": "last_keypress_time > system.now.milliseconds - 230"
                                     },
+                                    { "type": "variable_unless", "name": "left_mod_active", "value": 1 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
                                 "from": {
@@ -356,11 +710,6 @@
                                     },
                                     { "key_code": "s" }
                                 ],
-                                "to_after_key_up": [
-                                    { "set_variable": { "name": "left_hrm", "value": 0 } },
-                                    { "set_variable": { "name": "left_ring_held", "value": 0 } },
-                                    { "set_variable": { "name": "left_mod_active", "value": 0 } }
-                                ],
                                 "type": "basic"
                             },
                             {
@@ -375,10 +724,13 @@
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [
-                                    { "set_variable": { "name": "left_ring_held", "value": 1 } }
-                                ],
-                                "to_after_key_up": [
-                                    { "set_variable": { "name": "left_ring_held", "value": 0 } }
+                                    { 
+                                        "set_variable": { 
+                                            "name": "left_ring_held", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    }
                                 ],
                                 "to_if_alone": [{ "key_code": "s", "halt": true }],
                                 "to_if_held_down": [{ "key_code": "left_option", "lazy": true }],
@@ -386,7 +738,7 @@
                                     "to_if_canceled": [{ "key_code": "s" }]
                                 },
                                 "parameters": {
-                                    "basic.to_if_alone_timeout_milliseconds": 200,
+                                    "basic.to_if_alone_timeout_milliseconds": 0,
                                     "basic.to_if_held_down_threshold_milliseconds": 0,
                                     "basic.to_delayed_action_delay_milliseconds": 200
                                 },
@@ -403,19 +755,26 @@
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [
-                                    { "set_variable": { "name": "left_hrm", "value": 1 } },
-                                    { "set_variable": { "name": "left_ring_held", "value": 1 } },
+                                    { 
+                                        "set_variable": { 
+                                            "name": "left_hrm", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    },
+                                    { 
+                                        "set_variable": { 
+                                            "name": "left_ring_held", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    },
                                     {
                                         "set_variable": {
                                             "name": "left_hand_press_time",
                                             "expression": "system.now.milliseconds"
                                         }
                                     }
-                                ],
-                                "to_after_key_up": [
-                                    { "set_variable": { "name": "left_hrm", "value": 0 } },
-                                    { "set_variable": { "name": "left_ring_held", "value": 0 } },
-                                    { "set_variable": { "name": "left_mod_active", "value": 0 } }
                                 ],
                                 "to_if_alone": [
                                     {
@@ -427,7 +786,13 @@
                                     { "key_code": "s", "halt": true }
                                 ],
                                 "to_if_held_down": [
-                                    { "set_variable": { "name": "left_mod_active", "value": 1 } },
+                                    { 
+                                        "set_variable": { 
+                                            "name": "left_mod_active", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    },
                                     { "key_code": "left_option", "lazy": true }
                                 ],
                                 "to_delayed_action": {
@@ -460,7 +825,7 @@
                                         "type": "expression_if",
                                         "expression": "last_keypress_time > system.now.milliseconds - 230"
                                     },
-                                    { "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },
+                                    { "type": "variable_unless", "name": "left_mod_active", "value": 1 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
                                 "from": {
@@ -476,11 +841,6 @@
                                     },
                                     { "key_code": "d" }
                                 ],
-                                "to_after_key_up": [
-                                    { "set_variable": { "name": "left_hrm", "value": 0 } },
-                                    { "set_variable": { "name": "left_middle_held", "value": 0 } },
-                                    { "set_variable": { "name": "left_mod_active", "value": 0 } }
-                                ],
                                 "type": "basic"
                             },
                             {
@@ -488,7 +848,6 @@
                                 "conditions": [
                                     { "type": "variable_if", "name": "left_mod_active", "value": 1 },
                                     { "type": "variable_if", "name": "right_hrm", "value": 0 },
-                                    { "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
                                 "from": {
@@ -496,10 +855,13 @@
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [
-                                    { "set_variable": { "name": "left_middle_held", "value": 1 } }
-                                ],
-                                "to_after_key_up": [
-                                    { "set_variable": { "name": "left_middle_held", "value": 0 } }
+                                    { 
+                                        "set_variable": { 
+                                            "name": "left_middle_held", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    }
                                 ],
                                 "to_if_alone": [{ "key_code": "d", "halt": true }],
                                 "to_if_held_down": [{ "key_code": "left_command", "lazy": true }],
@@ -507,7 +869,7 @@
                                     "to_if_canceled": [{ "key_code": "d" }]
                                 },
                                 "parameters": {
-                                    "basic.to_if_alone_timeout_milliseconds": 200,
+                                    "basic.to_if_alone_timeout_milliseconds": 0,
                                     "basic.to_if_held_down_threshold_milliseconds": 0,
                                     "basic.to_delayed_action_delay_milliseconds": 200
                                 },
@@ -525,19 +887,26 @@
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [
-                                    { "set_variable": { "name": "left_hrm", "value": 1 } },
-                                    { "set_variable": { "name": "left_middle_held", "value": 1 } },
+                                    { 
+                                        "set_variable": { 
+                                            "name": "left_hrm", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    },
+                                    { 
+                                        "set_variable": { 
+                                            "name": "left_middle_held", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    },
                                     {
                                         "set_variable": {
                                             "name": "left_hand_press_time",
                                             "expression": "system.now.milliseconds"
                                         }
                                     }
-                                ],
-                                "to_after_key_up": [
-                                    { "set_variable": { "name": "left_hrm", "value": 0 } },
-                                    { "set_variable": { "name": "left_middle_held", "value": 0 } },
-                                    { "set_variable": { "name": "left_mod_active", "value": 0 } }
                                 ],
                                 "to_if_alone": [
                                     {
@@ -549,7 +918,13 @@
                                     { "key_code": "d", "halt": true }
                                 ],
                                 "to_if_held_down": [
-                                    { "set_variable": { "name": "left_mod_active", "value": 1 } },
+                                    { 
+                                        "set_variable": { 
+                                            "name": "left_mod_active", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    },
                                     { "key_code": "left_command", "lazy": true }
                                 ],
                                 "to_delayed_action": {
@@ -582,7 +957,7 @@
                                         "type": "expression_if",
                                         "expression": "last_keypress_time > system.now.milliseconds - 70"
                                     },
-                                    { "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },
+                                    { "type": "variable_unless", "name": "left_mod_active", "value": 1 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
                                 "from": {
@@ -598,11 +973,6 @@
                                     },
                                     { "key_code": "f" }
                                 ],
-                                "to_after_key_up": [
-                                    { "set_variable": { "name": "left_hrm", "value": 0 } },
-                                    { "set_variable": { "name": "left_index_held", "value": 0 } },
-                                    { "set_variable": { "name": "left_mod_active", "value": 0 } }
-                                ],
                                 "type": "basic"
                             },
                             {
@@ -610,7 +980,6 @@
                                 "conditions": [
                                     { "type": "variable_if", "name": "left_mod_active", "value": 1 },
                                     { "type": "variable_if", "name": "right_hrm", "value": 0 },
-                                    { "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
                                 "from": {
@@ -618,10 +987,13 @@
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [
-                                    { "set_variable": { "name": "left_index_held", "value": 1 } }
-                                ],
-                                "to_after_key_up": [
-                                    { "set_variable": { "name": "left_index_held", "value": 0 } }
+                                    { 
+                                        "set_variable": { 
+                                            "name": "left_index_held", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    }
                                 ],
                                 "to_if_alone": [{ "key_code": "f", "halt": true }],
                                 "to_if_held_down": [{ "key_code": "left_shift" }],
@@ -629,7 +1001,7 @@
                                     "to_if_canceled": [{ "key_code": "f" }]
                                 },
                                 "parameters": {
-                                    "basic.to_if_alone_timeout_milliseconds": 150,
+                                    "basic.to_if_alone_timeout_milliseconds": 0,
                                     "basic.to_if_held_down_threshold_milliseconds": 0,
                                     "basic.to_delayed_action_delay_milliseconds": 150
                                 },
@@ -647,19 +1019,26 @@
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [
-                                    { "set_variable": { "name": "left_hrm", "value": 1 } },
-                                    { "set_variable": { "name": "left_index_held", "value": 1 } },
+                                    { 
+                                        "set_variable": { 
+                                            "name": "left_hrm", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    },
+                                    { 
+                                        "set_variable": { 
+                                            "name": "left_index_held", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    },
                                     {
                                         "set_variable": {
                                             "name": "left_hand_press_time",
                                             "expression": "system.now.milliseconds"
                                         }
                                     }
-                                ],
-                                "to_after_key_up": [
-                                    { "set_variable": { "name": "left_hrm", "value": 0 } },
-                                    { "set_variable": { "name": "left_index_held", "value": 0 } },
-                                    { "set_variable": { "name": "left_mod_active", "value": 0 } }
                                 ],
                                 "to_if_alone": [
                                     {
@@ -671,7 +1050,13 @@
                                     { "key_code": "f", "halt": true }
                                 ],
                                 "to_if_held_down": [
-                                    { "set_variable": { "name": "left_mod_active", "value": 1 } },
+                                    { 
+                                        "set_variable": { 
+                                            "name": "left_mod_active", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    },
                                     { "key_code": "left_shift" }
                                 ],
                                 "to_delayed_action": {
@@ -704,7 +1089,7 @@
                                         "type": "expression_if",
                                         "expression": "last_keypress_time > system.now.milliseconds - 70"
                                     },
-                                    { "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },
+                                    { "type": "variable_unless", "name": "right_mod_active", "value": 1 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
                                 "from": {
@@ -720,11 +1105,6 @@
                                     },
                                     { "key_code": "j" }
                                 ],
-                                "to_after_key_up": [
-                                    { "set_variable": { "name": "right_hrm", "value": 0 } },
-                                    { "set_variable": { "name": "right_index_held", "value": 0 } },
-                                    { "set_variable": { "name": "right_mod_active", "value": 0 } }
-                                ],
                                 "type": "basic"
                             },
                             {
@@ -732,7 +1112,6 @@
                                 "conditions": [
                                     { "type": "variable_if", "name": "right_mod_active", "value": 1 },
                                     { "type": "variable_if", "name": "left_hrm", "value": 0 },
-                                    { "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
                                 "from": {
@@ -740,10 +1119,13 @@
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [
-                                    { "set_variable": { "name": "right_index_held", "value": 1 } }
-                                ],
-                                "to_after_key_up": [
-                                    { "set_variable": { "name": "right_index_held", "value": 0 } }
+                                    { 
+                                        "set_variable": { 
+                                            "name": "right_index_held", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    }
                                 ],
                                 "to_if_alone": [{ "key_code": "j", "halt": true }],
                                 "to_if_held_down": [{ "key_code": "right_shift" }],
@@ -751,7 +1133,7 @@
                                     "to_if_canceled": [{ "key_code": "j" }]
                                 },
                                 "parameters": {
-                                    "basic.to_if_alone_timeout_milliseconds": 150,
+                                    "basic.to_if_alone_timeout_milliseconds": 0,
                                     "basic.to_if_held_down_threshold_milliseconds": 0,
                                     "basic.to_delayed_action_delay_milliseconds": 150
                                 },
@@ -769,19 +1151,26 @@
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [
-                                    { "set_variable": { "name": "right_hrm", "value": 1 } },
-                                    { "set_variable": { "name": "right_index_held", "value": 1 } },
+                                    { 
+                                        "set_variable": { 
+                                            "name": "right_hrm", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    },
+                                    { 
+                                        "set_variable": { 
+                                            "name": "right_index_held", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    },
                                     {
                                         "set_variable": {
                                             "name": "right_hand_press_time",
                                             "expression": "system.now.milliseconds"
                                         }
                                     }
-                                ],
-                                "to_after_key_up": [
-                                    { "set_variable": { "name": "right_hrm", "value": 0 } },
-                                    { "set_variable": { "name": "right_index_held", "value": 0 } },
-                                    { "set_variable": { "name": "right_mod_active", "value": 0 } }
                                 ],
                                 "to_if_alone": [
                                     {
@@ -793,7 +1182,13 @@
                                     { "key_code": "j", "halt": true }
                                 ],
                                 "to_if_held_down": [
-                                    { "set_variable": { "name": "right_mod_active", "value": 1 } },
+                                    { 
+                                        "set_variable": { 
+                                            "name": "right_mod_active", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    },
                                     { "key_code": "right_shift" }
                                 ],
                                 "to_delayed_action": {
@@ -826,7 +1221,7 @@
                                         "type": "expression_if",
                                         "expression": "last_keypress_time > system.now.milliseconds - 230"
                                     },
-                                    { "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },
+                                    { "type": "variable_unless", "name": "right_mod_active", "value": 1 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
                                 "from": {
@@ -842,11 +1237,6 @@
                                     },
                                     { "key_code": "k" }
                                 ],
-                                "to_after_key_up": [
-                                    { "set_variable": { "name": "right_hrm", "value": 0 } },
-                                    { "set_variable": { "name": "right_middle_held", "value": 0 } },
-                                    { "set_variable": { "name": "right_mod_active", "value": 0 } }
-                                ],
                                 "type": "basic"
                             },
                             {
@@ -854,7 +1244,6 @@
                                 "conditions": [
                                     { "type": "variable_if", "name": "right_mod_active", "value": 1 },
                                     { "type": "variable_if", "name": "left_hrm", "value": 0 },
-                                    { "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
                                 "from": {
@@ -862,10 +1251,13 @@
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [
-                                    { "set_variable": { "name": "right_middle_held", "value": 1 } }
-                                ],
-                                "to_after_key_up": [
-                                    { "set_variable": { "name": "right_middle_held", "value": 0 } }
+                                    { 
+                                        "set_variable": { 
+                                            "name": "right_middle_held", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    }
                                 ],
                                 "to_if_alone": [{ "key_code": "k", "halt": true }],
                                 "to_if_held_down": [{ "key_code": "right_command", "lazy": true }],
@@ -873,7 +1265,7 @@
                                     "to_if_canceled": [{ "key_code": "k" }]
                                 },
                                 "parameters": {
-                                    "basic.to_if_alone_timeout_milliseconds": 200,
+                                    "basic.to_if_alone_timeout_milliseconds": 0,
                                     "basic.to_if_held_down_threshold_milliseconds": 0,
                                     "basic.to_delayed_action_delay_milliseconds": 200
                                 },
@@ -891,19 +1283,26 @@
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [
-                                    { "set_variable": { "name": "right_hrm", "value": 1 } },
-                                    { "set_variable": { "name": "right_middle_held", "value": 1 } },
+                                    { 
+                                        "set_variable": { 
+                                            "name": "right_hrm", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    },
+                                    { 
+                                        "set_variable": { 
+                                            "name": "right_middle_held", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    },
                                     {
                                         "set_variable": {
                                             "name": "right_hand_press_time",
                                             "expression": "system.now.milliseconds"
                                         }
                                     }
-                                ],
-                                "to_after_key_up": [
-                                    { "set_variable": { "name": "right_hrm", "value": 0 } },
-                                    { "set_variable": { "name": "right_middle_held", "value": 0 } },
-                                    { "set_variable": { "name": "right_mod_active", "value": 0 } }
                                 ],
                                 "to_if_alone": [
                                     {
@@ -915,7 +1314,13 @@
                                     { "key_code": "k", "halt": true }
                                 ],
                                 "to_if_held_down": [
-                                    { "set_variable": { "name": "right_mod_active", "value": 1 } },
+                                    { 
+                                        "set_variable": { 
+                                            "name": "right_mod_active", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    },
                                     { "key_code": "right_command", "lazy": true }
                                 ],
                                 "to_delayed_action": {
@@ -948,7 +1353,7 @@
                                         "type": "expression_if",
                                         "expression": "last_keypress_time > system.now.milliseconds - 230"
                                     },
-                                    { "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },
+                                    { "type": "variable_unless", "name": "right_mod_active", "value": 1 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
                                 "from": {
@@ -964,11 +1369,6 @@
                                     },
                                     { "key_code": "l" }
                                 ],
-                                "to_after_key_up": [
-                                    { "set_variable": { "name": "right_hrm", "value": 0 } },
-                                    { "set_variable": { "name": "right_ring_held", "value": 0 } },
-                                    { "set_variable": { "name": "right_mod_active", "value": 0 } }
-                                ],
                                 "type": "basic"
                             },
                             {
@@ -976,7 +1376,6 @@
                                 "conditions": [
                                     { "type": "variable_if", "name": "right_mod_active", "value": 1 },
                                     { "type": "variable_if", "name": "left_hrm", "value": 0 },
-                                    { "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
                                 "from": {
@@ -984,10 +1383,13 @@
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [
-                                    { "set_variable": { "name": "right_ring_held", "value": 1 } }
-                                ],
-                                "to_after_key_up": [
-                                    { "set_variable": { "name": "right_ring_held", "value": 0 } }
+                                    { 
+                                        "set_variable": { 
+                                            "name": "right_ring_held", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    }
                                 ],
                                 "to_if_alone": [{ "key_code": "l", "halt": true }],
                                 "to_if_held_down": [{ "key_code": "right_option", "lazy": true }],
@@ -995,7 +1397,7 @@
                                     "to_if_canceled": [{ "key_code": "l" }]
                                 },
                                 "parameters": {
-                                    "basic.to_if_alone_timeout_milliseconds": 200,
+                                    "basic.to_if_alone_timeout_milliseconds": 0,
                                     "basic.to_if_held_down_threshold_milliseconds": 0,
                                     "basic.to_delayed_action_delay_milliseconds": 200
                                 },
@@ -1013,19 +1415,26 @@
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [
-                                    { "set_variable": { "name": "right_hrm", "value": 1 } },
-                                    { "set_variable": { "name": "right_ring_held", "value": 1 } },
+                                    { 
+                                        "set_variable": { 
+                                            "name": "right_hrm", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    },
+                                    { 
+                                        "set_variable": { 
+                                            "name": "right_ring_held", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    },
                                     {
                                         "set_variable": {
                                             "name": "right_hand_press_time",
                                             "expression": "system.now.milliseconds"
                                         }
                                     }
-                                ],
-                                "to_after_key_up": [
-                                    { "set_variable": { "name": "right_hrm", "value": 0 } },
-                                    { "set_variable": { "name": "right_ring_held", "value": 0 } },
-                                    { "set_variable": { "name": "right_mod_active", "value": 0 } }
                                 ],
                                 "to_if_alone": [
                                     {
@@ -1037,7 +1446,13 @@
                                     { "key_code": "l", "halt": true }
                                 ],
                                 "to_if_held_down": [
-                                    { "set_variable": { "name": "right_mod_active", "value": 1 } },
+                                    { 
+                                        "set_variable": { 
+                                            "name": "right_mod_active", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    },
                                     { "key_code": "right_option", "lazy": true }
                                 ],
                                 "to_delayed_action": {
@@ -1070,7 +1485,7 @@
                                         "type": "expression_if",
                                         "expression": "last_keypress_time > system.now.milliseconds - 230"
                                     },
-                                    { "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },
+                                    { "type": "variable_unless", "name": "right_mod_active", "value": 1 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
                                 "from": {
@@ -1086,11 +1501,6 @@
                                     },
                                     { "key_code": "semicolon" }
                                 ],
-                                "to_after_key_up": [
-                                    { "set_variable": { "name": "right_hrm", "value": 0 } },
-                                    { "set_variable": { "name": "right_pinky_held", "value": 0 } },
-                                    { "set_variable": { "name": "right_mod_active", "value": 0 } }
-                                ],
                                 "type": "basic"
                             },
                             {
@@ -1098,7 +1508,6 @@
                                 "conditions": [
                                     { "type": "variable_if", "name": "right_mod_active", "value": 1 },
                                     { "type": "variable_if", "name": "left_hrm", "value": 0 },
-                                    { "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },
                                     { "type": "variable_if", "name": "typing_mode", "value": 0 }
                                 ],
                                 "from": {
@@ -1106,18 +1515,21 @@
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [
-                                    { "set_variable": { "name": "right_pinky_held", "value": 1 } }
-                                ],
-                                "to_after_key_up": [
-                                    { "set_variable": { "name": "right_pinky_held", "value": 0 } }
+                                    { 
+                                        "set_variable": { 
+                                            "name": "right_pinky_held", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    }
                                 ],
                                 "to_if_alone": [{ "key_code": "semicolon", "halt": true }],
-                                "to_if_held_down": [{ "key_code": "right_control" }],
+                                "to_if_held_down": [{ "key_code": "right_control", "lazy": true }],
                                 "to_delayed_action": {
                                     "to_if_canceled": [{ "key_code": "semicolon" }]
                                 },
                                 "parameters": {
-                                    "basic.to_if_alone_timeout_milliseconds": 200,
+                                    "basic.to_if_alone_timeout_milliseconds": 0,
                                     "basic.to_if_held_down_threshold_milliseconds": 0,
                                     "basic.to_delayed_action_delay_milliseconds": 200
                                 },
@@ -1135,19 +1547,26 @@
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [
-                                    { "set_variable": { "name": "right_hrm", "value": 1 } },
-                                    { "set_variable": { "name": "right_pinky_held", "value": 1 } },
+                                    { 
+                                        "set_variable": { 
+                                            "name": "right_hrm", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    },
+                                    { 
+                                        "set_variable": { 
+                                            "name": "right_pinky_held", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    },
                                     {
                                         "set_variable": {
                                             "name": "right_hand_press_time",
                                             "expression": "system.now.milliseconds"
                                         }
                                     }
-                                ],
-                                "to_after_key_up": [
-                                    { "set_variable": { "name": "right_hrm", "value": 0 } },
-                                    { "set_variable": { "name": "right_pinky_held", "value": 0 } },
-                                    { "set_variable": { "name": "right_mod_active", "value": 0 } }
                                 ],
                                 "to_if_alone": [
                                     {
@@ -1159,8 +1578,14 @@
                                     { "key_code": "semicolon", "halt": true }
                                 ],
                                 "to_if_held_down": [
-                                    { "set_variable": { "name": "right_mod_active", "value": 1 } },
-                                    { "key_code": "right_control" }
+                                    { 
+                                        "set_variable": { 
+                                            "name": "right_mod_active", 
+                                            "value": 1,
+                                            "key_up_value": 0
+                                        } 
+                                    },
+                                    { "key_code": "right_control", "lazy": true }
                                 ],
                                 "to_delayed_action": {
                                     "to_if_canceled": [
@@ -1353,7 +1778,8 @@
                             {
                                 "conditions": [
                                     { "type": "variable_unless", "name": "left_hrm", "value": 1 },
-                                    { "type": "variable_unless", "name": "right_hrm", "value": 1 }
+                                    { "type": "variable_unless", "name": "right_hrm", "value": 1 },
+                                    { "type": "variable_unless", "name": "hyper_caps_lock", "value": 1 }
                                 ],
                                 "from": {
                                     "key_code": "y",
@@ -1373,7 +1799,8 @@
                             {
                                 "conditions": [
                                     { "type": "variable_unless", "name": "left_hrm", "value": 1 },
-                                    { "type": "variable_unless", "name": "right_hrm", "value": 1 }
+                                    { "type": "variable_unless", "name": "right_hrm", "value": 1 },
+                                    { "type": "variable_unless", "name": "hyper_caps_lock", "value": 1 }
                                 ],
                                 "from": {
                                     "key_code": "u",
@@ -1414,7 +1841,8 @@
                             {
                                 "conditions": [
                                     { "type": "variable_unless", "name": "left_hrm", "value": 1 },
-                                    { "type": "variable_unless", "name": "right_hrm", "value": 1 }
+                                    { "type": "variable_unless", "name": "right_hrm", "value": 1 },
+                                    { "type": "variable_unless", "name": "hyper_caps_lock", "value": 1 }
                                 ],
                                 "from": {
                                     "key_code": "o",
@@ -1474,7 +1902,8 @@
                             {
                                 "conditions": [
                                     { "type": "variable_unless", "name": "left_hrm", "value": 1 },
-                                    { "type": "variable_unless", "name": "right_hrm", "value": 1 }
+                                    { "type": "variable_unless", "name": "right_hrm", "value": 1 },
+                                    { "type": "variable_unless", "name": "hyper_caps_lock", "value": 1 }
                                 ],
                                 "from": {
                                     "key_code": "h",
@@ -1594,7 +2023,8 @@
                             {
                                 "conditions": [
                                     { "type": "variable_unless", "name": "left_hrm", "value": 1 },
-                                    { "type": "variable_unless", "name": "right_hrm", "value": 1 }
+                                    { "type": "variable_unless", "name": "right_hrm", "value": 1 },
+                                    { "type": "variable_unless", "name": "hyper_caps_lock", "value": 1 }
                                 ],
                                 "from": {
                                     "key_code": "n",
@@ -1614,7 +2044,8 @@
                             {
                                 "conditions": [
                                     { "type": "variable_unless", "name": "left_hrm", "value": 1 },
-                                    { "type": "variable_unless", "name": "right_hrm", "value": 1 }
+                                    { "type": "variable_unless", "name": "right_hrm", "value": 1 },
+                                    { "type": "variable_unless", "name": "hyper_caps_lock", "value": 1 }
                                 ],
                                 "from": {
                                     "key_code": "m",
@@ -1634,7 +2065,8 @@
                             {
                                 "conditions": [
                                     { "type": "variable_unless", "name": "left_hrm", "value": 1 },
-                                    { "type": "variable_unless", "name": "right_hrm", "value": 1 }
+                                    { "type": "variable_unless", "name": "right_hrm", "value": 1 },
+                                    { "type": "variable_unless", "name": "hyper_caps_lock", "value": 1 }
                                 ],
                                 "from": {
                                     "key_code": "comma",
@@ -1725,15 +2157,8 @@
                                     {
                                         "set_variable": {
                                             "name": "hyper_caps_lock",
-                                            "value": 1
-                                        }
-                                    }
-                                ],
-                                "to_after_key_up": [
-                                    {
-                                        "set_variable": {
-                                            "name": "hyper_caps_lock",
-                                            "value": 0
+                                            "value": 1,
+                                            "key_up_value": 0
                                         }
                                     }
                                 ],
@@ -1746,21 +2171,24 @@
                         "description": "Mac OSX: double-tap right shift key -> caps lock toggle",
                         "manipulators": [
                             {
+                                "description": "Double-tap right shift -> Caps Lock (expression-based)",
                                 "conditions": [
                                     {
-                                        "name": "right_shift pressed",
-                                        "type": "variable_if",
-                                        "value": 1
+                                        "type": "expression_if",
+                                        "expression": "right_shift_last_tap > system.now.milliseconds - 300"
                                     }
                                 ],
                                 "from": {
                                     "key_code": "right_shift",
                                     "modifiers": { "optional": ["any"] }
                                 },
-                                "to": [{ "key_code": "caps_lock" }],
+                                "to": [
+                                    { "key_code": "caps_lock" }
+                                ],
                                 "type": "basic"
                             },
                             {
+                                "description": "First tap - track timestamp",
                                 "from": {
                                     "key_code": "right_shift",
                                     "modifiers": { "optional": ["any"] }
@@ -1768,30 +2196,12 @@
                                 "to": [
                                     {
                                         "set_variable": {
-                                            "name": "right_shift pressed",
-                                            "value": 1
+                                            "name": "right_shift_last_tap",
+                                            "expression": "system.now.milliseconds"
                                         }
                                     },
                                     { "key_code": "right_shift" }
                                 ],
-                                "to_delayed_action": {
-                                    "to_if_canceled": [
-                                        {
-                                            "set_variable": {
-                                                "name": "right_shift pressed",
-                                                "value": 0
-                                            }
-                                        }
-                                    ],
-                                    "to_if_invoked": [
-                                        {
-                                            "set_variable": {
-                                                "name": "right_shift pressed",
-                                                "value": 0
-                                            }
-                                        }
-                                    ]
-                                },
                                 "type": "basic"
                             }
                         ]
