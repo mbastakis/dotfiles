@@ -22,3 +22,5 @@ dot-config/colima
 dot-docker/*
 !dot-docker/config.json
 
+# AI/Docs
+ai-docs
