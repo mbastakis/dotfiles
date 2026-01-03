@@ -162,13 +162,11 @@ dotfiles/
 │   ├── plugins.zsh                   # Zinit plugin config
 │   ├── fzf.zsh                       # Fuzzy finder integration
 │   └── fzf-tab.zsh                   # Interactive completions
-├── 🔧 utils/                         # Utility scripts
-│   └── brew-compare.sh               # Compare Nix/system brew deps
+├── 🔧 dot-bin/                        # User scripts (~/.bin/)
+│   ├── nix-add                       # Add packages to flake.nix
+│   └── brew-compare                  # Compare Nix/system brew deps
 ├── dot-zshrc                         # ~/.zshrc (sources dot-zsh/)
 ├── dot-zshenv                        # ~/.zshenv (environment setup)
-├── 🌿 dot-gitconfig                  # ~/.gitconfig (with conditional includes)
-├── dot-gitconfig-personal            # Personal git config
-├── dot-gitconfig-work                # Work git config
 ├── ⚡ setup.sh                       # Main installation script
 └── .stowrc                           # Stow configuration
 ```
@@ -177,8 +175,8 @@ dotfiles/
 
 1. 🔗 **Stow** symlinks `dot-*` directories to `~` (e.g., `dot-config/` → `~/.config/`)
 2. ❄️ **Nix Darwin** manages system packages, Homebrew formulas/casks, and system preferences
-3. 🐚 **Zsh** sources modular configs from `dot-zsh/` in order: `local.zsh`, `plugins.zsh`, `aliases.zsh`, `functions.zsh`, `custom_shortcuts.zsh`, `obsidian-cli.zsh`, `fzf.zsh`
-4. 🌿 **Git** uses conditional includes for work/personal configs based on repo path
+3. 🐚 **Zsh** sources modular configs from `dot-zsh/` in order: `exports.zsh`, `plugins.zsh`, `completions.zsh`, `tools.zsh`, `aliases.zsh`, `functions.zsh`, `fzf.zsh`, `fzf-tab.zsh`, `keybindings.zsh`, `direnv.zsh`, `local.zsh`
+4. 🌿 **Git** uses conditional includes for work/personal configs based on repo path (see `dot-config/git/`)
 
 ### 📦 Package Management
 
@@ -192,7 +190,7 @@ dotfiles/
 - 🖥️ GUI apps: raycast, aerospace, obsidian, warp, ghostty, claude, vivaldi, etc.
 - 🔤 Fonts: JetBrains Mono Nerd Font, SF Pro
 
-**🔍 Utility**: `utils/brew-compare.sh` compares Nix-declared vs system-installed packages
+**🔍 Utility**: `dot-bin/brew-compare` compares Nix-declared vs system-installed packages
 
 ## ✨ Features
 
@@ -277,7 +275,7 @@ kubectl <TAB>                 # Should show interactive fzf menu
 ```
 
 **🌿 Configure Git:**
-Edit `dot-gitconfig` conditional includes to match your work/personal repo paths
+Edit `dot-config/git/config` conditional includes to match your work/personal repo paths
 
 **🤖 Set up AI tools:**
 - 🔑 Add API keys to environment (see `dot-zsh/local.zsh.example`)

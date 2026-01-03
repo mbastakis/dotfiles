@@ -1,6 +1,6 @@
 ---
 description: Create detailed implementation plans through interactive research and iteration
-model: anthropic/claude-opus-4-5-20250929
+model: amazon-bedrock/anthropic.claude-opus-4-5-20251101-v1:0
 ---
 
 # Implementation Plan
@@ -17,6 +17,7 @@ When this command is invoked:
    - Begin the research process
 
 2. **If no parameters provided**, respond with:
+
 ```
 I'll help you create a detailed implementation plan. Let me start by understanding what we're building.
 
@@ -64,6 +65,7 @@ Then wait for the user's input.
    - Determine true scope based on codebase reality
 
 5. **Present informed understanding and focused questions**:
+
    ```
    Based on the ticket and my research of the codebase, I understand we need to [accurate summary].
 
@@ -99,6 +101,7 @@ After getting initial clarifications:
 4. **Wait for ALL sub-tasks to complete** before proceeding
 
 5. **Present findings and design options**:
+
    ```
    Based on my research, here's what I found:
 
@@ -122,6 +125,7 @@ After getting initial clarifications:
 Once aligned on approach:
 
 1. **Create initial plan outline**:
+
    ```
    Here's my proposed plan structure:
 
@@ -158,6 +162,7 @@ After structure approval, write the plan using this template structure:
 [A Specification of the desired end state after this plan is complete, and how to verify it]
 
 ### Key Discoveries:
+
 - [Important finding with file:line reference]
 - [Pattern to follow]
 - [Constraint to work within]
@@ -173,22 +178,26 @@ After structure approval, write the plan using this template structure:
 ## Phase 1: [Descriptive Name]
 
 ### Overview
+
 [What this phase accomplishes]
 
 ### Changes Required:
 
 #### 1. [Component/File Group]
+
 **File**: `path/to/file.ext`
 **Changes**: [Summary of changes]
 
 ### Success Criteria:
 
 #### Automated Verification:
+
 - [ ] Tests pass
 - [ ] Type checking passes
 - [ ] Linting passes
 
 #### Manual Verification:
+
 - [ ] Feature works as expected when tested
 - [ ] Performance is acceptable
 - [ ] Edge case handling verified manually
@@ -200,13 +209,16 @@ After structure approval, write the plan using this template structure:
 ## Testing Strategy
 
 ### Unit Tests:
+
 - [What to test]
 - [Key edge cases]
 
 ### Integration Tests:
+
 - [End-to-end scenarios]
 
 ### Manual Testing Steps:
+
 1. [Specific step to verify feature]
 2. [Another verification step]
 
@@ -223,6 +235,7 @@ After structure approval, write the plan using this template structure:
 ### Step 5: Review and Iterate
 
 1. **Present the draft plan**:
+
    ```
    I've created the implementation plan.
 
