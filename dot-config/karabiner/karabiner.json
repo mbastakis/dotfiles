@@ -3667,6 +3667,11 @@
                     "type": "variable_unless",
                     "name": "right_hrm",
                     "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "hyper_caps_lock",
+                    "value": 1
                   }
                 ],
                 "from": {
@@ -4167,7 +4172,30 @@
                 },
                 "to": [
                   {
-                    "key_code": "delete_forward"
+                    "key_code": "page_down"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "hyper_caps_lock",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
+                "from": {
+                  "key_code": "period",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "key_code": "page_up"
                   }
                 ],
                 "type": "basic"

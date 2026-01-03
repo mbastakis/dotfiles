@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE keyboard SYSTEM "file://localhost/System/Library/DTDs/KeyboardLayout.dtd">
+<keyboard group="126" id="-15008" name="Greek Dvorak" maxout="2">
+    <layouts>
+        <layout first="0" last="17" modifiers="common" mapSet="ANSI" />
+    </layouts>
+
+    <modifierMap id="common" defaultIndex="0">
+        <keyMapSelect mapIndex="0">
+            <modifier keys="" />
+        </keyMapSelect>
+        <keyMapSelect mapIndex="1">
+            <modifier keys="anyShift" />
+        </keyMapSelect>
+        <keyMapSelect mapIndex="2">
+            <modifier keys="caps" />
+        </keyMapSelect>
+        <keyMapSelect mapIndex="3">
+            <modifier keys="caps anyShift" />
+        </keyMapSelect>
+        <keyMapSelect mapIndex="4">
+            <modifier keys="command" />
+        </keyMapSelect>
+        <keyMapSelect mapIndex="5">
+            <modifier keys="command anyShift" />
+        </keyMapSelect>
+    </modifierMap>
+
+    <keyMapSet id="ANSI">
+        <!-- Base state (lowercase) -->
+        <keyMap index="0">
+            <!-- Home row: α ο ε θ ι δ η τ ν σ -->
+            <key code="0" action="alpha" />  <!-- A -->
+            <key code="1" action="omicron" />  <!-- S -->
+            <key code="2" action="epsilon" />  <!-- D -->
+            <key code="3" output="θ" />  <!-- F -->
+            <key code="5" action="iota" />  <!-- G -->
+            <key code="4" output="δ" />  <!-- H -->
+            <key code="38" action="eta" /> <!-- J -->
+            <key code="40" output="τ" /> <!-- K -->
+            <key code="37" output="ν" /> <!-- L -->
+            <key code="41" output="σ" /> <!-- ; -->
+
+            <!-- Top row: ' , . π υ φ γ ψ ρ λ -->
+            <key code="12" output="'" />  <!-- Q -->
+            <key code="13" output="," />  <!-- W -->
+            <key code="14" output="." />  <!-- E -->
+            <key code="15" output="π" />  <!-- R -->
+            <key code="17" action="upsilon" />  <!-- T -->
+            <key code="16" output="φ" />  <!-- Y -->
+            <key code="32" output="γ" />  <!-- U -->
+            <key code="34" output="ψ" />  <!-- I -->
+            <key code="31" output="ρ" />  <!-- O -->
+            <key code="35" output="λ" />  <!-- P -->
+
+            <!-- Bottom row: ; ξ κ χ β μ ζ ω ς -->
+            <key code="6" output=";" />   <!-- Z -->
+            <key code="7" action="Tonos" />   <!-- X (tonos dead key) -->
+            <key code="8" output="ξ" />   <!-- C -->
+            <key code="9" output="κ" />   <!-- V -->
+            <key code="11" output="χ" />  <!-- B -->
+            <key code="45" output="β" />  <!-- N -->
+            <key code="46" output="μ" />  <!-- M -->
+            <key code="43" output="ς" />  <!-- , -->
+            <key code="47" action="omega" />  <!-- . -->
+
+            <!-- Numbers -->
+            <key code="18" output="1" />
+            <key code="19" output="2" />
+            <key code="20" output="3" />
+            <key code="21" output="4" />
+            <key code="23" output="5" />
+            <key code="22" output="6" />
+            <key code="26" output="7" />
+            <key code="28" output="8" />
+            <key code="25" output="9" />
+            <key code="29" output="0" />
+
+            <!-- Other punctuation -->
+            <key code="27" output="'" />  <!-- - key -->
+            <key code="24" output="]" />  <!-- = key -->
+            <key code="33" output="-" />  <!-- [ -->
+            <key code="30" output="=" />  <!-- ] -->
+            <key code="42" output="\" />  <!-- \ -->
+            <key code="39" action="Tonos" />  <!-- ' (tonos dead key) -->
+            <key code="44" output="ζ" />  <!-- / -->
+            <key code="50" output="`" />  <!-- ` -->
+
+            <!-- Essential keys -->
+            <key code="36" output="&#x000D;" /> <!-- Return -->
+            <key code="48" output="&#x0009;" /> <!-- Tab -->
+            <key code="49" output=" " />        <!-- Space -->
+            <key code="51" output="&#x0008;" /> <!-- Delete -->
+            <key code="53" output="&#x001B;" /> <!-- Escape -->
+
+            <!-- Arrow keys -->
+            <key code="123" output="&#x001C;" /> <!-- Left -->
+            <key code="124" output="&#x001D;" /> <!-- Right -->
+            <key code="125" output="&#x001F;" /> <!-- Down -->
+            <key code="126" output="&#x001E;" /> <!-- Up -->
+        </keyMap>
+
+        <!-- Shift state (uppercase) -->
+        <keyMap index="1">
+            <!-- Home row uppercase: Α Ο Ε Θ Ι Δ Η Τ Ν Σ -->
+            <key code="0" action="Alpha" />  <!-- A -->
+            <key code="1" action="Omicron" />  <!-- S -->
+            <key code="2" action="Epsilon" />  <!-- D -->
+            <key code="3" output="Θ" />  <!-- F -->
+            <key code="5" action="Iota" />  <!-- G -->
+            <key code="4" output="Δ" />  <!-- H -->
+            <key code="38" action="Eta" /> <!-- J -->
+            <key code="40" output="Τ" /> <!-- K -->
+            <key code="37" output="Ν" /> <!-- L -->
+            <key code="41" output="Σ" /> <!-- ; -->
+
+            <!-- Top row uppercase: " < > Π Υ Φ Γ Ψ Ρ Λ -->
+            <key code="12" output="&quot;" />  <!-- Q -->
+            <key code="13" output="&lt;" />    <!-- W -->
+            <key code="14" output="&gt;" />    <!-- E -->
+            <key code="15" output="Π" />       <!-- R -->
+            <key code="17" action="Upsilon" />       <!-- T -->
+            <key code="16" output="Φ" />       <!-- Y -->
+            <key code="32" output="Γ" />       <!-- U -->
+            <key code="34" output="Ψ" />       <!-- I -->
+            <key code="31" output="Ρ" />       <!-- O -->
+            <key code="35" output="Λ" />       <!-- P -->
+
+            <!-- Bottom row uppercase: : ¨ Ξ Κ Χ Β Μ Ω Σ (matched to lowercase) -->
+            <key code="6" output=":" />   <!-- Z (shift of ;) -->
+            <key code="7" action="Dialytika" />   <!-- X (dialytika dead key) -->
+            <key code="8" output="Ξ" />   <!-- C (shift of ξ) -->
+            <key code="9" output="Κ" />   <!-- V (shift of κ) -->
+            <key code="11" output="Χ" />  <!-- B (shift of χ) -->
+            <key code="45" output="Β" />  <!-- N (shift of β) -->
+            <key code="46" output="Μ" />  <!-- M (shift of μ) -->
+            <key code="43" output="Σ" />  <!-- , (shift of ω) -->
+            <key code="47" action="Omega" />  <!-- . (shift of ς → Σ) -->
+
+            <!-- Shifted numbers and symbols -->
+            <key code="18" output="!" />
+            <key code="19" output="@" />
+            <key code="20" output="#" />
+            <key code="21" output="$" />
+            <key code="23" output="%" />
+            <key code="22" output="^" />
+            <key code="26" output="&amp;" />
+            <key code="28" output="*" />
+            <key code="25" output="(" />
+            <key code="29" output=")" />
+
+            <!-- Other shifted punctuation -->
+            <key code="27" output="_" />
+            <key code="24" output="+" />
+            <key code="33" output="{" />
+            <key code="30" output="}" />
+            <key code="42" output="|" />
+            <key code="39" action="Dialytika" />  <!-- ' (dialytika dead key) -->
+            <key code="44" output="Ζ" />  <!-- / (shift of ζ) -->
+            <key code="50" output="~" />
+
+            <!-- Essential keys -->
+            <key code="36" output="&#x000D;" /> <!-- Return -->
+            <key code="48" output="&#x0009;" /> <!-- Tab -->
+            <key code="49" output=" " />        <!-- Space -->
+            <key code="51" output="&#x0008;" /> <!-- Delete -->
+            <key code="53" output="&#x001B;" /> <!-- Escape -->
+
+            <!-- Arrow keys -->
+            <key code="123" output="&#x001C;" /> <!-- Left -->
+            <key code="124" output="&#x001D;" /> <!-- Right -->
+            <key code="125" output="&#x001F;" /> <!-- Down -->
+            <key code="126" output="&#x001E;" /> <!-- Up -->
+        </keyMap>
+
+        <!-- Caps Lock state (uppercase) - same as Shift -->
+        <keyMap index="2">
+            <!-- Home row uppercase: Α Ο Ε Θ Ι Δ Η Τ Ν Σ -->
+            <key code="0" action="Alpha" />  <!-- A -->
+            <key code="1" action="Omicron" />  <!-- S -->
+            <key code="2" action="Epsilon" />  <!-- D -->
+            <key code="3" output="Θ" />  <!-- F -->
+            <key code="5" action="Iota" />  <!-- G -->
+            <key code="4" output="Δ" />  <!-- H -->
+            <key code="38" action="Eta" /> <!-- J -->
+            <key code="40" output="Τ" /> <!-- K -->
+            <key code="37" output="Ν" /> <!-- L -->
+            <key code="41" output="Σ" /> <!-- ; -->
+
+            <!-- Top row uppercase: " , . Π Υ Φ Γ Ψ Ρ Λ -->
+            <key code="12" output="&quot;" />  <!-- Q -->
+            <key code="13" output="," />    <!-- W -->
+            <key code="14" output="." />    <!-- E -->
+            <key code="15" output="Π" />       <!-- R -->
+            <key code="17" action="Upsilon" />       <!-- T -->
+            <key code="16" output="Φ" />       <!-- Y -->
+            <key code="32" output="Γ" />       <!-- U -->
+            <key code="34" output="Ψ" />       <!-- I -->
+            <key code="31" output="Ρ" />       <!-- O -->
+            <key code="35" output="Λ" />       <!-- P -->
+
+            <!-- Bottom row uppercase: : ´ Ξ Κ Χ Β Μ Ω Σ -->
+            <key code="6" output=":" />   <!-- Z -->
+            <key code="7" action="Tonos" />   <!-- X -->
+            <key code="8" output="Ξ" />   <!-- C -->
+            <key code="9" output="Κ" />   <!-- V -->
+            <key code="11" output="Χ" />  <!-- B -->
+            <key code="45" output="Β" />  <!-- N -->
+            <key code="46" output="Μ" />  <!-- M -->
+            <key code="43" output="Σ" />  <!-- , -->
+            <key code="47" action="Omega" />  <!-- . -->
+
+            <!-- Shifted numbers and symbols -->
+            <key code="18" output="!" />
+            <key code="19" output="@" />
+            <key code="20" output="#" />
+            <key code="21" output="$" />
+            <key code="23" output="%" />
+            <key code="22" output="^" />
+            <key code="26" output="&amp;" />
+            <key code="28" output="*" />
+            <key code="25" output="(" />
+            <key code="29" output=")" />
+
+            <!-- Other shifted punctuation -->
+            <key code="27" output="_" />
+            <key code="24" output="+" />
+            <key code="33" output="{" />
+            <key code="30" output="}" />
+            <key code="42" output="|" />
+            <key code="39" action="Tonos" />  <!-- ' -->
+            <key code="44" output="Ζ" />  <!-- / -->
+            <key code="50" output="~" />
+
+            <!-- Essential keys -->
+            <key code="36" output="&#x000D;" /> <!-- Return -->
+            <key code="48" output="&#x0009;" /> <!-- Tab -->
+            <key code="49" output=" " />        <!-- Space -->
+            <key code="51" output="&#x0008;" /> <!-- Delete -->
+            <key code="53" output="&#x001B;" /> <!-- Escape -->
+
+            <!-- Arrow keys -->
+            <key code="123" output="&#x001C;" /> <!-- Left -->
+            <key code="124" output="&#x001D;" /> <!-- Right -->
+            <key code="125" output="&#x001F;" /> <!-- Down -->
+            <key code="126" output="&#x001E;" /> <!-- Up -->
+        </keyMap>
+
+        <!-- Caps Lock + Shift state (lowercase) - shift cancels caps -->
+        <keyMap index="3">
+            <!-- Home row: α ο ε θ ι δ η τ ν σ -->
+            <key code="0" action="alpha" />  <!-- A -->
+            <key code="1" action="omicron" />  <!-- S -->
+            <key code="2" action="epsilon" />  <!-- D -->
+            <key code="3" output="θ" />  <!-- F -->
+            <key code="5" action="iota" />  <!-- G -->
+            <key code="4" output="δ" />  <!-- H -->
+            <key code="38" action="eta" /> <!-- J -->
+            <key code="40" output="τ" /> <!-- K -->
+            <key code="37" output="ν" /> <!-- L -->
+            <key code="41" output="σ" /> <!-- ; -->
+
+            <!-- Top row: ' , . π υ φ γ ψ ρ λ -->
+            <key code="12" output="'" />  <!-- Q -->
+            <key code="13" output="," />  <!-- W -->
+            <key code="14" output="." />  <!-- E -->
+            <key code="15" output="π" />  <!-- R -->
+            <key code="17" action="upsilon" />  <!-- T -->
+            <key code="16" output="φ" />  <!-- Y -->
+            <key code="32" output="γ" />  <!-- U -->
+            <key code="34" output="ψ" />  <!-- I -->
+            <key code="31" output="ρ" />  <!-- O -->
+            <key code="35" output="λ" />  <!-- P -->
+
+            <!-- Bottom row: ; ξ κ χ β μ ζ ω ς -->
+            <key code="6" output=";" />   <!-- Z -->
+            <key code="7" action="Tonos" />   <!-- X -->
+            <key code="8" output="ξ" />   <!-- C -->
+            <key code="9" output="κ" />   <!-- V -->
+            <key code="11" output="χ" />  <!-- B -->
+            <key code="45" output="β" />  <!-- N -->
+            <key code="46" output="μ" />  <!-- M -->
+            <key code="43" output="ς" />  <!-- , -->
+            <key code="47" action="omega" />  <!-- . -->
+
+            <!-- Numbers -->
+            <key code="18" output="1" />
+            <key code="19" output="2" />
+            <key code="20" output="3" />
+            <key code="21" output="4" />
+            <key code="23" output="5" />
+            <key code="22" output="6" />
+            <key code="26" output="7" />
+            <key code="28" output="8" />
+            <key code="25" output="9" />
+            <key code="29" output="0" />
+
+            <!-- Other punctuation -->
+            <key code="27" output="'" />  <!-- - key -->
+            <key code="24" output="]" />  <!-- = key -->
+            <key code="33" output="-" />  <!-- [ -->
+            <key code="30" output="=" />  <!-- ] -->
+            <key code="42" output="\" />  <!-- \ -->
+            <key code="39" action="Tonos" />  <!-- ' -->
+            <key code="44" output="ζ" />  <!-- / -->
+            <key code="50" output="`" />  <!-- ` -->
+
+            <!-- Essential keys -->
+            <key code="36" output="&#x000D;" /> <!-- Return -->
+            <key code="48" output="&#x0009;" /> <!-- Tab -->
+            <key code="49" output=" " />        <!-- Space -->
+            <key code="51" output="&#x0008;" /> <!-- Delete -->
+            <key code="53" output="&#x001B;" /> <!-- Escape -->
+
+            <!-- Arrow keys -->
+            <key code="123" output="&#x001C;" /> <!-- Left -->
+            <key code="124" output="&#x001D;" /> <!-- Right -->
+            <key code="125" output="&#x001F;" /> <!-- Down -->
+            <key code="126" output="&#x001E;" /> <!-- Up -->
+        </keyMap>
+
+        <!-- Command state (Dvorak mapping for shortcuts) -->
+        <keyMap index="4">
+            <!-- Map to Dvorak positions for standard shortcuts -->
+            <key code="0" output="a" />  <!-- A -->
+            <key code="1" output="o" />  <!-- S -->
+            <key code="2" output="e" />  <!-- D -->
+            <key code="3" output="u" />  <!-- F -->
+            <key code="5" output="i" />  <!-- G -->
+            <key code="4" output="d" />  <!-- H -->
+            <key code="38" output="h" /> <!-- J -->
+            <key code="40" output="t" /> <!-- K -->
+            <key code="37" output="n" /> <!-- L -->
+
+            <key code="12" output="'" />  <!-- Q -->
+            <key code="13" output="," />  <!-- W -->
+            <key code="14" output="." />  <!-- E -->
+            <key code="15" output="p" />  <!-- R -->
+            <key code="17" output="y" />  <!-- T -->
+            <key code="16" output="f" />  <!-- Y -->
+            <key code="32" output="g" />  <!-- U -->
+            <key code="34" output="c" />  <!-- I -->
+            <key code="31" output="r" />  <!-- O -->
+            <key code="35" output="l" />  <!-- P -->
+
+            <key code="6" output=";" />   <!-- Z -->
+            <key code="7" output="q" />   <!-- X -->
+            <key code="8" output="j" />   <!-- C -->
+            <key code="9" output="k" />   <!-- V -->
+            <key code="11" output="x" />  <!-- B -->
+            <key code="45" output="b" />  <!-- N -->
+            <key code="46" output="m" />  <!-- M -->
+
+            <!-- Numbers -->
+            <key code="18" output="1" />
+            <key code="19" output="2" />
+            <key code="20" output="3" />
+            <key code="21" output="4" />
+            <key code="23" output="5" />
+            <key code="22" output="6" />
+            <key code="26" output="7" />
+            <key code="28" output="8" />
+            <key code="25" output="9" />
+            <key code="29" output="0" />
+
+            <!-- Punctuation -->
+            <key code="27" output="-" />
+            <key code="24" output="=" />
+            <key code="33" output="/" />
+            <key code="30" output="=" />
+            <key code="42" output="\\" />
+            <key code="41" output="s" />
+            <key code="39" output="-" />
+            <key code="43" output="w" />
+            <key code="47" output="v" />
+            <key code="44" output="z" />
+            <key code="50" output="`" />
+
+            <!-- Essential keys -->
+            <key code="36" output="&#x000D;" /> <!-- Return -->
+            <key code="48" output="&#x0009;" /> <!-- Tab -->
+            <key code="49" output=" " />        <!-- Space -->
+            <key code="51" output="&#x0008;" /> <!-- Delete -->
+            <key code="53" output="&#x001B;" /> <!-- Escape -->
+
+            <!-- Arrow keys -->
+            <key code="123" output="&#x001C;" /> <!-- Left -->
+            <key code="124" output="&#x001D;" /> <!-- Right -->
+            <key code="125" output="&#x001F;" /> <!-- Down -->
+            <key code="126" output="&#x001E;" /> <!-- Up -->
+        </keyMap>
+
+        <!-- Command+Shift state (Dvorak mapping for shortcuts) -->
+        <keyMap index="5">
+            <!-- Map to Dvorak positions for standard shortcuts -->
+            <key code="0" output="A" />  <!-- A -->
+            <key code="1" output="O" />  <!-- S -->
+            <key code="2" output="E" />  <!-- D -->
+            <key code="3" output="U" />  <!-- F -->
+            <key code="5" output="I" />  <!-- G -->
+            <key code="4" output="D" />  <!-- H -->
+            <key code="38" output="H" /> <!-- J -->
+            <key code="40" output="T" /> <!-- K -->
+            <key code="37" output="N" /> <!-- L -->
+
+            <key code="12" output="&quot;" />  <!-- Q -->
+            <key code="13" output="&lt;" />  <!-- W -->
+            <key code="14" output="&gt;" />  <!-- E -->
+            <key code="15" output="P" />  <!-- R -->
+            <key code="17" output="Y" />  <!-- T -->
+            <key code="16" output="F" />  <!-- Y -->
+            <key code="32" output="G" />  <!-- U -->
+            <key code="34" output="C" />  <!-- I -->
+            <key code="31" output="R" />  <!-- O -->
+            <key code="35" output="L" />  <!-- P -->
+
+            <key code="6" output=":" />   <!-- Z -->
+            <key code="7" output="Q" />   <!-- X -->
+            <key code="8" output="J" />   <!-- C -->
+            <key code="9" output="K" />   <!-- V -->
+            <key code="11" output="X" />  <!-- B -->
+            <key code="45" output="B" />  <!-- N -->
+            <key code="46" output="M" />  <!-- M -->
+
+            <!-- Shifted numbers -->
+            <key code="18" output="!" />
+            <key code="19" output="@" />
+            <key code="20" output="#" />
+            <key code="21" output="$" />
+            <key code="23" output="%" />
+            <key code="22" output="^" />
+            <key code="26" output="&amp;" />
+            <key code="28" output="*" />
+            <key code="25" output="(" />
+            <key code="29" output=")" />
+
+            <!-- Shifted punctuation -->
+            <key code="27" output="_" />
+            <key code="24" output="+" />
+            <key code="33" output="?" />
+            <key code="30" output="+" />
+            <key code="42" output="|" />
+            <key code="41" output="S" />
+            <key code="39" output="_" />
+            <key code="43" output="W" />
+            <key code="47" output="V" />
+            <key code="44" output="Z" />
+            <key code="50" output="~" />
+
+            <!-- Essential keys -->
+            <key code="36" output="&#x000D;" /> <!-- Return -->
+            <key code="48" output="&#x0009;" /> <!-- Tab -->
+            <key code="49" output=" " />        <!-- Space -->
+            <key code="51" output="&#x0008;" /> <!-- Delete -->
+            <key code="53" output="&#x001B;" /> <!-- Escape -->
+
+            <!-- Arrow keys -->
+            <key code="123" output="&#x001C;" /> <!-- Left -->
+            <key code="124" output="&#x001D;" /> <!-- Right -->
+            <key code="125" output="&#x001F;" /> <!-- Down -->
+            <key code="126" output="&#x001E;" /> <!-- Up -->
+        </keyMap>
+    </keyMapSet>
+
+    <actions>
+        <!-- Dead key actions -->
+        <action id="Tonos">
+            <when state="none" next="Tonos"/>
+        </action>
+        <action id="Dialytika">
+            <when state="none" next="Dialytika"/>
+        </action>
+
+        <!-- Vowel actions with accent support -->
+        <action id="alpha">
+            <when state="none" output="α"/>
+            <when state="Tonos" output="ά"/>
+        </action>
+        <action id="Alpha">
+            <when state="none" output="Α"/>
+            <when state="Tonos" output="Ά"/>
+        </action>
+
+        <action id="epsilon">
+            <when state="none" output="ε"/>
+            <when state="Tonos" output="έ"/>
+        </action>
+        <action id="Epsilon">
+            <when state="none" output="Ε"/>
+            <when state="Tonos" output="Έ"/>
+        </action>
+
+        <action id="eta">
+            <when state="none" output="η"/>
+            <when state="Tonos" output="ή"/>
+        </action>
+        <action id="Eta">
+            <when state="none" output="Η"/>
+            <when state="Tonos" output="Ή"/>
+        </action>
+
+        <action id="iota">
+            <when state="none" output="ι"/>
+            <when state="Tonos" output="ί"/>
+            <when state="Dialytika" output="ϊ"/>
+        </action>
+        <action id="Iota">
+            <when state="none" output="Ι"/>
+            <when state="Tonos" output="Ί"/>
+            <when state="Dialytika" output="Ϊ"/>
+        </action>
+
+        <action id="omicron">
+            <when state="none" output="ο"/>
+            <when state="Tonos" output="ό"/>
+        </action>
+        <action id="Omicron">
+            <when state="none" output="Ο"/>
+            <when state="Tonos" output="Ό"/>
+        </action>
+
+        <action id="upsilon">
+            <when state="none" output="υ"/>
+            <when state="Tonos" output="ύ"/>
+            <when state="Dialytika" output="ϋ"/>
+        </action>
+        <action id="Upsilon">
+            <when state="none" output="Υ"/>
+            <when state="Tonos" output="Ύ"/>
+            <when state="Dialytika" output="Ϋ"/>
+        </action>
+
+        <action id="omega">
+            <when state="none" output="ω"/>
+            <when state="Tonos" output="ώ"/>
+        </action>
+        <action id="Omega">
+            <when state="none" output="Ω"/>
+            <when state="Tonos" output="Ώ"/>
+        </action>
+    </actions>
+
+    <terminators>
+        <!-- Cancel dead key state when space or non-combining character is typed -->
+        <when state="Tonos" output="΄ "/>
+        <when state="Dialytika" output="¨ "/>
+    </terminators>
+</keyboard>

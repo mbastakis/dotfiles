@@ -412,7 +412,8 @@
         {
             "conditions": [
                 { "type": "variable_unless", "name": "left_hrm", "value": 1 },
-                { "type": "variable_unless", "name": "right_hrm", "value": 1 }
+                { "type": "variable_unless", "name": "right_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "hyper_caps_lock", "value": 1 }
             ],
             "from": {
                 "key_code": "period",
