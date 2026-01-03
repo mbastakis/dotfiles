@@ -72,4 +72,29 @@ else
   log_warning "ya (Yazi CLI) not found, skipping plugin installation"
 fi
 
+# 6. Install custom keyboard layouts
+KEYBOARD_LAYOUTS_SRC="$SCRIPT_DIR/dot-config/keyboard-layouts"
+KEYBOARD_LAYOUTS_DST="$HOME/Library/Keyboard Layouts"
+
+if [[ -d "$KEYBOARD_LAYOUTS_SRC" ]]; then
+  mkdir -p "$KEYBOARD_LAYOUTS_DST"
+  layouts_changed=false
+  for layout in "$KEYBOARD_LAYOUTS_SRC"/*.keylayout; do
+    if [[ -f "$layout" ]]; then
+      layout_name="$(basename "$layout")"
+      dst_file="$KEYBOARD_LAYOUTS_DST/$layout_name"
+      if [[ ! -f "$dst_file" ]] || ! cmp -s "$layout" "$dst_file"; then
+        cp "$layout" "$KEYBOARD_LAYOUTS_DST/"
+        log_info "Installed keyboard layout: $layout_name"
+        layouts_changed=true
+      fi
+    fi
+  done
+  if [[ "$layouts_changed" == "true" ]]; then
+    log_warning "You may need to log out and back in for new keyboard layouts to appear in System Settings"
+  else
+    log_info "Keyboard layouts are up to date"
+  fi
+fi
+
 log_info "Setup complete!"
