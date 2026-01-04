@@ -58,7 +58,8 @@ Agent instructions in markdown...
 ```
 
 **Current agents**:
-- `web-researcher.md` — Web crawling via crawl4ai skill
+- `web-researcher.md` — Search the web and synthesize findings (uses websearch, codesearch, webfetch)
+- `web-crawler.md` — Crawl websites and persist to ai-docs (uses crawl4ai skill)
 
 ## Skills
 
@@ -88,3 +89,5 @@ Run with: `uvx --from crawl4ai python scripts/<script>.py`
 - Model IDs must match provider format exactly (e.g., `amazon-bedrock/anthropic.claude-opus-4-20250514-v1:0`)
 - Skills loaded via the `skill` tool — agents need `skill` in tools list
 - `node_modules/` is gitignored — run `bun install` after clone
+- **Markdown agent permissions**: Only simple `allow`/`ask`/`deny` values work for `bash` permissions in markdown agents. Granular patterns (e.g., `bash: { "mkdir *": allow }`) only work in JSON config, not YAML frontmatter.
+- **Bash pattern bug** ([#6676](https://github.com/anomalyco/opencode/issues/6676)): Flags like `-p` are stripped during permission matching, so `mkdir -p foo` matches `mkdir`, not `mkdir -p *`

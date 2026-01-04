@@ -76,7 +76,54 @@
       "echo": "allow",
       "eza": "allow",
       "date": "allow",
+      // Web crawler commands (global)
+      "mkdir *": "allow",
+      "uvx *": "allow",
+      "ls *": "allow",
+      "du *": "allow",
+      "cat *": "allow",
       "*": "ask"
+    }
+  },
+  "agent": {
+    "web-crawler": {
+      "description": "Crawl websites and extract content to ai-docs",
+      "mode": "subagent",
+      "model": "amazon-bedrock/anthropic.claude-haiku-4-5-20251001-v1:0",
+      "temperature": 0.1,
+      "prompt": "{file:./agent/web-crawler.md}",
+      "permission": {
+        // Granular bash patterns have known bugs (#6676, #6856):
+        // - Flags like -p are stripped during pattern matching
+        // - Agent-level patterns may not work reliably
+        // Strategy: allow all, but explicitly deny dangerous commands
+        // Due to #6676, flags are stripped so "rm" matches "rm -rf ..."
+        "bash": {
+          "rm": "deny",
+          "rm *": "deny",
+          "rmdir": "deny",
+          "rmdir *": "deny",
+          "mv": "ask",
+          "mv *": "ask",
+          "cp": "ask",
+          "cp *": "ask",
+          "chmod": "deny",
+          "chmod *": "deny",
+          "chown": "deny",
+          "chown *": "deny",
+          "sudo": "deny",
+          "sudo *": "deny",
+          "*": "allow"
+        },
+        "skill": "allow",
+        "write": "allow",
+        "read": "allow",
+        "webfetch": "allow",
+        "websearch": "allow",
+        "edit": "deny",
+        "glob": "deny",
+        "grep": "deny"
+      }
     }
   },
   "instructions": []
