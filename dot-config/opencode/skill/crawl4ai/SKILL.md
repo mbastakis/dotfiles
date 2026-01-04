@@ -53,6 +53,12 @@ asyncio.run(main())
 # Simple markdown extraction (using uvx)
 uvx --from crawl4ai python scripts/basic_crawler.py https://example.com
 
+# BM25 query-based filtering (extract only relevant content)
+uvx --from crawl4ai python scripts/basic_crawler.py https://docs.python.org --bm25-query "async await"
+
+# Adaptive crawling with information foraging (intelligent stopping)
+uvx --from crawl4ai python scripts/adaptive_crawler.py https://docs.example.com --query "authentication API"
+
 # Batch processing
 uvx --from crawl4ai python scripts/batch_crawler.py urls.txt
 
@@ -262,7 +268,34 @@ extraction_strategy = LLMExtractionStrategy(
 
 ## Advanced Patterns
 
-### 1. Site-Wide Crawling
+### 1. Adaptive Crawling (Information Foraging)
+
+Intelligent crawling that knows when to stop based on information sufficiency. Perfect for research tasks.
+
+```bash
+# Basic adaptive crawl with query
+uvx --from crawl4ai python scripts/adaptive_crawler.py https://docs.python.org --query "async context managers"
+
+# Higher confidence for exhaustive coverage
+uvx --from crawl4ai python scripts/adaptive_crawler.py https://api.example.com/docs --query "authentication" --confidence 0.85
+
+# Export knowledge base for AI consumption
+uvx --from crawl4ai python scripts/adaptive_crawler.py https://scikit-learn.org --query "model evaluation" --max-pages 30 --export-kb
+```
+
+**When to use:**
+- Research tasks requiring comprehensive coverage
+- Question answering with sufficient context
+- Knowledge base building for AI/ML
+- API documentation discovery
+
+**How it works:**
+- Uses three metrics: Coverage, Consistency, Saturation
+- Automatically stops when sufficient information gathered
+- Prioritizes links based on relevance to query
+- Saves most relevant pages ranked by score
+
+### 2. Site-Wide Crawling
 
 Crawl an entire website and convert all pages to markdown:
 
@@ -284,7 +317,7 @@ The site crawler:
 - Generates `site_index.json` with crawl statistics and URL metadata
 - Supports rate limiting, max page limits, and path filtering
 
-### 2. Deep Crawling (Manual)
+### 3. Deep Crawling (Manual)
 
 For custom link discovery and crawling logic:
 
@@ -307,7 +340,7 @@ async with AsyncWebCrawler() as crawler:
     # or custom crawl strategies (see complete-sdk-reference.md)
 ```
 
-### 2. Batch & Multi-URL Processing
+### 4. Batch & Multi-URL Processing
 
 Efficiently crawl multiple URLs:
 
@@ -327,7 +360,7 @@ async with AsyncWebCrawler() as crawler:
             print(f"✅ {result.url}: {len(result.markdown)} chars")
 ```
 
-### 3. Session & Authentication
+### 5. Session & Authentication
 
 Handle login-required content:
 
@@ -350,7 +383,7 @@ config = CrawlerRunConfig(session_id="user_session")
 await crawler.arun("https://site.com/protected-content", config=config)
 ```
 
-### 4. Dynamic Content Handling
+### 6. Dynamic Content Handling
 
 For JavaScript-heavy sites:
 
@@ -376,7 +409,7 @@ config = CrawlerRunConfig(
 )
 ```
 
-### 5. Anti-Detection & Proxies
+### 7. Anti-Detection & Proxies
 
 Avoid bot detection:
 
@@ -473,9 +506,10 @@ config = CrawlerRunConfig(
 
 ### scripts/
 
+- **adaptive_crawler.py** - Intelligent crawling with information foraging (knows when to stop)
 - **site_crawler.py** - Crawl entire sites and convert all pages to markdown
 - **extraction_pipeline.py** - Three extraction approaches with schema generation
-- **basic_crawler.py** - Simple markdown extraction with screenshots
+- **basic_crawler.py** - Simple markdown extraction with BM25/Pruning filtering
 - **batch_crawler.py** - Multi-URL concurrent processing
 
 ### references/
