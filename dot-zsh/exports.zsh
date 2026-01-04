@@ -22,4 +22,4 @@ export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
 export _ZO_ECHO=1
 
 # OpenCode Exa integration (enables websearch/codesearch tools)
-export OPENCODE_ENABLE_EXA=true
+# export OPENCODE_ENABLE_EXA=true

@@ -10,3 +10,6 @@ vscode_extensions
 .opencode
 .archive
 .jj
+.envrc
+.ripgreprc
+.ruff_cache

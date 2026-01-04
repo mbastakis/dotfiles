@@ -1,2 +1,0 @@
-# Ripgrep configuration for OpenCode - allows searching gitignored files
-export RIPGREP_CONFIG_PATH="$PWD/.ripgreprc"
