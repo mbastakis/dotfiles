@@ -2,21 +2,43 @@
 description: Research topics on the web and synthesize findings. Use this agent to answer questions, find information, compare technologies, or gather knowledge from web sources.
 mode: subagent
 temperature: 0.5
+# v1.1.1: Use 'permission' instead of 'tools'
+# Non-permissionable tools (read, glob, grep, websearch, codesearch, todowrite, todoread) are enabled by default
 tools:
   write: false
   edit: false
-  bash: true
-  skill: true
-  read: true
-  webfetch: true
-  websearch: true
-  codesearch: true
   glob: false
   grep: false
-  todowrite: true
-  todoread: true
+  task: false
 permission:
-  bash: allow
+  # Only allow safe read-only and research commands
+  bash:
+    # GitHub CLI - primary research tool
+    gh: allow
+    gh *: allow
+    # Safe read-only commands
+    cat: allow
+    cat *: allow
+    head: allow
+    head *: allow
+    tail: allow
+    tail *: allow
+    ls: allow
+    ls *: allow
+    # Text processing
+    grep: allow
+    grep *: allow
+    sort: allow
+    sort *: allow
+    uniq: allow
+    uniq *: allow
+    wc: allow
+    wc *: allow
+    # Deny everything else
+    "*": deny
+  skill: allow
+  webfetch: allow
+  external_directory: deny
 ---
 
 # Web Research Agent

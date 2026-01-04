@@ -1,6 +1,6 @@
 ---
 description: Create git commits with user approval
-model: amazon-bedrock/anthropic.claude-haiku-4-5-20251001-v1:0
+agent: commit
 ---
 
 # Commit Changes
