@@ -123,6 +123,31 @@ These are **enabled by default** and can only be disabled via `tools: false`:
 - `write`, `patch` - Use `tools: false` to disable
 - `todowrite`, `todoread`, `task` - Use `tools: false` to disable
 
+### Bash Permission Pattern Matching
+
+**Critical: Last matching rule wins.** When multiple patterns match a command, the rule defined **last** in the config takes precedence.
+
+```jsonc
+// WRONG - "*" at end overrides everything
+"bash": {
+  "git status*": "allow",
+  "git commit*": "ask",
+  "*": "ask"              // This matches last, so git status still asks!
+}
+
+// CORRECT - "*" first, specific rules override it
+"bash": {
+  "*": "ask",             // Default (matched first)
+  "git status*": "allow", // Overrides default (matched last)
+  "git commit*": "ask"
+}
+```
+
+**Pattern syntax:**
+- `*` matches zero or more characters
+- `?` matches exactly one character
+- All other characters match literally
+
 ### Agent Configuration Pattern (v1.1.1+)
 
 ```jsonc
@@ -139,9 +164,9 @@ These are **enabled by default** and can only be disabled via `tools: false`:
     // Control permissionable tools via permission
     "permission": {
       "bash": {
-        "git status": "allow",
-        "git diff *": "allow",
-        "*": "deny"           // deny = tool disabled for this pattern
+        "*": "deny",              // Default FIRST (last matching wins)
+        "git status": "allow",    // Specific rules override default
+        "git diff *": "allow"
       },
       "edit": "deny",         // deny = edit tool disabled entirely
       "skill": "allow",       // allow = enabled, no approval needed
