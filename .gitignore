@@ -24,3 +24,7 @@ dot-docker/*
 
 # AI/Docs
 ai-docs
+
+# Python
+__pycache__/
+*.pyc
