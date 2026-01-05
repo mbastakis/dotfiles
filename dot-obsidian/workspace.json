@@ -27,19 +27,7 @@
             }
           },
           {
-            "id": "5d5c504e4312fc71",
-            "type": "leaf",
-            "state": {
-              "type": "release-notes",
-              "state": {
-                "currentVersion": "1.11.3"
-              },
-              "icon": "lucide-book-up",
-              "title": "Release Notes 1.11.3"
-            }
-          },
-          {
-            "id": "bc94d5e7c50808ea",
+            "id": "e15b54f5ef212204",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -54,7 +42,7 @@
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -241,7 +229,7 @@
       "obsidian-book-search-plugin:Create new book note": true
     }
   },
-  "active": "bc94d5e7c50808ea",
+  "active": "e15b54f5ef212204",
   "lastOpenFiles": [
     "Dashboards/Home.canvas",
     "todo.md",
