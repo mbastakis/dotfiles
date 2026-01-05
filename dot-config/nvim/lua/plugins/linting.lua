@@ -111,6 +111,7 @@ return {
 
       -- Terraform
       terraform = { "tflint", "tfsec" },
+      ["terraform-vars"] = { "tflint" },
     }
 
     -- Create autocommand to trigger linting

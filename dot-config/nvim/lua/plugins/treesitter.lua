@@ -17,6 +17,8 @@ return {
       "vim",
       "vimdoc",
       "comment",
+      "hcl",
+      "terraform",
     },
   },
 }

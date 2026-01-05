@@ -50,6 +50,7 @@ return {
 
         -- Terraform (use LSP's terraform fmt)
         terraform = { "terraform_fmt", lsp_format = "fallback" },
+        ["terraform-vars"] = { "terraform_fmt", lsp_format = "fallback" },
 
         -- TOML
         toml = { "taplo" },

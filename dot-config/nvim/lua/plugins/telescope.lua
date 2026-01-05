@@ -44,6 +44,7 @@ return {
       builtin.live_grep(themes.get_ivy({
         hidden = true,
         file_ignore_patterns = filter_patterns,
+        additional_args = { "--hidden" },
       }))
     end, { desc = "Telescope live grep (filtered)" })
 
@@ -52,6 +53,7 @@ return {
       builtin.live_grep(themes.get_ivy({
         hidden = true,
         file_ignore_patterns = {},
+        additional_args = { "--hidden" },
       }))
     end, { desc = "Telescope live grep (show all)" })
 
