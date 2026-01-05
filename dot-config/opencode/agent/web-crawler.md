@@ -138,7 +138,7 @@ If a crawl fails:
 - **Always save to `ai-docs/<tool-name>/`** — Never output elsewhere
 - **Always use `--headless`** — Unless JavaScript requires visible browser
 - **Create directory first** — `mkdir -p ai-docs/<tool-name>` before crawling
-- **Use websearch for discovery** — Find official docs URL if not provided
+- **Use webfetch with DuckDuckGo for discovery** — Search `https://html.duckduckgo.com/html/?q=<tool>+documentation` to find official docs URL if not provided
 - **Return JSON only** — No explanatory text, just the structured output
 - **Handle errors gracefully** — Include error details in JSON response
 - **NEVER use `cd && command`** — Run all commands directly

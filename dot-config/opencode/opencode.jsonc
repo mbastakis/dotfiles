@@ -303,6 +303,58 @@
         "edit": "deny",
         "external_directory": "deny"
       }
+    },
+    "web-researcher": {
+      "description": "Research topics on the web and synthesize findings. Use this agent to answer questions, find information, compare technologies, or gather knowledge from web sources.",
+      "mode": "subagent",
+      "temperature": 0.5,
+      "prompt": "{file:./agent/web-researcher.md}",
+      // v1.1.1: 'tools' is deprecated, use 'permission' for permissionable tools
+      // Non-permissionable tools (read, glob, grep) are enabled by default
+      "tools": {
+        "write": false,
+        "edit": false,
+        "patch": false,
+        "glob": false,
+        "grep": false,
+        "task": false
+      },
+      "permission": {
+        "bash": {
+          // GitHub CLI - primary research tool
+          "gh": "allow",
+          "gh *": "allow",
+          // crawl4ai for adaptive crawling
+          "uvx": "allow",
+          "uvx *": "allow",
+          "python": "allow",
+          "python *": "allow",
+          // Safe read-only commands
+          "cat": "allow",
+          "cat *": "allow",
+          "head": "allow",
+          "head *": "allow",
+          "tail": "allow",
+          "tail *": "allow",
+          "ls": "allow",
+          "ls *": "allow",
+          // Text processing
+          "grep": "allow",
+          "grep *": "allow",
+          "sort": "allow",
+          "sort *": "allow",
+          "uniq": "allow",
+          "uniq *": "allow",
+          "wc": "allow",
+          "wc *": "allow",
+          // Deny everything else
+          "*": "deny"
+        },
+        "skill": "allow",
+        "webfetch": "allow",
+        "edit": "deny",
+        "external_directory": "deny"
+      }
     }
   },
   "instructions": []
