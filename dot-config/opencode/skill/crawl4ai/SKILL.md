@@ -303,12 +303,16 @@ Crawl an entire website and convert all pages to markdown:
 # Crawl entire docs site with visible browser (for debugging)
 uvx --from crawl4ai python scripts/site_crawler.py https://docs.example.com
 
-# Headless mode with custom options
+# Headless mode with custom options (default: 250 max pages)
 uvx --from crawl4ai python scripts/site_crawler.py https://docs.example.com \
     --headless --max-pages 100 --delay 1.0 -o ./output_dir
 
 # Crawl entire domain (not just URLs under start path)
 uvx --from crawl4ai python scripts/site_crawler.py https://example.com --no-stay-within-path
+
+# Resume a previous crawl (continues from site_index.json)
+uvx --from crawl4ai python scripts/site_crawler.py https://docs.example.com \
+    -o ./output_dir --resume
 ```
 
 The site crawler:
@@ -316,6 +320,7 @@ The site crawler:
 - Converts each page to clean markdown
 - Generates `site_index.json` with crawl statistics and URL metadata
 - Supports rate limiting, max page limits, and path filtering
+- **Supports resuming** from previous crawl via `--resume` flag
 
 ### 3. Deep Crawling (Manual)
 

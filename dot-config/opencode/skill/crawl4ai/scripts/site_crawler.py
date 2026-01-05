@@ -44,6 +44,40 @@ class URLManager:
         self.visited: Set[str] = set()  # Already visited
         self.discovered: Dict[str, dict] = {}  # URL -> metadata
 
+    def load_from_index(self, index_path: Path) -> int:
+        """
+        Load state from existing site_index.json for resume functionality.
+        Returns the number of previously crawled pages.
+        """
+        if not index_path.exists():
+            return 0
+
+        try:
+            with open(index_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+
+            all_urls = data.get("all_urls", {})
+            stats = data.get("stats", {})
+
+            # Restore discovered URLs and mark successful ones as visited
+            for url, metadata in all_urls.items():
+                self.discovered[url] = metadata
+                if metadata.get("success", False):
+                    self.visited.add(url)
+                elif not metadata.get("crawled_at"):
+                    # URL was discovered but not crawled - add to queue
+                    self.queue.append(url)
+
+            pages_crawled = stats.get("pages_crawled", 0)
+            print(f"   Resumed from previous crawl:")
+            print(f"   - Previously crawled: {len(self.visited)} pages")
+            print(f"   - URLs in queue: {len(self.queue)}")
+            return pages_crawled
+
+        except (json.JSONDecodeError, KeyError) as e:
+            print(f"   Warning: Could not parse index file: {e}")
+            return 0
+
     def normalize_url(self, url: str) -> str:
         """Normalize URL: remove fragments, handle trailing slashes"""
         # Remove fragment
@@ -129,11 +163,12 @@ class URLManager:
 async def crawl_site(
     start_url: str,
     output_dir: str = "./crawled_site",
-    max_pages: int = 100,
+    max_pages: int = 250,
     delay: float = 1.0,
     stay_within_path: bool = True,
     headless: bool = False,
     verbose: bool = True,
+    resume: bool = False,
 ) -> Dict:
     """
     Crawl entire site starting from start_url
@@ -146,6 +181,7 @@ async def crawl_site(
         stay_within_path: If True, only crawl URLs under start_url's path
         headless: If True, run browser in headless mode
         verbose: If True, print detailed progress
+        resume: If True, resume from previous crawl using site_index.json
 
     Returns:
         Dictionary with crawl statistics and results
@@ -155,10 +191,27 @@ async def crawl_site(
     output_path = Path(output_dir)
     pages_dir = output_path / "pages"
     pages_dir.mkdir(parents=True, exist_ok=True)
+    index_path = output_path / "site_index.json"
 
     # Initialize URL manager
     url_manager = URLManager(start_url, stay_within_path)
-    url_manager.add_url(start_url)
+
+    # Resume from previous crawl if requested
+    previous_count = 0
+    previous_pages = []
+    if resume and index_path.exists():
+        previous_count = url_manager.load_from_index(index_path)
+        # Load previous pages data for stats continuation
+        try:
+            with open(index_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                previous_pages = data.get("stats", {}).get("pages", [])
+        except (json.JSONDecodeError, KeyError):
+            pass
+
+    # Add start URL if not resuming or queue is empty
+    if not resume or len(url_manager.queue) == 0:
+        url_manager.add_url(start_url)
 
     # Browser configuration - NON-HEADLESS for visibility by default
     browser_config = BrowserConfig(
@@ -178,14 +231,14 @@ async def crawl_site(
     stats = {
         "start_url": start_url,
         "start_time": datetime.now().isoformat(),
-        "pages_crawled": 0,
+        "pages_crawled": previous_count,
         "pages_failed": 0,
-        "total_links_discovered": 0,
-        "pages": [],
+        "total_links_discovered": len(url_manager.discovered),
+        "pages": previous_pages.copy(),
     }
 
     async with AsyncWebCrawler(config=browser_config) as crawler:
-        page_num = 0
+        page_num = previous_count  # Start from previous count when resuming
 
         while True:
             # Check limits
@@ -299,19 +352,26 @@ async def crawl_site(
     stats["total_urls_discovered"] = len(url_manager.discovered)
     stats["urls_in_queue_remaining"] = len(url_manager.queue)
 
-    # Save index file
-    index_path = output_path / "site_index.json"
+    # Save index file (already defined at top)
     with open(index_path, "w", encoding="utf-8") as f:
         json.dump({"stats": stats, "all_urls": url_manager.discovered}, f, indent=2)
 
     print(f"\n{'=' * 60}")
     print(f"Crawl Complete!")
-    print(f"   Pages crawled: {stats['pages_crawled']}")
+    if resume and previous_count > 0:
+        print(
+            f"   Pages crawled (this session): {stats['pages_crawled'] - previous_count}"
+        )
+        print(f"   Pages crawled (total): {stats['pages_crawled']}")
+    else:
+        print(f"   Pages crawled: {stats['pages_crawled']}")
     print(f"   Pages failed: {stats['pages_failed']}")
     print(f"   Total URLs discovered: {stats['total_urls_discovered']}")
     print(f"   URLs remaining in queue: {stats['urls_in_queue_remaining']}")
     print(f"   Output directory: {output_path}")
     print(f"   Index file: {index_path}")
+    if stats["urls_in_queue_remaining"] > 0:
+        print(f"\n   Tip: Run with --resume to continue crawling remaining URLs")
     print(f"{'=' * 60}")
 
     return stats
@@ -336,6 +396,9 @@ Examples:
     
     # Crawl entire domain (not just path)
     python site_crawler.py https://example.com --no-stay-within-path
+    
+    # Resume a previous crawl (continues from site_index.json)
+    python site_crawler.py https://opencode.ai/docs -o ./output --resume
         """,
     )
 
@@ -350,8 +413,8 @@ Examples:
         "--max-pages",
         "-m",
         type=int,
-        default=100,
-        help="Maximum pages to crawl (default: 100)",
+        default=250,
+        help="Maximum pages to crawl (default: 250)",
     )
     parser.add_argument(
         "--delay",
@@ -371,6 +434,12 @@ Examples:
         help="Crawl entire domain, not just URLs under start path",
     )
     parser.add_argument(
+        "--resume",
+        "-r",
+        action="store_true",
+        help="Resume from previous crawl using site_index.json in output dir",
+    )
+    parser.add_argument(
         "--quiet", "-q", action="store_true", help="Reduce output verbosity"
     )
 
@@ -384,6 +453,7 @@ Examples:
         stay_within_path=not args.no_stay_within_path,
         headless=args.headless,
         verbose=not args.quiet,
+        resume=args.resume,
     )
 
 
