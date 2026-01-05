@@ -7,3 +7,6 @@
 
 # Obsidian CLI completions
 command -v obsidian-cli &>/dev/null && eval "$(obsidian-cli completion zsh)"
+
+# OpenCode completions
+command -v opencode &>/dev/null && eval "$(opencode completion)"
