@@ -11,6 +11,12 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SRC_DIR="$SCRIPT_DIR/src"
 OUTPUT_FILE="$SCRIPT_DIR/karabiner.json"
 
+# Rules that should work on ALL devices (not just built-in keyboard)
+# All other rules default to built-in keyboard only
+ALL_DEVICES_RULES=(
+    "16-language-switch.json"
+)
+
 # Check for jq
 if ! command -v jq &> /dev/null; then
     echo "Error: jq is required but not installed."
@@ -34,13 +40,41 @@ echo "Building karabiner.json..."
 # Start with base.json
 BASE_JSON=$(cat "$SRC_DIR/base.json")
 
+# Device condition for built-in keyboard only
+BUILTIN_DEVICE_CONDITION='{"type": "device_if", "identifiers": [{"is_built_in_keyboard": true}]}'
+
+# Helper function to check if a rule should work on all devices
+is_all_devices_rule() {
+    local filename="$1"
+    for rule in "${ALL_DEVICES_RULES[@]}"; do
+        [[ "$filename" == "$rule" ]] && return 0
+    done
+    return 1
+}
+
 # Collect all rules from rule files (sorted by filename for predictable order)
 RULES_JSON="[]"
 for rule_file in "$SRC_DIR/rules"/*.json; do
     if [[ -f "$rule_file" ]]; then
-        echo "  Adding: $(basename "$rule_file")"
-        # Each rule file contains a single rule object, append it to the array
-        RULES_JSON=$(echo "$RULES_JSON" | jq --slurpfile rule "$rule_file" '. + [$rule[0]]')
+        filename=$(basename "$rule_file")
+        echo "  Adding: $filename"
+        
+        if is_all_devices_rule "$filename"; then
+            # No device condition - works on all keyboards
+            RULES_JSON=$(echo "$RULES_JSON" | jq --slurpfile rule "$rule_file" '. + [$rule[0]]')
+        else
+            # Add device condition to each manipulator's conditions array (built-in only)
+            RULE_WITH_DEVICE=$(jq --argjson device "$BUILTIN_DEVICE_CONDITION" '
+                .manipulators = [.manipulators[] | 
+                    if .conditions then
+                        .conditions = [.conditions[], $device]
+                    else
+                        .conditions = [$device]
+                    end
+                ]
+            ' "$rule_file")
+            RULES_JSON=$(echo "$RULES_JSON" | jq --argjson rule "$RULE_WITH_DEVICE" '. + [$rule]')
+        fi
     fi
 done
 

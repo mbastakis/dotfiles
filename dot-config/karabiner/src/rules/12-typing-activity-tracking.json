@@ -457,7 +457,9 @@
             ],
             "from": {
                 "key_code": "spacebar",
-                "modifiers": { "optional": ["any"] }
+                "modifiers": {
+                    "optional": ["caps_lock", "command", "option", "shift"]
+                }
             },
             "to": [
                 {

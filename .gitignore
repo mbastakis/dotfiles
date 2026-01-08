@@ -25,6 +25,9 @@ dot-docker/*
 # AI/Docs
 ai-docs
 
+# Karabiner
+dot-config/karabiner/automatic_backups/
+
 # Python
 __pycache__/
 *.pyc

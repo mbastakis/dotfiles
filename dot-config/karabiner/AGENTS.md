@@ -31,9 +31,24 @@ Rules sorted alphabetically by filename. Prefix with numbers for order:
 03-hrm-left-a.json
 ...
 15-hyper-navigation.json
+16-language-switch.json
 ```
 
 **Requires**: `jq` (install via `brew install jq`)
+
+### Device Filtering
+
+By default, all rules apply only to the **built-in keyboard**. This prevents home row mods from interfering with external keyboards.
+
+To make a rule work on **all devices**, add its filename to `ALL_DEVICES_RULES` in `build.sh`:
+
+```bash
+ALL_DEVICES_RULES=(
+    "16-language-switch.json"
+)
+```
+
+Rules in this array skip the `device_if` condition and work on any keyboard.
 
 ## Home Row Mods Layout (GASC)
 

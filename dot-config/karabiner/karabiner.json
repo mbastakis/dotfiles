@@ -24,6 +24,14 @@
                     "type": "variable_unless",
                     "name": "left_mod_active",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -62,6 +70,14 @@
                     "type": "variable_unless",
                     "name": "left_mod_active",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -100,6 +116,14 @@
                     "type": "variable_unless",
                     "name": "left_mod_active",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -138,6 +162,14 @@
                     "type": "variable_unless",
                     "name": "left_mod_active",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -176,6 +208,14 @@
                     "type": "variable_unless",
                     "name": "left_mod_active",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -214,6 +254,14 @@
                     "type": "variable_unless",
                     "name": "left_mod_active",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -252,6 +300,14 @@
                     "type": "variable_unless",
                     "name": "left_mod_active",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -290,6 +346,14 @@
                     "type": "variable_unless",
                     "name": "left_mod_active",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -328,6 +392,14 @@
                     "type": "variable_unless",
                     "name": "left_mod_active",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -366,6 +438,14 @@
                     "type": "variable_unless",
                     "name": "left_mod_active",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -404,6 +484,14 @@
                     "type": "variable_unless",
                     "name": "left_mod_active",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -442,6 +530,14 @@
                     "type": "variable_unless",
                     "name": "left_mod_active",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -480,6 +576,14 @@
                     "type": "variable_unless",
                     "name": "right_mod_active",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -518,6 +622,14 @@
                     "type": "variable_unless",
                     "name": "right_mod_active",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -556,6 +668,14 @@
                     "type": "variable_unless",
                     "name": "right_mod_active",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -594,6 +714,14 @@
                     "type": "variable_unless",
                     "name": "right_mod_active",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -632,6 +760,14 @@
                     "type": "variable_unless",
                     "name": "right_mod_active",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -670,6 +806,14 @@
                     "type": "variable_unless",
                     "name": "right_mod_active",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -708,6 +852,14 @@
                     "type": "variable_unless",
                     "name": "right_mod_active",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -746,6 +898,14 @@
                     "type": "variable_unless",
                     "name": "right_mod_active",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -784,6 +944,14 @@
                     "type": "variable_unless",
                     "name": "right_mod_active",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -822,6 +990,14 @@
                     "type": "variable_unless",
                     "name": "right_mod_active",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -860,6 +1036,14 @@
                     "type": "variable_unless",
                     "name": "right_mod_active",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -898,6 +1082,14 @@
                     "type": "variable_unless",
                     "name": "right_mod_active",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -945,6 +1137,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -984,6 +1184,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -1023,6 +1231,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -1062,6 +1278,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -1101,6 +1325,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -1140,6 +1372,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -1179,6 +1419,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -1218,6 +1466,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -1262,6 +1518,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -1302,6 +1566,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -1359,6 +1631,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -1457,6 +1737,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -1497,6 +1785,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -1554,6 +1850,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -1652,6 +1956,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -1692,6 +2004,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -1754,6 +2074,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -1852,6 +2180,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -1892,6 +2228,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -1953,6 +2297,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -2050,6 +2402,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -2090,6 +2450,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -2151,6 +2519,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -2248,6 +2624,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -2288,6 +2672,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -2350,6 +2742,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -2448,6 +2848,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -2488,6 +2896,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -2550,6 +2966,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -2648,6 +3072,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -2688,6 +3120,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -2750,6 +3190,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -2861,6 +3309,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "type": "basic"
@@ -2894,6 +3350,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "type": "basic"
@@ -2927,6 +3391,14 @@
                     "type": "variable_if",
                     "name": "typing_mode",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "type": "basic"
@@ -2947,6 +3419,14 @@
                     "type": "variable_unless",
                     "name": "right_hrm",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -2981,6 +3461,14 @@
                     "type": "variable_unless",
                     "name": "right_hrm",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3015,6 +3503,14 @@
                     "type": "variable_unless",
                     "name": "right_hrm",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3049,6 +3545,14 @@
                     "type": "variable_unless",
                     "name": "right_hrm",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3083,6 +3587,14 @@
                     "type": "variable_unless",
                     "name": "right_hrm",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3122,6 +3634,14 @@
                     "type": "variable_unless",
                     "name": "hyper_caps_lock",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3161,6 +3681,14 @@
                     "type": "variable_unless",
                     "name": "hyper_caps_lock",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3200,6 +3728,14 @@
                     "type": "variable_unless",
                     "name": "hyper_caps_lock",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3239,6 +3775,14 @@
                     "type": "variable_unless",
                     "name": "hyper_caps_lock",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3273,6 +3817,14 @@
                     "type": "variable_unless",
                     "name": "right_hrm",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3307,6 +3859,14 @@
                     "type": "variable_unless",
                     "name": "right_hrm",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3346,6 +3906,14 @@
                     "type": "variable_unless",
                     "name": "hyper_caps_lock",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3380,6 +3948,14 @@
                     "type": "variable_unless",
                     "name": "right_hrm",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3414,6 +3990,14 @@
                     "type": "variable_unless",
                     "name": "right_hrm",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3448,6 +4032,14 @@
                     "type": "variable_unless",
                     "name": "right_hrm",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3482,6 +4074,14 @@
                     "type": "variable_unless",
                     "name": "right_hrm",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3516,6 +4116,14 @@
                     "type": "variable_unless",
                     "name": "right_hrm",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3555,6 +4163,14 @@
                     "type": "variable_unless",
                     "name": "hyper_caps_lock",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3594,6 +4210,14 @@
                     "type": "variable_unless",
                     "name": "hyper_caps_lock",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3633,6 +4257,14 @@
                     "type": "variable_unless",
                     "name": "hyper_caps_lock",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3672,6 +4304,14 @@
                     "type": "variable_unless",
                     "name": "hyper_caps_lock",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3706,6 +4346,14 @@
                     "type": "variable_unless",
                     "name": "right_hrm",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3740,13 +4388,24 @@
                     "type": "variable_unless",
                     "name": "right_hrm",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
                   "key_code": "spacebar",
                   "modifiers": {
                     "optional": [
-                      "any"
+                      "caps_lock",
+                      "command",
+                      "option",
+                      "shift"
                     ]
                   }
                 },
@@ -3791,7 +4450,17 @@
                     "key_code": "escape"
                   }
                 ],
-                "type": "basic"
+                "type": "basic",
+                "conditions": [
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ]
               }
             ]
           },
@@ -3804,6 +4473,14 @@
                   {
                     "type": "expression_if",
                     "expression": "right_shift_last_tap > system.now.milliseconds - 300"
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3842,7 +4519,17 @@
                     "key_code": "right_shift"
                   }
                 ],
-                "type": "basic"
+                "type": "basic",
+                "conditions": [
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ]
               }
             ]
           },
@@ -3855,6 +4542,14 @@
                     "name": "hyper_caps_lock",
                     "type": "variable_if",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3878,6 +4573,14 @@
                     "name": "hyper_caps_lock",
                     "type": "variable_if",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3901,6 +4604,14 @@
                     "name": "hyper_caps_lock",
                     "type": "variable_if",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3924,6 +4635,14 @@
                     "name": "hyper_caps_lock",
                     "type": "variable_if",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3947,6 +4666,14 @@
                     "name": "hyper_caps_lock",
                     "type": "variable_if",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3970,6 +4697,14 @@
                     "name": "hyper_caps_lock",
                     "type": "variable_if",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -3996,6 +4731,14 @@
                     "name": "hyper_caps_lock",
                     "type": "variable_if",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -4022,6 +4765,14 @@
                     "name": "hyper_caps_lock",
                     "type": "variable_if",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -4045,6 +4796,14 @@
                     "name": "hyper_caps_lock",
                     "type": "variable_if",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -4068,6 +4827,14 @@
                     "name": "hyper_caps_lock",
                     "type": "variable_if",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -4091,6 +4858,14 @@
                     "name": "hyper_caps_lock",
                     "type": "variable_if",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -4114,6 +4889,14 @@
                     "name": "hyper_caps_lock",
                     "type": "variable_if",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -4137,6 +4920,14 @@
                     "name": "hyper_caps_lock",
                     "type": "variable_if",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -4160,6 +4951,14 @@
                     "name": "hyper_caps_lock",
                     "type": "variable_if",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -4183,6 +4982,14 @@
                     "name": "hyper_caps_lock",
                     "type": "variable_if",
                     "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ],
                 "from": {
@@ -4199,6 +5006,30 @@
                   }
                 ],
                 "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "Ctrl+Space: Cycle input language (ABC -> Dvorak -> Greek Dvorak)",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "spacebar",
+                  "modifiers": {
+                    "mandatory": [
+                      "left_control"
+                    ],
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "shell_command": "~/.bin/switch-input-source"
+                  }
+                ]
               }
             ]
           }
@@ -4222,6 +5053,18 @@
             "vendor_id": 1133
           },
           "ignore": true
+        },
+        {
+          "identifiers": {
+            "is_keyboard": true,
+            "is_pointing_device": true,
+            "product_id": 10203,
+            "vendor_id": 5824
+          },
+          "ignore": false,
+          "ignore_vendor_events": true,
+          "manipulate_caps_lock_led": false,
+          "treat_as_built_in_keyboard": false
         }
       ],
       "simple_modifications": [
