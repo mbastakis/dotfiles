@@ -4,41 +4,32 @@
     "type": "split",
     "children": [
       {
-        "id": "4509724f8bf84da7",
+        "id": "757ec7de00fca5f9",
         "type": "tabs",
         "children": [
           {
-            "id": "e7a7b303c61786dc",
-            "type": "leaf",
-            "pinned": true,
-            "state": {
-              "type": "canvas",
-              "state": {
-                "file": "Dashboards/Home.canvas",
-                "viewState": {
-                  "x": -760,
-                  "y": -168,
-                  "zoom": -0.03041187575066307
-                }
-              },
-              "pinned": true,
-              "icon": "lucide-layout-dashboard",
-              "title": "Home"
-            }
-          },
-          {
-            "id": "e15b54f5ef212204",
+            "id": "864537015ae1418d",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "todo.md",
+                "file": "4-Archive/Career-be-good-at-work.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": false
               },
               "icon": "lucide-file",
-              "title": "todo"
+              "title": "Career-be-good-at-work"
+            }
+          },
+          {
+            "id": "5f3be9dcbbbf75d6",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "New tab"
             }
           }
         ],
@@ -61,8 +52,8 @@
             "state": {
               "type": "notebook-navigator",
               "state": {},
-              "icon": "lucide-ghost",
-              "title": "notebook-navigator"
+              "icon": "notebook",
+              "title": "Notebook Navigator"
             }
           },
           {
@@ -229,41 +220,46 @@
       "obsidian-book-search-plugin:Create new book note": true
     }
   },
-  "active": "e15b54f5ef212204",
+  "active": "5f3be9dcbbbf75d6",
   "lastOpenFiles": [
+    "4-Archive/Career-be-good-at-work.md",
+    "4-Archive/Work-Softcom-vehicle-ticket-1.md",
+    "4-Archive/_Reports-extraction-tracking.md",
+    "2-Areas/Documentation/aicc-aws-playground-access.md",
+    "2-Areas/Documentation/aws-ssa-certification-info.md",
+    "2-Areas/Documentation/bmad-method-bmad-code-user-guide.md",
+    "1-Projects/Opencode/Opencode.md",
+    "1-Projects/Spiritbind/Spiritbind.md",
+    "1-Projects/Obsidian/Obsidian.md",
+    "1-Projects/Fitness/Fitness.md",
+    "1-Projects/DT-AICC/DT-AICC.md",
+    "1-Projects/DT-AICC/clco-1548-dtsp-scanning.md",
+    "1-Projects/Default/Default.md",
+    "0-Inbox/WARP.md",
+    "1-Projects/DT-AICC/tools-access.md",
+    "1-Projects/DT-AICC/personal-credentials.md",
+    "1-Projects/DT-AICC/login-n8n-argocd-langfuse.md",
+    "1-Projects/DT-AICC/glossary.md",
+    "1-Projects/DT-AICC/get-access-tools-account.md",
+    "1-Projects/DT-AICC/get-access-telekomwiki.md",
+    "1-Projects/DT-AICC/get-access-slack.md",
+    "1-Projects/DT-AICC/download-dt-repos.md",
+    "1-Projects/DT-AICC/download-dt-repos-task.md",
+    "1-Projects/DT-AICC/container-image-scanning-evaluation.md",
+    "1-Projects/DT-AICC/cloud-core-sre-meeting.md",
+    "1-Projects/DT-AICC/clco-1557-kyverno-cli.md",
+    "2-Areas/Journal",
+    "2-Areas/Work/DT-AICC",
+    "2-Areas/Work",
+    "2-Areas/Personal",
+    "2-Areas/Learning",
+    "2-Areas/Documentation",
+    "2-Areas/Career",
+    "4-Archive/Work/Softcom/porsche",
+    "4-Archive/Work/Softcom/esync",
+    "4-Archive/Work/DT-AICC/tickets",
     "Dashboards/Home.canvas",
-    "todo.md",
-    "philippes age key.md",
-    "Projects/opencode.md",
-    "Projects/Tasks/Opencode Tasks/Use Bedrock from Playground AWS.md",
-    "Extras/Excalidraw/obsidian-new-restructuring.md",
-    "Extras/Excalidraw/Drawing 2025-12-12 20.00.32.excalidraw.restored.md",
-    "Extras/Excalidraw/Drawing 2025-12-12 20.00.32.excalidraw.md",
-    "Resources/Books/Vibe Coding Building Production-Grade Software With GenAI, Chat, Agents, and Beyond (Gene Kim, Steve Yegge) (Z-Library).epub",
-    "Resources/Books/Unconfirmed 197599.crdownload",
-    "Genspark description of me.md",
-    "test.md",
-    "Extras/Excalidraw/databases-aicc-magenta-apprentice.excalidraw.md",
-    "Extras/PDF/Designing Data-Intensive Applications The Big Ideas Behind Reliable, Scalable, and Maintainable Systems (Martin Kleppmann) (Z-Library).pdf",
-    "Extras/PDF/Computer Systems A Programmer’s Perspective, Third Edition (Global Edition) ( etc.) (Z-Library).pdf",
-    "Extras/PDF/Structure and Interpretation of Computer Programs (Harold Abelson, Gerald Jay Sussman etc.) (Z-Library).pdf",
-    "Resources/Technical/format-computer-old.md",
-    "Resources/AI/deep-learning.md",
-    "Extras/Excalidraw/Drawing 2025-11-27 12.05.20.excalidraw.md",
     "Extras/Images/todo-1764077929580.webp",
-    "templates",
-    "Logistics.md",
-    "Projects/Tasks/Kanban Tasks/Track Finance.md",
-    "Archives/Personal/General/loukas-expenses-logistics.md",
-    "Projects/Tasks/Kanban Tasks/buy marileni a gift for birthday.md",
-    "Projects/Tasks/Kanban Tasks/Help mom with Website.md",
-    "cka-lukas.md",
-    "cka-test.md",
-    "homeserver.md",
-    "Monotonic Array.md",
-    "platform-engineer-psa-proposal.md",
-    "Pokemon Unbound.md",
-    "Remove Duplicates Sorted Array, Remove Element.md",
     "Extras/Images/Cygnus.png",
     "Extras/Images/todo-1761453162422.webp",
     "Extras/Images/todo-1761453159845.webp",
@@ -273,10 +269,6 @@
     "Extras/Images/cka-test-1761155353264.webp",
     "Extras/Images/cka-test-1761155345691.webp",
     "Extras/Images/cka-test-1761155338466.webp",
-    "Resources/Homeserver",
-    "Extras/PDF/AI Agents in Action (Micheal Lanham) (Z-Library).pdf",
-    "Resources/Books/Marvel Comics For Dummies (Troy Brownfield) (Z-Library).epub",
-    "Resources/Books/Unconfirmed 421319.crdownload",
     "Dashboards/Fitness.canvas",
     "Dashboards/Discovery.canvas",
     "Dashboards/Global Tasks.canvas",

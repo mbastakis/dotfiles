@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
-      "OcTasklist24",
-      "RiTaskLine",
+      "LiHome",
+      "LiDumbbell",
       "LiEye",
-      "SiShortcut",
-      "LiDumbbell"
+      "LiSquareKanban",
+      "LiWorkflow"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [
@@ -59,61 +59,17 @@
     "debugMode": false,
     "useInternalPlugins": false
   },
-  "Projects": {
-    "iconName": "OcProject16",
-    "iconColor": "#6af081"
-  },
-  "Areas": {
-    "iconName": "BoBxCollection",
-    "iconColor": "#6af081"
-  },
-  "Resources": {
-    "iconName": "TiNotes",
-    "iconColor": "#6af08a"
-  },
-  "Archives": {
-    "iconName": "LiArchive",
-    "iconColor": "#6af08a"
-  },
-  "Dashboards": {
-    "iconName": "IbDashboard",
-    "iconColor": "#7f8cf0"
-  },
   "Extras": {
     "iconName": "SiMeta",
     "iconColor": "#f06a7f"
   },
   "Extras/Excalidraw": "SiExcalidraw",
   "Extras/Images": "LiImages",
-  "Extras/PDF": "FarFilePdf",
   "Extras/Templates": "TiTemplate",
-  "Resources/Sticky Notes": "RiStickyNoteFill",
   "Resources/Snippets": "RiTextSnippet",
   "Resources/Snippets/Code": "TiCode",
   "Resources/Snippets/Commands": "RiSlashCommands",
-  "Resources/Weblist": "LiLink",
-  "Resources/Shortcuts": "SiQuicklook",
-  "Dashboards/Fitness.canvas": "TiRun",
-  "Extras/Exercises": "LiDumbbell",
-  "Calendar": {
-    "iconName": "LiCalendar",
-    "iconColor": "#6af0ee"
-  },
-  "Calendar/Calendar Events": "LiCalendar",
-  "Projects/Tasks": "OcTasklist16",
-  "Projects/Tasks/Kanban Tasks": "RiTaskLine",
-  "Projects/Tasks/DT Tasks": "RiTaskLine",
-  "Resources/Tutorials": "TiInfoSquare",
-  "Resources/People": "OcPeople16",
-  "Resources/People/xara-notes.md": "👩",
-  "Dashboards/Discovery.canvas": "FasMagnifyingGlass",
-  "Dashboards/PARA.canvas": "RiOrganizationChart",
   "Extras/Filters": "LiFilter",
-  "Areas/Documentation": "LiFiles",
-  "Dashboards/Global Tasks.canvas": "BoBxTask",
-  "Dashboards/Home.canvas": "IbDashboard",
-  "Resources/Books": "TiBooks",
-  "Resources/Shortform Books": "TiBooks",
   "Projects/Tasks/Kanban Tasks/4. add glow to my workflow, in general check my packages and create esay to use docs and commands.md": {
     "iconName": "OcTasklist24"
   },
@@ -123,536 +79,78 @@
   "Projects/Tasks/Kanban Tasks/create commands to easily symlink specs and ai docs to repos=.md": {
     "iconName": "OcTasklist24"
   },
-  "Resources/AI_Docs": "CoFolderDocument",
-  "Resources/Specs": "IbDocumentCode",
-  "Calendar/Daily Notes": "FasCalendarDay",
   "Extras/Filters/readitlater.base": "LiEye",
   "Extras/Filters/sticky-notes.base": "RiStickyNoteFill",
-  "Extras/Templates/Projects/dt-aicc-card.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Extras/Templates/Projects/default-card.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Calendar/Calendar Events/Go to Chara.md": {
-    "iconName": "CoCalendarEvent"
-  },
-  "Calendar/Calendar Events/Hermetic presentation tools, setup, slides.md": {
-    "iconName": "CoCalendarEvent"
-  },
-  "Projects/Tasks/DT Tasks/Get access to the Kanban Board.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/DT Tasks/use the proxmox gpus to add the ollamas .md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/DT Tasks/deploy logfire.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/DT Tasks/Create an onboarding ticket.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/DT Tasks/Help BFL Dev Team.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/DT Tasks/Go to aws Playground.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/DT Tasks/wfmt silverlight.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/DT Tasks/2 Jul Abishek check .md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/DT Tasks/Ask Paul the script for aws login.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/DT Tasks/Azure & GCP contact dimitra.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/DT Tasks/Contact Nickel get kanban board access.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/DT Tasks/PSA Portal Notes.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Ask for Perplexity Pro subscription.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Ask for a DTTL Teams Account, and ask for accesses.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Meeting with Bali Dimitra.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Extras/Templates/Calendar/calendar-event.md": {
-    "iconName": "CoCalendarEvent"
-  },
-  "Projects/Tasks/Kanban Tasks/Find a topic and create a 30 min presentation.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/fix list height, kanban.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/track subscriptions in excel ? Maybe obsidian excel ?.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/fitness dashboard.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Obsidian MCP for task cration.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/use local models, maybe with langgraph to index and structure obsidian notes.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Track Finance.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/create git-tree default specs.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/make terminal shortcuts-commands ?.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/checkout crush.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Add warp workflows to .dotfiles.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/add hooks claude pro.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/finish raw book data.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/start using cline, free, with gemini cli, claude code.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Check opencode.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Sync obsidian, CouchDB.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/create pixel asset pipeline project.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/manage claude mcp through dotfiles.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Create default refactor specs.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/add ai_docs.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/check navi.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/ollama tui.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/create kanban column for websites I obsidian clip.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/1. obsidian git, disable sync.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Check Claude + Docker MCP and remove Copilot in obsidian if not needed.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/notes from the aicc meeting.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/fix glove80 use cases.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/how the dashboard for project should be.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Create command to start and stop all local AI.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Refactor Resources, Make atomic notes.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/document yazi, fix vscode fzf, zoxide.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/2. check nix user, check how to setup nix darwin correctly.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/revamp workflow, in general some refactor on obsiadian.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/configure ghostty, add edit command in terminal.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/create default feat specs.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/plan vacation, write dates to calendar etc.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/agentic tool for revolut api, track finance.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/generate ditigal persona, youtube etc.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Create Dates with Chara page.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/obsidian in git.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Monitor Arm for Desk.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Maybe Replace Warp with Ghostty.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/checout kimi llm, free openrouter, add to cline and opencode.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/use the agentic loop to create more warp workflows.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/dotfiles tui.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/check llmstudio vs ollama.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Make global Tasks dashboard.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Create good dir structure for work using warp workflows.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/add specs dir.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/HDMI 2.1.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/remove unecssary logs, metrics, cache, optimize the files.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/add nix in dotfiles.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/iPad.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/fix the raw data and delete the duplicate books.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/configure nushell maybe ?.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/checkout mcp servers vscode.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/add parllama to dotfiles, add uv tools to dotfiles.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/document all brew commands, maybe add to navi.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Tool for easy context to llm.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Track Subscriptions.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/specs and ai_docs in obsidian as symlinks, commands that can creat them easily.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/3. change dotfiles repo.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/create good claude code configuration, global commands dotfiles config.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/setup vi mode in ghostty.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/create deep research claude code command.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/create warp workflows with claude code.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Find a good prompt versioning and testing system.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Add plugins to yazi.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/check if I can download bitnet huggingface to ollama, check dotfiles.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Add agent tool, check emails and create obsidian tasks.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/see swe_prompt_bench how is a prompt tested, how do you craft master agentic prompts.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Check Hyperbrowser.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/configure opencode.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Check Atlas and ACE Systems.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/create obsidian web clipper templates and export settings.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Calendar/Calendar Events/Hermetica check compliance.md": {
-    "iconName": "CoCalendarEvent"
-  },
-  "Areas/mike-workflow.md": {
-    "iconName": "LiWorkflow"
-  },
-  "Resources/Shortcuts/Shortcuts.md": {
-    "iconName": "SiShortcut"
-  },
-  "Areas/mike-logistics.md": {
-    "iconName": "FasDollarSign"
-  },
-  "Projects/Tasks/Opencode Tasks": "RiTaskLine",
-  "Extras/Templates/Projects/opencode-card.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/DT Tasks/Bring Keycloak in front of Langfuse, Magenta Apprentice, LMStudio.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/DT Tasks/Check backlog and current sprint.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/DT Tasks/Create Prod with billing element.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Opencode Tasks/Use Hendriks machine for kimi k2, qwen coder.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Opencode Tasks/Use Vertex AI from GCP.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Opencode Tasks/Use Bedrock from Playground AWS.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Find good Tea brand and buy.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Fitness Tasks": "RiTaskLine",
-  "Extras/Templates/Projects/fitness-card.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Fitness Tasks/Find a book containing practices and write down.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Areas/mike-software.md": {
-    "iconName": "SiPaloaltosoftware"
-  },
-  "Areas/DT-mike.md": {
-    "iconName": "SiWorkplace"
-  },
-  "Areas/mike-people.md": {
-    "iconName": "OcPeople16"
-  },
-  "Archives/Personal/health/Exercise.md": {
-    "iconName": "LiDumbbell"
-  },
-  "Projects/Tasks/Opencode Tasks/Have drop zones in obsidian, with constant opencode.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Opencode Tasks/Add opencode to github agent.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Export automatically browser pinned tabs to obsidian.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Resources/Tools/vivaldi-shortcuts.md": {
-    "iconName": "SiShortcut"
-  },
-  "Archives/Projects/mike-dashboard.md": {
-    "iconName": "LiHome"
-  },
-  "Resources/AI/ocr.md": {
-    "iconName": "FasMagnifyingGlassPlus"
-  },
-  "Resources/Tools/screen-recording.md": {
+  "3-Resources/screen-recording.md": {
     "iconName": "TiPlayerRecord"
   },
-  "Resources/Hardware/glove80.md": {
+  "3-Resources/vivaldi-shortcuts.md": {
+    "iconName": "SiShortcut"
+  },
+  "3-Resources/glove80.md": {
     "iconName": "LiKeyboard"
   },
-  "Resources/Hardware/lily58-pro.md": {
+  "3-Resources/lily58-pro.md": {
     "iconName": "LiKeyboard"
   },
-  "Resources/Infrastructure/kyverno-presentation.md": {
-    "iconName": "SiSlides"
-  },
-  "Resources/Mac/mac-setup.md": {
-    "iconName": "RiMacbookLine"
-  },
-  "Resources/Mac/mac.md": {
-    "iconName": "RiMacbookLine"
-  },
-  "Resources/Mac/to-be-packaged.md": {
+  "3-Resources/to-be-packaged.md": {
     "iconName": "LiPlane"
   },
-  "Areas/Documentation/aws-ssa-certification-info.md": {
+  "3-Resources/mac.md": {
+    "iconName": "RiMacbookLine"
+  },
+  "3-Resources/mac-setup.md": {
+    "iconName": "RiMacbookLine"
+  },
+  "3-Resources/ocr.md": {
+    "iconName": "FasMagnifyingGlassPlus"
+  },
+  "3-Resources/vscode-shortcuts.md": {
+    "iconName": "SiShortcut"
+  },
+  "3-Resources/mac-shortcuts.md": {
+    "iconName": "SiShortcut"
+  },
+  "3-Resources/Shortcuts.md": {
+    "iconName": "SiShortcut"
+  },
+  "3-Resources/yazi-shortcuts.md": {
+    "iconName": "SiShortcut"
+  },
+  "3-Resources/kyverno-presentation.md": {
+    "iconName": "SiSlides"
+  },
+  "2-Areas/Documentation/aws-ssa-certification-info.md": {
     "iconName": "LiInfo"
   },
-  "Projects/Tasks/Obsidian Tasks": "RiTaskLine",
-  "Extras/Templates/Projects/obsidian-card.md": {
-    "iconName": "OcTasklist24"
+  "2-Areas/DT-mike.md": {
+    "iconName": "SiWorkplace"
   },
-  "Projects/Tasks/Obsidian Tasks/create mcp for obsidian, converse with AI about the design.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Archives/Personal/General/mike-kanban.md": {
-    "iconName": "LiSquareKanban"
-  },
-  "Projects/Tasks/SpiritBind Tasks": "OcCheckbox16",
-  "Projects/Tasks/WhoCaresGames Tasks": "OcCheckbox16",
-  "Extras/Templates/Projects/spiritbind-card.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Extras/Templates/Projects/whocaresgames-card.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/SpiritBind Tasks/to-be-deleted.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/WhoCaresGames Tasks/to-be-deleted.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/DT Tasks/push mr for decouple.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/DT Tasks/push mr for deployment.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/DT Tasks/Architecture docs made with Philipe.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/DT Tasks/Do Istio + Keycloak.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/DT Tasks/Write an email to the two guys.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Obsidian Tasks/Transfer modz aws test to obsidian.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Extras/Exercises/Dips.md": {
-    "iconName": "LiDumbbell"
-  },
-  "Projects/Tasks/Opencode Tasks/setup crawl4ai .md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Go to doctor and seteup yearly check up.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Start procedures for joining the army and postponing.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Resources/Shortcuts/mac-shortcuts.md": {
-    "iconName": "SiShortcut"
-  },
-  "Resources/Shortcuts/vscode-shortcuts.md": {
-    "iconName": "SiShortcut"
-  },
-  "Resources/Shortcuts/yazi-shortcuts.md": {
-    "iconName": "SiShortcut"
-  },
-  "Archives/Personal/General/loukas-expenses-logistics.md": {
+  "2-Areas/mike-logistics.md": {
     "iconName": "FasDollarSign"
   },
-  "Archives/Personal/General/mike-readitlater.md": {
+  "2-Areas/mike-people.md": {
+    "iconName": "OcPeople16"
+  },
+  "2-Areas/mike-software.md": {
+    "iconName": "SiPaloaltosoftware"
+  },
+  "2-Areas/mike-workflow.md": {
+    "iconName": "LiWorkflow"
+  },
+  "4-Archive/Personal-General-loukas-expenses-logistics.md": {
+    "iconName": "FasDollarSign"
+  },
+  "4-Archive/Personal-General-mike-kanban.md": {
+    "iconName": "LiSquareKanban"
+  },
+  "4-Archive/Personal-General-mike-readitlater.md": {
     "iconName": "LiEye"
   },
-  "Extras/Exercises/Bicep Curl.md": {
+  "4-Archive/Personal-health-Exercise.md": {
     "iconName": "LiDumbbell"
   },
-  "Extras/Exercises/Burpees.md": {
-    "iconName": "LiDumbbell"
-  },
-  "Extras/Exercises/Handstand.md": {
-    "iconName": "LiDumbbell"
-  },
-  "Extras/Exercises/Hanging Leg Raise.md": {
-    "iconName": "LiDumbbell"
-  },
-  "Extras/Exercises/Hollow Body Hold.md": {
-    "iconName": "LiDumbbell"
-  },
-  "Extras/Exercises/Lunges.md": {
-    "iconName": "LiDumbbell"
-  },
-  "Extras/Exercises/Plank.md": {
-    "iconName": "LiDumbbell"
-  },
-  "Extras/Exercises/Pull-Ups.md": {
-    "iconName": "LiDumbbell"
-  },
-  "Extras/Exercises/Push-Ups.md": {
-    "iconName": "LiDumbbell"
-  },
-  "Extras/Exercises/Squats.md": {
-    "iconName": "LiDumbbell"
-  },
-  "Projects/Tasks/DT Tasks/AICC meetup.md": {
-    "iconName": "RiTaskLine"
-  },
-  "Projects/Tasks/DT Tasks/Call with Philipe.md": {
-    "iconName": "RiTaskLine"
-  },
-  "Projects/Tasks/DT Tasks/Fix gitlab runner deprecated keys.md": {
-    "iconName": "RiTaskLine"
-  },
-  "Projects/Tasks/DT Tasks/GitOps transition.md": {
-    "iconName": "RiTaskLine"
-  },
-  "Projects/Tasks/DT Tasks/Setup kyverno to pull from artifactory.md": {
-    "iconName": "RiTaskLine"
-  },
-  "Projects/Tasks/DT Tasks/kyverno argocd fix, from docs.md": {
-    "iconName": "RiTaskLine"
-  },
-  "Projects/Tasks/DT Tasks/kyverno-destruction-job.md": {
-    "iconName": "RiTaskLine"
-  },
-  "Projects/Tasks/Kanban Tasks/Clean up Iphone.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/maybe check jj.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/watch youtube quantitization local llm.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Obsidian Tasks/Add pre-commit hooks in git were they check file size and suggest reduce, think of other pre-commit hooks.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Obsidian Tasks/Automatic way to discover and bring up old notes that needs cleaning or remembering.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Obsidian Tasks/create a book Area and book notes Areas.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/Help mom with Website.md": {
-    "iconName": "OcTasklist24"
-  },
-  "Projects/Tasks/Kanban Tasks/buy marileni a gift for birthday.md": {
-    "iconName": "OcTasklist24"
+  "4-Archive/Projects-mike-dashboard.md": {
+    "iconName": "LiHome"
   }
 }

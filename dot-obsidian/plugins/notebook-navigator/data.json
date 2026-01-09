@@ -280,68 +280,18 @@
   "checkForUpdatesOnStart": true,
   "confirmBeforeDelete": true,
   "customVaultName": "",
-  "pinnedNotes": {
-    "Dashboards/Home.canvas": {
-      "folder": true,
-      "tag": false
-    },
-    "Projects/spiritbind.md": {
-      "folder": true,
-      "tag": false
-    },
-    "Projects/whocaresgames.md": {
-      "folder": true,
-      "tag": false
-    },
-    "Projects/fitness.md": {
-      "folder": true,
-      "tag": false
-    },
-    "Projects/dt-aicc.md": {
-      "folder": true,
-      "tag": false
-    },
-    "Projects/obsidian.md": {
-      "folder": true,
-      "tag": false
-    },
-    "Projects/opencode.md": {
-      "folder": true,
-      "tag": false
-    },
-    "Projects/default.md": {
-      "folder": true,
-      "tag": false
-    }
-  },
+  "pinnedNotes": {},
   "fileIcons": {},
   "fileColors": {},
   "folderIcons": {
-    "Dashboards": "grid-2x-2",
-    "Calendar": "calendar",
-    "Extras": "x",
-    "Projects": "square-kanban",
-    "Areas": "map",
-    "Resources": "folders",
-    "Archives": "archive"
+    "Extras": "x"
   },
   "folderColors": {
-    "Dashboards": "#ec4899",
-    "Calendar": "#3b82f6",
-    "Extras": "#ef4444",
-    "Projects": "#22c55e",
-    "Areas": "#22c55e",
-    "Resources": "#22c55e",
-    "Archives": "#22c55e"
+    "Extras": "#ef4444"
   },
   "folderBackgroundColors": {},
   "folderSortOverrides": {},
-  "folderAppearances": {
-    "Projects": {
-      "titleRows": 1,
-      "mode": "compact"
-    }
-  },
+  "folderAppearances": {},
   "tagIcons": {},
   "tagColors": {},
   "tagBackgroundColors": {},
@@ -371,7 +321,7 @@
     "#404040"
   ],
   "lastShownVersion": "",
-  "lastAnnouncedRelease": "1.9.1",
+  "lastAnnouncedRelease": "2.0.4",
   "rootFolderOrder": [],
   "rootTagOrder": [],
   "allowTagCreationInAddTagModal": true,

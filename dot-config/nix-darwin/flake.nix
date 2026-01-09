@@ -166,6 +166,7 @@
         "opentofu"
         "oven-sh/bun/bun"
         "p7zip"
+        "pandoc"
         "parallel-disk-usage"
         "poppler"
         "postgresql@17"
