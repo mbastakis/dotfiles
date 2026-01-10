@@ -10,8 +10,1656 @@
         },
         "rules": [
           {
-            "description": "Bilateral cancellation - Same-hand rollover outputs both letters",
+            "description": "Common word sequences - Fix cross-hand HRM timing issues",
             "manipulators": [
+              {
+                "description": "k+j+d pressed rapidly = 'kjd' (the) - strict order",
+                "type": "basic",
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 80
+                },
+                "from": {
+                  "simultaneous": [
+                    {
+                      "key_code": "k"
+                    },
+                    {
+                      "key_code": "j"
+                    },
+                    {
+                      "key_code": "d"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "detect_key_down_uninterruptedly": true
+                  },
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "k"
+                  },
+                  {
+                    "key_code": "j"
+                  },
+                  {
+                    "key_code": "d"
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "typing_mode",
+                    "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "description": "k+j pressed rapidly = 'kj' (th) - strict order",
+                "type": "basic",
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 80
+                },
+                "from": {
+                  "simultaneous": [
+                    {
+                      "key_code": "k"
+                    },
+                    {
+                      "key_code": "j"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "detect_key_down_uninterruptedly": true
+                  },
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "k"
+                  },
+                  {
+                    "key_code": "j"
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "typing_mode",
+                    "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "description": "j+k pressed rapidly = 'jk' (ht) - strict order",
+                "type": "basic",
+                "parameters": {
+                  "basic.simultaneous_threshold_milliseconds": 80
+                },
+                "from": {
+                  "simultaneous": [
+                    {
+                      "key_code": "j"
+                    },
+                    {
+                      "key_code": "k"
+                    }
+                  ],
+                  "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "detect_key_down_uninterruptedly": true
+                  },
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "j"
+                  },
+                  {
+                    "key_code": "k"
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "typing_mode",
+                    "value": 0
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Bilateral cancellation - Same-hand and cross-hand rollover outputs both letters",
+            "manipulators": [
+              {
+                "description": "j held + a tapped = 'ja' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "right_index_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "right_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "a",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "j"
+                  },
+                  {
+                    "key_code": "a"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "j held + s tapped = 'js' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "right_index_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "right_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "s",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "j"
+                  },
+                  {
+                    "key_code": "s"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "j held + d tapped = 'jd' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "right_index_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "right_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "d",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "j"
+                  },
+                  {
+                    "key_code": "d"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "j held + f tapped = 'jf' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "right_index_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "right_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "f",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "j"
+                  },
+                  {
+                    "key_code": "f"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "k held + a tapped = 'ka' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "right_middle_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "right_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "a",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "k"
+                  },
+                  {
+                    "key_code": "a"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "k held + s tapped = 'ks' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "right_middle_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "right_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "s",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "k"
+                  },
+                  {
+                    "key_code": "s"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "k held + d tapped = 'kd' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "right_middle_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "right_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "d",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "k"
+                  },
+                  {
+                    "key_code": "d"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "k held + f tapped = 'kf' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "right_middle_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "right_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "f",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "k"
+                  },
+                  {
+                    "key_code": "f"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "l held + a tapped = 'la' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "right_ring_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "right_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "a",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "l"
+                  },
+                  {
+                    "key_code": "a"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "l held + s tapped = 'ls' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "right_ring_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "right_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "s",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "l"
+                  },
+                  {
+                    "key_code": "s"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "l held + d tapped = 'ld' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "right_ring_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "right_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "d",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "l"
+                  },
+                  {
+                    "key_code": "d"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "l held + f tapped = 'lf' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "right_ring_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "right_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "f",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "l"
+                  },
+                  {
+                    "key_code": "f"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "; held + a tapped = ';a' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "right_pinky_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "right_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "a",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "semicolon"
+                  },
+                  {
+                    "key_code": "a"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "; held + s tapped = ';s' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "right_pinky_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "right_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "s",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "semicolon"
+                  },
+                  {
+                    "key_code": "s"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "; held + d tapped = ';d' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "right_pinky_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "right_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "d",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "semicolon"
+                  },
+                  {
+                    "key_code": "d"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "; held + f tapped = ';f' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "right_pinky_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "right_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "f",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "semicolon"
+                  },
+                  {
+                    "key_code": "f"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "a held + j tapped = 'aj' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "left_pinky_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "left_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "j",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "a"
+                  },
+                  {
+                    "key_code": "j"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "a held + k tapped = 'ak' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "left_pinky_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "left_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "k",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "a"
+                  },
+                  {
+                    "key_code": "k"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "a held + l tapped = 'al' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "left_pinky_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "left_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "l",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "a"
+                  },
+                  {
+                    "key_code": "l"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "a held + ; tapped = 'a;' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "left_pinky_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "left_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "semicolon",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "a"
+                  },
+                  {
+                    "key_code": "semicolon"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "s held + j tapped = 'sj' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "left_ring_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "left_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "j",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "s"
+                  },
+                  {
+                    "key_code": "j"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "s held + k tapped = 'sk' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "left_ring_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "left_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "k",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "s"
+                  },
+                  {
+                    "key_code": "k"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "s held + l tapped = 'sl' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "left_ring_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "left_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "l",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "s"
+                  },
+                  {
+                    "key_code": "l"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "s held + ; tapped = 's;' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "left_ring_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "left_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "semicolon",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "s"
+                  },
+                  {
+                    "key_code": "semicolon"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "d held + j tapped = 'dj' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "left_middle_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "left_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "j",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "d"
+                  },
+                  {
+                    "key_code": "j"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "d held + k tapped = 'dk' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "left_middle_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "left_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "k",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "d"
+                  },
+                  {
+                    "key_code": "k"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "d held + l tapped = 'dl' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "left_middle_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "left_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "l",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "d"
+                  },
+                  {
+                    "key_code": "l"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "d held + ; tapped = 'd;' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "left_middle_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "left_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "semicolon",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "d"
+                  },
+                  {
+                    "key_code": "semicolon"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "f held + j tapped = 'fj' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "left_index_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "left_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "j",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "f"
+                  },
+                  {
+                    "key_code": "j"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "f held + k tapped = 'fk' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "left_index_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "left_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "k",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "f"
+                  },
+                  {
+                    "key_code": "k"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "f held + l tapped = 'fl' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "left_index_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "left_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "l",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "f"
+                  },
+                  {
+                    "key_code": "l"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "f held + ; tapped = 'f;' (cross-hand)",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "left_index_held",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_unless",
+                    "name": "left_mod_active",
+                    "value": 1
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
+                  }
+                ],
+                "from": {
+                  "key_code": "semicolon",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "last_keypress_time",
+                      "expression": "system.now.milliseconds"
+                    }
+                  },
+                  {
+                    "key_code": "f"
+                  },
+                  {
+                    "key_code": "semicolon"
+                  }
+                ],
+                "type": "basic"
+              },
               {
                 "description": "a held + s tapped = 'as'",
                 "conditions": [

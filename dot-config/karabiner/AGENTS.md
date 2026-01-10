@@ -61,11 +61,12 @@ Rules in this array skip the `device_if` condition and work on any keyboard.
 
 ## Anti-Misfire Protection
 
-The config includes 4 layers of protection:
-1. **Bilateral cancellation** — same-hand combos produce letters
-2. **Crossover timing** — enforces proper cross-hand timing
-3. **Typing streak detection** — disables mods during fast typing
-4. **Typing mode toggle** — manual mod disable via Caps+T
+The config includes 5 layers of protection:
+1. **Common word sequences** — `from.simultaneous` rules for rapid cross-hand patterns (e.g., "the")
+2. **Bilateral cancellation** — same-hand combos produce letters
+3. **Crossover timing** — enforces proper cross-hand timing
+4. **Typing streak detection** — disables mods during fast typing
+5. **Typing mode toggle** — manual mod disable via Caps+T
 
 ## Adding Rules
 
