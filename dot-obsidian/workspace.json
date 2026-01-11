@@ -4,36 +4,22 @@
     "type": "split",
     "children": [
       {
-        "id": "757ec7de00fca5f9",
+        "id": "4509724f8bf84da7",
         "type": "tabs",
         "children": [
           {
-            "id": "864537015ae1418d",
+            "id": "e7a7b303c61786dc",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "release-notes",
               "state": {
-                "file": "4-Archive/Career-be-good-at-work.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": false
+                "currentVersion": "1.11.4"
               },
-              "icon": "lucide-file",
-              "title": "Career-be-good-at-work"
-            }
-          },
-          {
-            "id": "5f3be9dcbbbf75d6",
-            "type": "leaf",
-            "state": {
-              "type": "empty",
-              "state": {},
-              "icon": "lucide-file",
-              "title": "New tab"
+              "icon": "lucide-book-up",
+              "title": "Release Notes 1.11.4"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -220,7 +206,7 @@
       "obsidian-book-search-plugin:Create new book note": true
     }
   },
-  "active": "5f3be9dcbbbf75d6",
+  "active": "e7a7b303c61786dc",
   "lastOpenFiles": [
     "4-Archive/Career-be-good-at-work.md",
     "4-Archive/Work-Softcom-vehicle-ticket-1.md",

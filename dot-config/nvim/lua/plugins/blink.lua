@@ -12,17 +12,17 @@ return {
       nerd_font_variant = "mono",
     },
     completion = { documentation = { auto_show = false } },
-    providers = {
-      codecompanion = {
-        name = "CodeCompanion",
-        module = "codecompanion.providers.completion.blink",
-        enabled = true,
-      },
-    },
     sources = {
       default = { "lsp", "path", "snippets", "buffer" },
       per_filetype = {
         codecompanion = { "codecompanion", "buffer" },
+      },
+      providers = {
+        codecompanion = {
+          name = "CodeCompanion",
+          module = "codecompanion.providers.completion.blink",
+          enabled = true,
+        },
       },
     },
 
