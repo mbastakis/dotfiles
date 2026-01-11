@@ -12,6 +12,7 @@ macOS development environment using Nix Darwin and GNU Stow. All configs symlink
 | `dot-obsidian/`       | Obsidian plugins, themes, snippets                   | `~/.obsidian/` |
 | `dot-warp/`           | Warp terminal workflows                              | `~/.warp/`     |
 | `dot-bin/`            | User scripts                                         | `~/.bin/`      |
+| `dot-launchagents/`   | macOS LaunchAgent configs (NOT symlinked)            | -              |
 | `bin/`                | Installation scripts (NOT symlinked)                 | -              |
 | `code-portable-data/` | Portable VS Code config                              | -              |
 
@@ -43,7 +44,7 @@ nvim -c ':checkhealth' -c ':qa'            # Full health check
 
 | Script                           | Purpose                                                          |
 | -------------------------------- | ---------------------------------------------------------------- |
-| `./setup.sh`                     | Full setup (Homebrew, Stow, Nix, Yazi plugins, keyboard layouts) |
+| `./setup.sh`                     | Full setup (Homebrew, Stow, Nix, Yazi plugins, keyboard layouts, LaunchAgents) |
 | `bin/install_nix.sh`             | Install Nix and apply darwin flake                               |
 | `bin/install_code_extensions.sh` | Package and install VS Code extensions                           |
 | `dot-bin/nix-add`                | Add brew/cask packages to flake.nix                              |
@@ -188,3 +189,4 @@ mauve    = "#cba6f7"    peach    = "#fab387"
 - **Git config**: Uses conditional includes for work/personal based on repo path
 - **Local overrides**: Put machine-specific config in `dot-zsh/local.zsh` (gitignored)
 - **API keys**: Store in `dot-zsh/local.zsh`, never commit secrets
+- **LaunchAgents**: Configured in `dot-launchagents/` and installed via `setup.sh` (not symlinked). Use service aliases to manage: `oc-start`, `oc-stop`, `oc-restart`, `oc-status`, `oc-logs`

@@ -72,7 +72,50 @@ else
   log_warning "ya (Yazi CLI) not found, skipping plugin installation"
 fi
 
-# 6. Install custom keyboard layouts
+# 6. Install LaunchAgents
+LAUNCHAGENTS_SRC="$SCRIPT_DIR/dot-launchagents"
+LAUNCHAGENTS_DST="$HOME/Library/LaunchAgents"
+
+if [[ -d "$LAUNCHAGENTS_SRC" ]]; then
+  mkdir -p "$LAUNCHAGENTS_DST"
+  mkdir -p "$HOME/.local/share/opencode"  # For logs
+  for plist in "$LAUNCHAGENTS_SRC"/*.plist; do
+    if [[ -f "$plist" ]]; then
+      plist_name="$(basename "$plist")"
+      dst_file="$LAUNCHAGENTS_DST/$plist_name"
+      label="${plist_name%.plist}"
+
+      # Substitute __HOME__ placeholder with actual home directory
+      tmp_plist=$(mktemp)
+      sed "s|__HOME__|$HOME|g" "$plist" > "$tmp_plist"
+
+      # Check if plist changed
+      if [[ ! -f "$dst_file" ]] || ! cmp -s "$tmp_plist" "$dst_file"; then
+        # Unload existing agent (idempotent - ignore errors if not loaded)
+        launchctl bootout "gui/$(id -u)/$label" 2>/dev/null || true
+
+        # Install and load new agent
+        cp "$tmp_plist" "$dst_file"
+        launchctl bootstrap "gui/$(id -u)" "$dst_file"
+        log_info "Installed and loaded LaunchAgent: $plist_name"
+      else
+        # Ensure agent is loaded even if file unchanged
+        if ! launchctl list | grep -q "$label"; then
+          launchctl bootstrap "gui/$(id -u)" "$dst_file"
+          log_info "Loaded LaunchAgent: $plist_name"
+        else
+          log_info "LaunchAgent up to date: $plist_name"
+        fi
+      fi
+
+      rm -f "$tmp_plist"
+    fi
+  done
+else
+  log_info "No LaunchAgents to install"
+fi
+
+# 7. Install custom keyboard layouts
 KEYBOARD_LAYOUTS_SRC="$SCRIPT_DIR/dot-config/keyboard-layouts"
 KEYBOARD_LAYOUTS_DST="$HOME/Library/Keyboard Layouts"
 

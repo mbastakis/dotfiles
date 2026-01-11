@@ -41,6 +41,11 @@ alias keytest="cat -v"
 # Opencode
 alias oc="opencode"
 alias ocr="opencode -m amazon-bedrock/anthropic.claude-haiku-4-5-20251001-v1:0 run"
+alias oc-restart="launchctl bootout \"gui/$(id -u)/ai.opencode.serve\" 2>/dev/null; launchctl bootstrap \"gui/$(id -u)\" ~/Library/LaunchAgents/ai.opencode.serve.plist && echo 'OpenCode server restarted' && sleep 1 && (tail -20 ~/.local/share/opencode/serve.log 2>/dev/null | grep -E 'listening|error|Error' || echo 'Waiting for logs...')"
+alias oc-stop="launchctl bootout \"gui/$(id -u)/ai.opencode.serve\" 2>/dev/null && echo 'OpenCode server stopped' || echo 'OpenCode server was not running'"
+alias oc-start="launchctl bootstrap \"gui/$(id -u)\" ~/Library/LaunchAgents/ai.opencode.serve.plist 2>/dev/null && echo 'OpenCode server started' && sleep 1 && (tail -20 ~/.local/share/opencode/serve.log 2>/dev/null | grep -E 'listening|error|Error' || echo 'Waiting for logs...') || echo 'OpenCode server already running'"
+alias oc-status="launchctl list | grep ai.opencode.serve || echo 'OpenCode server not running'"
+alias oc-logs="tail -f ~/.local/share/opencode/serve.log"
 
 # Ghostty
 alias ghostty-settings="nvim ~/.config/ghostty/config"
