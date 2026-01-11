@@ -134,6 +134,104 @@
     }
   },
   "agent": {
+    "explore": {
+      "description": "Fast codebase search specialist. Answers 'Where is X?', 'Find the code that does Y'. Fire multiple in parallel for broad searches.",
+      "mode": "subagent",
+      "model": "amazon-bedrock/anthropic.claude-haiku-4-5-20251001-v1:0",
+      "temperature": 0.1,
+      "prompt": "{file:./agent/explore.md}",
+      // Read-only agent - no file modifications
+      "tools": {
+        "write": false,
+        "patch": false,
+        "task": false
+      },
+      "permission": {
+        "bash": {
+          // Default: deny everything else (MUST be first - last matching rule wins!)
+          "*": "deny",
+          // Git read-only commands
+          "git log*": "allow",
+          "git blame*": "allow",
+          "git show*": "allow",
+          "git diff*": "allow",
+          // Search tools
+          "grep*": "allow",
+          "find*": "allow"
+        },
+        "edit": "deny",
+        "webfetch": "deny",
+        "skill": "deny",
+        "external_directory": "deny"
+      }
+    },
+    "oracle": {
+      "description": "Strategic technical advisor for architecture decisions, code review, and complex debugging. Call when stuck or making significant design choices.",
+      "mode": "subagent",
+      "model": "amazon-bedrock/anthropic.claude-opus-4-5-20251101-v1:0",
+      "temperature": 0.3,
+      "prompt": "{file:./agent/oracle.md}",
+      // Advisory agent - no file modifications, deep analysis
+      "tools": {
+        "write": false,
+        "patch": false,
+        "task": false
+      },
+      "permission": {
+        "bash": {
+          // Default: deny everything else (MUST be first - last matching rule wins!)
+          "*": "deny",
+          // Git read-only for context
+          "git log*": "allow",
+          "git blame*": "allow",
+          "git show*": "allow",
+          "git diff*": "allow"
+        },
+        "edit": "deny",
+        "webfetch": "allow",
+        "skill": "deny",
+        "external_directory": "deny"
+      }
+    },
+    "librarian": {
+      "description": "Research source code, GitHub issues/PRs, and library internals. Use for 'How does [package] implement X?', debugging external dependencies, finding bug reports. Returns evidence with GitHub permalinks.",
+      "mode": "subagent",
+      "model": "opencode/glm-4.7-free",
+      "temperature": 0.1,
+      "prompt": "{file:./agent/librarian.md}",
+      // Research agent - no local file modifications
+      "tools": {
+        "write": false,
+        "patch": false
+      },
+      "permission": {
+        "bash": {
+          // Default: deny everything else (MUST be first - last matching rule wins!)
+          "*": "deny",
+          // GitHub CLI - primary research tool
+          "gh*": "allow",
+          // Git for cloned repos
+          "git clone*": "allow",
+          "git log*": "allow",
+          "git blame*": "allow",
+          "git rev-parse*": "allow",
+          // Safe read-only commands
+          "cat*": "allow",
+          "head*": "allow",
+          "tail*": "allow",
+          "ls*": "allow",
+          "grep*": "allow",
+          "find*": "allow",
+          // Temp directory operations
+          "cd /tmp*": "allow",
+          "mkdir*": "allow"
+        },
+        "skill": "allow",
+        "webfetch": "allow",
+        "edit": "deny",
+        "external_directory": "allow"
+      }
+    },
     "commit": {
       "description": "Git commit agent with pre-approved git commands",
       "mode": "subagent",
@@ -181,6 +279,8 @@
         // Security: explicit denylist for dangerous commands
         // Due to bug #6676, flags are stripped so "rm" matches "rm -rf ..."
         "bash": {
+          // Default: ask for anything else (MUST be first - last matching rule wins!)
+          "*": "ask",
           // Filesystem destruction - deny
           "rm*": "deny",
           "rmdir*": "deny",
@@ -217,9 +317,7 @@
           "du*": "allow",
           "head*": "allow",
           "tail*": "allow",
-          "wc*": "allow",
-          // Default - ask for anything else
-          "*": "ask"
+          "wc*": "allow"
         },
         "skill": "allow",
         "webfetch": "allow",
@@ -228,23 +326,23 @@
       }
     },
     "web-researcher": {
-      "description": "Research topics on the web and synthesize findings. Use this agent to answer questions, find information, compare technologies, or gather knowledge from web sources.",
+      "description": "Research web content: documentation, tutorials, best practices, comparisons. Use for conceptual questions, 'how do I do X?', technology comparisons. Does NOT look at source code - use @librarian for that.",
       "mode": "subagent",
+      "model": "opencode/glm-4.7-free",
       "temperature": 0.5,
       "prompt": "{file:./agent/web-researcher.md}",
       // v1.1.1: 'tools' is deprecated, use 'permission' for permissionable tools
       // Non-permissionable tools (read, glob, grep) are enabled by default
       "tools": {
         "write": false,
-        "edit": false,
         "patch": false,
         "glob": false,
-        "grep": false,
+        "grep": false
       },
       "permission": {
         "bash": {
-          // GitHub CLI - primary research tool
-          "gh*": "allow",
+          // Default: deny everything else (MUST be first - last matching rule wins!)
+          "*": "deny",
           // crawl4ai for adaptive crawling
           "uvx*": "allow",
           "python*": "allow",
@@ -257,9 +355,7 @@
           "grep*": "allow",
           "sort*": "allow",
           "uniq*": "allow",
-          "wc*": "allow",
-          // Deny everything else
-          "*": "deny"
+          "wc*": "allow"
         },
         "skill": "allow",
         "webfetch": "allow",

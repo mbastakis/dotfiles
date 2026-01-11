@@ -66,8 +66,97 @@ Agent instructions in markdown...
 
 **Current agents**:
 - `commit.md` — Git commit agent (configured in opencode.jsonc)
-- `web-researcher.md` — Search the web and synthesize findings
-- `web-crawler.md` — Crawl websites and persist to ai-docs (configured in opencode.jsonc)
+- `explore.md` — Fast **local codebase** search, returns structured file locations (Haiku 4.5)
+- `oracle.md` — Strategic advisor for architecture/debugging decisions (Opus 4.5)
+- `librarian.md` — Research **source code**: GitHub repos, issues/PRs, library internals via `gh` CLI (GLM 4.7 Free)
+- `web-researcher.md` — **Web search**: DuckDuckGo + webfetch for docs, tutorials, best practices. No GitHub access — use to discover URLs (GLM 4.7 Free)
+- `web-crawler.md` — **Persist** web content to ai-docs/ files (Haiku 4.5)
+
+### Agent Relationships
+
+```
+                    ┌─────────────────┐
+                    │  Main Assistant │
+                    └────────┬────────┘
+                             │
+        ┌────────────────────┼────────────────────┐
+        │                    │                    │
+        ▼                    ▼                    ▼
+┌───────────────┐   ┌───────────────┐   ┌───────────────┐
+│   @explore    │   │  @librarian   │   │   @oracle     │
+│ (local code)  │   │ (GitHub/code) │   │ (strategy)    │
+└───────────────┘   └───────┬───────┘   └───────────────┘
+                            │
+                            │ delegates for URL discovery
+                            ▼
+                   ┌───────────────┐
+                   │@web-researcher│
+                   │ (DuckDuckGo)  │
+                   └───────┬───────┘
+                           │
+                           │ can use for JS-heavy sites
+                           ▼
+                   ┌───────────────┐
+                   │ @web-crawler  │
+                   │ (persist to   │
+                   │  ai-docs/)    │
+                   └───────────────┘
+```
+
+### When to Use Each Agent
+
+| Agent | Trigger | Tools | Output |
+|-------|---------|-------|--------|
+| `@explore` | "Where is X?", "Find files for Y" | Read-only local tools | File paths + line numbers |
+| `@librarian` | "How does [lib] implement X?", "GitHub issues for Y" | `gh` CLI, git clone, webfetch | Permalinks + code snippets |
+| `@web-researcher` | "Best practices for X", "Compare A vs B", "Find URLs about Y" | DuckDuckGo, webfetch, crawl4ai | URLs + synthesized findings |
+| `@web-crawler` | "Save docs for X to ai-docs/" | crawl4ai, write | Persisted markdown files |
+| `@oracle` | Architecture decisions, 2+ failed attempts | Read-only, webfetch | Strategic recommendations |
+
+### Librarian vs Web-Researcher
+
+| Question Type | Use Agent | Why |
+|---------------|-----------|-----|
+| "How does React implement hooks?" | `@librarian` | Needs source code, GitHub permalinks |
+| "Best practices for React hooks" | `@web-researcher` | Needs docs, articles, tutorials |
+| "Why does [library] throw error X?" | `@librarian` | Search GitHub issues/PRs |
+| "What does error X mean?" | `@web-researcher` | General explanation from docs |
+| "Find examples of X in open source" | `@librarian` | Clone repos, search code |
+| "Compare library A vs B" | `@web-researcher` | Articles, benchmarks, opinions |
+| "Find documentation URLs for X" | `@web-researcher` | DuckDuckGo search for discovery |
+
+**Note**: `@librarian` can delegate to `@web-researcher` when it needs to discover URLs about a topic before investigating them with `gh` CLI.
+
+### crawl4ai Skill (Available to All Agents)
+
+All agents can use the `crawl4ai` skill for JavaScript-heavy sites or structured extraction. Load with:
+```
+skill({ name: "crawl4ai" })
+```
+
+## Request Classification
+
+Before taking action on a user request, classify it to determine the appropriate approach:
+
+| Type | Signal | Action |
+|------|--------|--------|
+| **Trivial** | Single file, known location, direct answer | Direct tools only |
+| **Explicit** | Specific file/line, clear command | Execute directly |
+| **Exploratory** | "How does X work?", "Find Y" | Fire `@explore` (1-3 agents) + tools in parallel |
+| **Open-ended** | "Improve", "Refactor", "Add feature" | Assess codebase first, then plan |
+| **External** | Library questions, "how does [package] work?" | Delegate to `@librarian` |
+| **Strategic** | Architecture decisions, 2+ failed attempts | Consult `@oracle` |
+| **Ambiguous** | Unclear scope, multiple interpretations | Ask ONE clarifying question |
+
+### Agent Delegation Triggers
+
+| Pattern | Action |
+|---------|--------|
+| 2+ modules/directories involved | Fire `@explore` in background |
+| External library/API mentioned | Fire `@librarian` in background |
+| After completing significant implementation | Consult `@oracle` for review |
+| After 2+ failed fix attempts | Consult `@oracle` for debugging strategy |
+| "Where is X?" questions | Use `@explore` for fast search |
 
 ## Skills
 

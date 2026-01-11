@@ -32,20 +32,35 @@ Then wait for the user's research query.
 
 ## Steps to follow after receiving the research query
 
-1. **Read any directly mentioned files first:**
+1. **Intent Analysis (REQUIRED FIRST)**
+
+   Before ANY search or action, wrap your analysis in `<analysis>` tags:
+
+   ```
+   <analysis>
+   **Literal Request**: [What they literally asked]
+   **Actual Need**: [What they're really trying to accomplish]
+   **Success Looks Like**: [What result would let them proceed immediately]
+   **Request Type**: [Trivial | Explicit | Exploratory | Open-ended | External | Ambiguous]
+   </analysis>
+   ```
+
+   This prevents answering the wrong question. Address their **actual need**, not just the literal request.
+
+2. **Read any directly mentioned files first:**
    - If the user mentions specific files (tickets, docs, JSON), read them FULLY first
    - **IMPORTANT**: Use the Read tool WITHOUT limit/offset parameters to read entire files
    - **CRITICAL**: Read these files yourself in the main context before spawning any sub-tasks
    - This ensures you have full context before decomposing the research
 
-2. **Analyze and decompose the research question:**
+3. **Analyze and decompose the research question:**
    - Break down the user's query into composable research areas
    - Take time to think deeply about the underlying patterns, connections, and architectural implications
    - Identify specific components, patterns, or concepts to investigate
    - Create a research plan using TodoWrite to track all subtasks
    - Consider which directories, files, or architectural patterns are relevant
 
-3. **Spawn parallel sub-agent tasks for comprehensive research:**
+4. **Spawn parallel sub-agent tasks for comprehensive research:**
    - Create multiple Task agents (with explore subagent_type) to research different aspects concurrently
    - Each task should focus on a specific aspect of the research question
 
@@ -63,7 +78,7 @@ Then wait for the user's research query.
    - Don't write detailed prompts about HOW to search - the agents already know
    - Remind agents they are documenting, not evaluating or improving
 
-4. **Wait for all sub-agents to complete and synthesize findings:**
+5. **Wait for all sub-agents to complete and synthesize findings:**
    - IMPORTANT: Wait for ALL sub-agent tasks to complete before proceeding
    - Compile all sub-agent results
    - Connect findings across different components
@@ -71,7 +86,7 @@ Then wait for the user's research query.
    - Highlight patterns, connections, and architectural decisions
    - Answer the user's specific questions with concrete evidence
 
-5. **Generate research summary:**
+6. **Generate research summary:**
    Structure your findings as follows:
 
    ```markdown
@@ -111,12 +126,12 @@ Then wait for the user's research query.
    [Any areas that need further investigation]
    ```
 
-6. **Present findings and handle follow-up:**
+7. **Present findings and handle follow-up:**
    - Present a concise summary of findings to the user
    - Include key file references for easy navigation
    - Ask if they have follow-up questions or need clarification
 
-7. **Handle follow-up questions:**
+8. **Handle follow-up questions:**
    - If the user has follow-up questions, spawn new sub-agents as needed
    - Add to your findings with a new section: `## Follow-up Research`
    - Continue investigating and documenting
