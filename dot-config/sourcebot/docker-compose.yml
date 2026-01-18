@@ -17,7 +17,7 @@ services:
       - ./config.json:/data/config.json:ro
       - sourcebot_data:/data
       # Mount local repos directory
-      - ${SOURCEBOT_REPOS_PATH:-~/dev}:/repos:ro
+      - ${SOURCEBOT_REPOS_PATH:-${HOME}/dev}:/repos:ro
     env_file:
       - .env
     environment:
