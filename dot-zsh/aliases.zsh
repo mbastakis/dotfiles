@@ -39,7 +39,7 @@ alias obs="obsidian-cli"
 alias keytest="cat -v"
 
 # Opencode
-alias oc="opencode"
+alias oc="OPENCODE_EXPERIMENTAL_PLAN_MODE=1 opencode"
 alias ocr="opencode -m amazon-bedrock/anthropic.claude-haiku-4-5-20251001-v1:0 run"
 alias oc-restart="launchctl bootout \"gui/$(id -u)/ai.opencode.serve\" 2>/dev/null; launchctl bootstrap \"gui/$(id -u)\" ~/Library/LaunchAgents/ai.opencode.serve.plist && echo 'OpenCode server restarted' && sleep 1 && (tail -20 ~/.local/share/opencode/serve.log 2>/dev/null | grep -E 'listening|error|Error' || echo 'Waiting for logs...')"
 alias oc-stop="launchctl bootout \"gui/$(id -u)/ai.opencode.serve\" 2>/dev/null && echo 'OpenCode server stopped' || echo 'OpenCode server was not running'"
@@ -49,6 +49,14 @@ alias oc-logs="tail -f ~/.local/share/opencode/serve.log"
 
 # Ghostty
 alias ghostty-settings="nvim ~/.config/ghostty/config"
+
+# Sourcebot (local code search)
+alias sb-up="docker-compose -f ~/.config/sourcebot/docker-compose.yml up -d"
+alias sb-down="docker-compose -f ~/.config/sourcebot/docker-compose.yml down"
+alias sb-logs="docker-compose -f ~/.config/sourcebot/docker-compose.yml logs -f sourcebot"
+alias sb-restart="docker-compose -f ~/.config/sourcebot/docker-compose.yml restart sourcebot"
+alias sb-status="docker-compose -f ~/.config/sourcebot/docker-compose.yml ps"
+alias sb-open="open http://localhost:3000"
 
 # Temporary Commands
 

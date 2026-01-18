@@ -22,6 +22,7 @@ return {
 
         -- JSON/YAML/Markdown (prettier handles these well)
         json = { "prettierd", "prettier", stop_after_first = true },
+        jsonc = { "prettierd", "prettier", stop_after_first = true },
         yaml = { "prettierd", "prettier", stop_after_first = true },
         ["yaml.docker-compose"] = { "prettierd", "prettier", stop_after_first = true },
         ["yaml.gitlab"] = { "prettierd", "prettier", stop_after_first = true },

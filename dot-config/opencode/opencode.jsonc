@@ -8,12 +8,20 @@
     "amazon-bedrock": {
       "models": {
         "anthropic.claude-opus-4-5-20251101-v1:0": {
-          "name": "Claude Opus 4.5 (Bedrock)"
-        }
-      }
-    }
+          "name": "Claude Opus 4.5 (Bedrock)",
+        },
+      },
+    },
   },
   "mcp": {
+    // "sourcebot": {
+    //   "type": "local",
+    //   "command": ["npx", "-y", "@sourcebot/mcp@latest"],
+    //   "environment": {
+    //     "SOURCEBOT_HOST": "http://localhost:3000",
+    //     "SOURCEBOT_API_KEY": "${SOURCEBOT_API_KEY}"
+    //   }
+    // }
     // "snap-happy": {
     //   "type": "local",
     //   "command": [
@@ -130,40 +138,12 @@
       "rm*": "ask",
       "mv*": "ask",
       "cp*": "ask",
-      "chmod*": "ask"
-    }
+      "chmod*": "ask",
+    },
   },
   "agent": {
     "explore": {
-      "description": "Fast codebase search specialist. Answers 'Where is X?', 'Find the code that does Y'. Fire multiple in parallel for broad searches.",
-      "mode": "subagent",
-      "model": "amazon-bedrock/anthropic.claude-haiku-4-5-20251001-v1:0",
-      "temperature": 0.1,
-      "prompt": "{file:./agent/explore.md}",
-      // Read-only agent - no file modifications
-      "tools": {
-        "write": false,
-        "patch": false,
-        "task": false
-      },
-      "permission": {
-        "bash": {
-          // Default: deny everything else (MUST be first - last matching rule wins!)
-          "*": "deny",
-          // Git read-only commands
-          "git log*": "allow",
-          "git blame*": "allow",
-          "git show*": "allow",
-          "git diff*": "allow",
-          // Search tools
-          "grep*": "allow",
-          "find*": "allow"
-        },
-        "edit": "deny",
-        "webfetch": "deny",
-        "skill": "deny",
-        "external_directory": "deny"
-      }
+      "model": "amazon-bedrock/anthropic.claude-opus-4-5-20251101-v1:0",
     },
     "oracle": {
       "description": "Strategic technical advisor for architecture decisions, code review, and complex debugging. Call when stuck or making significant design choices.",
@@ -175,7 +155,7 @@
       "tools": {
         "write": false,
         "patch": false,
-        "task": false
+        "task": false,
       },
       "permission": {
         "bash": {
@@ -185,24 +165,24 @@
           "git log*": "allow",
           "git blame*": "allow",
           "git show*": "allow",
-          "git diff*": "allow"
+          "git diff*": "allow",
         },
         "edit": "deny",
         "webfetch": "allow",
         "skill": "deny",
-        "external_directory": "deny"
-      }
+        "external_directory": "deny",
+      },
     },
     "librarian": {
       "description": "Research source code, GitHub issues/PRs, and library internals. Use for 'How does [package] implement X?', debugging external dependencies, finding bug reports. Returns evidence with GitHub permalinks.",
       "mode": "subagent",
-      "model": "opencode/glm-4.7-free",
+      "model": "amazon-bedrock/anthropic.claude-haiku-4-5-20251001-v1:0",
       "temperature": 0.1,
       "prompt": "{file:./agent/librarian.md}",
       // Research agent - no local file modifications
       "tools": {
         "write": false,
-        "patch": false
+        "patch": false,
       },
       "permission": {
         "bash": {
@@ -224,13 +204,13 @@
           "find*": "allow",
           // Temp directory operations
           "cd /tmp*": "allow",
-          "mkdir*": "allow"
+          "mkdir*": "allow",
         },
         "skill": "allow",
         "webfetch": "allow",
         "edit": "deny",
-        "external_directory": "allow"
-      }
+        "external_directory": "allow",
+      },
     },
     "commit": {
       "description": "Git commit agent with pre-approved git commands",
@@ -259,8 +239,8 @@
         "edit": "deny",
         "webfetch": "deny",
         "skill": "deny",
-        "external_directory": "deny"
-      }
+        "external_directory": "deny",
+      },
     },
     "web-crawler": {
       "description": "Crawl websites and extract content to ai-docs",
@@ -317,18 +297,18 @@
           "du*": "allow",
           "head*": "allow",
           "tail*": "allow",
-          "wc*": "allow"
+          "wc*": "allow",
         },
         "skill": "allow",
         "webfetch": "allow",
         "edit": "deny",
-        "external_directory": "deny"
-      }
+        "external_directory": "deny",
+      },
     },
     "web-researcher": {
       "description": "Research web content: documentation, tutorials, best practices, comparisons. Use for conceptual questions, 'how do I do X?', technology comparisons. Does NOT look at source code - use @librarian for that.",
       "mode": "subagent",
-      "model": "opencode/glm-4.7-free",
+      "model": "amazon-bedrock/anthropic.claude-haiku-4-5-20251001-v1:0",
       "temperature": 0.5,
       "prompt": "{file:./agent/web-researcher.md}",
       // v1.1.1: 'tools' is deprecated, use 'permission' for permissionable tools
@@ -337,7 +317,7 @@
         "write": false,
         "patch": false,
         "glob": false,
-        "grep": false
+        "grep": false,
       },
       "permission": {
         "bash": {
@@ -355,14 +335,14 @@
           "grep*": "allow",
           "sort*": "allow",
           "uniq*": "allow",
-          "wc*": "allow"
+          "wc*": "allow",
         },
         "skill": "allow",
         "webfetch": "allow",
         "edit": "deny",
-        "external_directory": "deny"
-      }
-    }
+        "external_directory": "deny",
+      },
+    },
   },
-  "instructions": []
+  "instructions": [],
 }

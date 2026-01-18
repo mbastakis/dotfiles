@@ -50,3 +50,5 @@ features = catppuccin-mocha
 [merge]
   tool = nvim
   conflictstyle = zdiff3
+[url "https://oauth2:@gitlab.devops.telekom.de"]
+	insteadOf = https://gitlab.devops.telekom.de

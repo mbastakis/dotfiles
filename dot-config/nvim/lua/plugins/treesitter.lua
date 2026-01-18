@@ -9,6 +9,8 @@ return {
       "c",
       "diff",
       "html",
+      "json",
+      "jsonc",
       "lua",
       "luadoc",
       "markdown",

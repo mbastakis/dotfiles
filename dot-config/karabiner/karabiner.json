@@ -3155,7 +3155,7 @@
                 "conditions": [
                   {
                     "type": "expression_if",
-                    "expression": "last_keypress_time > system.now.milliseconds - 230"
+                    "expression": "last_keypress_time > system.now.milliseconds - 160"
                   },
                   {
                     "type": "variable_unless",
@@ -3263,7 +3263,7 @@
                 "parameters": {
                   "basic.to_if_alone_timeout_milliseconds": 0,
                   "basic.to_if_held_down_threshold_milliseconds": 0,
-                  "basic.to_delayed_action_delay_milliseconds": 200
+                  "basic.to_delayed_action_delay_milliseconds": 120
                 },
                 "type": "basic"
               },
@@ -3359,8 +3359,8 @@
                 },
                 "parameters": {
                   "basic.to_if_alone_timeout_milliseconds": 200,
-                  "basic.to_if_held_down_threshold_milliseconds": 270,
-                  "basic.to_delayed_action_delay_milliseconds": 270
+                  "basic.to_if_held_down_threshold_milliseconds": 200,
+                  "basic.to_delayed_action_delay_milliseconds": 200
                 },
                 "type": "basic"
               }
@@ -3374,7 +3374,7 @@
                 "conditions": [
                   {
                     "type": "expression_if",
-                    "expression": "last_keypress_time > system.now.milliseconds - 230"
+                    "expression": "last_keypress_time > system.now.milliseconds - 160"
                   },
                   {
                     "type": "variable_unless",
@@ -3482,7 +3482,7 @@
                 "parameters": {
                   "basic.to_if_alone_timeout_milliseconds": 0,
                   "basic.to_if_held_down_threshold_milliseconds": 0,
-                  "basic.to_delayed_action_delay_milliseconds": 200
+                  "basic.to_delayed_action_delay_milliseconds": 120
                 },
                 "type": "basic"
               },
@@ -3578,8 +3578,8 @@
                 },
                 "parameters": {
                   "basic.to_if_alone_timeout_milliseconds": 200,
-                  "basic.to_if_held_down_threshold_milliseconds": 250,
-                  "basic.to_delayed_action_delay_milliseconds": 250
+                  "basic.to_if_held_down_threshold_milliseconds": 200,
+                  "basic.to_delayed_action_delay_milliseconds": 200
                 },
                 "type": "basic"
               }
@@ -3593,7 +3593,7 @@
                 "conditions": [
                   {
                     "type": "expression_if",
-                    "expression": "last_keypress_time > system.now.milliseconds - 230"
+                    "expression": "last_keypress_time > system.now.milliseconds - 160"
                   },
                   {
                     "type": "variable_unless",
@@ -3701,7 +3701,7 @@
                 "parameters": {
                   "basic.to_if_alone_timeout_milliseconds": 0,
                   "basic.to_if_held_down_threshold_milliseconds": 0,
-                  "basic.to_delayed_action_delay_milliseconds": 200
+                  "basic.to_delayed_action_delay_milliseconds": 120
                 },
                 "type": "basic"
               },
@@ -3802,8 +3802,8 @@
                 },
                 "parameters": {
                   "basic.to_if_alone_timeout_milliseconds": 200,
-                  "basic.to_if_held_down_threshold_milliseconds": 230,
-                  "basic.to_delayed_action_delay_milliseconds": 230
+                  "basic.to_if_held_down_threshold_milliseconds": 200,
+                  "basic.to_delayed_action_delay_milliseconds": 200
                 },
                 "type": "basic"
               }
@@ -3817,7 +3817,7 @@
                 "conditions": [
                   {
                     "type": "expression_if",
-                    "expression": "last_keypress_time > system.now.milliseconds - 70"
+                    "expression": "last_keypress_time > system.now.milliseconds - 50"
                   },
                   {
                     "type": "variable_unless",
@@ -3924,7 +3924,7 @@
                 "parameters": {
                   "basic.to_if_alone_timeout_milliseconds": 0,
                   "basic.to_if_held_down_threshold_milliseconds": 0,
-                  "basic.to_delayed_action_delay_milliseconds": 150
+                  "basic.to_delayed_action_delay_milliseconds": 120
                 },
                 "type": "basic"
               },
@@ -4024,8 +4024,8 @@
                 },
                 "parameters": {
                   "basic.to_if_alone_timeout_milliseconds": 150,
-                  "basic.to_if_held_down_threshold_milliseconds": 150,
-                  "basic.to_delayed_action_delay_milliseconds": 150
+                  "basic.to_if_held_down_threshold_milliseconds": 130,
+                  "basic.to_delayed_action_delay_milliseconds": 130
                 },
                 "type": "basic"
               }
@@ -4039,7 +4039,7 @@
                 "conditions": [
                   {
                     "type": "expression_if",
-                    "expression": "last_keypress_time > system.now.milliseconds - 70"
+                    "expression": "last_keypress_time > system.now.milliseconds - 50"
                   },
                   {
                     "type": "variable_unless",
@@ -4146,7 +4146,7 @@
                 "parameters": {
                   "basic.to_if_alone_timeout_milliseconds": 0,
                   "basic.to_if_held_down_threshold_milliseconds": 0,
-                  "basic.to_delayed_action_delay_milliseconds": 150
+                  "basic.to_delayed_action_delay_milliseconds": 120
                 },
                 "type": "basic"
               },
@@ -4246,8 +4246,8 @@
                 },
                 "parameters": {
                   "basic.to_if_alone_timeout_milliseconds": 150,
-                  "basic.to_if_held_down_threshold_milliseconds": 150,
-                  "basic.to_delayed_action_delay_milliseconds": 150
+                  "basic.to_if_held_down_threshold_milliseconds": 130,
+                  "basic.to_delayed_action_delay_milliseconds": 130
                 },
                 "type": "basic"
               }
@@ -4261,7 +4261,7 @@
                 "conditions": [
                   {
                     "type": "expression_if",
-                    "expression": "last_keypress_time > system.now.milliseconds - 230"
+                    "expression": "last_keypress_time > system.now.milliseconds - 160"
                   },
                   {
                     "type": "variable_unless",
@@ -4369,7 +4369,7 @@
                 "parameters": {
                   "basic.to_if_alone_timeout_milliseconds": 0,
                   "basic.to_if_held_down_threshold_milliseconds": 0,
-                  "basic.to_delayed_action_delay_milliseconds": 200
+                  "basic.to_delayed_action_delay_milliseconds": 120
                 },
                 "type": "basic"
               },
@@ -4470,8 +4470,8 @@
                 },
                 "parameters": {
                   "basic.to_if_alone_timeout_milliseconds": 200,
-                  "basic.to_if_held_down_threshold_milliseconds": 230,
-                  "basic.to_delayed_action_delay_milliseconds": 230
+                  "basic.to_if_held_down_threshold_milliseconds": 200,
+                  "basic.to_delayed_action_delay_milliseconds": 200
                 },
                 "type": "basic"
               }
@@ -4485,7 +4485,7 @@
                 "conditions": [
                   {
                     "type": "expression_if",
-                    "expression": "last_keypress_time > system.now.milliseconds - 230"
+                    "expression": "last_keypress_time > system.now.milliseconds - 160"
                   },
                   {
                     "type": "variable_unless",
@@ -4593,7 +4593,7 @@
                 "parameters": {
                   "basic.to_if_alone_timeout_milliseconds": 0,
                   "basic.to_if_held_down_threshold_milliseconds": 0,
-                  "basic.to_delayed_action_delay_milliseconds": 200
+                  "basic.to_delayed_action_delay_milliseconds": 120
                 },
                 "type": "basic"
               },
@@ -4694,8 +4694,8 @@
                 },
                 "parameters": {
                   "basic.to_if_alone_timeout_milliseconds": 200,
-                  "basic.to_if_held_down_threshold_milliseconds": 250,
-                  "basic.to_delayed_action_delay_milliseconds": 250
+                  "basic.to_if_held_down_threshold_milliseconds": 200,
+                  "basic.to_delayed_action_delay_milliseconds": 200
                 },
                 "type": "basic"
               }
@@ -4709,7 +4709,7 @@
                 "conditions": [
                   {
                     "type": "expression_if",
-                    "expression": "last_keypress_time > system.now.milliseconds - 230"
+                    "expression": "last_keypress_time > system.now.milliseconds - 160"
                   },
                   {
                     "type": "variable_unless",
@@ -4817,7 +4817,7 @@
                 "parameters": {
                   "basic.to_if_alone_timeout_milliseconds": 0,
                   "basic.to_if_held_down_threshold_milliseconds": 0,
-                  "basic.to_delayed_action_delay_milliseconds": 200
+                  "basic.to_delayed_action_delay_milliseconds": 120
                 },
                 "type": "basic"
               },
@@ -4918,8 +4918,8 @@
                 },
                 "parameters": {
                   "basic.to_if_alone_timeout_milliseconds": 200,
-                  "basic.to_if_held_down_threshold_milliseconds": 270,
-                  "basic.to_delayed_action_delay_milliseconds": 270
+                  "basic.to_if_held_down_threshold_milliseconds": 200,
+                  "basic.to_delayed_action_delay_milliseconds": 200
                 },
                 "type": "basic"
               }

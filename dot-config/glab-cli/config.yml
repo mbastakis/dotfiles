@@ -25,4 +25,4 @@ hosts:
       - gitlab.devops.telekom.de
       - gitlab.devops.telekom.de:443
       - registry.gitlab.devops.telekom.de
-last_update_check_timestamp: "2025-12-18T14:34:51+02:00"
+last_update_check_timestamp: "2026-01-13T11:12:58+01:00"

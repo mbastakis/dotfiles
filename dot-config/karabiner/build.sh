@@ -19,15 +19,15 @@ ALL_DEVICES_RULES=("16-language-switch.json")
 # ============================================================================
 HRM_CONFIG=(
     # Left hand: a=ctrl, s=opt, d=cmd, f=shift
-    "a|left_control|pinky|left|230|270|200|200|0"
-    "s|left_option|ring|left|230|250|200|200|0"
-    "d|left_command|middle|left|230|230|200|200|1"
-    "f|left_shift|index|left|70|150|150|150|1"
+    "a|left_control|pinky|left|160|200|200|120|0"
+    "s|left_option|ring|left|160|200|200|120|0"
+    "d|left_command|middle|left|160|200|200|120|1"
+    "f|left_shift|index|left|50|130|150|120|1"
     # Right hand: j=shift, k=cmd, l=opt, ;=ctrl
-    "j|right_shift|index|right|70|150|150|150|1"
-    "k|right_command|middle|right|230|230|200|200|1"
-    "l|right_option|ring|right|230|250|200|200|1"
-    "semicolon|right_control|pinky|right|230|270|200|200|1"
+    "j|right_shift|index|right|50|130|150|120|1"
+    "k|right_command|middle|right|160|200|200|120|1"
+    "l|right_option|ring|right|160|200|200|120|1"
+    "semicolon|right_control|pinky|right|160|200|200|120|1"
 )
 
 # Device condition for built-in keyboard

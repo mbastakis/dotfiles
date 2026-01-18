@@ -31,3 +31,6 @@ dot-config/karabiner/automatic_backups/
 # Python
 __pycache__/
 *.pyc
+
+# Sourcebot secrets
+dot-config/sourcebot/.env

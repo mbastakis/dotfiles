@@ -1,0 +1,67 @@
+# Sourcebot - Local Code Search
+# All data stays local - no cloud upload
+#
+# Usage:
+#   sb-up       Start services
+#   sb-down     Stop services
+#   sb-logs     View logs
+#   sb-open     Open web UI (http://localhost:3000)
+
+services:
+  sourcebot:
+    image: ghcr.io/sourcebot-dev/sourcebot:latest
+    container_name: sourcebot
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./config.json:/data/config.json:ro
+      - sourcebot_data:/data
+      # Mount local repos directory
+      - ${SOURCEBOT_REPOS_PATH:-~/dev}:/repos:ro
+    env_file:
+      - .env
+    environment:
+      - CONFIG_PATH=/data/config.json
+      - AUTH_URL=http://localhost:3000
+      - SOURCEBOT_TELEMETRY_DISABLED=true
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/sourcebot
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: sourcebot-postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: sourcebot
+    volumes:
+      - sourcebot_postgres:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: sourcebot-redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - sourcebot_redis:/data
+    restart: unless-stopped
+
+volumes:
+  sourcebot_data:
+  sourcebot_postgres:
+  sourcebot_redis:

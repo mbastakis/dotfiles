@@ -1,0 +1,38 @@
+{
+    "$schema": "https://raw.githubusercontent.com/sourcebot-dev/sourcebot/main/schemas/v3/index.json",
+    "settings": {
+        "maxFileSize": 10485760,
+        "reindexIntervalMs": 3600000,
+        "resyncConnectionIntervalMs": 86400000,
+        "maxRepoIndexingJobConcurrency": 4
+    },
+    "connections": {
+        "github-personal": {
+            "type": "github",
+            "token": { "env": "GITHUB_TOKEN" },
+            "users": ["mbastakis"],
+            "exclude": {
+                "archived": true,
+                "forks": true
+            },
+            "revisions": {
+                "branches": ["main", "master"],
+                "tags": []
+            }
+        },
+        "gitlab-work": {
+            "type": "gitlab",
+            "url": "https://gitlab.devops.telekom.de",
+            "token": { "env": "GITLAB_TOKEN" },
+            "users": ["Michail.Bastakis"],
+            "exclude": {
+                "archived": true,
+                "forks": true
+            },
+            "revisions": {
+                "branches": ["main", "master", "develop"],
+                "tags": []
+            }
+        }
+    }
+}

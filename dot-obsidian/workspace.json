@@ -11,12 +11,10 @@
             "id": "e7a7b303c61786dc",
             "type": "leaf",
             "state": {
-              "type": "release-notes",
-              "state": {
-                "currentVersion": "1.11.4"
-              },
-              "icon": "lucide-book-up",
-              "title": "Release Notes 1.11.4"
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "New tab"
             }
           }
         ]
@@ -208,6 +206,7 @@
   },
   "active": "e7a7b303c61786dc",
   "lastOpenFiles": [
+    "0-Inbox/todo.md",
     "4-Archive/Career-be-good-at-work.md",
     "4-Archive/Work-Softcom-vehicle-ticket-1.md",
     "4-Archive/_Reports-extraction-tracking.md",
@@ -233,7 +232,6 @@
     "1-Projects/DT-AICC/download-dt-repos-task.md",
     "1-Projects/DT-AICC/container-image-scanning-evaluation.md",
     "1-Projects/DT-AICC/cloud-core-sre-meeting.md",
-    "1-Projects/DT-AICC/clco-1557-kyverno-cli.md",
     "2-Areas/Journal",
     "2-Areas/Work/DT-AICC",
     "2-Areas/Work",
