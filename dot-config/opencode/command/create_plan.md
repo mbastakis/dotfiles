@@ -1,6 +1,5 @@
 ---
 description: Create detailed implementation plans through interactive research and iteration
-model: amazon-bedrock/anthropic.claude-opus-4-5-20251101-v1:0
 ---
 
 # Implementation Plan

@@ -1,6 +1,5 @@
 ---
 description: Document codebase as-is through comprehensive parallel research
-model: amazon-bedrock/anthropic.claude-opus-4-5-20251101-v1:0
 ---
 
 # Research Codebase
