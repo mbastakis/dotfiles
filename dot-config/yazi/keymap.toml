@@ -84,6 +84,7 @@ keymap = [
 	{ on = "<C-s>",     run = "escape --search",             desc = "Cancel the ongoing search" },
 	{ on = "o",         run = "plugin fzf",                  desc = "Jump to a file/directory via fzf" },
 	{ on = "z",         run = "plugin zoxide",               desc = "Jump to a directory via zoxide" },
+	{ on = [ "g", "i" ], run = "plugin lazygit",             desc = "Run lazygit" },
 
 	# Linemode
 	{ on = [ "m", "s" ], run = "linemode size",        desc = "Linemode: size" },
