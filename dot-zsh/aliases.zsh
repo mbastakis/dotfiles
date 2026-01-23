@@ -38,6 +38,9 @@ alias obs="obsidian-cli"
 # Debug key sequences for zsh
 alias keytest="cat -v"
 
+# Kubernetes
+alias ctx="kubectx"
+
 # Opencode
 alias oc="OPENCODE_EXPERIMENTAL_PLAN_MODE=1 opencode"
 alias ocr="opencode -m amazon-bedrock/anthropic.claude-haiku-4-5-20251001-v1:0 run"
