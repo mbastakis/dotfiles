@@ -29,3 +29,14 @@ autocmd({ "BufRead", "BufNewFile" }, {
     end
   end,
 })
+
+-- Enable treesitter highlighting and indentation for all filetypes
+autocmd("FileType", {
+  desc = "Enable treesitter highlighting and indentation",
+  group = augroup("treesitter-features", { clear = true }),
+  callback = function()
+    if pcall(vim.treesitter.start) then
+      vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+    end
+  end,
+})

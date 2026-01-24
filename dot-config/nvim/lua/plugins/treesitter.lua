@@ -1,26 +1,45 @@
 return {
   "nvim-treesitter/nvim-treesitter",
+  branch = "main", -- New rewrite (requires Neovim 0.11+)
+  lazy = false,
   build = ":TSUpdate",
-  main = "nvim-treesitter.configs", -- Sets main module to use for opts
-  -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-  opts = {
-    ensure_installed = {
+  config = function()
+    require("nvim-treesitter").setup({
+      install_dir = vim.fn.stdpath("data") .. "/site",
+    })
+
+    -- Install parsers (async, no-op if already installed)
+    require("nvim-treesitter").install({
       "bash",
       "c",
+      "comment",
+      "css",
       "diff",
+      "dockerfile",
+      "go",
+      "gomod",
+      "gosum",
+      "hcl",
       "html",
+      "javascript",
       "json",
       "jsonc",
       "lua",
       "luadoc",
       "markdown",
       "markdown_inline",
+      "nix",
+      "python",
       "query",
+      "rust",
+      "scss",
+      "terraform",
+      "toml",
+      "tsx",
+      "typescript",
       "vim",
       "vimdoc",
-      "comment",
-      "hcl",
-      "terraform",
-    },
-  },
+      "yaml",
+    })
+  end,
 }

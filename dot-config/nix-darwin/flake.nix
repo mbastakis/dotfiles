@@ -184,6 +184,7 @@
         "tealdeer"
         "thefuck"
         "tree"
+        "tree-sitter-cli"
         "uv"
         "watch"
         "wget"
