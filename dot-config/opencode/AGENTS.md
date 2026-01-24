@@ -67,6 +67,7 @@ Agent instructions in markdown...
 **Current agents**:
 - `commit.md` — Git commit agent (configured in opencode.jsonc)
 - `explore.md` — Fast **local codebase** search, returns structured file locations (Haiku 4.5)
+- `manager.md` — **Project manager** using Linear MCP. Tab-switchable primary agent (`mode: all`)
 - `oracle.md` — Strategic advisor for architecture/debugging decisions (Opus 4.5)
 - `librarian.md` — Research **source code**: GitHub repos, issues/PRs, library internals via `gh` CLI (GLM 4.7 Free)
 - `web-researcher.md` — **Web search**: DuckDuckGo + webfetch for docs, tutorials, best practices. No GitHub access — use to discover URLs (GLM 4.7 Free)
@@ -79,28 +80,39 @@ Agent instructions in markdown...
                     │  Main Assistant │
                     └────────┬────────┘
                              │
-        ┌────────────────────┼────────────────────┐
-        │                    │                    │
-        ▼                    ▼                    ▼
+    ┌────────────────────────┼────────────────────────┐
+    │                        │                        │
+    ▼                        ▼                        ▼
 ┌───────────────┐   ┌───────────────┐   ┌───────────────┐
-│   @explore    │   │  @librarian   │   │   @oracle     │
-│ (local code)  │   │ (GitHub/code) │   │ (strategy)    │
-└───────────────┘   └───────┬───────┘   └───────────────┘
-                            │
-                            │ delegates for URL discovery
-                            ▼
-                   ┌───────────────┐
-                   │@web-researcher│
-                   │ (DuckDuckGo)  │
-                   └───────┬───────┘
-                           │
-                           │ can use for JS-heavy sites
-                           ▼
-                   ┌───────────────┐
-                   │ @web-crawler  │
-                   │ (persist to   │
-                   │  ai-docs/)    │
-                   └───────────────┘
+│   @manager    │   │   @explore    │   │   @oracle     │
+│ (Linear/PM)   │   │ (local code)  │   │ (strategy)    │
+│ Tab-switch OK │   └───────────────┘   └───────────────┘
+└───────┬───────┘
+        │ can delegate for codebase context
+        ▼
+┌───────────────┐
+│   @explore    │
+└───────────────┘
+
+        ┌───────────────┐
+        │  @librarian   │
+        │ (GitHub/code) │
+        └───────┬───────┘
+                │
+                │ delegates for URL discovery
+                ▼
+       ┌───────────────┐
+       │@web-researcher│
+       │ (DuckDuckGo)  │
+       └───────┬───────┘
+               │
+               │ can use for JS-heavy sites
+               ▼
+       ┌───────────────┐
+       │ @web-crawler  │
+       │ (persist to   │
+       │  ai-docs/)    │
+       └───────────────┘
 ```
 
 ### When to Use Each Agent
@@ -108,6 +120,7 @@ Agent instructions in markdown...
 | Agent | Trigger | Tools | Output |
 |-------|---------|-------|--------|
 | `@explore` | "Where is X?", "Find files for Y" | Read-only local tools | File paths + line numbers |
+| `@manager` | "Create issue for X", "Project status?" | Linear MCP tools | Issue/project links + summaries |
 | `@librarian` | "How does [lib] implement X?", "GitHub issues for Y" | `gh` CLI, git clone, webfetch | Permalinks + code snippets |
 | `@web-researcher` | "Best practices for X", "Compare A vs B", "Find URLs about Y" | DuckDuckGo, webfetch, crawl4ai | URLs + synthesized findings |
 | `@web-crawler` | "Save docs for X to ai-docs/" | crawl4ai, write | Persisted markdown files |

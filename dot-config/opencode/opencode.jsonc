@@ -4,6 +4,10 @@
   "autoshare": false,
   "share": "manual",
   "autoupdate": true,
+  // Disable Linear MCP globally - only manager agent should use it
+  "tools": {
+    "linear_*": false,
+  },
   "provider": {
     "amazon-bedrock": {
       "models": {
@@ -14,6 +18,10 @@
     },
   },
   "mcp": {
+    "linear": {
+      "type": "local",
+      "command": ["npx", "-y", "mcp-remote", "https://mcp.linear.app/mcp"],
+    },
     // "sourcebot": {
     //   "type": "local",
     //   "command": ["npx", "-y", "@sourcebot/mcp@latest"],
@@ -340,6 +348,28 @@
         "skill": "allow",
         "webfetch": "allow",
         "edit": "deny",
+        "external_directory": "deny",
+      },
+    },
+    "manager": {
+      "description": "Project manager using Linear. Creates issues, tracks projects, manages cycles.",
+      "mode": "all", // Tab-switchable AND @manager callable
+      "temperature": 0.3,
+      "prompt": "{file:./agent/manager.md}",
+      // Enable Linear MCP tools (disabled globally)
+      // No file writing - read-only codebase access for context
+      "tools": {
+        "linear_*": true,
+        "write": false,
+        "patch": false,
+      },
+      "permission": {
+        "bash": {
+          "*": "deny", // No shell access needed
+        },
+        "edit": "deny",
+        "webfetch": "deny",
+        "skill": "deny",
         "external_directory": "deny",
       },
     },
