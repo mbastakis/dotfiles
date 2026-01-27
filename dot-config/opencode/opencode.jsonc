@@ -4,10 +4,9 @@
   "autoshare": false,
   "share": "manual",
   "autoupdate": true,
-  // Disable Linear MCP globally - only manager agent should use it
-  "tools": {
-    "linear_*": false,
-  },
+  // Linear MCP is available to all agents, but Linear tasks should be delegated
+  // to the @manager agent which has specialized workflows for project management.
+  // See AGENTS.md for guidance on when to use @manager vs other agents.
   "provider": {
     "amazon-bedrock": {
       "models": {
@@ -68,6 +67,14 @@
   },
   "permission": {
     "edit": "allow",
+    // Allow access to OpenCode config directory without prompting
+    "external_directory": {
+      "*": "ask",
+      "~/.config/opencode/*": "allow",
+      "~/.config/opencode/**/*": "allow",
+      "/Users/mbastakis/.config/opencode/*": "allow",
+      "/Users/mbastakis/.config/opencode/**/*": "allow"
+    },
     "bash": {
       // === DEFAULT: Everything else requires approval ===
       // IMPORTANT: This MUST be first - last matching rule wins!
@@ -178,7 +185,7 @@
         "edit": "deny",
         "webfetch": "allow",
         "skill": "deny",
-        "external_directory": "deny",
+        "external_directory": "allow",
       },
     },
     "librarian": {
@@ -247,7 +254,7 @@
         "edit": "deny",
         "webfetch": "deny",
         "skill": "deny",
-        "external_directory": "deny",
+        "external_directory": "allow",
       },
     },
     "web-crawler": {
@@ -310,7 +317,7 @@
         "skill": "allow",
         "webfetch": "allow",
         "edit": "deny",
-        "external_directory": "deny",
+        "external_directory": "allow",
       },
     },
     "web-researcher": {
@@ -348,7 +355,7 @@
         "skill": "allow",
         "webfetch": "allow",
         "edit": "deny",
-        "external_directory": "deny",
+        "external_directory": "allow",
       },
     },
     "manager": {
@@ -356,10 +363,8 @@
       "mode": "all", // Tab-switchable AND @manager callable
       "temperature": 0.3,
       "prompt": "{file:./agent/manager.md}",
-      // Enable Linear MCP tools (disabled globally)
       // No file writing - read-only codebase access for context
       "tools": {
-        "linear_*": true,
         "write": false,
         "patch": false,
       },
@@ -370,7 +375,7 @@
         "edit": "deny",
         "webfetch": "deny",
         "skill": "deny",
-        "external_directory": "deny",
+        "external_directory": "allow",
       },
     },
   },
