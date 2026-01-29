@@ -131,17 +131,6 @@ uvx tool-name     # Run tools without installing
 - **Theme**: Catppuccin Mocha colors throughout
 - **Section separators**: Blank lines between major sections
 
-## Component-Specific Guidelines
-
-Detailed guidelines for complex components:
-
-| Component  | Documentation                      |
-| ---------- | ---------------------------------- |
-| Zsh config | `dot-zsh/AGENTS.md`                |
-| Neovim     | `dot-config/nvim/AGENTS.md`        |
-| Karabiner  | `dot-config/karabiner/AGENTS.md`   |
-| OpenCode   | `dot-config/opencode/AGENTS.md`    |
-
 ## Naming Conventions
 
 | Type               | Convention                   | Example                    |
@@ -184,7 +173,6 @@ mauve    = "#cba6f7"    peach    = "#fab387"
 ## Important Notes
 
 - **Zsh files**: ALL go in `dot-zsh/`, NOT `dot-config/`
-- **Component docs**: See component-specific AGENTS.md files for detailed guidelines
 - **Stow ignore**: See `.stow-local-ignore` for excluded files; AGENTS.md files auto-ignored via `**/AGENTS.md`
 - **Git config**: Uses conditional includes for work/personal based on repo path
 - **Local overrides**: Put machine-specific config in `dot-zsh/local.zsh` (gitignored)

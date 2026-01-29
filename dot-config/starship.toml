@@ -20,13 +20,49 @@ disabled = false
 symbol = "☸ "
 format = "[$symbol$context]($style) in "
 
+# Explicit short aliases for frequently used clusters
+[[kubernetes.contexts]]
+context_pattern = ".*aicc-prod-ec1-shared-eks-0"
+context_alias = "prod"
+
+[[kubernetes.contexts]]
+context_pattern = ".*aicc-cndtag-dev"
+context_alias = "dev"
+
+[[kubernetes.contexts]]
+context_pattern = ".*aicc-playground"
+context_alias = "playground"
+
+# Fallback: extract cluster name from ARN
 [[kubernetes.contexts]]
 context_pattern = "arn:aws:eks:.*:.*:cluster/(?P<cluster>[\\w-]+)"
 context_alias = "$cluster"
 
 [aws]
-symbol = " "
-format = "on [$symbol($profile ) (\\[$duration\\] )]($style)"
+symbol = ""
+format = "[$symbol $profile]($style) "
+
+# AWS session timer - displays remaining time with color based on urgency
+# Green (>30min), Yellow (<30min), Red (<5min)
+# Set timer with: starship-timer set aws-session <epoch_or_duration>
+
+[custom.aws_timer_ok]
+command = "starship-timer-display aws-session"
+when = "test -n \"$AWS_PROFILE\" && remaining=$(starship-timer-display aws-session --remaining 2>/dev/null) && test $remaining -gt 1800"
+format = "[$output]($style)"
+style = "green"
+
+[custom.aws_timer_warn]
+command = "starship-timer-display aws-session"
+when = "test -n \"$AWS_PROFILE\" && remaining=$(starship-timer-display aws-session --remaining 2>/dev/null) && test $remaining -le 1800 && test $remaining -gt 300"
+format = "[$output]($style)"
+style = "flamingo"
+
+[custom.aws_timer_critical]
+command = "starship-timer-display aws-session"
+when = "test -n \"$AWS_PROFILE\" && remaining=$(starship-timer-display aws-session --remaining 2>/dev/null) && test $remaining -le 300 && test $remaining -gt 0"
+format = "[$output]($style)"
+style = "red bold"
 
 [buf]
 symbol = " "

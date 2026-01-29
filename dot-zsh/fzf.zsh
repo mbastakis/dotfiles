@@ -33,8 +33,14 @@ export FZF_CTRL_R_OPTS="
   --header 'Press CTRL-Y to copy command into clipboard'"
 
 # Initialize fzf shell integration (keybindings and completion)
+# Note: We disable CTRL-R since atuin handles history search
 if command -v fzf &>/dev/null; then
   eval "$(fzf --zsh)"
+  # Unbind fzf's Ctrl+R to let atuin handle it
+  bindkey -r '^R'
 fi
+
+# Atuin - shell history (loaded after fzf so it binds Ctrl+R)
+command -v atuin &>/dev/null && eval "$(atuin init zsh)"
 
 # Custom keybindings moved to keybindings.zsh

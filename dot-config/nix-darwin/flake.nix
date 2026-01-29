@@ -106,6 +106,7 @@
         "azure-cli"
         "bagels"
         "bat"
+        "bitwarden-cli"
         "browsh"
         "btop"
         "chafa"

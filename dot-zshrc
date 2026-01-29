@@ -1,3 +1,6 @@
+# Enable profiling: ZSHRC_PROFILE=1 zsh -i -c exit
+[[ -n "$ZSHRC_PROFILE" ]] && zmodload zsh/zprof
+
 # ZSH configuration - main entry point
 # shellcheck disable=SC1091
 
@@ -17,17 +20,23 @@ export HISTFILE=~/.zsh_history
 # Tool initialization (order matters!)
 # ----------------------------------------------------
 
-# Homebrew shell environment
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# Homebrew shell environment (cached for faster startup)
+_brew_cache="$HOME/.cache/brew-shellenv.zsh"
+if [[ ! -f "$_brew_cache" || ! -s "$_brew_cache" ]]; then
+  mkdir -p "$HOME/.cache"
+  /opt/homebrew/bin/brew shellenv > "$_brew_cache" 2>/dev/null
+fi
+source "$_brew_cache"
+unset _brew_cache
 
 # Interactive-only exports (PAGER, LESS, tool-specific vars)
 source "$HOME/.zsh/exports.zsh"
 
-# Carapace completions - MUST be before plugins.zsh (before compinit)
-command -v carapace &>/dev/null && source <(carapace _carapace)
-
 # Zinit plugins + fzf-tab + compinit
 source "$HOME/.zsh/plugins.zsh"
+
+# Carapace completions - MUST be AFTER compinit (needs compdef command)
+command -v carapace &>/dev/null && source <(carapace _carapace zsh)
 
 # Tool completions (after compinit)
 source "$HOME/.zsh/completions.zsh"
@@ -49,3 +58,6 @@ source "$HOME/.zsh/direnv.zsh"
 # Local configuration (machine-specific, secrets) - loaded last to override
 [[ -f "$HOME/.zsh/local.zsh" ]] || touch "$HOME/.zsh/local.zsh"
 source "$HOME/.zsh/local.zsh"
+
+# Output profiling results
+[[ -n "$ZSHRC_PROFILE" ]] && zprof

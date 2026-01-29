@@ -28,8 +28,13 @@ zstyle ':fzf-tab:complete:*:*' fzf-preview '
 # Switch group using `<` and `>`
 zstyle ':fzf-tab:*' switch-group '<' '>'
 
-# Use Catppuccin Mocha colors for fzf-tab with wrapped preview
-zstyle ':fzf-tab:*' fzf-flags --color=bg+:#313244,bg:#1E1E2E,spinner:#F5E0DC,hl:#F38BA8 --color=fg:#CDD6F4,header:#F38BA8,info:#CBA6F7,pointer:#F5E0DC --color=marker:#B4BEFE,fg+:#CDD6F4,prompt:#CBA6F7,hl+:#F38BA8 --color=selected-bg:#45475A --border --height=80% --preview-window=right:50%:wrap
+# Use Catppuccin Mocha colors for fzf-tab with transparent background
+zstyle ':fzf-tab:*' fzf-flags \
+  '--color=bg+:#313244,bg:-1,spinner:#F5E0DC,hl:#F38BA8' \
+  '--color=fg:#CDD6F4,header:#F38BA8,info:#CBA6F7,pointer:#F5E0DC' \
+  '--color=marker:#B4BEFE,fg+:#CDD6F4,prompt:#CBA6F7,hl+:#F38BA8' \
+  '--color=selected-bg:#45475A' \
+  --border --height=80% --preview-window=right:50%:wrap
 
 # Apply to all completions
 zstyle ':fzf-tab:*' fzf-command fzf
@@ -65,3 +70,7 @@ zstyle ':fzf-tab:complete:(-command-|-parameter-|-brace-parameter-|export|unset|
 
 # Continuous completion (accept and continue)
 zstyle ':fzf-tab:*' continuous-trigger '/'
+
+# Use only prefix for query string to avoid ../ or ~/ leaking into fzf filter
+# Default is (prefix input first) which includes the typed path in the query
+zstyle ':fzf-tab:*' query-string prefix

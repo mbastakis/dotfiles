@@ -16,7 +16,9 @@ alias lda="ld --git-ignore --all"
 alias lgit="eza --long --git"
 
 # Utilities
-alias reload="source ~/.zshrc"
+alias reload="exec zsh"  # Replace shell with fresh instance
+alias zsh-profile="ZSHRC_PROFILE=1 zsh -i -c exit"
+alias zsh-time="time (zsh -i -c exit)"
 
 # Vim
 alias v="nvim"
