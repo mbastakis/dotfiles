@@ -34,3 +34,7 @@ __pycache__/
 
 # Sourcebot secrets
 dot-config/sourcebot/.env
+
+# Shell init caches (generated at runtime)
+.cache/brew-shellenv.zsh
+.cache/carapace-init.zsh

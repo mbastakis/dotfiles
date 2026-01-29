@@ -36,7 +36,17 @@ source "$HOME/.zsh/exports.zsh"
 source "$HOME/.zsh/plugins.zsh"
 
 # Carapace completions - MUST be AFTER compinit (needs compdef command)
-command -v carapace &>/dev/null && source <(carapace _carapace zsh)
+# Cached for faster startup (regenerate if carapace binary changes)
+if command -v carapace &>/dev/null; then
+  _carapace_cache="$HOME/.cache/carapace-init.zsh"
+  _carapace_bin="$(command -v carapace)"
+  if [[ ! -f "$_carapace_cache" ]] || [[ "$_carapace_bin" -nt "$_carapace_cache" ]]; then
+    mkdir -p "$HOME/.cache"
+    carapace _carapace zsh > "$_carapace_cache" 2>/dev/null
+  fi
+  source "$_carapace_cache"
+  unset _carapace_cache _carapace_bin
+fi
 
 # Tool completions (after compinit)
 source "$HOME/.zsh/completions.zsh"

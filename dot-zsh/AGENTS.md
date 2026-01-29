@@ -4,20 +4,20 @@ Modular zsh config files symlinked to `~/.zsh/`, sourced by `~/.zshrc`.
 
 ## Files
 
-| File                           | Purpose                              |
-| ------------------------------ | ------------------------------------ |
-| `exports.zsh`                  | Environment variables (PAGER, LESS)  |
-| `plugins.zsh`                  | Zinit plugin manager, compinit       |
-| `completions.zsh`              | Tool-specific completions            |
-| `tools.zsh`                    | atuin, zoxide, starship, thefuck     |
-| `aliases.zsh`                  | Command shortcuts                    |
-| `functions.zsh`                | Custom shell functions               |
-| `fzf.zsh`                      | FZF configuration                    |
-| `fzf-tab.zsh`                  | FZF completion menu                  |
-| `keybindings.zsh`              | Ctrl-F, Ctrl-G, Alt-C bindings       |
-| `direnv.zsh`                   | Direnv hook                          |
-| `shift-select-enhancements.zsh`| Clipboard integration for selections |
-| `local.zsh`                    | Machine-specific (gitignored)        |
+| File                            | Purpose                              |
+| ------------------------------- | ------------------------------------ |
+| `exports.zsh`                   | Environment variables (PAGER, LESS)  |
+| `plugins.zsh`                   | Zinit plugin manager, compinit       |
+| `completions.zsh`               | Tool-specific completions            |
+| `tools.zsh`                     | atuin, zoxide, starship, thefuck     |
+| `aliases.zsh`                   | Command shortcuts                    |
+| `functions.zsh`                 | Custom shell functions               |
+| `fzf.zsh`                       | FZF configuration                    |
+| `fzf-tab.zsh`                   | FZF completion menu                  |
+| `keybindings.zsh`               | Ctrl-F, Ctrl-G, Alt-C bindings       |
+| `direnv.zsh`                    | Direnv hook                          |
+| `shift-select-enhancements.zsh` | Clipboard integration for selections |
+| `local.zsh`                     | Machine-specific (gitignored)        |
 
 ## Load Order (Critical)
 
@@ -28,18 +28,19 @@ exports → plugins → completions → tools → aliases → functions → fzf 
 ```
 
 Dependencies:
+
 - `plugins.zsh` runs `compinit` — must load before `completions.zsh`
 - `fzf-tab.zsh` configures plugin loaded in `plugins.zsh`
 - `keybindings.zsh` uses `ftext-widget` from `functions.zsh`
 
 ## Commands
 
-| Command              | Purpose                    |
-| -------------------- | -------------------------- |
-| `source ~/.zshrc`    | Reload config              |
-| `reload`             | Alias for above            |
-| `zinit update`       | Update all plugins         |
-| `zinit self-update`  | Update zinit itself        |
+| Command             | Purpose             |
+| ------------------- | ------------------- |
+| `source ~/.zshrc`   | Reload config       |
+| `reload`            | Alias for above     |
+| `zinit update`      | Update all plugins  |
+| `zinit self-update` | Update zinit itself |
 
 ## Code Style
 
@@ -63,13 +64,13 @@ bindkey '^X' widget_name
 
 ## Adding New Config
 
-| Type              | Location           | Notes                          |
-| ----------------- | ------------------ | ------------------------------ |
-| Aliases           | `aliases.zsh`      | Simple command shortcuts       |
-| Functions         | `functions.zsh`    | Complex multi-line logic       |
-| Tool integrations | `tools.zsh`        | `eval "$(tool init zsh)"`      |
-| Keybindings       | `keybindings.zsh`  | ZLE widgets + bindkey          |
-| Machine-specific  | `local.zsh`        | API keys, local PATH overrides |
+| Type              | Location          | Notes                          |
+| ----------------- | ----------------- | ------------------------------ |
+| Aliases           | `aliases.zsh`     | Simple command shortcuts       |
+| Functions         | `functions.zsh`   | Complex multi-line logic       |
+| Tool integrations | `tools.zsh`       | `eval "$(tool init zsh)"`      |
+| Keybindings       | `keybindings.zsh` | ZLE widgets + bindkey          |
+| Machine-specific  | `local.zsh`       | API keys, local PATH overrides |
 
 ## Gotchas
 
@@ -77,3 +78,19 @@ bindkey '^X' widget_name
 - `shift-select-enhancements.zsh` loaded via zinit atload hook, not directly sourced
 - `local.zsh` is gitignored — copy from `local.zsh.example` as template
 - `obsidian-cli.zsh` is NOT in default load order — source from `local.zsh` if needed
+
+## Startup Performance
+
+Cache slow tool init output to `~/.cache/` for faster shell startup:
+
+```zsh
+# Pattern: cache if missing OR binary newer than cache
+_cache="$HOME/.cache/tool-init.zsh"
+_bin="$(command -v tool)"
+if [[ ! -f "$_cache" ]] || [[ "$_bin" -nt "$_cache" ]]; then
+  tool init zsh > "$_cache"
+fi
+source "$_cache"
+```
+
+Used for: `brew shellenv`, `carapace _carapace zsh`. The `-nt` (newer than) operator invalidates cache when binary updates.

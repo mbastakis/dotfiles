@@ -1,36 +1,17 @@
 #!/usr/bin/env zsh
 # completions.zsh - Tool completions
 # Loaded AFTER compinit (which runs in plugins.zsh)
+#
+# Most completions are now managed via carapace specs:
+#   ~/.config/carapace/specs/
+#
+# To add/update completions for tools not in carapace-bin's 669 built-in completers:
+#   carapace-sync --add <tool>    # Add new tool
+#   carapace-sync                 # Sync all (updates on version change)
+#   carapace-sync --force         # Force regenerate all specs
+#   carapace-sync --list          # Show managed tools
+#
+# Managed tools: bw, opencode, obsidian-cli, bun
+# See: ~/.config/carapace/tools.yaml
 
-# Bun completions
-[[ -s "$HOME/.bun/_bun" ]] && source "$HOME/.bun/_bun"
-
-# ==== Lazy-loaded completions ====
-# These tools have slow completion init (1-2s each), so we defer loading
-# until the user actually tries to complete them.
-
-# Bitwarden CLI completions (lazy-loaded: ~1.7s init time)
-if command -v bw &>/dev/null; then
-  _bw_lazy() {
-    unfunction _bw_lazy
-    eval "$(bw completion --shell zsh)"
-    compdef _bw bw
-    _bw "$@"
-  }
-  compdef _bw_lazy bw
-fi
-
-# OpenCode completions (lazy-loaded: ~0.5s init time)
-if command -v opencode &>/dev/null; then
-  _opencode_lazy() {
-    unfunction _opencode_lazy
-    eval "$(opencode completion)"
-    _opencode "$@"
-  }
-  compdef _opencode_lazy opencode
-fi
-
-# ==== Normal completions ====
-
-# Obsidian CLI completions (~34ms, fast enough to load normally)
-command -v obsidian-cli &>/dev/null && eval "$(obsidian-cli completion zsh)"
+# No runtime completion generation needed - carapace handles everything via specs

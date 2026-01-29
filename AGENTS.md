@@ -8,12 +8,10 @@ macOS development environment using Nix Darwin and GNU Stow. All configs symlink
 | --------------------- | ---------------------------------------------------- | -------------- |
 | `dot-config/`         | App configs (nvim, aerospace, yazi, opencode, etc.)  | `~/.config/`   |
 | `dot-zsh/`            | ALL zsh files (aliases, functions, exports, plugins) | `~/.zsh/`      |
-| `dot-claude/`         | Claude AI config, commands, hooks                    | `~/.claude/`   |
 | `dot-obsidian/`       | Obsidian plugins, themes, snippets                   | `~/.obsidian/` |
-| `dot-warp/`           | Warp terminal workflows                              | `~/.warp/`     |
-| `dot-bin/`            | User scripts                                         | `~/.bin/`      |
-| `dot-launchagents/`   | macOS LaunchAgent configs (NOT symlinked)            | -              |
+| `dot-bin/`            | User scripts and TUI wrappers                        | `~/.bin/`      |
 | `bin/`                | Installation scripts (NOT symlinked)                 | -              |
+| `apps/`               | TUI app source code (NOT symlinked)                  | -              |
 | `code-portable-data/` | Portable VS Code config                              | -              |
 
 Root dotfiles (`dot-zshrc`, `dot-zshenv`) symlinked directly to `~/` with prefix stripped.
@@ -42,13 +40,14 @@ nvim -c ':checkhealth' -c ':qa'            # Full health check
 
 ### Utility Scripts
 
-| Script                           | Purpose                                                          |
-| -------------------------------- | ---------------------------------------------------------------- |
-| `./setup.sh`                     | Full setup (Homebrew, Stow, Nix, Yazi plugins, keyboard layouts, LaunchAgents) |
-| `bin/install_nix.sh`             | Install Nix and apply darwin flake                               |
-| `bin/install_code_extensions.sh` | Package and install VS Code extensions                           |
-| `dot-bin/nix-add`                | Add brew/cask packages to flake.nix                              |
-| `dot-bin/brew-compare`           | Compare Nix-declared vs system-installed packages                |
+| Script                           | Purpose                                                                                                  |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `./setup.sh`                     | Full setup (Homebrew, Stow, Nix, Yazi plugins, TUI apps, service sync, keyboard layouts, carapace specs) |
+| `bin/install_nix.sh`             | Install Nix and apply darwin flake                                                                       |
+| `bin/install_code_extensions.sh` | Package and install VS Code extensions                                                                   |
+| `dot-bin/nix-add`                | Add brew/cask packages to flake.nix                                                                      |
+| `dot-bin/brew-compare`           | Compare Nix-declared vs system-installed packages                                                        |
+| `dot-bin/carapace-sync`          | Generate/update carapace completion specs                                                                |
 
 ## Code Style Guidelines
 
@@ -174,7 +173,20 @@ mauve    = "#cba6f7"    peach    = "#fab387"
 
 - **Zsh files**: ALL go in `dot-zsh/`, NOT `dot-config/`
 - **Stow ignore**: See `.stow-local-ignore` for excluded files; AGENTS.md files auto-ignored via `**/AGENTS.md`
+- **Stow uses Perl regex**: `.stow-local-ignore` patterns are Perl regex, not globs. Use `node_modules` not `**/node_modules`; escape dots like `bun\.lock`
+- **Stow --adopt gotcha**: If home directory has symlinks pointing INTO the repo (e.g., `~/foo -> ~/dev/dotfiles/apps/foo`), `stow --adopt` creates those symlinks in repo root. Delete unexpected root symlinks after adopt.
+- **Wrapper scripts need stow first**: Scripts in `dot-bin/` referencing `~/.config/` paths fail until `stow --adopt .` creates symlinks
 - **Git config**: Uses conditional includes for work/personal based on repo path
 - **Local overrides**: Put machine-specific config in `dot-zsh/local.zsh` (gitignored)
 - **API keys**: Store in `dot-zsh/local.zsh`, never commit secrets
-- **LaunchAgents**: Configured in `dot-launchagents/` and installed via `setup.sh` (not symlinked). Use service aliases to manage: `oc-start`, `oc-stop`, `oc-restart`, `oc-status`, `oc-logs`
+
+## OpenTUI Apps
+
+TUI applications in `apps/` use OpenTUI React (source NOT symlinked, wrappers in `dot-bin/`):
+
+| App             | Location                | Alias | Purpose                               |
+| --------------- | ----------------------- | ----- | ------------------------------------- |
+| nix-manager     | `apps/nix-manager/`     | -     | Manage Homebrew vs Nix flake packages |
+| service-manager | `apps/service-manager/` | `svc` | Manage macOS services                 |
+
+**Pattern**: Both apps share same architecture (Header, List, StatusBar, DetailPanel) and Catppuccin theme. Use as reference for new TUI tools.
