@@ -2,15 +2,23 @@
 
 import { colors } from "../theme"
 
-type StatusType = "success" | "warning" | "error" | "info" | "neutral"
+type PresetStatus = "success" | "warning" | "error" | "info" | "neutral"
 
-interface StatusIndicatorProps {
-  status: StatusType
+interface PresetStatusProps {
+  status: PresetStatus
   text: string
   icon?: string
 }
 
-const STATUS_CONFIG: Record<StatusType, { color: string; icon: string }> = {
+interface CustomStatusProps {
+  text: string
+  color: string
+  icon: string
+}
+
+type StatusIndicatorProps = PresetStatusProps | CustomStatusProps
+
+const STATUS_CONFIG: Record<PresetStatus, { color: string; icon: string }> = {
   success: { color: colors.green, icon: "●" },
   warning: { color: colors.yellow, icon: "◐" },
   error: { color: colors.red, icon: "○" },
@@ -18,13 +26,25 @@ const STATUS_CONFIG: Record<StatusType, { color: string; icon: string }> = {
   neutral: { color: colors.subtext0, icon: "◌" },
 }
 
-export function StatusIndicator({ status, text, icon }: StatusIndicatorProps) {
-  const config = STATUS_CONFIG[status]
-  const displayIcon = icon ?? config.icon
+function isPresetProps(props: StatusIndicatorProps): props is PresetStatusProps {
+  return "status" in props
+}
 
+export function StatusIndicator(props: StatusIndicatorProps) {
+  if (isPresetProps(props)) {
+    const config = STATUS_CONFIG[props.status]
+    const displayIcon = props.icon ?? config.icon
+    return (
+      <text fg={config.color}>
+        {displayIcon} {props.text}
+      </text>
+    )
+  }
+
+  // Custom color/icon
   return (
-    <text fg={config.color}>
-      {displayIcon} {text}
+    <text fg={props.color}>
+      {props.icon} {props.text}
     </text>
   )
 }

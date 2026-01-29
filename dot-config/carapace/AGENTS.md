@@ -7,6 +7,7 @@ Multi-shell completion system using specs and bridges.
 | File | Purpose | Auto-generated? |
 |------|---------|-----------------|
 | `specs/bw.yaml` | Native spec for Bitwarden CLI | **No** - hand-written (~300 lines) |
+| `specs/nix-manager.yaml` | Native spec for nix-manager | **No** - hand-written (subcommands + flags) |
 | `specs/opencode.yaml` | Yargs bridge for OpenCode | Yes - via `carapace-sync` |
 | `specs/obsidian-cli.yaml` | Cobra bridge for Obsidian CLI | Yes - via `carapace-sync` |
 | `tools.yaml` | Registry of managed tools | Manual (in git) |
@@ -18,6 +19,7 @@ Multi-shell completion system using specs and bridges.
 ```bash
 carapace-sync              # Sync all (updates only if version changed)
 carapace-sync --force      # Force regenerate all bridge specs
+carapace-sync --clean      # Clear all caches (forces shell to reload specs)
 carapace-sync --add <tool> # Add new tool to registry
 carapace-sync --list       # Show managed tools and status
 carapace-sync --test       # Verify specs work correctly
@@ -58,13 +60,50 @@ Match bridge to the tool's completion framework - check output of `<tool> comple
 
 ## Gotchas
 
+- **Zsh init cache NOT invalidated by spec changes** - `~/.cache/carapace-init.zsh` only regenerates when carapace binary changes, not when specs in `~/.config/carapace/specs/` change. Run `carapace-sync --clean` or delete cache manually after adding/editing specs.
 - **`.versions` must be tracked in git** - if gitignored, `carapace-sync` regenerates specs on every run (cached version is empty → always differs from current)
-- **`carapace export` returns empty even when working** - don't use for debugging; test with actual TAB completion
+- **`carapace export` returns empty even when working** - don't use for debugging; test with actual TAB completion or `CARAPACE_COMPLINE="tool " carapace tool bash`
 - **Built-in completers (669+) override custom specs** - check `carapace --list | grep <tool>` before creating specs; tools like `bun`, `git`, `docker` don't need specs
 - **Zsh shell bridges require setup** - register completions in `bridge/zsh/.zshrc` with both `eval` and explicit `compdef`
 - **Version matters** - bridges broken in 1.5.5, fixed in 1.6.0+
 - **bw.yaml is NOT auto-generated** - it's a 300-line native spec; handle with care
 
+## Native Spec Structure
+
+For custom tools without framework completion, use native spec format (not bridges):
+
+```yaml
+name: mytool
+description: Tool description
+flags:
+  -h, --help: Show help
+  -v, --verbose: Verbose output
+completion:
+  positional:
+    - - subcommand1    # First positional: list of valid subcommands
+      - subcommand2
+commands:
+  - name: subcommand1
+    description: Description here
+    flags:
+      --flag: Flag for subcommand
+```
+
+Key: `completion.positional` is array of arrays - each inner array is completions for that position.
+
 ## Startup Performance
 
-Carapace init is cached at `~/.cache/carapace-init.zsh` (gitignored). Cache invalidates when carapace binary changes. No completion generation happens at shell startup - all specs are pre-generated.
+Carapace init is cached at `~/.cache/carapace-init.zsh` (gitignored). Cache invalidates when carapace binary changes but NOT when specs change. Use `carapace-sync --clean` after modifying specs. No completion generation happens at shell startup - all specs are pre-generated.
+
+## Debugging Completions
+
+```bash
+# Test bash completions (simplest output format)
+echo "tool ''" | COMP_LINE="tool " COMP_POINT=5 xargs carapace tool bash
+
+# Test zsh completions
+echo "tool ''" | CARAPACE_COMPLINE="tool " xargs carapace tool zsh
+
+# Verify spec is loaded
+carapace --list | grep tool
+```

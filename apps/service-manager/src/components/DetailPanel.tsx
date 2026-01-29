@@ -3,6 +3,7 @@
 import type { Service } from "../lib/types"
 import { colors } from "@dotfiles/shared/theme"
 import { truncateText, truncatePath } from "@dotfiles/shared/utils"
+import { PropertyRow, Panel, StatusIndicator } from "@dotfiles/shared/components"
 
 interface DetailPanelProps {
   visible: boolean
@@ -13,127 +14,106 @@ export function DetailPanel({ visible, service }: DetailPanelProps) {
   if (!visible || !service) return null
 
   return (
-    <box
-      border
-      borderStyle="rounded"
-      borderColor={colors.surface1}
-      backgroundColor={colors.surface0}
-      padding={2}
-      width={45}
-      flexDirection="column"
-      gap={1}
-    >
-      <text>
-        <span fg={colors.blue}>
-          <strong>Service: </strong>
-        </span>
-        <span fg={colors.text}>{service.label}</span>
-      </text>
+    <Panel width={45}>
+      <PropertyRow label="Service" value={service.label} />
 
-      <text>
-        <span fg={colors.blue}>
-          <strong>Status: </strong>
-        </span>
-        <span fg={getStatusColor(service.status)}>
-          {getStatusText(service)}
-        </span>
-      </text>
+      <PropertyRow
+        label="Enabled"
+        value={
+          <span fg={service.enabled ? colors.green : colors.yellow}>
+            {service.enabled ? "Yes" : "No"}
+          </span>
+        }
+      />
+
+      <PropertyRow
+        label="Status"
+        value={<ServiceStatus status={service.status} />}
+      />
 
       {service.pid && (
-        <text>
-          <span fg={colors.blue}>
-            <strong>PID: </strong>
-          </span>
-          <span fg={colors.text}>{service.pid}</span>
-        </text>
+        <PropertyRow label="PID" value={String(service.pid)} />
       )}
 
       {service.exitCode !== undefined && (
-        <text>
-          <span fg={colors.blue}>
-            <strong>Exit Code: </strong>
-          </span>
-          <span fg={service.exitCode === 0 ? colors.green : colors.red}>
-            {service.exitCode}
-          </span>
-        </text>
+        <PropertyRow
+          label="Exit Code"
+          value={
+            <span fg={service.exitCode === 0 ? colors.green : colors.red}>
+              {service.exitCode}
+            </span>
+          }
+        />
       )}
 
       <box marginTop={1}>
-        <text>
-          <span fg={colors.blue}>
-            <strong>Command: </strong>
-          </span>
-        </text>
+        <PropertyRow label="Command" value="" />
       </box>
       <text fg={colors.subtext0}>
         {truncateText(service.program.join(" "), 40)}
       </text>
 
       <box marginTop={1} flexDirection="row" gap={2}>
-        <text>
-          <span fg={colors.blue}>RunAtLoad: </span>
-          <span fg={service.runAtLoad ? colors.green : colors.subtext0}>
-            {service.runAtLoad ? "Yes" : "No"}
-          </span>
-        </text>
-        <text>
-          <span fg={colors.blue}>KeepAlive: </span>
-          <span fg={service.keepAlive ? colors.green : colors.subtext0}>
-            {service.keepAlive ? "Yes" : "No"}
-          </span>
-        </text>
+        <PropertyRow
+          label="RunAtLoad"
+          value={
+            <span fg={service.runAtLoad ? colors.green : colors.subtext0}>
+              {service.runAtLoad ? "Yes" : "No"}
+            </span>
+          }
+        />
+        <PropertyRow
+          label="KeepAlive"
+          value={
+            <span fg={service.keepAlive ? colors.green : colors.subtext0}>
+              {service.keepAlive ? "Yes" : "No"}
+            </span>
+          }
+        />
       </box>
 
       {service.stdoutPath && (
         <box marginTop={1}>
-          <text>
-            <span fg={colors.blue}>
-              <strong>Stdout: </strong>
-            </span>
-            <span fg={colors.teal}>
-              {truncatePath(service.stdoutPath, 35)}
-            </span>
-          </text>
+          <PropertyRow
+            label="Stdout"
+            value={truncatePath(service.stdoutPath, 35)}
+            valueColor={colors.teal}
+          />
         </box>
       )}
 
       {service.stderrPath && (
-        <text>
-          <span fg={colors.blue}>
-            <strong>Stderr: </strong>
-          </span>
-          <span fg={colors.teal}>{truncatePath(service.stderrPath, 35)}</span>
-        </text>
+        <PropertyRow
+          label="Stderr"
+          value={truncatePath(service.stderrPath, 35)}
+          valueColor={colors.teal}
+        />
       )}
+
+      <box marginTop={1}>
+        <PropertyRow
+          label="Config"
+          value={truncatePath(service.configPath, 35)}
+          valueColor={colors.lavender}
+        />
+      </box>
 
       <box marginTop={2}>
         <text fg={colors.subtext0}>
           <em>Press Esc to close</em>
         </text>
       </box>
-    </box>
+    </Panel>
   )
 }
 
-function getStatusColor(status: Service["status"]): string {
+function ServiceStatus({ status }: { status: Service["status"] }) {
   switch (status) {
     case "running":
-      return colors.green
+      return <StatusIndicator color={colors.green} icon="●" text="Running" />
     case "stopped":
-      return colors.red
+      return <StatusIndicator color={colors.red} icon="○" text="Stopped" />
     case "not_installed":
-      return colors.yellow
-  }
-}
-
-function getStatusText(service: Service): string {
-  switch (service.status) {
-    case "running":
-      return "● Running"
-    case "stopped":
-      return "○ Stopped"
-    case "not_installed":
-      return "◌ Not Installed"
+      return <StatusIndicator color={colors.yellow} icon="◌" text="Not Installed" />
   }
 }

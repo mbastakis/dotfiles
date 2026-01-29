@@ -7,7 +7,7 @@
     "start": "bun run src/index.tsx"
   },
   "dependencies": {
-    "@dotfiles/shared": "file:../shared",
+    "@dotfiles/shared": "workspace:*",
     "@opentui/core": "latest",
     "@opentui/react": "latest",
     "react": ">=19.0.0"

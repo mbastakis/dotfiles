@@ -1,0 +1,9 @@
+{
+  "name": "dotfiles-apps",
+  "private": true,
+  "workspaces": [
+    "shared",
+    "nix-manager",
+    "service-manager"
+  ]
+}

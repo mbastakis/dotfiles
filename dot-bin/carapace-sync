@@ -1,0 +1,400 @@
+#!/usr/bin/env bash
+# carapace-sync - Manage carapace spec files for shell completions
+# Generates YAML specs using carapace bridges for tools not in carapace-bin's built-in completers
+
+set -euo pipefail
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+# Paths
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/carapace"
+TOOLS_FILE="$CONFIG_DIR/tools.yaml"
+SPECS_DIR="$CONFIG_DIR/specs"
+VERSIONS_FILE="$CONFIG_DIR/.versions"
+CARAPACE_CACHE_DIR="$HOME/.cache/carapace"
+CARAPACE_INIT_CACHE="$HOME/.cache/carapace-init.zsh"
+
+# Logging
+log_info()    { echo -e "${GREEN}[INFO]${NC} $1"; }
+log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
+log_error()   { echo -e "${RED}[ERROR]${NC} $1" >&2; }
+log_debug()   { [[ -n "${DEBUG:-}" ]] && echo -e "${BLUE}[DEBUG]${NC} $1" || true; }
+
+# Check dependencies
+check_deps() {
+  local missing=()
+  for cmd in carapace yq; do
+    command -v "$cmd" &>/dev/null || missing+=("$cmd")
+  done
+  if [[ ${#missing[@]} -gt 0 ]]; then
+    log_error "Missing dependencies: ${missing[*]}"
+    log_error "Install with: brew install ${missing[*]}"
+    exit 1
+  fi
+}
+
+# Clear all carapace caches
+clear_caches() {
+  local cleared=0
+  
+  # Clear carapace directory cache
+  if [[ -d "$CARAPACE_CACHE_DIR" ]]; then
+    rm -rf "$CARAPACE_CACHE_DIR"
+    log_debug "Cleared $CARAPACE_CACHE_DIR"
+    ((cleared++)) || true
+  fi
+  
+  # Clear zsh init cache (sourced in .zshrc)
+  if [[ -f "$CARAPACE_INIT_CACHE" ]]; then
+    rm -f "$CARAPACE_INIT_CACHE"
+    log_debug "Cleared $CARAPACE_INIT_CACHE"
+    ((cleared++)) || true
+  fi
+  
+  if [[ $cleared -gt 0 ]]; then
+    log_info "Cleared carapace caches ($cleared items)"
+  fi
+}
+
+# Get tool version (empty string if tool not found)
+get_version() {
+  local tool="$1"
+  local version_cmd="$2"
+  
+  if ! command -v "$tool" &>/dev/null; then
+    echo ""
+    return
+  fi
+  
+  # Run version command and extract version
+  eval "$version_cmd" 2>/dev/null | head -1 || echo "unknown"
+}
+
+# Get cached version
+get_cached_version() {
+  local tool="$1"
+  [[ -f "$VERSIONS_FILE" ]] || touch "$VERSIONS_FILE"
+  grep "^${tool}=" "$VERSIONS_FILE" 2>/dev/null | cut -d= -f2- || echo ""
+}
+
+# Set cached version
+set_cached_version() {
+  local tool="$1"
+  local version="$2"
+  [[ -f "$VERSIONS_FILE" ]] || touch "$VERSIONS_FILE"
+  
+  # Remove old entry and add new one
+  local tmp
+  tmp=$(mktemp)
+  grep -v "^${tool}=" "$VERSIONS_FILE" > "$tmp" 2>/dev/null || true
+  echo "${tool}=${version}" >> "$tmp"
+  mv "$tmp" "$VERSIONS_FILE"
+}
+
+# Detect bridge type for a tool
+detect_bridge() {
+  local tool="$1"
+  
+  if ! command -v "$tool" &>/dev/null; then
+    echo "skip"
+    return
+  fi
+  
+  # Try to detect completion type
+  local help_output
+  help_output=$("$tool" --help 2>&1 || true)
+  
+  # Check for common patterns
+  if echo "$help_output" | grep -qi "cobra"; then
+    echo "Cobra"
+  elif echo "$help_output" | grep -qi "click"; then
+    echo "Click"
+  elif "$tool" completion zsh &>/dev/null 2>&1; then
+    echo "Zsh"
+  elif "$tool" completion bash &>/dev/null 2>&1; then
+    echo "Bash"
+  else
+    echo "Zsh"  # Default to Zsh bridge
+  fi
+}
+
+# Generate spec for a tool
+generate_spec() {
+  local tool="$1"
+  local description="$2"
+  local bridge_type="$3"
+  local spec_file="$SPECS_DIR/${tool}.yaml"
+  
+  if [[ "$bridge_type" == "skip" ]]; then
+    log_debug "Skipping $tool (bridge_type=skip)"
+    return 0
+  fi
+  
+  if [[ "$bridge_type" == "custom" ]]; then
+    log_warning "$tool requires custom spec (not auto-generated)"
+    return 0
+  fi
+  
+  log_info "Generating spec for $tool (bridge: $bridge_type)"
+  
+  cat > "$spec_file" <<EOF
+name: $tool
+description: $description
+parsing: disabled
+completion:
+  positionalany: ["\$carapace.bridge.${bridge_type}([$tool])"]
+EOF
+  
+  log_debug "Created $spec_file"
+}
+
+# Parse tools.yaml and process each tool
+sync_tools() {
+  local force="${1:-false}"
+  local count=0
+  local updated=0
+  local skipped=0
+  
+  if [[ ! -f "$TOOLS_FILE" ]]; then
+    log_error "Tools file not found: $TOOLS_FILE"
+    exit 1
+  fi
+  
+  mkdir -p "$SPECS_DIR"
+  
+  # Get list of tools (use while loop to handle hyphens in tool names)
+  while IFS= read -r tool; do
+    [[ -z "$tool" ]] && continue
+    ((count++)) || true
+    
+    local description bridge_type version_cmd
+    description=$(yq -r ".tools.[\"${tool}\"].description // \"\"" "$TOOLS_FILE")
+    bridge_type=$(yq -r ".tools.[\"${tool}\"].bridge_type // \"auto\"" "$TOOLS_FILE")
+    version_cmd=$(yq -r ".tools.[\"${tool}\"].version_cmd // \"${tool} --version\"" "$TOOLS_FILE")
+    
+    # Check if tool exists
+    if ! command -v "$tool" &>/dev/null; then
+      log_warning "$tool not installed, skipping"
+      ((skipped++)) || true
+      continue
+    fi
+    
+    # Auto-detect bridge type if needed
+    if [[ "$bridge_type" == "auto" ]]; then
+      bridge_type=$(detect_bridge "$tool")
+      log_debug "Auto-detected bridge for $tool: $bridge_type"
+    fi
+    
+    # Get current version
+    local current_version cached_version
+    current_version=$(get_version "$tool" "$version_cmd")
+    cached_version=$(get_cached_version "$tool")
+    
+    # Check if update needed
+    local spec_file="$SPECS_DIR/${tool}.yaml"
+    if [[ "$force" == "true" ]] || [[ ! -f "$spec_file" ]] || [[ "$current_version" != "$cached_version" ]]; then
+      generate_spec "$tool" "$description" "$bridge_type"
+      set_cached_version "$tool" "$current_version"
+      ((updated++)) || true
+    else
+      log_debug "$tool is up to date (v$current_version)"
+    fi
+  done < <(yq -r '.tools | keys | .[]' "$TOOLS_FILE")
+  
+  echo ""
+  log_info "Processed $count tools: $updated updated, $skipped skipped"
+  
+  # Clear caches if any specs were updated
+  if [[ $updated -gt 0 ]]; then
+    clear_caches
+    log_info "Restart shell or run 'source ~/.zshrc' to apply changes"
+  fi
+}
+
+# List managed tools and their status
+list_tools() {
+  if [[ ! -f "$TOOLS_FILE" ]]; then
+    log_error "Tools file not found: $TOOLS_FILE"
+    exit 1
+  fi
+  
+  echo -e "${BLUE}Managed Tools${NC}"
+  echo "─────────────────────────────────────────────────────────────"
+  printf "%-15s %-12s %-10s %-15s %s\n" "TOOL" "BRIDGE" "STATUS" "VERSION" "SPEC"
+  echo "─────────────────────────────────────────────────────────────"
+  
+  while IFS= read -r tool; do
+    [[ -z "$tool" ]] && continue
+    local bridge_type version_cmd status version spec_status
+    bridge_type=$(yq -r ".tools.[\"${tool}\"].bridge_type // \"auto\"" "$TOOLS_FILE")
+    version_cmd=$(yq -r ".tools.[\"${tool}\"].version_cmd // \"${tool} --version\"" "$TOOLS_FILE")
+    
+    if command -v "$tool" &>/dev/null; then
+      status="${GREEN}installed${NC}"
+      version=$(get_version "$tool" "$version_cmd" | head -c 12)
+    else
+      status="${RED}missing${NC}"
+      version="-"
+    fi
+    
+    local spec_file="$SPECS_DIR/${tool}.yaml"
+    if [[ -f "$spec_file" ]]; then
+      spec_status="${GREEN}✓${NC}"
+    else
+      spec_status="${RED}✗${NC}"
+    fi
+    
+    printf "%-15s %-12s %-22b %-15s %b\n" "$tool" "$bridge_type" "$status" "$version" "$spec_status"
+  done < <(yq -r '.tools | keys | .[]' "$TOOLS_FILE")
+}
+
+# Add a new tool interactively
+add_tool() {
+  local tool="$1"
+  
+  if ! command -v "$tool" &>/dev/null; then
+    log_error "$tool is not installed"
+    exit 1
+  fi
+  
+  # Check if already in registry
+  if yq -e ".tools.${tool}" "$TOOLS_FILE" &>/dev/null; then
+    log_warning "$tool is already in the registry"
+    return 0
+  fi
+  
+  # Detect bridge type
+  local bridge_type
+  bridge_type=$(detect_bridge "$tool")
+  log_info "Detected bridge type for $tool: $bridge_type"
+  
+  # Get description from --help
+  local description
+  description=$("$tool" --help 2>&1 | head -1 | cut -c1-50 || echo "$tool CLI tool")
+  
+  # Add to tools.yaml
+  log_info "Adding $tool to registry..."
+  yq -i ".tools.${tool} = {\"description\": \"$description\", \"bridge_type\": \"$bridge_type\", \"version_cmd\": \"${tool} --version\"}" "$TOOLS_FILE"
+  
+  # Generate spec
+  generate_spec "$tool" "$description" "$bridge_type"
+  
+  local version
+  version=$(get_version "$tool" "${tool} --version")
+  set_cached_version "$tool" "$version"
+  
+  clear_caches
+  log_info "Added $tool successfully"
+  log_info "Restart shell or run 'source ~/.zshrc' to apply changes"
+}
+
+# Test all specs
+test_specs() {
+  log_info "Testing carapace specs..."
+  local failed=0
+  
+  for spec in "$SPECS_DIR"/*.yaml; do
+    [[ -f "$spec" ]] || continue
+    
+    local tool
+    tool=$(basename "$spec" .yaml)
+    
+    if ! command -v "$tool" &>/dev/null; then
+      log_warning "$tool not installed, skipping test"
+      continue
+    fi
+    
+    # Test by running carapace completion
+    if carapace "$tool" zsh 2>/dev/null | head -1 | grep -q "^#compdef"; then
+      echo -e "  ${GREEN}✓${NC} $tool"
+    else
+      echo -e "  ${RED}✗${NC} $tool"
+      ((failed++)) || true
+    fi
+  done
+  
+  if [[ $failed -gt 0 ]]; then
+    log_error "$failed spec(s) failed validation"
+    exit 1
+  else
+    log_info "All specs validated successfully"
+  fi
+}
+
+# Show usage
+usage() {
+  cat <<EOF
+Usage: carapace-sync [OPTIONS]
+
+Manage carapace spec files for shell completions.
+
+Commands:
+  (default)       Sync all tools, update only if version changed
+  --force, -f     Regenerate all specs regardless of version
+  --clean, -c     Clear all carapace caches (forces shell to reload specs)
+  --list, -l      Show managed tools and status
+  --add <tool>    Add new tool to registry
+  --test, -t      Verify specs work correctly
+  --help, -h      Show this help message
+
+Examples:
+  carapace-sync              # Sync all tools
+  carapace-sync --force      # Force regenerate all specs
+  carapace-sync --clean      # Clear caches only
+  carapace-sync --add gh     # Add gh to managed tools
+  carapace-sync --list       # Show tool status
+  carapace-sync --test       # Verify all specs
+
+Files:
+  $TOOLS_FILE    Tool registry
+  $SPECS_DIR/    Generated specs
+  $VERSIONS_FILE Version cache
+
+Caches:
+  $CARAPACE_CACHE_DIR/    Carapace internal cache
+  $CARAPACE_INIT_CACHE    Zsh init script cache
+EOF
+}
+
+# Main
+main() {
+  check_deps
+  
+  case "${1:-}" in
+    --force|-f)
+      sync_tools true
+      ;;
+    --clean|-c)
+      clear_caches
+      log_info "Restart shell or run 'source ~/.zshrc' to apply changes"
+      ;;
+    --list|-l)
+      list_tools
+      ;;
+    --add)
+      [[ -z "${2:-}" ]] && { log_error "Usage: carapace-sync --add <tool>"; exit 1; }
+      add_tool "$2"
+      ;;
+    --test|-t)
+      test_specs
+      ;;
+    --help|-h)
+      usage
+      ;;
+    "")
+      sync_tools false
+      ;;
+    *)
+      log_error "Unknown option: $1"
+      usage
+      exit 1
+      ;;
+  esac
+}
+
+main "$@"

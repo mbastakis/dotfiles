@@ -1,27 +1,27 @@
-// Hook for watching plist directory for changes
+// Hook for watching config directory for changes
 
 import { useState, useEffect, useCallback } from "react"
 import { watch } from "fs"
-import { getLaunchAgentsSrcPath } from "../lib/plist"
+import { getConfigDir } from "../lib/plist"
 
-interface UsePlistWatcherResult {
+interface UseConfigWatcherResult {
   isWatching: boolean
   lastChange: number | null
 }
 
 export function usePlistWatcher(
   onFileChange: () => void
-): UsePlistWatcherResult {
+): UseConfigWatcherResult {
   const [isWatching, setIsWatching] = useState(false)
   const [lastChange, setLastChange] = useState<number | null>(null)
 
   useEffect(() => {
-    const plistDir = getLaunchAgentsSrcPath()
+    const configDir = getConfigDir()
     let debounceTimeout: ReturnType<typeof setTimeout> | null = null
 
     try {
-      const watcher = watch(plistDir, (eventType, filename) => {
-        if (filename?.endsWith(".plist")) {
+      const watcher = watch(configDir, (eventType, filename) => {
+        if (filename?.endsWith(".toml")) {
           if (debounceTimeout) {
             clearTimeout(debounceTimeout)
           }

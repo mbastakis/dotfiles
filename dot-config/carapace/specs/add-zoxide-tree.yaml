@@ -1,0 +1,13 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: add-zoxide-tree
+description: Add git project directories to zoxide database
+flags:
+  -h, --help: Show help message
+  -v, --verbose: Show each directory as it's added
+  --all: Include all directories, not just git projects
+  --max-depth=: Limit recursion depth
+completion:
+  flag:
+    max-depth: ["1", "2", "3", "4", "5"]
+  positional:
+    - ["$carapace.bridge.Zsh([cd])"]

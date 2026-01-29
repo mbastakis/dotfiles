@@ -2,6 +2,8 @@
 
 import type { PackageInfo, Package } from "../lib/types"
 import { colors } from "@dotfiles/shared/theme"
+import { truncateText } from "@dotfiles/shared/utils"
+import { PropertyRow, Panel, StatusIndicator } from "@dotfiles/shared/components"
 
 interface DetailPanelProps {
   visible: boolean
@@ -14,66 +16,39 @@ export function DetailPanel({ visible, pkg, info, loading }: DetailPanelProps) {
   if (!visible || !pkg) return null
 
   return (
-    <box
-      border
-      borderStyle="rounded"
-      borderColor={colors.surface1}
-      backgroundColor={colors.surface0}
-      padding={2}
-      width={40}
-      flexDirection="column"
-      gap={1}
-    >
-      <text>
-        <span fg={colors.blue}>
-          <strong>Package: </strong>
-        </span>
-        <span fg={colors.text}>{pkg.name}</span>
-      </text>
+    <Panel width={40}>
+      <PropertyRow label="Package" value={pkg.name} />
 
       {loading ? (
         <text fg={colors.yellow}>Loading info...</text>
       ) : (
         <>
           {info?.version && (
-            <text>
-              <span fg={colors.blue}>
-                <strong>Version: </strong>
-              </span>
-              <span fg={colors.text}>{info.version}</span>
-            </text>
+            <PropertyRow label="Version" value={info.version} />
           )}
 
-          <text>
-            <span fg={colors.blue}>
-              <strong>Status: </strong>
-            </span>
-            <span fg={getStatusColor(pkg.status)}>
-              {getStatusText(pkg.status)}
-            </span>
-          </text>
+          <PropertyRow
+            label="Status"
+            value={<PackageStatus status={pkg.status} />}
+          />
 
           {info?.description && (
             <box marginTop={1}>
-              <text>
-                <span fg={colors.blue}>
-                  <strong>Desc: </strong>
-                </span>
-                <span fg={colors.subtext0}>
-                  {truncateText(info.description, 100)}
-                </span>
-              </text>
+              <PropertyRow
+                label="Desc"
+                value={truncateText(info.description, 100)}
+                valueColor={colors.subtext0}
+              />
             </box>
           )}
 
           {info?.homepage && (
             <box marginTop={1}>
-              <text>
-                <span fg={colors.blue}>
-                  <strong>URL: </strong>
-                </span>
-                <span fg={colors.teal}>{info.homepage}</span>
-              </text>
+              <PropertyRow
+                label="URL"
+                value={info.homepage}
+                valueColor={colors.teal}
+              />
             </box>
           )}
         </>
@@ -84,33 +59,17 @@ export function DetailPanel({ visible, pkg, info, loading }: DetailPanelProps) {
           <em>Press Esc to close</em>
         </text>
       </box>
-    </box>
+    </Panel>
   )
 }
 
-function getStatusColor(status: Package["status"]): string {
+function PackageStatus({ status }: { status: Package["status"] }) {
   switch (status) {
     case "synced":
-      return colors.green
+      return <StatusIndicator color={colors.green} icon="✓" text="Synced with flake.nix" />
     case "extra":
-      return colors.yellow
+      return <StatusIndicator color={colors.yellow} icon="+" text="Installed but not in flake" />
     case "missing":
-      return colors.red
+      return <StatusIndicator color={colors.red} icon="!" text="In flake but not installed" />
   }
-}
-
-function getStatusText(status: Package["status"]): string {
-  switch (status) {
-    case "synced":
-      return "✓ Synced with flake.nix"
-    case "extra":
-      return "+ Installed but not in flake"
-    case "missing":
-      return "! In flake but not installed"
-  }
-}
-
-function truncateText(text: string, maxLength: number): string {
-  if (text.length <= maxLength) return text
-  return text.slice(0, maxLength - 3) + "..."
 }

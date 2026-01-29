@@ -1,6 +1,7 @@
 // HelpModal component for showing keyboard shortcuts
 
 import { colors } from "@dotfiles/shared/theme"
+import { Panel } from "@dotfiles/shared/components"
 
 interface HelpModalProps {
   visible: boolean
@@ -33,21 +34,9 @@ export function HelpModal({ visible }: HelpModalProps) {
       bottom={0}
       justifyContent="center"
       alignItems="center"
-      backgroundColor="rgba(0, 0, 0, 0.7)"
+      backgroundColor={colors.crust}
     >
-      <box
-        border
-        borderStyle="rounded"
-        borderColor={colors.blue}
-        backgroundColor={colors.surface0}
-        paddingLeft={3}
-        paddingRight={3}
-        paddingTop={2}
-        paddingBottom={2}
-        flexDirection="column"
-        gap={1}
-        width={45}
-      >
+      <Panel width={45} borderColor={colors.blue}>
         <box justifyContent="center" paddingBottom={1}>
           <text fg={colors.mauve}>
             <strong>Keyboard Shortcuts</strong>
@@ -69,7 +58,7 @@ export function HelpModal({ visible }: HelpModalProps) {
             <span fg={colors.yellow}>Esc</span> to close
           </text>
         </box>
-      </box>
+      </Panel>
     </box>
   )
 }

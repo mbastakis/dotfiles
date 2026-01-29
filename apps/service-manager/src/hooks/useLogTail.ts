@@ -11,7 +11,7 @@ interface UseLogTailResult {
   error: string | null
   refresh: () => Promise<void>
   scrollOffset: number
-  setScrollOffset: (offset: number) => void
+  setScrollOffset: React.Dispatch<React.SetStateAction<number>>
   totalLines: number
 }
 

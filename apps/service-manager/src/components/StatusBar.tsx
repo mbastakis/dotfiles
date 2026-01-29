@@ -1,4 +1,4 @@
-// StatusBar component with keyboard hints
+// StatusBar component with service info and status
 
 import type { Service } from "../lib/types"
 import { colors } from "@dotfiles/shared/theme"
@@ -45,37 +45,15 @@ export function StatusBar({ currentService, isLoading, mode }: StatusBarProps) {
         </text>
       </box>
       <box backgroundColor={colors.mantle} paddingX={2} paddingY={1}>
-        {mode === "normal" && (
-          <text fg={colors.subtext0}>
-            <span fg={colors.blue}>j/k</span>:Nav{"  "}
-            <span fg={colors.blue}>s</span>:Start{"  "}
-            <span fg={colors.blue}>x</span>:Stop{"  "}
-            <span fg={colors.blue}>r</span>:Restart{"  "}
-            <span fg={colors.blue}>i</span>:Install{"  "}
-            <span fg={colors.blue}>l</span>:Logs{"  "}
-            <span fg={colors.blue}>d</span>:Details{"  "}
-            <span fg={colors.blue}>R</span>:Refresh{"  "}
-            <span fg={colors.blue}>q</span>:Quit
-          </text>
-        )}
-        {mode === "detail" && (
-          <text fg={colors.subtext0}>
-            <span fg={colors.blue}>Esc/h</span>:Back{"  "}
-            <span fg={colors.blue}>s</span>:Start{"  "}
-            <span fg={colors.blue}>x</span>:Stop{"  "}
-            <span fg={colors.blue}>r</span>:Restart{"  "}
-            <span fg={colors.blue}>l</span>:Logs
-          </text>
-        )}
-        {mode === "logs" && (
-          <text fg={colors.subtext0}>
-            <span fg={colors.blue}>j/k</span>:Scroll{"  "}
-            <span fg={colors.blue}>g</span>:Top{"  "}
-            <span fg={colors.blue}>G</span>:Bottom{"  "}
-            <span fg={colors.blue}>r</span>:Refresh{"  "}
-            <span fg={colors.blue}>Esc/q</span>:Back
-          </text>
-        )}
+        <text fg={colors.subtext0}>
+          Press <span fg={colors.yellow}>?</span> for help
+          {mode !== "normal" && (
+            <>
+              {" │ "}
+              <span fg={colors.blue}>Esc</span> to go back
+            </>
+          )}
+        </text>
       </box>
     </box>
   )

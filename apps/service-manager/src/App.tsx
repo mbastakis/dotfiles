@@ -1,12 +1,13 @@
 // Main App component with mode management and keyboard shortcuts
 
-import { useState, useCallback, useMemo } from "react"
+import { useState, useCallback } from "react"
 import { useKeyboard, useRenderer } from "@opentui/react"
 import { Header } from "./components/Header"
 import { ServiceList } from "./components/ServiceList"
 import { StatusBar } from "./components/StatusBar"
 import { DetailPanel } from "./components/DetailPanel"
 import { LogViewer } from "./components/LogViewer"
+import { HelpModal } from "./components/HelpModal"
 import { useServices } from "./hooks/useServices"
 import { useServiceStatus } from "./hooks/useServiceStatus"
 import { useLogTail } from "./hooks/useLogTail"
@@ -15,12 +16,13 @@ import {
   startService,
   stopService,
   restartService,
-  installPlist,
+  uninstallService,
 } from "./lib/launchctl"
-import type { Service, ServiceStatus } from "./lib/types"
+import { updateConfigEnabled } from "./lib/plist"
+import type { Service } from "./lib/types"
 import { colors } from "@dotfiles/shared/theme"
 
-type AppMode = "normal" | "detail" | "logs"
+type AppMode = "normal" | "detail" | "logs" | "help"
 
 export function App() {
   const renderer = useRenderer()
@@ -28,28 +30,17 @@ export function App() {
   // State
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [mode, setMode] = useState<AppMode>("normal")
+  const [helpFromMode, setHelpFromMode] = useState<"normal" | "detail" | "logs">("normal")
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
   const [actionLoading, setActionLoading] = useState(false)
 
   // Services data
   const { services, loading, refresh } = useServices()
 
-  // Status polling - updates service statuses in place
-  const handleStatusUpdate = useCallback(
-    (
-      updates: Map<
-        string,
-        { status: ServiceStatus; pid?: number; exitCode?: number }
-      >
-    ) => {
-      // This is handled by the refresh cycle
-    },
-    []
-  )
+  // Status polling - refreshes when status changes detected
+  useServiceStatus(services, refresh, 3000)
 
-  useServiceStatus(services, handleStatusUpdate, 3000)
-
-  // Watch for plist file changes
+  // Watch for config file changes
   const { isWatching } = usePlistWatcher(refresh)
 
   // Current service
@@ -73,9 +64,9 @@ export function App() {
 
   // Service actions
   const handleStart = useCallback(async () => {
-    if (!currentService) return
+    if (!currentService || actionLoading) return
     if (currentService.status === "not_installed") {
-      showMessage("Service not installed. Press 'i' to install first.")
+      showMessage("Service not installed. Enable it first with 'e'.")
       return
     }
     setActionLoading(true)
@@ -83,10 +74,10 @@ export function App() {
     setActionLoading(false)
     showMessage(success ? `Started ${currentService.label}` : "Start failed")
     await refresh()
-  }, [currentService, refresh, showMessage])
+  }, [currentService, actionLoading, refresh, showMessage])
 
   const handleStop = useCallback(async () => {
-    if (!currentService) return
+    if (!currentService || actionLoading) return
     if (currentService.status === "not_installed") {
       showMessage("Service not installed")
       return
@@ -96,12 +87,12 @@ export function App() {
     setActionLoading(false)
     showMessage(success ? `Stopped ${currentService.label}` : "Stop failed")
     await refresh()
-  }, [currentService, refresh, showMessage])
+  }, [currentService, actionLoading, refresh, showMessage])
 
   const handleRestart = useCallback(async () => {
-    if (!currentService) return
+    if (!currentService || actionLoading) return
     if (currentService.status === "not_installed") {
-      showMessage("Service not installed. Press 'i' to install first.")
+      showMessage("Service not installed. Enable it first with 'e'.")
       return
     }
     setActionLoading(true)
@@ -110,29 +101,56 @@ export function App() {
     setActionLoading(false)
     showMessage(success ? `Restarted ${currentService.label}` : "Restart failed")
     await refresh()
-  }, [currentService, refresh, showMessage])
+  }, [currentService, actionLoading, refresh, showMessage])
 
-  const handleInstall = useCallback(async () => {
-    if (!currentService) return
+  const handleToggleEnabled = useCallback(async () => {
+    if (!currentService || actionLoading) return
     setActionLoading(true)
-    const success = await installPlist(
-      currentService.plistPath,
-      currentService.label
-    )
-    setActionLoading(false)
+    
+    const newEnabled = !currentService.enabled
+    const success = await updateConfigEnabled(currentService.configPath, newEnabled)
+    
     if (success) {
-      showMessage(`Installed ${currentService.label}`)
-      await refresh()
+      if (newEnabled) {
+        // Enable: install and start
+        const { installService } = await import("./lib/launchctl")
+        const installed = await installService(currentService.configPath)
+        if (!installed) {
+          showMessage(`Config updated but failed to install ${currentService.label}`)
+        } else {
+          const started = await startService(currentService.label)
+          showMessage(started 
+            ? `Enabled ${currentService.label}` 
+            : `Enabled ${currentService.label} (failed to start)`)
+        }
+      } else {
+        // Disable: stop and uninstall
+        const uninstalled = await uninstallService(currentService.label)
+        showMessage(uninstalled 
+          ? `Disabled ${currentService.label}` 
+          : `Config updated but failed to uninstall ${currentService.label}`)
+      }
     } else {
-      showMessage("Install failed")
+      showMessage("Failed to update config")
     }
-  }, [currentService, refresh, showMessage])
+    
+    setActionLoading(false)
+    await refresh()
+  }, [currentService, actionLoading, refresh, showMessage])
 
   // Handle keyboard input
   useKeyboard((key) => {
     // Global shortcuts
     if (key.ctrl && key.name === "c") {
       renderer.destroy()
+      return
+    }
+
+    // Help mode - any key closes it
+    if (mode === "help") {
+      if (key.name === "escape" || key.name === "?" || key.name === "enter") {
+        setMode(helpFromMode)
+      }
       return
     }
 
@@ -145,20 +163,27 @@ export function App() {
           break
         case "j":
         case "down":
-          setScrollOffset((o) => Math.min(logLines.length - 10, o + 1))
+          if (logLines.length === 0) break
+          setScrollOffset((o) => Math.max(0, Math.min(logLines.length - 10, o + 1)))
           break
         case "k":
         case "up":
+          if (logLines.length === 0) break
           setScrollOffset((o) => Math.max(0, o - 1))
           break
         case "g":
           setScrollOffset(0)
           break
         case "G":
+          if (logLines.length === 0) break
           setScrollOffset(Math.max(0, logLines.length - 20))
           break
         case "r":
           refreshLog()
+          break
+        case "?":
+          setHelpFromMode("logs")
+          setMode("help")
           break
       }
       return
@@ -180,12 +205,19 @@ export function App() {
         case "r":
           handleRestart()
           break
-        case "l":
+        case "e":
+          handleToggleEnabled()
+          break
+        case "enter":
           if (currentService?.stdoutPath) {
             setMode("logs")
           } else {
             showMessage("No log file configured")
           }
+          break
+        case "?":
+          setHelpFromMode("detail")
+          setMode("help")
           break
       }
       return
@@ -199,11 +231,13 @@ export function App() {
 
       case "j":
       case "down":
+        if (services.length === 0) break
         setSelectedIndex((i) => Math.min(services.length - 1, i + 1))
         break
 
       case "k":
       case "up":
+        if (services.length === 0) break
         setSelectedIndex((i) => Math.max(0, i - 1))
         break
 
@@ -216,16 +250,22 @@ export function App() {
         break
 
       case "r":
-        handleRestart()
+        if (key.shift) {
+          refresh()
+          showMessage("Refreshed services")
+        } else {
+          handleRestart()
+        }
         break
 
-      case "i":
-        handleInstall()
+      case "e":
+        handleToggleEnabled()
         break
 
-      case "l":
       case "enter":
-        if (currentService?.stdoutPath) {
+        if (!currentService) {
+          showMessage("No service selected")
+        } else if (currentService.stdoutPath) {
           setMode("logs")
         } else {
           showMessage("No log file configured for this service")
@@ -236,22 +276,26 @@ export function App() {
         setMode("detail")
         break
 
-      case "R":
-        refresh()
-        showMessage("Refreshed services")
-        break
-
       case "g":
-        setSelectedIndex(0)
+        if (services.length === 0) break
+        if (key.shift) {
+          setSelectedIndex(Math.max(0, services.length - 1))
+        } else {
+          setSelectedIndex(0)
+        }
         break
 
-      case "G":
-        setSelectedIndex(Math.max(0, services.length - 1))
+      case "?":
+        setHelpFromMode("normal")
+        setMode("help")
         break
     }
   })
 
   const isLoading = loading || actionLoading
+
+  // StatusBar mode (never "help")
+  const statusBarMode = mode === "help" ? helpFromMode : mode
 
   // Full-screen log view
   if (mode === "logs") {
@@ -274,7 +318,7 @@ export function App() {
         <StatusBar
           currentService={currentService}
           isLoading={isLoading}
-          mode={mode}
+          mode={statusBarMode}
         />
       </box>
     )
@@ -301,7 +345,7 @@ export function App() {
             services={services}
             selectedIndex={selectedIndex}
             onSelect={setSelectedIndex}
-            focused={mode === "normal"}
+            focused={mode === "normal" || mode === "help"}
           />
         </box>
 
@@ -311,8 +355,10 @@ export function App() {
       <StatusBar
         currentService={currentService}
         isLoading={isLoading}
-        mode={mode}
+        mode={statusBarMode}
       />
+
+      <HelpModal visible={mode === "help"} mode={helpFromMode} />
     </box>
   )
 }

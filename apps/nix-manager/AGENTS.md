@@ -21,6 +21,15 @@ Supports non-interactive usage:
 - `nix-manager --list` - All packages with status
 - `nix-manager --diff` - Only differences (extra/missing)
 - `nix-manager --help` - Usage info
+- `nix-manager add <name>` - Add brew (default), `--cask`, `--mas <name> <id>`, `--nix`
+- `nix-manager remove <name>` - Remove brew (default), `--cask`, `--mas`, `--nix`
+
+## CLI Implementation
+
+- `lib/flake.ts` has `addPackage()` and `removePackage()` functions that work standalone (no TUI dependency)
+- `lib/cli.ts` wraps these with colored output and duplicate/existence checks
+- `index.tsx` parses subcommands (`add`/`remove`) before checking for flag-style args (`--list`)
+- CLI functions return `boolean` for success/failure - exit codes handled in `index.tsx`
 
 ## File Dependencies
 

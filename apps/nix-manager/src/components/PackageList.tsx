@@ -3,6 +3,7 @@
 import { useTerminalDimensions } from "@opentui/react"
 import type { Package } from "../lib/types"
 import { colors } from "@dotfiles/shared/theme"
+import { EmptyState } from "@dotfiles/shared/components"
 
 interface PackageListProps {
   packages: Package[]
@@ -32,9 +33,7 @@ export function PackageList({
   if (packages.length === 0) {
     return (
       <box padding={2} justifyContent="center" alignItems="center" flexGrow={1}>
-        <text fg={colors.subtext0}>
-          <em>No packages found</em>
-        </text>
+        <EmptyState message="No packages found" hint="Try switching tabs" />
       </box>
     )
   }

@@ -16,13 +16,12 @@
       # List packages installed in system profile. To search by name, run:
       # $ nix-env -qaP | bat
       environment.systemPackages = [
-        pkgs.vim
-        pkgs.sshs
-        pkgs.glow
-        pkgs.nushell
-        pkgs.carapace
         pkgs.claude-code
         pkgs.gemini-cli
+        pkgs.glow
+        pkgs.nushell
+        pkgs.sshs
+        pkgs.vim
         pkgs.vsce
       ];
       nixpkgs.config.allowUnfree = true;
@@ -84,6 +83,7 @@
         "kap"
         "karabiner-elements"
         "keyclu"
+        "linear-linear"
         "obsidian"
         "opencode-desktop"
         "raycast"
@@ -110,6 +110,7 @@
         "browsh"
         "btop"
         "oven-sh/bun/bun"
+        "carapace"
         "chafa"
         "colima"
         "coreutils"
@@ -137,15 +138,17 @@
         "git-lfs"
         "glab"
         "gnu-sed"
+        "gnupg"
         "go"
+        "go-task"
         "graphicsmagick"
         "grep"
+        "hadolint"
         "helm"
         "httpie"
         "imagemagick"
         "iproute2mac"
         "jj"
-        "jq"
         "jq"
         "k9s"
         "kind"
@@ -176,6 +179,7 @@
         "ripgrep"
         "rust"
         "serie"
+        "shellcheck"
         "sketchybar"
         "sops"
         "sox"
@@ -184,6 +188,7 @@
         "statix"
         "stow"
         "tealdeer"
+        "tfenv"
         "thefuck"
         "tree"
         "tree-sitter-cli"
@@ -200,11 +205,12 @@
       ];
       homebrew.masApps = {
         "Amphetamine" = 937984704;
-        "Quick Sticky Notes" = 6740142714;
-        "Microsoft Outlook" = 985367838;
-        "Mark And Scribble" = 1635403801;
-        "Hidden Bar" = 1452453066;
         "Bitwarden" = 1352778147;
+        "Hidden Bar" = 1452453066;
+        "Mark And Scribble" = 1635403801;
+        "Microsoft Outlook" = 985367838;
+        "Quick Sticky Notes" = 6740142714;
+        "Say No to Notch" = 1639306886;
       };
       system.primaryUser = "mbastakis";
     };

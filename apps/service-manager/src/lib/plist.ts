@@ -1,42 +1,35 @@
-// Plist parsing utilities
+// Config parsing and plist generation utilities
 
-import { readdir, readFile, exists } from "fs/promises"
+import { readdir, readFile, exists, writeFile } from "fs/promises"
 import { homedir } from "os"
-import { join, basename } from "path"
-import type { PlistData, Service } from "./types"
+import { join } from "path"
+import { parse as parseToml, stringify as stringifyToml } from "smol-toml"
+import type { Service, ServiceConfig, ParseConfigResult } from "./types"
 
-// Try common dotfiles locations
-function findDotfilesDir(): string {
-  const candidates = [
-    join(homedir(), "dotfiles"),
-    join(homedir(), "dev/dotfiles"),
-    join(homedir(), ".dotfiles"),
-  ]
-  
-  for (const candidate of candidates) {
-    try {
-      const fs = require("fs")
-      if (fs.existsSync(join(candidate, "dot-launchagents"))) {
-        return candidate
-      }
-    } catch {}
-  }
-  
-  // Fallback - resolve from this script's location
-  const scriptDir = import.meta.dir
-  // service-manager/src/lib/plist.ts -> go up to dotfiles
-  return join(scriptDir, "../../../../..")
+/**
+ * Escape special XML characters and control characters to prevent malformed plist generation
+ */
+function escapeXml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;")
+    .replace(/\r/g, "&#13;")
+    .replace(/\n/g, "&#10;")
+    .replace(/\t/g, "&#9;")
 }
 
-const DOTFILES_DIR = findDotfilesDir()
-const LAUNCHAGENTS_SRC = join(DOTFILES_DIR, "dot-launchagents")
+// Config and destination directories
+const CONFIG_DIR = join(homedir(), ".config/service-manager")
 const LAUNCHAGENTS_DEST = join(homedir(), "Library/LaunchAgents")
 
 /**
- * Get the path to the dotfiles LaunchAgents directory
+ * Get the path to the service-manager config directory
  */
-export function getLaunchAgentsSrcPath(): string {
-  return LAUNCHAGENTS_SRC
+export function getConfigDir(): string {
+  return CONFIG_DIR
 }
 
 /**
@@ -47,57 +40,116 @@ export function getLaunchAgentsDestPath(): string {
 }
 
 /**
- * List all plist files in the dotfiles LaunchAgents directory
+ * List all TOML config files in the config directory
  */
-export async function listPlistFiles(): Promise<string[]> {
+export async function listConfigFiles(): Promise<string[]> {
   try {
-    const files = await readdir(LAUNCHAGENTS_SRC)
+    if (!(await exists(CONFIG_DIR))) {
+      return []
+    }
+    const files = await readdir(CONFIG_DIR)
     return files
-      .filter((f) => f.endsWith(".plist"))
-      .map((f) => join(LAUNCHAGENTS_SRC, f))
+      .filter((f) => f.endsWith(".toml"))
+      .map((f) => join(CONFIG_DIR, f))
   } catch {
     return []
   }
 }
 
 /**
- * Parse a plist file using plutil and return parsed data
+ * Expand ~ to home directory in paths
  */
-export async function parsePlist(path: string): Promise<PlistData | null> {
+export function expandPath(value: string): string {
+  if (value.startsWith("~")) {
+    return join(homedir(), value.slice(1))
+  }
+  return value
+}
+
+/**
+ * Parse a TOML config file and return ServiceConfig with detailed errors
+ */
+export function parseConfigWithError(
+  content: string,
+  filename: string
+): ParseConfigResult {
   try {
-    // Use plutil to convert plist to JSON
-    const proc = Bun.spawn(["plutil", "-convert", "json", "-o", "-", path], {
-      stdout: "pipe",
-      stderr: "pipe",
-    })
+    const data = parseToml(content)
 
-    const output = await new Response(proc.stdout).text()
-    await proc.exited
-
-    if (proc.exitCode !== 0) {
-      return null
+    // Validate required fields with specific error messages
+    if (typeof data.enabled !== "boolean") {
+      return { success: false, error: `${filename}: missing or invalid 'enabled' field (must be true/false)` }
     }
 
-    const data = JSON.parse(output) as PlistData
-    return data
+    const service = data.service as ServiceConfig["service"] | undefined
+    if (!service) {
+      return { success: false, error: `${filename}: missing [service] section` }
+    }
+
+    if (!service.label || typeof service.label !== "string") {
+      return { success: false, error: `${filename}: missing or invalid 'service.label'` }
+    }
+
+    if (!Array.isArray(service.program)) {
+      return { success: false, error: `${filename}: 'service.program' must be an array` }
+    }
+
+    if (service.program.length === 0) {
+      return { success: false, error: `${filename}: 'service.program' cannot be empty` }
+    }
+
+    if (!service.program.every((p) => typeof p === "string")) {
+      return { success: false, error: `${filename}: all 'service.program' elements must be strings` }
+    }
+
+    return {
+      success: true,
+      config: {
+        enabled: data.enabled as boolean,
+        service: {
+          label: service.label,
+          program: service.program,
+          run_at_load: service.run_at_load,
+          keep_alive: service.keep_alive,
+          working_directory: service.working_directory,
+          environment: service.environment,
+        },
+        logs: data.logs as ServiceConfig["logs"],
+      },
+    }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Unknown parse error"
+    return { success: false, error: `${filename}: ${message}` }
+  }
+}
+
+/**
+ * Parse a TOML config file and return ServiceConfig (null on error)
+ */
+export async function parseConfig(path: string): Promise<ServiceConfig | null> {
+  try {
+    const content = await readFile(path, "utf-8")
+    const filename = path.split("/").pop() || path
+    const result = parseConfigWithError(content, filename)
+    return result.success ? result.config : null
   } catch {
     return null
   }
 }
 
 /**
- * Replace __HOME__ placeholder with actual home directory
+ * Parse a TOML config file with detailed error reporting
  */
-export function replaceHomePlaceholder(value: string): string {
-  return value.replace(/__HOME__/g, homedir())
-}
-
-/**
- * Check if a plist is installed in ~/Library/LaunchAgents
- */
-export async function isPlistInstalled(label: string): Promise<boolean> {
-  const installedPath = join(LAUNCHAGENTS_DEST, `${label}.plist`)
-  return exists(installedPath)
+export async function parseConfigDetailed(path: string): Promise<ParseConfigResult> {
+  try {
+    const content = await readFile(path, "utf-8")
+    const filename = path.split("/").pop() || path
+    return parseConfigWithError(content, filename)
+  } catch (err) {
+    const filename = path.split("/").pop() || path
+    const message = err instanceof Error ? err.message : "Failed to read file"
+    return { success: false, error: `${filename}: ${message}` }
+  }
 }
 
 /**
@@ -108,41 +160,150 @@ export function getInstalledPath(label: string): string {
 }
 
 /**
- * Parse a plist file and return a partial Service object
+ * Parse a config file and return a partial Service object
  */
-export async function parsePlistToService(
-  plistPath: string
+export async function parseConfigToService(
+  configPath: string
 ): Promise<Omit<Service, "status" | "pid" | "exitCode"> | null> {
-  const data = await parsePlist(plistPath)
-  if (!data || !data.Label) {
+  const config = await parseConfig(configPath)
+  if (!config) {
     return null
   }
 
-  const label = data.Label
+  const { service, logs, enabled } = config
 
   return {
-    label,
-    plistPath,
-    installedPath: getInstalledPath(label),
-    program: data.ProgramArguments || [],
-    runAtLoad: data.RunAtLoad ?? false,
-    keepAlive: data.KeepAlive ?? false,
-    stdoutPath: data.StandardOutPath
-      ? replaceHomePlaceholder(data.StandardOutPath)
+    label: service.label,
+    configPath,
+    installedPath: getInstalledPath(service.label),
+    enabled,
+    program: service.program,
+    runAtLoad: service.run_at_load ?? false,
+    keepAlive: service.keep_alive ?? false,
+    stdoutPath: logs?.stdout ? expandPath(logs.stdout) : undefined,
+    stderrPath: logs?.stderr ? expandPath(logs.stderr) : undefined,
+    workingDirectory: service.working_directory
+      ? expandPath(service.working_directory)
       : undefined,
-    stderrPath: data.StandardErrorPath
-      ? replaceHomePlaceholder(data.StandardErrorPath)
-      : undefined,
-    workingDirectory: data.WorkingDirectory
-      ? replaceHomePlaceholder(data.WorkingDirectory)
-      : undefined,
-    environmentVariables: data.EnvironmentVariables
-      ? Object.fromEntries(
-          Object.entries(data.EnvironmentVariables).map(([k, v]) => [
-            k,
-            replaceHomePlaceholder(v),
-          ])
-        )
-      : undefined,
+    environmentVariables: service.environment,
+  }
+}
+
+/**
+ * Generate plist XML from a ServiceConfig
+ */
+export function generatePlist(config: ServiceConfig): string {
+  const { service, logs } = config
+  const home = homedir()
+  
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>${escapeXml(service.label)}</string>
+
+    <key>ProgramArguments</key>
+    <array>
+${service.program.map((arg) => `        <string>${escapeXml(expandPath(arg))}</string>`).join("\n")}
+    </array>
+`
+
+  // Environment variables (expand ~ in values)
+  const userEnv: Record<string, string> = {}
+  if (service.environment) {
+    for (const [key, value] of Object.entries(service.environment)) {
+      userEnv[key] = expandPath(value)
+    }
+  }
+  
+  const env: Record<string, string> = {
+    HOME: home,
+    PATH: "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+    ...userEnv,
+  }
+  
+  xml += `
+    <key>EnvironmentVariables</key>
+    <dict>
+${Object.entries(env)
+  .map(
+    ([key, value]) =>
+      `        <key>${escapeXml(key)}</key>
+        <string>${escapeXml(value)}</string>`
+  )
+  .join("\n")}
+    </dict>
+`
+
+  // Run at load
+  if (service.run_at_load) {
+    xml += `
+    <key>RunAtLoad</key>
+    <true/>
+`
+  }
+
+  // Keep alive
+  if (service.keep_alive) {
+    xml += `
+    <key>KeepAlive</key>
+    <true/>
+`
+  }
+
+  // Log paths
+  if (logs?.stdout) {
+    xml += `
+    <key>StandardOutPath</key>
+    <string>${escapeXml(expandPath(logs.stdout))}</string>
+`
+  }
+
+  if (logs?.stderr) {
+    xml += `
+    <key>StandardErrorPath</key>
+    <string>${escapeXml(expandPath(logs.stderr))}</string>
+`
+  }
+
+  // Working directory
+  if (service.working_directory) {
+    xml += `
+    <key>WorkingDirectory</key>
+    <string>${escapeXml(expandPath(service.working_directory))}</string>
+`
+  }
+
+  xml += `</dict>
+</plist>
+`
+
+  return xml
+}
+
+/**
+ * Update the enabled state in a TOML config file
+ */
+export async function updateConfigEnabled(
+  configPath: string,
+  enabled: boolean
+): Promise<boolean> {
+  try {
+    const content = await readFile(configPath, "utf-8")
+    const data = parseToml(content)
+
+    // Check if enabled field exists and is a boolean
+    if (typeof data.enabled !== "boolean") {
+      return false
+    }
+
+    // Update and write back using TOML serializer
+    data.enabled = enabled
+    const newContent = stringifyToml(data)
+    await writeFile(configPath, newContent, "utf-8")
+    return true
+  } catch {
+    return false
   }
 }

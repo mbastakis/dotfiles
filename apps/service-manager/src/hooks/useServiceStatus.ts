@@ -1,52 +1,44 @@
 // Hook for polling service status updates
 
-import { useState, useEffect, useRef } from "react"
-import type { Service, ServiceStatus } from "../lib/types"
+import { useEffect, useRef } from "react"
+import type { Service } from "../lib/types"
 import { getServiceStatus } from "../lib/launchctl"
-
-interface UseServiceStatusResult {
-  updateStatus: (
-    services: Service[]
-  ) => Promise<Map<string, { status: ServiceStatus; pid?: number; exitCode?: number }>>
-}
 
 export function useServiceStatus(
   services: Service[],
-  onStatusUpdate: (
-    updates: Map<string, { status: ServiceStatus; pid?: number; exitCode?: number }>
-  ) => void,
+  onStatusChange: () => void,
   pollInterval: number = 3000
-): UseServiceStatusResult {
+): void {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
-
-  const updateStatus = async (
-    servicesToCheck: Service[]
-  ): Promise<Map<string, { status: ServiceStatus; pid?: number; exitCode?: number }>> => {
-    const updates = new Map<
-      string,
-      { status: ServiceStatus; pid?: number; exitCode?: number }
-    >()
-
-    for (const service of servicesToCheck) {
-      const statusInfo = await getServiceStatus(service.label)
-      updates.set(service.label, statusInfo)
-    }
-
-    return updates
-  }
+  const lastStatusRef = useRef<Map<string, string>>(new Map())
 
   useEffect(() => {
     if (services.length === 0) return
 
     const poll = async () => {
-      const updates = await updateStatus(services)
-      onStatusUpdate(updates)
+      let hasChanges = false
+
+      for (const service of services) {
+        const statusInfo = await getServiceStatus(service.label)
+        const lastStatus = lastStatusRef.current.get(service.label)
+        
+        if (lastStatus !== statusInfo.status) {
+          hasChanges = true
+          lastStatusRef.current.set(service.label, statusInfo.status)
+        }
+      }
+
+      if (hasChanges) {
+        onStatusChange()
+      }
     }
 
-    // Initial poll
-    poll()
+    // Initialize last known statuses
+    for (const service of services) {
+      lastStatusRef.current.set(service.label, service.status)
+    }
 
-    // Set up interval
+    // Set up interval (don't poll immediately, we already have initial state)
     intervalRef.current = setInterval(poll, pollInterval)
 
     return () => {
@@ -54,7 +46,5 @@ export function useServiceStatus(
         clearInterval(intervalRef.current)
       }
     }
-  }, [services.map((s) => s.label).join(","), pollInterval])
-
-  return { updateStatus }
+  }, [services.map((s) => s.label).join(","), pollInterval, onStatusChange])
 }

@@ -1,4 +1,3 @@
-# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: opencode
 description: AI coding assistant CLI
 parsing: disabled

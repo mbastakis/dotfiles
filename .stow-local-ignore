@@ -3,6 +3,7 @@ README.md
 AGENTS\.md
 ai-docs
 .gitignore
+apps
 bin
 setup.sh
 vscode_extensions
@@ -13,4 +14,6 @@ vscode_extensions
 .envrc
 .ripgreprc
 .ruff_cache
-dot-launchagents
+node_modules
+bun\.lock
+\.versions

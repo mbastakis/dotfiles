@@ -73,12 +73,7 @@ export function StatusBar({
       </box>
       <box backgroundColor={colors.mantle} paddingLeft={2} paddingRight={2} paddingTop={1} paddingBottom={1}>
         <text fg={colors.subtext0}>
-          <span>Sort: </span>
-          <span fg={colors.blue}>{sortMode === "name" ? "Name" : sortMode === "status-asc" ? "Status ↑" : "Status ↓"}</span>
-          <span> │ </span>
-          <span fg={colors.subtext0}>Press </span>
-          <span fg={colors.yellow}>?</span>
-          <span fg={colors.subtext0}> for help</span>
+          Press <span fg={colors.yellow}>?</span> for help
         </text>
       </box>
     </box>

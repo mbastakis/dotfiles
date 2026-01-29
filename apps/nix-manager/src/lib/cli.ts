@@ -5,9 +5,12 @@ import {
   readFlake,
   extractBrews,
   extractCasks,
+  extractMasApps,
   extractNixPackages,
+  addPackage,
+  removePackage,
 } from "./flake"
-import type { PackageStatus } from "./types"
+import type { PackageStatus, PackageType } from "./types"
 
 // ANSI color codes matching Catppuccin Mocha
 const ansi = {
@@ -243,10 +246,22 @@ export function printHelp(): void {
   console.log(`${ansi.mauve}${ansi.bold}nix-manager${ansi.reset} - TUI for managing Homebrew packages vs Nix flake
 
 ${ansi.blue}Usage:${ansi.reset}
-  nix-manager           Start interactive TUI
-  nix-manager --list    List all packages with status
-  nix-manager --diff    Show only extra/missing packages
-  nix-manager --help    Show this help message
+  nix-manager                        Start interactive TUI
+  nix-manager --list                 List all packages with status
+  nix-manager --diff                 Show only extra/missing packages
+  nix-manager --help                 Show this help message
+
+${ansi.blue}Add packages:${ansi.reset}
+  nix-manager add <name>             Add brew formula (default)
+  nix-manager add --cask <name>      Add Homebrew cask
+  nix-manager add --mas <name> <id>  Add Mac App Store app
+  nix-manager add --nix <name>       Add Nix package
+
+${ansi.blue}Remove packages:${ansi.reset}
+  nix-manager remove <name>          Remove brew formula (default)
+  nix-manager remove --cask <name>   Remove Homebrew cask
+  nix-manager remove --mas <name>    Remove Mac App Store app
+  nix-manager remove --nix <name>    Remove Nix package
 
 ${ansi.blue}Status indicators:${ansi.reset}
   ${ansi.green}✓ synced${ansi.reset}   Package in flake and installed
@@ -265,4 +280,127 @@ ${ansi.blue}TUI Keyboard shortcuts:${ansi.reset}
   Esc         Clear filter/selection
   q           Quit
 `)
+}
+
+/**
+ * Add a package to flake.nix via CLI
+ */
+export async function runCliAdd(
+  packageType: PackageType,
+  packageName: string,
+  masAppId?: number
+): Promise<boolean> {
+  const typeLabels: Record<PackageType, string> = {
+    brews: "brew formula",
+    casks: "cask",
+    masApps: "Mac App Store app",
+    nixpkgs: "nix package",
+  }
+
+  try {
+    // Check if package already exists
+    const content = await readFlake()
+    let exists = false
+
+    if (packageType === "brews") {
+      const packages = extractBrews(content)
+      exists = packages.some(
+        (p) => p === packageName || p.split("/").pop() === packageName
+      )
+    } else if (packageType === "casks") {
+      exists = extractCasks(content).includes(packageName)
+    } else if (packageType === "masApps") {
+      exists = extractMasApps(content).some((app) => app.name === packageName)
+    } else {
+      exists = extractNixPackages(content).includes(packageName)
+    }
+
+    if (exists) {
+      console.log(
+        `${ansi.yellow}! ${typeLabels[packageType]} "${packageName}" already exists in flake.nix${ansi.reset}`
+      )
+      return true // Not an error, just a no-op
+    }
+
+    // Validate masApp has ID
+    if (packageType === "masApps" && masAppId === undefined) {
+      console.log(
+        `${ansi.red}Error: Mac App Store apps require an app ID${ansi.reset}`
+      )
+      console.log(`${ansi.subtext}Usage: nix-manager add --mas "App Name" 123456${ansi.reset}`)
+      return false
+    }
+
+    await addPackage(packageName, packageType, undefined, masAppId)
+
+    console.log(
+      `${ansi.green}✓ Added ${typeLabels[packageType]} "${packageName}" to flake.nix${ansi.reset}`
+    )
+    console.log(
+      `${ansi.subtext}Run: cd ~/.config/nix-darwin && darwin-rebuild switch --flake .#simple${ansi.reset}`
+    )
+    return true
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error)
+    console.log(`${ansi.red}Error adding package: ${message}${ansi.reset}`)
+    return false
+  }
+}
+
+/**
+ * Remove a package from flake.nix via CLI
+ */
+export async function runCliRemove(
+  packageType: PackageType,
+  packageName: string
+): Promise<boolean> {
+  const typeLabels: Record<PackageType, string> = {
+    brews: "brew formula",
+    casks: "cask",
+    masApps: "Mac App Store app",
+    nixpkgs: "nix package",
+  }
+
+  try {
+    // Check if package exists
+    const content = await readFlake()
+    let exists = false
+    let fullName = packageName
+
+    if (packageType === "brews") {
+      const packages = extractBrews(content)
+      const found = packages.find(
+        (p) => p === packageName || p.split("/").pop() === packageName
+      )
+      exists = !!found
+      if (found) fullName = found
+    } else if (packageType === "casks") {
+      exists = extractCasks(content).includes(packageName)
+    } else if (packageType === "masApps") {
+      exists = extractMasApps(content).some((app) => app.name === packageName)
+    } else {
+      exists = extractNixPackages(content).includes(packageName)
+    }
+
+    if (!exists) {
+      console.log(
+        `${ansi.yellow}! ${typeLabels[packageType]} "${packageName}" not found in flake.nix${ansi.reset}`
+      )
+      return true // Not an error, just a no-op
+    }
+
+    await removePackage(fullName, packageType)
+
+    console.log(
+      `${ansi.green}✓ Removed ${typeLabels[packageType]} "${packageName}" from flake.nix${ansi.reset}`
+    )
+    console.log(
+      `${ansi.subtext}Run: cd ~/.config/nix-darwin && darwin-rebuild switch --flake .#simple${ansi.reset}`
+    )
+    return true
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error)
+    console.log(`${ansi.red}Error removing package: ${message}${ansi.reset}`)
+    return false
+  }
 }

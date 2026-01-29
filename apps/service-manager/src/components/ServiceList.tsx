@@ -2,6 +2,7 @@
 
 import type { Service } from "../lib/types"
 import { colors } from "@dotfiles/shared/theme"
+import { EmptyState } from "@dotfiles/shared/components"
 
 interface ServiceListProps {
   services: Service[]
@@ -18,15 +19,11 @@ export function ServiceList({
 }: ServiceListProps) {
   if (services.length === 0) {
     return (
-      <box
-        padding={2}
-        justifyContent="center"
-        alignItems="center"
-        flexGrow={1}
-      >
-        <text fg={colors.subtext0}>
-          <em>No LaunchAgent plists found in ~/dotfiles/dot-launchagents/</em>
-        </text>
+      <box padding={2} justifyContent="center" alignItems="center" flexGrow={1}>
+        <EmptyState
+          message="No service configs found"
+          hint="Add .toml files to ~/.config/service-manager/"
+        />
       </box>
     )
   }
@@ -51,13 +48,14 @@ export function ServiceList({
 }
 
 function formatServiceLine(svc: Service): string {
+  const enabledIcon = svc.enabled ? "✓" : "○"
   const statusIcon = getStatusIcon(svc.status)
   const statusText = getStatusText(svc)
 
   // Pad the label to align status
-  const paddedLabel = svc.label.padEnd(30)
+  const paddedLabel = svc.label.padEnd(28)
 
-  return `${statusIcon} ${paddedLabel} ${statusText}`
+  return `${enabledIcon} ${statusIcon} ${paddedLabel} ${statusText}`
 }
 
 function getStatusIcon(status: Service["status"]): string {

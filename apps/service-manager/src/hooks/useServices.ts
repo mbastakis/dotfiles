@@ -1,8 +1,8 @@
-// Hook for discovering and loading services from plist files
+// Hook for discovering and loading services from config files
 
 import { useState, useEffect, useCallback } from "react"
 import type { Service } from "../lib/types"
-import { listPlistFiles, parsePlistToService, isPlistInstalled } from "../lib/plist"
+import { listConfigFiles, parseConfigToService } from "../lib/plist"
 import { getServiceStatus } from "../lib/launchctl"
 
 interface UseServicesResult {
@@ -22,9 +22,9 @@ export function useServices(): UseServicesResult {
     setError(null)
 
     try {
-      const plistPaths = await listPlistFiles()
+      const configPaths = await listConfigFiles()
 
-      if (plistPaths.length === 0) {
+      if (configPaths.length === 0) {
         setServices([])
         setLoading(false)
         return
@@ -32,8 +32,8 @@ export function useServices(): UseServicesResult {
 
       const loadedServices: Service[] = []
 
-      for (const plistPath of plistPaths) {
-        const partialService = await parsePlistToService(plistPath)
+      for (const configPath of configPaths) {
+        const partialService = await parseConfigToService(configPath)
         if (!partialService) continue
 
         // Get current status

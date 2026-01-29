@@ -1,0 +1,16 @@
+enabled = true
+
+[service]
+label = "ai.opencode.serve"
+program = [ "/opt/homebrew/bin/opencode", "serve" ]
+run_at_load = true
+keep_alive = true
+working_directory = "~"
+
+[service.environment]
+AWS_PROFILE = "claude-code"
+AWS_DEFAULT_REGION = "eu-central-1"
+
+[logs]
+stdout = "~/.local/share/opencode/serve.log"
+stderr = "~/.local/share/opencode/serve.error.log"
