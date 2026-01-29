@@ -1,0 +1,18 @@
+{
+  "name": "@dotfiles/shared",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./theme": "./src/theme/index.ts",
+    "./utils": "./src/utils/index.ts",
+    "./hooks": "./src/hooks/index.ts",
+    "./components": "./src/components/index.ts",
+    "./constants": "./src/constants/index.ts"
+  },
+  "peerDependencies": {
+    "@opentui/react": "*",
+    "react": ">=19.0.0"
+  }
+}

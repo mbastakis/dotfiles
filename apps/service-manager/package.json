@@ -1,0 +1,19 @@
+{
+  "name": "service-manager",
+  "version": "1.0.0",
+  "description": "TUI for managing macOS LaunchAgent services",
+  "type": "module",
+  "scripts": {
+    "start": "bun run src/index.tsx"
+  },
+  "dependencies": {
+    "@dotfiles/shared": "file:../shared",
+    "@opentui/core": "latest",
+    "@opentui/react": "latest",
+    "react": ">=19.0.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/react": ">=19.0.0"
+  }
+}
