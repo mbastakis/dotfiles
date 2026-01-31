@@ -15,9 +15,13 @@ export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --e
 # CTRL-T: Paste selected files and directories
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_CTRL_T_OPTS="
+  --height=~20 --layout=reverse
+  --border=rounded --border-label=' Select file ' --padding=0,1
+  --prompt='  ' --pointer='→' --cycle --scrollbar='│'
   --walker-skip .git,node_modules,target
-  --preview 'bat -n --color=always {}'
-  --bind 'ctrl-/:change-preview-window(down|hidden|)'"
+  --preview 'bat -n --color=always --line-range :500 {}'
+  --preview-window=right,50%,border-left
+  --bind 'ctrl-/:toggle-preview,ctrl-d:preview-page-down,ctrl-u:preview-page-up'"
 
 # ALT-C: Interactive zoxide (jump to any directory)
 # Disabled fzf's default ALT-C in favor of zoxide interactive

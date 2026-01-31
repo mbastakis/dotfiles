@@ -21,10 +21,10 @@ fi
 zle -N ftext-widget
 bindkey '^F' ftext-widget
 
-# Zoxide interactive selection (Alt-C)
+# Zoxide interactive selection (Ctrl-Z)
 function run_zoxide_interactive() {
   BUFFER="cdi"
   zle accept-line
 }
 zle -N run_zoxide_interactive
-bindkey '\ec' run_zoxide_interactive
+bindkey '^Z' run_zoxide_interactive

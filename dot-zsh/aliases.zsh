@@ -17,6 +17,7 @@ alias lgit="eza --long --git"
 
 # Utilities
 alias reload="exec zsh" # Replace shell with fresh instance
+alias r="reload"
 alias zsh-profile="ZSHRC_PROFILE=1 zsh -i -c exit"
 alias zsh-time="time (zsh -i -c exit)"
 
@@ -32,7 +33,7 @@ alias lg="lazygit"
 alias b="bat --paging=always --color=always --style=plain --line-range=1:1000 --decorations=always"
 
 # Atuin
-alias r="atuin search -i"
+# alias r="atuin search -i"  # Use ctrl+r instead
 
 # Obsidian CLI
 alias obs="obsidian-cli"
