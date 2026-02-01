@@ -10,6 +10,8 @@ working_directory = "~"
 [service.environment]
 AWS_PROFILE = "claude-code"
 AWS_DEFAULT_REGION = "eu-central-1"
+OPENCODE_EXPERIMENTAL_PLAN_MODE = "1"
+OPENCODE_EXPERIMENTAL_MARKDOWN = "1"
 
 [logs]
 stdout = "~/.local/share/opencode/serve.log"

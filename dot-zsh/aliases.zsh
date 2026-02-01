@@ -45,8 +45,9 @@ alias keytest="cat -v"
 alias ctx="kubectx"
 
 # Opencode
-alias oc="OPENCODE_EXPERIMENTAL_PLAN_MODE=1 opencode"
-alias ocr="opencode -m amazon-bedrock/anthropic.claude-haiku-4-5-20251001-v1:0 run"
+OC_SERVER="http://localhost:4096"
+alias oc="opencode attach $OC_SERVER --dir ."
+alias ocr="opencode run --attach $OC_SERVER -m amazon-bedrock/anthropic.claude-haiku-4-5-20251001-v1:0"
 
 # Ghostty
 alias ghostty-settings="nvim ~/.config/ghostty/config"
