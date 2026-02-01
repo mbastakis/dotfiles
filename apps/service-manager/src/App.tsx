@@ -208,6 +208,7 @@ export function App() {
         case "e":
           handleToggleEnabled()
           break
+        case "l":
         case "enter":
           if (currentService?.stdoutPath) {
             setMode("logs")
@@ -262,6 +263,7 @@ export function App() {
         handleToggleEnabled()
         break
 
+      case "l":
       case "enter":
         if (!currentService) {
           showMessage("No service selected")

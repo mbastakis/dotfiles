@@ -14,7 +14,6 @@ const normalShortcuts = [
   { key: "s", desc: "Start service" },
   { key: "x", desc: "Stop service" },
   { key: "r", desc: "Restart service" },
-  { key: "i", desc: "Install service" },
   { key: "e", desc: "Toggle enabled" },
   { key: "l/Enter", desc: "View logs" },
   { key: "d", desc: "View details" },

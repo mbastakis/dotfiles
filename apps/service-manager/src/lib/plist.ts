@@ -190,11 +190,35 @@ export async function parseConfigToService(
 }
 
 /**
+ * Generate a shell command that logs a startup timestamp then exec's the real program
+ * Also redirects stderr to stdout so all logs appear in one file
+ * Truncates the log file on startup to prevent unbounded growth
+ */
+function generateStartupWrapper(program: string[], stdoutPath?: string): string[] {
+  if (!stdoutPath) {
+    // No log file, just run the program directly
+    return program
+  }
+  
+  const expandedStdout = expandPath(stdoutPath)
+  const expandedProgram = program.map(expandPath)
+  const escapedProgram = expandedProgram.map((arg) => `'${arg.replace(/'/g, "'\\''")}'`).join(" ")
+  
+  // Shell command that truncates log, writes timestamp, then exec's the real program with stderr redirected to stdout
+  const shellCmd = `echo "=== Service started at $(date '+%Y-%m-%d %H:%M:%S') ===" > "${expandedStdout}" && exec ${escapedProgram} 2>&1`
+  
+  return ["/bin/sh", "-c", shellCmd]
+}
+
+/**
  * Generate plist XML from a ServiceConfig
  */
 export function generatePlist(config: ServiceConfig): string {
   const { service, logs } = config
   const home = homedir()
+  
+  // Wrap the program to add startup timestamp logging
+  const wrappedProgram = generateStartupWrapper(service.program, logs?.stdout)
   
   let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -205,7 +229,7 @@ export function generatePlist(config: ServiceConfig): string {
 
     <key>ProgramArguments</key>
     <array>
-${service.program.map((arg) => `        <string>${escapeXml(expandPath(arg))}</string>`).join("\n")}
+${wrappedProgram.map((arg) => `        <string>${escapeXml(arg)}</string>`).join("\n")}
     </array>
 `
 

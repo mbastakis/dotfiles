@@ -3,7 +3,7 @@
 import type { Service } from "../lib/types"
 import { colors } from "@dotfiles/shared/theme"
 import { truncateText, truncatePath } from "@dotfiles/shared/utils"
-import { PropertyRow, Panel, StatusIndicator } from "@dotfiles/shared/components"
+import { PropertyRow, Panel } from "@dotfiles/shared/components"
 
 interface DetailPanelProps {
   visible: boolean
@@ -40,7 +40,7 @@ export function DetailPanel({ visible, service }: DetailPanelProps) {
           label="Exit Code"
           value={
             <span fg={service.exitCode === 0 ? colors.green : colors.red}>
-              {service.exitCode}
+              {String(service.exitCode)}
             </span>
           }
         />
@@ -110,10 +110,10 @@ export function DetailPanel({ visible, service }: DetailPanelProps) {
 function ServiceStatus({ status }: { status: Service["status"] }) {
   switch (status) {
     case "running":
-      return <StatusIndicator color={colors.green} icon="●" text="Running" />
+      return <span fg={colors.green}>● Running</span>
     case "stopped":
-      return <StatusIndicator color={colors.red} icon="○" text="Stopped" />
+      return <span fg={colors.red}>○ Stopped</span>
     case "not_installed":
-      return <StatusIndicator color={colors.yellow} icon="◌" text="Not Installed" />
+      return <span fg={colors.yellow}>◌ Not Installed</span>
   }
 }
