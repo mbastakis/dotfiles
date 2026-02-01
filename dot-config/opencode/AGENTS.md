@@ -7,10 +7,9 @@ Available subagents and delegation guidance.
 - `commit` — Git commit agent (pre-approved git commands)
 - `explore` — Fast local codebase search, returns file paths + line numbers
 - `manager` — Project manager using Linear MCP with BMAD-style workflows
-- `oracle` — Strategic advisor for architecture/debugging decisions
 - `librarian` — Research source code: GitHub repos, issues/PRs, library internals via `gh` CLI
 - `web-researcher` — Web search: DuckDuckGo + webfetch for docs, tutorials, best practices
-- `web-crawler` — Persist web content to ai-docs/ files
+- `crawl` — Persist web content to ai-docs/ files (invoke via `/crawl` command or `@crawl`)
 
 ### Manager Agent (Max)
 
@@ -51,8 +50,7 @@ Manager uses BMAD-style workflows and menu triggers (e.g., `[RW]` for research, 
 | `@manager`        | "Create issue for X", "Project status?", `[RW]`, `[CE]`, etc. | Linear MCP tools               | Issue/project links + summaries |
 | `@librarian`      | "How does [lib] implement X?", "GitHub issues for Y"          | `gh` CLI, git clone, webfetch  | Permalinks + code snippets      |
 | `@web-researcher` | "Best practices for X", "Compare A vs B", "Find URLs about Y" | DuckDuckGo, webfetch, crawl4ai | URLs + synthesized findings     |
-| `@web-crawler`    | "Save docs for X to ai-docs/"                                 | crawl4ai, write                | Persisted markdown files        |
-| `@oracle`         | Architecture decisions, 2+ failed attempts                    | Read-only, webfetch            | Strategic recommendations       |
+| `@crawl`          | "Save docs for X to ai-docs/", `/crawl <url>`                 | crawl4ai, write                | Persisted markdown files        |
 
 **Note**: `@librarian` can delegate to `@web-researcher` when it needs to discover URLs about a topic before investigating them with `gh` CLI.
 
@@ -75,7 +73,6 @@ Before taking action on a user request, classify it to determine the appropriate
 | **Exploratory** | "How does X work?", "Find Y"                  | Fire `@explore` (1-3 agents) + tools in parallel |
 | **Open-ended**  | "Improve", "Refactor", "Add feature"          | Assess codebase first, then plan                 |
 | **External**    | Library questions, "how does [package] work?" | Delegate to `@librarian`                         |
-| **Strategic**   | Architecture decisions, 2+ failed attempts    | Consult `@oracle`                                |
 | **Ambiguous**   | Unclear scope, multiple interpretations       | Ask ONE clarifying question                      |
 
 ### Agent Delegation Triggers
@@ -84,6 +81,4 @@ Before taking action on a user request, classify it to determine the appropriate
 | ------------------------------------------- | ---------------------------------------- |
 | 2+ modules/directories involved             | Fire `@explore` in background            |
 | External library/API mentioned              | Fire `@librarian` in background          |
-| After completing significant implementation | Consult `@oracle` for review             |
-| After 2+ failed fix attempts                | Consult `@oracle` for debugging strategy |
 | "Where is X?" questions                     | Use `@explore` for fast search           |

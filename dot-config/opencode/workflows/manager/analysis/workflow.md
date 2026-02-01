@@ -31,7 +31,6 @@ Common criteria:
 
 | Need | Delegate To |
 |------|-------------|
-| Strategic trade-offs | `@oracle` |
 | Codebase fit | `@explore` |
 | External comparisons | `@web-researcher` |
 

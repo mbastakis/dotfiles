@@ -98,7 +98,6 @@ Before creating tickets, gather context by delegating to specialized agents:
 | Need | Delegate To | When |
 |------|-------------|------|
 | Find relevant code | `@explore` | Before any implementation ticket |
-| Strategic advice | `@oracle` | Architecture decisions, complex trade-offs |
 | Code/GitHub research | `@librarian` | Understanding libraries, finding examples |
 | Web research | `@web-researcher` | Best practices, documentation, tutorials |
 

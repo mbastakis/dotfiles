@@ -25,7 +25,6 @@ Clarify:
 | Need | Delegate To |
 |------|-------------|
 | Existing code structure | `@explore` |
-| Technical approach | `@oracle` (if complex) |
 
 ### Step 3: Break into Stories
 

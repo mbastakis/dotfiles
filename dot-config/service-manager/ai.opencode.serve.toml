@@ -2,7 +2,7 @@ enabled = true
 
 [service]
 label = "ai.opencode.serve"
-program = [ "/opt/homebrew/bin/opencode", "serve" ]
+program = [ "/opt/homebrew/bin/opencode", "serve", "--port", "4096", "--hostname", "127.0.0.1", "--log-level", "INFO", "--print-logs" ]
 run_at_load = true
 keep_alive = true
 working_directory = "~"

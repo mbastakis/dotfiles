@@ -25,7 +25,6 @@ Gather:
 | Need | Delegate To |
 |------|-------------|
 | Existing patterns | `@explore` |
-| Design review | `@oracle` |
 | External patterns | `@web-researcher` |
 
 ### Step 3: Identify Decisions

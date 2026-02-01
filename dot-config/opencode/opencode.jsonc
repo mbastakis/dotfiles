@@ -1,6 +1,7 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "theme": "catppuccin",
+  "model": "amazon-bedrock/anthropic.claude-opus-4-5-20251101-v1:0",
   "autoshare": false,
   "share": "manual",
   "autoupdate": true,
@@ -15,68 +16,52 @@
         },
       },
     },
+    "opencode": {
+      "models": {
+        "trinity-large-preview-free": {
+          "name": "Trinity Large Preview Free",
+        },
+        "minimax-m2.1-free": {
+          "name": "MiniMax M2.1 Free",
+        },
+        "kimi-k2.5-free": {
+          "name": "Kimi K2.5 Free",
+        },
+        "glm-4.7-free": {
+          "name": "GLM 4.7 Free",
+        },
+        "big-pickle": {
+          "name": "Big Pickle",
+        },
+      },
+    },
+    "openai": {
+      "models": {
+        "gpt-5.2-codex": {
+          "name": "GPT 5.2 Codex",
+        },
+        "gpt-5.1-codex-max": {
+          "name": "GPT 5.1 Codex Max",
+        },
+      },
+    },
   },
   "mcp": {
     "linear": {
       "type": "local",
       "command": ["npx", "-y", "mcp-remote", "https://mcp.linear.app/mcp"],
     },
-    // "sourcebot": {
-    //   "type": "local",
-    //   "command": ["npx", "-y", "@sourcebot/mcp@latest"],
-    //   "environment": {
-    //     "SOURCEBOT_HOST": "http://localhost:3000",
-    //     "SOURCEBOT_API_KEY": "${SOURCEBOT_API_KEY}"
-    //   }
-    // }
-    // "snap-happy": {
-    //   "type": "local",
-    //   "command": [
-    //     "npx",
-    //     "@mariozechner/snap-happy"
-    //   ],
-    //   "environment": {
-    //     "SNAP_HAPPY_SCREENSHOT_PATH": "${HOME}/Screenshots"
-    //   }
-    // },
-    // "context7": {
-    //   "type": "local",
-    //   "command": [
-    //     "npx",
-    //     "-y",
-    //     "@upstash/context7-mcp"
-    //   ]
-    // },
-    // "mcp-obsidian": {
-    //   "type": "local",
-    //   "command": ["uvx", "mcp-obsidian"],
-    //   "environment": {
-    //     "OBSIDIAN_API_KEY": "${OBSIDIAN_API_KEY}",
-    //     "OBSIDIAN_HOST": "127.0.0.1",
-    //     "OBSIDIAN_PORT": "27124"
-    //   }
-    // },
-    // "sequential-thinking": {
-    //   "type": "local",
-    //   "command": [
-    //     "npx",
-    //     "-y",
-    //     "@modelcontextprotocol/server-sequential-thinking"
-    //   ]
-    // },
   },
   "permission": {
     "edit": "allow",
-    // Allow access to OpenCode config directory without prompting
     "external_directory": {
       "*": "ask",
       "~/.config/opencode/*": "allow",
       "~/.config/opencode/**/*": "allow",
       "/Users/mbastakis/.config/opencode/*": "allow",
-      "/Users/mbastakis/.config/opencode/**/*": "allow"
+      "/Users/mbastakis/.config/opencode/**/*": "allow",
     },
     "bash": {
-      // === DEFAULT: Everything else requires approval ===
       // IMPORTANT: This MUST be first - last matching rule wins!
       "*": "ask",
       // === DENY: Dangerous commands ===
@@ -157,37 +142,6 @@
     },
   },
   "agent": {
-    "explore": {
-      "model": "amazon-bedrock/anthropic.claude-opus-4-5-20251101-v1:0",
-    },
-    "oracle": {
-      "description": "Strategic technical advisor for architecture decisions, code review, and complex debugging. Call when stuck or making significant design choices.",
-      "mode": "subagent",
-      "model": "amazon-bedrock/anthropic.claude-opus-4-5-20251101-v1:0",
-      "temperature": 0.3,
-      "prompt": "{file:./agent/oracle.md}",
-      // Advisory agent - no file modifications, deep analysis
-      "tools": {
-        "write": false,
-        "patch": false,
-        "task": false,
-      },
-      "permission": {
-        "bash": {
-          // Default: deny everything else (MUST be first - last matching rule wins!)
-          "*": "deny",
-          // Git read-only for context
-          "git log*": "allow",
-          "git blame*": "allow",
-          "git show*": "allow",
-          "git diff*": "allow",
-        },
-        "edit": "deny",
-        "webfetch": "allow",
-        "skill": "deny",
-        "external_directory": "allow",
-      },
-    },
     "librarian": {
       "description": "Research source code, GitHub issues/PRs, and library internals. Use for 'How does [package] implement X?', debugging external dependencies, finding bug reports. Returns evidence with GitHub permalinks.",
       "mode": "subagent",
@@ -257,12 +211,12 @@
         "external_directory": "allow",
       },
     },
-    "web-crawler": {
-      "description": "Crawl websites and extract content to ai-docs",
+    "crawl": {
+      "description": "Crawl websites and extract content using crawl4ai",
       "mode": "subagent",
       "model": "amazon-bedrock/anthropic.claude-haiku-4-5-20251001-v1:0",
       "temperature": 0.1,
-      "prompt": "{file:./agent/web-crawler.md}",
+      "prompt": "{file:./agent/crawl.md}",
       // v1.1.1: 'tools' is deprecated, use 'permission' for permissionable tools
       // Non-permissionable tools (read, glob, grep) are enabled by default
       "tools": {
