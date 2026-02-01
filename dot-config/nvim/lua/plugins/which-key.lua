@@ -25,7 +25,8 @@ return {
     wk.add({
       { "<leader>f", group = "Find", icon = " " },
       { "<leader>e", group = "Explorer", icon = " " },
-      { "<leader>o", group = "Opencode", icon = "󱚟 " },
+      { "<leader>o", group = "Obsidian", icon = "󰂺 " },
+      { "<leader>a", group = "AI", icon = "󱚟 " },
       { "<leader>g", group = "Git" },
       { "<leader>u", group = "Utilities", icon = " " },
     })

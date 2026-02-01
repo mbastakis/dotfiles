@@ -12,6 +12,10 @@ return {
     gitbrowse = { enabled = true },
     image = { enabled = true },
     scratch = { enabled = false },
+    -- Enable picker to provide vim.ui.select replacement
+    picker = {
+      ui_select = true,
+    },
     dashboard = {
       enabled = true,
       preset = {
