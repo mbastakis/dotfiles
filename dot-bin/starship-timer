@@ -23,10 +23,10 @@ Commands:
     list                      List all active timers
 
 Examples:
-    starship-timer set aws-session 1704067200
-    starship-timer set aws-session 12h
+    starship-timer set aws-session-dev 1704067200
+    starship-timer set aws-session-\$AWS_PROFILE 12h
     starship-timer set vpn 1h30m
-    starship-timer clear aws-session
+    starship-timer clear aws-session-dev
 EOF
     exit 1
 }
