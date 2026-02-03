@@ -2,7 +2,7 @@ enabled = true
 
 [service]
 label = "ai.opencode.serve"
-program = [ "/opt/homebrew/bin/opencode", "serve", "--port", "4096", "--hostname", "127.0.0.1", "--log-level", "INFO", "--print-logs" ]
+program = [ "/opt/homebrew/bin/opencode", "serve", "--port", "4096", "--hostname", "0.0.0.0", "--log-level", "INFO", "--print-logs", "--cors", "http://100.98.144.6:4096" ]
 run_at_load = true
 keep_alive = true
 working_directory = "~"
@@ -12,6 +12,10 @@ AWS_PROFILE = "claude-code"
 AWS_DEFAULT_REGION = "eu-central-1"
 OPENCODE_EXPERIMENTAL_PLAN_MODE = "1"
 OPENCODE_EXPERIMENTAL_MARKDOWN = "1"
+# Ripgrep config (enables --hidden and other settings)
+RIPGREP_CONFIG_PATH = "~/.config/ripgrep/config"
+# Full PATH from path_helper (~ only expands at string start, so use absolute paths)
+PATH = "/opt/homebrew/bin:/opt/homebrew/sbin:/opt/homebrew/opt/postgresql@17/bin:/Users/mbastakis/go/bin:/Users/mbastakis/.cargo/bin:/Users/mbastakis/dev/dotfiles/bin:/Users/mbastakis/.local/bin:/Users/mbastakis/.bin:/Users/mbastakis/bin:/Users/mbastakis/.nix-profile/bin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 [logs]
 stdout = "~/.local/share/opencode/serve.log"

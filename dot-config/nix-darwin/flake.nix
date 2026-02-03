@@ -176,6 +176,7 @@
         "poppler"
         "postgresql@17"
         "pyenv"
+        "qrencode"
         "ripgrep"
         "rust"
         "serie"

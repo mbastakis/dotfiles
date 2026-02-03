@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Build all TUI apps in the apps/ workspace
+# Build all apps in the apps/ workspace (Bun/OpenTUI + Go)
 # Usage: build_apps.sh [--force]
-#   --force: Remove node_modules and bun.lock before installing
+#   --force: Clean rebuild (remove node_modules, rebuild all binaries)
 
 set -euo pipefail
 
@@ -31,73 +31,75 @@ for arg in "$@"; do
   esac
 done
 
-# Check prerequisites
-if ! command -v bun &>/dev/null; then
-  log_error "bun is required but not installed"
-  exit 1
-fi
-
-if [[ ! -d "$APPS_DIR" ]]; then
-  log_error "Apps directory not found: $APPS_DIR"
-  exit 1
-fi
-
-if [[ ! -f "$APPS_DIR/package.json" ]]; then
-  log_error "Workspace package.json not found at $APPS_DIR/package.json"
-  exit 1
-fi
-
-# Force clean if requested
-if [[ "$FORCE" == "true" ]]; then
-  log_info "Force rebuild: removing node_modules and lock files..."
-  rm -rf "$APPS_DIR/node_modules"
-  rm -f "$APPS_DIR/bun.lock"
-  for app_dir in "$APPS_DIR"/*/; do
-    if [[ -f "${app_dir}package.json" ]]; then
-      rm -rf "${app_dir}node_modules"
-      rm -f "${app_dir}bun.lock"
-    fi
-  done
-fi
-
-# Install workspace dependencies
-log_info "Installing workspace dependencies..."
-cd "$APPS_DIR"
-if [[ -f "bun.lock" ]]; then
-  bun install --frozen-lockfile 2>/dev/null || bun install
-else
-  bun install
-fi
-
-# Generate wrapper scripts for each app
-log_info "Generating wrapper scripts in $BIN_DIR..."
 mkdir -p "$BIN_DIR"
 
-for app_dir in "$APPS_DIR"/*/; do
-  # Skip shared package and non-app directories
-  app_name="$(basename "$app_dir")"
-  [[ "$app_name" == "shared" ]] && continue
-  [[ ! -f "${app_dir}package.json" ]] && continue
-  
-  # Check if it has a start script (indicates it's a runnable app)
-  if ! grep -q '"start"' "${app_dir}package.json" 2>/dev/null; then
-    continue
+# ============================================================================
+# Bun/OpenTUI Apps
+# ============================================================================
+build_bun_apps() {
+  # Check if there are any bun apps
+  if [[ ! -f "$APPS_DIR/package.json" ]]; then
+    log_info "No Bun workspace found, skipping..."
+    return 0
   fi
-  
-  # Determine wrapper name (use existing name or derive from app name)
-  case "$app_name" in
-    service-manager)
-      wrapper_name="svc"
-      ;;
-    *)
-      wrapper_name="$app_name"
-      ;;
-  esac
-  
-  wrapper_path="$BIN_DIR/$wrapper_name"
-  
-  # Generate wrapper script
-  cat > "$wrapper_path" << EOF
+
+  if ! command -v bun &>/dev/null; then
+    log_warning "bun not installed, skipping Bun apps"
+    return 0
+  fi
+
+  # Force clean if requested
+  if [[ "$FORCE" == "true" ]]; then
+    log_info "Force rebuild: removing node_modules and lock files..."
+    rm -rf "$APPS_DIR/node_modules"
+    for app_dir in "$APPS_DIR"/*/; do
+      if [[ -f "${app_dir}package.json" ]]; then
+        rm -rf "${app_dir}node_modules"
+      fi
+    done
+  fi
+
+  # Install workspace dependencies
+  log_info "Installing Bun workspace dependencies..."
+  cd "$APPS_DIR"
+  if [[ -f "bun.lock" ]]; then
+    bun install --frozen-lockfile 2>/dev/null || bun install
+  else
+    bun install
+  fi
+
+  # Generate wrapper scripts for each app
+  log_info "Generating Bun app wrappers..."
+
+  for app_dir in "$APPS_DIR"/*/; do
+    app_name="$(basename "$app_dir")"
+    
+    # Skip non-bun directories
+    [[ "$app_name" == "shared" ]] && continue
+    [[ ! -f "${app_dir}package.json" ]] && continue
+    
+    # Skip if it's a Go app (has go.mod)
+    [[ -f "${app_dir}go.mod" ]] && continue
+    
+    # Check if it has a start script (indicates it's a runnable app)
+    if ! grep -q '"start"' "${app_dir}package.json" 2>/dev/null; then
+      continue
+    fi
+    
+    # Determine wrapper name (use existing name or derive from app name)
+    case "$app_name" in
+      service-manager)
+        wrapper_name="svc"
+        ;;
+      *)
+        wrapper_name="$app_name"
+        ;;
+    esac
+    
+    wrapper_path="$BIN_DIR/$wrapper_name"
+    
+    # Generate wrapper script
+    cat > "$wrapper_path" << EOF
 #!/usr/bin/env bash
 # Auto-generated wrapper for $app_name TUI app
 # Regenerate with: bin/build_apps.sh
@@ -131,9 +133,78 @@ fi
 cd "\$APP_DIR"
 exec bun run src/index.tsx "\$@"
 EOF
+    
+    chmod +x "$wrapper_path"
+    log_info "Generated wrapper: $wrapper_name -> apps/$app_name"
+  done
+}
+
+# ============================================================================
+# Go Apps
+# ============================================================================
+build_go_apps() {
+  if ! command -v go &>/dev/null; then
+    log_warning "go not installed, skipping Go apps"
+    return 0
+  fi
+
+  local found_go_apps=false
   
-  chmod +x "$wrapper_path"
-  log_info "Generated wrapper: $wrapper_name -> apps/$app_name"
-done
+  for app_dir in "$APPS_DIR"/*/; do
+    app_name="$(basename "$app_dir")"
+    
+    # Check if it's a Go app
+    [[ ! -f "${app_dir}go.mod" ]] && continue
+    
+    found_go_apps=true
+    
+    # Determine binary name
+    # Apps with shell wrappers get _ prefix (internal/hidden)
+    # These apps have shell functions that wrap the binary
+    case "$app_name" in
+      aws-login)
+        # aws-login has a shell wrapper in aws.zsh
+        binary_name="_${app_name}"
+        ;;
+      *)
+        binary_name="$app_name"
+        ;;
+    esac
+    
+    binary_path="$BIN_DIR/$binary_name"
+    
+    # Check if rebuild needed (skip if binary newer than all source files)
+    if [[ "$FORCE" != "true" ]] && [[ -f "$binary_path" ]]; then
+      newest_source=$(find "$app_dir" -name '*.go' -newer "$binary_path" 2>/dev/null | head -1)
+      if [[ -z "$newest_source" ]]; then
+        log_info "Go app $app_name is up to date"
+        continue
+      fi
+    fi
+    
+    log_info "Building Go app: $app_name"
+    
+    if (cd "$app_dir" && go build -o "$binary_path" .); then
+      log_info "Built: $app_name -> $BIN_DIR/$binary_name"
+    else
+      log_warning "Failed to build $app_name"
+    fi
+  done
+  
+  if [[ "$found_go_apps" == "false" ]]; then
+    log_info "No Go apps found"
+  fi
+}
+
+# ============================================================================
+# Main
+# ============================================================================
+if [[ ! -d "$APPS_DIR" ]]; then
+  log_error "Apps directory not found: $APPS_DIR"
+  exit 1
+fi
+
+build_bun_apps
+build_go_apps
 
 log_info "Build complete!"

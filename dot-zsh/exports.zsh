@@ -21,5 +21,8 @@ export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
 # Zoxide echo (show directory after cd)
 export _ZO_ECHO=1
 
+# Ripgrep config
+export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/config"
+
 # OpenCode Exa integration (enables websearch/codesearch tools)
 # export OPENCODE_ENABLE_EXA=true

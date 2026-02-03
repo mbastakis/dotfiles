@@ -1,0 +1,75 @@
+# ~/.config/ripgrep/config
+# Global ripgrep configuration
+
+# === SEARCH BEHAVIOR ===
+--smart-case
+--hidden
+
+# === OUTPUT FORMATTING ===
+--max-columns=150
+--max-columns-preview
+
+# === CATPPUCCIN MOCHA COLORS ===
+--colors=path:fg:blue
+--colors=path:style:bold
+--colors=line:fg:243
+--colors=match:fg:208
+--colors=match:style:bold
+
+# === CUSTOM FILE TYPES ===
+--type-add
+config:*.{yaml,yml,toml,json,jsonc,ini,conf}
+--type-add
+web:*.{html,css,scss,sass,less,js,jsx,ts,tsx,vue,svelte}
+--type-add
+docs:*.{md,mdx,txt,rst,adoc}
+--type-add
+shell:*.{sh,bash,zsh,fish}
+
+# === IGNORE PATTERNS ===
+
+# Version control
+--glob=!.git/**
+--glob=!.jj/**
+
+# Package managers / dependencies
+--glob=!**/node_modules/**
+--glob=!**/.venv/**
+--glob=!**/__pycache__/**
+--glob=!.cache/**
+--glob=!.npm/**
+--glob=!.pnpm/**
+--glob=!.yarn/**
+--glob=!**/vendor/**
+--glob=!.bundle/**
+
+# Build outputs
+--glob=!**/dist/**
+--glob=!**/build/**
+--glob=!**/target/**
+--glob=!**/.next/**
+--glob=!**/.nuxt/**
+--glob=!**/.output/**
+
+# IDE/Editor
+--glob=!**/.obsidian/**
+--glob=!**/.idea/**
+--glob=!**/.vscode/**
+
+# DevOps/Infrastructure
+--glob=!**/.terraform/**
+--glob=!**/.docker/**
+
+# OS files
+--glob=!**/.DS_Store
+--glob=!**/*.pyc
+--glob=!.Trash/**
+
+# Lock files (large, rarely useful to search)
+--glob=!*.lock
+--glob=!package-lock.json
+--glob=!yarn.lock
+--glob=!bun.lock
+--glob=!pnpm-lock.yaml
+--glob=!Cargo.lock
+--glob=!poetry.lock

@@ -1,9 +1,0 @@
-# Ripgrep configuration for OpenCode
-# This allows searching in gitignored files
-
-# Don't respect .gitignore files
---no-ignore
-
-# Still respect .ignore and .rgignore files if they exist
-# Remove the line below if you want to ignore those too
-# --no-ignore-dot

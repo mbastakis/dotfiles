@@ -58,8 +58,9 @@ stderr = "~/.local/share/opencode/serve.error.log"
 ## Plist Generation
 
 - Plists are generated from TOML configs at install time
-- Path expansion: `~` is expanded to home directory
+- Path expansion: `~` is expanded to home directory **only at string start** (e.g., `~/.config` expands, but `/foo:~/.bar` does not)
 - Environment variables include HOME and PATH by default
+- **PATH gotcha**: Use absolute paths in `[service.environment].PATH`, not `~` — the `expandPath()` function only handles `~` at position 0
 
 ## TUI Navigation
 

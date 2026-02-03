@@ -233,3 +233,25 @@ PULLSCRIPT
   echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
   echo "Done!"
 }
+
+# Opencode
+OC_SERVER="http://localhost:4096"
+
+oc() {
+  opencode attach "$OC_SERVER" --dir .
+}
+
+occ() {
+  local session_id
+  session_id=$(opencode session list -n 1 --format json | jq -r '.[0].id')
+  if [[ -n "$session_id" && "$session_id" != "null" ]]; then
+    opencode attach "$OC_SERVER" --dir . -s "$session_id"
+  else
+    echo "No previous session found"
+    return 1
+  fi
+}
+
+ocr() {
+  opencode run --attach "$OC_SERVER" -m amazon-bedrock/anthropic.claude-haiku-4-5-20251001-v1:0 "$@"
+}

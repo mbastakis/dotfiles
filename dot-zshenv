@@ -19,6 +19,10 @@ export LC_ALL="en_US.UTF-8"
 
 ## PATH configuration
 
+# Homebrew (must be early so other tools installed via brew are found)
+[[ -d "/opt/homebrew/bin" ]] && PATH="/opt/homebrew/bin:$PATH"
+[[ -d "/opt/homebrew/sbin" ]] && PATH="/opt/homebrew/sbin:$PATH"
+
 # Ensure user-level bin directories exist
 [[ ! -d "$HOME/bin" ]] && mkdir -p "$HOME/bin"
 [[ ! -d "$HOME/.local/bin" ]] && mkdir -p "$HOME/.local/bin"

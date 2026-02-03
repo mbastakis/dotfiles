@@ -72,9 +72,22 @@ bindkey '^X' widget_name
 | Keybindings       | `keybindings.zsh` | ZLE widgets + bindkey          |
 | Machine-specific  | `local.zsh`       | API keys, local PATH overrides |
 
+## Zsh Shell Types and File Loading
+
+Background processes (launchd, cron, opencode subprocesses) spawn non-interactive shells:
+
+| Shell invocation | Files loaded | Example use case |
+|------------------|--------------|------------------|
+| `zsh -c 'cmd'` | `.zshenv` only | opencode bash tool, scripts |
+| `zsh -l` | `.zshenv` + `.zprofile` | login shells |
+| `zsh -i` | `.zshenv` + `.zshrc` | interactive terminals |
+
+**Critical**: Put PATH additions needed by background processes in `dot-zshenv`, not `dot-zshrc`. The `exports.zsh` file is only sourced by interactive shells.
+
 ## Gotchas
 
 - **Do not** add zsh files to `dot-config/` — all zsh config goes in `dot-zsh/`
+- **Background process PATH**: Homebrew (`/opt/homebrew/bin`) must be in `dot-zshenv` for launchd services to find brew-installed binaries
 - `shift-select-enhancements.zsh` loaded via zinit atload hook, not directly sourced
 - `local.zsh` is gitignored — copy from `local.zsh.example` as template
 - `obsidian-cli.zsh` is NOT in default load order — source from `local.zsh` if needed

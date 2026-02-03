@@ -1,0 +1,36 @@
+# AWS Login Configuration
+# ~/.config/aws-login/config.yaml
+
+defaults:
+  region: eu-central-1
+  cache_ttl_buffer: 300      # Refresh if expiring within 5 min
+
+cache:
+  directory: ~/.config/aws-login/cache
+
+starship:
+  enabled: true
+  timer_prefix: aws-session-
+
+bitwarden:
+  enabled: true
+
+profiles:
+  playground:
+    type: mfa
+    description: "AWS Playground - Requires MFA"
+    bitwarden_item: "AWS Playground"
+    mfa_serial: auto          # Read from ~/.aws/config
+    session_duration: 12h
+
+  dev:
+    type: iam
+    description: "Development environment"
+
+  prod:
+    type: iam
+    description: "Production environment"
+
+  claude-code:
+    type: iam
+    description: "Claude Code profile"

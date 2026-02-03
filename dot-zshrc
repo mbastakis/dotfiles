@@ -64,6 +64,7 @@ source "$HOME/.zsh/fzf.zsh"
 source "$HOME/.zsh/fzf-tab.zsh"
 source "$HOME/.zsh/keybindings.zsh"
 source "$HOME/.zsh/direnv.zsh"
+source "$HOME/.zsh/aws.zsh"
 
 # Local configuration (machine-specific, secrets) - loaded last to override
 [[ -f "$HOME/.zsh/local.zsh" ]] || touch "$HOME/.zsh/local.zsh"
