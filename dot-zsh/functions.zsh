@@ -64,22 +64,6 @@ function y() {
   rm -f -- "$tmp"
 }
 
-# Shared fzf options for ftext functions
-_ftext_fzf_opts=(
-  --border=rounded
-  --border-label=' Search in files '
-  --padding=0,1
-  --prompt='  '
-  --pointer='→'
-  --cycle
-  --scrollbar='│'
-  --color 'hl:-1:underline,hl+:-1:underline:reverse'
-  --delimiter :
-  --preview 'bat --color=always {1} --highlight-line {2} 2>/dev/null'
-  --preview-window 'top,60%,border-bottom,+{2}+3/3,~3'
-  --bind 'ctrl-/:toggle-preview,ctrl-d:preview-page-down,ctrl-u:preview-page-up'
-)
-
 # Helper to open file in editor at specific line
 _ftext_open_editor() {
   local file="$1" line="$2"

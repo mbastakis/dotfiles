@@ -4,6 +4,7 @@
 # === SEARCH BEHAVIOR ===
 --smart-case
 --hidden
+--no-ignore-vcs
 
 # === OUTPUT FORMATTING ===
 --max-columns=150

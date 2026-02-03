@@ -28,12 +28,10 @@ zstyle ':fzf-tab:complete:*:*' fzf-preview '
 # Switch group using `<` and `>`
 zstyle ':fzf-tab:*' switch-group '<' '>'
 
-# Use Catppuccin Mocha colors for fzf-tab with transparent background
+# Use shared Catppuccin colors from fzf.zsh (transparent background variant)
+# FZF_COLORS_TRANSPARENT is defined in fzf.zsh
 zstyle ':fzf-tab:*' fzf-flags \
-  '--color=bg+:#313244,bg:-1,spinner:#F5E0DC,hl:#F38BA8' \
-  '--color=fg:#CDD6F4,header:#F38BA8,info:#CBA6F7,pointer:#F5E0DC' \
-  '--color=marker:#B4BEFE,fg+:#CDD6F4,prompt:#CBA6F7,hl+:#F38BA8' \
-  '--color=selected-bg:#45475A' \
+  ${(z)FZF_COLORS_TRANSPARENT} \
   --border --height=80% --preview-window=right:50%:wrap
 
 # Apply to all completions
