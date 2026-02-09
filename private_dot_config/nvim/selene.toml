@@ -1,0 +1,6 @@
+std = "lua51"
+
+[rules]
+mixed_table = "allow"
+undefined_variable = "allow"
+unscoped_variables = "allow"

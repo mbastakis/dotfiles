@@ -1,0 +1,15 @@
+% throw, expression, syntax, c#, cs, .net
+
+# Throw expression as assignment check
+
+Arg = arg ?? throw new System.ArgumentNullException(nameof(arg));
+
+# Throw expression within property
+
+string Name \
+{ \
+	get name; \
+	set => name = value \
+				?? throw new ArgumentNullException(nameof(name)); \
+}
+

@@ -1,0 +1,66 @@
+# .zshenv - ZSH environment file loaded for all shell types (login, interactive, neither)
+# This file contains environment variables needed by all shell types (scripts, cron, etc.)
+
+# Dotfiles path (chezmoi source - for reference only)
+export DOTFILES_PATH="{{ .chezmoi.sourceDir }}"
+
+# XDG base directories
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CACHE_HOME="$HOME/.cache"
+
+# Default programs
+export EDITOR="nvim"
+export VISUAL="nvim"
+
+# Language preference
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+
+## PATH configuration
+
+{{- if eq .chezmoi.os "darwin" }}
+# Homebrew (macOS - Apple Silicon)
+[[ -d "/opt/homebrew/bin" ]] && PATH="/opt/homebrew/bin:$PATH"
+[[ -d "/opt/homebrew/sbin" ]] && PATH="/opt/homebrew/sbin:$PATH"
+{{- else if eq .chezmoi.os "linux" }}
+# Linuxbrew (if present)
+[[ -d "/home/linuxbrew/.linuxbrew/bin" ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+{{- end }}
+
+# Ensure user-level bin directories exist
+[[ ! -d "$HOME/bin" ]] && mkdir -p "$HOME/bin"
+[[ ! -d "$HOME/.local/bin" ]] && mkdir -p "$HOME/.local/bin"
+
+# User bin directories
+[[ -d "$HOME/bin" ]] && PATH="$HOME/bin:$PATH"
+[[ -d "$HOME/.bin" ]] && PATH="$HOME/.bin:$PATH"
+[[ -d "$HOME/.local/bin" ]] && PATH="$HOME/.local/bin:$PATH"
+
+# Cargo (Rust)
+[[ -d "$HOME/.cargo/bin" ]] && PATH="$HOME/.cargo/bin:$PATH"
+
+# Go
+export GOPATH="$HOME/go"
+[[ -d "$GOPATH/bin" ]] && PATH="$GOPATH/bin:$PATH"
+
+# Bun
+export BUN_INSTALL="$HOME/.bun"
+[[ -d "$BUN_INSTALL/bin" ]] && PATH="$BUN_INSTALL/bin:$PATH"
+
+{{- if eq .chezmoi.os "darwin" }}
+# PostgreSQL (macOS)
+if [[ -d "/opt/homebrew/opt/postgresql@17/bin" ]]; then
+  PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
+  export LDFLAGS="-L/opt/homebrew/opt/postgresql@17/lib"
+  export CPPFLAGS="-I/opt/homebrew/opt/postgresql@17/include"
+fi
+
+# Nix configuration directory (if still using Nix for anything)
+export NIX_CONF_DIR="$HOME/.config/nix"
+{{- end }}
+
+## Programming language settings
+
+# Python - don't write .pyc files
+export PYTHONDONTWRITEBYTECODE=1

@@ -1,0 +1,28 @@
+git_protocol: https
+glamour_style: dark
+check_update: true
+display_hyperlinks: true
+host: gitlab.devops.telekom.de
+glab_pager: bat
+hostname: gitlab.devops.telekom.de
+no_prompt: false
+telemetry: false
+hosts:
+  gitlab.com:
+    api_protocol: ssh
+    api_host: gitlab.com
+    container_registry_domains:
+      - gitlab.com
+      - gitlab.com:443
+      - registry.gitlab.com
+  gitlab.devops.telekom.de:
+    user: michail.bastakis
+    email: michail.bastakis@telekom.com
+    api_host: gitlab.devops.telekom.de
+    git_protocol: https
+    api_protocol: https
+    container_registry_domains:
+      - gitlab.devops.telekom.de
+      - gitlab.devops.telekom.de:443
+      - registry.gitlab.devops.telekom.de
+last_update_check_timestamp: "2026-01-28T16:58:19+02:00"

@@ -1,0 +1,337 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "theme": "catppuccin",
+  "model": "amazon-bedrock/anthropic.claude-opus-4-5-20251101-v1:0",
+  "autoshare": false,
+  "share": "manual",
+  "autoupdate": true,
+  // Linear MCP is available to all agents, but Linear tasks should be delegated
+  // to the @manager agent which has specialized workflows for project management.
+  // See AGENTS.md for guidance on when to use @manager vs other agents.
+  "provider": {
+    "amazon-bedrock": {
+      "models": {
+        "anthropic.claude-opus-4-5-20251101-v1:0": {
+          "name": "Claude Opus 4.5 (Bedrock)",
+        },
+      },
+    },
+    "opencode": {
+      "models": {
+        "trinity-large-preview-free": {
+          "name": "Trinity Large Preview Free",
+        },
+        "minimax-m2.1-free": {
+          "name": "MiniMax M2.1 Free",
+        },
+        "kimi-k2.5-free": {
+          "name": "Kimi K2.5 Free",
+        },
+        "glm-4.7-free": {
+          "name": "GLM 4.7 Free",
+        },
+        "big-pickle": {
+          "name": "Big Pickle",
+        },
+      },
+    },
+    "openai": {
+      "models": {
+        "gpt-5.2-codex": {
+          "name": "GPT 5.2 Codex",
+        },
+        "gpt-5.1-codex-max": {
+          "name": "GPT 5.1 Codex Max",
+        },
+      },
+    },
+  },
+  "mcp": {
+    "linear": {
+      "type": "local",
+      "command": ["npx", "-y", "mcp-remote", "https://mcp.linear.app/mcp"],
+    },
+  },
+  "permission": {
+    "edit": "allow",
+    "external_directory": {
+      "*": "ask",
+      "~/.config/opencode/*": "allow",
+      "~/.config/opencode/**/*": "allow",
+      "/Users/mbastakis/.config/opencode/*": "allow",
+      "/Users/mbastakis/.config/opencode/**/*": "allow",
+    },
+    "bash": {
+      // IMPORTANT: This MUST be first - last matching rule wins!
+      "*": "ask",
+      // === DENY: Dangerous commands ===
+      // These should never run without explicit user action outside OpenCode
+      "rm -rf /": "deny",
+      "rm -rf /*": "deny",
+      "sudo": "deny",
+      "sudo *": "deny",
+      "su": "deny",
+      "su *": "deny",
+      "chmod 777 *": "deny",
+      "chown": "deny",
+      "chown *": "deny",
+      // === ALLOW: OpenCode config access ===
+      "cat ~/.config/opencode/*": "allow",
+      "ls ~/.config/opencode/*": "allow",
+      "find ~/.config/opencode -name '*.md'": "allow",
+      "~/.config/opencode/cache/cache-helper.sh *": "allow",
+      "~/.config/opencode/logs/session-logger.sh *": "allow",
+      "mkdir -p ~/.config/opencode/metrics/*": "allow",
+      // === ALLOW: Safe text processing ===
+      "sort*": "allow",
+      "grep*": "allow",
+      "head*": "allow",
+      "tail*": "allow",
+      "wc*": "allow",
+      "cut*": "allow",
+      "sed*": "allow",
+      "awk*": "allow",
+      "tr*": "allow",
+      "uniq*": "allow",
+      "xargs*": "allow",
+      "echo*": "allow",
+      "eza*": "allow",
+      "date*": "allow",
+      // === ALLOW: File operations (for crawlers/general use) ===
+      "mkdir*": "allow",
+      "ls*": "allow",
+      "du*": "allow",
+      "cat*": "allow",
+      // === ALLOW: Development tools ===
+      "uvx*": "allow",
+      "python*": "allow",
+      "node*": "allow",
+      // === ASK: Package managers ===
+      "npm*": "ask",
+      "bun*": "ask",
+      // === ALLOW: Git read-only (safe) ===
+      "git status*": "allow",
+      "git diff*": "allow",
+      "git log*": "allow",
+      "git show*": "allow",
+      "git rev-parse*": "allow",
+      "git branch*": "allow",
+      "git remote*": "allow",
+      "git ls-files*": "allow",
+      "git fetch*": "allow",
+      // === ALLOW: Git staging ===
+      "git add*": "allow",
+      "git stash*": "allow",
+      "git restore*": "allow",
+      // === ASK: Git operations that modify history/remote ===
+      "git commit*": "ask",
+      "git push*": "ask",
+      "git checkout*": "ask",
+      "git switch*": "ask",
+      "git merge*": "ask",
+      "git rebase*": "ask",
+      "git reset*": "ask",
+      "git pull*": "ask",
+      "git clean*": "ask",
+      "git rm*": "ask",
+      // === ASK: File modification ===
+      "rm*": "ask",
+      "mv*": "ask",
+      "cp*": "ask",
+      "chmod*": "ask",
+    },
+  },
+  "agent": {
+    "librarian": {
+      "description": "Research source code, GitHub issues/PRs, and library internals. Use for 'How does [package] implement X?', debugging external dependencies, finding bug reports. Returns evidence with GitHub permalinks.",
+      "mode": "subagent",
+      "model": "amazon-bedrock/anthropic.claude-haiku-4-5-20251001-v1:0",
+      "temperature": 0.1,
+      "prompt": "{file:./agent/librarian.md}",
+      // Research agent - no local file modifications
+      "tools": {
+        "write": false,
+        "patch": false,
+      },
+      "permission": {
+        "bash": {
+          // Default: deny everything else (MUST be first - last matching rule wins!)
+          "*": "deny",
+          // GitHub CLI - primary research tool
+          "gh*": "allow",
+          // Git for cloned repos
+          "git clone*": "allow",
+          "git log*": "allow",
+          "git blame*": "allow",
+          "git rev-parse*": "allow",
+          // Safe read-only commands
+          "cat*": "allow",
+          "head*": "allow",
+          "tail*": "allow",
+          "ls*": "allow",
+          "grep*": "allow",
+          "find*": "allow",
+          // Temp directory operations
+          "cd /tmp*": "allow",
+          "mkdir*": "allow",
+        },
+        "skill": "allow",
+        "webfetch": "allow",
+        "edit": "deny",
+        "external_directory": "allow",
+      },
+    },
+    "commit": {
+      "description": "Git commit agent with pre-approved git commands",
+      "mode": "subagent",
+      "model": "amazon-bedrock/anthropic.claude-haiku-4-5-20251001-v1:0",
+      "prompt": "{file:./agent/commit.md}",
+      // v1.1.1: 'tools' is deprecated, use 'permission' for permissionable tools
+      // Non-permissionable tools (read, glob, grep) are enabled by default
+      // Use tools:false only to disable non-permissionable tools
+      "tools": {
+        "write": false,
+        "patch": false,
+        "read": false,
+        "glob": false,
+        "grep": false,
+        "websearch": false,
+        "codesearch": false,
+        "todowrite": false,
+        "todoread": false,
+      },
+      "permission": {
+        "bash": {
+          // Git commands - auto-approved
+          "git *": "allow",
+        },
+        "edit": "deny",
+        "webfetch": "deny",
+        "skill": "deny",
+        "external_directory": "allow",
+      },
+    },
+    "crawl": {
+      "description": "Crawl websites and extract content using crawl4ai",
+      "mode": "subagent",
+      "model": "amazon-bedrock/anthropic.claude-haiku-4-5-20251001-v1:0",
+      "temperature": 0.1,
+      "prompt": "{file:./agent/crawl.md}",
+      // v1.1.1: 'tools' is deprecated, use 'permission' for permissionable tools
+      // Non-permissionable tools (read, glob, grep) are enabled by default
+      "tools": {
+        "glob": false,
+        "grep": false,
+        "patch": false,
+      },
+      "permission": {
+        // Security: explicit denylist for dangerous commands
+        // Due to bug #6676, flags are stripped so "rm" matches "rm -rf ..."
+        "bash": {
+          // Default: ask for anything else (MUST be first - last matching rule wins!)
+          "*": "ask",
+          // Filesystem destruction - deny
+          "rm*": "deny",
+          "rmdir*": "deny",
+          // Permission changes - deny
+          "chmod*": "deny",
+          "chown*": "deny",
+          // Privilege escalation - deny
+          "sudo*": "deny",
+          "su*": "deny",
+          // Code execution vectors - deny
+          "eval*": "deny",
+          "exec*": "deny",
+          "source*": "deny",
+          "bash -c*": "deny",
+          "sh -c*": "deny",
+          "zsh -c*": "deny",
+          // Network exfiltration - deny
+          "curl*": "deny",
+          "wget*": "deny",
+          "nc*": "deny",
+          "netcat*": "deny",
+          "ssh*": "deny",
+          "scp*": "deny",
+          "rsync*": "deny",
+          // File operations - ask (crawler may need these)
+          "mv*": "ask",
+          "cp*": "ask",
+          // Allowed commands for crawling
+          "mkdir*": "allow",
+          "uvx*": "allow",
+          "python*": "allow",
+          "ls*": "allow",
+          "cat*": "allow",
+          "du*": "allow",
+          "head*": "allow",
+          "tail*": "allow",
+          "wc*": "allow",
+        },
+        "skill": "allow",
+        "webfetch": "allow",
+        "edit": "deny",
+        "external_directory": "allow",
+      },
+    },
+    "web-researcher": {
+      "description": "Research web content: documentation, tutorials, best practices, comparisons. Use for conceptual questions, 'how do I do X?', technology comparisons. Does NOT look at source code - use @librarian for that.",
+      "mode": "subagent",
+      "model": "amazon-bedrock/anthropic.claude-haiku-4-5-20251001-v1:0",
+      "temperature": 0.5,
+      "prompt": "{file:./agent/web-researcher.md}",
+      // v1.1.1: 'tools' is deprecated, use 'permission' for permissionable tools
+      // Non-permissionable tools (read, glob, grep) are enabled by default
+      "tools": {
+        "write": false,
+        "patch": false,
+        "glob": false,
+        "grep": false,
+      },
+      "permission": {
+        "bash": {
+          // Default: deny everything else (MUST be first - last matching rule wins!)
+          "*": "deny",
+          // crawl4ai for adaptive crawling
+          "uvx*": "allow",
+          "python*": "allow",
+          // Safe read-only commands
+          "cat*": "allow",
+          "head*": "allow",
+          "tail*": "allow",
+          "ls*": "allow",
+          // Text processing
+          "grep*": "allow",
+          "sort*": "allow",
+          "uniq*": "allow",
+          "wc*": "allow",
+        },
+        "skill": "allow",
+        "webfetch": "allow",
+        "edit": "deny",
+        "external_directory": "allow",
+      },
+    },
+    "manager": {
+      "description": "Project manager using Linear. Creates issues, tracks projects, manages cycles.",
+      "mode": "all", // Tab-switchable AND @manager callable
+      "temperature": 0.3,
+      "prompt": "{file:./agent/manager.md}",
+      // No file writing - read-only codebase access for context
+      "tools": {
+        "write": false,
+        "patch": false,
+      },
+      "permission": {
+        "bash": {
+          "*": "deny", // No shell access needed
+        },
+        "edit": "deny",
+        "webfetch": "deny",
+        "skill": "deny",
+        "external_directory": "allow",
+      },
+    },
+  },
+  "instructions": [],
+}

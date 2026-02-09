@@ -1,0 +1,22 @@
+% obsidian, ai_docs, specs, folder
+
+# Create a new specs folder and link it to Obsidian
+obsidian-cli create Resources/Specs/<name>/CONTEXT.md
+rm <obsidian_path>/Resources/Specs/<name>/CONTEXT.md
+ln -s <obsidian_path>/Resources/Specs/<name> ./specs
+
+# Create a new ai_docs folder and link it to Obsidian
+obsidian-cli create Resources/AI_Docs/<name>/CONTEXT.md
+rm <obsidian_path>/Resources/AI_Docs/<name>/CONTEXT.md
+ln -s <obsidian_path>/Resources/AI_Docs/<name> ./ai_docs
+
+# Create a new folder for Specs and AI_Docs
+obsidian-cli create Resources/Specs/<name>/CONTEXT.md
+rm <obsidian_path>/Resources/Specs/<name>/CONTEXT.md
+ln -s <obsidian_path>/Resources/Specs/<name> ./specs
+obsidian-cli create Resources/AI_Docs/<name>/CONTEXT.md
+rm <obsidian_path>/Resources/AI_Docs/<name>/CONTEXT.md
+ln -s <obsidian_path>/Resources/AI_Docs/<name> ./ai_docs
+
+$ name: 
+$ obsidian_path: obsidian-cli print-default | awk '/path:/ {print $4}' ---

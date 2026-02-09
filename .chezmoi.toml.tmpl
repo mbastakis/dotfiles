@@ -1,0 +1,38 @@
+{{- $profileEnv := env "CHEZMOI_PROFILE" -}}
+{{- $profile := "" -}}
+{{- if or (eq $profileEnv "personal") (eq $profileEnv "work") -}}
+{{-   $profile = $profileEnv -}}
+{{- else -}}
+{{-   $profile = promptChoiceOnce . "profile" "Machine profile" (list "personal" "work") -}}
+{{- end -}}
+{{- $email := "" -}}
+{{- if eq $profile "work" -}}
+{{-   $email = "mbastakis@telekom.de" -}}
+{{- else -}}
+{{-   $email = "mbastakis@gmail.com" -}}
+{{- end -}}
+
+encryption = "age"
+
+[age]
+    identity = "~/.config/chezmoi/key.txt"
+    recipient = "age12ckt64kx2u4slvhx97knnaq8g7xfzsjtll3gx04wau8qsrxjcgvquekdhl"
+
+[data]
+    profile = {{ $profile | quote }}
+    email = {{ $email | quote }}
+    name = "Michail Bastakis"
+
+[bitwardenSecrets]
+    command = "{{ .chezmoi.sourceDir }}/bin/chezmoi-bws"
+
+[diff]
+    command = "delta"
+    pager = "delta"
+
+[edit]
+    command = "nvim"
+
+[merge]
+    command = "nvim"
+    args = ["-d"]

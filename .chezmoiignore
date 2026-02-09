@@ -1,0 +1,64 @@
+# Documentation
+README.md
+AGENTS.md
+**/AGENTS.md
+dotfiles-migration.md
+
+# Git
+.git/
+.gitignore
+.github/
+
+# Development directories (not part of dotfiles)
+apps/
+bin/
+ai-docs/
+code-portable-data/
+
+# Build artifacts
+node_modules/
+*.pyc
+__pycache__/
+.ruff_cache/
+bun.lock
+package-lock.json
+
+# Nix (being removed)
+private_dot_config/nix-darwin/
+
+# Caches (generated at runtime)
+.cache/
+private_dot_config/aws-login/cache/
+private_dot_config/aws-login/private_cache/
+dot_obsidian/plugins/ai-image-analyzer/cache/
+dot_obsidian/plugins/text-extractor/cache/
+
+# OS files
+.DS_Store
+
+# Machine-generated (karabiner backups)
+private_dot_config/karabiner/automatic_backups/
+private_dot_config/private_karabiner/automatic_backups/
+
+# Raycast (user-specific)
+private_dot_config/raycast/extensions/
+private_dot_config/raycast/config.json
+
+# SSH (machine-generated)
+.ssh/known_hosts
+.ssh/known_hosts.old
+
+# Sourcebot secrets (managed via template)
+private_dot_config/sourcebot/.env
+private_dot_config/sourcebot/private_dot_env
+
+{{- if ne .chezmoi.os "darwin" }}
+# macOS-only configs (skip on Linux)
+private_dot_config/aerospace/
+private_dot_config/karabiner/
+private_dot_config/private_karabiner/
+private_dot_config/finicky/
+private_dot_config/service-manager/
+private_dot_config/sketchybar/
+dot_bin/executable_switch-input-source
+{{- end }}

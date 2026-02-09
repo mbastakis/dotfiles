@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: starship-timer
+description: Set/clear timers for Starship prompt display
+flags:
+  -h, --help: Show help message
+completion:
+  positional:
+    - - set
+      - clear
+      - list
+commands:
+  - name: set
+    description: Set a timer (epoch or duration like 12h, 30m, 1h30m)
+    completion:
+      positional:
+        - []  # timer name - free form
+        - ["12h", "1h", "30m", "1h30m", "2h", "8h"]
+  - name: clear
+    description: Clear a timer
+    completion:
+      positional:
+        - ["$carapace.tools.Find([~/.cache/starship-timers, -type, f, -maxdepth, 1])"]
+  - name: list
+    description: List all active timers

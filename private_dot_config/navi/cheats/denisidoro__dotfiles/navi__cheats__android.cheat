@@ -1,0 +1,30 @@
+% android, adb, device
+
+# Display a property
+adb -s "<device>" shell getprop "<property>"
+
+# Install an APK
+adb -s "<device>" install -r "<apk_path>"
+
+# Uninstall an APK
+adb -s "<device>" uninstall "<apk_path>"
+
+# Clear data given an application package
+adb -s "<device>" shell pm clear "<package>"
+
+# Dispatch a deep-link
+adb -s "<device>" shell am start "<uri>"
+
+$ apk_path: ls .
+$ device: adb devices | tail -n +2 | cut -sf 1
+
+
+% android, ssh, termux
+
+# Enable password authentication
+sed -Ei "s/PasswordAuthentication.*/PasswordAuthentication true/g" "<sshd_config>"
+
+# Disable password authentication
+sed -Ei "s/PasswordAuthentication.*/PasswordAuthentication false/g" "<sshd_config>"
+
+$ sshd_config: echo "${PREFIX}/etc/ssh/sshd_config"

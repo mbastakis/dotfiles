@@ -1,0 +1,46 @@
+# AWS Login Configuration Example
+# Copy to ~/.config/aws-login/config.yaml and customize
+#
+# This tool provides a clean `aws-login <profile>` interface for switching
+# AWS profiles with automatic MFA handling, caching, and shell integration.
+
+defaults:
+  region: eu-central-1         # Default region for all profiles
+  cache_ttl_buffer: 300        # Refresh cached creds if expiring within N seconds
+
+cache:
+  directory: ~/.config/aws-login/cache   # Where to store cached sessions
+
+starship:
+  enabled: true                # Enable starship-timer integration for prompt
+  timer_prefix: aws-session-   # Timer name prefix (e.g., aws-session-dev)
+
+bitwarden:
+  enabled: true                # Enable Bitwarden TOTP integration
+
+# Profile definitions
+# Types:
+#   - iam: AWS CLI profile lookup (no env creds; supports SSO/credential_process)
+#   - mfa: IAM credentials + MFA via STS get-session-token
+#   - sso: AWS SSO login flow (planned)
+#   - assume-role: STS assume-role (planned)
+
+profiles:
+  # Example MFA profile (requires TOTP)
+  my-account:
+    type: mfa
+    description: "My AWS Account - Requires MFA"
+    bitwarden_item: "AWS My Account"    # Bitwarden item name for TOTP
+    mfa_serial: auto                     # "auto" reads from ~/.aws/config
+    session_duration: 12h                # How long sessions last
+
+  # Example IAM profile (no MFA)
+  dev:
+    type: iam
+    description: "Development environment"
+    region: us-east-1                    # Override default region
+
+  # Example production profile
+  prod:
+    type: iam
+    description: "Production environment"

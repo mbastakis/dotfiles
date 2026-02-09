@@ -1,0 +1,66 @@
+#!/bin/bash
+# macOS System Settings
+# Replaces nix-darwin system.defaults
+# Run once after initial chezmoi apply
+
+{{- if ne .chezmoi.os "darwin" }}
+exit 0
+{{- end }}
+
+set -euo pipefail
+
+echo "Configuring macOS system settings..."
+
+# Dock
+defaults write com.apple.dock autohide -bool true
+defaults write com.apple.dock orientation -string "right"
+defaults write com.apple.dock mru-spaces -bool false
+defaults write com.apple.dock mineffect -string "scale"
+defaults write com.apple.dock show-recents -bool false
+
+# Finder
+defaults write com.apple.finder AppleShowAllExtensions -bool true
+defaults write com.apple.finder AppleShowAllFiles -bool true
+defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
+defaults write com.apple.finder ShowPathbar -bool true
+defaults write com.apple.finder ShowStatusBar -bool true
+defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+
+# Login Window
+defaults write com.apple.loginwindow LoginwindowText -string "mbastakis"
+
+# Screenshots
+mkdir -p ~/Pictures/screenshots
+defaults write com.apple.screencapture location -string "$HOME/Pictures/screenshots"
+defaults write com.apple.screencapture type -string "png"
+
+# Screen Saver
+defaults write com.apple.screensaver askForPasswordDelay -int 10
+
+# Global Domain
+defaults write NSGlobalDomain AppleICUForce24HourTime -bool true
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+defaults write NSGlobalDomain AppleShowAllFiles -bool true
+defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
+defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
+defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
+defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+
+# Control Center
+defaults write com.apple.controlcenter BatteryShowPercentage -bool true
+
+# Trackpad
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+
+# Keyboard
+defaults write NSGlobalDomain KeyRepeat -int 2
+defaults write NSGlobalDomain InitialKeyRepeat -int 15
+
+echo "Restarting affected services..."
+for app in "Dock" "Finder" "SystemUIServer"; do
+    killall "$app" &>/dev/null || true
+done
+
+echo "macOS settings configured successfully!"
+echo "Note: Some changes may require a logout/restart to take effect."

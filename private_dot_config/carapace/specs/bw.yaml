@@ -1,0 +1,306 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: bw
+description: Bitwarden CLI password manager
+flags:
+  --pretty: Format output with tabbed JSON
+  --raw: Return raw output instead of descriptive message
+  --response: Return JSON formatted response output
+  --cleanexit: Exit with success (0) unless error thrown
+  --quiet: Don't return anything to stdout
+  --nointeraction: Do not prompt for interactive input
+  --session=: Pass session key instead of reading from env
+  -v, --version: Output the version number
+  -h, --help: Output usage information
+completion:
+  positional:
+    - - sdk-version
+      - login
+      - logout
+      - lock
+      - unlock
+      - sync
+      - generate
+      - encode
+      - config
+      - update
+      - completion
+      - status
+      - list
+      - get
+      - create
+      - edit
+      - delete
+      - restore
+      - move
+      - confirm
+      - import
+      - export
+      - send
+      - receive
+      - serve
+commands:
+  - name: sdk-version
+    description: Print the SDK version
+  - name: login
+    description: Log into a user account
+    flags:
+      --method=: Two-step login method
+      --code=: Two-step login code
+      --sso: Log in with Single-Sign On
+      --apikey: Log in with an Api Key
+      --passwordenv=: Environment variable storing your password
+      --passwordfile=: Path to file containing your password
+      --check: Check login status
+      -h, --help: Output usage information
+  - name: logout
+    description: Log out of the current user account
+  - name: lock
+    description: Lock the vault and destroy active session keys
+  - name: unlock
+    description: Unlock the vault and return a new session key
+    flags:
+      --check: Check lock status
+      --passwordenv=: Environment variable storing your password
+      --passwordfile=: Path to file containing your password
+      -h, --help: Output usage information
+  - name: sync
+    description: Pull the latest vault data from server
+    flags:
+      -f, --force: Force a full sync
+      --last: Get the last sync date
+      -h, --help: Output usage information
+  - name: generate
+    description: Generate a password/passphrase
+    flags:
+      -u, --uppercase: Include uppercase characters
+      -l, --lowercase: Include lowercase characters
+      -n, --number: Include numeric characters
+      -s, --special: Include special characters
+      -p, --passphrase: Generate a passphrase
+      --length=: Length of the password
+      --words=: Number of words
+      --minNumber=: Minimum number of numeric characters
+      --minSpecial=: Minimum number of special characters
+      --separator=: Word separator
+      -c, --capitalize: Title case passphrase
+      --includeNumber: Passphrase includes number
+      --ambiguous: Avoid ambiguous characters
+      -h, --help: Output usage information
+  - name: encode
+    description: Base 64 encode stdin
+  - name: config
+    description: Configure CLI settings
+    flags:
+      --web-vault=: Custom web vault URL
+      --api=: Custom API URL
+      --identity=: Custom identity URL
+      --icons=: Custom icons service URL
+      --notifications=: Custom notifications URL
+      --events=: Custom events URL
+      --key-connector=: URL for Key Connector server
+      -h, --help: Output usage information
+    completion:
+      positional:
+        - - server
+  - name: update
+    description: Check for updates
+  - name: completion
+    description: Generate shell completions
+    flags:
+      --shell=: Shell to generate completions for
+      -h, --help: Output usage information
+    completion:
+      flag:
+        shell: [bash, zsh, fish]
+  - name: status
+    description: Show server, last sync, user information, and vault status
+  - name: list
+    description: List an array of objects from the vault
+    flags:
+      --search=: Perform a search on the listed objects
+      --url=: Filter items of type login with a url-match search
+      --folderid=: Filter items by folder id
+      --collectionid=: Filter items by collection id
+      --organizationid=: Filter items or collections by organization id
+      --trash: Filter items that are deleted and in the trash
+      -h, --help: Output usage information
+    completion:
+      positional:
+        - - items
+          - folders
+          - collections
+          - org-collections
+          - org-members
+          - organizations
+  - name: get
+    description: Get an object from the vault
+    flags:
+      --itemid=: Attachment's item id
+      --output=: Output directory or filename for attachment
+      --organizationid=: Organization id for an organization object
+      -h, --help: Output usage information
+    completion:
+      positional:
+        - - item
+          - username
+          - password
+          - uri
+          - totp
+          - notes
+          - exposed
+          - attachment
+          - folder
+          - collection
+          - org-collection
+          - organization
+          - template
+          - fingerprint
+          - send
+  - name: create
+    description: Create an object in the vault
+    flags:
+      --file=: Path to file for attachment
+      --itemid=: Attachment's item id
+      --organizationid=: Organization id for an organization object
+      -h, --help: Output usage information
+    completion:
+      positional:
+        - - item
+          - attachment
+          - folder
+          - org-collection
+  - name: edit
+    description: Edit an object from the vault
+    flags:
+      --organizationid=: Organization id for an organization object
+      -h, --help: Output usage information
+    completion:
+      positional:
+        - - item
+          - item-collections
+          - folder
+          - org-collection
+  - name: delete
+    description: Delete an object from the vault
+    flags:
+      --itemid=: Attachment's item id
+      --organizationid=: Organization id for an organization object
+      -p, --permanent: Permanently deletes the item instead of soft-deleting
+      -h, --help: Output usage information
+    completion:
+      positional:
+        - - item
+          - attachment
+          - folder
+          - org-collection
+  - name: restore
+    description: Restores an object from the trash
+    completion:
+      positional:
+        - - item
+  - name: move
+    description: Move an item to an organization
+  - name: confirm
+    description: Confirm an object to the organization
+    flags:
+      --organizationid=: Organization id for an organization object
+      -h, --help: Output usage information
+    completion:
+      positional:
+        - - org-member
+  - name: import
+    description: Import vault data from a file
+    flags:
+      --formats: List formats
+      --organizationid=: ID of the organization to import to
+      -h, --help: Output usage information
+  - name: export
+    description: Export vault data to a CSV, JSON or ZIP file
+    flags:
+      --output=: Output directory or filename
+      --format=: Export file format
+      --password=: Use password to encrypt (encrypted_json only)
+      --organizationid=: Organization id for an organization
+      -h, --help: Output usage information
+    completion:
+      flag:
+        format: [csv, json, encrypted_json]
+  - name: send
+    description: Work with Bitwarden sends
+    flags:
+      -f, --file: Specifies that data is a filepath
+      -d, --deleteInDays=: Days until deletion (default 7)
+      --password=: Optional password to access this Send
+      --email=: Optional emails to access this Send
+      -a, --maxAccessCount=: Max possible accesses
+      --hidden: Hide data in web by default
+      -n, --name=: The name of the Send
+      --notes=: Notes to add to the Send
+      --fullObject: Return full Send object
+      -h, --help: Output usage information
+    completion:
+      positional:
+        - - list
+          - template
+          - get
+          - receive
+          - create
+          - edit
+          - remove-password
+          - delete
+    commands:
+      - name: list
+        description: List all the Sends owned by you
+      - name: template
+        description: Get json templates for send objects
+        completion:
+          positional:
+            - - file
+              - text
+      - name: get
+        description: Get Sends owned by you
+        flags:
+          --output=: Output directory or filename
+          --text: Return the text content of a Send
+          -h, --help: Output usage information
+      - name: receive
+        description: Access a Bitwarden Send from a url
+        flags:
+          --password=: Password needed to access the Send
+          --passwordenv=: Environment variable storing the password
+          --passwordfile=: Path to file containing the password
+          --obj: Return the Send's json object
+          --output=: File path to save a File-type Send
+          -h, --help: Output usage information
+      - name: create
+        description: Create a Send
+        flags:
+          --file=: File to Send
+          --text=: Text to Send
+          --hidden: Text hidden flag (with --text only)
+          -h, --help: Output usage information
+      - name: edit
+        description: Edit a Send
+        flags:
+          --itemid=: Overrides the itemId in encodedJson
+          -h, --help: Output usage information
+      - name: remove-password
+        description: Removes the saved password from a Send
+      - name: delete
+        description: Delete a Send
+  - name: receive
+    description: Access a Bitwarden Send from a url
+    flags:
+      --password=: Password needed to access the Send
+      --passwordenv=: Environment variable storing the password
+      --passwordfile=: Path to file containing the password
+      --obj: Return the Send's json object
+      --output=: File path to save a File-type Send
+      -h, --help: Output usage information
+  - name: serve
+    description: Start a RESTful API webserver
+    flags:
+      --hostname=: The hostname to bind your API webserver to
+      --port=: The port to run your API webserver on
+      --disable-origin-protection: Allow requests with origin header (CSRF warning)
+      -h, --help: Output usage information

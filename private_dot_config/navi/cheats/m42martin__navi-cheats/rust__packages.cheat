@@ -1,0 +1,5 @@
+% rust packages, utilities, cli, shell, package manager, updates
+
+# Update all currently installed cargo packages
+
+cargo install-update --all

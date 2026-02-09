@@ -1,0 +1,33 @@
+#!/bin/bash
+# Install packages from Brewfile
+# Runs when Brewfile content changes
+# Hash: {{ include "Brewfile" | sha256sum }}
+
+{{- if ne .chezmoi.os "darwin" }}
+exit 0
+{{- end }}
+
+set -euo pipefail
+
+echo "Installing packages from Brewfile..."
+
+if ! command -v brew &>/dev/null; then
+    echo "Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+cd "{{ .chezmoi.sourceDir }}"
+
+if [[ -t 0 && -t 1 ]]; then
+    brew bundle --file=Brewfile
+else
+    echo "Non-interactive shell detected. Skipping Mac App Store installs during chezmoi apply."
+    # Skip all MAS app IDs in Brewfile to avoid interactive App Store password prompts.
+    export HOMEBREW_BUNDLE_MAS_SKIP="${HOMEBREW_BUNDLE_MAS_SKIP:-937984704 1352778147 1452453066 1635403801 985367838 6740142714 1639306886}"
+    brew bundle --file=Brewfile
+    echo "To install Mac App Store apps later, run this in an interactive terminal:"
+    echo "  brew bundle --file={{ .chezmoi.sourceDir }}/Brewfile"
+fi
+
+echo "Package installation complete!"

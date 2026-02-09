@@ -1,0 +1,3 @@
+% code, vscode, install code extensions
+# Install VSCode extensions from a JSON file
+jq -r '.[].identifier.id' extensions.json | grep -v '^local\.' | xargs -I {} sh -c 'code --uninstall-extension {} 2>/dev/null; code --install-extension {}'

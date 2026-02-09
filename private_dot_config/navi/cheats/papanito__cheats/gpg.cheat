@@ -1,0 +1,32 @@
+% gpg
+$ key_name: gpg --list-keys --with-colons | awk -F: '$1 == "uid" {print $8" "$10}' --- --column 1 --delimiter ' '
+
+# Export Public Key as armored ASCII
+gpg --output <output_filename> --armor --export <key_name>
+
+# List pgp keys
+gpg --list-keys --with-colons | awk -F: '$1 == "uid" {print $8 "\t" $10 }'
+
+# To locate the key of a user, by email address:
+gpg --auto-key-locate keyserver --locate-keys <email>
+
+# Refresh all your keys (e.g. new revocation certificates and subkeys)
+gpg --refresh-keys
+
+# Upload and verify key to keys.openpgp.org
+gpg --export <email> | curl -T - https://keys.openpgp.org
+
+# Generate revoke key
+gpg --output revoke.asc --gen-revoke <key_name>
+
+# Import revocation certificate into your keyring
+gpg --import revoke.asc
+
+# Search your key on the keyserver
+gpg --keyserver <keyserver> --search-key <key_name>
+
+# Generate a lot of random passwords
+gpg --gen-random --armor 1 
+
+# Generate a random password of a given lenght
+gpg --gen-random --armor 1 <length>

@@ -1,0 +1,232 @@
+% gitlab, glab
+
+;; ====================
+;; Search & Discovery
+;; ====================
+
+# Search projects/repos globally (text search)
+glab repo search -s "<search_term>" -P <per_page>
+
+$ per_page: echo -e "20\n50\n100" --- --header "Results per page"
+
+;; ====================
+;; Group Details
+;; ====================
+
+# Get group details by ID (interactive select)
+glab api "groups/<group_id_detail>" | jq 'del(.projects, .shared_projects)'
+
+$ group_id_detail: glab api "groups?per_page=100" | jq -r '.[] | "\(.id) \(.full_path)"' --- --column 1 --header "ID PATH"
+
+;; ====================
+;; Clone Operations
+;; ====================
+# Clone all repos in a group (preserving hierarchy, non-archived only)
+glab repo clone -g <clone_group> -p --paginate --archived=false
+
+$ clone_group: glab api "groups?per_page=100" | jq -r '.[] | "\(.id) \(.full_path)"' --- --column 1 --header "ID PATH"
+
+;; ====================
+;; Merge Requests
+;; ====================
+
+% gitlab, glab, mr
+
+# List open merge requests in current repo
+glab mr list
+
+# List all merge requests (including closed/merged)
+glab mr list -s all
+
+# List MRs assigned to me
+glab mr list --assignee=@me
+
+# List MRs I need to review
+glab mr list --reviewer=@me
+
+# View merge request details (interactive)
+glab mr view <mr_iid>
+
+$ mr_iid: glab mr list -F json 2>/dev/null | jq -r '.[] | "\(.iid) \(.title[0:50]) \(.author.username)"' --- --column 1 --header "IID TITLE AUTHOR"
+
+# Create merge request (interactive wizard)
+glab mr create
+
+# Create merge request with title
+glab mr create -t "<mr_title>"
+
+# Checkout merge request branch locally
+glab mr checkout <mr_checkout>
+
+$ mr_checkout: glab mr list -F json 2>/dev/null | jq -r '.[] | "\(.iid) \(.source_branch) \(.title[0:40])"' --- --column 1 --header "IID BRANCH TITLE"
+
+# Approve merge request
+glab mr approve <mr_approve>
+
+$ mr_approve: glab mr list -F json 2>/dev/null | jq -r '.[] | "\(.iid) \(.title[0:60])"' --- --column 1 --header "IID TITLE"
+
+# Merge a merge request
+glab mr merge <mr_to_merge>
+
+$ mr_to_merge: glab mr list -F json 2>/dev/null | jq -r '.[] | "\(.iid) \(.title[0:60])"' --- --column 1 --header "IID TITLE"
+
+# Open merge request in browser
+glab mr view <mr_web> --web
+
+$ mr_web: glab mr list -F json 2>/dev/null | jq -r '.[] | "\(.iid) \(.title[0:60])"' --- --column 1 --header "IID TITLE"
+
+;; ====================
+;; Issues
+;; ====================
+
+% gitlab, glab, issue
+
+# List open issues
+glab issue list
+
+# List issues assigned to me
+glab issue list --assignee=@me
+
+# View issue details (interactive)
+glab issue view <issue_iid>
+
+$ issue_iid: glab issue list -F json 2>/dev/null | jq -r '.[] | "\(.iid) \(.title[0:50]) \(.author.username)"' --- --column 1 --header "IID TITLE AUTHOR"
+
+# Create issue (interactive wizard)
+glab issue create
+
+# Create issue with title
+glab issue create -t "<issue_title>"
+
+# Close issue
+glab issue close <issue_close>
+
+$ issue_close: glab issue list -F json 2>/dev/null | jq -r '.[] | "\(.iid) \(.title[0:60])"' --- --column 1 --header "IID TITLE"
+
+# Open issue in browser
+glab issue view <issue_web> --web
+
+$ issue_web: glab issue list -F json 2>/dev/null | jq -r '.[] | "\(.iid) \(.title[0:60])"' --- --column 1 --header "IID TITLE"
+
+;; ====================
+;; Pipelines / CI
+;; ====================
+
+% gitlab, glab, pipeline, ci
+
+# List recent pipelines
+glab ci list
+
+# View current/latest pipeline status
+glab ci status
+
+# View pipeline details (interactive)
+glab ci view <ci_pipeline>
+
+$ ci_pipeline: glab ci list -F json 2>/dev/null | jq -r '.[] | "\(.id) \(.status) \(.ref)"' --- --column 1 --header "ID STATUS REF"
+
+# Run a new pipeline on current branch
+glab ci run
+
+# Run a pipeline on specific branch
+glab ci run -b <ci_branch>
+
+$ ci_branch: git branch -r 2>/dev/null | sed 's|origin/||;s|^[[:space:]]*||' | grep -v HEAD --- --header "Select branch"
+
+# Retry failed pipeline
+glab ci retry <ci_retry>
+
+$ ci_retry: glab ci list -F json 2>/dev/null | jq -r '.[] | select(.status == "failed") | "\(.id) \(.status) \(.ref)"' --- --column 1 --header "ID STATUS REF"
+
+# Cancel running pipeline
+glab ci cancel <ci_cancel>
+
+$ ci_cancel: glab ci list -F json 2>/dev/null | jq -r '.[] | select(.status == "running" or .status == "pending") | "\(.id) \(.status) \(.ref)"' --- --column 1 --header "ID STATUS REF"
+
+# Open pipeline in browser
+glab ci view <ci_web> --web
+
+$ ci_web: glab ci list -F json 2>/dev/null | jq -r '.[] | "\(.id) \(.status) \(.ref)"' --- --column 1 --header "ID STATUS REF"
+
+# Trace/follow job logs (live)
+glab ci trace
+
+;; ====================
+;; Releases & Tags
+;; ====================
+
+% gitlab, glab, release
+
+# List releases
+glab release list
+
+# View release details (interactive)
+glab release view <release_tag>
+
+$ release_tag: glab release list -F json 2>/dev/null | jq -r '.[].tag_name' --- --header "Select release tag"
+
+# Create a new release (type tag name)
+glab release create <new_tag> -n "<release_title>"
+
+;; ====================
+;; Labels
+;; ====================
+
+% gitlab, glab, label
+
+# List all labels in project
+glab label list
+
+# Create a new label
+glab label create "<label_name>" -c "<label_color>"
+
+$ label_color: echo -e "#428BCA\n#44AD8E\n#A8D695\n#D4C5F9\n#F0AD4E\n#D9534F\n#7F8C8D" --- --header "Select or type hex color"
+
+;; ====================
+;; API Direct Access
+;; ====================
+
+% gitlab, glab, api
+
+# Call arbitrary API endpoint (type endpoint path)
+glab api "<api_endpoint>" | jq '.'
+
+# Get current user info
+glab api "user" | jq '.'
+
+# Get current project info (must be in a git repo)
+glab api "projects/:fullpath" | jq '.'
+
+# List project members (must be in a git repo)
+glab api "projects/:fullpath/members/all" | jq '.[] | {username, name, access_level}'
+
+# List project CI/CD variables (must be in a git repo)
+glab api "projects/:fullpath/variables" | jq '.'
+
+# List group CI/CD variables
+glab api "groups/<api_group>/variables" | jq '.'
+
+$ api_group: glab api "groups?per_page=100" | jq -r '.[] | "\(.id) \(.full_path)"' --- --column 1 --header "ID PATH"
+
+;; ====================
+;; Config & Auth
+;; ====================
+
+% gitlab, glab, config
+
+# Check current auth status
+glab auth status
+
+# Login to GitLab
+glab auth login
+
+# Set default repo for current directory
+glab repo set-default
+
+# View glab configuration
+glab config list
+
+# Switch GitLab host
+glab config set host <gitlab_host>
+
+$ gitlab_host: glab config get hosts 2>/dev/null | tr ',' '\n' --- --header "Select host"

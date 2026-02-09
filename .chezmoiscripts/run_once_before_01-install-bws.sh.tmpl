@@ -1,0 +1,21 @@
+#!/bin/bash
+# Install Bitwarden Secrets Manager CLI
+# Run once before other scripts that need secrets
+
+{{- if ne .chezmoi.os "darwin" }}
+# Different installation method for Linux
+exit 0
+{{- end }}
+
+set -euo pipefail
+
+if command -v bws &>/dev/null; then
+    echo "BWS CLI already installed: $(bws --version)"
+    exit 0
+fi
+
+echo "Installing Bitwarden Secrets Manager CLI..."
+curl -fsSL https://bws.bitwarden.com/install.sh | bash
+
+echo "BWS CLI installed successfully!"
+echo "BWS token is provided via age-encrypted file (~/.bws_token, decrypted by chezmoi)."

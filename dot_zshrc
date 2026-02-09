@@ -1,0 +1,110 @@
+# Enable profiling: ZSHRC_PROFILE=1 zsh -i -c exit
+[[ -n "$ZSHRC_PROFILE" ]] && zmodload zsh/zprof
+
+# ZSH configuration - main entry point
+# shellcheck disable=SC1091
+
+# ZSH options
+setopt AUTO_CD           # Change directory without cd
+setopt EXTENDED_HISTORY  # Record timestamp in history
+setopt SHARE_HISTORY     # Share history between sessions
+setopt HIST_IGNORE_DUPS  # Don't record duplicates
+setopt HIST_IGNORE_SPACE # Don't record commands starting with space
+
+# History configuration
+export HISTSIZE=10000
+export SAVEHIST=10000
+export HISTFILE=~/.zsh_history
+
+# ----------------------------------------------------
+# Tool initialization (order matters!)
+# ----------------------------------------------------
+
+# Homebrew shell environment (cached for faster startup)
+_brew_cache="$HOME/.cache/brew-shellenv.zsh"
+if [[ ! -f "$_brew_cache" || ! -s "$_brew_cache" ]]; then
+  mkdir -p "$HOME/.cache"
+  /opt/homebrew/bin/brew shellenv > "$_brew_cache" 2>/dev/null
+fi
+source "$_brew_cache"
+unset _brew_cache
+
+# Interactive-only exports (PAGER, LESS, tool-specific vars)
+source "$HOME/.zsh/exports.zsh"
+
+# Zinit plugins + fzf-tab + compinit
+source "$HOME/.zsh/plugins.zsh"
+
+# Carapace completions - MUST be AFTER compinit (needs compdef command)
+# Cached for faster startup (regenerate if carapace binary changes)
+if command -v carapace &>/dev/null; then
+  _carapace_cache="$HOME/.cache/carapace-init.zsh"
+  _carapace_bin="$(command -v carapace)"
+  if [[ ! -f "$_carapace_cache" ]] || [[ "$_carapace_bin" -nt "$_carapace_cache" ]]; then
+    mkdir -p "$HOME/.cache"
+    carapace _carapace zsh > "$_carapace_cache" 2>/dev/null
+  fi
+  source "$_carapace_cache"
+  unset _carapace_cache _carapace_bin
+fi
+
+# Tool completions (after compinit)
+source "$HOME/.zsh/completions.zsh"
+
+# Tool shell integrations (atuin, zoxide, starship, thefuck)
+source "$HOME/.zsh/tools.zsh"
+
+# ----------------------------------------------------
+# Shell configuration
+# ----------------------------------------------------
+
+source "$HOME/.zsh/aliases.zsh"
+source "$HOME/.zsh/functions.zsh"
+source "$HOME/.zsh/fzf.zsh"
+source "$HOME/.zsh/fzf-tab.zsh"
+source "$HOME/.zsh/keybindings.zsh"
+source "$HOME/.zsh/direnv.zsh"
+source "$HOME/.zsh/aws.zsh"
+
+# Local configuration (machine-specific, secrets) - loaded last to override
+[[ -f "$HOME/.zsh/local.zsh" ]] || touch "$HOME/.zsh/local.zsh"
+source "$HOME/.zsh/local.zsh"
+
+# Zellij auto-start (interactive shells only)
+if command -v zellij &>/dev/null &&
+  [[ -z "${ZELLIJ:-}" ]] &&
+  [[ -z "${TMUX:-}" ]] &&
+  [[ -z "${ZSH_EXECUTION_STRING:-}" ]] &&
+  [[ -t 0 ]] && [[ -t 1 ]] &&
+  [[ "${ZELLIJ_AUTO_START:-true}" == "true" ]]; then
+  _zj_session_name="${ZELLIJ_AUTO_SESSION_NAME:-}"
+  _zj_session_layout="${ZELLIJ_AUTO_SESSION_LAYOUT:-}"
+
+  if [[ "${ZELLIJ_AUTO_ATTACH:-false}" == "true" ]]; then
+    if [[ -n "$_zj_session_name" ]]; then
+      if [[ -n "$_zj_session_layout" ]]; then
+        zellij attach "$_zj_session_name" -c options --default-layout "$_zj_session_layout" || zellij attach -c
+      else
+        zellij attach "$_zj_session_name" -c || zellij attach -c
+      fi
+    elif command -v zj-session &>/dev/null; then
+      zj-session || zellij attach -c
+    else
+      zellij attach -c
+    fi
+  else
+    if [[ -n "$_zj_session_name" ]] && [[ -n "$_zj_session_layout" ]]; then
+      zellij -s "$_zj_session_name" --layout "$_zj_session_layout" || zellij
+    elif [[ -n "$_zj_session_name" ]]; then
+      zellij -s "$_zj_session_name" || zellij
+    else
+      zellij
+    fi
+  fi
+
+  unset _zj_session_name _zj_session_layout
+  [[ "${ZELLIJ_AUTO_EXIT:-false}" == "true" ]] && exit
+fi
+
+# Output profiling results
+[[ -n "$ZSHRC_PROFILE" ]] && zprof

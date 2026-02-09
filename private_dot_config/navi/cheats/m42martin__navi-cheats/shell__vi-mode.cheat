@@ -1,0 +1,43 @@
+% shell, console, cli, vi mode, movements, cursor, text
+
+# Enable vi mode in Bash shell
+
+add the following to ~/.inputrc "set editing-mode vi"
+
+# Move to the start of the command line text
+
+^ OR I
+
+# Move to the end of the command line text
+
+$
+
+# Move one word forwards in the command line text
+
+w
+
+# Move one word segment backwards in the command line text
+
+b  (this takes 4 steps to move from the last 'e' to the first '-' in the following example " --backwards-move ")
+
+# Move one word boundary backwards in the command line text
+
+B  (this takes 1 step to move from the last 'e' to the first '-' in the following example " --backwards-move ")
+
+# Move to the end of the next word segment in the command line text
+
+e  (this takes 4 steps to move from the first '-' to the last 'e' in the following example " --forward-move ")
+
+# Move to the end of the next word boundary in the command line text
+
+E  (this takes 1 step to move from the first '-' to the last 'e' in the following example " --forward-move ")
+
+# Delete all text beginning at, and after the cursor 
+
+D
+
+# Undo the last change made to the command line text 
+
+u
+
+

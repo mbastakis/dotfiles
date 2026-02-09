@@ -1,0 +1,66 @@
+[user]
+    email = {{ .email }}
+    name = {{ .name }}
+
+{{ if eq .profile "work" -}}
+[includeIf "gitdir:~/work/"]
+    path = ~/.config/git/.gitconfig-work
+
+[includeIf "gitdir:~/dev/work/"]
+    path = ~/.config/git/.gitconfig-work
+
+[includeIf "hasconfig:remote.*.url:https://*telekom*/**"]
+    path = ~/.config/git/.gitconfig-work
+
+[includeIf "hasconfig:remote.*.url:ssh://*telekom*/**"]
+    path = ~/.config/git/.gitconfig-work
+
+[includeIf "hasconfig:remote.*.url:git@*telekom*:*/**"]
+    path = ~/.config/git/.gitconfig-work
+
+[url "https://oauth2:@gitlab.devops.telekom.de"]
+    insteadOf = https://gitlab.devops.telekom.de
+{{ end -}}
+
+[include]
+    path = ~/.config/delta/themes/catppuccin.gitconfig
+
+[core]
+    pager = delta
+    editor = nvim
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    features = catppuccin-mocha
+    navigate = true
+    dark = true
+
+[color]
+    ui = true
+
+[color "diff-highlight"]
+    oldNormal = red bold
+    oldHighlight = red bold 52
+    newNormal = green bold
+    newHighlight = green bold 22
+
+[color "diff"]
+    meta = 11
+    frag = magenta bold
+    func = 146 bold
+    commit = yellow bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
+
+[init]
+    defaultBranch = master
+
+[diff]
+    tool = nvim
+
+[merge]
+    tool = nvim
+    conflictstyle = zdiff3

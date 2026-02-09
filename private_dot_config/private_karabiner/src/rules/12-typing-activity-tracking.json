@@ -1,0 +1,476 @@
+{
+    "description": "Track typing activity on non-HRM keys for streak detection",
+    "manipulators": [
+        {
+            "conditions": [
+                { "type": "variable_unless", "name": "left_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "right_hrm", "value": 1 }
+            ],
+            "from": {
+                "key_code": "q",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "q" }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                { "type": "variable_unless", "name": "left_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "right_hrm", "value": 1 }
+            ],
+            "from": {
+                "key_code": "w",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "w" }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                { "type": "variable_unless", "name": "left_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "right_hrm", "value": 1 }
+            ],
+            "from": {
+                "key_code": "e",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "e" }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                { "type": "variable_unless", "name": "left_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "right_hrm", "value": 1 }
+            ],
+            "from": {
+                "key_code": "r",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "r" }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                { "type": "variable_unless", "name": "left_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "right_hrm", "value": 1 }
+            ],
+            "from": {
+                "key_code": "t",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "t" }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                { "type": "variable_unless", "name": "left_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "right_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "hyper_caps_lock", "value": 1 }
+            ],
+            "from": {
+                "key_code": "y",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "y" }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                { "type": "variable_unless", "name": "left_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "right_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "hyper_caps_lock", "value": 1 }
+            ],
+            "from": {
+                "key_code": "u",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "u" }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                { "type": "variable_unless", "name": "left_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "right_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "hyper_caps_lock", "value": 1 }
+            ],
+            "from": {
+                "key_code": "i",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "i" }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                { "type": "variable_unless", "name": "left_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "right_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "hyper_caps_lock", "value": 1 }
+            ],
+            "from": {
+                "key_code": "o",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "o" }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                { "type": "variable_unless", "name": "left_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "right_hrm", "value": 1 }
+            ],
+            "from": {
+                "key_code": "p",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "p" }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                { "type": "variable_unless", "name": "left_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "right_hrm", "value": 1 }
+            ],
+            "from": {
+                "key_code": "g",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "g" }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                { "type": "variable_unless", "name": "left_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "right_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "hyper_caps_lock", "value": 1 }
+            ],
+            "from": {
+                "key_code": "h",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "h" }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                { "type": "variable_unless", "name": "left_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "right_hrm", "value": 1 }
+            ],
+            "from": {
+                "key_code": "z",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "z" }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                { "type": "variable_unless", "name": "left_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "right_hrm", "value": 1 }
+            ],
+            "from": {
+                "key_code": "x",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "x" }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                { "type": "variable_unless", "name": "left_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "right_hrm", "value": 1 }
+            ],
+            "from": {
+                "key_code": "c",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "c" }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                { "type": "variable_unless", "name": "left_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "right_hrm", "value": 1 }
+            ],
+            "from": {
+                "key_code": "v",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "v" }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                { "type": "variable_unless", "name": "left_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "right_hrm", "value": 1 }
+            ],
+            "from": {
+                "key_code": "b",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "b" }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                { "type": "variable_unless", "name": "left_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "right_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "hyper_caps_lock", "value": 1 }
+            ],
+            "from": {
+                "key_code": "n",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "n" }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                { "type": "variable_unless", "name": "left_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "right_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "hyper_caps_lock", "value": 1 }
+            ],
+            "from": {
+                "key_code": "m",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "m" }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                { "type": "variable_unless", "name": "left_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "right_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "hyper_caps_lock", "value": 1 }
+            ],
+            "from": {
+                "key_code": "comma",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "comma" }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                { "type": "variable_unless", "name": "left_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "right_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "hyper_caps_lock", "value": 1 }
+            ],
+            "from": {
+                "key_code": "period",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "period" }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                { "type": "variable_unless", "name": "left_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "right_hrm", "value": 1 }
+            ],
+            "from": {
+                "key_code": "slash",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "slash" }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                { "type": "variable_unless", "name": "left_hrm", "value": 1 },
+                { "type": "variable_unless", "name": "right_hrm", "value": 1 }
+            ],
+            "from": {
+                "key_code": "spacebar",
+                "modifiers": {
+                    "optional": ["caps_lock", "command", "option", "shift"]
+                }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "spacebar" }
+            ],
+            "type": "basic"
+        }
+    ]
+}

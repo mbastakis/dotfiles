@@ -1,0 +1,139 @@
+% ansi terminal colors, bash, shell, cli
+
+# Ansi tput syntax for reset
+
+RESET=$'\033[0m'
+
+# Ansi tput method for Foreground Black
+
+$(tput setaf 0)
+
+# Ansi tput method for Foreground Light Black
+
+$(tput setaf 8)
+
+# Ansi tput method for Foreground Red
+
+$(tput setaf 1)
+
+# Ansi tput method for Foreground Light Red
+
+$(tput setaf 9)
+
+# Ansi tput method for Foreground Light Green
+
+$(tput setaf 2)
+
+# Ansi tput method for Foreground Light Green
+
+$(tput setaf 10)
+
+# Ansi tput method for Foreground Yellow
+
+$(tput setaf 3)
+
+# Ansi tput method for Foreground Light Yellow
+
+$(tput setaf 11)
+
+# Ansi tput method for Foreground Blue
+
+$(tput setaf 4)
+
+# Ansi tput method for Foreground Light Blue
+
+$(tput setaf 12)
+
+# Ansi tput method for Foreground Magenta
+
+$(tput setaf 5)
+
+# Ansi tput method for Foreground Light Magenta
+
+$(tput setaf 13)
+
+# Ansi tput method for Foreground Cyan
+
+$(tput setaf 6)
+
+# Ansi tput method for Foreground Light Cyan
+
+$(tput setaf 14)
+
+# Ansi tput method for Foreground White
+
+$(tput setaf 7)
+
+# Ansi tput method for Foreground Light White
+
+$(tput setaf 15)
+
+
+# Ansi tput method for Background Black
+
+$(tput setab 0)
+
+# Ansi tput method for Background Light Black
+
+$(tput setab 8)
+
+# Ansi tput method for Background Red
+
+$(tput setab 1)
+
+# Ansi tput method for Background Light Red
+
+$(tput setab 9)
+
+# Ansi tput method for Background Light Green
+
+$(tput setab 2)
+
+# Ansi tput method for Background Light Green
+
+$(tput setab 10)
+
+# Ansi tput method for Background Yellow
+
+$(tput setab 3)
+
+# Ansi tput method for Background Light Yellow
+
+$(tput setab 11)
+
+# Ansi tput method for Background Blue
+
+$(tput setab 4)
+
+# Ansi tput method for Background Light Blue
+
+$(tput setab 12)
+
+# Ansi tput method for Background Magenta
+
+$(tput setab 5)
+
+# Ansi tput method for Background Light Magenta
+
+$(tput setab 13)
+
+# Ansi tput method for Background Cyan
+
+$(tput setab 6)
+
+# Ansi tput method for Background Light Cyan
+
+$(tput setab 14)
+
+# Ansi tput method for Background White
+
+$(tput setab 7)
+
+# Ansi tput method for Background Light White
+
+$(tput setab 15)
+
+# Set variable to the value of a unicode character
+
+circle_red_large=$'\U2B55'
+

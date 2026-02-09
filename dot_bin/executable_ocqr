@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# OpenCode server QR code generator
+# Generates a QR code with the Tailscale URL for easy phone access
+
+PORT="${1:-4096}"
+
+# Try tailscale CLI first, fall back to parsing interfaces for 100.x.x.x
+TAILSCALE_IP=$(tailscale ip -4 2>/dev/null || \
+  ifconfig | grep "inet 100\." | awk '{print $2}' | head -1 || true)
+
+if [[ -z "$TAILSCALE_IP" ]]; then
+  echo "Error: Tailscale not running or no IPv4 address"
+  echo "Start Tailscale and try again"
+  exit 1
+fi
+
+URL="http://${TAILSCALE_IP}:${PORT}"
+
+echo "OpenCode Server URL:"
+echo "$URL"
+echo ""
+qrencode -t UTF8 "$URL"
+echo ""
+echo "Scan with your phone (Tailscale app required)"

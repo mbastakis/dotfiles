@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: carapace-sync
+description: Manage carapace spec files for shell completions
+flags:
+  -h, --help: Show help message
+  -f, --force: Regenerate all specs regardless of version
+  -c, --clean: Clear all carapace caches
+  -l, --list: Show managed tools and status
+  -t, --test: Verify specs work correctly
+  --add=: Add new tool to registry

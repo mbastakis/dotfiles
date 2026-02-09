@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# Auto-generated wrapper for nix-manager TUI app
+# Regenerate with: bin/build_apps.sh
+
+set -euo pipefail
+
+# Find dotfiles directory
+DOTFILES_DIR=""
+for dir in ~/dev/dotfiles ~/dotfiles ~/.dotfiles; do
+  if [[ -d "$dir/apps/nix-manager" ]]; then
+    DOTFILES_DIR="$dir"
+    break
+  fi
+done
+
+if [[ -z "$DOTFILES_DIR" ]]; then
+  echo "Error: Could not find dotfiles directory with apps/nix-manager" >&2
+  exit 1
+fi
+
+APPS_DIR="$DOTFILES_DIR/apps"
+APP_DIR="$APPS_DIR/nix-manager"
+
+# Ensure workspace dependencies are installed
+if [[ ! -d "$APPS_DIR/node_modules" ]]; then
+  echo "Installing workspace dependencies..." >&2
+  (cd "$APPS_DIR" && bun install)
+fi
+
+# Run from app directory for proper module resolution
+cd "$APP_DIR"
+exec bun run src/index.tsx "$@"

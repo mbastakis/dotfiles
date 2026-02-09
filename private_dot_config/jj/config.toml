@@ -1,0 +1,72 @@
+#:schema https://docs.jj-vcs.dev/latest/config-schema.json
+
+# =============================================================================
+# User Settings
+# =============================================================================
+# NOTE: jj does not inherit from git config (see: github.com/jj-vcs/jj/issues/4048)
+# Must duplicate user settings here with path-based conditionals.
+
+[user]
+name = "Michail Bastakis"
+email = "mbastakis@gmail.com"
+
+# Work override: repos under ~/dev/work use work identity
+[[--scope]]
+--when.repositories = ["~/dev/work"]
+[--scope.user]
+name = "Michail Bastakis"
+email = "Michail.Bastakis@telekom.com"
+
+# =============================================================================
+# UI Settings
+# =============================================================================
+[ui]
+editor = "nvim"
+
+# =============================================================================
+# Git Settings
+# =============================================================================
+[git]
+colocate = true
+
+# =============================================================================
+# Aliases
+# =============================================================================
+[aliases]
+# Log shortcuts
+l = ["log", "-r", "::@"]                           # Log ancestors of current
+la = ["log", "-r", "all()"]                        # Log all commits
+lb = ["log", "-r", "bookmarks()"]                  # Log all bookmarks
+
+# Status and diff shortcuts  
+d = ["diff"]                                       # Show diff of working copy
+ds = ["diff", "--stat"]                            # Show diff stats
+s = ["status"]                                     # Show status
+
+# Commit shortcuts
+c = ["commit"]                                     # Commit with message prompt
+ca = ["commit", "--amend"]                         # Amend to parent commit
+ci = ["commit", "--interactive"]                   # Interactive commit (select hunks)
+
+# Navigation
+p = ["prev"]                                       # Move to parent commit
+n = ["next"]                                       # Move to child commit
+
+# Bookmark shortcuts
+b = ["bookmark", "list"]                           # List bookmarks
+bc = ["bookmark", "create"]                        # Create bookmark
+bd = ["bookmark", "delete"]                        # Delete bookmark
+bm = ["bookmark", "move"]                          # Move bookmark
+
+# Git operations
+gf = ["git", "fetch"]                              # Fetch from remote
+gp = ["git", "push"]                               # Push to remote
+
+# Undo/redo
+u = ["undo"]                                       # Undo last operation
+
+# Show commit details
+sh = ["show"]                                      # Show current commit
+
+# Rebase shortcuts
+rb = ["rebase"]                                    # Rebase

@@ -1,0 +1,4 @@
+%  restart, audio, sound, volume
+
+# Restart Audio
+sudo killall coreaudiod

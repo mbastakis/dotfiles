@@ -1,0 +1,47 @@
+# TOML test file with intentional format issues
+
+[package]
+name = "test-project"
+version = "0.1.0"
+authors = ["John Doe <john@example.com>"]
+edition = "2021"
+
+# Inconsistent spacing
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+tokio = { version = "1.0", features = ["full"] }
+reqwest = "0.11"
+
+[dev-dependencies]
+criterion = "0.5"
+
+# Very long line
+[[bin]]
+name = "my-app"
+path = "src/main.rs"
+required-features = ["feature1", "feature2", "feature3", "feature4", "feature5"]
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+
+# Duplicate keys (error)
+[features]
+default = ["feature1"]
+feature1 = []
+feature2 = ["dep:serde"]
+
+# Inconsistent array formatting
+[[example]]
+name = "example1"
+path = "examples/example1.rs"
+
+[[example]]
+zame = "example2"
+path = "examples/example2.rs"
+
+[workspace]
+members = ["crate1", "crate2", "crate3"]
+
+# Missing newline at end

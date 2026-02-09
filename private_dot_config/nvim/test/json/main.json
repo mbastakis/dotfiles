@@ -1,0 +1,30 @@
+{
+  "name": "test-project",
+  "version": "1.0.0",
+  "description": "A test project for LSP",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": ["test", "demo"],
+  "author": "John Doe",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "prettier": "^2.8.0"
+  },
+  "config": {
+    "port": 3000,
+    "host": "localhost",
+    "debug": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/user/repo.git"
+  }
+}

@@ -1,0 +1,4 @@
+% network, restart, connection, vpn, wifi, internet
+
+# Restart Internet Connection
+ sudo ifconfig en0 down && sudo ifconfig en0 up

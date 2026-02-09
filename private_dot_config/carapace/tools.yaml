@@ -1,0 +1,28 @@
+# carapace-sync tool registry
+# Tools that need spec generation (not in carapace-bin's built-in completers)
+#
+# Bridge types: Zsh, Bash, Fish, Cobra, Yargs, Click, Clap, Argcomplete
+#
+# To add a new tool: carapace-sync --add <tool>
+# Check if tool has built-in completer: carapace --list | grep <tool>
+
+tools:
+  # Native spec (full flag/subcommand definitions)
+  bw:
+    description: Bitwarden CLI password manager
+    bridge_type: custom  # Uses native spec, not bridge
+    version_cmd: "bw --version"
+
+  # Yargs-based CLI
+  opencode:
+    description: AI coding assistant CLI
+    bridge_type: Yargs
+    version_cmd: "opencode --version"
+
+  # Cobra-based CLI
+  obsidian-cli:
+    description: Obsidian vault CLI
+    bridge_type: Cobra
+    version_cmd: "obsidian-cli --version"
+
+  # Note: bun has built-in carapace completer, no spec needed

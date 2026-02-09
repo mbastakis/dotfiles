@@ -1,0 +1,22 @@
+{
+    "description": "Hyper Key: Caps Lock -> hyper mode (variable only)",
+    "manipulators": [
+        {
+            "from": {
+                "key_code": "caps_lock",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "hyper_caps_lock",
+                        "value": 1,
+                        "key_up_value": 0
+                    }
+                }
+            ],
+            "to_if_alone": [{ "key_code": "escape" }],
+            "type": "basic"
+        }
+    ]
+}

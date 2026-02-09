@@ -1,0 +1,5 @@
+name: opencode
+description: AI coding assistant CLI
+parsing: disabled
+completion:
+  positionalany: ["$carapace.bridge.Yargs([opencode])"]

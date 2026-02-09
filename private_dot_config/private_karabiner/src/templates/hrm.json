@@ -1,0 +1,132 @@
+{
+    "description": "Home row mods - {{KEY_CODE}} ({{MOD_SHORT}}) - {{FINGER_NAME}}",
+    "manipulators": [
+        {
+            "description": "Typing streak - output '{{KEY_DISPLAY}}' if recently typed{{STREAK_SUFFIX}}",
+            "conditions": [
+                {
+                    "type": "expression_if",
+                    "expression": "last_keypress_time > system.now.milliseconds - {{STREAK_MS}}"
+                },
+                { "type": "variable_unless", "name": "{{OPPOSITE_MOD_ACTIVE}}", "value": 1 },
+                { "type": "variable_if", "name": "typing_mode", "value": 0 }
+            ],
+            "from": {
+                "key_code": "{{KEY_CODE}}",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "{{KEY_CODE}}" }
+            ],
+            "type": "basic"
+        },
+        {
+            "description": "Same-hand stacking - instant mod when {{HAND}} mod IS ACTIVE (not just pressed)",
+            "conditions": [
+                { "type": "variable_if", "name": "{{OPPOSITE_MOD_ACTIVE}}", "value": 1 },
+                { "type": "variable_if", "name": "{{OPPOSITE_HRM}}", "value": 0 },
+                { "type": "variable_if", "name": "typing_mode", "value": 0 }
+            ],
+            "from": {
+                "key_code": "{{KEY_CODE}}",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                { 
+                    "set_variable": { 
+                        "name": "{{FINGER_HELD}}", 
+                        "value": 1,
+                        "key_up_value": 0
+                    } 
+                }
+            ],
+            "to_if_alone": [{ "key_code": "{{KEY_CODE}}", "halt": true }],
+            "to_if_held_down": [{ "key_code": "{{MODIFIER}}"{{LAZY_SUFFIX}} }],
+            "to_delayed_action": {
+                "to_if_canceled": [{ "key_code": "{{KEY_CODE}}" }]
+            },
+            "parameters": {
+                "basic.to_if_alone_timeout_milliseconds": 0,
+                "basic.to_if_held_down_threshold_milliseconds": 0,
+                "basic.to_delayed_action_delay_milliseconds": {{STACK_DELAY_MS}}
+            },
+            "type": "basic"
+        },
+        {
+            "description": "Default HRM - tap for '{{KEY_DISPLAY}}', hold for {{MOD_FULL}}",
+            "conditions": [
+                { "type": "variable_if", "name": "{{OPPOSITE_HRM}}", "value": 0 },
+                {{HYPER_CONDITION}}
+                { "type": "variable_if", "name": "typing_mode", "value": 0 }
+            ],
+            "from": {
+                "key_code": "{{KEY_CODE}}",
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                { 
+                    "set_variable": { 
+                        "name": "{{HAND_HRM}}", 
+                        "value": 1,
+                        "key_up_value": 0
+                    } 
+                },
+                { 
+                    "set_variable": { 
+                        "name": "{{FINGER_HELD}}", 
+                        "value": 1,
+                        "key_up_value": 0
+                    } 
+                },
+                {
+                    "set_variable": {
+                        "name": "{{HAND_PRESS_TIME}}",
+                        "expression": "system.now.milliseconds"
+                    }
+                }
+            ],
+            "to_if_alone": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "{{KEY_CODE}}", "halt": true }
+            ],
+            "to_if_held_down": [
+                { 
+                    "set_variable": { 
+                        "name": "{{HAND_MOD_ACTIVE}}", 
+                        "value": 1,
+                        "key_up_value": 0
+                    } 
+                },
+                { "key_code": "{{MODIFIER}}"{{LAZY_SUFFIX}} }
+            ],
+            "to_delayed_action": {
+                "to_if_canceled": [
+                    {
+                        "set_variable": {
+                            "name": "last_keypress_time",
+                            "expression": "system.now.milliseconds"
+                        }
+                    },
+                    { "key_code": "{{KEY_CODE}}" }
+                ]
+            },
+            "parameters": {
+                "basic.to_if_alone_timeout_milliseconds": {{ALONE_MS}},
+                "basic.to_if_held_down_threshold_milliseconds": {{HELD_MS}},
+                "basic.to_delayed_action_delay_milliseconds": {{HELD_MS}}
+            },
+            "type": "basic"
+        }
+    ]
+}

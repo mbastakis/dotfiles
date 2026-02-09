@@ -1,0 +1,41 @@
+% kubernetes, rancher, fleet
+@ kubernetes
+$ clusterid: kubectl -n fleet-default get clusters.provisioning.cattle.io   --- --column 1 --header-lines 1
+
+# Get Fleet bundles 
+kubectl get bundle -n fleet-default --context <local_context>
+
+# Get Fleet bundles, filtered by pattern
+kubectl get bundle -n fleet-default --context <local_context> | grep -E "<pattern>"
+
+# Get Rancher clusters
+kubectl get clusters.management.cattle.io
+
+# Get Rancher nodes
+kubectl get nodes.management.cattle.io -A
+
+# Remove cluster manually from Rancher
+kubectl patch clusters.management.cattle.io <clusterid> -p '{"metadata":{"finalizers":[]}}' --type=merge && 
+kubectl delete clusters.management.cattle.io <clusterid>
+
+# Get password of grafana
+kubectl get secret --namespace cattle-monitoring-system rancher-monitoring-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+# User bindings for external provider
+kubectl get userattributes.management.cattle.io -ocustom-columns='NAME:.metadata.name,GENERATION:.metadata.generation,LASTREFRESH:.LastRefresh,EXTRABYPROVIDER:.ExtraByProvider'
+
+# Create an API key with no expiration
+kubectl patch tokens <token> -–type='json' -p='[{"op": "replace", "path": "/ttl", "value": 0}]' && kubectl patch tokens <token> --type='json' -p='[{"op": "remove", "path": "/expiresAt"}]'
+
+# collect the logs including the previous logs
+for pod in $(kubectl get pods -n cattle-system -l app=rancher --no-headers -o custom-columns=":metadata.name")
+  do
+    kubectl logs -n cattle-system $pod -c rancher |& gzip > $pod.log.gz
+    kubectl logs -n cattle-system $pod -c rancher --previous |& gzip > $pod-previous.log.gz
+done
+
+# Change the log level for Rancher v2.x
+kubectl -n cattle-system get pods -l app=rancher --no-headers -o custom-columns=name:.metadata.name | while read rancherpod; do kubectl -n cattle-system exec $rancherpod -c rancher -- loglevel --set <log_level>; done
+
+$ rancher_pods: kubectl -n cattle-system get pods -l app=rancher --no-headers -o custom-columns=name:.metadata.name
+$ log_level: echo error\ninfo\ndebug

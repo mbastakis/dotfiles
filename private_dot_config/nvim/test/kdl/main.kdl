@@ -1,0 +1,8 @@
+workspace {
+  name "dotfiles"
+
+  editor {
+    formatter "kdlfmt"
+    lsp "kdl-lsp"
+  }
+}

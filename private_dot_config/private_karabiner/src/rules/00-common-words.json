@@ -1,0 +1,100 @@
+{
+    "description": "Common word sequences - Fix cross-hand HRM timing issues",
+    "manipulators": [
+        {
+            "description": "k+j+d pressed rapidly = 'kjd' (the) - strict order",
+            "type": "basic",
+            "parameters": {
+                "basic.simultaneous_threshold_milliseconds": 80
+            },
+            "from": {
+                "simultaneous": [
+                    { "key_code": "k" },
+                    { "key_code": "j" },
+                    { "key_code": "d" }
+                ],
+                "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "detect_key_down_uninterruptedly": true
+                },
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "k" },
+                { "key_code": "j" },
+                { "key_code": "d" }
+            ],
+            "conditions": [
+                { "type": "variable_if", "name": "typing_mode", "value": 0 }
+            ]
+        },
+        {
+            "description": "k+j pressed rapidly = 'kj' (th) - strict order",
+            "type": "basic",
+            "parameters": {
+                "basic.simultaneous_threshold_milliseconds": 80
+            },
+            "from": {
+                "simultaneous": [
+                    { "key_code": "k" },
+                    { "key_code": "j" }
+                ],
+                "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "detect_key_down_uninterruptedly": true
+                },
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "k" },
+                { "key_code": "j" }
+            ],
+            "conditions": [
+                { "type": "variable_if", "name": "typing_mode", "value": 0 }
+            ]
+        },
+        {
+            "description": "j+k pressed rapidly = 'jk' (ht) - strict order",
+            "type": "basic",
+            "parameters": {
+                "basic.simultaneous_threshold_milliseconds": 80
+            },
+            "from": {
+                "simultaneous": [
+                    { "key_code": "j" },
+                    { "key_code": "k" }
+                ],
+                "simultaneous_options": {
+                    "key_down_order": "strict",
+                    "detect_key_down_uninterruptedly": true
+                },
+                "modifiers": { "optional": ["any"] }
+            },
+            "to": [
+                {
+                    "set_variable": {
+                        "name": "last_keypress_time",
+                        "expression": "system.now.milliseconds"
+                    }
+                },
+                { "key_code": "j" },
+                { "key_code": "k" }
+            ],
+            "conditions": [
+                { "type": "variable_if", "name": "typing_mode", "value": 0 }
+            ]
+        }
+    ]
+}

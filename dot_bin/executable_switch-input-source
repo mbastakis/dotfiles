@@ -1,0 +1,41 @@
+#!/usr/bin/env swift
+import Carbon
+import Foundation
+
+let sources: [(id: String, name: String)] = [
+    ("com.apple.keylayout.ABC", "ABC"),
+    ("com.apple.keylayout.Dvorak", "Dvorak"),
+    ("org.unknown.keylayout.GreekDvorak", "Greek Dvorak")
+]
+
+// Get current input source
+let currentSource = TISCopyCurrentKeyboardInputSource().takeRetainedValue()
+let currentID = unsafeBitCast(TISGetInputSourceProperty(currentSource, kTISPropertyInputSourceID), to: CFString.self) as String
+
+// Find current index and get next
+var currentIndex = sources.firstIndex(where: { $0.id == currentID }) ?? 0
+let nextIndex = (currentIndex + 1) % sources.count
+let nextID = sources[nextIndex].id
+let nextName = sources[nextIndex].name
+
+// Find and select next input source
+let allSources = TISCreateInputSourceList(nil, false).takeRetainedValue() as! [TISInputSource]
+for source in allSources {
+    if let id = TISGetInputSourceProperty(source, kTISPropertyInputSourceID) {
+        let sourceID = unsafeBitCast(id, to: CFString.self) as String
+        if sourceID == nextID {
+            TISSelectInputSource(source)
+            
+            // Show notification
+            let script = """
+                display notification "\(nextName)" with title "Input Source" sound name "Pop"
+            """
+            let process = Process()
+            process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
+            process.arguments = ["-e", script]
+            try? process.run()
+            
+            break
+        }
+    }
+}

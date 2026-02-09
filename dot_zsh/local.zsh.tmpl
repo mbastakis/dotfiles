@@ -1,0 +1,25 @@
+#!/usr/bin/env zsh
+# local.zsh - Machine-specific configuration
+# Secrets retrieved from Bitwarden Secrets Manager
+# Managed by chezmoi - DO NOT EDIT DIRECTLY
+
+{{- if eq .chezmoi.os "darwin" }}
+
+# API keys from Bitwarden Secrets Manager
+export OPENROUTER_API_KEY='{{ (bitwardenSecrets "04781112-325c-468b-90dd-b3ec00d7123c").value | trim }}'
+export GITLAB_TOKEN='{{ (bitwardenSecrets "b92fd35b-faf8-42a9-bdd0-b3ec00d71379").value | trim }}'
+export GITHUB_TOKEN='{{ (bitwardenSecrets "8492381a-2a28-48f6-a0cc-b3ec00d713ea").value | trim }}'
+
+# Supabase
+export SUPABASE_URL='{{ (bitwardenSecrets "f39ea7bf-477c-44bd-a804-b3ec00d712a7").value | trim }}'
+export SUPABASE_SERVICE_KEY='{{ (bitwardenSecrets "a8a6bdca-cf45-4af9-a42c-b3ec00d7130e").value | trim }}'
+
+# Sourcebot
+export SOURCEBOT_API_KEY='{{ (bitwardenSecrets "b1d585bc-8817-4c10-bb5b-b3ec00d71459").value | trim }}'
+
+{{- if eq .profile "work" }}
+# Work-specific PATH additions
+export PATH="/Users/mbastakis/dev/work/scripts/:$PATH"
+{{- end }}
+
+{{- end }}
