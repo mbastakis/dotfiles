@@ -3,7 +3,7 @@
 
 $ helm_release_name: helm ls --kube-context $context -n $namespace --- --column 1 --header-lines 1 --delimiter '\s\s+'
 
-# Get helm values of a given helm release 
+# Get helm values of a given helm release
 helm --kube-context <context> -n <namespace> get values <helm_release_name>
 
 # Get all the information for the current release of <release-name> in namespace <namespace>

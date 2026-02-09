@@ -56,7 +56,7 @@ is_all_devices_rule() {
 
 add_device_condition() {
     jq --argjson device "$DEVICE_CONDITION" '
-        .manipulators = [.manipulators[] | 
+        .manipulators = [.manipulators[] |
             .conditions = (.conditions // []) + [$device]
         ]
     '
@@ -75,7 +75,7 @@ generate_hrm_rule() {
     local hand_press_time="${hand}_hand_press_time"
     local finger_held="${hand}_${finger}_held"
     local opposite_hrm opposite_mod_active
-    
+
     if [[ "$hand" == "left" ]]; then
         opposite_hrm="right_hrm"; opposite_mod_active="left_mod_active"
     else
@@ -107,10 +107,10 @@ generate_hrm_rule() {
     # Conditional parts
     local lazy_suffix=""
     [[ "$modifier" != *"shift"* ]] && lazy_suffix=', "lazy": true'
-    
+
     local streak_suffix=""
     [[ "$finger" == "index" ]] && streak_suffix=" (shorter window for shift)"
-    
+
     local hyper_condition=""
     [[ "$has_hyper" == "1" ]] && hyper_condition='{ "type": "variable_if", "name": "hyper_caps_lock", "value": 0 },'
 
@@ -158,7 +158,7 @@ for config in "${HRM_CONFIG[@]}"; do
     IFS='|' read -r key_code modifier finger hand streak held alone stack hyper <<< "$config"
     key_display="$key_code"; [[ "$key_code" == "semicolon" ]] && key_display=";"
     printf "  Generating: %02d-hrm-%s-%s.json\n" "$order" "$hand" "$key_display"
-    
+
     rule=$(generate_hrm_rule "$key_code" "$modifier" "$finger" "$hand" "$streak" "$held" "$alone" "$stack" "$hyper" | add_device_condition)
     RULES_JSON=$(echo "$RULES_JSON" | jq --argjson r "$rule" '. + [$r]')
     ((order++))
@@ -169,7 +169,7 @@ for rule_file in "$SRC_DIR/rules"/1[1-9]-*.json "$SRC_DIR/rules"/[2-9][0-9]-*.js
     [[ -f "$rule_file" ]] || continue
     filename=$(basename "$rule_file")
     echo "  Adding: $filename"
-    
+
     if is_all_devices_rule "$filename"; then
         rule=$(cat "$rule_file")
     else

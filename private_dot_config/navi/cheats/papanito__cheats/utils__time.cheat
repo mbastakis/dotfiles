@@ -1,4 +1,4 @@
 % time
 
-# See the time synchronization details with timedatectl 
+# See the time synchronization details with timedatectl
 timedatectl timesync-status

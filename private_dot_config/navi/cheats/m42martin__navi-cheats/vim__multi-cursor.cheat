@@ -10,7 +10,7 @@
 
 # Jump to next/previous occurrence
 
-n OR N 
+n OR N
 
 # Select next/previous cursor
 
@@ -27,4 +27,3 @@ Q
 # Switch to `extend` mode
 
 <tab>
-

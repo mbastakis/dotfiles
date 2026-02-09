@@ -38,7 +38,7 @@ hydra -L users.txt -P pass.txt <target> -t 16 ssh
 
 hydra -L users.txt -P pass.txt <target> -t 16 ftp
 
-# hydra [ssh] (user file/static password) 
+# hydra [ssh] (user file/static password)
 
 hydra -L users.txt -P <pass> <target> -t 16 ssh
 
@@ -46,7 +46,7 @@ hydra -L users.txt -P <pass> <target> -t 16 ssh
 
 hydra -L users.txt -P <pass> <target> -t 16 ftp
 
-# hydra [ssh] (static user/password file) 
+# hydra [ssh] (static user/password file)
 
 hydra -L <user> -P pass.txt <target> -t 16 ssh
 

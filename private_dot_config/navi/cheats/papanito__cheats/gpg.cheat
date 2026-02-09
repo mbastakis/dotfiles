@@ -26,7 +26,7 @@ gpg --import revoke.asc
 gpg --keyserver <keyserver> --search-key <key_name>
 
 # Generate a lot of random passwords
-gpg --gen-random --armor 1 
+gpg --gen-random --armor 1
 
 # Generate a random password of a given lenght
 gpg --gen-random --armor 1 <length>

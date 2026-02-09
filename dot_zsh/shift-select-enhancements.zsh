@@ -14,10 +14,10 @@ function shift-select::copy-region() {
 			end=$MARK
 		fi
 		selected_text="${BUFFER[$start,$end]}"
-		
+
 		# Copy to clipboard
 		printf '%s' "$selected_text" | pbcopy
-		
+
 		# Also copy to zsh kill ring for compatibility
 		CUTBUFFER="$selected_text"
 	fi
@@ -38,13 +38,13 @@ function shift-select::cut-region() {
 			end=$MARK
 		fi
 		selected_text="${BUFFER[$start,$end]}"
-		
+
 		# Copy to clipboard
 		printf '%s' "$selected_text" | pbcopy
-		
+
 		# Also copy to zsh kill ring for compatibility
 		CUTBUFFER="$selected_text"
-		
+
 		# Remove the selected text
 		zle kill-region -w
 	fi

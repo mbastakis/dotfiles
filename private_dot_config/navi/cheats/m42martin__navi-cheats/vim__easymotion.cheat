@@ -19,4 +19,3 @@
 # word motion and search for a specific letter (backwards)
 
 <leader><leader>F<char>	uses the 'F' motion
-

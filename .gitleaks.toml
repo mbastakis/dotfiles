@@ -1,0 +1,6 @@
+[allowlist]
+  description = "Allowlist for false positives"
+  paths = [
+    # Crawled SDK reference docs contain example API tokens (not real secrets)
+    '''private_dot_config/opencode/skill/crawl4ai/references/.*\.md''',
+  ]

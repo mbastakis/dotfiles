@@ -136,4 +136,3 @@ $(tput setab 15)
 # Set variable to the value of a unicode character
 
 circle_red_large=$'\U2B55'
-

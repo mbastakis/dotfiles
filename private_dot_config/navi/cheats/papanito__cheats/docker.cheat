@@ -3,7 +3,7 @@
 # Remove old and unused Docker images
 docker rmi $(docker images --filter "dangling=true" -q --no-trunc)
 
-# delete ALL dangling data (i.e. In order: containers stopped, volumes without containers and images with no containers). 
+# delete ALL dangling data (i.e. In order: containers stopped, volumes without containers and images with no containers).
 docker system prune
 
 # delete dangling data with filter

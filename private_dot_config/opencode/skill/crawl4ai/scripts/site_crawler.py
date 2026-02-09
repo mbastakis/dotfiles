@@ -387,16 +387,16 @@ async def main():
 Examples:
     # Basic usage
     python site_crawler.py https://opencode.ai/docs
-    
+
     # With options
     python site_crawler.py https://opencode.ai/docs --max-pages 50 --delay 1.5
-    
+
     # Headless mode (no visible browser)
     python site_crawler.py https://opencode.ai/docs --headless
-    
+
     # Crawl entire domain (not just path)
     python site_crawler.py https://example.com --no-stay-within-path
-    
+
     # Resume a previous crawl (continues from site_index.json)
     python site_crawler.py https://opencode.ai/docs -o ./output --resume
         """,

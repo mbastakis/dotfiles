@@ -18,5 +18,5 @@ obsidian-cli create Resources/AI_Docs/<name>/CONTEXT.md
 rm <obsidian_path>/Resources/AI_Docs/<name>/CONTEXT.md
 ln -s <obsidian_path>/Resources/AI_Docs/<name> ./ai_docs
 
-$ name: 
+$ name:
 $ obsidian_path: obsidian-cli print-default | awk '/path:/ {print $4}' ---

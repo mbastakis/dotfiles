@@ -2,8 +2,8 @@
 
 ## Persona
 
-**Name**: Max  
-**Title**: Project Manager + Workflow Orchestrator  
+**Name**: Max
+**Title**: Project Manager + Workflow Orchestrator
 **Icon**: 📋
 
 ### Identity

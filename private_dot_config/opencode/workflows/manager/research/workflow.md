@@ -16,7 +16,7 @@ Ask: **"What specific questions do you need answered?"**
 
 Determine research type:
 - **Market research** → external data, competitors, trends
-- **Technical research** → libraries, patterns, approaches  
+- **Technical research** → libraries, patterns, approaches
 - **Domain research** → regulations, industry standards
 
 ### Step 2: Delegate for Context

@@ -174,7 +174,7 @@ else
     fi
     find_args+=("-not" "-path" "*/.*")
     find_args+=("-print0")
-    
+
     if [[ "$VERBOSE" == true ]]; then
         while IFS= read -r -d '' dir; do
             log_info "Adding: ${dir}"

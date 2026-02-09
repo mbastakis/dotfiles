@@ -2,34 +2,32 @@
 
 # Reduces fold level throughout the buffer
 
-zr 
+zr
 
 # Opens all folds
 
-zR 
+zR
 
 # Increases fold level throughout the buffer
 
-zm 
+zm
 
 # Fold everything all the way
 
-M 
+M
 
 # Open the fold your cursor is on
 
-za 
+za
 
 # Open the fold your cursor is on recursively
 
-zA 
+zA
 
 # Close the fold your cursor is on
 
-zc 
+zc
 
 # Close the fold your cursor is on recursively
 
-zC 
-
-
+zC

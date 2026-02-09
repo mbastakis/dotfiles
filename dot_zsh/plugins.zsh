@@ -26,14 +26,14 @@ if [[ -f "${HOME}/.local/share/zinit/zinit.git/zinit.zsh" ]]; then
 
     # ==== Plugin Definitions ====
     # Add your plugins below
-    
+
     # Completions should be loaded first
     zinit ice blockf
     zinit load zsh-users/zsh-completions
-    
+
     # Load fzf-tab for interactive completion menu (must load before compinit)
     zinit light Aloxaf/fzf-tab
-    
+
     # Initialize completions (carapace must be loaded AFTER this - see dot-zshrc)
     # Cache compinit - only rebuild dump file once per day for faster startup
     # Glob qualifier: N=no error if no match, .=regular file, mh+24=modified >24h ago
@@ -43,22 +43,22 @@ if [[ -f "${HOME}/.local/share/zinit/zinit.git/zinit.zsh" ]]; then
     else
       compinit     # Cache is stale (>24h) or missing, rebuild
     fi
-    
+
     # Load Git plugin from Oh-My-Zsh
     zinit snippet OMZ::plugins/git/git.plugin.zsh
-    
+
     # Load Kubectl plugin from Oh-My-Zsh
     zinit snippet OMZ::plugins/kubectl/kubectl.plugin.zsh
 
     # Load autosuggestions (should be before syntax highlighting)
     zinit ice wait lucid atload'!_zsh_autosuggest_start'
     zinit load zsh-users/zsh-autosuggestions
-    
+
     # Load shift-select functionality (Shift+arrows to select text)
     # Load our enhancements after the plugin loads using atload hook
     zinit ice wait lucid atload'source "${ZDOTDIR:-$HOME}/.zsh/shift-select-enhancements.zsh"'
     zinit load jirutka/zsh-shift-select
-    
+
     # Load syntax highlighting (must be last for proper highlighting)
     zinit ice wait lucid
     zinit load zdharma-continuum/fast-syntax-highlighting

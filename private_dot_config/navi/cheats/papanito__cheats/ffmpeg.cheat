@@ -6,10 +6,10 @@ ffmpeg -i <video_file> -hide_banner
 # Extract Images from a Video into separate image files named image1.jpg, image2.jpg, and so on.
 ffmpeg -i <video_file> <cideo_file>_%d.jpg
 
-# Convert Images into Video - which will take all the images in the current folder (like "image1.jpg", "image2.jpg", etc.) 
+# Convert Images into Video - which will take all the images in the current folder (like "image1.jpg", "image2.jpg", etc.)
 ffmpeg -f image2 -i image%d.jpg imagestovideo.mpg
 
-# Convert a Video to MP3 Format 
+# Convert a Video to MP3 Format
 ffmpeg -i <video_file> -vn -ar 44100 -ac 2 -ab 192 -f mp3 <video_file>.mp3
 
 # Convert Video to an animated, uncompressed gif file

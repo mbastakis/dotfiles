@@ -19,5 +19,4 @@ ggshield secret scan pypi <package>
 ggshield iac scan all <path>
 
 # search for new potential IaC vulnerabilities
-ggshield iac scan diff --ref=HEAD~1 . 
-
+ggshield iac scan diff --ref=HEAD~1 .

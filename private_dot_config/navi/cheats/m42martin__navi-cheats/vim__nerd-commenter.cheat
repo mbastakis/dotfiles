@@ -1,6 +1,6 @@
 % nerd-commenter, comments, code, text, vi, vim, neovim
 
-# Toggle comment (modes: normal, visual) (preservim/nerdcommenter) 
+# Toggle comment (modes: normal, visual) (preservim/nerdcommenter)
 <leader>c<space>
 
 # Comment out the current line or text selected in visual mode. (modes: normal, visual) (preservim/nerdcommenter)
@@ -34,14 +34,13 @@
 <leader>ca |NERDCommenterAltDelims|
 
 # or both sides (<lea# der>cb). (modes: normal, visual) (preservim/nerdcommenter)
-<leader>cl 
+<leader>cl
 
 # Comment out (and align left) the current line or text selected in visual mode. (modes: normal, visual) (preservim/nerdcommenter)
-[count]<leader>cl |NERDCommenterAlignLeft 
+[count]<leader>cl |NERDCommenterAlignLeft
 
 # Comment out (and align left) the current line or text selected in visual mode. (modes: normal, visual) (preservim/nerdcommenter)
 [count]<leader>cb |NERDCommenterAlignBoth
 
 # Uncomment current line or text selected in visual mode. (modes: normal, visual) (preservim/nerdcommenter)
 [count]<leader>cu |NERDCommenterUncomment|
-

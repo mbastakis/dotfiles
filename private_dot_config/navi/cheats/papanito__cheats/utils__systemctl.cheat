@@ -22,7 +22,7 @@ systemctl status <service>
 # Show failed services (or --failed)
 systemctl state=failed
 
-# See all enabled services with systemctl 
+# See all enabled services with systemctl
 systemctl list-unit-files --type=service --state=enabled
 
 # Resets unit(s) with failed state
@@ -61,5 +61,5 @@ systemctl --type=service --state=running --legend=false
 # See all masked units - systemd uses the concept of masked units that prevents those units from being started
 systemctl list-unit-files --state=masked
 
-# See all active systemd units of one type 
+# See all active systemd units of one type
 systemctl list-units --type=<type>

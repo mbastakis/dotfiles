@@ -38,12 +38,12 @@
                 "modifiers": { "optional": ["any"] }
             },
             "to": [
-                { 
-                    "set_variable": { 
-                        "name": "{{FINGER_HELD}}", 
+                {
+                    "set_variable": {
+                        "name": "{{FINGER_HELD}}",
                         "value": 1,
                         "key_up_value": 0
-                    } 
+                    }
                 }
             ],
             "to_if_alone": [{ "key_code": "{{KEY_CODE}}", "halt": true }],
@@ -70,19 +70,19 @@
                 "modifiers": { "optional": ["any"] }
             },
             "to": [
-                { 
-                    "set_variable": { 
-                        "name": "{{HAND_HRM}}", 
+                {
+                    "set_variable": {
+                        "name": "{{HAND_HRM}}",
                         "value": 1,
                         "key_up_value": 0
-                    } 
+                    }
                 },
-                { 
-                    "set_variable": { 
-                        "name": "{{FINGER_HELD}}", 
+                {
+                    "set_variable": {
+                        "name": "{{FINGER_HELD}}",
                         "value": 1,
                         "key_up_value": 0
-                    } 
+                    }
                 },
                 {
                     "set_variable": {
@@ -101,12 +101,12 @@
                 { "key_code": "{{KEY_CODE}}", "halt": true }
             ],
             "to_if_held_down": [
-                { 
-                    "set_variable": { 
-                        "name": "{{HAND_MOD_ACTIVE}}", 
+                {
+                    "set_variable": {
+                        "name": "{{HAND_MOD_ACTIVE}}",
                         "value": 1,
                         "key_up_value": 0
-                    } 
+                    }
                 },
                 { "key_code": "{{MODIFIER}}"{{LAZY_SUFFIX}} }
             ],

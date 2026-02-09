@@ -25,7 +25,7 @@ for source in allSources {
         let sourceID = unsafeBitCast(id, to: CFString.self) as String
         if sourceID == nextID {
             TISSelectInputSource(source)
-            
+
             // Show notification
             let script = """
                 display notification "\(nextName)" with title "Input Source" sound name "Pop"
@@ -34,7 +34,7 @@ for source in allSources {
             process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
             process.arguments = ["-e", script]
             try? process.run()
-            
+
             break
         }
     }

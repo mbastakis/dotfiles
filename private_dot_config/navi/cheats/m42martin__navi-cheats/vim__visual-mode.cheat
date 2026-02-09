@@ -4,19 +4,19 @@
 
 v$jS]
 
-# Select from cursor up to end of current paragraph 
+# Select from cursor up to end of current paragraph
 
 v}
 
-# Select from cursor up to end of current paragraph 
+# Select from cursor up to end of current paragraph
 
 v)
 
-# Select from cursor back to start of previous paragraph 
+# Select from cursor back to start of previous paragraph
 
 v{
 
-# Select from cursor back to start of current paragraph 
+# Select from cursor back to start of current paragraph
 
 v(
 

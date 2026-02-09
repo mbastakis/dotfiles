@@ -45,7 +45,7 @@ gh api graphql --paginate -f query='
   }
 '
 
-# Lists the feeds available to the authenticated user. 
+# Lists the feeds available to the authenticated user.
 
 gh api \
   -H "Accept: application/vnd.github+json" \

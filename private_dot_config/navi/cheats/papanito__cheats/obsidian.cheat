@@ -46,7 +46,7 @@ obs move "{current-note-path}" "{new-note-path}" --vault "{vault-name}"
 obs move "{current-note-path}" "{new-note-path}" --open
 
 # Renames a note in default obsidian
-obs delete "{note-path}" 
+obs delete "{note-path}"
 
 # Renames a note in given obsidian
 obs delete "{note-path}" --vault "{vault-name}"

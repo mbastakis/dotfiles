@@ -14,7 +14,7 @@ This configuration includes:
 
 3. **Browser-Specific URL Routing**: Directs specific URLs to open in Microsoft Edge (template included).
 
-4. **URL Rewriting**: 
+4. **URL Rewriting**:
    - Forces HTTPS for all URLs
    - Removes common tracking parameters
 
@@ -47,7 +47,7 @@ Finicky supports several ways to match URLs:
 You can match based on more than just the URL:
 
 ```javascript
-match: ({ url, opener }) => 
+match: ({ url, opener }) =>
   url.host.includes("docs.google.com") && opener.name === "Slack",
 browser: "Google Chrome"
 ```

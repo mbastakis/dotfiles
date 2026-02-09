@@ -38,7 +38,7 @@ l = ["log", "-r", "::@"]                           # Log ancestors of current
 la = ["log", "-r", "all()"]                        # Log all commits
 lb = ["log", "-r", "bookmarks()"]                  # Log all bookmarks
 
-# Status and diff shortcuts  
+# Status and diff shortcuts
 d = ["diff"]                                       # Show diff of working copy
 ds = ["diff", "--stat"]                            # Show diff stats
 s = ["status"]                                     # Show status

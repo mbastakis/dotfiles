@@ -11,7 +11,7 @@ Analyze this session and extract non-obvious learnings to AGENTS.md files.
 AGENTS.md files can exist at any directory level. When an agent reads a file, any AGENTS.md in parent directories is automatically loaded. Place learnings as close to the relevant code as possible:
 
 - Project-wide → root `AGENTS.md`
-- Package/module-specific → `packages/foo/AGENTS.md`  
+- Package/module-specific → `packages/foo/AGENTS.md`
 - Feature-specific → `src/auth/AGENTS.md`
 
 ## What Counts as a Learning

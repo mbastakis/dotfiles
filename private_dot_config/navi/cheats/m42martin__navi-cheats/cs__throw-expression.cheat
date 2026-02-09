@@ -12,4 +12,3 @@ string Name \
 	set => name = value \
 				?? throw new ArgumentNullException(nameof(name)); \
 }
-

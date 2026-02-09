@@ -8,7 +8,7 @@ b OR <num>b  (Requires 5b to jump across the following " merry-go-round ")
 
 B OR <num>B  (Requires B (1 step) to jump across the following " merry-go-round ")
 
-# Move cursor to Nth occurrence of {char} 
+# Move cursor to Nth occurrence of {char}
 # Move cursor forward to the end of the next word segment
 
 e OR <num>e  (Requires 5e to jump across the following " merry-go-round ")
@@ -17,7 +17,7 @@ e OR <num>e  (Requires 5e to jump across the following " merry-go-round ")
 
 E OR <num>E  (Requires E (1 step) to jump across the following " merry-go-round ")
 
-# Move cursor to Nth occurrence of {char} 
+# Move cursor to Nth occurrence of {char}
 
 f<char> OR <num>f<char>
 

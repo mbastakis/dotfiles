@@ -36,5 +36,5 @@ nix-env --list-generations --profile /nix/var/nix/profiles/system
 # as root switch to generation
 nix-env --profile /nix/var/nix/profiles/system --switch-generation <generation>
 
-# as root delete broken generations (space separated) 
+# as root delete broken generations (space separated)
 nix-env --profile /nix/var/nix/profiles/system --delete-generations <generations>

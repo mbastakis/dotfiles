@@ -1,0 +1,54 @@
+repos:
+  # General file hygiene
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: '\.age$'
+      - id: end-of-file-fixer
+        exclude: '\.age$'
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+        exclude: '(private_dot_config/nvim/test/|private_dot_config/nvim/test/helm)'
+      - id: check-toml
+      - id: check-json
+        exclude: 'private_dot_config/(nvim/test/|private_karabiner/src/templates/)'
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: [--maxkb=500]
+      - id: detect-private-key
+        exclude: '\.age$'
+
+  # Shell linting (bash only, not zsh)
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.10.0.1
+    hooks:
+      - id: shellcheck
+        args: [-x, -e, "SC1091"]
+        # Only lint bash scripts; exclude zsh, templates, and nvim test fixtures
+        exclude: '(\.zsh$|\.tmpl$|private_dot_config/nvim/test/)'
+
+  # Secrets detection
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.24.0
+    hooks:
+      - id: gitleaks
+
+  # YAML lint
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.35.1
+    hooks:
+      - id: yamllint
+        args: [-d, relaxed]
+        exclude: '(private_dot_config/nvim/test/|private_dot_config/k9s/|private_dot_config/carapace/specs/)'
+
+  # Pre-push: validate chezmoi dry-run
+  - repo: local
+    hooks:
+      - id: chezmoi-dry-run
+        name: chezmoi dry-run
+        entry: chezmoi apply --dry-run --force
+        language: system
+        always_run: true
+        pass_filenames: false
+        stages: [pre-push]

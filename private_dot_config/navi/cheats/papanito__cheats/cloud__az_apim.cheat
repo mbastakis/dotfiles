@@ -3,7 +3,7 @@
 
 # list all api management services
 az apim list | jq -r ".[].name"
- 
+
 # list all apis in an api management service
 az apim api list -g <rg> -n <API Management service> | jq  -r ".[].name"
 

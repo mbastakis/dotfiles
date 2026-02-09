@@ -8,7 +8,7 @@ chezmoi add <file>
 
 chezmoi diff
 
-# Apply changes to your home directory  
+# Apply changes to your home directory
 
 chezmoi apply -v
 
@@ -52,7 +52,7 @@ chezmoi update
 
 # Pull the latest changes from your repo and see what would change, without actually applying the changes
 
-chezmoi git pull -- --rebase && chezmoi 
+chezmoi git pull -- --rebase && chezmoi
 
 # Install chezmoi and your dotfiles on a new machine with a single command
 

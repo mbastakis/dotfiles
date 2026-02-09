@@ -5,7 +5,7 @@ $ type: echo -e "vlan\nbridge"
 ip neighbour
 
 # Delete an ARP entry
-ip neigh del <ip> dev <device> 
+ip neigh del <ip> dev <device>
 
 # Show assigned IP address of the system.
 ip address

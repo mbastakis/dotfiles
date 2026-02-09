@@ -12,7 +12,7 @@ salt '*' saltutil.clear_cache
 salt '*' state.apply ftpsync pillar='{<comma_separated_key_value_pairs>}'
 
 # List all files from the salt fileserver
-salt-run fileserver.file_list 
+salt-run fileserver.file_list
 
 # Lists only files for fileserver environment <saltenv>
 salt-run fileserver.file_list saltenv=<saltenv>

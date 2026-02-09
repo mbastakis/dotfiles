@@ -2,7 +2,7 @@
 @ kubernetes
 $ clusterid: kubectl -n fleet-default get clusters.provisioning.cattle.io   --- --column 1 --header-lines 1
 
-# Get Fleet bundles 
+# Get Fleet bundles
 kubectl get bundle -n fleet-default --context <local_context>
 
 # Get Fleet bundles, filtered by pattern
@@ -15,7 +15,7 @@ kubectl get clusters.management.cattle.io
 kubectl get nodes.management.cattle.io -A
 
 # Remove cluster manually from Rancher
-kubectl patch clusters.management.cattle.io <clusterid> -p '{"metadata":{"finalizers":[]}}' --type=merge && 
+kubectl patch clusters.management.cattle.io <clusterid> -p '{"metadata":{"finalizers":[]}}' --type=merge &&
 kubectl delete clusters.management.cattle.io <clusterid>
 
 # Get password of grafana

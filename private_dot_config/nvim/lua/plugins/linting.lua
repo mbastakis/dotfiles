@@ -14,7 +14,7 @@ return {
       parser = function(output, bufnr)
         local diagnostics = {}
         local chart_root = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(bufnr), ":h")
-        
+
         -- Find the chart root (directory containing Chart.yaml)
         while chart_root ~= "/" do
           if vim.fn.filereadable(chart_root .. "/Chart.yaml") == 1 then
@@ -26,7 +26,7 @@ return {
         for line in output:gmatch("[^\r\n]+") do
           -- Match: [ERROR] templates/: file:line:col
           local severity, file, lnum, col, message = line:match("%[(%w+)%]%s+(.-):(.-):(.-)%s+(.+)")
-          
+
           if not severity then
             -- Match: [ERROR] file: message (without line number)
             severity, file, message = line:match("%[(%w+)%]%s+(.-):%s+(.+)")
@@ -37,7 +37,7 @@ return {
             -- Only show diagnostics for the current buffer's file
             local current_file = vim.api.nvim_buf_get_name(bufnr)
             local diagnostic_file = chart_root .. "/" .. file
-            
+
             -- If this diagnostic is for the current file or it's a general chart error
             if current_file:match(file:gsub("%-", "%%-")) or file == "Chart.yaml" or file:match("^templates/") then
               table.insert(diagnostics, {
@@ -127,14 +127,14 @@ return {
             upward = true,
             path = vim.fs.dirname(filepath),
           })[1]
-          
+
           if chart_file then
             -- This is a YAML file in a Helm chart, use helm_lint
             lint.try_lint("helm_lint")
             return
           end
         end
-        
+
         -- Default linting behavior
         lint.try_lint()
       end,

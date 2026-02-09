@@ -32,12 +32,10 @@ e  (this takes 4 steps to move from the first '-' to the last 'e' in the followi
 
 E  (this takes 1 step to move from the first '-' to the last 'e' in the following example " --forward-move ")
 
-# Delete all text beginning at, and after the cursor 
+# Delete all text beginning at, and after the cursor
 
 D
 
-# Undo the last change made to the command line text 
+# Undo the last change made to the command line text
 
 u
-
-

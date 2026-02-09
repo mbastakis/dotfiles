@@ -6,7 +6,7 @@ ysiw<char>	example -> ysiw" -> "example"
 
 # Surround text under cursor with single-quote
 
-ysiw<char>	example -> ysiw' -> 'example' 
+ysiw<char>	example -> ysiw' -> 'example'
 
 # Surround text under cursor with html/xml brackets
 
@@ -54,4 +54,3 @@ yssB OR yss}	example line -> (example line)
 # Surround the entire current line under cursor with curly braces {} with space or padding
 
 yss<space>B OR yss{	example line -> { example line }
-

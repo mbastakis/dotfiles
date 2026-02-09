@@ -9,7 +9,7 @@ Immediately call the Bash tool with command: `git status`
 ## Available Commands (via Bash tool)
 
 - `git status` - See current changes
-- `git diff` - View modifications  
+- `git diff` - View modifications
 - `git log --oneline -5` - Recent commits
 - `git add <files>` - Stage files
 - `git commit -m "message"` - Create commits
