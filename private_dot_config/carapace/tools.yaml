@@ -25,4 +25,10 @@ tools:
     bridge_type: Cobra
     version_cmd: "obsidian-cli --version"
 
+  # Cobra-based CLI
+  chezmoi:
+    description: Dotfile manager
+    bridge_type: Cobra
+    version_cmd: "chezmoi --version"
+
   # Note: bun has built-in carapace completer, no spec needed

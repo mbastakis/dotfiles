@@ -19,9 +19,9 @@ if command -v ya &>/dev/null; then
     ya pkg upgrade || ya pkg install 2>/dev/null || true
 fi
 
-if command -v carapace &>/dev/null && [[ -f "$HOME/.bin/carapace-sync" ]]; then
+if command -v carapace &>/dev/null && [[ -f "$HOME/bin/carapace-sync" ]]; then
     echo "Syncing carapace completions..."
-    "$HOME/.bin/carapace-sync" || true
+    "$HOME/bin/carapace-sync" || true
 fi
 
 mkdir -p "$HOME/.cache"

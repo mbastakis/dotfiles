@@ -12,7 +12,7 @@
             },
             "to": [
                 {
-                    "shell_command": "~/.bin/switch-input-source"
+                    "shell_command": "~/bin/switch-input-source"
                 }
             ]
         }

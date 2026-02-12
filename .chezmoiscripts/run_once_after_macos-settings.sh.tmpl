@@ -57,6 +57,26 @@ defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 defaults write NSGlobalDomain KeyRepeat -int 2
 defaults write NSGlobalDomain InitialKeyRepeat -int 15
 
+# Stats (menubar system monitor)
+defaults write eu.exelban.Stats "CPU_state" -bool true
+defaults write eu.exelban.Stats "GPU_state" -bool true
+defaults write eu.exelban.Stats "RAM_state" -bool true
+defaults write eu.exelban.Stats "Network_state" -bool true
+defaults write eu.exelban.Stats "Clock_state" -bool true
+defaults write eu.exelban.Stats "Disk_state" -bool false
+defaults write eu.exelban.Stats "Battery_state" -bool false
+defaults write eu.exelban.Stats telemetry -int 0
+defaults write eu.exelban.Stats LaunchAtLoginNext -int 1
+
+# KeyClu (shortcut cheatsheet overlay)
+defaults write com.0804Team.KeyClu launchAtLogin -bool true
+defaults write com.0804Team.KeyClu hideMenuIcon -bool true
+defaults write com.0804Team.KeyClu enableMacosShortcuts -bool true
+defaults write com.0804Team.KeyClu enableMyShortcuts -bool true
+defaults write com.0804Team.KeyClu showBookmarks -bool true
+defaults write com.0804Team.KeyClu showHighlight -bool true
+defaults write com.0804Team.KeyClu activationKeyType -int 1
+
 echo "Restarting affected services..."
 for app in "Dock" "Finder" "SystemUIServer"; do
     killall "$app" &>/dev/null || true

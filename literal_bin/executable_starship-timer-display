@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+# starship-timer-display - Display timer for Starship prompt
+# Usage: starship-timer-display <name> [--remaining] [--ansi]
+#
+# Outputs formatted remaining time for Starship
+# With --remaining flag, outputs just the remaining seconds
+# With --ansi flag, outputs colored bracketed timer text based on urgency
+#
+# Colors are determined here based on remaining time thresholds:
+#   - Green: >30 minutes remaining
+#   - Flamingo: 5-30 minutes remaining
+#   - Red bold: <5 minutes remaining
+#
+# Outputs nothing if timer doesn't exist or is expired
+
+set -euo pipefail
+
+TIMER_DIR="${HOME}/.cache/starship-timers"
+
+name="${1:-}"
+remaining_only=false
+ansi_output=false
+
+if [[ -z "$name" ]]; then
+    exit 1
+fi
+
+shift || true
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --remaining)
+            remaining_only=true
+            ;;
+        --ansi)
+            ansi_output=true
+            ;;
+        *)
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+timer_file="$TIMER_DIR/$name"
+if [[ ! -f "$timer_file" ]]; then
+    exit 1
+fi
+
+if ! IFS= read -r expiration < "$timer_file"; then
+    exit 1
+fi
+
+if [[ ! "$expiration" =~ ^[0-9]+$ ]]; then
+    exit 1
+fi
+
+now=$(date +%s)
+remaining=$((expiration - now))
+
+# Exit with error if expired (don't delete here - avoids race condition
+# when multiple prompts/shells check the same timer simultaneously)
+if [[ $remaining -le 0 ]]; then
+    exit 1
+fi
+
+# If --remaining flag, just output seconds
+if [[ "$remaining_only" == true ]]; then
+    printf '%s\n' "$remaining"
+    exit 0
+fi
+
+# Calculate hours and minutes
+hours=$((remaining / 3600))
+minutes=$(((remaining % 3600) / 60))
+
+# Format time string
+if [[ $hours -gt 0 ]]; then
+    time_str="${hours}h ${minutes}m"
+else
+    time_str="${minutes}m"
+fi
+
+if [[ "$ansi_output" == true ]]; then
+    if [[ $remaining -gt 1800 ]]; then
+        printf '\033[38;2;166;227;161m[%s]\033[0m\n' "$time_str"
+    elif [[ $remaining -gt 300 ]]; then
+        printf '\033[38;2;242;205;205m[%s]\033[0m\n' "$time_str"
+    else
+        printf '\033[1;38;2;243;139;168m[%s]\033[0m\n' "$time_str"
+    fi
+else
+    # Output with brackets for starship format
+    printf '[%s]\n' "$time_str"
+fi

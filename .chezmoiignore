@@ -9,56 +9,70 @@ dotfiles-migration.md
 .gitignore
 .github/
 
-# Development directories (not part of dotfiles)
+# Source-only directories (kept in repo, not deployed by chezmoi)
 apps/
-bin/
 ai-docs/
 code-portable-data/
 
-# Build artifacts
+# Age encryption key (decrypted by run_onchange_before script)
+key.txt.age
+
+# Keep repo helper scripts out of target ~/bin
+bin/chezmoi-bws
+bin/_aws-login
+
+# Build artifacts and generated files
 node_modules/
+**/node_modules/**
+**/target/**
 *.pyc
 __pycache__/
+**/__pycache__/
 .ruff_cache/
 bun.lock
 package-lock.json
+Cargo.lock
 
-# Nix (being removed)
-private_dot_config/nix-darwin/
+# Nix (removed)
+.config/nix/
+.config/nix-darwin/
 
-# Caches (generated at runtime)
+# Caches and runtime-generated files
 .cache/
-private_dot_config/aws-login/cache/
-private_dot_config/aws-login/private_cache/
-dot_obsidian/plugins/ai-image-analyzer/cache/
-dot_obsidian/plugins/text-extractor/cache/
+.config/aws-login/cache/**
+.config/carapace/.versions
+.config/glab-cli/recover/**
+.config/navi/navi.log
+.config/nvim/lazy-lock.json
+.config/opencode/package.json
+.config/opencode/bun.lock
+.config/yazi/plugins/**
+.obsidian/**
 
 # OS files
 .DS_Store
 
-# Machine-generated (karabiner backups)
-private_dot_config/karabiner/automatic_backups/
-private_dot_config/private_karabiner/automatic_backups/
+# Karabiner — only deploy karabiner.json, build system stays in source only
+.config/karabiner/automatic_backups/
+.config/karabiner/build.sh
+.config/karabiner/src/**
+.config/karabiner/assets/**
+.config/karabiner/research/**
+.config/karabiner/README.md
 
 # Raycast (user-specific)
-private_dot_config/raycast/extensions/
-private_dot_config/raycast/config.json
+.config/raycast/extensions/
+.config/raycast/config.json
 
 # SSH (machine-generated)
 .ssh/known_hosts
 .ssh/known_hosts.old
 
-# Sourcebot secrets (managed via template)
-private_dot_config/sourcebot/.env
-private_dot_config/sourcebot/private_dot_env
-
 {{- if ne .chezmoi.os "darwin" }}
 # macOS-only configs (skip on Linux)
-private_dot_config/aerospace/
-private_dot_config/karabiner/
-private_dot_config/private_karabiner/
-private_dot_config/finicky/
-private_dot_config/service-manager/
-private_dot_config/sketchybar/
-dot_bin/executable_switch-input-source
+.config/aerospace/
+.config/karabiner/
+.config/finicky/
+.config/sketchybar/
+bin/switch-input-source
 {{- end }}

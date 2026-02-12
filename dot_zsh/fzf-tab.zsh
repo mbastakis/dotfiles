@@ -13,29 +13,19 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 # Preview directory's content with eza when completing cd
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
 
-# Default preview: show description from carapace, or file/directory content
-# The $desc variable contains the description provided by the completer (carapace)
-zstyle ':fzf-tab:complete:*:*' fzf-preview '
-  if [[ -n $desc ]]; then
-    echo $desc
-  elif [[ -f $realpath ]]; then
-    bat --color=always --style=numbers --line-range=:500 $realpath
-  elif [[ -d $realpath ]]; then
-    eza -1 --color=always $realpath
-  fi
-'
+# Default preview: show lightweight completion description only
+zstyle ':fzf-tab:complete:*:*' fzf-preview '[[ -n $desc ]] && echo $desc'
 
 # Switch group using `<` and `>`
 zstyle ':fzf-tab:*' switch-group '<' '>'
 
-# Use shared Catppuccin colors from fzf.zsh (transparent background variant)
-# FZF_COLORS_TRANSPARENT is defined in fzf.zsh
+# Use default fzf colors from FZF_DEFAULT_OPTS
 zstyle ':fzf-tab:*' fzf-flags \
-  ${(z)FZF_COLORS_TRANSPARENT} \
   --border --height=80% --preview-window=right:50%:wrap
 
 # Apply to all completions
 zstyle ':fzf-tab:*' fzf-command fzf
+zstyle ':fzf-tab:*' use-fzf-default-opts yes
 
 # Use tmux popup if available
 zstyle ':fzf-tab:*' fzf-pad 4
@@ -72,3 +62,6 @@ zstyle ':fzf-tab:*' continuous-trigger '/'
 # Use only prefix for query string to avoid ../ or ~/ leaking into fzf filter
 # Default is (prefix input first) which includes the typed path in the query
 zstyle ':fzf-tab:*' query-string prefix
+
+# Prefer fzf-tab directly for TAB completion
+(( ${+widgets[fzf-tab-complete]} )) && bindkey '^I' fzf-tab-complete

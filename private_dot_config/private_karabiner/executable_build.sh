@@ -8,7 +8,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SRC_DIR="$SCRIPT_DIR/src"
-OUTPUT_FILE="$SCRIPT_DIR/karabiner.json"
+OUTPUT_FILE="$SCRIPT_DIR/private_karabiner.json"
 HRM_TEMPLATE="$SRC_DIR/templates/hrm.json"
 
 # Rules that work on ALL devices (not just built-in keyboard)

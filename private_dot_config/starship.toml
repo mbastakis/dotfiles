@@ -1,0 +1,234 @@
+palette = "catppuccin_mocha"
+command_timeout = 1500
+
+format = "$all"
+
+# CMD duration
+[cmd_duration]
+min_time = 2_000                      # Show command duration over 2,000 milliseconds (=2 sec)
+format = " took [$duration]($style) "
+
+# Configure directory display
+[directory]
+read_only = " 󰌾"
+truncation_length = 4
+style = "bold lavender"
+truncation_symbol = "…/"
+
+[kubernetes]
+disabled = false
+symbol = "☸ "
+format = "[$symbol$context]($style) in "
+
+# Explicit short aliases for frequently used clusters
+[[kubernetes.contexts]]
+context_pattern = ".*aicc-prod-ec1-shared-eks-0"
+context_alias = "prod"
+
+[[kubernetes.contexts]]
+context_pattern = ".*aicc-cndtag-dev"
+context_alias = "dev"
+
+[[kubernetes.contexts]]
+context_pattern = ".*aicc-playground"
+context_alias = "playground"
+
+# Fallback: extract cluster name from ARN
+[[kubernetes.contexts]]
+context_pattern = "arn:aws:eks:.*:.*:cluster/(?P<cluster>[\\w-]+)"
+context_alias = "$cluster"
+
+[aws]
+symbol = ""
+format = "[$symbol $profile]($style) "
+
+# AWS session timer (single module, colorized in script based on urgency)
+# Green (>30min), Yellow (5-30min), Red (<=5min)
+# Timer is scoped per-profile to avoid cross-terminal pollution
+# Set timer with: starship-timer set aws-session-$AWS_PROFILE <epoch_or_duration>
+
+[custom.aws_timer]
+command = 'starship-timer-display "aws-session-$AWS_PROFILE" --ansi'
+when = 'test -n "$AWS_PROFILE"'
+format = "$output "
+unsafe_no_escape = true
+
+[bun]
+symbol = " "
+
+[c]
+symbol = " "
+
+[cpp]
+symbol = " "
+
+[cmake]
+symbol = " "
+
+[docker_context]
+symbol = " "
+
+[fossil_branch]
+symbol = " "
+
+[gcloud]
+symbol = " "
+
+[git_branch]
+symbol = " "
+
+[git_commit]
+tag_symbol = '  '
+
+[golang]
+symbol = " "
+
+[hg_branch]
+symbol = " "
+
+[hostname]
+ssh_symbol = " "
+
+[java]
+symbol = " "
+
+[kotlin]
+symbol = " "
+
+[lua]
+symbol = " "
+
+[memory_usage]
+symbol = "󰍛 "
+
+[nim]
+symbol = "󰆥 "
+
+[nix_shell]
+symbol = " "
+
+[nodejs]
+symbol = " "
+
+[os.symbols]
+Alpaquita = " "
+Alpine = " "
+AlmaLinux = " "
+Amazon = " "
+Android = " "
+AOSC = " "
+Arch = " "
+Artix = " "
+CachyOS = " "
+CentOS = " "
+Debian = " "
+DragonFly = " "
+Emscripten = " "
+EndeavourOS = " "
+Fedora = " "
+FreeBSD = " "
+Garuda = "󰛓 "
+Gentoo = " "
+HardenedBSD = "󰞌 "
+Illumos = "󰈸 "
+Kali = " "
+Linux = " "
+Mabox = " "
+Macos = " "
+Manjaro = " "
+Mariner = " "
+MidnightBSD = " "
+Mint = " "
+NetBSD = " "
+NixOS = " "
+Nobara = " "
+OpenBSD = "󰈺 "
+openSUSE = " "
+OracleLinux = "󰌷 "
+Pop = " "
+Raspbian = " "
+Redhat = " "
+RedHatEnterprise = " "
+RockyLinux = " "
+Redox = "󰀘 "
+Solus = "󰠳 "
+SUSE = " "
+Ubuntu = " "
+Unknown = " "
+Void = " "
+Windows = "󰍲 "
+
+[helm]
+disabled = true
+
+[package]
+disabled = true
+symbol = "󰏗 "
+
+[perl]
+symbol = " "
+
+[php]
+symbol = " "
+
+[pijul_channel]
+symbol = " "
+
+[python]
+symbol = " "
+
+[ruby]
+symbol = " "
+
+[rust]
+symbol = "󱘗 "
+
+[status]
+symbol = " "
+
+[swift]
+symbol = " "
+
+[zig]
+symbol = " "
+
+[git_status]
+conflicted = "  "
+ahead = " ⇡ "
+behind = "⇣"
+diverged = "⇕"
+deleted = "✘:(${count})"
+modified = " :(${count})"
+stashed = "  "
+staged = " :(${count})"
+renamed = "  "
+untracked = " :(${count})"
+style = "overlay2"
+
+[palettes.catppuccin_mocha]
+rosewater = "#f5e0dc"
+flamingo = "#f2cdcd"
+pink = "#f5c2e7"
+mauve = "#cba6f7"
+red = "#f38ba8"
+maroon = "#eba0ac"
+peach = "#fab387"
+yellow = "#f9e2af"
+green = "#a6e3a1"
+teal = "#94e2d5"
+sky = "#89dceb"
+sapphire = "#74c7ec"
+blue = "#89b4fa"
+lavender = "#b4befe"
+text = "#cdd6f4"
+subtext1 = "#bac2de"
+subtext0 = "#a6adc8"
+overlay2 = "#9399b2"
+overlay1 = "#7f849c"
+overlay0 = "#6c7086"
+surface2 = "#585b70"
+surface1 = "#45475a"
+surface0 = "#313244"
+base = "#1e1e2e"
+mantle = "#181825"
+crust = "#11111b"

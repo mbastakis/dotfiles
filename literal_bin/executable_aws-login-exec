@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+# Run a command with AWS env from aws-login
+
+set -euo pipefail
+
+show_usage() {
+  cat <<'EOF'
+Usage: aws-login-exec <aws-login args...> -- <command> [args...]
+
+Runs a command with AWS env exported from aws-login in a fresh shell.
+
+Examples:
+  aws-login-exec dev -- aws sts get-caller-identity
+  aws-login-exec playground 123456 -- aws s3 ls
+  aws-login-exec playground --no-cache -- aws s3 ls
+EOF
+}
+
+log_error() {
+  echo "Error: $*" >&2
+}
+
+aws_args=()
+cmd=()
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -h|--help)
+      show_usage
+      exit 0
+      ;;
+    --)
+      shift
+      cmd=("$@")
+      break
+      ;;
+    *)
+      aws_args+=("$1")
+      shift
+      ;;
+  esac
+done
+
+if [[ ${#aws_args[@]} -eq 0 ]]; then
+  log_error "Missing aws-login arguments"
+  show_usage
+  exit 1
+fi
+
+if [[ ${#cmd[@]} -eq 0 ]]; then
+  log_error "Missing command after --"
+  show_usage
+  exit 1
+fi
+
+aws_login_bin="${AWS_LOGIN_BIN:-$HOME/bin/_aws-login}"
+if [[ ! -x "$aws_login_bin" ]]; then
+  if ! aws_login_bin="$(command -v _aws-login 2>/dev/null)"; then
+    log_error "_aws-login not found"
+    exit 1
+  fi
+fi
+
+set +e
+output="$("$aws_login_bin" "${aws_args[@]}")"
+exit_code=$?
+set -e
+
+if [[ $exit_code -ne 0 ]]; then
+  exit $exit_code
+fi
+
+if [[ -n "$output" ]]; then
+  eval "$output"
+fi
+
+exec "${cmd[@]}"

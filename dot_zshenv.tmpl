@@ -17,6 +17,9 @@ export VISUAL="nvim"
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 
+# Use user-managed zsh config only (avoids duplicate global compinit)
+export NOSYSZSHRC=1
+
 ## PATH configuration
 
 {{- if eq .chezmoi.os "darwin" }}
@@ -34,7 +37,6 @@ export LC_ALL="en_US.UTF-8"
 
 # User bin directories
 [[ -d "$HOME/bin" ]] && PATH="$HOME/bin:$PATH"
-[[ -d "$HOME/.bin" ]] && PATH="$HOME/.bin:$PATH"
 [[ -d "$HOME/.local/bin" ]] && PATH="$HOME/.local/bin:$PATH"
 
 # Cargo (Rust)

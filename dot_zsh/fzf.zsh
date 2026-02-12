@@ -45,13 +45,6 @@ $FZF_UI \
 --info='inline: ' \
 --multi"
 
-# Transparent background variant (exported for fzf-tab)
-export FZF_COLORS_TRANSPARENT="\
---color=bg+:#313244,bg:-1,spinner:#F5E0DC,hl:#F38BA8 \
---color=fg:#CDD6F4,header:#F38BA8,info:#CBA6F7,pointer:#F5E0DC \
---color=marker:#B4BEFE,fg+:#CDD6F4,prompt:#CBA6F7,hl+:#F38BA8 \
---color=selected-bg:#45475A"
-
 # =============================================================================
 # DEFAULT COMMAND (what files to search)
 # =============================================================================
@@ -91,7 +84,6 @@ export FZF_CTRL_R_OPTS="\
 --border-label=' History ' \
 --preview='echo {}' \
 --preview-window='up:3:hidden:wrap' \
---color='header:italic' \
 --header='CTRL-Y to copy'"
 
 # =============================================================================
@@ -112,14 +104,13 @@ printf \"\n%*s\n%*s\n\" \$(((w+\${#line})/2)) \"\$line\" \$(((w+\${#txt})/2)) \"
 --preview-window='bottom,6,border-top'"
 
 # =============================================================================
-# FTEXT: Ripgrep search (overrides: layout, preview, delimiter, highlight)
+# FTEXT: Ripgrep search (overrides: layout, preview, delimiter)
 # Note: Array format because fzf is invoked directly in functions.zsh
 # FZF_DEFAULT_OPTS is still auto-applied, so we only specify overrides.
 # =============================================================================
 _ftext_fzf_opts=(
   --layout=default
   --border-label=' Search in files '
-  --color='hl:-1:underline,hl+:-1:underline:reverse'
   --delimiter=:
   --preview='bat --color=always {1} --highlight-line {2} 2>/dev/null'
   --preview-window='up,70%,border-bottom,+{2}+3/3,~3'
@@ -129,9 +120,13 @@ _ftext_fzf_opts=(
 # INITIALIZE FZF
 # =============================================================================
 if command -v fzf &>/dev/null; then
-  eval "$(fzf --zsh)"
-  # Unbind fzf's Ctrl+R to let atuin handle it
-  bindkey -r '^R'
+  # fzf --zsh installs ZLE widgets/bindings and warns in non-TTY shells
+  # (e.g. zsh -i -c ...). Skip widget init unless attached to a terminal.
+  if [[ -t 0 && -t 1 ]]; then
+    eval "$(fzf --zsh)"
+    # Unbind fzf's Ctrl+R to let atuin handle it
+    bindkey -r '^R'
+  fi
 fi
 
 # =============================================================================
