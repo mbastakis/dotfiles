@@ -1,0 +1,43 @@
+#!/bin/bash
+# Build aws-login Go binary from source into ~/bin/_aws-login
+# hash-go-mod: {{ include "apps/aws-login/go.mod" | sha256sum }}
+# hash-go-sum: {{ include "apps/aws-login/go.sum" | sha256sum }}
+# hash-main: {{ include "apps/aws-login/main.go" | sha256sum }}
+# hash-config: {{ include "apps/aws-login/config.go" | sha256sum }}
+# hash-cache: {{ include "apps/aws-login/cache.go" | sha256sum }}
+# hash-profiles: {{ include "apps/aws-login/profiles.go" | sha256sum }}
+# hash-bitwarden: {{ include "apps/aws-login/bitwarden.go" | sha256sum }}
+# hash-output: {{ include "apps/aws-login/output.go" | sha256sum }}
+# hash-gum: {{ include "apps/aws-login/gum.go" | sha256sum }}
+
+{{- if ne .chezmoi.os "darwin" }}
+exit 0
+{{- end }}
+
+set -euo pipefail
+
+SOURCE_DIR="{{ .chezmoi.sourceDir }}/apps/aws-login"
+OUTPUT_BIN="$HOME/bin/_aws-login"
+
+if [[ ! -d "$SOURCE_DIR" ]]; then
+    echo "aws-login source not found at $SOURCE_DIR; skipping build" >&2
+    exit 0
+fi
+
+if ! command -v go &>/dev/null; then
+    echo "go not found; skipping aws-login build" >&2
+    exit 0
+fi
+
+mkdir -p "$HOME/bin"
+
+version="$(git -C "{{ .chezmoi.sourceDir }}" rev-parse --short HEAD 2>/dev/null || echo dev)"
+
+echo "Building aws-login -> $OUTPUT_BIN" >&2
+(
+    cd "$SOURCE_DIR"
+    go build -trimpath -ldflags="-s -w -X main.Version=$version" -o "$OUTPUT_BIN" .
+)
+
+chmod 755 "$OUTPUT_BIN"
+echo "Built aws-login version $version" >&2

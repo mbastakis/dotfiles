@@ -1,0 +1,10 @@
+#!/bin/bash
+# Decrypt age private key on first run (or when key.txt.age changes).
+# This is the ONLY time the passphrase is needed.
+# hash: {{ include "key.txt.age" | sha256sum }}
+
+set -euo pipefail
+
+mkdir -p "${HOME}/.config/chezmoi"
+chezmoi age decrypt --output "${HOME}/.config/chezmoi/key.txt" --passphrase "{{ .chezmoi.sourceDir }}/key.txt.age"
+chmod 600 "${HOME}/.config/chezmoi/key.txt"

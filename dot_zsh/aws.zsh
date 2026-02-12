@@ -5,7 +5,7 @@
 # Usage: aws-login <profile> [mfa-code] [options]
 aws-login() {
   local output
-  output=$("$HOME/.bin/_aws-login" "$@")
+  output=$("$HOME/bin/_aws-login" "$@")
   local exit_code=$?
 
   if [[ $exit_code -eq 0 && -n "$output" ]]; then

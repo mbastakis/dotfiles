@@ -30,3 +30,6 @@ private_dot_config/opencode/bun.lock
 
 # AWS login caches
 private_dot_config/aws-login/private_cache/
+
+# aws-login local build artifact
+apps/aws-login/aws-login

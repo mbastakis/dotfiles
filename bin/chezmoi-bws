@@ -5,14 +5,13 @@ set -euo pipefail
 #
 # Token resolution order:
 #   1. BWS_ACCESS_TOKEN env var (if already set)
-#   2. Decrypt bin/bws_token.age from chezmoi source using the age identity key
+#   2. Decrypted token file at ~/.local/share/bws/token
+#      (managed by chezmoi as an encrypted_ file, decrypted during chezmoi apply)
 #
-# The age identity key at ~/.config/chezmoi/key.txt is the single unlock secret
-# needed on any new machine. Everything else derives from it.
+# The age passphrase prompt happens once during chezmoi apply for ALL
+# encrypted files (SSH key, Supermaven config, BWS token).
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ENCRYPTED_TOKEN="$SCRIPT_DIR/bws_token.age"
-AGE_IDENTITY="$HOME/.config/chezmoi/key.txt"
+TOKEN_FILE="$HOME/.local/share/bws/token"
 
 install_bws_if_missing() {
   if command -v bws &>/dev/null; then
@@ -35,16 +34,10 @@ if [[ -n "${BWS_ACCESS_TOKEN:-}" ]]; then
   exec bws "$@"
 fi
 
-# 2. Decrypt token from age-encrypted file in source dir
-if [[ -f "$ENCRYPTED_TOKEN" && -f "$AGE_IDENTITY" ]]; then
-  if command -v age &>/dev/null; then
-    token="$(age -d -i "$AGE_IDENTITY" "$ENCRYPTED_TOKEN" 2>/dev/null || true)"
-  elif command -v chezmoi &>/dev/null; then
-    # Fall back to chezmoi's builtin age
-    token="$(chezmoi age decrypt -i "$AGE_IDENTITY" "$ENCRYPTED_TOKEN" 2>/dev/null || true)"
-  fi
-
-  if [[ -n "${token:-}" ]]; then
+# 2. Read token from chezmoi-managed decrypted file
+if [[ -f "$TOKEN_FILE" ]]; then
+  token="$(cat "$TOKEN_FILE")"
+  if [[ -n "$token" ]]; then
     export BWS_ACCESS_TOKEN="$token"
     exec bws "$@"
   fi
@@ -53,9 +46,8 @@ fi
 cat >&2 <<EOF
 BWS_ACCESS_TOKEN is required to render chezmoi templates.
 
-Could not decrypt token. Ensure both files exist:
-  Age identity:    $AGE_IDENTITY
-  Encrypted token: $ENCRYPTED_TOKEN
+Token file not found: $TOKEN_FILE
+Run 'chezmoi apply' to decrypt and deploy it.
 
 Or set the token manually:
   export BWS_ACCESS_TOKEN="..."
