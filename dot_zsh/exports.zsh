@@ -23,11 +23,3 @@ export _ZO_ECHO=1
 
 # Ripgrep config
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/config"
-
-# OpenCode Exa integration (enables websearch/codesearch tools)
-# export OPENCODE_ENABLE_EXA=true
-
-# Zellij auto-start behavior
-export ZELLIJ_AUTO_ATTACH="true"
-export ZELLIJ_AUTO_SESSION_NAME="test-setup"
-export ZELLIJ_AUTO_SESSION_LAYOUT="$HOME/.config/zellij/layout/test-setup.kdl"
