@@ -2,25 +2,8 @@
     email = {{ .email }}
     name = {{ .name }}
 
-{{ if eq .profile "work" -}}
-[includeIf "gitdir:~/work/"]
+[includeIf "hasconfig:remote.*.url:git@gitlab-telekom:/**"]
     path = ~/.config/git/.gitconfig-work
-
-[includeIf "gitdir:~/dev/work/"]
-    path = ~/.config/git/.gitconfig-work
-
-[includeIf "hasconfig:remote.*.url:https://*telekom*/**"]
-    path = ~/.config/git/.gitconfig-work
-
-[includeIf "hasconfig:remote.*.url:ssh://*telekom*/**"]
-    path = ~/.config/git/.gitconfig-work
-
-[includeIf "hasconfig:remote.*.url:git@*telekom*:*/**"]
-    path = ~/.config/git/.gitconfig-work
-
-[url "https://oauth2:@gitlab.devops.telekom.de"]
-    insteadOf = https://gitlab.devops.telekom.de
-{{ end -}}
 
 [include]
     path = ~/.config/delta/themes/catppuccin.gitconfig

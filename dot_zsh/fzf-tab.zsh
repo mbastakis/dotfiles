@@ -8,7 +8,7 @@ zstyle ':completion:*:git-checkout:*' sort false
 zstyle ':completion:*:descriptions' format '[%d]'
 
 # Set list-colors to enable filename colorizing
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' list-colors '${(s.:.)LS_COLORS}'
 
 # Preview directory's content with eza when completing cd
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
@@ -27,11 +27,7 @@ zstyle ':fzf-tab:*' fzf-flags \
 zstyle ':fzf-tab:*' fzf-command fzf
 zstyle ':fzf-tab:*' use-fzf-default-opts yes
 
-# Use tmux popup if available
-zstyle ':fzf-tab:*' fzf-pad 4
-
 # Show preview for commands with arguments
-zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl status $word'
 zstyle ':fzf-tab:complete:(-command-|-parameter-|-brace-parameter-|export|unset|expand):*' fzf-preview 'echo ${(P)word}'
 
 # Preview for kill command
@@ -53,15 +49,9 @@ zstyle ':fzf-tab:complete:docker-*:*' fzf-preview 'echo $desc'
 zstyle ':fzf-tab:complete:kubectl:*' fzf-preview 'echo $desc'
 zstyle ':fzf-tab:complete:kubectl-*:*' fzf-preview 'echo $desc'
 
-# Preview for environment variables
-zstyle ':fzf-tab:complete:(-command-|-parameter-|-brace-parameter-|export|unset|expand):*' fzf-preview 'echo ${(P)word}'
-
 # Continuous completion (accept and continue)
 zstyle ':fzf-tab:*' continuous-trigger '/'
 
 # Use only prefix for query string to avoid ../ or ~/ leaking into fzf filter
 # Default is (prefix input first) which includes the typed path in the query
 zstyle ':fzf-tab:*' query-string prefix
-
-# Prefer fzf-tab directly for TAB completion
-(( ${+widgets[fzf-tab-complete]} )) && bindkey '^I' fzf-tab-complete

@@ -1,3 +1,19 @@
-Include /Users/mbastakis/.colima/ssh_config
+Host gitlab-telekom
+    HostName gitlab.devops.telekom.de
+    User git
+    IdentityFile ~/.ssh/gitlab-telekom
+    IdentitiesOnly yes
 
+Host github.com github-personal
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/github-personal
+    IdentitiesOnly yes
+
+# Default key
+Host *
+    IdentityFile ~/.ssh/id_ed25519
+    AddKeysToAgent yes
+
+Include /Users/mbastakis/.colima/ssh_config
 Include /Users/mbastakis/.config/colima/ssh_config

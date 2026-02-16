@@ -3,8 +3,6 @@
 
 # Navigation
 alias ..="cd .."
-alias ...="cd ../.."
-alias ....="cd ../../.."
 
 # Listing
 alias l="eza --color=always --icons=always --no-user"
@@ -32,21 +30,13 @@ alias lg="lazygit"
 # Bat
 alias b="bat --paging=always --color=always --style=plain --line-range=1:1000 --decorations=always"
 
-# Atuin
-# alias r="atuin search -i"  # Use ctrl+r instead
-
 # Obsidian CLI
 alias obs="obsidian-cli"
 
-# Zellij
-alias zj="zj-session"
-alias zjl="zj-layout"
-
-# Debug key sequences for zsh
-alias keytest="cat -v"
-
 # Kubernetes
+alias k="kubectl"
 alias ctx="kubectx"
+alias ns="kubens"
 
 # Ghostty
 alias ghostty-settings="nvim ~/.config/ghostty/config"

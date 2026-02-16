@@ -16,20 +16,7 @@ if [[ -f "${HOME}/.local/share/zinit/zinit.git/zinit.zsh" ]]; then
     autoload -Uz _zinit
     (( ${+_comps} )) && _comps[zinit]=_zinit
 
-    # Load a few important annexes, without Turbo
-    # (this is currently required for annexes)
-    zinit light-mode for \
-        zdharma-continuum/zinit-annex-as-monitor \
-        zdharma-continuum/zinit-annex-bin-gem-node \
-        zdharma-continuum/zinit-annex-patch-dl \
-        zdharma-continuum/zinit-annex-rust
-
     # ==== Plugin Definitions ====
-    # Add your plugins below
-
-    # Completions should be loaded first
-    zinit ice blockf
-    zinit load zsh-users/zsh-completions
 
     # Load fzf-tab for interactive completion menu (must load before compinit)
     zinit light Aloxaf/fzf-tab
@@ -51,17 +38,9 @@ if [[ -f "${HOME}/.local/share/zinit/zinit.git/zinit.zsh" ]]; then
     # Load Git plugin from Oh-My-Zsh
     zinit snippet OMZ::plugins/git/git.plugin.zsh
 
-    # Load Kubectl plugin from Oh-My-Zsh
-    zinit snippet OMZ::plugins/kubectl/kubectl.plugin.zsh
-
     # Load autosuggestions (should be before syntax highlighting)
-    zinit ice wait lucid atload'!_zsh_autosuggest_start'
+    zinit ice wait lucid atload'!unset ZSH_AUTOSUGGEST_USE_ASYNC; _zsh_autosuggest_start'
     zinit load zsh-users/zsh-autosuggestions
-
-    # Load shift-select functionality (Shift+arrows to select text)
-    # Load our enhancements after the plugin loads using atload hook
-    zinit ice wait lucid atload'source "${ZDOTDIR:-$HOME}/.zsh/shift-select-enhancements.zsh"'
-    zinit load jirutka/zsh-shift-select
 
     # Load syntax highlighting (must be last for proper highlighting)
     zinit ice wait lucid

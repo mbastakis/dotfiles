@@ -1,6 +1,6 @@
 return {
   "nvim-telescope/telescope.nvim",
-  tag = "v0.1.9",
+  branch = "master",
   dependencies = { "nvim-lua/plenary.nvim", { "nvim-telescope/telescope-fzf-native.nvim", build = "make" } },
   config = function()
     require("telescope").setup({
@@ -8,6 +8,9 @@ return {
         fzf = {},
       },
     })
+
+    -- Load the fzf extension for fuzzy sorting
+    require("telescope").load_extension("fzf")
 
     local builtin = require("telescope.builtin")
     local themes = require("telescope.themes")

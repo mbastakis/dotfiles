@@ -10,14 +10,8 @@ if command -v zoxide &>/dev/null; then
   eval "$(zoxide init --cmd cd zsh)"
 fi
 
-# Thefuck - command correction (lazy-loaded for faster startup)
-if command -v thefuck &>/dev/null; then
-  fuck() {
-    unfunction fuck  # Remove this wrapper
-    eval "$(thefuck --alias)"  # Load the real alias
-    fuck "$@"  # Call the real function
-  }
-fi
+# Direnv - per-directory environment
+command -v direnv &>/dev/null && eval "$(direnv hook zsh)"
 
 # Starship - prompt
 command -v starship &>/dev/null && eval "$(starship init zsh)"

@@ -4,6 +4,9 @@
 # Dotfiles path (chezmoi source - for reference only)
 export DOTFILES_PATH="{{ .chezmoi.sourceDir }}"
 
+# Ripgrep config
+export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/config"
+
 # XDG base directories
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
@@ -57,9 +60,6 @@ if [[ -d "/opt/homebrew/opt/postgresql@17/bin" ]]; then
   export LDFLAGS="-L/opt/homebrew/opt/postgresql@17/lib"
   export CPPFLAGS="-I/opt/homebrew/opt/postgresql@17/include"
 fi
-
-# Nix configuration directory (if still using Nix for anything)
-export NIX_CONF_DIR="$HOME/.config/nix"
 {{- end }}
 
 ## Programming language settings

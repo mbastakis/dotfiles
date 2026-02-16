@@ -34,27 +34,6 @@ take() {
   cd "$1" || return
 }
 
-# Python virtual environment
-# Create a venv
-venv() {
-  mkdir -p ~/.virtualenvs
-
-  python3 -m venv ~/.virtualenvs/$1
-}
-# Activate python environment
-activate() {
-  source ~/.virtualenvs/$1/bin/activate
-}
-deact() {
-  deactivate
-}
-venvlist() {
-  ls ~/.virtualenvs/
-}
-venvremove() {
-  sudo rm -rf ~/.virtualenvs/$1
-}
-
 # Yazi
 function y() {
   local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
@@ -138,104 +117,36 @@ function brew_update() {
   echo "Homebrew update complete."
 }
 
-# Pull all git repos in a directory tree (parallel, with formatted output)
-# Usage: git_pull_all [directory] [parallelism]
-git_pull_all() {
-  local search_dir="${1:-.}"
-  local parallelism="${2:-8}"
+# AWS profile switcher - wraps Go binary to enable env var export
+# Usage: aws-login <profile> [mfa-code] [options]
+aws-login() {
+  local output
+  output=$("$HOME/bin/_aws-login" "$@")
+  local exit_code=$?
 
-  if [[ ! -d "$search_dir" ]]; then
-    echo "Error: Directory '$search_dir' does not exist"
-    return 1
+  if [[ $exit_code -eq 0 && -n "$output" ]]; then
+    eval "$output"
+
+    if [[ -n "${TMUX:-}" ]] && command -v tmux &>/dev/null; then
+      if [[ -n "${AWS_PROFILE:-}" ]]; then
+        tmux set-environment -g AWS_PROFILE "$AWS_PROFILE"
+      else
+        tmux set-environment -gu AWS_PROFILE
+      fi
+
+      if [[ -n "${AWS_DEFAULT_PROFILE:-}" ]]; then
+        tmux set-environment -g AWS_DEFAULT_PROFILE "$AWS_DEFAULT_PROFILE"
+      else
+        tmux set-environment -gu AWS_DEFAULT_PROFILE
+      fi
+    fi
   fi
 
-  # Get absolute path upfront (use builtin cd to bypass hooks)
-  local abs_dir
-  abs_dir=$(builtin cd "$search_dir" && pwd)
+  return $exit_code
+}
 
-  # Count repos first
-  local repo_count
-  repo_count=$(find "$abs_dir" -name ".git" -type d 2>/dev/null | wc -l | tr -d ' ')
-
-  if [[ "$repo_count" -eq 0 ]]; then
-    echo "No git repositories found in $search_dir"
-    return 0
-  fi
-
-  echo "Pulling $repo_count repositories in $abs_dir (parallelism: $parallelism)"
-  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-
-  # Create a temporary script for xargs to call
-  local tmp_script
-  tmp_script=$(mktemp)
-  cat >"$tmp_script" <<'PULLSCRIPT'
-#!/bin/sh
-repo_dir="$1"
-base_dir_len="$2"
-
-cd "$repo_dir" || exit 1
-
-# Get relative path by cutting the base directory prefix (using character count)
-if [ "$base_dir_len" -gt 0 ]; then
-  # Cut base_dir + 1 (for the trailing slash)
-  rel_path=$(echo "$repo_dir" | cut -c$((base_dir_len + 2))-)
+# Sync existing AWS profile to tmux environment on shell startup
+if [[ -n "${TMUX:-}" ]] && command -v tmux &>/dev/null; then
+  [[ -n "${AWS_PROFILE:-}" ]] && tmux set-environment -g AWS_PROFILE "$AWS_PROFILE"
+  [[ -n "${AWS_DEFAULT_PROFILE:-}" ]] && tmux set-environment -g AWS_DEFAULT_PROFILE "$AWS_DEFAULT_PROFILE"
 fi
-if [ -z "$rel_path" ]; then
-  rel_path="."
-fi
-
-# Perform the pull
-result=$(git pull --ff-only 2>&1)
-status=$?
-msg=$(echo "$result" | tail -1)
-
-# Format output based on result
-if [ $status -eq 0 ]; then
-  if echo "$result" | grep -q "Already up to date"; then
-    printf "\033[32m✓\033[0m %-60s %s\n" "$rel_path" "$msg"
-  else
-    printf "\033[34m↓\033[0m %-60s \033[34m%s\033[0m\n" "$rel_path" "Updated"
-  fi
-else
-  printf "\033[31m✗\033[0m %-60s \033[31m%s\033[0m\n" "$rel_path" "$msg"
-fi
-PULLSCRIPT
-  chmod +x "$tmp_script"
-
-  # Get length of abs_dir for the script to use
-  local abs_dir_len=${#abs_dir}
-
-  # Sort repos first, then process in parallel with live output (no final sort)
-  find "$abs_dir" -name ".git" -type d 2>/dev/null |
-    while read -r git_dir; do dirname "$git_dir"; done |
-    sort |
-    xargs -P "$parallelism" -I {} "$tmp_script" "{}" "$abs_dir_len"
-
-  # Cleanup
-  rm -f "$tmp_script"
-
-  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  echo "Done!"
-}
-
-# Opencode
-OC_SERVER="http://localhost:4096"
-
-oc() {
-  opencode attach "$OC_SERVER" --dir .
-}
-
-occ() {
-  local session_id
-  session_id=$(opencode session list -n 1 --format json | jq -r '.[0].id')
-  if [[ -n "$session_id" && "$session_id" != "null" ]]; then
-    opencode attach "$OC_SERVER" --dir . -s "$session_id"
-  else
-    echo "No previous session found"
-    return 1
-  fi
-}
-
-ocr() {
-  opencode run --attach "$OC_SERVER" -m amazon-bedrock/anthropic.claude-haiku-4-5-20251001-v1:0 "$@"
-}

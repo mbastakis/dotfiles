@@ -9,7 +9,7 @@ Modular zsh config files symlinked to `~/.zsh/`, sourced by `~/.zshrc`.
 | `exports.zsh`                   | Environment variables (PAGER, LESS)  |
 | `plugins.zsh`                   | Zinit plugin manager, compinit       |
 | `completions.zsh`               | Tool-specific completions            |
-| `tools.zsh`                     | atuin, zoxide, starship, thefuck     |
+| `tools.zsh`                     | atuin, zoxide, starship              |
 | `aliases.zsh`                   | Command shortcuts                    |
 | `functions.zsh`                 | Custom shell functions               |
 | `fzf.zsh`                       | FZF configuration                    |
