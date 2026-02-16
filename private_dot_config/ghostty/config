@@ -69,6 +69,10 @@ keybind = ctrl+shift+t=goto_split:down
 keybind = ctrl+shift+n=goto_split:up
 keybind = ctrl+shift+s=goto_split:right
 
+# Send Ctrl+Tab / Ctrl+Shift+Tab to terminal (for tmux)
+keybind = ctrl+tab=text:\x1b[27;5;9~
+keybind = ctrl+shift+tab=text:\x1b[27;6;9~
+
 # Quick Terminal
 quick-terminal-position = top
 quick-terminal-size = 100%
@@ -81,7 +85,7 @@ keybind = cmd+shift+e=write_screen_file:open
 # Send escape sequences for copy/cut operations
 keybind = cmd+c=text:\x1b[200~
 keybind = cmd+x=text:\x1b[201~
-keybind = shift+enter=text:\n
+keybind = shift+enter=csi:13;2u
 
 # Font Size
 keybind = super+0=reset_font_size

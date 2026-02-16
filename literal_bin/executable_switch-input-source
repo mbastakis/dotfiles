@@ -2,40 +2,100 @@
 import Carbon
 import Foundation
 
-let sources: [(id: String, name: String)] = [
-    ("com.apple.keylayout.ABC", "ABC"),
-    ("com.apple.keylayout.Dvorak", "Dvorak"),
-    ("org.unknown.keylayout.GreekDvorak", "Greek Dvorak")
+struct InputSource {
+    let id: String
+    let name: String
+    let aliases: Set<String>
+}
+
+let sources: [InputSource] = [
+    InputSource(id: "com.apple.keylayout.ABC", name: "Qwerty", aliases: ["abc", "qwerty", "querty"]),
+    InputSource(id: "com.apple.keylayout.Dvorak", name: "Dvorak", aliases: ["dvorak"]),
+    InputSource(id: "org.unknown.keylayout.GreekDvorak", name: "Greek", aliases: ["greek", "greek-dvorak", "greekdvorak"])
 ]
 
-// Get current input source
-let currentSource = TISCopyCurrentKeyboardInputSource().takeRetainedValue()
-let currentID = unsafeBitCast(TISGetInputSourceProperty(currentSource, kTISPropertyInputSourceID), to: CFString.self) as String
+func normalize(_ value: String) -> String {
+    value.lowercased()
+        .replacingOccurrences(of: "_", with: "-")
+        .replacingOccurrences(of: " ", with: "-")
+}
 
-// Find current index and get next
-var currentIndex = sources.firstIndex(where: { $0.id == currentID }) ?? 0
-let nextIndex = (currentIndex + 1) % sources.count
-let nextID = sources[nextIndex].id
-let nextName = sources[nextIndex].name
+func currentInputSourceID() -> String? {
+    let source = TISCopyCurrentKeyboardInputSource().takeRetainedValue()
+    guard let property = TISGetInputSourceProperty(source, kTISPropertyInputSourceID) else {
+        return nil
+    }
+    return unsafeBitCast(property, to: CFString.self) as String
+}
 
-// Find and select next input source
-let allSources = TISCreateInputSourceList(nil, false).takeRetainedValue() as! [TISInputSource]
-for source in allSources {
-    if let id = TISGetInputSourceProperty(source, kTISPropertyInputSourceID) {
-        let sourceID = unsafeBitCast(id, to: CFString.self) as String
-        if sourceID == nextID {
-            TISSelectInputSource(source)
+func selectInputSource(withID targetID: String) -> Bool {
+    let allSources = TISCreateInputSourceList(nil, false).takeRetainedValue() as! [TISInputSource]
+    for source in allSources {
+        guard let property = TISGetInputSourceProperty(source, kTISPropertyInputSourceID) else {
+            continue
+        }
 
-            // Show notification
-            let script = """
-                display notification "\(nextName)" with title "Input Source" sound name "Pop"
-            """
-            let process = Process()
-            process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
-            process.arguments = ["-e", script]
-            try? process.run()
-
-            break
+        let sourceID = unsafeBitCast(property, to: CFString.self) as String
+        if sourceID == targetID {
+            return TISSelectInputSource(source) == noErr
         }
     }
+    return false
 }
+
+func notify(_ name: String) {
+    let script = "display notification \"\(name)\" with title \"Input Source\" sound name \"Pop\""
+    let process = Process()
+    process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
+    process.arguments = ["-e", script]
+    try? process.run()
+}
+
+let args = Array(CommandLine.arguments.dropFirst())
+let targetAlias: String?
+
+switch args.count {
+case 0:
+    targetAlias = nil
+case 1:
+    targetAlias = args[0]
+case 2 where args[0] == "--to" || args[0] == "-t":
+    targetAlias = args[1]
+default:
+    fputs("Usage: switch-input-source [--to <qwerty|dvorak|greek>]\n", stderr)
+    exit(1)
+}
+
+guard let currentID = currentInputSourceID() else {
+    fputs("Could not read current input source\n", stderr)
+    exit(1)
+}
+
+let targetSource: InputSource
+if let targetAlias {
+    let normalizedAlias = normalize(targetAlias)
+    guard let requested = sources.first(where: {
+        $0.id == targetAlias || $0.aliases.contains(normalizedAlias)
+    }) else {
+        fputs("Unknown layout '\(targetAlias)'. Use one of: qwerty, dvorak, greek\n", stderr)
+        exit(1)
+    }
+    targetSource = requested
+} else {
+    let currentIndex = sources.firstIndex(where: { $0.id == currentID }) ?? 0
+    let nextIndex = (currentIndex + 1) % sources.count
+    targetSource = sources[nextIndex]
+}
+
+if currentID == targetSource.id {
+    print("Already on \(targetSource.name)")
+    exit(0)
+}
+
+guard selectInputSource(withID: targetSource.id) else {
+    fputs("Could not switch to \(targetSource.name)\n", stderr)
+    exit(1)
+}
+
+print("Switched to \(targetSource.name)")
+notify(targetSource.name)

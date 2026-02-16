@@ -43,3 +43,11 @@ alias ghostty-settings="nvim ~/.config/ghostty/config"
 
 # Chezmoi
 alias cz="chezmoi"
+
+# Tmux
+alias ta="tmux attach"
+alias td="tmux detach"
+alias tls="tmux ls"
+
+# Opencode
+alias oc="opencode"

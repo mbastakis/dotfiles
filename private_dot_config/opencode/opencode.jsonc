@@ -8,44 +8,6 @@
   // Linear MCP is available to all agents, but Linear tasks should be delegated
   // to the @manager agent which has specialized workflows for project management.
   // See AGENTS.md for guidance on when to use @manager vs other agents.
-  "provider": {
-    "amazon-bedrock": {
-      "models": {
-        "anthropic.claude-opus-4-5-20251101-v1:0": {
-          "name": "Claude Opus 4.5 (Bedrock)",
-        },
-      },
-    },
-    "opencode": {
-      "models": {
-        "trinity-large-preview-free": {
-          "name": "Trinity Large Preview Free",
-        },
-        "minimax-m2.1-free": {
-          "name": "MiniMax M2.1 Free",
-        },
-        "kimi-k2.5-free": {
-          "name": "Kimi K2.5 Free",
-        },
-        "glm-4.7-free": {
-          "name": "GLM 4.7 Free",
-        },
-        "big-pickle": {
-          "name": "Big Pickle",
-        },
-      },
-    },
-    "openai": {
-      "models": {
-        "gpt-5.2-codex": {
-          "name": "GPT 5.2 Codex",
-        },
-        "gpt-5.1-codex-max": {
-          "name": "GPT 5.1 Codex Max",
-        },
-      },
-    },
-  },
   "mcp": {
     "linear": {
       "type": "local",
@@ -124,6 +86,9 @@
       "git add*": "allow",
       "git stash*": "allow",
       "git restore*": "allow",
+      // === ALLOW: Chezmoi ===
+      "chezmoi diff": "allow",
+      "chezmoi status": "allow",
       // === ASK: Git operations that modify history/remote ===
       "git commit*": "ask",
       "git push*": "ask",
@@ -146,7 +111,6 @@
     "librarian": {
       "description": "Research source code, GitHub issues/PRs, and library internals. Use for 'How does [package] implement X?', debugging external dependencies, finding bug reports. Returns evidence with GitHub permalinks.",
       "mode": "subagent",
-      "model": "amazon-bedrock/anthropic.claude-haiku-4-5-20251001-v1:0",
       "temperature": 0.1,
       "prompt": "{file:./agent/librarian.md}",
       // Research agent - no local file modifications
@@ -185,7 +149,6 @@
     "commit": {
       "description": "Git commit agent with pre-approved git commands",
       "mode": "subagent",
-      "model": "amazon-bedrock/anthropic.claude-haiku-4-5-20251001-v1:0",
       "prompt": "{file:./agent/commit.md}",
       // v1.1.1: 'tools' is deprecated, use 'permission' for permissionable tools
       // Non-permissionable tools (read, glob, grep) are enabled by default
@@ -215,7 +178,6 @@
     "crawl": {
       "description": "Crawl websites and extract content using crawl4ai",
       "mode": "subagent",
-      "model": "amazon-bedrock/anthropic.claude-haiku-4-5-20251001-v1:0",
       "temperature": 0.1,
       "prompt": "{file:./agent/crawl.md}",
       // v1.1.1: 'tools' is deprecated, use 'permission' for permissionable tools
@@ -278,7 +240,6 @@
     "web-researcher": {
       "description": "Research web content: documentation, tutorials, best practices, comparisons. Use for conceptual questions, 'how do I do X?', technology comparisons. Does NOT look at source code - use @librarian for that.",
       "mode": "subagent",
-      "model": "amazon-bedrock/anthropic.claude-haiku-4-5-20251001-v1:0",
       "temperature": 0.5,
       "prompt": "{file:./agent/web-researcher.md}",
       // v1.1.1: 'tools' is deprecated, use 'permission' for permissionable tools
