@@ -33,7 +33,7 @@ Rules sorted alphabetically by filename. Prefix with numbers for order:
 03-10: HRM rules (generated from HRM_CONFIG)
 11-typing-mode-toggle.json
 ...
-16-language-switch.json
+15-hyper-navigation.json
 ```
 
 **Requires**: `jq` (install via `brew install jq`)
@@ -79,7 +79,7 @@ To make a rule work on **all devices**, add its filename to `ALL_DEVICES_RULES` 
 
 ```bash
 ALL_DEVICES_RULES=(
-    "16-language-switch.json"
+    "your-rule.json"
 )
 ```
 

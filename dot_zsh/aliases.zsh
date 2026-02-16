@@ -40,3 +40,6 @@ alias ns="kubens"
 
 # Ghostty
 alias ghostty-settings="nvim ~/.config/ghostty/config"
+
+# Chezmoi
+alias cz="chezmoi"

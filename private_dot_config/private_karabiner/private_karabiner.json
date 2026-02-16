@@ -6656,30 +6656,6 @@
                 "type": "basic"
               }
             ]
-          },
-          {
-            "description": "Ctrl+Space: Cycle input language (ABC -> Dvorak -> Greek Dvorak)",
-            "manipulators": [
-              {
-                "type": "basic",
-                "from": {
-                  "key_code": "spacebar",
-                  "modifiers": {
-                    "mandatory": [
-                      "left_control"
-                    ],
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "shell_command": "~/bin/switch-input-source"
-                  }
-                ]
-              }
-            ]
           }
         ]
       },
