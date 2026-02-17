@@ -1,4 +1,4 @@
-Host gitlab-telekom
+Host gitlab.devops.telekom.de
     HostName gitlab.devops.telekom.de
     User git
     IdentityFile ~/.ssh/gitlab-telekom
@@ -12,7 +12,6 @@ Host github.com github-personal
 
 # Default key
 Host *
-    IdentityFile ~/.ssh/id_ed25519
     AddKeysToAgent yes
 
 Include /Users/mbastakis/.colima/ssh_config

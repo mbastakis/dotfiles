@@ -2,7 +2,13 @@
     email = {{ .email }}
     name = {{ .name }}
 
-[includeIf "hasconfig:remote.*.url:git@gitlab-telekom:/**"]
+[includeIf "hasconfig:remote.*.url:ssh://git@gitlab.devops.telekom.de/**"]
+    path = ~/.config/git/.gitconfig-work
+[includeIf "hasconfig:remote.*.url:git@gitlab.devops.telekom.de:*/**"]
+    path = ~/.config/git/.gitconfig-work
+[includeIf "hasconfig:remote.*.url:https://gitlab.devops.telekom.de/**"]
+    path = ~/.config/git/.gitconfig-work
+[includeIf "hasconfig:remote.*.url:https://*@gitlab.devops.telekom.de/**"]
     path = ~/.config/git/.gitconfig-work
 
 [include]

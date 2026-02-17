@@ -145,8 +145,8 @@ aws-login() {
   return $exit_code
 }
 
-# Sync existing AWS profile to tmux environment on shell startup
-if [[ -n "${TMUX:-}" ]] && command -v tmux &>/dev/null; then
-  [[ -n "${AWS_PROFILE:-}" ]] && tmux set-environment -g AWS_PROFILE "$AWS_PROFILE"
-  [[ -n "${AWS_DEFAULT_PROFILE:-}" ]] && tmux set-environment -g AWS_DEFAULT_PROFILE "$AWS_DEFAULT_PROFILE"
-fi
+function reset_internet() {
+  sudo killall -HUP mDNSResponder && echo macOS DNS Cache Reset
+  sudo pfctl -f /etc/pf.conf
+  sudo ifconfig en0 down && sudo ifconfig en0 up
+}
