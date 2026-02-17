@@ -74,5 +74,6 @@ Cargo.lock
 .config/karabiner/
 .config/finicky/
 .config/sketchybar/
+Library/LaunchAgents/com.mbastakis.ghostty-tmux.plist
 bin/switch-input-source
 {{- end }}
