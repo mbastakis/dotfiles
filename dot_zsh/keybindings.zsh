@@ -58,6 +58,10 @@ typeset -a _word_fwd_keys _word_back_keys
 _word_fwd_keys=('^[f' '^[[1;3C' '^[[1;5C' '^[[1;9C' '^[[5C')
 _word_back_keys=('^[b' '^[[1;3D' '^[[1;5D' '^[[1;9D' '^[[5D')
 
+typeset -a _line_home_keys _line_end_keys
+_line_home_keys=('^[[1~' '^[[H' '^[OH')
+_line_end_keys=('^[[4~' '^[[F' '^[OF')
+
 # Insert mode: use emacs word movement so autosuggest partial-accept is stable.
 for _seq in "${_word_fwd_keys[@]}"; do
   bindkey -M emacs "$_seq" emacs-forward-word
@@ -76,7 +80,19 @@ for _seq in "${_word_back_keys[@]}"; do
   bindkey -M vicmd "$_seq" vi-backward-word
 done
 
-unset _seq _map _word_fwd_keys _word_back_keys _widget_bind_maps
+# Home/End key sequences (including Cmd+Left/Cmd+Right from Ghostty).
+for _seq in "${_line_home_keys[@]}"; do
+  bindkey -M emacs "$_seq" beginning-of-line
+  bindkey -M viins "$_seq" beginning-of-line
+  bindkey -M vicmd "$_seq" vi-beginning-of-line
+done
+for _seq in "${_line_end_keys[@]}"; do
+  bindkey -M emacs "$_seq" end-of-line
+  bindkey -M viins "$_seq" end-of-line
+  bindkey -M vicmd "$_seq" vi-end-of-line
+done
+
+unset _seq _map _word_fwd_keys _word_back_keys _line_home_keys _line_end_keys _widget_bind_maps
 
 # Keep line editor in emacs mode and disable Esc -> vi-cmd-mode switching.
 bindkey -e

@@ -73,6 +73,10 @@ keybind = ctrl+shift+s=goto_split:right
 keybind = ctrl+tab=text:\x1b[27;5;9~
 keybind = ctrl+shift+tab=text:\x1b[27;6;9~
 
+# Keep Cmd+Left/Right as Home/End (do not emit Ctrl-A/Ctrl-E)
+keybind = cmd+left=text:\x1b[1~
+keybind = cmd+right=text:\x1b[4~
+
 # Quick Terminal
 quick-terminal-position = top
 quick-terminal-size = 100%
