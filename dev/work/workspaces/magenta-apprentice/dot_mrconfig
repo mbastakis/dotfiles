@@ -1,0 +1,57 @@
+# magenta-apprentice workspace
+#
+# Usage:
+#   cd workspaces/magenta-apprentice
+#   mr checkout    # clones everything
+#   mr -j5 update  # parallel pull all repos
+#   mr status      # status across all repos
+#
+
+[DEFAULT]
+jobs = 5
+
+# =============================================================================
+# Services
+# =============================================================================
+
+[magenta-apprentice]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/fiber/magenta-apprentice.git' 'magenta-apprentice'
+
+[anonymization-service]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/fiber/anonymization-service.git' 'anonymization-service'
+
+[trigger-service]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/fiber/trigger-service.git' 'trigger-service'
+
+# =============================================================================
+# Fiber ArgoCD - group 631097 (auto-discovered)
+# =============================================================================
+
+include =
+    glab api "groups/631097/projects?per_page=100&include_subgroups=true" 2>/dev/null |
+    jq -r 'sort_by(.path_with_namespace)[] | (.path_with_namespace | ltrimstr("aicc/fiber/")) as $local |
+      "[\($local)]\ncheckout = git clone \u0027\(.http_url_to_repo)\u0027 \u0027\(.path)\u0027\n"'
+
+# =============================================================================
+# Infrastructure ArgoCD - group 631103 (auto-discovered, filtered)
+# Only: app-of-apps + root-app-of-apps + keycloak/langfuse/ner helm charts
+# =============================================================================
+
+include =
+    glab api "groups/631103/projects?per_page=100&include_subgroups=true" 2>/dev/null |
+    jq -r '[.[] | select(
+      ((.path_with_namespace | contains("helm-charts") | not) or
+       (.path | IN("keycloak-helm", "langfuse-helm", "ner-model-chart")))
+      and (.path_with_namespace | contains("/digital/") | not)
+    )] | sort_by(.path_with_namespace)[] |
+      (.path_with_namespace | ltrimstr("aicc/infrastructure/")) as $local |
+      "[\($local)]\ncheckout = git clone \u0027\(.http_url_to_repo)\u0027 \u0027\(.path)\u0027\n"'
+
+# =============================================================================
+# IAC - group 620010 (auto-discovered)
+# =============================================================================
+
+include =
+    glab api "groups/620010/projects?per_page=100&include_subgroups=true" 2>/dev/null |
+    jq -r 'sort_by(.path_with_namespace)[] | (.path_with_namespace | ltrimstr("aicc/infrastructure/")) as $local |
+      "[\($local)]\ncheckout = git clone \u0027\(.http_url_to_repo)\u0027 \u0027\(.path)\u0027\n"'

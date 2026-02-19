@@ -17,7 +17,7 @@ Modular zsh config files symlinked to `~/.zsh/`, sourced by `~/.zshrc`.
 | `keybindings.zsh`               | Ctrl-F, Ctrl-G, Alt-C bindings       |
 | `direnv.zsh`                    | Direnv hook                          |
 | `shift-select-enhancements.zsh` | Clipboard integration for selections |
-| `local.zsh`                     | Machine-specific (gitignored)        |
+| `local.zsh`                     | Rendered from chezmoi template       |
 
 ## Load Order (Critical)
 
@@ -76,11 +76,11 @@ bindkey '^X' widget_name
 
 Background processes (launchd, cron, opencode subprocesses) spawn non-interactive shells:
 
-| Shell invocation | Files loaded | Example use case |
-|------------------|--------------|------------------|
-| `zsh -c 'cmd'` | `.zshenv` only | opencode bash tool, scripts |
-| `zsh -l` | `.zshenv` + `.zprofile` | login shells |
-| `zsh -i` | `.zshenv` + `.zshrc` | interactive terminals |
+| Shell invocation | Files loaded            | Example use case            |
+| ---------------- | ----------------------- | --------------------------- |
+| `zsh -c 'cmd'`   | `.zshenv` only          | opencode bash tool, scripts |
+| `zsh -l`         | `.zshenv` + `.zprofile` | login shells                |
+| `zsh -i`         | `.zshenv` + `.zshrc`    | interactive terminals       |
 
 **Critical**: Put PATH additions needed by background processes in `dot-zshenv`, not `dot-zshrc`. The `exports.zsh` file is only sourced by interactive shells.
 
@@ -89,7 +89,7 @@ Background processes (launchd, cron, opencode subprocesses) spawn non-interactiv
 - **Do not** add zsh files to `dot-config/` — all zsh config goes in `dot-zsh/`
 - **Background process PATH**: Homebrew (`/opt/homebrew/bin`) must be in `dot-zshenv` for launchd services to find brew-installed binaries
 - `shift-select-enhancements.zsh` loaded via zinit atload hook, not directly sourced
-- `local.zsh` is gitignored — copy from `local.zsh.example` as template
+- `local.zsh` is generated from `dot_zsh/local.zsh.tmpl` and can be overwritten by `chezmoi apply`; edit the template, not `~/.zsh/local.zsh`
 - `obsidian-cli.zsh` is NOT in default load order — source from `local.zsh` if needed
 
 ## Startup Performance

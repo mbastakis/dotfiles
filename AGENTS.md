@@ -95,6 +95,15 @@ Uses **target-state paths** (not source-state):
 
 Supports chezmoi template conditionals for OS-specific ignores.
 
+### Operational Gotchas
+
+- `.chezmoiignore` is rendered as a template for many commands (`add`, `status`, `apply`); missing data keys in conditions can break unrelated commands.
+- When adding new data keys in `.chezmoi.toml.tmpl`, keep templates compatible with existing keys (for example `.profile`) until `chezmoi init` has been run everywhere.
+- For non-interactive checks, prefer `chezmoi apply --dry-run --force`; without `--force`, changed files may trigger TTY prompts and fail in headless shells.
+- In this repo, `chezmoi diff` is most reliable with absolute target paths (for example `/Users/mbastakis/.config/git/config`) when diffing a single file.
+- `Documents/notes/.obsidian/workspace.json` is volatile UI state (recent files/workspace layout) and should stay ignored to avoid noisy churn and accidental overwrite.
+- `glab` rewrites `last_update_check_timestamp` in `.config/glab-cli/config.yml`; expect frequent drift unless that field is ignored or normalized.
+
 ## Shell Script Conventions
 
 ### Every bash script must have
@@ -167,7 +176,8 @@ exit 0
 |-----------------------------------|--------------------------------------|
 | `{{ .chezmoi.os }}`              | OS detection (`darwin`/`linux`)      |
 | `{{ .chezmoi.sourceDir }}`       | Chezmoi source directory path        |
-| `{{ .profile }}`                 | `personal` or `work`                 |
+| `{{ .profile }}`                 | `personal` or `dt-work`              |
+| `{{ .dtWork }}`                  | Toggle DT work-only config           |
 | `{{ .email }}`, `{{ .name }}`    | User data from config                |
 | `{{ bitwardenSecrets "uuid" }}`  | Fetch secret from BWS                |
 | `{{ include "file" \| sha256sum }}` | File content hash for change detection |

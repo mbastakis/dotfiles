@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+get_default_cache_dir() {
+    if [[ -n "${XDG_CACHE_HOME:-}" ]]; then
+        printf "%s\n" "$XDG_CACHE_HOME"
+    elif [[ "$(uname)" == "Darwin" ]]; then
+        printf "%s\n" "$HOME/Library/Caches"
+    else
+        printf "%s\n" "$HOME/.cache"
+    fi
+}
+
+index="${1:-}"
+if [[ -z "$index" || ! "$index" =~ ^[1-9][0-9]*$ ]]; then
+    tmux display-message "Harpoon: invalid index '$index'"
+    exit 1
+fi
+
+cache_dir="$(get_default_cache_dir)"
+cache_file="$cache_dir/.tmux-harpoon-sessions"
+bookmark="$(tmux display -p '#{session_name}=#{session_path}:#{window_index}.#{pane_index}')"
+
+mkdir -p "$cache_dir"
+touch "$cache_file"
+
+tmp_filtered="$(mktemp)"
+tmp_result="$(mktemp)"
+
+awk -v bookmark="$bookmark" '
+NF && $0 != bookmark {
+    print
+}
+' "$cache_file" >"$tmp_filtered"
+
+awk -v idx="$index" -v bookmark="$bookmark" '
+NR == idx {
+    print bookmark
+    replaced = 1
+    next
+}
+
+{
+    print
+}
+
+END {
+    if (!replaced) {
+        print bookmark
+    }
+}
+' "$tmp_filtered" >"$tmp_result"
+
+mv "$tmp_result" "$cache_file"
+rm -f "$tmp_filtered"
+
+tmux display-message "Tracking session #{session_name} in index $index"

@@ -1,15 +1,16 @@
 {{- $profileEnv := env "CHEZMOI_PROFILE" -}}
-{{- $profile := "" -}}
-{{- if or (eq $profileEnv "personal") (eq $profileEnv "work") -}}
-{{-   $profile = $profileEnv -}}
+{{- $dtWork := false -}}
+{{- if or (eq $profileEnv "dt-work") (eq $profileEnv "work") -}}
+{{-   $dtWork = true -}}
+{{- else if eq $profileEnv "personal" -}}
+{{-   $dtWork = false -}}
 {{- else -}}
-{{-   $profile = promptChoiceOnce . "profile" "Machine profile" (list "personal" "work") -}}
+{{-   $dtWorkChoice := promptChoiceOnce . "dt-work" "Enable DT work configuration?" (list "no" "yes") -}}
+{{-   $dtWork = eq $dtWorkChoice "yes" -}}
 {{- end -}}
-{{- $email := "" -}}
-{{- if eq $profile "work" -}}
-{{-   $email = "mbastakis@telekom.de" -}}
-{{- else -}}
-{{-   $email = "mbastakis@gmail.com" -}}
+{{- $profile := "personal" -}}
+{{- if $dtWork -}}
+{{-   $profile = "dt-work" -}}
 {{- end -}}
 
 encryption = "age"
@@ -20,7 +21,8 @@ encryption = "age"
 
 [data]
     profile = {{ $profile | quote }}
-    email = {{ $email | quote }}
+    dtWork = {{ $dtWork }}
+    email = "mbastakis@gmail.com"
     name = "Michail Bastakis"
 
 [bitwardenSecrets]

@@ -4,35 +4,35 @@ lazy.nvim plugin manager with LSP, formatting, and linting. Theme: Catppuccin Mo
 
 ## Structure
 
-| Path               | Purpose                                |
-| ------------------ | -------------------------------------- |
-| `init.lua`         | Entry point, bootstraps lazy.nvim     |
+| Path               | Purpose                                    |
+| ------------------ | ------------------------------------------ |
+| `init.lua`         | Entry point, bootstraps lazy.nvim          |
 | `lua/config/`      | Core settings (options, keymaps, autocmds) |
-| `lua/plugins/`     | Plugin specs (one file per plugin)    |
-| `lua/plugins/lsp/` | LSP-related plugins                   |
-| `after/lsp/*.lua`  | Server-specific overrides             |
-| `test/`            | Test files for LSP validation         |
+| `lua/plugins/`     | Plugin specs (one file per plugin)         |
+| `lua/plugins/lsp/` | LSP-related plugins                        |
+| `after/lsp/*.lua`  | Server-specific overrides                  |
+| `test/`            | Test files for LSP validation              |
 
 ## Commands
 
-| Command                              | Purpose              |
-| ------------------------------------ | -------------------- |
-| `nvim --headless +q`                 | Validate syntax      |
-| `nvim -c ':checkhealth' -c ':qa'`    | Full health check    |
-| `:Lazy`                              | Plugin manager UI    |
-| `:Mason`                             | LSP/tool installer   |
-| `:LspInfo`                           | Active LSP servers   |
-| `:ConformInfo`                       | Formatter status     |
+| Command                           | Purpose            |
+| --------------------------------- | ------------------ |
+| `nvim --headless +q`              | Validate syntax    |
+| `nvim -c ':checkhealth' -c ':qa'` | Full health check  |
+| `:Lazy`                           | Plugin manager UI  |
+| `:Mason`                          | LSP/tool installer |
+| `:LspInfo`                        | Active LSP servers |
+| `:ConformInfo`                    | Formatter status   |
 
 ## LSP Architecture
 
-| File                  | Purpose                              |
-| --------------------- | ------------------------------------ |
-| `lsp/mason.lua`       | Install servers via Mason            |
-| `lsp/config.lua`      | LSP keymaps, diagnostics             |
-| `linting.lua`         | nvim-lint rules by filetype          |
-| `formatting.lua`      | conform.nvim (format on save)        |
-| `after/lsp/*.lua`     | Server overrides (highest priority)  |
+| File              | Purpose                             |
+| ----------------- | ----------------------------------- |
+| `lsp/mason.lua`   | Install servers via Mason           |
+| `lsp/config.lua`  | LSP keymaps, diagnostics            |
+| `linting.lua`     | nvim-lint rules by filetype         |
+| `formatting.lua`  | conform.nvim (format on save)       |
+| `after/lsp/*.lua` | Server overrides (highest priority) |
 
 ## Adding Plugins
 

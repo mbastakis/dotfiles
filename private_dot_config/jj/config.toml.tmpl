@@ -10,12 +10,14 @@
 name = "Michail Bastakis"
 email = "mbastakis@gmail.com"
 
-# Work override: repos under ~/dev/work use work identity
+{{- if or (eq .profile "dt-work") (eq .profile "work") }}
+# DT work override: repos under ~/dev/work use work identity
 [[--scope]]
 --when.repositories = ["~/dev/work"]
 [--scope.user]
 name = "Michail Bastakis"
 email = "Michail.Bastakis@telekom.com"
+{{- end }}
 
 # =============================================================================
 # UI Settings

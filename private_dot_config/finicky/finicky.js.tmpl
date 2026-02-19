@@ -5,6 +5,7 @@ export default {
     logRequests: true,
   },
   handlers: [
+{{- if or (eq .profile "dt-work") (eq .profile "work") }}
     {
       // Telekom related URLs - open in Microsoft Edge
       match: [
@@ -17,5 +18,6 @@ export default {
       ],
       browser: "Google Chrome",
     }
+{{- end }}
   ]
 };

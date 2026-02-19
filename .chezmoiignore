@@ -1,7 +1,6 @@
 # Documentation
 README.md
 AGENTS.md
-**/AGENTS.md
 dotfiles-migration.md
 
 # Git
@@ -67,6 +66,14 @@ Cargo.lock
 # SSH (machine-generated)
 .ssh/known_hosts
 .ssh/known_hosts.old
+
+{{- if and (ne .profile "dt-work") (ne .profile "work") }}
+# DT work-specific config
+.config/glab-cli/
+.config/git/.gitconfig-work
+.ssh/gitlab-telekom
+.ssh/gitlab-telekom.pub
+{{- end }}
 
 {{- if ne .chezmoi.os "darwin" }}
 # macOS-only configs (skip on Linux)
