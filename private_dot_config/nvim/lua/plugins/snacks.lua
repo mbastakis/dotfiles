@@ -10,7 +10,7 @@ return {
     lazygit = { enabled = true },
     git = { enabled = true },
     gitbrowse = { enabled = true },
-    image = { enabled = true },
+    image = { enabled = false }, -- Causes DA1 timeout race condition on startup
     scratch = { enabled = false },
     -- Enable picker to provide vim.ui.select replacement
     picker = {

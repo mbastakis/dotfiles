@@ -51,3 +51,4 @@ alias tls="tmux ls"
 
 # Opencode
 alias oc="opencode"
+alias occ="opencode --continue"

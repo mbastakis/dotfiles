@@ -87,8 +87,8 @@ keybind = cmd+shift+e=write_screen_file:open
 
 # Zsh-shift-select Integration
 # Send escape sequences for copy/cut operations
-keybind = cmd+c=text:\x1b[200~
-keybind = cmd+x=text:\x1b[201~
+# keybind = cmd+c=text:\x1b[200~
+# keybind = cmd+x=text:\x1b[201~
 keybind = shift+enter=csi:13;2u
 
 # Font Size
