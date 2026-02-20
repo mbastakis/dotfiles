@@ -48,4 +48,3 @@ When adding a new managed component to chezmoi:
 ## References
 
 - Docs tree root: `docs/README.md`
-- Implementation plan: `docs/implementation-plan.md`

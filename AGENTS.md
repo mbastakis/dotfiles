@@ -75,21 +75,22 @@ key.txt.age (in repo, passphrase-encrypted)
 
 ## Key Paths
 
-| Source (chezmoi)             | Target                           | Notes                        |
-|------------------------------|----------------------------------|------------------------------|
-| `.chezmoi.toml.tmpl`        | `~/.config/chezmoi/chezmoi.toml` | Config, profile, encryption  |
-| `key.txt.age`               | _(ignored, source-only)_         | Passphrase-encrypted age key |
-| `bin/chezmoi-bws`           | _(ignored, source-only)_         | BWS token wrapper            |
-| `apps/aws-login/`           | _(ignored, source-only)_         | Go source for aws-login CLI  |
-| `literal_bin/`              | `~/bin/`                         | Shell utility scripts        |
-| `private_dot_ssh/`          | `~/.ssh/`                        | SSH keys (encrypted)         |
-| `private_dot_config/`       | `~/.config/`                     | App configs                  |
-| `.chezmoiscripts/`          | _(lifecycle scripts, not deployed)_ | Before/after scripts      |
-| `.chezmoidata.yaml`         | _(template data)_                | Catppuccin Mocha colors      |
+| Source (chezmoi)      | Target                              | Notes                        |
+| --------------------- | ----------------------------------- | ---------------------------- |
+| `.chezmoi.toml.tmpl`  | `~/.config/chezmoi/chezmoi.toml`    | Config, profile, encryption  |
+| `key.txt.age`         | _(ignored, source-only)_            | Passphrase-encrypted age key |
+| `bin/chezmoi-bws`     | _(ignored, source-only)_            | BWS token wrapper            |
+| `apps/aws-login/`     | _(ignored, source-only)_            | Go source for aws-login CLI  |
+| `literal_bin/`        | `~/bin/`                            | Shell utility scripts        |
+| `private_dot_ssh/`    | `~/.ssh/`                           | SSH keys (encrypted)         |
+| `private_dot_config/` | `~/.config/`                        | App configs                  |
+| `.chezmoiscripts/`    | _(lifecycle scripts, not deployed)_ | Before/after scripts         |
+| `.chezmoidata.yaml`   | _(template data)_                   | Catppuccin Mocha colors      |
 
 ## .chezmoiignore
 
 Uses **target-state paths** (not source-state):
+
 - Correct: `.config/foo/bar`
 - Wrong: `private_dot_config/foo/bar`
 
@@ -103,6 +104,7 @@ Supports chezmoi template conditionals for OS-specific ignores.
 - In this repo, `chezmoi diff` is most reliable with absolute target paths (for example `/Users/mbastakis/.config/git/config`) when diffing a single file.
 - `Documents/notes/.obsidian/workspace.json` is volatile UI state (recent files/workspace layout) and should stay ignored to avoid noisy churn and accidental overwrite.
 - `glab` rewrites `last_update_check_timestamp` in `.config/glab-cli/config.yml`; expect frequent drift unless that field is ignored or normalized.
+- Any new repo-only directory (like `docs/`) must be added to `.chezmoiignore` or chezmoi will deploy it to `~/`. The ignore file uses target-state paths, so `docs/` not `literal_docs/`.
 
 ## Shell Script Conventions
 
@@ -156,7 +158,7 @@ fi
 
 ## Chezmoi Template Conventions
 
-### OS guards (every .chezmoiscripts/*.tmpl)
+### OS guards (every .chezmoiscripts/\*.tmpl)
 
 ```
 {{- if ne .chezmoi.os "darwin" }}
@@ -172,19 +174,19 @@ exit 0
 
 ### Template functions used
 
-| Function                          | Purpose                              |
-|-----------------------------------|--------------------------------------|
-| `{{ .chezmoi.os }}`              | OS detection (`darwin`/`linux`)      |
-| `{{ .chezmoi.sourceDir }}`       | Chezmoi source directory path        |
-| `{{ .profile }}`                 | `personal` or `dt-work`              |
-| `{{ .dtWork }}`                  | Toggle DT work-only config           |
-| `{{ .email }}`, `{{ .name }}`    | User data from config                |
-| `{{ bitwardenSecrets "uuid" }}`  | Fetch secret from BWS                |
+| Function                            | Purpose                                |
+| ----------------------------------- | -------------------------------------- |
+| `{{ .chezmoi.os }}`                 | OS detection (`darwin`/`linux`)        |
+| `{{ .chezmoi.sourceDir }}`          | Chezmoi source directory path          |
+| `{{ .profile }}`                    | `personal` or `dt-work`                |
+| `{{ .dtWork }}`                     | Toggle DT work-only config             |
+| `{{ .email }}`, `{{ .name }}`       | User data from config                  |
+| `{{ bitwardenSecrets "uuid" }}`     | Fetch secret from BWS                  |
 | `{{ include "file" \| sha256sum }}` | File content hash for change detection |
-| `{{ env "VAR" }}`               | Read environment variable            |
-| `{{ promptChoiceOnce ... }}`     | Interactive prompt (cached)          |
-| `{{ value \| quote }}`          | Quote for TOML output                |
-| `{{ value \| trim }}`           | Trim whitespace from secrets         |
+| `{{ env "VAR" }}`                   | Read environment variable              |
+| `{{ promptChoiceOnce ... }}`        | Interactive prompt (cached)            |
+| `{{ value \| quote }}`              | Quote for TOML output                  |
+| `{{ value \| trim }}`               | Trim whitespace from secrets           |
 
 ### Whitespace control
 
@@ -217,3 +219,26 @@ Only `karabiner.json` is deployed to target; `build.sh` and `src/` stay in sourc
 # Rebuild from chezmoi source dir:
 cd ~/.local/share/chezmoi/private_dot_config/private_karabiner && ./build.sh
 ```
+
+## Documentation (`docs/`)
+
+Docsify site deployed to GitHub Pages at `https://mbastakis.github.io/dotfiles/`.
+Source lives in `docs/`; served as a zero-build SPA via `docs/index.html`.
+
+### Docs Maintenance Rule
+
+**When modifying any config file, check if the corresponding doc in `docs/` needs updating.** Key mappings:
+
+| Config change                                              | Doc to update                                                             |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `.chezmoiscripts/`, `.chezmoi.toml.tmpl`, `.chezmoiignore` | `docs/architecture/chezmoi-lifecycle.md`, `docs/architecture/overview.md` |
+| `dot_zsh/`, `dot_zshrc`                                    | `docs/components/zsh.md`                                                  |
+| `private_dot_config/nvim/`                                 | `docs/components/nvim.md`                                                 |
+| `private_dot_config/opencode/`                             | `docs/components/opencode.md`                                             |
+| `private_dot_config/carapace/`                             | `docs/components/carapace.md`                                             |
+| `private_dot_config/private_karabiner/`                    | `docs/components/karabiner.md`                                            |
+| Any custom keymap/keybinding change                        | `docs/shortcuts.md`                                                       |
+| New `private_dot_config/` component                        | `docs/components/config-overview.md`                                      |
+| `dev/*/dot_mrconfig`                                       | `docs/workspaces/mrconfig.md`                                             |
+
+See `docs/maintenance.md` for the full update checklist.
