@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>mbastakis dotfiles</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="Documentation for mbastakis chezmoi-managed dotfiles" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0"
+    />
+    <!-- Docsify themeable base (layout) -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css"
+    />
+    <!-- Catppuccin Mocha color overlay -->
+    <link
+      rel="stylesheet"
+      href="https://docsify.catppuccin.com/mocha/mauve.css"
+    />
+    <style>
+      /* Mermaid diagrams inside docsify links inherit unwanted font-weight */
+      .markdown-section a.mermaid {
+        font-weight: normal;
+      }
+      /* Give mermaid containers a subtle background */
+      .markdown-section .mermaid {
+        text-align: center;
+        margin: 1em 0;
+      }
+      .markdown-section .mermaid svg {
+        max-width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" data-cfasync="false">
+      import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: "dark",
+        themeVariables: {
+          // Catppuccin Mocha palette
+          primaryColor: "#cba6f7",      // mauve
+          primaryTextColor: "#cdd6f4",  // text
+          primaryBorderColor: "#6c7086", // overlay0
+          lineColor: "#9399b2",         // overlay2
+          secondaryColor: "#313244",    // surface0
+          tertiaryColor: "#181825",     // mantle
+          background: "#1e1e2e",        // base
+          mainBkg: "#313244",           // surface0
+          nodeBorder: "#6c7086",        // overlay0
+          clusterBkg: "#181825",        // mantle
+          titleColor: "#cdd6f4",        // text
+          edgeLabelBackground: "#313244", // surface0
+          nodeTextColor: "#cdd6f4",     // text
+        },
+      });
+
+      let svgCounter = 0;
+
+      window.$docsify = {
+        name: "dotfiles",
+        loadSidebar: true,
+        subMaxLevel: 3,
+        auto2top: true,
+        search: {
+          placeholder: "Search docs...",
+          noData: "No results.",
+          paths: "auto",
+        },
+        markdown: {
+          renderer: {
+            code(code, lang) {
+              if (lang === "mermaid") {
+                const svgName = `mermaid-svg-${svgCounter++}`;
+                const containerId = `${svgName}-container`;
+                mermaid.render(svgName, code).then(({ svg }) => {
+                  const el = document.querySelector(`#${containerId}`);
+                  if (el) {
+                    el.innerHTML = svg;
+                  } else {
+                    console.error(`Mermaid container #${containerId} not found`);
+                  }
+                });
+                return `<div class="mermaid" id="${containerId}"></div>`;
+              }
+              return this.origin.code.apply(this, arguments);
+            },
+          },
+        },
+      };
+    </script>
+    <!-- Docsify v4 -->
+    <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+    <!-- Search plugin -->
+    <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
+    <!-- Copy code button -->
+    <script src="//cdn.jsdelivr.net/npm/docsify-copy-code@2"></script>
+  </body>
+</html>
