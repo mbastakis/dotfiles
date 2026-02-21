@@ -1,46 +1,52 @@
 # AWS Login Configuration Example
-# Copy to ~/.config/aws-login/config.yaml and customize
-#
-# This tool provides a clean `aws-login <profile>` interface for switching
-# AWS profiles with automatic MFA handling, caching, and shell integration.
+# Copy to ~/.config/aws-login/config.yaml and customize.
 
 defaults:
-  region: eu-central-1         # Default region for all profiles
-  cache_ttl_buffer: 300        # Refresh cached creds if expiring within N seconds
+  region: eu-central-1
+  cache_ttl_buffer: 300 # seconds
 
-cache:
-  directory: ~/.config/aws-login/cache   # Where to store cached sessions
+# Optional cache override.
+# By default aws-login uses:
+#   $XDG_CACHE_HOME/aws-login
+# or ~/.cache/aws-login when XDG_CACHE_HOME is not set.
+# cache:
+#   directory: ~/.cache/aws-login
 
 starship:
-  enabled: true                # Enable starship-timer integration for prompt
-  timer_prefix: aws-session-   # Timer name prefix (e.g., aws-session-dev)
+  enabled: true
+  timer_prefix: aws-session-
 
 bitwarden:
-  enabled: true                # Enable Bitwarden TOTP integration
-
-# Profile definitions
-# Types:
-#   - iam: AWS CLI profile lookup (no env creds; supports SSO/credential_process)
-#   - mfa: IAM credentials + MFA via STS get-session-token
-#   - sso: AWS SSO login flow (planned)
-#   - assume-role: STS assume-role (planned)
+  enabled: true
 
 profiles:
-  # Example MFA profile (requires TOTP)
-  my-account:
+  playground:
     type: mfa
-    description: "My AWS Account - Requires MFA"
-    bitwarden_item: "AWS My Account"    # Bitwarden item name for TOTP
-    mfa_serial: auto                     # "auto" reads from ~/.aws/config
-    session_duration: 12h                # How long sessions last
+    description: "AWS Playground - Requires MFA"
+    bitwarden_item: "AWS Playground"
+    mfa_serial: auto
+    session_duration: 12h
 
-  # Example IAM profile (no MFA)
   dev:
-    type: iam
+    type: cloudshepherd
     description: "Development environment"
-    region: us-east-1                    # Override default region
+    auth_url: https://auth2.cs.telekom.de
+    api_url: https://api.cs.telekom.de/public
+    account: "076811069858"
+    role: CS_DTIT_Project_Admin
+    otp_source: bitwarden
+    bitwarden_item: "auth.devops.telekom.de"
+    storage: file
+    min_ttl: 20
 
-  # Example production profile
   prod:
-    type: iam
+    type: cloudshepherd
     description: "Production environment"
+    auth_url: https://auth2.cs.telekom.de
+    api_url: https://api.cs.telekom.de/public
+    account: "620453162886"
+    role: CS_DTIT_Project_Admin
+    otp_source: bitwarden # or "prompt"
+    bitwarden_item: "auth.devops.telekom.de"
+    storage: file # or "keyring"
+    min_ttl: 20

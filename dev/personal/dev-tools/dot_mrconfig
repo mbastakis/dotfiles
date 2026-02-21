@@ -1,0 +1,6 @@
+# Personal repositories
+[aws-login]
+checkout = git clone git@github.com:mbastakis/aws-login.git aws-login
+
+[homebrew-tap]
+checkout = git clone git@github.com:mbastakis/homebrew-tap.git homebrew-tap

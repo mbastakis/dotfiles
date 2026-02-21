@@ -31,7 +31,6 @@ Chezmoi translates source-state file names to target paths using naming conventi
 | `.chezmoi.toml.tmpl` | `~/.config/chezmoi/chezmoi.toml` | Config, profile selection, encryption settings |
 | `key.txt.age` | _(source-only)_ | Passphrase-encrypted age private key |
 | `bin/chezmoi-bws` | _(source-only)_ | BWS token wrapper script |
-| `apps/aws-login/` | _(source-only)_ | Go source for aws-login CLI |
 | `literal_bin/` | `~/bin/` | Shell utility scripts |
 | `private_dot_ssh/` | `~/.ssh/` | SSH keys (encrypted) |
 | `private_dot_config/` | `~/.config/` | Application configs |
@@ -48,7 +47,6 @@ These directories exist in the repo but are never deployed to the target filesys
 
 | Directory | Purpose |
 |---|---|
-| `apps/` | Go source code (compiled by lifecycle scripts) |
 | `ai-docs/` | Crawled documentation for AI agents |
 | `code-portable-data/` | VS Code portable data |
 | `bin/chezmoi-bws` | BWS helper (used during template rendering only) |

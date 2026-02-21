@@ -117,34 +117,6 @@ function brew_update() {
   echo "Homebrew update complete."
 }
 
-# AWS profile switcher - wraps Go binary to enable env var export
-# Usage: aws-login <profile> [mfa-code] [options]
-aws-login() {
-  local output
-  output=$("$HOME/bin/_aws-login" "$@")
-  local exit_code=$?
-
-  if [[ $exit_code -eq 0 && -n "$output" ]]; then
-    eval "$output"
-
-    if [[ -n "${TMUX:-}" ]] && command -v tmux &>/dev/null; then
-      if [[ -n "${AWS_PROFILE:-}" ]]; then
-        tmux set-environment -g AWS_PROFILE "$AWS_PROFILE"
-      else
-        tmux set-environment -gu AWS_PROFILE
-      fi
-
-      if [[ -n "${AWS_DEFAULT_PROFILE:-}" ]]; then
-        tmux set-environment -g AWS_DEFAULT_PROFILE "$AWS_DEFAULT_PROFILE"
-      else
-        tmux set-environment -gu AWS_DEFAULT_PROFILE
-      fi
-    fi
-  fi
-
-  return $exit_code
-}
-
 function reset_internet() {
   sudo killall -HUP mDNSResponder && echo macOS DNS Cache Reset
   sudo pfctl -f /etc/pf.conf

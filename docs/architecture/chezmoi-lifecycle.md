@@ -20,9 +20,8 @@ flowchart TD
   D --> D3[Deploy files, dirs, symlinks]
 
   E --> E1[03 - setup tasks<br/>run_once]
-  E --> E2[04 - build aws-login<br/>run_onchange]
-  E --> E3[05 - ghostty-tmux agent<br/>run_onchange]
-  E --> E4[macos-settings<br/>run_once]
+  E --> E2[05 - ghostty-tmux agent<br/>run_onchange]
+  E --> E3[macos-settings<br/>run_once]
 ```
 
 _Reference: `AGENTS.md:42`_
@@ -71,12 +70,6 @@ One-time post-deploy tasks:
 All operations use graceful degradation (`|| true`).
 
 _Reference: `.chezmoiscripts/run_once_after_03-setup.sh.tmpl:1`_
-
-### 04 - Build aws-login (`run_onchange`)
-
-Compiles the `aws-login` Go binary from `apps/aws-login/` into `~/bin/_aws-login`. Tracks 8 individual source file hashes for change detection. Injects git short SHA as version. Guards on both source directory and `go` binary presence.
-
-_Reference: `.chezmoiscripts/run_onchange_after_04-build-aws-login.sh.tmpl:1`_
 
 ### 05 - Ghostty-tmux LaunchAgent (`run_onchange`)
 

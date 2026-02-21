@@ -68,6 +68,8 @@ _Reference: `private_dot_config/git/`_
 
 Homebrew Brewfile at `~/.config/brew/Brewfile`. Managed by the lifecycle script `02-install-packages` which runs `brew bundle` when the Brewfile content changes.
 
+`aws-login` is installed from the private tap `mbastakis/tap` (formula `mbastakis/tap/aws-login`) instead of being compiled from dotfiles source.
+
 _Reference: `private_dot_config/brew/Brewfile`_
 
 ## References

@@ -2,7 +2,6 @@
 README.md
 AGENTS.md
 docs/
-dotfiles-migration.md
 
 # Git
 .git/
@@ -10,7 +9,6 @@ dotfiles-migration.md
 .github/
 
 # Source-only directories (kept in repo, not deployed by chezmoi)
-apps/
 ai-docs/
 code-portable-data/
 
@@ -19,7 +17,6 @@ key.txt.age
 
 # Keep repo helper scripts out of target ~/bin
 bin/chezmoi-bws
-bin/_aws-login
 
 # Build artifacts and generated files
 node_modules/

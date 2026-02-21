@@ -9,6 +9,8 @@ Multi-repo workspace layout with static checkout definitions and dynamic GitLab 
 ```
 dev/
   personal/
+    dev-tools/
+      dot_mrconfig        # aws-login + homebrew-tap repos
     whocares/
       dot_mrconfig        # Simple static checkouts
   work/
@@ -31,16 +33,22 @@ checkout = git clone <url> reponame
 
 ## Static Checkouts
 
-Repos explicitly listed in the mrconfig. Example from personal workspace:
+Repos explicitly listed in the mrconfig. Examples from personal workspaces:
 
 ```ini
 [whocaressoftware]
 checkout = git clone git@github.com:WhoCaresSoftware/whocaressoftware.git whocaressoftware
+
+[aws-login]
+checkout = git clone git@github.com:mbastakis/aws-login.git aws-login
+
+[homebrew-tap]
+checkout = git clone git@github.com:mbastakis/homebrew-tap.git homebrew-tap
 ```
 
 Work workspace has 3 static repos (magenta-apprentice, anonymization-service, trigger-service) with explicit GitLab URLs.
 
-_Reference: `dev/personal/whocares/dot_mrconfig:1`, `dev/work/workspaces/magenta-apprentice/dot_mrconfig:10`_
+_Reference: `dev/personal/whocares/dot_mrconfig:1`, `dev/personal/dev-tools/dot_mrconfig:1`, `dev/work/workspaces/magenta-apprentice/dot_mrconfig:10`_
 
 ## Dynamic Discovery
 
@@ -108,3 +116,4 @@ _Reference: `dev/work/workspaces/magenta-apprentice/AGENTS.md:1`_
 - Work mrconfig: `dev/work/workspaces/magenta-apprentice/dot_mrconfig:1`
 - Work AGENTS: `dev/work/workspaces/magenta-apprentice/AGENTS.md:1`
 - Personal mrconfig: `dev/personal/whocares/dot_mrconfig:1`
+- Personal dev-tools mrconfig: `dev/personal/dev-tools/dot_mrconfig:1`

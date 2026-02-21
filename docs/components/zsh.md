@@ -82,6 +82,7 @@ Tool initialization for interactive shells:
 | Zoxide | `zoxide init --cmd cd zsh` | Replaces `cd`; unaliases `zi` to avoid zinit conflict |
 | Direnv | `direnv hook zsh` | Per-directory environment variables |
 | Starship | `starship init zsh` | Prompt |
+| aws-login | `aws-login init zsh` | Defines `aws-login` and `aws-login-exec` shell functions |
 
 Atuin is loaded in `fzf.zsh` (after fzf setup) so it can take over `Ctrl-R`.
 
@@ -112,7 +113,6 @@ _Reference: `dot_zsh/aliases.zsh:1`_
 | `ftext [query]` | Interactive ripgrep+fzf search; opens result in `$VISUAL` |
 | `ftext-widget` | ZLE widget for `Ctrl-F` keybinding (Tab inserts filename, Enter opens editor) |
 | `brew_update` | Full Homebrew maintenance cycle |
-| `aws-login <profile>` | Wrapper for Go binary; sets env vars and propagates to tmux |
 | `reset_internet` | Flush DNS, reset pf, bounce network interface |
 
 _Reference: `dot_zsh/functions.zsh:1`_

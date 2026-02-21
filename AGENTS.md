@@ -20,12 +20,12 @@ chezmoi ignored            # List all ignored files
 chezmoi forget FILE        # Stop managing a file
 ```
 
-### aws-login build
+### aws-login repositories
 
-```bash
-# Build manually from source (if needed)
-cd ~/.local/share/chezmoi/apps/aws-login && go build -o ~/bin/_aws-login .
-```
+`mr checkout` in `~/dev/personal/dev-tools` clones:
+
+- `git@github.com:mbastakis/aws-login.git`
+- `git@github.com:mbastakis/homebrew-tap.git`
 
 ### Pre-commit hooks
 
@@ -54,7 +54,7 @@ Pre-push: `chezmoi apply --dry-run --force`.
    - Deploy files, directories, symlinks
 5. After scripts (alphabetical):
    03-setup                → bat cache, yazi plugins, carapace sync (run_once)
-   04-build-aws-login      → builds ~/bin/_aws-login from apps/aws-login (run_onchange)
+   05-ghostty-tmux         → installs LaunchAgent for tmux startup (run_onchange)
    macos-settings          → macOS defaults (run_once)
 ```
 
@@ -80,7 +80,7 @@ key.txt.age (in repo, passphrase-encrypted)
 | `.chezmoi.toml.tmpl`  | `~/.config/chezmoi/chezmoi.toml`    | Config, profile, encryption  |
 | `key.txt.age`         | _(ignored, source-only)_            | Passphrase-encrypted age key |
 | `bin/chezmoi-bws`     | _(ignored, source-only)_            | BWS token wrapper            |
-| `apps/aws-login/`     | _(ignored, source-only)_            | Go source for aws-login CLI  |
+| `dev/personal/dev-tools/dot_mrconfig` | `~/dev/personal/dev-tools/.mrconfig` | Personal dev-tools workspace repos |
 | `literal_bin/`        | `~/bin/`                            | Shell utility scripts        |
 | `private_dot_ssh/`    | `~/.ssh/`                           | SSH keys (encrypted)         |
 | `private_dot_config/` | `~/.config/`                        | App configs                  |

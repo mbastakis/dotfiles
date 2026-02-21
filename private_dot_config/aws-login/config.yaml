@@ -5,9 +5,6 @@ defaults:
   region: eu-central-1
   cache_ttl_buffer: 300      # Refresh if expiring within 5 min
 
-cache:
-  directory: ~/.config/aws-login/cache
-
 starship:
   enabled: true
   timer_prefix: aws-session-
@@ -24,13 +21,37 @@ profiles:
     session_duration: 12h
 
   dev:
-    type: iam
+    type: cloudshepherd
     description: "Development environment"
+    auth_url: https://auth2.cs.telekom.de
+    api_url: https://api.cs.telekom.de/public
+    account: "076811069858"
+    role: CS_DTIT_Project_Admin
+    otp_source: bitwarden
+    bitwarden_item: "auth.devops.telekom.de"
+    storage: file
+    min_ttl: 20
 
   prod:
-    type: iam
+    type: cloudshepherd
     description: "Production environment"
+    auth_url: https://auth2.cs.telekom.de
+    api_url: https://api.cs.telekom.de/public
+    account: "620453162886"
+    role: CS_DTIT_Project_Admin
+    otp_source: bitwarden
+    bitwarden_item: "auth.devops.telekom.de"
+    storage: file
+    min_ttl: 20
 
   claude-code:
-    type: iam
+    type: cloudshepherd
     description: "Claude Code profile"
+    auth_url: https://auth2.cs.telekom.de
+    api_url: https://api.cs.telekom.de/public
+    account: "110869144691"
+    role: CS_DTIT_Bedrock_User
+    otp_source: bitwarden
+    bitwarden_item: "auth.devops.telekom.de"
+    storage: file
+    min_ttl: 20

@@ -15,3 +15,6 @@ command -v direnv &>/dev/null && eval "$(direnv hook zsh)"
 
 # Starship - prompt
 command -v starship &>/dev/null && eval "$(starship init zsh)"
+
+# aws-login - shell integration
+command -v aws-login &>/dev/null && eval "$(aws-login init zsh)"

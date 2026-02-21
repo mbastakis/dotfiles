@@ -1,0 +1,40 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: aws-login
+description: AWS profile switcher with MFA, IAM, and CloudShepherd support
+flags:
+  -h, --help: Show help message
+  -v, --verbose: Show detailed output
+  --version: Show version
+  --list: Show available profiles
+  --list-profiles: List profile names (machine-readable)
+  --status: Show current session status
+  --clear: Unset AWS environment variables
+  --no-cache: Force refresh, ignore cached credentials
+completion:
+  positional:
+    - - init
+      - exec
+      - login
+      - accounts
+      - "$carapace.tools.Exec([aws-login, --list-profiles])"
+commands:
+  - name: init
+    description: Output shell integration script
+    completion:
+      positional:
+        - - zsh
+  - name: exec
+    description: Run command with AWS credentials
+    completion:
+      positional:
+        - ["$carapace.tools.Exec([aws-login, --list-profiles])"]
+  - name: login
+    description: Interactive CloudShepherd login
+    completion:
+      positional:
+        - ["$carapace.tools.Exec([aws-login, --list-profiles])"]
+  - name: accounts
+    description: List CloudShepherd accounts and roles
+    completion:
+      positional:
+        - ["$carapace.tools.Exec([aws-login, --list-profiles])"]
