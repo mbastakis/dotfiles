@@ -20,7 +20,7 @@ If any of these are true, use a different workflow:
 
 ### Step 2: Create Minimal Ticket
 
-Use `linear_create_issue` with:
+Use `linear-cli i create "<title>"` with:
 - **Title**: "[Action] [target]" (e.g., "Update copyright year in footer")
 - **Description**: Use template below (keep it short!)
 - **Labels**: `chore` or appropriate label

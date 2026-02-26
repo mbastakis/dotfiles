@@ -29,7 +29,7 @@ Determine research type:
 
 ### Step 3: Create Ticket
 
-Use `linear_create_issue` with:
+Use `linear-cli i create "<title>"` with:
 - **Title**: "Research: [topic]"
 - **Description**: Use template below
 - **Labels**: `research`

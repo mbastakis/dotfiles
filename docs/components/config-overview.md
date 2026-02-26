@@ -9,9 +9,10 @@ Summary of all notable `~/.config/` areas managed by chezmoi, with links to dedi
 | Component | Source Path | Dedicated Doc | Description |
 |---|---|---|---|
 | **Neovim** | `private_dot_config/nvim/` | [nvim.md](nvim.md) | Editor with lazy.nvim, LSP, custom keymaps |
-| **OpenCode** | `private_dot_config/opencode/` | [opencode.md](opencode.md) | AI CLI with agents, commands, MCP |
+| **OpenCode** | `private_dot_config/opencode/` | [opencode.md](opencode.md) | AI CLI with agents, commands, workflows, and skills |
 | **Karabiner** | `private_dot_config/private_karabiner/` | [karabiner.md](karabiner.md) | Keyboard remapping (generated config) |
 | **Carapace** | `private_dot_config/carapace/` | [carapace.md](carapace.md) | Shell completion framework |
+| Mise | `private_dot_config/mise/` | -- | Tool/version manager config (`linear-cli`) |
 | Ghostty | `private_dot_config/ghostty/` | -- | Terminal emulator |
 | tmux | `private_dot_config/tmux/` | -- | Terminal multiplexer |
 | Starship | `private_dot_config/starship.toml` | -- | Prompt theme |

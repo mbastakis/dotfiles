@@ -79,6 +79,7 @@ Tool initialization for interactive shells:
 
 | Tool | Init | Notes |
 |---|---|---|
+| Mise | `mise activate zsh` | Activates mise-managed tools in PATH (e.g., `linear-cli`) |
 | Zoxide | `zoxide init --cmd cd zsh` | Replaces `cd`; unaliases `zi` to avoid zinit conflict |
 | Direnv | `direnv hook zsh` | Per-directory environment variables |
 | Starship | `starship init zsh` | Prompt |
@@ -167,6 +168,7 @@ Generated from `local.zsh.tmpl` by chezmoi. Pulls secrets from Bitwarden Secrets
 | Variable | Condition |
 |---|---|
 | `OPENROUTER_API_KEY` | Always (macOS) |
+| `LINEAR_API_KEY` | Always (macOS) |
 | `SUPABASE_URL`, `SUPABASE_SERVICE_KEY` | Always (macOS) |
 | `GITHUB_TOKEN`, `GITLAB_TOKEN`, `GITLAB_HOST` | DT work profile only |
 | Work `PATH` additions | DT work profile only |

@@ -5,15 +5,6 @@
   "autoshare": false,
   "share": "manual",
   "autoupdate": true,
-  // Linear MCP is available to all agents, but Linear tasks should be delegated
-  // to the @manager agent which has specialized workflows for project management.
-  // See AGENTS.md for guidance on when to use @manager vs other agents.
-  "mcp": {
-    "linear": {
-      "type": "local",
-      "command": ["npx", "-y", "mcp-remote", "https://mcp.linear.app/mcp"],
-    },
-  },
   "permission": {
     "edit": "allow",
     "external_directory": {
@@ -286,7 +277,8 @@
       },
       "permission": {
         "bash": {
-          "*": "deny", // No shell access needed
+          "*": "deny",
+          "linear-cli*": "allow",
         },
         "edit": "deny",
         "webfetch": "deny",

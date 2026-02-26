@@ -37,7 +37,7 @@ List the architectural decisions needed:
 
 ### Step 4: Create Ticket
 
-Use `linear_create_issue` with:
+Use `linear-cli i create "<title>"` with:
 - **Title**: "Architecture: [component/system]"
 - **Description**: Use template below
 - **Labels**: `architecture`

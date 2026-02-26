@@ -34,7 +34,7 @@ Delegate to `@explore`:
 
 ### Step 4: Create Ticket
 
-Use `linear_create_issue` with:
+Use `linear-cli i create "<title>"` with:
 - **Title**: "Fix: [brief description of bug]"
 - **Description**: Use template below
 - **Labels**: `bug`, + severity label

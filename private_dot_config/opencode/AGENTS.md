@@ -6,14 +6,14 @@ Available subagents and delegation guidance.
 
 - `commit` — Git commit agent (pre-approved git commands)
 - `explore` — Fast local codebase search, returns file paths + line numbers
-- `manager` — Project manager using Linear MCP with BMAD-style workflows
+- `manager` — Project manager using `linear-cli` with BMAD-style workflows
 - `librarian` — Research source code: GitHub repos, issues/PRs, library internals via `gh` CLI
 - `web-researcher` — Web search: DuckDuckGo + webfetch for docs, tutorials, best practices
 - `crawl` — Persist web content to ai-docs/ files (invoke via `/crawl` command or `@crawl`)
 
 ### Manager Agent (Max)
 
-Specialized project manager agent using Linear MCP. Delegate to `@manager` when:
+Specialized project manager agent using `linear-cli`. Delegate to `@manager` when:
 
 - Creating/updating issues, epics, or tasks in Linear
 - Querying project or cycle status
@@ -21,9 +21,9 @@ Specialized project manager agent using Linear MCP. Delegate to `@manager` when:
 
 Manager uses BMAD-style workflows and menu triggers (e.g., `[RW]` for research, `[CE]` for epic). See `agent/manager.md` for full workflow documentation.
 
-### Linear MCP Access
+### Linear CLI Access
 
-**All agents have access to Linear MCP tools**, but Linear-related tasks should be delegated to the `@manager` agent because:
+**Linear operations are handled via `linear-cli`**, but Linear-related tasks should be delegated to the `@manager` agent because:
 
 1. **Specialized workflows** — Manager has BMAD-style workflows optimized for issue creation, project tracking, and cycle management
 2. **Consistent formatting** — Manager uses templates that ensure issues have proper structure, acceptance criteria, and labels
@@ -37,7 +37,7 @@ Manager uses BMAD-style workflows and menu triggers (e.g., `[RW]` for research, 
 - Querying project/cycle status
 - Any operation that modifies Linear state
 
-**When other agents may use Linear directly:**
+**When other agents may use Linear directly (if permissions allow):**
 
 - Read-only queries for context (e.g., checking if an issue exists)
 - Emergency situations where manager is unavailable
@@ -47,7 +47,7 @@ Manager uses BMAD-style workflows and menu triggers (e.g., `[RW]` for research, 
 | Agent             | Trigger                                                       | Tools                          | Output                          |
 | ----------------- | ------------------------------------------------------------- | ------------------------------ | ------------------------------- |
 | `@explore`        | "Where is X?", "Find files for Y"                             | Read-only local tools          | File paths + line numbers       |
-| `@manager`        | "Create issue for X", "Project status?", `[RW]`, `[CE]`, etc. | Linear MCP tools               | Issue/project links + summaries |
+| `@manager`        | "Create issue for X", "Project status?", `[RW]`, `[CE]`, etc. | `linear-cli` bash commands     | Issue/project links + summaries |
 | `@librarian`      | "How does [lib] implement X?", "GitHub issues for Y"          | `gh` CLI, git clone, webfetch  | Permalinks + code snippets      |
 | `@web-researcher` | "Best practices for X", "Compare A vs B", "Find URLs about Y" | DuckDuckGo, webfetch, crawl4ai | URLs + synthesized findings     |
 | `@crawl`          | "Save docs for X to ai-docs/", `/crawl <url>`                 | crawl4ai, write                | Persisted markdown files        |

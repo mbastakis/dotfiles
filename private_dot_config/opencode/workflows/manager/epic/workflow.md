@@ -43,7 +43,7 @@ Map story dependencies:
 
 ### Step 5: Create Epic Issue
 
-Use `linear_create_issue` with:
+Use `linear-cli i create "<title>"` with:
 - **Title**: "[Feature Name]"
 - **Description**: Use epic template below
 - **Labels**: `epic`, `feature`
@@ -52,7 +52,7 @@ Use `linear_create_issue` with:
 
 ### Step 6: Create Child Stories
 
-For each story, use `linear_create_issue` with:
+For each story, use `linear-cli i create "<title>"` with:
 - **Title**: "[Story summary]"
 - **Description**: Use story template
 - **Parent**: Link to epic
@@ -60,7 +60,7 @@ For each story, use `linear_create_issue` with:
 
 ### Step 7: Set Up Dependencies
 
-Use `linear_update_issue` to set `blockedBy` relationships.
+Use `linear-cli i update <ID>` and `linear-cli i comment <ID> -b "..."` to document `blockedBy` relationships.
 
 ### Step 8: Return Result
 

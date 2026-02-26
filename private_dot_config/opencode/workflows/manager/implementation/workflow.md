@@ -43,7 +43,7 @@ Break into implementation steps:
 
 ### Step 5: Create Ticket
 
-Use `linear_create_issue` with:
+Use `linear-cli i create "<title>"` with:
 - **Title**: "[Action] [target]" (e.g., "Add dark mode toggle to settings")
 - **Description**: Use template below
 - **Labels**: `enhancement` or appropriate label

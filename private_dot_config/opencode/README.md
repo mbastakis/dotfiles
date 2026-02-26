@@ -6,7 +6,7 @@ Custom commands, agents, and skills for OpenCode AI assistant.
 
 | Path               | Purpose                                  |
 | ------------------ | ---------------------------------------- |
-| `opencode.jsonc`   | Main config (provider, MCP, permissions) |
+| `opencode.jsonc`   | Main config (provider, permissions, agents) |
 | `command/*.md`     | Custom slash commands                    |
 | `agent/*.md`       | Custom subagents                         |
 | `workflows/`       | BMAD-style workflow definitions          |

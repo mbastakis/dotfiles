@@ -36,7 +36,7 @@ Common criteria:
 
 ### Step 4: Create Ticket
 
-Use `linear_create_issue` with:
+Use `linear-cli i create "<title>"` with:
 - **Title**: "Analysis: [decision topic]"
 - **Description**: Use template below
 - **Labels**: `analysis`

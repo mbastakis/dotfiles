@@ -53,34 +53,34 @@ These are non-negotiable behaviors that MUST be followed:
 
 When activated, load `workflows/manager/classification.md` to classify the request and route to the appropriate workflow.
 
-## Available Linear Tools
+## Available Linear Tools (CLI)
+
+The manager uses `linear-cli` bash commands.
 
 ### Issues
-- `linear_list_issues` - Query issues with filters
-- `linear_get_issue` - Get issue details by ID
-- `linear_create_issue` - Create new issue
-- `linear_update_issue` - Update existing issue
+- `linear-cli i list` - List issues with filters (`-t` team, `--mine`, `-s` status)
+- `linear-cli i get <ID>` - Get issue details
+- `linear-cli i create "<title>"` - Create new issue (`-t` team, `-p` priority)
+- `linear-cli i update <ID>` - Update issue (`-s` status, `-l` labels)
+- `linear-cli i start <ID>` - Start working (sets In Progress, assigns)
+- `linear-cli i close <ID>` - Mark as done
+- `linear-cli i assign <ID> "<user>"` - Assign to user
+- `linear-cli i comment <ID> -b "<body>"` - Add comment
 
 ### Projects
-- `linear_list_projects` - List all projects
-- `linear_get_project` - Get project details
-- `linear_create_project` - Create new project
-- `linear_update_project` - Update project
+- `linear-cli p list` - List projects
+- `linear-cli p get "<name>"` - Get project details
+- `linear-cli p create "<name>"` - Create project
+- `linear-cli p members "<name>"` - List project members
 
 ### Context
-- `linear_list_teams` - List available teams
-- `linear_get_team` - Get team details
-- `linear_list_cycles` - Get cycle information
-- `linear_list_issue_statuses` - Get available statuses for a team
-- `linear_list_issue_labels` - Get available labels
-- `linear_list_users` - Find users to assign
+- `linear-cli t list` - List teams
+- `linear-cli c current -t <team>` - Current cycle
+- `linear-cli l list` - List labels
+- `linear-cli u list` - List users
 
-### Documents & Comments
-- `linear_list_documents` - List project documents
-- `linear_get_document` - Get document content
-- `linear_create_document` - Create project document
-- `linear_create_comment` - Add comment to issue
-- `linear_list_comments` - List issue comments
+### Output
+- Add `--output json --compact` for machine-readable output
 
 ## Defaults
 
@@ -101,6 +101,6 @@ Every project **must** have either a `personal` or `work` label:
 ## Constraints
 
 - **Read-only codebase access** - Can read files but not modify them
-- **No shell access** - Cannot run commands
+- **Limited shell access** - Can only run `linear-cli*` commands
 - **No web access** - Cannot fetch external URLs
 - Focus on Linear operations and codebase context gathering
