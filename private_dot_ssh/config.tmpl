@@ -1,4 +1,9 @@
 {{- if or (eq .profile "dt-work") (eq .profile "work") }}
+Host otc_n8n
+    HostName 80.158.109.121
+    User ubuntu
+    IdentityFile ~/.ssh/n8n-keypair.pem
+
 Host gitlab.devops.telekom.de
     HostName gitlab.devops.telekom.de
     User git
