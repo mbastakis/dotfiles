@@ -54,6 +54,10 @@ Interactive-only environment variables. PATH/EDITOR/XDG are set in `~/.zshenv` (
 | `LESS` | `-R` |
 | `CARAPACE_BRIDGES` | `zsh,fish,bash,inshellisense` |
 | `_ZO_ECHO` | `1` (show directory after zoxide cd) |
+| `OPENCODE_CONFIG` | `$HOME/.config/opencode/opencode.jsonc` |
+| `OPENCODE_EXPERIMENTAL_PLAN_MODE` | `true` |
+| `OPENCODE_EXPERIMENTAL_MARKDOWN` | `true` |
+| `OPENCODE_CONFIG_DIR` | `$HOME/.config/opencode` |
 
 _Reference: `dot_zsh/exports.zsh:1`_
 
@@ -124,6 +128,7 @@ Central FZF configuration. `FZF_DEFAULT_OPTS` carries all base settings (Catppuc
 
 **Shell keybindings:**
 - `Ctrl-T` -- fd-based file picker with bat preview
+- `Ctrl-Shift-T` -- directory picker (via Ghostty `ESC[202~` passthrough)
 - `Alt-C` -- disabled (zoxide used instead)
 - `Ctrl-R` -- fzf widget loaded then unbound; Atuin takes over
 
@@ -185,6 +190,7 @@ Ghostty sends custom CSI sequences for macOS shortcuts that zsh processes:
 - `Cmd+C`/`Cmd+X` -> CSI `200~`/`201~` -> shift-select copy/cut widgets
 - `Cmd+Left`/`Cmd+Right` -> Home/End escape sequences
 - `Shift+Cmd+Left`/`Right` -> select-whole-line widgets
+- `Ctrl+Shift+T` -> `ESC[202~` -> fzf directory picker widget
 
 ### tmux -> zsh
 

@@ -37,6 +37,23 @@ for _map in "${_widget_bind_maps[@]}"; do
   bindkey -M "$_map" '^F' ftext-widget
 done
 
+# fzf directory picker (Ctrl-Shift-T via Ghostty sequence)
+# Uses fzf-file-widget with a temporary directory-only source.
+function fzf-directory-widget() {
+  (( $+widgets[fzf-file-widget] )) || return 0
+
+  local dir_command="${FZF_CTRL_SHIFT_T_COMMAND:-${FZF_CTRL_T_COMMAND:-}}"
+  local dir_opts="${FZF_CTRL_SHIFT_T_OPTS:-${FZF_CTRL_T_OPTS:-}}"
+  local FZF_CTRL_T_COMMAND="$dir_command"
+  local FZF_CTRL_T_OPTS="$dir_opts"
+
+  zle fzf-file-widget
+}
+zle -N fzf-directory-widget
+for _map in "${_widget_bind_maps[@]}"; do
+  bindkey -M "$_map" '^[[202~' fzf-directory-widget
+done
+
 # Zoxide interactive selection (Ctrl-Z)
 function run_zoxide_interactive() {
   BUFFER="cdi"

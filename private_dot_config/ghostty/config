@@ -57,17 +57,12 @@ macos-titlebar-proxy-icon = hidden
 # Keybindings
 # ============================================================================
 
-# Splits and Tabs
-keybind = cmd+d=new_split:right
-keybind = cmd+shift+d=new_split:down
+# Tabs and Surfaces
 keybind = cmd+t=new_tab
 keybind = cmd+w=close_surface
 
-# Split Navigation (Dvorak: h=left, t=down, n=up, s=right)
-keybind = ctrl+shift+h=goto_split:left
-keybind = ctrl+shift+t=goto_split:down
-keybind = ctrl+shift+n=goto_split:up
-keybind = ctrl+shift+s=goto_split:right
+# Send Ctrl+Shift+T to terminal (zsh fzf directory picker)
+keybind = ctrl+shift+t=text:\x1b[202~
 
 # Send Ctrl+Tab / Ctrl+Shift+Tab to terminal (for tmux)
 keybind = ctrl+tab=text:\x1b[27;5;9~

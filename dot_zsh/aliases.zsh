@@ -31,7 +31,7 @@ alias lg="lazygit"
 alias b="bat --paging=always --color=always --style=plain --line-range=1:1000 --decorations=always"
 
 # Obsidian CLI
-alias obs="obsidian-cli"
+alias obs="obsidian"
 
 # Kubernetes
 alias k="kubectl"

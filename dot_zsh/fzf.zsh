@@ -72,6 +72,25 @@ export FZF_CTRL_T_OPTS="\
 --preview-window='right,50%,border-left'"
 
 # =============================================================================
+# CTRL-SHIFT-T: Directory picker (used via Ghostty passthrough)
+# =============================================================================
+export FZF_CTRL_SHIFT_T_COMMAND='fd --type d --strip-cwd-prefix --hidden --follow --no-ignore-vcs \
+  --exclude .git \
+  --exclude node_modules \
+  --exclude .venv \
+  --exclude __pycache__ \
+  --exclude .cache \
+  --exclude dist \
+  --exclude build \
+  --exclude target \
+  --exclude .next \
+  --exclude .nuxt'
+export FZF_CTRL_SHIFT_T_OPTS="\
+--border-label=' Select directory ' \
+--preview='eza --icons --color=always --group-directories-first --git {} 2>/dev/null || ls -la {}' \
+--preview-window='right,50%,border-left'"
+
+# =============================================================================
 # ALT-C: Disabled (using zoxide instead)
 # =============================================================================
 export FZF_ALT_C_COMMAND=""

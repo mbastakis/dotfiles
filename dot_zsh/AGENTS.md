@@ -90,7 +90,6 @@ Background processes (launchd, cron, opencode subprocesses) spawn non-interactiv
 - **Background process PATH**: Homebrew (`/opt/homebrew/bin`) must be in `dot-zshenv` for launchd services to find brew-installed binaries
 - `shift-select-enhancements.zsh` loaded via zinit atload hook, not directly sourced
 - `local.zsh` is generated from `dot_zsh/local.zsh.tmpl` and can be overwritten by `chezmoi apply`; edit the template, not `~/.zsh/local.zsh`
-- `obsidian-cli.zsh` is NOT in default load order — source from `local.zsh` if needed
 
 ## Startup Performance
 

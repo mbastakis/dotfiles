@@ -1,5 +1,0 @@
-name: obsidian-cli
-description: Obsidian vault CLI
-parsing: disabled
-completion:
-  positionalany: ["$carapace.bridge.Cobra([obsidian-cli])"]

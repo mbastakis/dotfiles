@@ -26,6 +26,7 @@ profiles:
     bitwarden_item: "AWS Playground"
     mfa_serial: auto
     session_duration: 12h
+    max-hour: 12
 
   dev:
     type: cloudshepherd
@@ -38,6 +39,7 @@ profiles:
     bitwarden_item: "auth.devops.telekom.de"
     storage: file
     min_ttl: 20
+    max-hour: 4
 
   prod:
     type: cloudshepherd
@@ -50,3 +52,4 @@ profiles:
     bitwarden_item: "auth.devops.telekom.de"
     storage: file # or "keyring"
     min_ttl: 20
+    max-hour: 4

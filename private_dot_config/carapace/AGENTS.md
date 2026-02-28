@@ -8,7 +8,6 @@ Multi-shell completion system using specs and bridges.
 |------|---------|-----------------|
 | `specs/bw.yaml` | Native spec for Bitwarden CLI | **No** - hand-written (~300 lines) |
 | `specs/opencode.yaml` | Yargs bridge for OpenCode | Yes - via `carapace-sync` |
-| `specs/obsidian-cli.yaml` | Cobra bridge for Obsidian CLI | Yes - via `carapace-sync` |
 | `tools.yaml` | Registry of managed tools | Manual (in git) |
 | `config.yaml` | Catppuccin Mocha theme | Manual (in git) |
 | `.versions` | Version cache for change detection | Auto-generated (tracked in git) |

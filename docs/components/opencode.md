@@ -23,6 +23,7 @@ Config model, agent definitions, custom commands, skills, and permission system.
     research_codebase.md
   plans/                  # Plan output directory
   skill/                  # Bundled skills
+    aws-login/            # AWS/kubectl environment and wrapper guidance
     crawl4ai/             # Web crawling skill (SKILL.md + scripts/ + references/)
   workflows/              # Manager agent workflows
     manager/
@@ -109,6 +110,17 @@ _Reference: `private_dot_config/opencode/AGENTS.md:45`_
 _Reference: `private_dot_config/opencode/README.md:15`_
 
 ## Skills
+
+### aws-login
+
+Bundled skill for safe AWS and kubectl usage through the `aws-login` CLI wrapper:
+
+- Defines required command pattern: `aws-login exec <env> -- <tool> <command>`
+- Documents environment mapping for `playground`, `dev`, and `prod`
+- Enforces a preflight protocol (context check, history check, context alignment)
+- Includes examples for both `kubectl` and `aws` commands
+
+_Reference: `private_dot_config/opencode/skill/aws-login/SKILL.md`_
 
 ### crawl4ai
 

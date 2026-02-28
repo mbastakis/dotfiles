@@ -57,6 +57,9 @@ if [[ -d "/opt/homebrew/opt/postgresql@17/bin" ]]; then
   export LDFLAGS="-L/opt/homebrew/opt/postgresql@17/lib"
   export CPPFLAGS="-I/opt/homebrew/opt/postgresql@17/include"
 fi
+
+# Obsidian CLI (official, requires Obsidian 1.12+)
+[[ -d "/Applications/Obsidian.app/Contents/MacOS" ]] && PATH="$PATH:/Applications/Obsidian.app/Contents/MacOS"
 {{- end }}
 
 ## Programming language settings

@@ -42,26 +42,21 @@ _Reference: `private_dot_config/private_karabiner/src/rules/15-hyper-navigation.
 
 | Key              | Action                         | Source                                 |
 | ---------------- | ------------------------------ | -------------------------------------- |
-| `Cmd+D`          | Split right                    | `private_dot_config/ghostty/config:61` |
-| `Cmd+Shift+D`    | Split down                     | `private_dot_config/ghostty/config:62` |
-| `Cmd+T`          | New tab                        | `private_dot_config/ghostty/config:63` |
-| `Cmd+W`          | Close surface                  | `private_dot_config/ghostty/config:64` |
-| `Ctrl+Shift+H`   | Goto split left (Dvorak)       | `private_dot_config/ghostty/config:67` |
-| `Ctrl+Shift+T`   | Goto split bottom (Dvorak)     | `private_dot_config/ghostty/config:68` |
-| `Ctrl+Shift+N`   | Goto split top (Dvorak)        | `private_dot_config/ghostty/config:69` |
-| `Ctrl+Shift+S`   | Goto split right (Dvorak)      | `private_dot_config/ghostty/config:70` |
-| `Ctrl+Tab`       | _(pass-through to tmux)_       | `private_dot_config/ghostty/config:73` |
-| `Ctrl+Shift+Tab` | _(pass-through to tmux)_       | `private_dot_config/ghostty/config:74` |
-| `Cmd+Left`       | Home (line start)              | `private_dot_config/ghostty/config:77` |
-| `Cmd+Right`      | End (line end)                 | `private_dot_config/ghostty/config:78` |
-| `Cmd+Ctrl+T`     | Quick terminal (global)        | `private_dot_config/ghostty/config:81` |
-| `Cmd+Shift+E`    | Write screen to file + open    | `private_dot_config/ghostty/config:86` |
-| `Shift+Enter`    | CSI 13;2u                      | `private_dot_config/ghostty/config:89` |
-| `Super+0`        | Reset font size                | `private_dot_config/ghostty/config:92` |
-| `Super+Shift+]`  | Increase font size             | `private_dot_config/ghostty/config:93` |
-| `Super+-`        | Decrease font size             | `private_dot_config/ghostty/config:94` |
-| `Cmd+C`          | CSI 200~ (copy via zsh widget) | `private_dot_config/ghostty/config:97` |
-| `Cmd+X`          | CSI 201~ (cut via zsh widget)  | `private_dot_config/ghostty/config:98` |
+| `Cmd+T`          | New tab                        | `private_dot_config/ghostty/config:61` |
+| `Cmd+W`          | Close surface                  | `private_dot_config/ghostty/config:62` |
+| `Ctrl+Shift+T`   | Send `ESC[202~` to zsh         | `private_dot_config/ghostty/config:65` |
+| `Ctrl+Tab`       | _(pass-through to tmux)_       | `private_dot_config/ghostty/config:68` |
+| `Ctrl+Shift+Tab` | _(pass-through to tmux)_       | `private_dot_config/ghostty/config:69` |
+| `Cmd+Left`       | Home (line start)              | `private_dot_config/ghostty/config:72` |
+| `Cmd+Right`      | End (line end)                 | `private_dot_config/ghostty/config:73` |
+| `Cmd+Ctrl+T`     | Quick terminal (global)        | `private_dot_config/ghostty/config:78` |
+| `Cmd+Shift+E`    | Write screen to file + open    | `private_dot_config/ghostty/config:81` |
+| `Shift+Enter`    | CSI 13;2u                      | `private_dot_config/ghostty/config:87` |
+| `Super+0`        | Reset font size                | `private_dot_config/ghostty/config:90` |
+| `Super+Shift+]`  | Increase font size             | `private_dot_config/ghostty/config:91` |
+| `Super+-`        | Decrease font size             | `private_dot_config/ghostty/config:92` |
+| `Cmd+C`          | CSI 200~ (copy via zsh widget) | `private_dot_config/ghostty/config:85` |
+| `Cmd+X`          | CSI 201~ (cut via zsh widget)  | `private_dot_config/ghostty/config:86` |
 
 ## tmux (Multiplexer Layer)
 
@@ -106,14 +101,15 @@ Prefix: **`Ctrl-a`**
 
 ### Custom Widget Keybindings
 
-| Key      | Action                                     | Source                       |
-| -------- | ------------------------------------------ | ---------------------------- |
-| `Ctrl+F` | Interactive ripgrep search (ftext-widget)  | `dot_zsh/keybindings.zsh:18` |
-| `Ctrl+G` | Navi cheatsheet browser                    | `dot_zsh/keybindings.zsh:29` |
-| `Ctrl+J` | Insert literal newline (multiline editing) | `dot_zsh/keybindings.zsh:14` |
-| `Ctrl+Z` | Zoxide interactive directory jump          | `dot_zsh/keybindings.zsh:40` |
-| `Ctrl+R` | Atuin history search (replaces fzf)        | `dot_zsh/fzf.zsh:130`        |
-| `Ctrl+T` | FZF file picker (fd-based, bat preview)    | `dot_zsh/fzf.zsh:80`         |
+| Key            | Action                                                | Source                       |
+| -------------- | ----------------------------------------------------- | ---------------------------- |
+| `Ctrl+F`       | Interactive ripgrep search (ftext-widget)             | `dot_zsh/keybindings.zsh:33` |
+| `Ctrl+G`       | Navi cheatsheet browser                               | `dot_zsh/keybindings.zsh:17` |
+| `Ctrl+J`       | Insert literal newline (multiline editing)            | `dot_zsh/keybindings.zsh:8`  |
+| `Ctrl+Shift+T` | FZF directory picker (Ghostty `ESC[202~` passthrough) | `dot_zsh/keybindings.zsh:40` |
+| `Ctrl+Z`       | Zoxide interactive directory jump                     | `dot_zsh/keybindings.zsh:57` |
+| `Ctrl+R`       | Atuin history search (replaces fzf)                   | `dot_zsh/fzf.zsh:147`        |
+| `Ctrl+T`       | FZF file picker (fd-based, bat preview)               | `dot_zsh/fzf.zsh:66`         |
 
 ### Shift-Select (Ghostty CSI Integration)
 

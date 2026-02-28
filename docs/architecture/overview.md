@@ -61,6 +61,7 @@ The `.chezmoiignore` file uses **target-state paths** (not source-state names) a
 - **Build artifacts:** `node_modules/`, `target/`, `__pycache__/`, lock files
 - **Caches:** `.cache/`, `.config/carapace/.versions`, `lazy-lock.json`, yazi plugins
 - **Runtime state:** `glab-cli/recover/`, `.obsidian/`, `.DS_Store`
+- **Obsidian vault generated files:** Plugin binaries (`main.js`, `manifest.json`, `styles.css`), themes, icons, and `workspace.json` under `Documents/notes/.obsidian/` are ignored — only settings JSONs and plugin `data.json` files are managed
 - **Profile-conditional:** DT work configs (glab, git work config, GitLab SSH keys) excluded when profile is not `dt-work`
 - **OS-conditional:** macOS-only configs (Aerospace, Karabiner, Finicky, SketchyBar) excluded on Linux
 
