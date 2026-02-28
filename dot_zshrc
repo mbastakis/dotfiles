@@ -36,18 +36,8 @@ source "$HOME/.zsh/exports.zsh"
 # Zinit plugins + fzf-tab + compinit
 source "$HOME/.zsh/plugins.zsh"
 
-# Carapace completions - MUST be AFTER compinit (needs compdef command)
-# Cached for faster startup (regenerate if carapace binary changes)
-if command -v carapace &>/dev/null; then
-  _carapace_cache="$HOME/.cache/carapace-init.zsh"
-  _carapace_bin="$(command -v carapace)"
-  if [[ ! -f "$_carapace_cache" ]] || [[ ! -s "$_carapace_cache" ]] || [[ "$_carapace_bin" -nt "$_carapace_cache" ]]; then
-    mkdir -p "$HOME/.cache"
-    carapace _carapace zsh >"$_carapace_cache" 2>/dev/null
-  fi
-  source "$_carapace_cache"
-  unset _carapace_cache _carapace_bin
-fi
+# Carapace completions (must be after compinit)
+source "$HOME/.zsh/carapace.zsh"
 
 # Tool shell integrations (atuin, zoxide, starship)
 source "$HOME/.zsh/tools.zsh"
