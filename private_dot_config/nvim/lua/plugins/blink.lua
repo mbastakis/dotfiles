@@ -1,6 +1,10 @@
 return {
   "saghen/blink.cmp",
-  dependencies = { "rafamadriz/friendly-snippets" },
+  dependencies = {
+    "rafamadriz/friendly-snippets",
+    "supermaven-inc/supermaven-nvim",
+    "Huijiro/blink-cmp-supermaven",
+  },
 
   version = "1.*",
   -- @module 'blink.cmp'
@@ -13,11 +17,17 @@ return {
     },
     completion = { documentation = { auto_show = false } },
     sources = {
-      default = { "lsp", "path", "snippets", "buffer" },
+      default = { "supermaven", "lsp", "path", "snippets", "buffer" },
       per_filetype = {
         codecompanion = { "codecompanion", "buffer" },
       },
       providers = {
+        supermaven = {
+          name = "supermaven",
+          module = "blink-cmp-supermaven",
+          async = true,
+          score_offset = 100,
+        },
         codecompanion = {
           name = "CodeCompanion",
           module = "codecompanion.providers.completion.blink",
