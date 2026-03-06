@@ -4,6 +4,9 @@ return {
     "rafamadriz/friendly-snippets",
     "supermaven-inc/supermaven-nvim",
     "Huijiro/blink-cmp-supermaven",
+    -- blink.compat provides a fake "cmp" module so supermaven-nvim's
+    -- require("cmp") check passes and doesn't warn about missing nvim-cmp.
+    { "saghen/blink.compat", version = "1.*", opts = {} },
   },
 
   version = "1.*",
@@ -25,8 +28,16 @@ return {
         supermaven = {
           name = "supermaven",
           module = "blink-cmp-supermaven",
-          async = true,
           score_offset = 100,
+          async = true,
+          transform_items = function(_, items)
+            for _, item in ipairs(items) do
+              item.source_name = "supermaven"
+              item.kind_icon = "󰧑"
+              item.kind_name = "Supermaven"
+            end
+            return items
+          end,
         },
         codecompanion = {
           name = "CodeCompanion",
