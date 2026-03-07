@@ -1,0 +1,21 @@
+ui:
+  # Show file tree on startup (toggle with 'e')
+  showFileTree: true
+
+  # File tree sidebar width
+  fileTreeWidth: 30
+
+  # Search panel width
+  searchTreeWidth: 60
+
+  # Nerd font icons with both status + filetype icons
+  icons: nerd-fonts-full
+
+  # Color filenames by git status
+  colorFileNames: true
+
+  # Show lines added/removed next to files
+  showDiffStats: true
+
+  # Side-by-side diff view (toggle with 's')
+  sideBySide: true

@@ -149,7 +149,7 @@ Configures the `fzf-tab` completion plugin with context-sensitive previews:
 | `cd` | `eza -1 --color=always` |
 | `export`/`unset` | Variable value |
 | `kill`/`ps` | Process command line |
-| `git add/diff/restore` | `git diff` via delta |
+| `git add/diff/restore` | `git diff` via delta (colorizer) |
 | `git log/show` | Colorized log/commit |
 | `git checkout` | Context-dependent (file, commit, branch) |
 | `docker`/`kubectl` | Completion description |
