@@ -27,6 +27,7 @@ Summary of all notable `~/.config/` areas managed by chezmoi, with links to dedi
 | Raycast | `private_dot_config/raycast/` | -- | macOS launcher (partial, extensions ignored) |
 | glab CLI | `private_dot_config/glab-cli/` | -- | GitLab CLI (DT work profile only) |
 | Diffnav | `private_dot_config/diffnav/` | -- | Git diff TUI pager (file tree + delta rendering) |
+| gh-dash | `private_dot_config/gh-dash/` | -- | GitHub dashboard TUI (`gh` extension, Catppuccin Mocha Mauve) |
 
 ## Ghostty
 
