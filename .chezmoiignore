@@ -44,15 +44,6 @@ Cargo.lock
 .config/opencode/package.json
 .config/opencode/bun.lock
 .config/yazi/plugins/**
-.obsidian/**
-
-# Obsidian vault — generated/volatile files (managed by Obsidian itself)
-Documents/notes/.obsidian/workspace.json
-Documents/notes/.obsidian/plugins/*/main.js
-Documents/notes/.obsidian/plugins/*/manifest.json
-Documents/notes/.obsidian/plugins/*/styles.css
-Documents/notes/.obsidian/themes/
-Documents/notes/.obsidian/icons/
 
 # OS files
 .DS_Store

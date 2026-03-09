@@ -16,9 +16,6 @@ node_modules/
 __pycache__/
 *.pyc
 
-# Obsidian (bulky, changes frequently, machine-specific)
-dot_obsidian/
-
 # Rust build artifacts (nvim test fixtures)
 private_dot_config/nvim/test/rust/target/
 
