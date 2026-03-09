@@ -7,6 +7,10 @@ vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Move to bottom window" })
 vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Move to top window" })
 vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
 
+-- Window splitting (native C-w h/v remapped since C-h/j/k/l handle navigation)
+vim.keymap.set("n", "<C-w>h", "<cmd>vsplit<CR>", { desc = "Split horizontal (side-by-side)" })
+vim.keymap.set("n", "<C-w>v", "<cmd>split<CR>", { desc = "Split vertical (stacked)" })
+
 -- Save file (works in normal and insert mode)
 vim.keymap.set("n", "<C-s>", "<cmd>w<CR>", { desc = "Save file" })
 vim.keymap.set("i", "<C-s>", "<Esc><cmd>w<CR>a", { desc = "Save file and return to insert mode" })

@@ -207,6 +207,17 @@ return {
             end,
           })
           :map("<leader>ua")
+        Snacks.toggle
+          .new({
+            name = "Bufferline",
+            get = function()
+              return vim.o.showtabline == 2
+            end,
+            set = function(state)
+              vim.o.showtabline = state and 2 or 0
+            end,
+          })
+          :map("<leader>uB")
       end,
     })
   end,

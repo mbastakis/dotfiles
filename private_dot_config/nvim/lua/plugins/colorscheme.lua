@@ -5,6 +5,7 @@ return {
   opts = {
     flavour = "mocha",
     integrations = {
+      bufferline = true,
       render_markdown = true,
     },
   },

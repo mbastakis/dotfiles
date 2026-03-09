@@ -11,7 +11,7 @@ vim.o.mouse = "a"
 vim.o.showmode = false
 vim.o.wrap = false
 vim.o.textwidth = 0
-vim.o.showtabline = 0
+vim.o.showtabline = 2
 
 vim.schedule(function()
   vim.o.clipboard = "unnamedplus"
