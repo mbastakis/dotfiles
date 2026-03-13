@@ -21,7 +21,8 @@ flowchart TD
 
   E --> E1[03 - setup tasks<br/>run_once]
   E --> E2[05 - ghostty-tmux agent<br/>run_onchange]
-  E --> E3[macos-settings<br/>run_once]
+  E --> E3[06 - disable Cmd+H global<br/>run_once]
+  E --> E4[macos-settings<br/>run_once]
 ```
 
 _Reference: `AGENTS.md:42`_
@@ -76,6 +77,14 @@ _Reference: `.chezmoiscripts/run_once_after_03-setup.sh.tmpl:1`_
 Manages the macOS LaunchAgent for Ghostty+tmux auto-start. Removes the legacy `Tmux.Start.plist` agent and reloads the new `com.mbastakis.ghostty-tmux` agent via `launchctl bootstrap`. Guards on plist file existence and GUI domain availability.
 
 _Reference: `.chezmoiscripts/run_onchange_after_05-ghostty-tmux-launchagent.sh.tmpl:1`_
+
+### 06 - Disable Cmd+H Globally (`run_once`)
+
+Disables macOS app hide shortcuts globally by writing per-app `NSUserKeyEquivalents` entries for `Hide <AppName>` to `nil`. The script scans common app directories (`/Applications`, `/System/Applications`, `~/Applications`) and removes the temporary wildcard test key `Hide %@` if present.
+
+Also disables `Hide Others` globally and refreshes preferences via `cfprefsd`.
+
+_Reference: `.chezmoiscripts/run_once_after_06-disable-cmd-h-global.sh.tmpl:1`_
 
 ### macOS Settings (`run_once`)
 

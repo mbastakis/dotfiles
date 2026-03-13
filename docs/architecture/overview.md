@@ -34,7 +34,7 @@ Chezmoi translates source-state file names to target paths using naming conventi
 | `literal_bin/` | `~/bin/` | Shell utility scripts |
 | `private_dot_ssh/` | `~/.ssh/` | SSH keys (encrypted) |
 | `private_dot_config/` | `~/.config/` | Application configs |
-| `.chezmoiscripts/` | _(lifecycle scripts)_ | Before/after scripts, not deployed |
+| `.chezmoiscripts/` | _(lifecycle scripts)_ | Before/after scripts (e.g. LaunchAgent reload, global Cmd+H disable), not deployed |
 | `.chezmoidata.yaml` | _(template data)_ | Catppuccin Mocha color palette |
 | `dot_zshrc` | `~/.zshrc` | Zsh entry point |
 | `dot_zsh/` | `~/.zsh/` | Zsh module files |

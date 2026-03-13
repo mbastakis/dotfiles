@@ -40,32 +40,45 @@ _Reference: `private_dot_config/private_karabiner/src/rules/15-hyper-navigation.
 
 ## Ghostty (Terminal Layer)
 
-| Key              | Action                         | Source                                 |
-| ---------------- | ------------------------------ | -------------------------------------- |
-| `Cmd+T`          | New tab                        | `private_dot_config/ghostty/config:62` |
-| `Cmd+W`          | Close surface                  | `private_dot_config/ghostty/config:63` |
-| `Ctrl+Shift+T`   | Send `ESC[202~` to zsh         | `private_dot_config/ghostty/config:66` |
-| `Ctrl+Tab`       | _(pass-through to tmux)_       | `private_dot_config/ghostty/config:69` |
-| `Ctrl+Shift+Tab` | _(pass-through to tmux)_       | `private_dot_config/ghostty/config:70` |
-| `Cmd+Left`       | Home (line start)              | `private_dot_config/ghostty/config:73` |
-| `Cmd+Right`      | End (line end)                 | `private_dot_config/ghostty/config:74` |
-| `Cmd+Shift+E`    | Write screen to file + open    | `private_dot_config/ghostty/config:82` |
-| `Shift+Enter`    | CSI 13;2u                      | `private_dot_config/ghostty/config:88` |
-| `Super+0`        | Reset font size                | `private_dot_config/ghostty/config:91` |
-| `Super+Shift+]`  | Increase font size             | `private_dot_config/ghostty/config:92` |
-| `Super+-`        | Decrease font size             | `private_dot_config/ghostty/config:93` |
+| Key              | Action                               | Source                                  |
+| ---------------- | ------------------------------------ | --------------------------------------- |
+| `Cmd+T`          | New tmux window (`prefix`, `c`)      | `private_dot_config/ghostty/config:70`  |
+| `Cmd+W`          | Kill tmux pane (`prefix`, `x`)       | `private_dot_config/ghostty/config:71`  |
+| `Cmd+D`          | Split horizontal (`prefix`, `h`)     | `private_dot_config/ghostty/config:72`  |
+| `Cmd+Shift+D`    | Split vertical (`prefix`, `v`)       | `private_dot_config/ghostty/config:73`  |
+| `Cmd+P`          | Floax/floating window (`prefix`, `P`) | `private_dot_config/ghostty/config:74` |
+| `Cmd+S`          | Tmux sessionx (`prefix`, `s`)        | `private_dot_config/ghostty/config:75`  |
+| `Cmd+H`          | Previous tmux window (`prefix`, `p`) | `private_dot_config/ghostty/config:76` |
+| `Cmd+L`          | Next tmux window (`prefix`, `n`)     | `private_dot_config/ghostty/config:77`  |
+| `Cmd+Shift+T`    | New Ghostty OS window                | `private_dot_config/ghostty/config:80`  |
+| `Cmd+Shift+W`    | Close Ghostty OS window              | `private_dot_config/ghostty/config:81`  |
+| `Cmd+Backspace`  | Delete to start of line (Ctrl+U)     | `private_dot_config/ghostty/config:84`  |
+| `Ctrl+Shift+T`   | Send `ESC[202~` to zsh               | `private_dot_config/ghostty/config:87`  |
+| `Ctrl+Tab`       | _(pass-through to tmux)_             | `private_dot_config/ghostty/config:90`  |
+| `Ctrl+Shift+Tab` | _(pass-through to tmux)_             | `private_dot_config/ghostty/config:91`  |
+| `Cmd+Left`       | Home (line start)                    | `private_dot_config/ghostty/config:94`  |
+| `Cmd+Right`      | End (line end)                       | `private_dot_config/ghostty/config:95`  |
+| `Cmd+Shift+E`    | Write screen to file + open          | `private_dot_config/ghostty/config:98`  |
+| `Shift+Enter`    | CSI 13;2u                            | `private_dot_config/ghostty/config:101`  |
+| `Super+0`        | Reset font size                      | `private_dot_config/ghostty/config:104` |
+| `Super+Shift+]`  | Increase font size                   | `private_dot_config/ghostty/config:105` |
+| `Super+-`        | Decrease font size                   | `private_dot_config/ghostty/config:106` |
+
+`Cmd+H` app-hide is disabled globally by `.chezmoiscripts/run_once_after_06-disable-cmd-h-global.sh.tmpl` so Ghostty receives `Cmd+H` for tmux navigation.
 
 ## tmux (Multiplexer Layer)
 
 Prefix: **`Ctrl-a`**
 
-| Key                  | Action           | Source                                 |
-| -------------------- | ---------------- | -------------------------------------- |
-| `prefix + h`         | Split horizontal | `private_dot_config/tmux/tmux.conf:24` |
-| `prefix + v`         | Split vertical   | `private_dot_config/tmux/tmux.conf:25` |
-| `prefix + c`         | New window       | `private_dot_config/tmux/tmux.conf:26` |
-| `Ctrl+Tab`           | Next window      | `private_dot_config/tmux/tmux.conf:11` |
-| `Ctrl+Shift+Tab`     | Previous window  | `private_dot_config/tmux/tmux.conf:12` |
+| Key                  | Action                 | Source                                 |
+| -------------------- | ---------------------- | -------------------------------------- |
+| `prefix + h`         | Split horizontal       | `private_dot_config/tmux/tmux.conf:24` |
+| `prefix + v`         | Split vertical         | `private_dot_config/tmux/tmux.conf:25` |
+| `prefix + c`         | New window             | `private_dot_config/tmux/tmux.conf:26` |
+| `prefix + x`         | Kill pane (no confirm) | `private_dot_config/tmux/tmux.conf:27` |
+| `prefix + p`         | Previous window        | `private_dot_config/tmux/tmux.conf:28` |
+| `Ctrl+Tab`           | Next window            | `private_dot_config/tmux/tmux.conf:11` |
+| `Ctrl+Shift+Tab`     | Previous window        | `private_dot_config/tmux/tmux.conf:12` |
 | `v` (copy mode)      | Begin selection  | `private_dot_config/tmux/tmux.conf:30` |
 | `y` (copy mode)      | Copy selection   | `private_dot_config/tmux/tmux.conf:32` |
 | `Escape` (copy mode) | Cancel           | `private_dot_config/tmux/tmux.conf:29` |
@@ -264,6 +277,6 @@ The following use plugin-default keymaps and are intentionally excluded from thi
 - Zsh shift-select: `dot_zsh/shift-select-enhancements.zsh:1`
 - FZF config: `dot_zsh/fzf.zsh:1`
 - tmux config: `private_dot_config/tmux/tmux.conf:1`
-- Ghostty config: `private_dot_config/ghostty/config:57`
+- Ghostty config: `private_dot_config/ghostty/config:65`
 - Neovim keymaps: `private_dot_config/nvim/lua/config/keymaps.lua:1`
 - Karabiner rules: `private_dot_config/private_karabiner/src/rules/`

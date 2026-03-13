@@ -1,0 +1,43 @@
+#!/bin/bash
+
+{{- if ne .chezmoi.os "darwin" }}
+exit 0
+{{- end }}
+
+set -euo pipefail
+
+app_dirs=(
+    "/Applications"
+    "/Applications/Setapp"
+    "/System/Applications"
+    "/System/Applications/Utilities"
+    "$HOME/Applications"
+)
+
+for app_dir in "${app_dirs[@]}"; do
+    [[ -d "$app_dir" ]] || continue
+
+    for app_bundle in "$app_dir"/*.app "$app_dir"/*/*.app; do
+        [[ -d "$app_bundle" ]] || continue
+
+        plist="$app_bundle/Contents/Info.plist"
+        app_name=""
+
+        if [[ -f "$plist" ]]; then
+            app_name=$(/usr/libexec/PlistBuddy -c "Print :CFBundleDisplayName" "$plist" 2>/dev/null || true)
+            if [[ -z "$app_name" ]]; then
+                app_name=$(/usr/libexec/PlistBuddy -c "Print :CFBundleName" "$plist" 2>/dev/null || true)
+            fi
+        fi
+
+        if [[ -z "$app_name" ]]; then
+            app_name="$(basename "$app_bundle" .app)"
+        fi
+
+        defaults write -g NSUserKeyEquivalents -dict-add "Hide $app_name" nil
+    done
+done
+
+defaults write -g NSUserKeyEquivalents -dict-add "Hide Others" nil
+defaults write -g NSUserKeyEquivalents -dict-remove "Hide %@" >/dev/null 2>&1 || true
+killall cfprefsd >/dev/null 2>&1 || true

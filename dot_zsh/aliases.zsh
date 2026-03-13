@@ -51,4 +51,5 @@ alias tls="tmux ls"
 
 # Opencode
 alias oc="opencode"
+alias oca="OPENCODE_PERMISSION='{\"*\": "allow"}' opencode"
 alias occ="opencode --continue"

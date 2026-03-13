@@ -35,9 +35,8 @@ cursor-style-blink = true
 cursor-color = #CBA6F7
 mouse-hide-while-typing = true
 mouse-shift-capture = true
-copy-on-select = clipboard
+copy-on-select = true
 right-click-action = paste
-mouse-shift-capture = true
 
 # ============================================================================
 # Shell Integration
@@ -59,12 +58,30 @@ macos-titlebar-style = hidden
 macos-titlebar-proxy-icon = hidden
 
 # ============================================================================
+# Startup Command (attach to tmux "main" session)
+# ============================================================================
+command = /bin/zsh -c "tmux new -A -s main"
+
+# ============================================================================
 # Keybindings
 # ============================================================================
 
-# Tabs and Surfaces
-keybind = cmd+t=new_tab
-keybind = cmd+w=close_surface
+# Tmux window/pane management (prefix = Ctrl+a = \x01)
+keybind = cmd+t=text:\x01\x63
+keybind = cmd+w=text:\x01\x78
+keybind = cmd+d=text:\x01\x68
+keybind = cmd+shift+d=text:\x01\x76
+keybind = cmd+p=text:\x01\x50
+keybind = cmd+s=text:\x01\x73
+keybind = cmd+h=text:\x01\x70
+keybind = cmd+l=text:\x01\x6e
+
+# Ghostty OS-level window management
+keybind = cmd+shift+t=new_window
+keybind = cmd+shift+w=close_window
+
+# Line editing: delete from cursor to start of line (Ctrl+U)
+keybind = cmd+backspace=text:\x15
 
 # Send Ctrl+Shift+T to terminal (zsh fzf directory picker)
 keybind = ctrl+shift+t=text:\x1b[202~
@@ -77,18 +94,10 @@ keybind = ctrl+shift+tab=text:\x1b[27;6;9~
 keybind = cmd+left=text:\x1b[1~
 keybind = cmd+right=text:\x1b[4~
 
-# Quick Terminal
-# quick-terminal-position = top
-# quick-terminal-size = 100%
-# keybind = global:cmd+ctrl+t=toggle_quick_terminal
-
 # Editor Integration
 keybind = cmd+shift+e=write_screen_file:open
 
 # Zsh-shift-select Integration
-# Send escape sequences for copy/cut operations
-# keybind = cmd+c=text:\x1b[200~
-# keybind = cmd+x=text:\x1b[201~
 keybind = shift+enter=csi:13;2u
 
 # Font Size
