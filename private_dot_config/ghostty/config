@@ -7,6 +7,9 @@
 theme = Catppuccin Mocha
 background-opacity = 0.85
 background-blur = 16
+background-image = ~/.config/ghostty/background.png
+background-image-opacity = 0.45
+background-image-fit = cover
 custom-shader = ~/.config/ghostty/shader.glsl
 
 # ============================================================================
@@ -27,8 +30,9 @@ window-padding-y = 10, 0
 # ============================================================================
 # Cursor & Mouse
 # ============================================================================
-cursor-style = block
+cursor-style = block_hollow
 cursor-style-blink = true
+cursor-color = #CBA6F7
 mouse-hide-while-typing = true
 mouse-shift-capture = true
 copy-on-select = clipboard

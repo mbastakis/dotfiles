@@ -3277,6 +3277,11 @@
                   },
                   {
                     "type": "variable_if",
+                    "name": "hyper_caps_lock",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
                     "name": "typing_mode",
                     "value": 0
                   },
@@ -6294,7 +6299,7 @@
                   }
                 ],
                 "from": {
-                  "key_code": "i",
+                  "key_code": "a",
                   "modifiers": {
                     "optional": [
                       "any"
@@ -6303,7 +6308,7 @@
                 },
                 "to": [
                   {
-                    "key_code": "up_arrow"
+                    "key_code": "left_option"
                   }
                 ],
                 "type": "basic"
@@ -6334,7 +6339,7 @@
                 },
                 "to": [
                   {
-                    "key_code": "right_arrow"
+                    "key_code": "up_arrow"
                   }
                 ],
                 "type": "basic"
@@ -6433,7 +6438,7 @@
                 },
                 "to": [
                   {
-                    "key_code": "left_option"
+                    "key_code": "right_arrow"
                   }
                 ],
                 "type": "basic"

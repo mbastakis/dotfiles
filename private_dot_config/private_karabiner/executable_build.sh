@@ -19,7 +19,7 @@ ALL_DEVICES_RULES=()
 # ============================================================================
 HRM_CONFIG=(
     # Left hand: a=ctrl, s=opt, d=cmd, f=shift
-    "a|left_control|pinky|left|160|200|200|120|0"
+    "a|left_control|pinky|left|160|200|200|120|1"
     "s|left_option|ring|left|160|200|200|120|0"
     "d|left_command|middle|left|160|200|200|120|1"
     "f|left_shift|index|left|50|120|150|120|1"

@@ -109,7 +109,7 @@ if.app-name-regex-substring = 'System Preferences'
 run = 'layout floating'
 
 [[on-window-detected]]
-if.app-name-regex-substring = 'SoundSource'
+if.app-name-regex-substring = 'GIMP'
 run = 'layout floating'
 
 [gaps]
