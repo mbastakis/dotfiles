@@ -58,6 +58,9 @@ return {
 
         -- KDL
         kdl = { "kdlfmt" },
+
+        -- Zig (zls provides zig fmt via LSP)
+        zig = { lsp_format = "fallback" },
       },
       -- Configure prettier to handle yaml subtypes as yaml
       formatters = {

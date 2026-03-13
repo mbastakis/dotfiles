@@ -46,6 +46,7 @@ return {
         "yamlls", -- YAML
         "ansiblels", -- Ansible
         "helm_ls", -- Helm templates
+        "zls", -- Zig
       },
       -- KDL note: kdl-lsp is configured in after/lsp/kdl_lsp.lua,
       -- but it is not currently distributed via Mason's LSP registry.

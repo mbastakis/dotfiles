@@ -9,6 +9,7 @@ Config model, agent definitions, custom commands, skills, and permission system.
 ```
 ~/.config/opencode/
   opencode.jsonc          # Main config (model, theme, permissions, agents)
+  opencode-notifier.json  # Notification plugin settings (events, volumes, backend)
   agent/                  # Custom agent definitions (markdown + YAML frontmatter)
     commit.md
     crawl.md
@@ -47,6 +48,7 @@ The main config (`opencode.jsonc`) defines:
 |---|---|
 | `model` | Primary model (`claude-opus-4-5` via Amazon Bedrock) |
 | `theme` | `catppuccin` |
+| `plugin` | Community plugins loaded from npm (for example `opencode-notifier`) |
 | `permission` | Granular bash command permission rules |
 | `agent` | 5 custom agent definitions |
 

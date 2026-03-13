@@ -5,8 +5,9 @@
 # Appearance & Theming
 # ============================================================================
 theme = Catppuccin Mocha
-background-opacity = 0.8
-background-blur = true
+background-opacity = 0.85
+background-blur = 16
+custom-shader = ~/.config/ghostty/shader.glsl
 
 # ============================================================================
 # Font Configuration

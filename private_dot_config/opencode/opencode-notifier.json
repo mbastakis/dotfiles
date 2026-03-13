@@ -1,0 +1,33 @@
+{
+  "sound": true,
+  "notification": true,
+  "notificationSystem": "osascript",
+  "suppressWhenFocused": false,
+  "showProjectName": true,
+  "showSessionTitle": false,
+  "timeout": 5,
+  "events": {
+    "permission": { "sound": true, "notification": true },
+    "complete": { "sound": true, "notification": true },
+    "error": { "sound": true, "notification": true },
+    "question": { "sound": true, "notification": true },
+    "subagent_complete": { "sound": false, "notification": false },
+    "user_cancelled": { "sound": false, "notification": false }
+  },
+  "sounds": {
+    "permission": "/System/Library/Sounds/Glass.aiff",
+    "complete": "/System/Library/Sounds/Bottle.aiff",
+    "error": "/System/Library/Sounds/Funk.aiff",
+    "question": "/System/Library/Sounds/Hero.aiff",
+    "subagent_complete": null,
+    "user_cancelled": null
+  },
+  "volumes": {
+    "permission": 0.5,
+    "complete": 0.6,
+    "error": 0.7,
+    "question": 0.5,
+    "subagent_complete": 0.3,
+    "user_cancelled": 0.3
+  }
+}

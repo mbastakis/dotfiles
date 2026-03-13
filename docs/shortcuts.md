@@ -30,7 +30,7 @@ A keystroke passes through each layer in sequence. Karabiner processes physical 
 | `l` | l   | Option  |
 | `;` | ;   | Ctrl    |
 
-_Reference: `private_dot_config/private_karabiner/executable_build.sh:47`_
+_Reference: `private_dot_config/private_karabiner/executable_build.sh:20`_
 
 ### Hyper Key Navigation
 
@@ -42,21 +42,18 @@ _Reference: `private_dot_config/private_karabiner/src/rules/15-hyper-navigation.
 
 | Key              | Action                         | Source                                 |
 | ---------------- | ------------------------------ | -------------------------------------- |
-| `Cmd+T`          | New tab                        | `private_dot_config/ghostty/config:61` |
-| `Cmd+W`          | Close surface                  | `private_dot_config/ghostty/config:62` |
-| `Ctrl+Shift+T`   | Send `ESC[202~` to zsh         | `private_dot_config/ghostty/config:65` |
-| `Ctrl+Tab`       | _(pass-through to tmux)_       | `private_dot_config/ghostty/config:68` |
-| `Ctrl+Shift+Tab` | _(pass-through to tmux)_       | `private_dot_config/ghostty/config:69` |
-| `Cmd+Left`       | Home (line start)              | `private_dot_config/ghostty/config:72` |
-| `Cmd+Right`      | End (line end)                 | `private_dot_config/ghostty/config:73` |
-| `Cmd+Ctrl+T`     | Quick terminal (global)        | `private_dot_config/ghostty/config:78` |
-| `Cmd+Shift+E`    | Write screen to file + open    | `private_dot_config/ghostty/config:81` |
-| `Shift+Enter`    | CSI 13;2u                      | `private_dot_config/ghostty/config:87` |
-| `Super+0`        | Reset font size                | `private_dot_config/ghostty/config:90` |
-| `Super+Shift+]`  | Increase font size             | `private_dot_config/ghostty/config:91` |
-| `Super+-`        | Decrease font size             | `private_dot_config/ghostty/config:92` |
-| `Cmd+C`          | CSI 200~ (copy via zsh widget) | `private_dot_config/ghostty/config:85` |
-| `Cmd+X`          | CSI 201~ (cut via zsh widget)  | `private_dot_config/ghostty/config:86` |
+| `Cmd+T`          | New tab                        | `private_dot_config/ghostty/config:62` |
+| `Cmd+W`          | Close surface                  | `private_dot_config/ghostty/config:63` |
+| `Ctrl+Shift+T`   | Send `ESC[202~` to zsh         | `private_dot_config/ghostty/config:66` |
+| `Ctrl+Tab`       | _(pass-through to tmux)_       | `private_dot_config/ghostty/config:69` |
+| `Ctrl+Shift+Tab` | _(pass-through to tmux)_       | `private_dot_config/ghostty/config:70` |
+| `Cmd+Left`       | Home (line start)              | `private_dot_config/ghostty/config:73` |
+| `Cmd+Right`      | End (line end)                 | `private_dot_config/ghostty/config:74` |
+| `Cmd+Shift+E`    | Write screen to file + open    | `private_dot_config/ghostty/config:82` |
+| `Shift+Enter`    | CSI 13;2u                      | `private_dot_config/ghostty/config:88` |
+| `Super+0`        | Reset font size                | `private_dot_config/ghostty/config:91` |
+| `Super+Shift+]`  | Increase font size             | `private_dot_config/ghostty/config:92` |
+| `Super+-`        | Decrease font size             | `private_dot_config/ghostty/config:93` |
 
 ## tmux (Multiplexer Layer)
 
@@ -64,32 +61,32 @@ Prefix: **`Ctrl-a`**
 
 | Key                  | Action           | Source                                 |
 | -------------------- | ---------------- | -------------------------------------- |
-| `prefix + h`         | Split horizontal | `private_dot_config/tmux/tmux.conf:22` |
-| `prefix + v`         | Split vertical   | `private_dot_config/tmux/tmux.conf:23` |
-| `prefix + c`         | New window       | `private_dot_config/tmux/tmux.conf:24` |
-| `Ctrl+Tab`           | Next window      | `private_dot_config/tmux/tmux.conf:16` |
-| `Ctrl+Shift+Tab`     | Previous window  | `private_dot_config/tmux/tmux.conf:17` |
-| `v` (copy mode)      | Begin selection  | `private_dot_config/tmux/tmux.conf:29` |
-| `y` (copy mode)      | Copy selection   | `private_dot_config/tmux/tmux.conf:30` |
-| `Escape` (copy mode) | Cancel           | `private_dot_config/tmux/tmux.conf:31` |
-| Arrow keys           | Resize pane      | `private_dot_config/tmux/tmux.conf:26` |
+| `prefix + h`         | Split horizontal | `private_dot_config/tmux/tmux.conf:24` |
+| `prefix + v`         | Split vertical   | `private_dot_config/tmux/tmux.conf:25` |
+| `prefix + c`         | New window       | `private_dot_config/tmux/tmux.conf:26` |
+| `Ctrl+Tab`           | Next window      | `private_dot_config/tmux/tmux.conf:11` |
+| `Ctrl+Shift+Tab`     | Previous window  | `private_dot_config/tmux/tmux.conf:12` |
+| `v` (copy mode)      | Begin selection  | `private_dot_config/tmux/tmux.conf:30` |
+| `y` (copy mode)      | Copy selection   | `private_dot_config/tmux/tmux.conf:32` |
+| `Escape` (copy mode) | Cancel           | `private_dot_config/tmux/tmux.conf:29` |
+| Arrow keys           | Resize pane      | `private_dot_config/tmux/tmux.conf:38` |
 
 ### Harpoon (tmux-harpoon)
 
-| Key                | Action              | Source                                 |
-| ------------------ | ------------------- | -------------------------------------- |
-| `Ctrl+Cmd+a`       | Jump to slot 1      | `private_dot_config/tmux/tmux.conf:60` |
-| `Ctrl+Cmd+o`       | Jump to slot 2      | `private_dot_config/tmux/tmux.conf:61` |
-| `Ctrl+Cmd+e`       | Jump to slot 3      | `private_dot_config/tmux/tmux.conf:62` |
-| `Ctrl+Cmd+u`       | Jump to slot 4      | `private_dot_config/tmux/tmux.conf:63` |
-| `Ctrl+Cmd+Shift+a` | Overwrite slot 1    | `private_dot_config/tmux/tmux.conf:65` |
-| `Ctrl+Cmd+Shift+o` | Overwrite slot 2    | `private_dot_config/tmux/tmux.conf:66` |
-| `Ctrl+Cmd+Shift+e` | Overwrite slot 3    | `private_dot_config/tmux/tmux.conf:67` |
-| `Ctrl+Cmd+Shift+u` | Overwrite slot 4    | `private_dot_config/tmux/tmux.conf:68` |
-| `prefix + A`       | Add pane to harpoon | `private_dot_config/tmux/tmux.conf:70` |
-| `prefix + D`       | Delete from harpoon | `private_dot_config/tmux/tmux.conf:71` |
-| `prefix + g`       | List harpoon slots  | `private_dot_config/tmux/tmux.conf:72` |
-| `prefix + e`       | Edit harpoon        | `private_dot_config/tmux/tmux.conf:73` |
+| Key                | Action              | Source                                  |
+| ------------------ | ------------------- | --------------------------------------- |
+| `Ctrl+Cmd+a`       | Jump to slot 1      | `private_dot_config/tmux/tmux.conf:113` |
+| `Ctrl+Cmd+o`       | Jump to slot 2      | `private_dot_config/tmux/tmux.conf:114` |
+| `Ctrl+Cmd+e`       | Jump to slot 3      | `private_dot_config/tmux/tmux.conf:115` |
+| `Ctrl+Cmd+u`       | Jump to slot 4      | `private_dot_config/tmux/tmux.conf:116` |
+| `Ctrl+Cmd+Shift+a` | Overwrite slot 1    | `private_dot_config/tmux/tmux.conf:119` |
+| `Ctrl+Cmd+Shift+o` | Overwrite slot 2    | `private_dot_config/tmux/tmux.conf:120` |
+| `Ctrl+Cmd+Shift+e` | Overwrite slot 3    | `private_dot_config/tmux/tmux.conf:121` |
+| `Ctrl+Cmd+Shift+u` | Overwrite slot 4    | `private_dot_config/tmux/tmux.conf:122` |
+| `prefix + A`       | Add pane to harpoon | `private_dot_config/tmux/tmux.conf:132` |
+| `prefix + D`       | Delete from harpoon | `private_dot_config/tmux/tmux.conf:133` |
+| `prefix + g`       | List harpoon slots  | `private_dot_config/tmux/tmux.conf:134` |
+| `prefix + e`       | Edit harpoon        | `private_dot_config/tmux/tmux.conf:135` |
 
 ### Plugins
 
@@ -108,44 +105,44 @@ Prefix: **`Ctrl-a`**
 | `Ctrl+J`       | Insert literal newline (multiline editing)            | `dot_zsh/keybindings.zsh:8`  |
 | `Ctrl+Shift+T` | FZF directory picker (Ghostty `ESC[202~` passthrough) | `dot_zsh/keybindings.zsh:40` |
 | `Ctrl+Z`       | Zoxide interactive directory jump                     | `dot_zsh/keybindings.zsh:57` |
-| `Ctrl+R`       | Atuin history search (replaces fzf)                   | `dot_zsh/fzf.zsh:147`        |
-| `Ctrl+T`       | FZF file picker (fd-based, bat preview)               | `dot_zsh/fzf.zsh:66`         |
+| `Ctrl+R`       | Atuin history search (replaces fzf)                   | `dot_zsh/fzf.zsh:154`       |
+| `Ctrl+T`       | FZF file picker (fd-based, bat preview)               | `dot_zsh/fzf.zsh:66`        |
 
 ### Shift-Select (Ghostty CSI Integration)
 
 | Key                    | Action                      | Source                                     |
 | ---------------------- | --------------------------- | ------------------------------------------ |
-| `Cmd+C` (via CSI)      | Copy selection to clipboard | `dot_zsh/shift-select-enhancements.zsh:15` |
-| `Cmd+X` (via CSI)      | Cut selection to clipboard  | `dot_zsh/shift-select-enhancements.zsh:35` |
-| `Shift+Cmd+Left/Right` | Select entire line          | `dot_zsh/shift-select-enhancements.zsh:71` |
+| `Cmd+C` (via CSI)      | Copy selection to clipboard | `dot_zsh/shift-select-enhancements.zsh:71` |
+| `Cmd+X` (via CSI)      | Cut selection to clipboard  | `dot_zsh/shift-select-enhancements.zsh:72` |
+| `Shift+Cmd+Left/Right` | Select entire line          | `dot_zsh/shift-select-enhancements.zsh:79` |
 
 ### Word Movement
 
 | Key                    | Action            | Source                       |
 | ---------------------- | ----------------- | ---------------------------- |
-| `Alt+F` / `Ctrl+Right` | Forward word      | `dot_zsh/keybindings.zsh:48` |
-| `Alt+B` / `Ctrl+Left`  | Backward word     | `dot_zsh/keybindings.zsh:58` |
-| `Home`                 | Beginning of line | `dot_zsh/keybindings.zsh:70` |
+| `Alt+F` / `Ctrl+Right` | Forward word      | `dot_zsh/keybindings.zsh:75` |
+| `Alt+B` / `Ctrl+Left`  | Backward word     | `dot_zsh/keybindings.zsh:76` |
+| `Home`                 | Beginning of line | `dot_zsh/keybindings.zsh:79` |
 | `End`                  | End of line       | `dot_zsh/keybindings.zsh:80` |
 
 ### FZF Internal Keybindings (inside fzf)
 
 | Key      | Action                     | Source               |
 | -------- | -------------------------- | -------------------- |
-| `Ctrl+/` | Toggle preview             | `dot_zsh/fzf.zsh:20` |
-| `Ctrl+D` | Preview page down          | `dot_zsh/fzf.zsh:21` |
-| `Ctrl+U` | Preview page up            | `dot_zsh/fzf.zsh:22` |
-| `Ctrl+Y` | Copy to clipboard (pbcopy) | `dot_zsh/fzf.zsh:23` |
-| `Ctrl+A` | Toggle all selections      | `dot_zsh/fzf.zsh:24` |
-| `Ctrl+S` | Toggle sort                | `dot_zsh/fzf.zsh:25` |
+| `Ctrl+/` | Toggle preview             | `dot_zsh/fzf.zsh:21` |
+| `Ctrl+D` | Preview page down          | `dot_zsh/fzf.zsh:22` |
+| `Ctrl+U` | Preview page up            | `dot_zsh/fzf.zsh:23` |
+| `Ctrl+Y` | Copy to clipboard (pbcopy) | `dot_zsh/fzf.zsh:24` |
+| `Ctrl+A` | Toggle all selections      | `dot_zsh/fzf.zsh:25` |
+| `Ctrl+S` | Toggle sort                | `dot_zsh/fzf.zsh:26` |
 
 ### FZF-Tab (inside completion menu)
 
-| Key              | Action                                | Source                     |
-| ---------------- | ------------------------------------- | -------------------------- |
-| `<` / `>`        | Switch completion group               | `dot_zsh/fzf-tab.zsh:8`    |
-| `/`              | Accept and continue into subdirectory | `dot_zsh/fzf-tab.zsh:12`   |
-| `Tab` (in ftext) | Insert filename (instead of opening)  | `dot_zsh/functions.zsh:80` |
+| Key              | Action                                | Source                      |
+| ---------------- | ------------------------------------- | --------------------------- |
+| `<` / `>`        | Switch completion group               | `dot_zsh/fzf-tab.zsh:20`   |
+| `/`              | Accept and continue into subdirectory | `dot_zsh/fzf-tab.zsh:53`   |
+| `Tab` (in ftext) | Insert filename (instead of opening)  | `dot_zsh/functions.zsh:81`  |
 
 ## Neovim (Editor Layer)
 
@@ -154,119 +151,110 @@ Prefix: **`Ctrl-a`**
 | Key            | Mode | Action                         | Source                                              |
 | -------------- | ---- | ------------------------------ | --------------------------------------------------- |
 | `Ctrl+H/J/K/L` | n    | Window navigation              | `private_dot_config/nvim/lua/config/keymaps.lua:5`  |
-| `Ctrl+S`       | n, i | Save file                      | `private_dot_config/nvim/lua/config/keymaps.lua:10` |
-| `<leader>fm`   | n    | Format buffer (conform, async) | `private_dot_config/nvim/lua/config/keymaps.lua:13` |
+| `Ctrl+S`       | n, i | Save file                      | `private_dot_config/nvim/lua/config/keymaps.lua:15` |
+| `<leader>fm`   | n    | Format buffer (conform, async) | `private_dot_config/nvim/lua/config/keymaps.lua:19` |
 
 ### Diffview
 
-| Key          | Mode | Action                            | Source                                              |
-| ------------ | ---- | --------------------------------- | --------------------------------------------------- |
-| `<leader>gd` | n    | Diff branch vs base               | `private_dot_config/nvim/lua/config/keymaps.lua:18` |
-| `<leader>gD` | n    | Diff pick branch (Telescope)      | `private_dot_config/nvim/lua/config/keymaps.lua:30` |
-| `<leader>gm` | n    | Open index/merge                  | `private_dot_config/nvim/lua/config/keymaps.lua:45` |
-| `<leader>gq` | n    | Close Diffview                    | `private_dot_config/nvim/lua/config/keymaps.lua:46` |
-| `Ctrl+/`     | n    | Toggle files panel (diffview buf) | `private_dot_config/nvim/lua/config/keymaps.lua:49` |
+| Key          | Mode | Action                            | Source                                               |
+| ------------ | ---- | --------------------------------- | ---------------------------------------------------- |
+| `<leader>gd` | n    | Diff branch vs base               | `private_dot_config/nvim/lua/config/keymaps.lua:121` |
+| `<leader>gD` | n    | Diff pick branch (Telescope)      | `private_dot_config/nvim/lua/config/keymaps.lua:122` |
+| `<leader>gm` | n    | Open index/merge                  | `private_dot_config/nvim/lua/config/keymaps.lua:123` |
+| `<leader>gq` | n    | Close Diffview                    | `private_dot_config/nvim/lua/config/keymaps.lua:126` |
+| `Ctrl+/`     | n    | Toggle files panel (diffview buf) | `private_dot_config/nvim/lua/config/keymaps.lua:130` |
 
 ### LSP (buffer-local on LspAttach)
 
 | Key          | Action                | Source                                                  |
 | ------------ | --------------------- | ------------------------------------------------------- |
-| `gd`         | Go to definition      | `private_dot_config/nvim/lua/plugins/lsp/config.lua:10` |
-| `gD`         | Go to declaration     | `private_dot_config/nvim/lua/plugins/lsp/config.lua:11` |
-| `gr`         | Go to references      | `private_dot_config/nvim/lua/plugins/lsp/config.lua:12` |
-| `gI`         | Go to implementation  | `private_dot_config/nvim/lua/plugins/lsp/config.lua:13` |
-| `gy`         | Go to type definition | `private_dot_config/nvim/lua/plugins/lsp/config.lua:14` |
-| `K`          | Hover documentation   | `private_dot_config/nvim/lua/plugins/lsp/config.lua:15` |
-| `<leader>ca` | Code action           | `private_dot_config/nvim/lua/plugins/lsp/config.lua:16` |
-| `<leader>rn` | Rename symbol         | `private_dot_config/nvim/lua/plugins/lsp/config.lua:17` |
-| `<leader>d`  | Show line diagnostics | `private_dot_config/nvim/lua/plugins/lsp/config.lua:18` |
-| `<leader>q`  | Open diagnostics list | `private_dot_config/nvim/lua/plugins/lsp/config.lua:19` |
+| `gd`         | Go to definition      | `private_dot_config/nvim/lua/plugins/lsp/config.lua:16` |
+| `gD`         | Go to declaration     | `private_dot_config/nvim/lua/plugins/lsp/config.lua:17` |
+| `gr`         | Go to references      | `private_dot_config/nvim/lua/plugins/lsp/config.lua:18` |
+| `gI`         | Go to implementation  | `private_dot_config/nvim/lua/plugins/lsp/config.lua:19` |
+| `gy`         | Go to type definition | `private_dot_config/nvim/lua/plugins/lsp/config.lua:20` |
+| `K`          | Hover documentation   | `private_dot_config/nvim/lua/plugins/lsp/config.lua:23` |
+| `<leader>ca` | Code action           | `private_dot_config/nvim/lua/plugins/lsp/config.lua:28` |
+| `<leader>rn` | Rename symbol         | `private_dot_config/nvim/lua/plugins/lsp/config.lua:29` |
+| `<leader>d`  | Show line diagnostics | `private_dot_config/nvim/lua/plugins/lsp/config.lua:32` |
+| `<leader>q`  | Open diagnostics list | `private_dot_config/nvim/lua/plugins/lsp/config.lua:33` |
 
 ### Telescope
 
-| Key          | Action                         | Source                                                 |
-| ------------ | ------------------------------ | ------------------------------------------------------ |
-| `<leader>ff` | Find files (filtered, hidden)  | `private_dot_config/nvim/lua/plugins/telescope.lua:20` |
-| `<leader>fF` | Find files (show all)          | `private_dot_config/nvim/lua/plugins/telescope.lua:21` |
-| `<leader>fg` | Live grep (filtered)           | `private_dot_config/nvim/lua/plugins/telescope.lua:22` |
-| `<leader>fG` | Live grep (show all)           | `private_dot_config/nvim/lua/plugins/telescope.lua:23` |
-| `<leader>fh` | Help tags                      | `private_dot_config/nvim/lua/plugins/telescope.lua:24` |
-| `<leader>fp` | Zoxide projects (cd on select) | `private_dot_config/nvim/lua/plugins/telescope.lua:25` |
+| Key          | Action                         | Source                                                  |
+| ------------ | ------------------------------ | ------------------------------------------------------- |
+| `<leader>ff` | Find files (filtered, hidden)  | `private_dot_config/nvim/lua/plugins/telescope.lua:110` |
+| `<leader>fF` | Find files (show all)          | `private_dot_config/nvim/lua/plugins/telescope.lua:120` |
+| `<leader>fg` | Live grep (filtered)           | `private_dot_config/nvim/lua/plugins/telescope.lua:129` |
+| `<leader>fG` | Live grep (show all)           | `private_dot_config/nvim/lua/plugins/telescope.lua:138` |
+| `<leader>fh` | Help tags                      | `private_dot_config/nvim/lua/plugins/telescope.lua:146` |
+| `<leader>fp` | Zoxide projects (cd on select) | `private_dot_config/nvim/lua/plugins/telescope.lua:149` |
 
 ### Oil (File Explorer)
 
-| Key         | Action   | Source                                          |
-| ----------- | -------- | ----------------------------------------------- |
-| `<leader>e` | Open Oil | `private_dot_config/nvim/lua/plugins/oil.lua:5` |
+| Key         | Action   | Source                                            |
+| ----------- | -------- | ------------------------------------------------- |
+| `<leader>e` | Open Oil | `private_dot_config/nvim/lua/plugins/oil.lua:208` |
 
 ### Snacks
 
-| Key          | Mode | Action                       | Source                                              |
-| ------------ | ---- | ---------------------------- | --------------------------------------------------- |
-| `<leader>h`  | n    | Dashboard                    | `private_dot_config/nvim/lua/plugins/snacks.lua:10` |
-| `<leader>n`  | n    | Notification history         | `private_dot_config/nvim/lua/plugins/snacks.lua:11` |
-| `<leader>gB` | n    | Git browse                   | `private_dot_config/nvim/lua/plugins/snacks.lua:12` |
-| `<leader>gb` | n    | Git blame line               | `private_dot_config/nvim/lua/plugins/snacks.lua:13` |
-| `<leader>gf` | n    | Lazygit current file history | `private_dot_config/nvim/lua/plugins/snacks.lua:14` |
-| `<leader>gg` | n    | Lazygit                      | `private_dot_config/nvim/lua/plugins/snacks.lua:15` |
-| `<leader>gl` | n    | Lazygit log (cwd)            | `private_dot_config/nvim/lua/plugins/snacks.lua:16` |
-| `<leader>un` | n    | Dismiss all notifications    | `private_dot_config/nvim/lua/plugins/snacks.lua:17` |
-| `Ctrl+/`     | n, t | Toggle terminal              | `private_dot_config/nvim/lua/plugins/snacks.lua:18` |
+| Key          | Mode | Action                       | Source                                               |
+| ------------ | ---- | ---------------------------- | ---------------------------------------------------- |
+| `<leader>h`  | n    | Dashboard                    | `private_dot_config/nvim/lua/plugins/snacks.lua:79`  |
+| `<leader>n`  | n    | Notification history         | `private_dot_config/nvim/lua/plugins/snacks.lua:86`  |
+| `<leader>gB` | n    | Git browse                   | `private_dot_config/nvim/lua/plugins/snacks.lua:93`  |
+| `<leader>gb` | n    | Git blame line               | `private_dot_config/nvim/lua/plugins/snacks.lua:100` |
+| `<leader>gf` | n    | Lazygit current file history | `private_dot_config/nvim/lua/plugins/snacks.lua:107` |
+| `<leader>gg` | n    | Lazygit                      | `private_dot_config/nvim/lua/plugins/snacks.lua:114` |
+| `<leader>gl` | n    | Lazygit log (cwd)            | `private_dot_config/nvim/lua/plugins/snacks.lua:121` |
+| `Ctrl+/`     | n, t | Toggle terminal              | `private_dot_config/nvim/lua/plugins/snacks.lua:128` |
 
 ### Snacks Toggles
 
-| Key          | Toggle                  | Source                                              |
-| ------------ | ----------------------- | --------------------------------------------------- |
-| `<leader>uL` | Relative number         | `private_dot_config/nvim/lua/plugins/snacks.lua:25` |
-| `<leader>ul` | Line number             | `private_dot_config/nvim/lua/plugins/snacks.lua:26` |
-| `<leader>uc` | Conceal level           | `private_dot_config/nvim/lua/plugins/snacks.lua:27` |
-| `<leader>uT` | Treesitter              | `private_dot_config/nvim/lua/plugins/snacks.lua:28` |
-| `<leader>ub` | Dark background         | `private_dot_config/nvim/lua/plugins/snacks.lua:29` |
-| `<leader>uh` | Inlay hints             | `private_dot_config/nvim/lua/plugins/snacks.lua:30` |
-| `<leader>ug` | Indent guides           | `private_dot_config/nvim/lua/plugins/snacks.lua:31` |
-| `<leader>uD` | Dim mode                | `private_dot_config/nvim/lua/plugins/snacks.lua:32` |
-| `<leader>uw` | Wrap + linebreak        | `private_dot_config/nvim/lua/plugins/snacks.lua:33` |
-| `<leader>uv` | Diagnostics             | `private_dot_config/nvim/lua/plugins/snacks.lua:34` |
-| `<leader>uV` | Diagnostic virtual text | `private_dot_config/nvim/lua/plugins/snacks.lua:35` |
-| `<leader>ux` | Diagnostic underlines   | `private_dot_config/nvim/lua/plugins/snacks.lua:36` |
-| `<leader>ua` | Supermaven on/off       | `private_dot_config/nvim/lua/plugins/snacks.lua:37` |
+| Key          | Toggle                  | Source                                               |
+| ------------ | ----------------------- | ---------------------------------------------------- |
+| `<leader>uL` | Relative number         | `private_dot_config/nvim/lua/plugins/snacks.lua:142` |
+| `<leader>ul` | Line number             | `private_dot_config/nvim/lua/plugins/snacks.lua:143` |
+| `<leader>uc` | Conceal level           | `private_dot_config/nvim/lua/plugins/snacks.lua:144` |
+| `<leader>uh` | Inlay hints             | `private_dot_config/nvim/lua/plugins/snacks.lua:147` |
+| `<leader>ug` | Indent guides           | `private_dot_config/nvim/lua/plugins/snacks.lua:148` |
+| `<leader>uD` | Dim mode                | `private_dot_config/nvim/lua/plugins/snacks.lua:149` |
+| `<leader>uw` | Wrap + linebreak        | `private_dot_config/nvim/lua/plugins/snacks.lua:150` |
+| `<leader>uv` | Diagnostics             | `private_dot_config/nvim/lua/plugins/snacks.lua:162` |
+| `<leader>uV` | Diagnostic virtual text | `private_dot_config/nvim/lua/plugins/snacks.lua:163` |
+| `<leader>ux` | Diagnostic underlines   | `private_dot_config/nvim/lua/plugins/snacks.lua:174` |
+| `<leader>ua` | Supermaven on/off       | `private_dot_config/nvim/lua/plugins/snacks.lua:185` |
+| `<leader>ub` | Bufferline              | `private_dot_config/nvim/lua/plugins/snacks.lua:201` |
 
 ### AI
 
-| Key          | Mode | Action                | Source                                                     |
-| ------------ | ---- | --------------------- | ---------------------------------------------------------- |
-| `<leader>ap` | n, v | CodeCompanion actions | `private_dot_config/nvim/lua/plugins/codecompanion.lua:10` |
-| `<leader>ac` | n, v | Toggle AI chat        | `private_dot_config/nvim/lua/plugins/codecompanion.lua:11` |
-
-### Supermaven (Insert Mode)
-
-| Key      | Action            | Source                                                  |
-| -------- | ----------------- | ------------------------------------------------------- |
-| `Tab`    | Accept suggestion | `private_dot_config/nvim/lua/plugins/supermaven.lua:10` |
-| `Ctrl+]` | Clear suggestion  | `private_dot_config/nvim/lua/plugins/supermaven.lua:11` |
-| `Ctrl+J` | Accept word       | `private_dot_config/nvim/lua/plugins/supermaven.lua:12` |
+| Key          | Mode | Action                | Source                                                      |
+| ------------ | ---- | --------------------- | ----------------------------------------------------------- |
+| `<leader>ap` | n, v | CodeCompanion actions | `private_dot_config/nvim/lua/plugins/codecompanion.lua:100` |
+| `<leader>ac` | n, v | Toggle AI chat        | `private_dot_config/nvim/lua/plugins/codecompanion.lua:101` |
 
 ### Obsidian
 
 | Key          | Action            | Source                                                |
 | ------------ | ----------------- | ----------------------------------------------------- |
-| `<leader>on` | New note          | `private_dot_config/nvim/lua/plugins/obsidian.lua:10` |
-| `<leader>os` | Search notes      | `private_dot_config/nvim/lua/plugins/obsidian.lua:11` |
-| `<leader>ot` | Open today's note | `private_dot_config/nvim/lua/plugins/obsidian.lua:12` |
+| `<leader>on` | New note          | `private_dot_config/nvim/lua/plugins/obsidian.lua:17` |
+| `<leader>os` | Search notes      | `private_dot_config/nvim/lua/plugins/obsidian.lua:18` |
+| `<leader>ot` | Open today's note | `private_dot_config/nvim/lua/plugins/obsidian.lua:19` |
 
 ### Other
 
 | Key          | Action                               | Source                                               |
 | ------------ | ------------------------------------ | ---------------------------------------------------- |
-| `<leader>uu` | Toggle undotree                      | `private_dot_config/nvim/lua/plugins/undotree.lua:5` |
-| `Escape`     | Clear search + dismiss notifications | `private_dot_config/nvim/lua/plugins/noice.lua:10`   |
+| `<leader>uu` | Toggle undotree                      | `private_dot_config/nvim/lua/plugins/undotree.lua:4` |
+| `Escape`     | Clear search + dismiss notifications | `private_dot_config/nvim/lua/plugins/noice.lua:34`   |
 
 ## Excluded Mappings
 
 The following use plugin-default keymaps and are intentionally excluded from this index:
 
-- **blink.cmp** -- default completion keymaps (preset: `default`). See `private_dot_config/nvim/lua/plugins/blink.lua:9`.
-- **origami** -- default fold keymaps (fold setup enabled). See `private_dot_config/nvim/lua/plugins/origami.lua:25`.
+- **blink.cmp** -- default completion keymaps (preset: `default`). See `private_dot_config/nvim/lua/plugins/blink.lua:16`.
+- **origami** -- default fold keymaps (fold setup enabled). See `private_dot_config/nvim/lua/plugins/origami.lua:27`.
+- **supermaven** -- keymaps disabled (`disable_keymaps = true`); completions handled via blink.cmp source. See `private_dot_config/nvim/lua/plugins/supermaven.lua:11`.
 - **Oil buffer-local** -- standard oil navigation keymaps (help, select, parent, etc.).
 - **vim-tmux-navigator** -- standard Ctrl+H/J/K/L cross-pane navigation.
 
