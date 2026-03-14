@@ -3,6 +3,7 @@
 
 # Navigation
 alias ..="cd .."
+alias grt='cd "$(git rev-parse --show-toplevel || echo .)"'
 
 # Listing
 alias l="eza --color=always --icons=always --no-user"
