@@ -1,6 +1,10 @@
 # macOS
 .DS_Store
 
+# AI
+ai-docs/
+specs/
+
 # chezmoi runtime (never commit)
 key.txt
 

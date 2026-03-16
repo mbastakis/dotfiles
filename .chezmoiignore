@@ -10,7 +10,7 @@ docs/
 
 # Source-only directories (kept in repo, not deployed by chezmoi)
 ai-docs/
-code-portable-data/
+specs/
 
 # Age encryption key (decrypted by run_onchange_before script)
 key.txt.age
