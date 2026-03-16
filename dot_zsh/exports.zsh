@@ -23,5 +23,4 @@ export _ZO_ECHO=1
 
 # OpenCode
 export OPENCODE_CONFIG="$HOME/.config/opencode/opencode.jsonc"
-export OPENCODE_EXPERIMENTAL_PLAN_MODE="true"
 export OPENCODE_CONFIG_DIR="$HOME/.config/opencode"

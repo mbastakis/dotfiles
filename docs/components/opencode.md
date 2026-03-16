@@ -8,9 +8,9 @@ Config model, agent definitions, custom commands, skills, and permission system.
 
 ```
 ~/.config/opencode/
-  opencode.jsonc          # Main config (model, theme, permissions, agents)
+  opencode.jsonc          # Main config (model, theme, global permissions)
   opencode-notifier.json  # Notification plugin settings (events, volumes, backend)
-  agent/                  # Custom agent definitions (markdown + YAML frontmatter)
+  agent/                  # Self-contained agents (YAML frontmatter + prompt)
     commit.md
     crawl.md
     librarian.md
@@ -26,16 +26,6 @@ Config model, agent definitions, custom commands, skills, and permission system.
   skill/                  # Bundled skills
     aws-login/            # AWS/kubectl environment and wrapper guidance
     crawl4ai/             # Web crawling skill (SKILL.md + scripts/ + references/)
-  workflows/              # Manager agent workflows
-    manager/
-      classification.md
-      analysis/workflow.md
-      architecture/workflow.md
-      bug-fix/workflow.md
-      epic/workflow.md
-      implementation/workflow.md
-      quick-task/workflow.md
-      research/workflow.md
 ```
 
 _Reference: `private_dot_config/opencode/README.md:5`_
@@ -46,11 +36,12 @@ The main config (`opencode.jsonc`) defines:
 
 | Section | Purpose |
 |---|---|
-| `model` | Primary model (`claude-opus-4-5` via Amazon Bedrock) |
+| `model` | Primary model (gpt-5.3-codex via OpenAI) |
 | `theme` | `catppuccin` |
 | `plugin` | Community plugins loaded from npm (for example `opencode-notifier`) |
 | `permission` | Granular bash command permission rules |
-| `agent` | 5 custom agent definitions |
+
+Agent definitions live in `agent/*.md` as self-contained markdown files with YAML frontmatter (Pattern B). No agent blocks in `opencode.jsonc`.
 
 _Reference: `private_dot_config/opencode/opencode.jsonc:1`_
 
@@ -64,7 +55,7 @@ linear-cli i list --mine --output json --compact
 
 Authentication is provided via `LINEAR_API_KEY` in `dot_zsh/local.zsh.tmpl`, and the manager agent is constrained to `linear-cli*` shell commands only.
 
-_Reference: `private_dot_config/opencode/opencode.jsonc:269`_
+_Reference: `private_dot_config/opencode/agent/manager.md`_
 
 ## Permission System
 
@@ -81,35 +72,35 @@ Bash command permissions use a **last matching rule wins** pattern:
 - **Permissionable:** edit, bash, skill, webfetch, doom_loop, external_directory
 - **Non-permissionable** (always allowed): read, glob, grep, write, patch
 
-_Reference: `private_dot_config/opencode/README.md:23`_
+_Reference: `private_dot_config/opencode/README.md:69`_
 
 ## Agents
 
-5 custom agents defined with markdown files and YAML frontmatter:
+5 self-contained agents defined with YAML frontmatter (Pattern B — auto-discovered from `agent/`):
 
 | Agent | Mode | Purpose | Key Constraints |
 |---|---|---|---|
-| `librarian` | -- | Research source code via `gh` CLI | Read-only, no file writes |
-| `commit` | -- | Git commit with pre-approved commands | Minimal tools |
-| `crawl` | -- | Web crawling with crawl4ai | Deny rm/curl/ssh/sudo |
-| `web-researcher` | -- | Web research via DuckDuckGo/webfetch | Read-only |
-| `manager` | `all` (tab-switchable) | Linear project management | Read-only files, `linear-cli*` shell only |
+| `commit` | subagent | Git commit with pre-approved commands | Haiku model, minimal tools, git-only bash |
+| `crawl` | subagent | Web crawling with crawl4ai | Haiku model, deny rm/curl/ssh/sudo |
+| `librarian` | subagent | Research source code via `gh` CLI | Read-only, no file writes |
+| `web-researcher` | subagent | Web research via DuckDuckGo/webfetch | Read-only, no file writes |
+| `manager` | subagent | Linear project management | `linear-cli*` shell only, no web access |
 
-The manager agent uses BMAD-style workflows with classification triggers (`[RW]` for research, `[CE]` for epic creation, etc.) and is the designated handler for all Linear operations.
+Each agent file contains its own description, mode, model, temperature, tools, and permissions in YAML frontmatter, plus the prompt body below.
 
-_Reference: `private_dot_config/opencode/AGENTS.md:45`_
+_Reference: `private_dot_config/opencode/AGENTS.md:1`_
 
 ## Custom Commands
 
 | Command | File | Purpose |
 |---|---|---|
-| `/commit` | `command/commit.md` | Guided git commit |
-| `/crawl` | `command/crawl.md` | Crawl a URL with crawl4ai |
+| `/commit` | `command/commit.md` | Guided git commit (subtask, routes to `@commit`) |
+| `/crawl` | `command/crawl.md` | Crawl a URL with crawl4ai (subtask, routes to `@crawl`) |
 | `/learn` | `command/learn.md` | Learn from documentation |
 | `/create_plan` | `command/create_plan.md` | Create an implementation plan |
-| `/research_codebase` | `command/research_codebase.md` | Research the current codebase |
+| `/research_codebase` | `command/research_codebase.md` | Research the current codebase (subtask) |
 
-_Reference: `private_dot_config/opencode/README.md:15`_
+_Reference: `private_dot_config/opencode/README.md:24`_
 
 ## Skills
 
@@ -149,35 +140,17 @@ Linear CLI helper skills for common PM operations:
 
 _Reference: `private_dot_config/opencode/skill/linear-list/SKILL.md`_
 
-## Manager Workflows
-
-The manager agent has structured workflows for different task types:
-
-| Workflow | Trigger | Purpose |
-|---|---|---|
-| `classification.md` | Automatic | Classify incoming requests |
-| `research/workflow.md` | `[RW]` | Research and analysis |
-| `epic/workflow.md` | `[CE]` | Create epics with stories |
-| `implementation/workflow.md` | `[CI]` | Implementation planning |
-| `quick-task/workflow.md` | `[QT]` | Fast issue creation |
-| `bug-fix/workflow.md` | `[BF]` | Bug investigation and fix |
-| `analysis/workflow.md` | `[AN]` | Deep analysis |
-| `architecture/workflow.md` | `[AR]` | Architecture decisions |
-
-_Reference: `private_dot_config/opencode/workflows/manager/`_
-
 ## Gotchas
 
 - Agent markdown files use YAML frontmatter delimiters (`---`); syntax must be exact.
 - Model IDs must match the provider's exact format (e.g., `amazon-bedrock/anthropic.claude-opus-4-5-...`).
-- Markdown agents only support simple `allow`/`ask`/`deny` permissions, not granular bash patterns.
+- Granular bash patterns in YAML frontmatter work correctly (confirmed via OpenCode source).
 - `package.json` and `bun.lock` under `.config/opencode/` are repo-ignored artifacts and should stay in `.chezmoiignore`.
 
-_Reference: `private_dot_config/opencode/README.md:40`_
+_Reference: `private_dot_config/opencode/README.md:131`_
 
 ## References
 
 - Main config: `private_dot_config/opencode/opencode.jsonc:1`
 - README: `private_dot_config/opencode/README.md:1`
 - AGENTS: `private_dot_config/opencode/AGENTS.md:1`
-- Manager workflows: `private_dot_config/opencode/workflows/manager/`

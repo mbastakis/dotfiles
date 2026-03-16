@@ -1,5 +1,7 @@
 ---
 description: Crawl websites using crawl4ai and return structured results
+agent: crawl
+subtask: true
 ---
 
 Crawl web pages and persist content to ai-docs/.

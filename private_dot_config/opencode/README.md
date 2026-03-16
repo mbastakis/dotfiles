@@ -6,10 +6,9 @@ Custom commands, agents, and skills for OpenCode AI assistant.
 
 | Path               | Purpose                                  |
 | ------------------ | ---------------------------------------- |
-| `opencode.jsonc`   | Main config (provider, permissions, agents) |
+| `opencode.jsonc`   | Main config (provider, global permissions) |
 | `command/*.md`     | Custom slash commands                    |
-| `agent/*.md`       | Custom subagents                         |
-| `workflows/`       | BMAD-style workflow definitions          |
+| `agent/*.md`       | Self-contained agents (YAML frontmatter) |
 | `skill/*/SKILL.md` | Skills with scripts and references       |
 
 ## Commands
@@ -27,7 +26,8 @@ Create `command/<name>.md` with YAML frontmatter:
 ```markdown
 ---
 description: Brief description shown in command list
-model: provider/model-id
+agent: optional-agent-routing
+subtask: true
 ---
 
 # Command Title
@@ -37,34 +37,48 @@ Instructions for the command in markdown...
 
 **Current commands**:
 
-- `research_codebase.md` — Document codebase through parallel research
+- `commit.md` — Guided git commit (routes to `@commit`, subtask)
+- `crawl.md` — Crawl a URL with crawl4ai (routes to `@crawl`, subtask)
+- `research_codebase.md` — Document codebase through parallel research (subtask)
 - `create_plan.md` — Create detailed implementation plans
+- `learn.md` — Learn from documentation
 
-## Custom Agents
+## Custom Agents (Pattern B — Self-Contained .md)
 
-Create `agent/<name>.md` with YAML frontmatter (v1.1.1+ syntax):
+Each agent is a single `.md` file with YAML frontmatter containing all config (description, mode, model, temperature, tools, permissions) plus the prompt body:
 
 ```markdown
 ---
 description: Brief description of what the agent does
 mode: subagent
+model: provider/model-id
 temperature: 0.5
-# Disable non-permissionable tools you don't want
 tools:
   write: false
-  edit: false
-  task: false
-# Control permissionable tools via permission
+  patch: false
 permission:
-  bash: allow
+  bash:
+    "*": deny
+    "git*": allow
+  edit: deny
   skill: allow
-  webfetch: deny
+  webfetch: allow
+  external_directory: allow
 ---
 
-# Agent Name
+You are an agent that does X.
 
-Agent instructions in markdown...
+## Methodology
+...
+
+## Output Format
+...
+
+## Guardrails
+...
 ```
+
+No agent blocks needed in `opencode.jsonc` — agents are auto-discovered from the `agent/` directory.
 
 ## Permissions (v1.1.1+)
 
@@ -118,34 +132,6 @@ These are **enabled by default** and can only be disabled via `tools: false`:
 - `?` matches exactly one character
 - All other characters match literally
 
-### Agent Configuration Pattern (v1.1.1+)
-
-```jsonc
-"agent": {
-  "my-agent": {
-    "description": "...",
-    "mode": "subagent",
-    "prompt": "{file:./agent/my-agent.md}",
-    // Disable non-permissionable tools you don't want
-    "tools": {
-      "write": false,
-      "task": false
-    },
-    // Control permissionable tools via permission
-    "permission": {
-      "bash": {
-        "*": "deny",              // Default FIRST (last matching wins)
-        "git status": "allow",    // Specific rules override default
-        "git diff *": "allow"
-      },
-      "edit": "deny",         // deny = edit tool disabled entirely
-      "skill": "allow",       // allow = enabled, no approval needed
-      "webfetch": "ask"       // ask = enabled, prompts for approval
-    }
-  }
-}
-```
-
 ### Permission Values
 
 | Value     | Effect                                  |
@@ -181,5 +167,4 @@ skill/<name>/
 - Model IDs must match provider format exactly (e.g., `amazon-bedrock/anthropic.claude-opus-4-20250514-v1:0`)
 - Skills loaded via the `skill` tool — agents need `skill: allow` in permission
 - `node_modules/` is gitignored — run `bun install` after clone
-- **Markdown agent permissions**: Only simple `allow`/`ask`/`deny` values work for `bash` permissions in markdown agents. Granular patterns (e.g., `bash: { "mkdir *": allow }`) only work in JSON config, not YAML frontmatter.
 - **Bash pattern bug** ([#6676](https://github.com/anomalyco/opencode/issues/6676)): Flags like `-p` are stripped during permission matching, so `mkdir -p foo` matches `mkdir`, not `mkdir -p *`

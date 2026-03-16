@@ -1,6 +1,7 @@
 ---
 description: Create git commits with user approval
 agent: commit
+subtask: true
 ---
 
 # Commit Changes
