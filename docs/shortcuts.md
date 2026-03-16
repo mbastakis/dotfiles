@@ -50,19 +50,21 @@ _Reference: `private_dot_config/private_karabiner/src/rules/15-hyper-navigation.
 | `Cmd+S`          | Tmux sessionx (`prefix`, `s`)        | `private_dot_config/ghostty/config:75`  |
 | `Cmd+H`          | Previous tmux window (`prefix`, `p`) | `private_dot_config/ghostty/config:76` |
 | `Cmd+L`          | Next tmux window (`prefix`, `n`)     | `private_dot_config/ghostty/config:77`  |
-| `Cmd+Shift+T`    | New Ghostty OS window                | `private_dot_config/ghostty/config:80`  |
-| `Cmd+Shift+W`    | Close Ghostty OS window              | `private_dot_config/ghostty/config:81`  |
-| `Cmd+Backspace`  | Delete to start of line (Ctrl+U)     | `private_dot_config/ghostty/config:84`  |
-| `Ctrl+Shift+T`   | Send `ESC[202~` to zsh               | `private_dot_config/ghostty/config:87`  |
-| `Ctrl+Tab`       | _(pass-through to tmux)_             | `private_dot_config/ghostty/config:90`  |
-| `Ctrl+Shift+Tab` | _(pass-through to tmux)_             | `private_dot_config/ghostty/config:91`  |
-| `Cmd+Left`       | Home (line start)                    | `private_dot_config/ghostty/config:94`  |
-| `Cmd+Right`      | End (line end)                       | `private_dot_config/ghostty/config:95`  |
-| `Cmd+Shift+E`    | Write screen to file + open          | `private_dot_config/ghostty/config:98`  |
-| `Shift+Enter`    | CSI 13;2u                            | `private_dot_config/ghostty/config:101`  |
-| `Super+0`        | Reset font size                      | `private_dot_config/ghostty/config:104` |
-| `Super+Shift+]`  | Increase font size                   | `private_dot_config/ghostty/config:105` |
-| `Super+-`        | Decrease font size                   | `private_dot_config/ghostty/config:106` |
+| `Cmd+O`          | OpenCode split (`prefix`, `o`)       | `private_dot_config/ghostty/config:80`  |
+| `Cmd+G`          | Lazygit popup (`prefix`, `G`)        | `private_dot_config/ghostty/config:81`  |
+| `Cmd+Shift+T`    | New Ghostty OS window                | `private_dot_config/ghostty/config:84`  |
+| `Cmd+Shift+W`    | Close Ghostty OS window              | `private_dot_config/ghostty/config:85`  |
+| `Cmd+Backspace`  | Delete to start of line (Ctrl+U)     | `private_dot_config/ghostty/config:88`  |
+| `Ctrl+Shift+T`   | Send `ESC[202~` to zsh               | `private_dot_config/ghostty/config:91`  |
+| `Ctrl+Tab`       | _(pass-through to tmux)_             | `private_dot_config/ghostty/config:94`  |
+| `Ctrl+Shift+Tab` | _(pass-through to tmux)_             | `private_dot_config/ghostty/config:95`  |
+| `Cmd+Left`       | Home (line start)                    | `private_dot_config/ghostty/config:98`  |
+| `Cmd+Right`      | End (line end)                       | `private_dot_config/ghostty/config:99`  |
+| `Cmd+Shift+E`    | Write screen to file + open          | `private_dot_config/ghostty/config:102` |
+| `Shift+Enter`    | CSI 13;2u                            | `private_dot_config/ghostty/config:105` |
+| `Super+0`        | Reset font size                      | `private_dot_config/ghostty/config:108` |
+| `Super+Shift+]`  | Increase font size                   | `private_dot_config/ghostty/config:109` |
+| `Super+-`        | Decrease font size                   | `private_dot_config/ghostty/config:110` |
 
 `Cmd+H` app-hide is disabled globally by `.chezmoiscripts/run_once_after_06-disable-cmd-h-global.sh.tmpl` so Ghostty receives `Cmd+H` for tmux navigation.
 
@@ -77,6 +79,8 @@ Prefix: **`Ctrl-a`**
 | `prefix + c`         | New window             | `private_dot_config/tmux/tmux.conf:26` |
 | `prefix + x`         | Kill pane (no confirm) | `private_dot_config/tmux/tmux.conf:27` |
 | `prefix + p`         | Previous window        | `private_dot_config/tmux/tmux.conf:28` |
+| `prefix + o`         | OpenCode split (aws-login + opencode) | `private_dot_config/tmux/tmux.conf:29` |
+| `prefix + G`         | Lazygit popup (90% overlay) | `private_dot_config/tmux/tmux.conf:30` |
 | `Ctrl+Tab`           | Next window            | `private_dot_config/tmux/tmux.conf:11` |
 | `Ctrl+Shift+Tab`     | Previous window        | `private_dot_config/tmux/tmux.conf:12` |
 | `v` (copy mode)      | Begin selection  | `private_dot_config/tmux/tmux.conf:30` |
