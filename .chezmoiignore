@@ -44,6 +44,8 @@ Cargo.lock
 .config/opencode/package.json
 .config/opencode/bun.lock
 .config/yazi/plugins/**
+.kube/cache/
+.kube/http-cache/
 
 # OS files
 .DS_Store

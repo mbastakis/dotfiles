@@ -20,6 +20,8 @@ profiles:
     mfa_serial: auto          # Read from ~/.aws/config
     session_duration: 12h
     max-hour: 12
+    env:
+      KUBECONFIG: ~/.kube/config-playground
 
   dev:
     type: cloudshepherd
@@ -33,6 +35,8 @@ profiles:
     storage: file
     min_ttl: 20
     max-hour: 4
+    env:
+      KUBECONFIG: ~/.kube/config-dev
 
   prod:
     type: cloudshepherd
@@ -46,6 +50,8 @@ profiles:
     storage: file
     min_ttl: 20
     max-hour: 4
+    env:
+      KUBECONFIG: ~/.kube/config-prod
 
   claude-code:
     type: cloudshepherd

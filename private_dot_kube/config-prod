@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Config
+clusters:
+- cluster:
+    certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURCVENDQWUyZ0F3SUJBZ0lJRTY5YkpMYjZSQ2d3RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TlRFeE1UY3hNVFEyTkRsYUZ3MHpOVEV4TVRVeE1UVXhORGxhTUJVeApFekFSQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLCkFvSUJBUUREYzlLYlp4ejZrSUQ0aWFvQjF5TllrWkFoN21GcFRtNC82OEZaWTI3cllQSkpPT3kzSjl2R1VQSSsKQjBoaFpwbWVyTTFHNUNVTnpiODMwaURwSWtybVY1UWFsSVlLdXQySVNyenhRMjhlTC90VGZzdEtBYnA1cnRQVwpzUC9MQkxXUFFLc2twOFAxbHF5cFZxN3NMQXdBQVo4UmZ1VmhDdzRUaU1oMmRqbWMyOXFqL084aVVoOHNjb0RHCmNDUTM1eVoxSWFNVVEzQkE5VzIzK3hMVGtCZVFyMisxQU1UcjBMeU11WDZvOStnL3dtbTdEVDFIWk1QMFJPTXAKZlpiN1BIOXpLVVk0RDgzYnhiclcvdjU1QkIvRnpQRjVNZGtOSUlEMFdkVW1BVHdGTTFNY0ZrVUVGcDNTK1ZZcwpmSy8yUVRkbEJsYllaejFFTTlBempIbVpNRWVCQWdNQkFBR2pXVEJYTUE0R0ExVWREd0VCL3dRRUF3SUNwREFQCkJnTlZIUk1CQWY4RUJUQURBUUgvTUIwR0ExVWREZ1FXQkJSR1ZFc0E2K0VUdHYzT0FTUnpNY3ZnYy8zM2NEQVYKQmdOVkhSRUVEakFNZ2dwcmRXSmxjbTVsZEdWek1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQUY0aWRzR2lvSQpxUHdoUDloWTYzK1lHZHdROUdpaWpYVnlHSldwcVJ5QjJ3VzBRbjFmTmMxNWRuNG1QYUNsNzlqbTgvUGRvbmRWCnpobEU5d1FkejdLMXQ0SGtMQ0l4KzJvalpwZ09sL1NZNFRsMEVncFBHSW4yMmhEUms2OG4ycy9XYkNNSTEwdFEKQzdrYUZnWnplaXp2a2YvQUJBRXBDbi95anQ1bVgxMGl4Z1M4SDJIbENLb1Z5Q1BLUlJkR3pqWDRGQkdoTnB1Mwpnc201NEhIdFVQSU00OEtMTURxcGtFZlR6aEtzSXdYUTQzZCtQVHdySGlUL20wWlBwVHByUnBNTm8xSEl5SFE2CkV1bVpHZkNMMDVhRlBmOGU2R2VObHV2MEJpa2R4RWs3Q1FrNFo2VWtNQnVNYUNsNHdyL29ONCtzZEZkcGVyVWUKZXUxY083c1B5dEh6Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    server: https://C8D5271C46AE08FC810A38050AA904F1.gr7.eu-central-1.eks.amazonaws.com
+  name: prod
+contexts:
+- context:
+    cluster: prod
+    user: prod
+  name: prod
+current-context: prod
+users:
+- name: prod
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1beta1
+      command: aws
+      args:
+      - --region
+      - eu-central-1
+      - eks
+      - get-token
+      - --cluster-name
+      - aicc-prod-ec1-shared-eks-0
+      - --output
+      - json
+      env:
+      - name: AWS_PROFILE
+        value: prod
+      interactiveMode: IfAvailable
+      provideClusterInfo: false
