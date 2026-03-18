@@ -11,6 +11,9 @@
     path = ~/.config/git/.gitconfig-work
 [includeIf "hasconfig:remote.*.url:https://*@gitlab.devops.telekom.de/**"]
     path = ~/.config/git/.gitconfig-work
+
+[http "https://gitlab.devops.telekom.de/"]
+    curloptResolve = gitlab.devops.telekom.de:443:10.14.252.252
 {{- end }}
 
 [include]
