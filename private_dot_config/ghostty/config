@@ -9,7 +9,7 @@ background-opacity = 0.85
 background-blur = 16
 background-image = ~/.config/ghostty/background.png
 background-image-opacity = 0.45
-background-image-fit = cover
+background-image-fit = contain
 custom-shader = ~/.config/ghostty/shader.glsl
 
 # ============================================================================

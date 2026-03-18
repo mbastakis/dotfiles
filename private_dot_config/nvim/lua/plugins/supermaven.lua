@@ -3,11 +3,13 @@ return {
   event = "InsertEnter",
   opts = {
     keymaps = {
-      accept_suggestion = nil, -- handled by blink.cmp
+      accept_suggestion = "<Tab>",
+      accept_word = "<C-g>",
+      clear_suggestion = "<C-]>",
     },
     ignore_filetypes = { "codecompanion" },
     log_level = "info",
-    disable_inline_completion = true,
-    disable_keymaps = true,
+    disable_inline_completion = false,
+    disable_keymaps = false,
   },
 }

@@ -23,6 +23,12 @@ checkout = git clone 'https://gitlab.devops.telekom.de/aicc/fiber/anonymization-
 [trigger-service]
 checkout = git clone 'https://gitlab.devops.telekom.de/aicc/fiber/trigger-service.git' 'trigger-service'
 
+[infrastructure/argocd/helm-charts/infra-grafana-dashboards]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/infra-grafana-dashboards.git' 'infrastructure/argocd/helm-charts/infra-grafana-dashboards'
+
+[infrastructure/argocd/helm-charts/observability-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/observability-helm.git' 'infrastructure/argocd/helm-charts/observability-helm'
+
 # =============================================================================
 # Fiber ArgoCD - group 631097 (auto-discovered)
 # =============================================================================
