@@ -66,7 +66,7 @@ _Reference: `private_dot_config/private_karabiner/src/rules/15-hyper-navigation.
 | `Super+Shift+]`  | Increase font size                   | `private_dot_config/ghostty/config:109` |
 | `Super+-`        | Decrease font size                   | `private_dot_config/ghostty/config:110` |
 
-`Cmd+H` app-hide is disabled globally by `.chezmoiscripts/run_once_after_06-disable-cmd-h-global.sh.tmpl` so Ghostty receives `Cmd+H` for tmux navigation.
+Ghostty remaps `Hide Ghostty` to `Ctrl+Option+Cmd+H` via `.chezmoiscripts/run_once_after_06-ghostty-hide-shortcut.sh.tmpl` so `Cmd+H` reaches tmux navigation while other apps keep the macOS default hide shortcut.
 
 ## tmux (Multiplexer Layer)
 

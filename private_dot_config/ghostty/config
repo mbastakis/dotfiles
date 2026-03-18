@@ -30,8 +30,7 @@ window-padding-y = 10, 0
 # ============================================================================
 # Cursor & Mouse
 # ============================================================================
-cursor-style = block_hollow
-cursor-style-blink = true
+cursor-style = block
 cursor-color = #CBA6F7
 mouse-hide-while-typing = true
 mouse-shift-capture = true

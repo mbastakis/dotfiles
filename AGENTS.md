@@ -55,6 +55,7 @@ Pre-push: `chezmoi apply --dry-run --force`.
 5. After scripts (alphabetical):
    03-setup                → bat cache, yazi plugins, carapace sync (run_once)
    05-ghostty-tmux         → installs LaunchAgent for tmux startup (run_onchange)
+   06-ghostty-hide-shortcut → clears global Hide overrides, remaps Ghostty hide (run_once)
    macos-settings          → macOS defaults (run_once)
 ```
 

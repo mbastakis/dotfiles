@@ -21,7 +21,7 @@ flowchart TD
 
   E --> E1[03 - setup tasks<br/>run_once]
   E --> E2[05 - ghostty-tmux agent<br/>run_onchange]
-  E --> E3[06 - disable Cmd+H global<br/>run_once]
+  E --> E3[06 - Ghostty Cmd+H override<br/>run_once]
   E --> E4[macos-settings<br/>run_once]
 ```
 
@@ -78,13 +78,13 @@ Manages the macOS LaunchAgent for Ghostty+tmux auto-start. Removes the legacy `T
 
 _Reference: `.chezmoiscripts/run_onchange_after_05-ghostty-tmux-launchagent.sh.tmpl:1`_
 
-### 06 - Disable Cmd+H Globally (`run_once`)
+### 06 - Ghostty Cmd+H Override (`run_once`)
 
-Disables macOS app hide shortcuts globally by writing per-app `NSUserKeyEquivalents` entries for `Hide <AppName>` to `nil`. The script scans common app directories (`/Applications`, `/System/Applications`, `~/Applications`) and removes the temporary wildcard test key `Hide %@` if present.
+Removes any legacy global `Hide *` keyboard overrides from `NSGlobalDomain` and sets an app-specific Ghostty shortcut so `Hide Ghostty` uses `Ctrl+Option+Cmd+H`.
 
-Also disables `Hide Others` globally and refreshes preferences via `cfprefsd`.
+This keeps default macOS hide shortcuts in other apps while allowing Ghostty to use `Cmd+H` for tmux navigation. Preferences are refreshed via `cfprefsd`.
 
-_Reference: `.chezmoiscripts/run_once_after_06-disable-cmd-h-global.sh.tmpl:1`_
+_Reference: `.chezmoiscripts/run_once_after_06-ghostty-hide-shortcut.sh.tmpl:1`_
 
 ### macOS Settings (`run_once`)
 

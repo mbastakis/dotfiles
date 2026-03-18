@@ -1,0 +1,38 @@
+#!/bin/bash
+
+{{- if ne .chezmoi.os "darwin" }}
+exit 0
+{{- end }}
+
+set -euo pipefail
+
+python3 - <<'PY'
+import plistlib
+from pathlib import Path
+
+plist_path = Path.home() / "Library/Preferences/.GlobalPreferences.plist"
+if not plist_path.exists():
+    raise SystemExit(0)
+
+with plist_path.open("rb") as file:
+    preferences = plistlib.load(file)
+
+key_equivalents = preferences.get("NSUserKeyEquivalents")
+if isinstance(key_equivalents, dict):
+    filtered_equivalents = {
+        key: value
+        for key, value in key_equivalents.items()
+        if not (isinstance(key, str) and key.startswith("Hide "))
+    }
+
+    if filtered_equivalents:
+        preferences["NSUserKeyEquivalents"] = filtered_equivalents
+    else:
+        preferences.pop("NSUserKeyEquivalents", None)
+
+    with plist_path.open("wb") as file:
+        plistlib.dump(preferences, file)
+PY
+
+defaults write com.mitchellh.ghostty NSUserKeyEquivalents -dict-add "Hide Ghostty" "@~^h"
+killall cfprefsd >/dev/null 2>&1 || true
