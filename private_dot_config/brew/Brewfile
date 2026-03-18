@@ -133,6 +133,7 @@ brew "zoxide"
 # Casks (GUI Applications)
 # -----------------------------------------------------------------------------
 cask "aerospace"
+cask "alt-tab"
 cask "appcleaner"
 cask "betterdisplay"
 cask "chatgpt"
