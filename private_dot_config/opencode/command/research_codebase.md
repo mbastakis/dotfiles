@@ -1,6 +1,5 @@
 ---
 description: Document codebase as-is through comprehensive parallel research
-subtask: true
 ---
 
 # Research Codebase
