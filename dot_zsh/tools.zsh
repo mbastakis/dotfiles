@@ -21,5 +21,8 @@ command -v direnv &>/dev/null && eval "$(direnv hook zsh)"
 # Starship - prompt
 command -v starship &>/dev/null && eval "$(starship init zsh)"
 
-# aws-login - shell integration
-command -v aws-login &>/dev/null && eval "$(aws-login init zsh)"
+# aws-login - shell integration + agent skills
+if command -v aws-login &>/dev/null; then
+  eval "$(aws-login init zsh)"
+  [[ ! -f ~/.config/opencode/skills/aws-login/SKILL.md ]] && aws-login skills install opencode &>/dev/null
+fi
