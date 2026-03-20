@@ -52,6 +52,9 @@ vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 -- Use bash treesitter parser for zsh files (no native zsh parser exists)
 vim.treesitter.language.register("bash", "zsh")
 
+-- Register gotmpl treesitter parser for chezmoi template filetypes
+vim.treesitter.language.register("gotmpl", "gotmpl")
+
 -- Custom filetype mappings
 vim.filetype.add({
   filename = {
@@ -77,6 +80,15 @@ vim.filetype.add({
       -- Check if we're in a Helm chart (has Chart.yaml in parent dirs)
       if vim.fs.root(path, { "Chart.yaml" }) then
         return "helm"
+      end
+    end,
+    -- Go template files (.tmpl) outside chezmoi source dir
+    -- chezmoi.vim handles .tmpl files inside the chezmoi source directory
+    -- by stripping prefixes and setting the base filetype automatically
+    [".*%.tmpl"] = function(path)
+      local chezmoi_source = vim.fn.expand("~/.local/share/chezmoi")
+      if not path:find(chezmoi_source, 1, true) then
+        return "gotmpl"
       end
     end,
   },

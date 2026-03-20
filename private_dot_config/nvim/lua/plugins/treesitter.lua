@@ -19,6 +19,7 @@ return {
       "go",
       "gomod",
       "gosum",
+      "gotmpl",
       "hcl",
       "html",
       "javascript",

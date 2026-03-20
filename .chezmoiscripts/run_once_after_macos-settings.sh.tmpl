@@ -13,7 +13,7 @@ echo "Configuring macOS system settings..."
 
 # Dock
 defaults write com.apple.dock autohide -bool true
-defaults write com.apple.dock orientation -string "right"
+defaults write com.apple.dock orientation -string "down"
 defaults write com.apple.dock mru-spaces -bool false
 defaults write com.apple.dock mineffect -string "scale"
 defaults write com.apple.dock show-recents -bool false
@@ -79,7 +79,7 @@ defaults write com.0804Team.KeyClu activationKeyType -int 1
 
 echo "Restarting affected services..."
 for app in "Dock" "Finder" "SystemUIServer"; do
-    killall "$app" &>/dev/null || true
+  killall "$app" &>/dev/null || true
 done
 
 echo "macOS settings configured successfully!"
