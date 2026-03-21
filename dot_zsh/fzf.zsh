@@ -149,6 +149,9 @@ if command -v fzf &>/dev/null; then
 fi
 
 # =============================================================================
-# ATUIN: Shell history (loaded after fzf so it binds Ctrl+R)
+# ATUIN: Shell history + AI (loaded after fzf so it binds Ctrl+R)
 # =============================================================================
-command -v atuin &>/dev/null && eval "$(atuin init zsh)"
+if command -v atuin &>/dev/null; then
+  eval "$(atuin init zsh)"
+  eval "$(atuin ai init zsh)"
+fi

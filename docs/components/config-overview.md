@@ -1,8 +1,8 @@
 # Config Overview
 
-Summary of all notable `~/.config/` areas managed by chezmoi, with links to dedicated docs for larger components.
+Summary of notable config areas managed by chezmoi, with links to dedicated docs for larger components.
 
-**Source:** `private_dot_config/` -> `~/.config/`
+**Source:** `private_dot_config/` -> `~/.config/`, `private_dot_abook/` -> `~/.abook/`
 
 ## Managed Components
 
@@ -12,6 +12,12 @@ Summary of all notable `~/.config/` areas managed by chezmoi, with links to dedi
 | **OpenCode** | `private_dot_config/opencode/` | [opencode.md](opencode.md) | AI CLI with agents, commands, workflows, and skills |
 | **Karabiner** | `private_dot_config/private_karabiner/` | [karabiner.md](karabiner.md) | Keyboard remapping (generated config) |
 | **Carapace** | `private_dot_config/carapace/` | [carapace.md](carapace.md) | Shell completion framework |
+| **Atuin** | `private_dot_config/private_atuin/private_config.toml` | -- | Shell history search, sync, and AI settings |
+| **NeoMutt** | `private_dot_config/neomutt/` | [email.md](email.md) | Terminal mail client config and custom mailbox bindings |
+| **notmuch** | `private_dot_config/notmuch/default/` | [email.md](email.md) | Mail index/search config and tagging hook |
+| **msmtp** | `private_dot_config/msmtp/private_config.tmpl` | [email.md](email.md) | SMTP account config rendered from Bitwarden secrets |
+| **isync (mbsync)** | `private_dot_config/isyncrc.tmpl` | [email.md](email.md) | IMAP sync channels and Maildir mapping |
+| **abook** | `private_dot_abook/` | [email.md](email.md) | Local address book (tool-native `~/.abook/` path) |
 | Mise | `private_dot_config/mise/` | -- | Tool/version manager config (`linear-cli`) |
 | Ghostty | `private_dot_config/ghostty/` | -- | Terminal emulator |
 | tmux | `private_dot_config/tmux/` | -- | Terminal multiplexer |
@@ -81,6 +87,8 @@ _Reference: `private_dot_config/brew/Brewfile`_
 
 - Neovim AGENTS: `private_dot_config/nvim/AGENTS.md:1`
 - OpenCode README: `private_dot_config/opencode/README.md:1`
+- Email stack doc: `docs/components/email.md:1`
+- mbsync template: `private_dot_config/isyncrc.tmpl:1`
 - Ghostty config: `private_dot_config/ghostty/config:1`
 - tmux config: `private_dot_config/tmux/tmux.conf:1`
 - Key paths table: `AGENTS.md:78`

@@ -12,9 +12,9 @@ flowchart TD
   A --> C[config/keymaps.lua<br/>global keymaps]
   A --> D[config/autocmds.lua<br/>yank highlight, helm detection]
   A --> E[config/lazy.lua<br/>bootstrap lazy.nvim]
-  E --> F["import: plugins/*<br/>22 plugin specs"]
+  E --> F["import: plugins/*<br/>23 plugin specs"]
   E --> G["import: plugins/lsp/*<br/>LSP config + Mason"]
-  H["after/lsp/*.lua<br/>5 server overrides"] -.->|loaded by nvim| G
+  H["after/lsp/*.lua<br/>6 server overrides"] -.->|loaded by nvim| G
 ```
 
 The entry point (`init.lua`) loads four core modules in strict order. `config/lazy.lua` bootstraps lazy.nvim from git if missing, then imports all plugin specs from two directories.
@@ -29,8 +29,8 @@ _Reference: `private_dot_config/nvim/init.lua:1`_
 - **Indentation:** 2-space tabs, expandtab
 - **Display:** Relative line numbers, no wrap, custom fold fillchars
 - **Folds:** Level 99 (all open by default)
-- **Custom filetypes:** `docker-compose.yml` -> `yaml.docker-compose`, `.gitlab-ci.yml` -> `yaml.gitlab`, Helm chart templates -> `helm`
-- **Treesitter:** Registers `bash` parser for `zsh` files
+- **Custom filetypes:** `docker-compose.yml` -> `yaml.docker-compose`, `.gitlab-ci.yml` -> `yaml.gitlab`, Helm chart templates -> `helm`, `.tmpl` outside chezmoi -> `gotmpl`
+- **Treesitter:** Registers `bash` parser for `zsh` files, `gotmpl` parser for `gotmpl` filetype
 
 _Reference: `private_dot_config/nvim/lua/config/options.lua:1`_
 
@@ -44,12 +44,13 @@ _Reference: `private_dot_config/nvim/lua/config/autocmds.lua:1`_
 
 ## Plugin Organization
 
-22 plugin spec files in `lua/plugins/`, each returning a lazy.nvim spec table:
+23 plugin spec files in `lua/plugins/`, each returning a lazy.nvim spec table:
 
 | File | Plugin | Category |
 |---|---|---|
 | `autopairs.lua` | nvim-autopairs | Editing |
 | `blink.lua` | blink.cmp | Completion |
+| `chezmoi.lua` | chezmoi.vim | Chezmoi templates |
 | `codecompanion.lua` | codecompanion.nvim | AI |
 | `colorscheme.lua` | catppuccin/nvim | Theme |
 | `diffview.lua` | diffview.nvim | Git |
@@ -90,7 +91,7 @@ flowchart TD
 
 Auto-installs and auto-enables servers. `automatic_enable = true` starts all installed servers without explicit setup calls.
 
-**19 LSP servers:** lua_ls, ts_ls, html, cssls, jsonls, bashls, eslint, pyright, gopls, terraformls, rust_analyzer, taplo, nil_ls, gitlab_ci_ls, dockerls, docker_compose_language_service, yamlls, ansiblels, helm_ls
+**20 LSP servers:** lua_ls, ts_ls, html, cssls, jsonls, bashls, eslint, pyright, gopls, terraformls, rust_analyzer, taplo, nil_ls, gitlab_ci_ls, dockerls, docker_compose_language_service, yamlls, ansiblels, helm_ls, zls
 
 **30+ tools (formatters/linters):** prettier, prettierd, stylua, shfmt, gofumpt, golines, shellcheck, eslint_d, ruff, yamllint, hadolint, golangci-lint, actionlint, trivy, gitleaks, and others.
 
@@ -112,6 +113,7 @@ Highest-priority overrides loaded by Neovim's native `after/lsp/` mechanism:
 | `jsonls.lua` | Adds `jsonc` filetype, enables validation |
 | `dockerls.lua` | Restricts to `dockerfile` filetype only |
 | `helm_ls.lua` | Custom values file patterns, embedded yamlls with kubernetes schema |
+| `gopls.lua` | Extends filetypes to include `gotmpl` for chezmoi/Go template files |
 | `kdl_lsp.lua` | Manual config (not in Mason), only enables if binary exists |
 
 _Reference: `private_dot_config/nvim/after/lsp/`_

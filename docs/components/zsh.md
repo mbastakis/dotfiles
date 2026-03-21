@@ -89,7 +89,7 @@ Tool initialization for interactive shells:
 | Starship | `starship init zsh` | Prompt |
 | aws-login | `aws-login init zsh` | Defines `aws-login` and `aws-login-exec` shell functions |
 
-Atuin is loaded in `fzf.zsh` (after fzf setup) so it can take over `Ctrl-R`.
+Atuin is loaded in `fzf.zsh` (after fzf setup) so it can take over `Ctrl-R`, and Atuin AI shell integration is loaded there too.
 
 _Reference: `dot_zsh/tools.zsh:1`_
 
@@ -101,6 +101,7 @@ _Reference: `dot_zsh/tools.zsh:1`_
 | Listing (eza) | `l`, `ls`, `ll`, `la`, `ld`, `lda`, `lgit` |
 | Shell | `reload`/`r` = `exec zsh`, `zsh-profile`, `zsh-time` |
 | Apps | `v`/`vi`/`vim` = `nvim`, `lg` = `lazygit`, `b` = `bat`, `oc` = `opencode`, `occ` = `opencode --continue` |
+| Mail | `nm` = `neomutt`, `msync` = `mail-sync`, `ab` = `abook` |
 | Tmux | `ta` = `tmux attach`, `td` = `tmux detach`, `tls` = `tmux ls` |
 | Kubernetes | `k` = `kubectl`, `ctx` = `kubectx`, `ns` = `kubens` |
 | Chezmoi | `cz` = `chezmoi` |
@@ -131,12 +132,13 @@ Central FZF configuration. `FZF_DEFAULT_OPTS` carries all base settings (Catppuc
 - `Ctrl-Shift-T` -- directory picker (via Ghostty `ESC[202~` passthrough)
 - `Alt-C` -- disabled (zoxide used instead)
 - `Ctrl-R` -- fzf widget loaded then unbound; Atuin takes over
+- `?` on an empty prompt -- Atuin AI natural-language prompt
 
 **Tool-specific configs:**
 - Zoxide (`_ZO_FZF_OPTS`): eza directory preview, git branch display
 - ftext (`_ftext_fzf_opts`): bat syntax-highlighted preview centered on match
 
-Atuin is initialized at the end of this file: `eval "$(atuin init zsh)"`.
+Atuin and Atuin AI are initialized at the end of this file: `eval "$(atuin init zsh)"` and `eval "$(atuin ai init zsh)"`.
 
 _Reference: `dot_zsh/fzf.zsh:1`_
 
@@ -161,6 +163,8 @@ _Reference: `dot_zsh/fzf-tab.zsh:1`_
 ### keybindings.zsh
 
 All bindings applied across keymaps: `emacs`, `viins`, `vicmd`, `main`. See [shortcuts.md](../shortcuts.md) for the full keybinding table.
+
+Notable custom bindings include `Ctrl-F` for `ftext-widget`, `Ctrl-G` for `navi`, and `Ctrl-Z` for zoxide.
 
 Final settings: `KEYTIMEOUT=80` (for Alt/Option escape-prefix sequences), `bindkey -e` (emacs mode).
 
@@ -200,6 +204,8 @@ Ghostty sends custom CSI sequences for macOS shortcuts that zsh processes:
 ### Zsh shell type note
 
 `.zshenv` is the only file loaded by non-interactive shells (`zsh -c`). PATH additions for background processes must go in `.zshenv`, not `.zshrc`.
+
+The mail LaunchAgent calls `~/bin/mail-sync --quiet` directly, and `mail-sync` sets its own `PATH` + XDG variables internally. Mail background sync does not depend on `.zshrc` load order or shell aliases.
 
 ## References
 

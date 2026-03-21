@@ -11,16 +11,18 @@ flowchart LR
   G --> Z[zsh]
   T --> Z
   Z --> N[Neovim]
+  Z --> M[Mail Stack\nNeoMutt + mbsync + msmtp + notmuch + abook]
   Z --> O[OpenCode CLI]
   C[chezmoi lifecycle] --> Z
   C --> N
+  C --> M
   C --> O
   C --> K
   C --> G
   C --> T
 ```
 
-Input flows from the physical keyboard through Karabiner (home row mods, hyper key), into Ghostty (terminal keybindings), then into tmux (prefix commands) or directly to zsh (shell keybindings). From zsh, input reaches Neovim or OpenCode. Chezmoi manages the configuration for all of these layers.
+Input flows from the physical keyboard through Karabiner (home row mods, hyper key), into Ghostty (terminal keybindings), then into tmux (prefix commands) or directly to zsh (shell keybindings). From zsh, input reaches Neovim, OpenCode, and NeoMutt. Chezmoi manages configuration for all layers, including the mail stack and its launchd automation.
 
 ## Source-to-Target Mapping
 
@@ -34,6 +36,14 @@ Chezmoi translates source-state file names to target paths using naming conventi
 | `literal_bin/` | `~/bin/` | Shell utility scripts |
 | `private_dot_ssh/` | `~/.ssh/` | SSH keys (encrypted) |
 | `private_dot_config/` | `~/.config/` | Application configs |
+| `private_dot_config/isyncrc.tmpl` | `~/.config/isyncrc` | mbsync/isync config |
+| `private_dot_config/msmtp/private_config.tmpl` | `~/.config/msmtp/config` | SMTP account config |
+| `private_dot_config/notmuch/default/config.tmpl` | `~/.config/notmuch/default/config` | notmuch profile config |
+| `private_dot_config/notmuch/default/hooks/executable_post-new.tmpl` | `~/.config/notmuch/default/hooks/post-new` | post-index account/folder tagging |
+| `private_dot_config/neomutt/` | `~/.config/neomutt/` | NeoMutt entrypoint, includes, mailcap |
+| `private_dot_abook/` | `~/.abook/` | Abook contact config and data |
+| `private_Library/LaunchAgents/com.mbastakis.mail-sync.plist.tmpl` | `~/Library/LaunchAgents/com.mbastakis.mail-sync.plist` | Mail sync scheduler |
+| `literal_bin/executable_mail-*` | `~/bin/mail-*` | Mail helper scripts (`mail-sync`, `mail-open`) |
 | `.chezmoiscripts/` | _(lifecycle scripts)_ | Before/after scripts (e.g. LaunchAgent reload, Ghostty-only Cmd+H override), not deployed |
 | `.chezmoidata.yaml` | _(template data)_ | Catppuccin Mocha color palette |
 | `dot_zshrc` | `~/.zshrc` | Zsh entry point |
@@ -63,7 +73,7 @@ The `.chezmoiignore` file uses **target-state paths** (not source-state names) a
 - **Runtime state:** `glab-cli/recover/`, `.obsidian/`, `.DS_Store`
 - **Obsidian vault generated files:** Plugin binaries (`main.js`, `manifest.json`, `styles.css`), themes, icons, and `workspace.json` under `Documents/notes/.obsidian/` are ignored — only settings JSONs and plugin `data.json` files are managed
 - **Profile-conditional:** DT work configs (glab, git work config, GitLab SSH keys) excluded when profile is not `dt-work`
-- **OS-conditional:** macOS-only configs (Aerospace, Karabiner, Finicky, SketchyBar) excluded on Linux
+- **OS-conditional:** macOS-only configs (Aerospace, Karabiner, Finicky, SketchyBar, Ghostty LaunchAgent, mail LaunchAgent) excluded on Linux
 
 _Reference: `.chezmoiignore:19`, `.chezmoiignore:54`_
 
