@@ -1,0 +1,91 @@
+# Account-aware identity, mailbox targets, and send settings.
+
+{{ $primaryAccount := .mail.defaults.primary_account -}}
+{{ range .mail.accounts -}}
+{{ if and .enabled (eq .id $primaryAccount) -}}
+{{ $inboxMailbox := printf "+%s/%s" .id .folders.inbox -}}
+{{ $inboxQuery := printf "notmuch://$my_notmuch_database?query=tag:acct-%s%%20and%%20tag:inbox%%20and%%20not%%20tag:spam%%20and%%20not%%20tag:trash" .id -}}
+{{ $sentQuery := printf "notmuch://$my_notmuch_database?query=tag:acct-%s%%20and%%20tag:sent" .id -}}
+{{ $draftsQuery := printf "notmuch://$my_notmuch_database?query=tag:acct-%s%%20and%%20tag:draft" .id -}}
+{{ $spamQuery := printf "notmuch://$my_notmuch_database?query=tag:acct-%s%%20and%%20tag:spam" .id -}}
+{{ $trashQuery := printf "notmuch://$my_notmuch_database?query=tag:acct-%s%%20and%%20tag:trash" .id -}}
+set my_account="{{ .id }}"
+set from={{ .address | quote }}
+set realname={{ .real_name | quote }}
+set sendmail="/opt/homebrew/bin/msmtp --account={{ .id }}"
+set spool_file="{{ $inboxMailbox }}"
+set postponed="+{{ .id }}/{{ .folders.drafts }}"
+
+set my_folder_inbox={{ .folders.inbox | quote }}
+set my_folder_sent={{ .folders.sent | quote }}
+set my_folder_drafts={{ .folders.drafts | quote }}
+set my_folder_spam={{ .folders.spam | quote }}
+set my_folder_trash={{ .folders.trash | quote }}
+
+set my_inbox_mailbox="{{ $inboxMailbox }}"
+set my_inbox_query="{{ $inboxQuery }}"
+set my_sent_query="{{ $sentQuery }}"
+set my_drafts_query="{{ $draftsQuery }}"
+set my_spam_query="{{ $spamQuery }}"
+set my_trash_query="{{ $trashQuery }}"
+set my_current_mailbox="{{ $inboxMailbox }}"
+
+{{ end -}}
+{{ end -}}
+
+alternates{{- range .mail.accounts }}{{- if .enabled }} {{ .address }}{{- end }}{{- end }}
+
+{{ range .mail.accounts -}}
+{{ if .enabled -}}
+{{ $inboxMailbox := printf "+%s/%s" .id .folders.inbox -}}
+{{ $inboxQuery := printf "notmuch://$my_notmuch_database?query=tag:acct-%s%%20and%%20tag:inbox%%20and%%20not%%20tag:spam%%20and%%20not%%20tag:trash" .id -}}
+{{ $sentQuery := printf "notmuch://$my_notmuch_database?query=tag:acct-%s%%20and%%20tag:sent" .id -}}
+{{ $draftsQuery := printf "notmuch://$my_notmuch_database?query=tag:acct-%s%%20and%%20tag:draft" .id -}}
+{{ $spamQuery := printf "notmuch://$my_notmuch_database?query=tag:acct-%s%%20and%%20tag:spam" .id -}}
+{{ $trashQuery := printf "notmuch://$my_notmuch_database?query=tag:acct-%s%%20and%%20tag:trash" .id -}}
+folder-hook "{{ .id }}/" 'set my_account="{{ .id }}" from={{ .address | quote }} realname={{ .real_name | quote }} sendmail="/opt/homebrew/bin/msmtp --account={{ .id }}" my_folder_inbox={{ .folders.inbox | quote }} my_folder_sent={{ .folders.sent | quote }} my_folder_drafts={{ .folders.drafts | quote }} my_folder_spam={{ .folders.spam | quote }} my_folder_trash={{ .folders.trash | quote }} my_inbox_mailbox="{{ $inboxMailbox }}" my_inbox_query="{{ $inboxQuery }}" my_sent_query="{{ $sentQuery }}" my_drafts_query="{{ $draftsQuery }}" my_spam_query="{{ $spamQuery }}" my_trash_query="{{ $trashQuery }}" my_current_mailbox="{{ $inboxMailbox }}"'
+folder-hook "{{ .id }}/" 'macro index,pager gi "<change-folder>{{ $inboxMailbox }}<enter>" "Open current-account inbox"'
+folder-hook "{{ .id }}/" 'macro index,pager gs "<change-folder>{{ $sentQuery }}<enter>" "Open current-account sent"'
+folder-hook "{{ .id }}/" 'macro index,pager gd "<change-folder>{{ $draftsQuery }}<enter>" "Open current-account drafts"'
+folder-hook "{{ .id }}/" 'macro index,pager gp "<change-folder>{{ $spamQuery }}<enter>" "Open current-account spam"'
+folder-hook "{{ .id }}/" 'macro index,pager gt "<change-folder>{{ $trashQuery }}<enter>" "Open current-account trash"'
+folder-hook "{{ .id }}/" 'macro index,pager gr "<sync-mailbox><shell-escape>$HOME/bin/mail-sync --account={{ .id }}<enter><change-folder>{{ $inboxMailbox }}<enter><check-stats><redraw-screen>" "Sync current account"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:inbox" 'set my_account="{{ .id }}" from={{ .address | quote }} realname={{ .real_name | quote }} sendmail="/opt/homebrew/bin/msmtp --account={{ .id }}" my_folder_inbox={{ .folders.inbox | quote }} my_folder_sent={{ .folders.sent | quote }} my_folder_drafts={{ .folders.drafts | quote }} my_folder_spam={{ .folders.spam | quote }} my_folder_trash={{ .folders.trash | quote }} my_inbox_mailbox="{{ $inboxMailbox }}" my_inbox_query="{{ $inboxQuery }}" my_sent_query="{{ $sentQuery }}" my_drafts_query="{{ $draftsQuery }}" my_spam_query="{{ $spamQuery }}" my_trash_query="{{ $trashQuery }}" my_current_mailbox="{{ $inboxQuery }}"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:inbox" 'macro index,pager gi "<change-folder>{{ $inboxMailbox }}<enter>" "Open current-account inbox"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:inbox" 'macro index,pager gs "<change-folder>{{ $sentQuery }}<enter>" "Open current-account sent"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:inbox" 'macro index,pager gd "<change-folder>{{ $draftsQuery }}<enter>" "Open current-account drafts"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:inbox" 'macro index,pager gp "<change-folder>{{ $spamQuery }}<enter>" "Open current-account spam"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:inbox" 'macro index,pager gt "<change-folder>{{ $trashQuery }}<enter>" "Open current-account trash"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:inbox" 'macro index,pager gr "<sync-mailbox><shell-escape>$HOME/bin/mail-sync --account={{ .id }}<enter><change-folder>{{ $inboxQuery }}<enter><check-stats><redraw-screen>" "Sync current account"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:sent" 'set my_account="{{ .id }}" from={{ .address | quote }} realname={{ .real_name | quote }} sendmail="/opt/homebrew/bin/msmtp --account={{ .id }}" my_folder_inbox={{ .folders.inbox | quote }} my_folder_sent={{ .folders.sent | quote }} my_folder_drafts={{ .folders.drafts | quote }} my_folder_spam={{ .folders.spam | quote }} my_folder_trash={{ .folders.trash | quote }} my_inbox_mailbox="{{ $inboxMailbox }}" my_inbox_query="{{ $inboxQuery }}" my_sent_query="{{ $sentQuery }}" my_drafts_query="{{ $draftsQuery }}" my_spam_query="{{ $spamQuery }}" my_trash_query="{{ $trashQuery }}" my_current_mailbox="{{ $sentQuery }}"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:sent" 'macro index,pager gi "<change-folder>{{ $inboxMailbox }}<enter>" "Open current-account inbox"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:sent" 'macro index,pager gs "<change-folder>{{ $sentQuery }}<enter>" "Open current-account sent"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:sent" 'macro index,pager gd "<change-folder>{{ $draftsQuery }}<enter>" "Open current-account drafts"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:sent" 'macro index,pager gp "<change-folder>{{ $spamQuery }}<enter>" "Open current-account spam"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:sent" 'macro index,pager gt "<change-folder>{{ $trashQuery }}<enter>" "Open current-account trash"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:sent" 'macro index,pager gr "<sync-mailbox><shell-escape>$HOME/bin/mail-sync --account={{ .id }}<enter><change-folder>{{ $sentQuery }}<enter><check-stats><redraw-screen>" "Sync current account"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:draft" 'set my_account="{{ .id }}" from={{ .address | quote }} realname={{ .real_name | quote }} sendmail="/opt/homebrew/bin/msmtp --account={{ .id }}" my_folder_inbox={{ .folders.inbox | quote }} my_folder_sent={{ .folders.sent | quote }} my_folder_drafts={{ .folders.drafts | quote }} my_folder_spam={{ .folders.spam | quote }} my_folder_trash={{ .folders.trash | quote }} my_inbox_mailbox="{{ $inboxMailbox }}" my_inbox_query="{{ $inboxQuery }}" my_sent_query="{{ $sentQuery }}" my_drafts_query="{{ $draftsQuery }}" my_spam_query="{{ $spamQuery }}" my_trash_query="{{ $trashQuery }}" my_current_mailbox="{{ $draftsQuery }}"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:draft" 'macro index,pager gi "<change-folder>{{ $inboxMailbox }}<enter>" "Open current-account inbox"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:draft" 'macro index,pager gs "<change-folder>{{ $sentQuery }}<enter>" "Open current-account sent"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:draft" 'macro index,pager gd "<change-folder>{{ $draftsQuery }}<enter>" "Open current-account drafts"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:draft" 'macro index,pager gp "<change-folder>{{ $spamQuery }}<enter>" "Open current-account spam"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:draft" 'macro index,pager gt "<change-folder>{{ $trashQuery }}<enter>" "Open current-account trash"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:draft" 'macro index,pager gr "<sync-mailbox><shell-escape>$HOME/bin/mail-sync --account={{ .id }}<enter><change-folder>{{ $draftsQuery }}<enter><check-stats><redraw-screen>" "Sync current account"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:spam" 'set my_account="{{ .id }}" from={{ .address | quote }} realname={{ .real_name | quote }} sendmail="/opt/homebrew/bin/msmtp --account={{ .id }}" my_folder_inbox={{ .folders.inbox | quote }} my_folder_sent={{ .folders.sent | quote }} my_folder_drafts={{ .folders.drafts | quote }} my_folder_spam={{ .folders.spam | quote }} my_folder_trash={{ .folders.trash | quote }} my_inbox_mailbox="{{ $inboxMailbox }}" my_inbox_query="{{ $inboxQuery }}" my_sent_query="{{ $sentQuery }}" my_drafts_query="{{ $draftsQuery }}" my_spam_query="{{ $spamQuery }}" my_trash_query="{{ $trashQuery }}" my_current_mailbox="{{ $spamQuery }}"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:spam" 'macro index,pager gi "<change-folder>{{ $inboxMailbox }}<enter>" "Open current-account inbox"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:spam" 'macro index,pager gs "<change-folder>{{ $sentQuery }}<enter>" "Open current-account sent"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:spam" 'macro index,pager gd "<change-folder>{{ $draftsQuery }}<enter>" "Open current-account drafts"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:spam" 'macro index,pager gp "<change-folder>{{ $spamQuery }}<enter>" "Open current-account spam"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:spam" 'macro index,pager gt "<change-folder>{{ $trashQuery }}<enter>" "Open current-account trash"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:spam" 'macro index,pager gr "<sync-mailbox><shell-escape>$HOME/bin/mail-sync --account={{ .id }}<enter><change-folder>{{ $spamQuery }}<enter><check-stats><redraw-screen>" "Sync current account"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:trash" 'set my_account="{{ .id }}" from={{ .address | quote }} realname={{ .real_name | quote }} sendmail="/opt/homebrew/bin/msmtp --account={{ .id }}" my_folder_inbox={{ .folders.inbox | quote }} my_folder_sent={{ .folders.sent | quote }} my_folder_drafts={{ .folders.drafts | quote }} my_folder_spam={{ .folders.spam | quote }} my_folder_trash={{ .folders.trash | quote }} my_inbox_mailbox="{{ $inboxMailbox }}" my_inbox_query="{{ $inboxQuery }}" my_sent_query="{{ $sentQuery }}" my_drafts_query="{{ $draftsQuery }}" my_spam_query="{{ $spamQuery }}" my_trash_query="{{ $trashQuery }}" my_current_mailbox="{{ $trashQuery }}"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:trash" 'macro index,pager gi "<change-folder>{{ $inboxMailbox }}<enter>" "Open current-account inbox"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:trash" 'macro index,pager gs "<change-folder>{{ $sentQuery }}<enter>" "Open current-account sent"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:trash" 'macro index,pager gd "<change-folder>{{ $draftsQuery }}<enter>" "Open current-account drafts"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:trash" 'macro index,pager gp "<change-folder>{{ $spamQuery }}<enter>" "Open current-account spam"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:trash" 'macro index,pager gt "<change-folder>{{ $trashQuery }}<enter>" "Open current-account trash"'
+folder-hook "notmuch://.*tag:acct-{{ .id }}.*tag:trash" 'macro index,pager gr "<sync-mailbox><shell-escape>$HOME/bin/mail-sync --account={{ .id }}<enter><change-folder>{{ $trashQuery }}<enter><check-stats><redraw-screen>" "Sync current account"'
+send-hook '~f {{ .address }}' 'set my_account="{{ .id }}" from={{ .address | quote }} realname={{ .real_name | quote }} sendmail="/opt/homebrew/bin/msmtp --account={{ .id }}"'
+
+{{ end -}}
+{{ end -}}

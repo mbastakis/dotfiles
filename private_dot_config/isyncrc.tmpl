@@ -1,0 +1,34 @@
+# isync/mbsync configuration managed by chezmoi.
+
+{{ $mailRoot := replace "~" .chezmoi.homeDir .mail.defaults.mail_root -}}
+{{ $isyncStateRoot := replace "~" .chezmoi.homeDir .mail.defaults.isync_state_root -}}
+
+{{ range .mail.accounts -}}
+{{ if .enabled -}}
+{{ $appPassword := ((bitwardenSecrets .secrets.app_password_uuid).value | trim) -}}
+IMAPAccount {{ .id }}
+Host imap.gmail.com
+User {{ .gmail_user | quote }}
+Pass {{ $appPassword | quote }}
+TLSType IMAPS
+AuthMechs LOGIN
+
+IMAPStore {{ .id }}-remote
+Account {{ .id }}
+
+MaildirStore {{ .id }}-local
+SubFolders Verbatim
+Path {{ printf "%s/%s/" $mailRoot .id }}
+Inbox {{ printf "%s/%s/%s" $mailRoot .id .folders.inbox }}
+
+Channel {{ .id }}
+Far :{{ .id }}-remote:
+Near :{{ .id }}-local:
+Patterns {{ .folders.inbox | quote }} {{ .folders.sent | quote }} {{ .folders.drafts | quote }} {{ .folders.spam | quote }} {{ .folders.trash | quote }}{{ if .sync_all_mail }} {{ .folders.all_mail | quote }}{{ end }}
+Create Near
+Sync All
+Expunge None
+SyncState {{ printf "%s/%s/" $isyncStateRoot .id }}
+
+{{ end -}}
+{{ end -}}

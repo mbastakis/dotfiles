@@ -1,0 +1,21 @@
+# msmtp configuration managed by chezmoi.
+
+defaults
+auth on
+tls on
+tls_starttls on
+logfile ~/.local/state/mail/log/msmtp.log
+
+{{ range .mail.accounts -}}
+{{ if .enabled -}}
+{{ $appPassword := ((bitwardenSecrets .secrets.app_password_uuid).value | trim) -}}
+account {{ .id }}
+host smtp.gmail.com
+port 587
+from {{ .address | quote }}
+user {{ .gmail_user | quote }}
+password {{ $appPassword | quote }}
+
+{{ end -}}
+{{ end -}}
+account default : {{ .mail.defaults.primary_account }}

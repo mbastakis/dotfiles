@@ -1,0 +1,43 @@
+#!/bin/bash
+
+set -euo pipefail
+
+if [[ $# -ne 1 ]]; then
+    echo "Usage: mail-view-image <path>" >&2
+    exit 1
+fi
+
+image_path="$1"
+
+if ! command -v chafa &>/dev/null; then
+    exec "$HOME/bin/mail-open" "$image_path"
+fi
+
+cols="${COLUMNS:-80}"
+lines="${LINES:-24}"
+if (( lines > 2 )); then
+    lines=$((lines - 2))
+fi
+
+passthrough="none"
+if [[ -n "${TMUX:-}" ]]; then
+    passthrough="tmux"
+fi
+
+set +e
+chafa \
+    --animate=off \
+    --clear \
+    --format=kitty \
+    --passthrough="$passthrough" \
+    --view-size="${cols}x${lines}" \
+    "$image_path"
+rc=$?
+set -e
+
+if (( rc != 0 )); then
+    exec "$HOME/bin/mail-open" "$image_path"
+fi
+
+printf '\nPress any key to return...' >&2
+IFS= read -r -s -n 1 _ </dev/tty || true

@@ -7,6 +7,7 @@
 - **Components**
   - [Zsh](components/zsh.md)
   - [Config Overview](components/config-overview.md)
+  - [Email](components/email.md)
   - [Neovim](components/nvim.md)
   - [OpenCode](components/opencode.md)
   - [Carapace](components/carapace.md)

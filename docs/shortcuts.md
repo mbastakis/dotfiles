@@ -10,10 +10,11 @@ flowchart LR
   G --> T["tmux<br/>(multiplexer layer)"]
   G --> Z["zsh<br/>(shell layer)"]
   T --> Z
+  Z --> M["NeoMutt<br/>(mail layer)"]
   Z --> N["Neovim<br/>(editor layer)"]
 ```
 
-A keystroke passes through each layer in sequence. Karabiner processes physical key events first (home row mods, hyper key), Ghostty handles terminal-level bindings, tmux intercepts its prefix and pass-through sequences, zsh processes shell keybindings, and finally Neovim handles editor keymaps.
+A keystroke passes through each layer in sequence. Karabiner processes physical key events first (home row mods, hyper key), Ghostty handles terminal-level bindings, tmux intercepts its prefix and pass-through sequences, zsh processes shell keybindings, and then app-level bindings apply in NeoMutt or Neovim.
 
 ## Karabiner (Keyboard Layer)
 
@@ -161,6 +162,38 @@ Prefix: **`Ctrl-a`**
 | `/`              | Accept and continue into subdirectory | `dot_zsh/fzf-tab.zsh:53`   |
 | `Tab` (in ftext) | Insert filename (instead of opening)  | `dot_zsh/functions.zsh:81`  |
 
+## NeoMutt (Mail Layer)
+
+Custom NeoMutt bindings are defined in the template layer and rendered for enabled mail accounts.
+
+| Key | Action | Source |
+| --- | --- | --- |
+| `u` | Open unified inbox virtual mailbox | `private_dot_config/neomutt/bindings.muttrc.tmpl:15` |
+| `gg` | Jump to top of index; in pager, jump to top of current mail | `private_dot_config/neomutt/bindings.muttrc.tmpl:16` |
+| `G` | Jump to bottom of index; in pager, jump to bottom of current mail | `private_dot_config/neomutt/bindings.muttrc.tmpl:6` |
+| `gT` | Limit the index to the current thread (`l all` restores full view) | `private_dot_config/neomutt/bindings.muttrc.tmpl:18` |
+| `j` / `k` | In pager, scroll the current mail down/up by one line | `private_dot_config/neomutt/bindings.muttrc.tmpl:8` |
+| `Up` / `Down` | In pager, jump to previous/next undeleted mail | `private_dot_config/neomutt/bindings.muttrc.tmpl:10` |
+| `i1`..`i9` | Open per-account inbox by account `order` (enabled accounts with `order` 1..9) | `private_dot_config/neomutt/bindings.muttrc.tmpl:22` |
+| `gb` | Toggle sidebar visibility | `private_dot_config/neomutt/bindings.muttrc.tmpl:32` |
+| `gf` | Search sidebar mailboxes | `private_dot_config/neomutt/bindings.muttrc.tmpl:33` |
+| `gj` | Highlight next sidebar mailbox | `private_dot_config/neomutt/bindings.muttrc.tmpl:34` |
+| `gk` | Highlight previous sidebar mailbox | `private_dot_config/neomutt/bindings.muttrc.tmpl:35` |
+| `gl` | Edit notmuch labels on the current message | `private_dot_config/neomutt/bindings.muttrc.tmpl:36` |
+| `gL` | Edit notmuch labels, then hide/requery if needed | `private_dot_config/neomutt/bindings.muttrc.tmpl:37` |
+| `gn` | Highlight next sidebar mailbox with new mail | `private_dot_config/neomutt/bindings.muttrc.tmpl:38` |
+| `gN` | Highlight previous sidebar mailbox with new mail | `private_dot_config/neomutt/bindings.muttrc.tmpl:39` |
+| `go` | Open highlighted sidebar mailbox | `private_dot_config/neomutt/bindings.muttrc.tmpl:40` |
+| `gi` | Open current-account inbox | `private_dot_config/neomutt/bindings.muttrc.tmpl:27` |
+| `gs` | Open current-account sent | `private_dot_config/neomutt/bindings.muttrc.tmpl:28` |
+| `gd` | Open current-account drafts | `private_dot_config/neomutt/bindings.muttrc.tmpl:29` |
+| `gp` | Open current-account spam | `private_dot_config/neomutt/bindings.muttrc.tmpl:30` |
+| `gt` | Open current-account trash | `private_dot_config/neomutt/bindings.muttrc.tmpl:31` |
+| `gU` | Use the message's `List-Unsubscribe` header when available | `private_dot_config/neomutt/bindings.muttrc.tmpl:41` |
+| `gr` | Sync current account and reopen current mailbox | `private_dot_config/neomutt/bindings.muttrc.tmpl:42` |
+| `gq` | Prompt for notmuch query virtual folder | `private_dot_config/neomutt/bindings.muttrc.tmpl:43` |
+| `gu` | Open message URLs via compact `urlscan` view | `private_dot_config/neomutt/bindings.muttrc.tmpl:44` |
+
 ## Neovim (Editor Layer)
 
 ### Global Keymaps
@@ -282,5 +315,6 @@ The following use plugin-default keymaps and are intentionally excluded from thi
 - FZF config: `dot_zsh/fzf.zsh:1`
 - tmux config: `private_dot_config/tmux/tmux.conf:1`
 - Ghostty config: `private_dot_config/ghostty/config:65`
+- NeoMutt bindings: `private_dot_config/neomutt/bindings.muttrc.tmpl:1`
 - Neovim keymaps: `private_dot_config/nvim/lua/config/keymaps.lua:1`
 - Karabiner rules: `private_dot_config/private_karabiner/src/rules/`

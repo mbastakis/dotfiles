@@ -81,5 +81,6 @@ Cargo.lock
 .config/finicky/
 .config/sketchybar/
 Library/LaunchAgents/com.mbastakis.ghostty-tmux.plist
+Library/LaunchAgents/com.mbastakis.mail-sync.plist
 bin/switch-input-source
 {{- end }}

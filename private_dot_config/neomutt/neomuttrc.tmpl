@@ -1,0 +1,25 @@
+# NeoMutt entrypoint managed by chezmoi.
+
+{{ $mailRoot := replace "~" .chezmoi.homeDir .mail.defaults.mail_root -}}
+{{ $notmuchDatabase := replace "~" .chezmoi.homeDir .mail.defaults.notmuch_database -}}
+
+set my_mail_root="{{ $mailRoot }}"
+set my_notmuch_database="{{ $notmuchDatabase }}"
+set my_primary_account="{{ .mail.defaults.primary_account }}"
+
+set folder="$my_mail_root"
+set mbox_type=Maildir
+set sendmail="/opt/homebrew/bin/msmtp"
+set query_command="abook --config ~/.abook/abookrc --datafile ~/.abook/addressbook --mutt-query '%s'"
+set mailcap_path="~/.config/neomutt/mailcap"
+set nm_default_url="notmuch://$my_notmuch_database"
+set nm_config_file="{{ printf "%s/.config/notmuch/default/config" .chezmoi.homeDir }}"
+set nm_query_type="threads"
+set virtual_spool_file=yes
+
+source "~/.config/neomutt/base.muttrc"
+source "~/.config/neomutt/colors.muttrc"
+source "~/.config/neomutt/tags.muttrc"
+source "~/.config/neomutt/accounts.muttrc"
+source "~/.config/neomutt/mailboxes.muttrc"
+source "~/.config/neomutt/bindings.muttrc"

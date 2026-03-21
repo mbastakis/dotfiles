@@ -22,7 +22,10 @@ flowchart TD
   E --> E1[03 - setup tasks<br/>run_once]
   E --> E2[05 - ghostty-tmux agent<br/>run_onchange]
   E --> E3[06 - Ghostty Cmd+H override<br/>run_once]
-  E --> E4[macos-settings<br/>run_once]
+  E --> E4[07 - mail runtime dirs<br/>run_once]
+  E --> E5[07 - mail maildirs<br/>run_onchange]
+  E --> E6[08 - mail-sync LaunchAgent reload<br/>run_onchange]
+  E --> E7[macos-settings<br/>run_once]
 ```
 
 _Reference: `AGENTS.md:42`_
@@ -85,6 +88,32 @@ Removes any legacy global `Hide *` keyboard overrides from `NSGlobalDomain` and 
 This keeps default macOS hide shortcuts in other apps while allowing Ghostty to use `Cmd+H` for tmux navigation. Preferences are refreshed via `cfprefsd`.
 
 _Reference: `.chezmoiscripts/run_once_after_06-ghostty-hide-shortcut.sh.tmpl:1`_
+
+### 07 - Mail Runtime Setup (`run_once`)
+
+Creates local runtime directories for the mail stack:
+
+- `mail.defaults.mail_root` (default: `~/.local/share/mail`)
+- `mail.defaults.notmuch_database` (default: `~/.local/share/notmuch/default`)
+- `mail.defaults.isync_state_root` (default: `~/.local/state/isync`)
+- `mail.defaults.log_root` (default: `~/.local/state/mail/log`)
+- `~/.cache/neomutt`
+- `~/.abook`
+- `mail.defaults.automation_hook_root` (default: `~/.config/mail/hooks/post-sync.d`)
+
+_Reference: `.chezmoiscripts/run_once_after_07-mail-setup.sh.tmpl:1`_
+
+### 07 - Maildir Bootstrap (`run_onchange`)
+
+Creates per-account Maildir roots for enabled accounts and ensures `INBOX/{cur,new,tmp}` exists. Re-runs when `.chezmoidata.yaml` hash changes.
+
+_Reference: `.chezmoiscripts/run_onchange_after_07-mail-maildirs.sh.tmpl:1`_
+
+### 08 - Mail Sync LaunchAgent Reload (`run_onchange`)
+
+Reloads `com.mbastakis.mail-sync` LaunchAgent when plist template content or configured sync interval changes. Guards on plist existence and GUI domain availability, then uses `launchctl bootout` + `launchctl bootstrap`.
+
+_Reference: `.chezmoiscripts/run_onchange_after_08-mail-sync-launchagent.sh.tmpl:1`_
 
 ### macOS Settings (`run_once`)
 

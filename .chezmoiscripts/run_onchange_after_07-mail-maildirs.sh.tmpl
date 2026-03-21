@@ -1,0 +1,22 @@
+#!/bin/bash
+# Ensure per-account Maildir roots exist for enabled accounts.
+# hash: {{ include ".chezmoidata.yaml" | sha256sum }}
+
+{{- if ne .chezmoi.os "darwin" }}
+exit 0
+{{- end }}
+
+set -euo pipefail
+
+{{- $mailRoot := replace "~" .chezmoi.homeDir .mail.defaults.mail_root }}
+
+{{- range .mail.accounts }}
+{{- if .enabled }}
+mkdir -p \
+    "{{ printf "%s/%s" $mailRoot .id }}" \
+    "{{ printf "%s/%s/%s/cur" $mailRoot .id .folders.inbox }}" \
+    "{{ printf "%s/%s/%s/new" $mailRoot .id .folders.inbox }}" \
+    "{{ printf "%s/%s/%s/tmp" $mailRoot .id .folders.inbox }}"
+
+{{- end }}
+{{- end }}

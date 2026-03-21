@@ -1,0 +1,44 @@
+# Conservative custom keybindings.
+# Current-account jumps use explicit my_* mailbox vars.
+
+bind index,pager i noop
+bind index,pager g noop
+bind index G last-entry
+bind pager G bottom
+bind pager j next-line
+bind pager k previous-line
+bind pager <Down> next-undeleted
+bind pager <Up> previous-undeleted
+bind pager <Right> next-undeleted
+bind pager <Left> previous-undeleted
+
+macro index,pager u "<enter-command>set my_current_mailbox=\"$my_unified_inbox_query\"<enter><change-folder>$my_unified_inbox_query<enter>" "Open unified inbox"
+macro index gg "<first-entry>" "Go to first message"
+macro pager gg "<top>" "Go to top of current message"
+macro index gT "<limit-current-thread>" "Limit view to current thread"
+
+{{ range .mail.accounts -}}
+{{ if and .enabled (gt .order 0) (le .order 9) -}}
+{{- $inboxMailbox := printf "+%s/%s" .id .folders.inbox -}}
+macro index,pager i{{ .order }} "<change-folder>{{ $inboxMailbox }}<enter>" "Open inbox: {{ .id }}"
+{{ end -}}
+{{ end -}}
+
+macro index,pager gi "<enter-command>push <change-folder>$my_inbox_mailbox<enter><enter>" "Open current-account inbox"
+macro index,pager gs "<enter-command>push <change-folder>$my_sent_query<enter><enter>" "Open current-account sent"
+macro index,pager gd "<enter-command>push <change-folder>$my_drafts_query<enter><enter>" "Open current-account drafts"
+macro index,pager gp "<enter-command>push <change-folder>$my_spam_query<enter><enter>" "Open current-account spam"
+macro index,pager gt "<enter-command>push <change-folder>$my_trash_query<enter><enter>" "Open current-account trash"
+macro index,pager gb "<sidebar-toggle-visible>" "Toggle sidebar"
+macro index,pager gf "<sidebar-start-search>" "Search sidebar mailboxes"
+macro index,pager gj "<sidebar-next>" "Highlight next sidebar mailbox"
+macro index,pager gk "<sidebar-prev>" "Highlight previous sidebar mailbox"
+macro index,pager gl "<modify-labels>" "Edit notmuch labels"
+macro index,pager gL "<modify-labels-then-hide>" "Edit labels and re-hide if needed"
+macro index,pager gn "<sidebar-next-new>" "Highlight next sidebar mailbox with new mail"
+macro index,pager gN "<sidebar-prev-new>" "Highlight previous sidebar mailbox with new mail"
+macro index,pager go "<sidebar-open>" "Open highlighted sidebar mailbox"
+macro index,pager gU "<list-unsubscribe>" "Unsubscribe using List-Unsubscribe"
+macro index,pager gr "<enter-command>push <sync-mailbox><shell-escape>$HOME/bin/mail-sync --account=$my_account<enter><change-folder>$my_current_mailbox<enter><check-stats><redraw-screen><enter>" "Sync current account"
+macro index,pager gq "<vfolder-from-query>" "Create notmuch virtual mailbox"
+macro index,pager gu "<pipe-message>urlscan --compact --dedupe --whitespace-off --nohelp --colors 256<enter>" "Open message URLs"

@@ -13,6 +13,7 @@ Component-based documentation for the chezmoi-managed dotfiles in this repositor
 
 - [Zsh](components/zsh.md) -- shell startup, load order, modules, and tool integrations
 - [Config Overview](components/config-overview.md) -- summary of all `~/.config/` areas managed by chezmoi
+- [Email](components/email.md) -- NeoMutt Gmail stack, daily workflow, automation, and troubleshooting
 - [Neovim](components/nvim.md) -- bootstrap flow, plugin organization, LSP layering, and custom keymaps
 - [OpenCode](components/opencode.md) -- config model, MCP setup, agents, and custom commands
 - [Carapace](components/carapace.md) -- completion registry, spec types, bridge model, and sync workflow

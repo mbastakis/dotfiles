@@ -1,0 +1,6 @@
+set preserve_fields=all
+set autosave=true
+set mutt_command=neomutt
+set mutt_return_all_emails=true
+set add_email_prevent_duplicates=true
+set sort_field=nick

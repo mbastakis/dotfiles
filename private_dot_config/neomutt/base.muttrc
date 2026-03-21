@@ -1,0 +1,73 @@
+# Shared NeoMutt behavior.
+
+set send_charset="utf-8"
+set use_from=yes
+set envelope_from=yes
+set reply_with_xorig=yes
+set edit_headers=yes
+set editor=nvim
+set date_format="%d/%m %H:%M"
+set flag_chars="⌦↩◌●◍◎- "
+set crypt_chars="✓✍ "
+set to_chars=" 󰇮→↪󰕒󰇰↰"
+set index_format="%4C %Z %{%d/%m %H:%M} %-18.18L (%<l?%4l&%4c>) %s%<g?  %g&>"
+set header_color_partial=yes
+
+ignore *
+unignore from: to: cc: reply-to: subject: date:
+unignore list-id: list-post:
+unignore x-label:
+unhdr_order *
+hdr_order From: To: Cc: Reply-To: Subject: Date: List-Id: List-Post: X-Label:
+
+set header_cache="~/.cache/neomutt/headers"
+set header_cache_compress_method="zlib"
+set header_cache_compress_level=1
+set message_cache_dir="~/.cache/neomutt/bodies"
+set certificate_file="~/.cache/neomutt/certificates"
+
+set mail_check=60
+set mail_check_stats=yes
+set mail_check_stats_interval=60
+set read_inc=1000
+set write_inc=1000
+set time_inc=500
+set timeout=15
+
+set use_threads=threads
+set sort=reverse-last-date-received
+set sort_aux=reverse-last-date-received
+set strict_threads=yes
+set sort_re=yes
+
+set pager_context=4
+set pager_index_lines=8
+set pager_read_delay=1
+set pager_stop=yes
+set markers=no
+set status_on_top=yes
+
+set sidebar_visible=yes
+set sidebar_width=42
+set sidebar_divider_char="│"
+set sidebar_next_new_wrap=yes
+set sidebar_non_empty_mailbox_only=yes
+set sidebar_short_path=no
+set sidebar_sort=unsorted
+set sidebar_format="%D%* %<N?%N/>%S"
+
+set delete=ask-yes
+set move=no
+set copy=no
+set record=""
+set trash=""
+set resolve=yes
+set mark_old=no
+
+alternative_order text/plain text/enriched text/html
+auto_view text/html
+
+set include=yes
+set fast_reply=no
+set forward_quote=yes
+set abort_noattach=ask-yes

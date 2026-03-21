@@ -1,0 +1,39 @@
+#!/bin/bash
+
+set -euo pipefail
+
+apply_role_tag() {
+    local account_tag="$1"
+    local role_tag="$2"
+    local path_query="$3"
+
+    notmuch tag "+${role_tag}" -- "$path_query"
+    notmuch tag "-${role_tag}" -- "tag:${account_tag} and tag:${role_tag} and not ${path_query}"
+}
+
+{{- range .mail.accounts }}
+{{- if .enabled }}
+account_tag='acct-{{ .id }}'
+account_query='path:"{{ .id }}/**"'
+
+notmuch tag "+${account_tag}" -- "$account_query"
+notmuch tag "-${account_tag}" -- "tag:${account_tag} and not ${account_query}"
+
+inbox_query='path:"{{ .id }}/{{ .folders.inbox }}/**"'
+sent_query='path:"{{ .id }}/{{ .folders.sent }}/**"'
+drafts_query='path:"{{ .id }}/{{ .folders.drafts }}/**"'
+spam_query='path:"{{ .id }}/{{ .folders.spam }}/**"'
+trash_query='path:"{{ .id }}/{{ .folders.trash }}/**"'
+
+apply_role_tag "$account_tag" "inbox" "$inbox_query"
+apply_role_tag "$account_tag" "sent" "$sent_query"
+apply_role_tag "$account_tag" "draft" "$drafts_query"
+apply_role_tag "$account_tag" "spam" "$spam_query"
+apply_role_tag "$account_tag" "trash" "$trash_query"
+
+notmuch tag -unread -- "tag:${account_tag} and ${drafts_query}"
+notmuch tag -inbox -- "tag:${account_tag} and ${spam_query}"
+notmuch tag -inbox -- "tag:${account_tag} and ${trash_query}"
+
+{{- end }}
+{{- end }}

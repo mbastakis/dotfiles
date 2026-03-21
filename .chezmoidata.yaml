@@ -25,3 +25,94 @@ colors:
   pink: "#f5c2e7"
   flamingo: "#f2cdcd"
   rosewater: "#f5e0dc"
+
+mail:
+  defaults:
+    sync_interval_minutes: 5
+    mail_root: "~/.local/share/mail"
+    notmuch_database: "~/.local/share/notmuch/default"
+    isync_state_root: "~/.local/state/isync"
+    log_root: "~/.local/state/mail/log"
+    automation_hook_root: "~/.config/mail/hooks/post-sync.d"
+    primary_account: mbastakis
+  accounts:
+    - id: mbastakis
+      enabled: true
+      order: 1
+      address: "mbastakis@gmail.com"
+      real_name: "Michail Bastakis"
+      gmail_user: "mbastakis@gmail.com"
+      sync_all_mail: true
+      folders:
+        inbox: INBOX
+        sent: "[Gmail]/Sent Mail"
+        drafts: "[Gmail]/Drafts"
+        spam: "[Gmail]/Spam"
+        trash: "[Gmail]/Trash"
+        all_mail: "[Gmail]/All Mail"
+      secrets:
+        app_password_uuid: "f8e9dcba-97e9-4540-b485-b41200c252a6"
+    - id: bastakismike
+      enabled: true
+      order: 2
+      address: "bastakismike@gmail.com"
+      real_name: "Michail Bastakis"
+      gmail_user: "bastakismike@gmail.com"
+      sync_all_mail: true
+      folders:
+        inbox: INBOX
+        sent: "[Gmail]/Sent Mail"
+        drafts: "[Gmail]/Drafts"
+        spam: "[Gmail]/Spam"
+        trash: "[Gmail]/Trash"
+        all_mail: "[Gmail]/All Mail"
+      secrets:
+        app_password_uuid: "cc93e481-dc9d-4fd9-b79a-b4120109877d"
+    - id: whocaressoftware
+      enabled: true
+      order: 3
+      address: "whocaressoftware@gmail.com"
+      real_name: "Who Cares Software"
+      gmail_user: "whocaressoftware@gmail.com"
+      sync_all_mail: true
+      folders:
+        inbox: INBOX
+        sent: "[Gmail]/Sent Mail"
+        drafts: "[Gmail]/Drafts"
+        spam: "[Gmail]/Spam"
+        trash: "[Gmail]/Trash"
+        all_mail: "[Gmail]/All Mail"
+      secrets:
+        app_password_uuid: "58cc7b8e-0e19-4d7e-aa3f-b412010b66db"
+    - id: mbastakis1911
+      enabled: true
+      order: 4
+      address: "mbastakis1911@gmail.com"
+      real_name: "Michail Bastakis"
+      gmail_user: "mbastakis1911@gmail.com"
+      sync_all_mail: true
+      folders:
+        inbox: INBOX
+        sent: "[Gmail]/Sent Mail"
+        drafts: "[Gmail]/Drafts"
+        spam: "[Gmail]/Spam"
+        trash: "[Gmail]/Trash"
+        all_mail: "[Gmail]/All Mail"
+      secrets:
+        app_password_uuid: "60a5c78d-d63f-4b1b-9aba-b412010d0af7"
+    - id: mbastakisgames
+      enabled: true
+      order: 5
+      address: "mbastakisgames@gmail.com"
+      real_name: "Michail Bastakis"
+      gmail_user: "mbastakisgames@gmail.com"
+      sync_all_mail: true
+      folders:
+        inbox: INBOX
+        sent: "[Gmail]/Sent Mail"
+        drafts: "[Gmail]/Drafts"
+        spam: "[Gmail]/Spam"
+        trash: "[Gmail]/Trash"
+        all_mail: "[Gmail]/All Mail"
+      secrets:
+        app_password_uuid: "c4f7c6a0-c996-4638-8c62-b412010fa51d"

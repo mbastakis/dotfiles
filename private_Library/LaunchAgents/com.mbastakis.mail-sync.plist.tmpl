@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.mbastakis.mail-sync</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>{{ printf "%s/bin/mail-sync" .chezmoi.homeDir }}</string>
+        <string>--quiet</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>StartInterval</key>
+    <integer>{{ mul .mail.defaults.sync_interval_minutes 60 }}</integer>
+
+    <key>StandardOutPath</key>
+    <string>{{ printf "%s/launchd-mail-sync.out.log" (replace "~" .chezmoi.homeDir .mail.defaults.log_root) }}</string>
+
+    <key>StandardErrorPath</key>
+    <string>{{ printf "%s/launchd-mail-sync.err.log" (replace "~" .chezmoi.homeDir .mail.defaults.log_root) }}</string>
+
+    <key>LimitLoadToSessionType</key>
+    <array>
+        <string>Aqua</string>
+    </array>
+</dict>
+</plist>

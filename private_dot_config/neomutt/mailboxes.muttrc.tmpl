@@ -1,0 +1,17 @@
+# Physical and virtual mailbox definitions.
+
+set my_unified_inbox_query="notmuch://$my_notmuch_database?query=tag:inbox%20and%20not%20tag:spam%20and%20not%20tag:trash"
+
+virtual-mailboxes "Unified Inbox" "$my_unified_inbox_query"
+
+{{ range .mail.accounts -}}
+{{ if .enabled -}}
+mailboxes -label "{{ if and (gt .order 0) (le .order 9) }}[{{ .order }}] {{ end }}{{ .id }} Inbox" "+{{ .id }}/{{ .folders.inbox }}"
+
+virtual-mailboxes "{{ .id }} Sent" "notmuch://$my_notmuch_database?query=tag:acct-{{ .id }}%20and%20tag:sent"
+virtual-mailboxes "{{ .id }} Drafts" "notmuch://$my_notmuch_database?query=tag:acct-{{ .id }}%20and%20tag:draft"
+virtual-mailboxes "{{ .id }} Spam" "notmuch://$my_notmuch_database?query=tag:acct-{{ .id }}%20and%20tag:spam"
+virtual-mailboxes "{{ .id }} Trash" "notmuch://$my_notmuch_database?query=tag:acct-{{ .id }}%20and%20tag:trash"
+
+{{ end -}}
+{{ end -}}

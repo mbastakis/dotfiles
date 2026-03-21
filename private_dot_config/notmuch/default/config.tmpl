@@ -1,0 +1,23 @@
+# notmuch configuration managed by chezmoi.
+
+{{ $mailRoot := replace "~" .chezmoi.homeDir .mail.defaults.mail_root -}}
+{{ $notmuchDatabase := replace "~" .chezmoi.homeDir .mail.defaults.notmuch_database -}}
+
+[database]
+path={{ $notmuchDatabase }}
+mail_root={{ $mailRoot }}
+hook_dir={{ printf "%s/.config/notmuch/default/hooks" .chezmoi.homeDir }}
+
+[user]
+name={{ .name }}
+primary_email={{ .email }}
+
+[new]
+tags=unread
+ignore=.uidvalidity
+
+[search]
+exclude_tags=deleted;spam
+
+[maildir]
+synchronize_flags=true

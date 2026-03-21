@@ -34,6 +34,11 @@ alias b="bat --paging=always --color=always --style=plain --line-range=1:1000 --
 # Obsidian CLI
 alias obs="obsidian"
 
+# Mail
+alias nm="neomutt"
+alias msync="mail-sync"
+alias ab="abook"
+
 # Kubernetes
 alias k="kubectl"
 alias ctx="kubectx"

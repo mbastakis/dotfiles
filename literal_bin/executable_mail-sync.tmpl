@@ -1,0 +1,187 @@
+#!/bin/bash
+
+{{- $logRoot := replace "~" .chezmoi.homeDir .mail.defaults.log_root }}
+{{- $automationHookRoot := replace "~" .chezmoi.homeDir .mail.defaults.automation_hook_root }}
+
+set -euo pipefail
+
+dry_run=false
+quiet=false
+account=""
+
+usage() {
+    cat <<'EOF'
+Usage: mail-sync [--dry-run] [--account <id>] [--quiet]
+
+Sync mail with mbsync, then index with notmuch.
+
+Options:
+  --dry-run         Run mbsync in dry-run mode and skip notmuch index updates
+  --account <id>    Sync only one configured account/channel
+  --quiet           Suppress stdout output; keep logging to file
+  -h, --help        Show this help message
+EOF
+}
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --dry-run)
+            dry_run=true
+            shift
+            ;;
+        --account)
+            if [[ -z "${2:-}" ]]; then
+                echo "Error: --account requires a value" >&2
+                exit 1
+            fi
+            account="$2"
+            shift 2
+            ;;
+        --account=*)
+            account="${1#*=}"
+            shift
+            ;;
+        --quiet)
+            quiet=true
+            shift
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        *)
+            echo "Error: unknown argument: $1" >&2
+            usage >&2
+            exit 1
+            ;;
+    esac
+done
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/bin:$HOME/.local/bin"
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+export NOTMUCH_PROFILE="${NOTMUCH_PROFILE:-default}"
+export NOTMUCH_CONFIG="${NOTMUCH_CONFIG:-$XDG_CONFIG_HOME/notmuch/default/config}"
+
+log_root="{{ $logRoot }}"
+lock_dir="$XDG_STATE_HOME/mail/mail-sync.lock"
+hooks_dir="{{ $automationHookRoot }}"
+mbsync_config="$XDG_CONFIG_HOME/isyncrc"
+log_file="$log_root/mail-sync.log"
+lock_acquired=false
+
+mkdir -p "$log_root"
+
+timestamp() {
+    date '+%Y-%m-%dT%H:%M:%S%z'
+}
+
+log_line() {
+    local level="$1"
+    local message="$2"
+    local line
+    line="$(timestamp) [${level}] ${message}"
+    printf '%s\n' "$line" >>"$log_file"
+    if [[ "$quiet" == "false" ]]; then
+        printf '%s\n' "$line"
+    fi
+}
+
+run_cmd() {
+    local description="$1"
+    shift
+
+    log_line "INFO" "$description"
+    if [[ "$quiet" == "true" ]]; then
+        "$@" >>"$log_file" 2>&1
+    else
+        "$@" 2>&1 | tee -a "$log_file"
+    fi
+}
+
+acquire_lock() {
+    mkdir -p "$(dirname "$lock_dir")"
+
+    if mkdir "$lock_dir" 2>/dev/null; then
+        printf '%s\n' "$$" >"$lock_dir/pid"
+        lock_acquired=true
+        return 0
+    fi
+
+    if [[ -f "$lock_dir/pid" ]]; then
+        local lock_pid
+        lock_pid="$(<"$lock_dir/pid")"
+        if [[ -n "$lock_pid" ]] && kill -0 "$lock_pid" 2>/dev/null; then
+            log_line "INFO" "Another mail-sync process is running (pid ${lock_pid}); exiting."
+            return 1
+        fi
+        rm -rf "$lock_dir"
+        if mkdir "$lock_dir" 2>/dev/null; then
+            printf '%s\n' "$$" >"$lock_dir/pid"
+            lock_acquired=true
+            return 0
+        fi
+    fi
+
+    log_line "INFO" "Could not acquire sync lock; exiting."
+    return 1
+}
+
+cleanup() {
+    if [[ "$lock_acquired" == "true" ]]; then
+        rm -rf "$lock_dir" >/dev/null 2>&1 || true
+        lock_acquired=false
+    fi
+}
+
+trap cleanup EXIT INT TERM
+
+if ! acquire_lock; then
+    exit 0
+fi
+
+if [[ ! -f "$mbsync_config" ]]; then
+    log_line "ERROR" "Missing mbsync config: $mbsync_config"
+    exit 1
+fi
+
+if [[ ! -f "$NOTMUCH_CONFIG" ]]; then
+    log_line "ERROR" "Missing notmuch config: $NOTMUCH_CONFIG"
+    exit 1
+fi
+
+mbsync_cmd=(mbsync -c "$mbsync_config")
+if [[ "$dry_run" == "true" ]]; then
+    mbsync_cmd+=(--dry-run)
+fi
+if [[ -n "$account" ]]; then
+    mbsync_cmd+=("$account")
+else
+    mbsync_cmd+=(-a)
+fi
+
+run_cmd "Running mbsync" "${mbsync_cmd[@]}"
+
+if [[ "$dry_run" == "true" ]]; then
+    log_line "INFO" "Dry-run mode enabled; skipping notmuch new and post-sync hooks."
+    exit 0
+fi
+
+run_cmd "Running notmuch new" notmuch new
+
+if [[ -d "$hooks_dir" ]]; then
+    shopt -s nullglob
+    for hook in "$hooks_dir"/*; do
+        [[ -f "$hook" && -x "$hook" ]] || continue
+        if run_cmd "Running post-sync hook: $hook" "$hook"; then
+            :
+        else
+            log_line "WARN" "Post-sync hook failed: $hook"
+        fi
+    done
+    shopt -u nullglob
+fi
+
+log_line "INFO" "Mail sync completed."

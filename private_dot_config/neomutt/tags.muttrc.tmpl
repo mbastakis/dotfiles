@@ -1,0 +1,5 @@
+# Notmuch tag presentation.
+
+set hidden_tags="unread,draft,flagged,passed,replied,signed,encrypted,inbox,sent,spam,trash,deleted{{- range .mail.accounts }}{{- if .enabled }},acct-{{ .id }}{{- end }}{{- end }}"
+
+tag-transforms "attachment" "󰁦" "todo" "󰄬" "calendar" "󰃭" "github" "󰊤" "newsletter" "󰇰"
