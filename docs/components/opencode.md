@@ -4,12 +4,16 @@ Config model, agent definitions, custom commands, skills, and permission system.
 
 **Source:** `private_dot_config/opencode/` -> `~/.config/opencode/`
 
+**Isolated OMO Profile:** `private_dot_config/opencode-omo/` -> `~/.config/opencode-omo/`
+
 ## Directory Structure
 
 ```
 ~/.config/opencode/
-  opencode.jsonc          # Main config (model, theme, global permissions)
-  opencode-notifier.json  # Notification plugin settings (events, volumes, backend)
+  opencode.jsonc          # Main config (model, global permissions)
+  opencode-notifier.json  # Notification plugin settings
+  tui.json                # TUI theme
+  AGENTS.md               # Delegation guidance
   agent/                  # Self-contained agents (YAML frontmatter + prompt)
     commit.md
     crawl.md
@@ -22,13 +26,31 @@ Config model, agent definitions, custom commands, skills, and permission system.
     learn.md
     create_plan.md
     research_codebase.md
-  plans/                  # Plan output directory
-  skill/                  # Bundled skills
-    aws-login/            # AWS/kubectl environment and wrapper guidance
-    crawl4ai/             # Web crawling skill (SKILL.md + scripts/ + references/)
+  skills/                 # Bundled skills shipped in source
+    crawl4ai/
+    linear-create/
+    linear-list/
+    linear-projects/
+    linear-update/
+    linear-workflow/
+  plugins/                # Empty in source; runtime plugin install location
+
+~/.config/opencode-omo/
+  opencode.jsonc          # Minimal isolated config root for OMO
+  oh-my-opencode.json     # OMO agent/category model profile
+  tui.json                # TUI theme for the isolated profile
+  .gitignore              # Ignores local package/plugin artifacts
+  README.md               # Profile-local notes
 ```
 
-_Reference: `private_dot_config/opencode/README.md:5`_
+_Reference: `private_dot_config/opencode/README.md:5`, `private_dot_config/opencode-omo/README.md:1`_
+
+## Profiles
+
+- `oc` uses the exported default profile rooted at `~/.config/opencode/`. `dot_zsh/exports.zsh:25`, `dot_zsh/aliases.zsh:59`
+- `omo` overrides `OPENCODE_CONFIG` and `OPENCODE_CONFIG_DIR` for that invocation, so OpenCode reads from `~/.config/opencode-omo/` instead of the primary profile. `dot_zsh/aliases.zsh:60`
+- The OMO profile enables `oh-my-opencode@latest` in its isolated `opencode.jsonc` and keeps the plugin's generated model profile in `oh-my-opencode.json`. `private_dot_config/opencode-omo/opencode.jsonc:1`, `private_dot_config/opencode-omo/oh-my-opencode.json:1`
+- The checked-in OMO profile now pins explicit models per agent/category based on the published OMO model guidance, using locally available OpenAI, Google, OpenCode Zen, and Minimax/Kimi-backed model IDs rather than the installer's all-`gpt-5-nano` fallback. `private_dot_config/opencode-omo/oh-my-opencode.json:1`, `private_dot_config/opencode-omo/README.md:28`
 
 ## Config Model
 
@@ -36,7 +58,7 @@ The main config (`opencode.jsonc`) defines:
 
 | Section | Purpose |
 |---|---|
-| `model` | Primary model (gpt-5.3-codex via OpenAI) |
+| `model` | Primary model (`openai/gpt-5.4`) |
 | `theme` | `catppuccin` |
 | `plugin` | Community plugins loaded from npm (for example `opencode-notifier`) |
 | `permission` | Granular bash command permission rules |

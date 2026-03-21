@@ -1,0 +1,8 @@
+{
+  "plugin": ["oh-my-opencode@latest"],
+  "$schema": "https://opencode.ai/config.json",
+  "model": "openai/gpt-5.4",
+  "autoshare": false,
+  "share": "manual",
+  "autoupdate": true,
+}

@@ -57,5 +57,9 @@ alias tls="tmux ls"
 
 # Opencode
 alias oc="opencode"
+alias omo='OPENCODE_CONFIG="$HOME/.config/opencode-omo/opencode.jsonc" OPENCODE_CONFIG_DIR="$HOME/.config/opencode-omo" opencode'
 alias oca="OPENCODE_PERMISSION='{\"*\": "allow"}' opencode"
 alias occ="opencode --continue"
+
+# Python
+alias python="python3"

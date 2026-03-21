@@ -100,7 +100,7 @@ _Reference: `dot_zsh/tools.zsh:1`_
 | Navigation | `..` = `cd ..` |
 | Listing (eza) | `l`, `ls`, `ll`, `la`, `ld`, `lda`, `lgit` |
 | Shell | `reload`/`r` = `exec zsh`, `zsh-profile`, `zsh-time` |
-| Apps | `v`/`vi`/`vim` = `nvim`, `lg` = `lazygit`, `b` = `bat`, `oc` = `opencode`, `occ` = `opencode --continue` |
+| Apps | `v`/`vi`/`vim` = `nvim`, `lg` = `lazygit`, `b` = `bat`, `oc` = `opencode`, `omo` = isolated OpenCode profile for OMO, `occ` = `opencode --continue` |
 | Mail | `nm` = `neomutt`, `msync` = `mail-sync`, `ab` = `abook` |
 | Tmux | `ta` = `tmux attach`, `td` = `tmux detach`, `tls` = `tmux ls` |
 | Kubernetes | `k` = `kubectl`, `ctx` = `kubectx`, `ns` = `kubens` |
