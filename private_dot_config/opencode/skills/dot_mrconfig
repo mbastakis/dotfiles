@@ -1,0 +1,3 @@
+# OpenCode skills (external repos)
+[obsidian-skills]
+checkout = git clone https://github.com/kepano/obsidian-skills.git obsidian-skills
