@@ -1,0 +1,2 @@
+# Obsidian CLI PATH is set in .zshenv.
+# Login-shell hooks live here via ZDOTDIR.

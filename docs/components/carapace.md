@@ -101,12 +101,12 @@ _Reference: `private_dot_config/carapace/config.yaml:1`_
 Carapace is loaded in the zsh startup sequence after `compinit`:
 
 1. `plugins.zsh` runs `compinit`
-2. `dot_zshrc` caches `carapace _carapace zsh` output to `~/.cache/carapace-init.zsh`
+2. `private_dot_config/zsh/dot_zshrc` caches `carapace _carapace zsh` output to `~/.cache/carapace-init.zsh`
 3. Cache is regenerated only when the carapace binary is newer than the cache
 
 The `CARAPACE_BRIDGES` environment variable is set in `exports.zsh` to `zsh,fish,bash,inshellisense`.
 
-_Reference: `dot_zshrc:37`, `dot_zsh/exports.zsh:8`_
+_Reference: `private_dot_config/zsh/dot_zshrc:37`, `private_dot_config/zsh/exports.zsh:8`_
 
 ## Gotchas
 
@@ -123,4 +123,4 @@ _Reference: `private_dot_config/carapace/AGENTS.md:60`_
 - Config: `private_dot_config/carapace/config.yaml:1`
 - Tools registry: `private_dot_config/carapace/tools.yaml:1`
 - Native specs: `private_dot_config/carapace/specs/aws-login.yaml:1`
-- Zsh integration: `dot_zshrc:37`
+- Zsh integration: `private_dot_config/zsh/dot_zshrc:37`

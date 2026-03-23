@@ -2,7 +2,7 @@
 
 Summary of notable config areas managed by chezmoi, with links to dedicated docs for larger components.
 
-**Source:** `private_dot_config/` -> `~/.config/`, `private_dot_abook/` -> `~/.abook/`
+**Source:** `private_dot_config/` -> `~/.config/`, `private_dot_local/private_share/` -> `~/.local/share/`
 
 ## Managed Components
 
@@ -13,12 +13,16 @@ Summary of notable config areas managed by chezmoi, with links to dedicated docs
 | **OpenCode OMO** | `private_dot_config/opencode-omo/` | [opencode.md](opencode.md) | Isolated OpenCode profile reserved for `oh-my-openagent` |
 | **Karabiner** | `private_dot_config/private_karabiner/` | [karabiner.md](karabiner.md) | Keyboard remapping (generated config) |
 | **Carapace** | `private_dot_config/carapace/` | [carapace.md](carapace.md) | Shell completion framework |
+| **Zsh** | `private_dot_config/zsh/`, `dot_zshenv.tmpl` | [zsh.md](zsh.md) | Shell bootstrap plus XDG-aware tool/runtime environment |
 | **Atuin** | `private_dot_config/private_atuin/private_config.toml` | -- | Shell history search, sync, and AI settings |
+| Vim | `private_dot_config/vim/vimrc` | -- | Minimal Vim config that redirects state into XDG paths |
+| Terraform CLI | `private_dot_config/terraform/terraform.rc` | -- | CLI defaults (for example checkpoint suppression) |
 | **NeoMutt** | `private_dot_config/neomutt/` | [email.md](email.md) | Terminal mail client config and custom mailbox bindings |
 | **notmuch** | `private_dot_config/notmuch/default/` | [email.md](email.md) | Mail index/search config and tagging hook |
 | **msmtp** | `private_dot_config/msmtp/private_config.tmpl` | [email.md](email.md) | SMTP account config rendered from Bitwarden secrets |
 | **isync (mbsync)** | `private_dot_config/isyncrc.tmpl` | [email.md](email.md) | IMAP sync channels and Maildir mapping |
-| **abook** | `private_dot_abook/` | [email.md](email.md) | Local address book (tool-native `~/.abook/` path) |
+| **abook** | `private_dot_config/abook/`, `private_dot_local/private_share/abook/` | [email.md](email.md) | Local address book split across XDG config/data paths |
+| Colima | `private_dot_local/private_share/colima/` | -- | Container runtime config and VM state |
 | Mise | `private_dot_config/mise/` | -- | Tool/version manager config (`linear-cli`) |
 | Ghostty | `private_dot_config/ghostty/` | -- | Terminal emulator |
 | tmux | `private_dot_config/tmux/` | -- | Terminal multiplexer |

@@ -7,6 +7,12 @@ if command -v mise &>/dev/null; then
   eval "$(mise activate zsh)"
 fi
 
+# Normalize XDG tool bins after PATH mutators like mise.
+path=(${path:#$HOME/.cargo/bin})
+path=(${path:#$HOME/.bun/bin})
+[[ -d "$CARGO_HOME/bin" ]] && path=("$CARGO_HOME/bin" ${path:#$CARGO_HOME/bin})
+[[ -d "$BUN_INSTALL/bin" ]] && path=("$BUN_INSTALL/bin" ${path:#$BUN_INSTALL/bin})
+
 # Zoxide - smart cd
 if command -v zoxide &>/dev/null; then
   # Unalias zi if it exists (conflicts with zinit)

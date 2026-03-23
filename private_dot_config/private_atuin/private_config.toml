@@ -266,6 +266,9 @@ records = true
 ## The port that should be used for TCP on non unix systems
 # tcp_port = 8889
 
+[logs]
+dir = "~/.local/state/atuin/logs"
+
 [ai]
 enabled = true
 

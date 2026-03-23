@@ -2,15 +2,16 @@
 
 Shell startup model, load order, module responsibilities, and integrations with tmux and Ghostty.
 
-**Source:** `dot_zshrc` -> `~/.zshrc`, `dot_zsh/` -> `~/.zsh/`
+**Source:** `dot_zshenv.tmpl` -> `~/.zshenv`, `private_dot_config/zsh/` -> `~/.config/zsh/`
 
 ## Startup Model
 
 ```mermaid
 flowchart TD
-  A[zsh starts] --> B{Interactive?}
-  B -->|No| C[.zshenv only<br/>PATH, EDITOR, XDG]
-  B -->|Yes| D[.zshrc]
+  A[zsh starts] --> C[~/.zshenv<br/>PATH, XDG, ZDOTDIR, HISTFILE]
+  C --> B{Interactive?}
+  B -->|No| X[Done]
+  B -->|Yes| D[$ZDOTDIR/.zshrc]
   D --> E[Homebrew shellenv<br/>cached]
   E --> F[exports.zsh]
   F --> G[plugins.zsh<br/>zinit + compinit]
@@ -24,7 +25,7 @@ flowchart TD
   N --> O[local.zsh<br/>secrets, overrides]
 ```
 
-_Reference: `dot_zshrc:24`_
+_Reference: `private_dot_config/zsh/dot_zshrc:22`, `dot_zshenv.tmpl:16`_
 
 ### Performance Caching
 
@@ -40,9 +41,17 @@ Both `brew shellenv` and `carapace _carapace zsh` are cached to `~/.cache/` and 
 | `HIST_IGNORE_DUPS` | No duplicate history entries |
 | `HIST_IGNORE_SPACE` | Commands starting with space are not recorded |
 
-_Reference: `dot_zshrc:11`_
+_Reference: `private_dot_config/zsh/dot_zshrc:8`_
 
 ## Module Responsibilities
+
+### .zshenv (templated)
+
+`dot_zshenv.tmpl` is the global bootstrap for every shell type. It defines the XDG base dirs, exports `ZDOTDIR`, and relocates tool/runtime state such as Cargo, Bun cache, Colima, CDK, `mcp-remote`, Go, and shell history before interactive config loads.
+
+On macOS it also maps `XDG_RUNTIME_DIR` to `TMPDIR` and disables Apple Terminal shell-session files with `SHELL_SESSIONS_DISABLE=1`.
+
+_Reference: `dot_zshenv.tmpl:1`_
 
 ### exports.zsh
 
@@ -59,7 +68,7 @@ Interactive-only environment variables. PATH/EDITOR/XDG are set in `~/.zshenv` (
 | `OPENCODE_EXPERIMENTAL_MARKDOWN` | `true` |
 | `OPENCODE_CONFIG_DIR` | `$HOME/.config/opencode` |
 
-_Reference: `dot_zsh/exports.zsh:1`_
+_Reference: `private_dot_config/zsh/exports.zsh:1`_
 
 ### plugins.zsh
 
@@ -75,7 +84,7 @@ Manages Zinit (auto-installed if missing) and runs `compinit` with 24h cache TTL
 
 `shift-select-enhancements.zsh` is loaded via zinit `atload` hook on the shift-select plugin, not directly sourced from `.zshrc`.
 
-_Reference: `dot_zsh/plugins.zsh:1`_
+_Reference: `private_dot_config/zsh/plugins.zsh:1`_
 
 ### tools.zsh
 
@@ -91,7 +100,7 @@ Tool initialization for interactive shells:
 
 Atuin is loaded in `fzf.zsh` (after fzf setup) so it can take over `Ctrl-R`, and Atuin AI shell integration is loaded there too.
 
-_Reference: `dot_zsh/tools.zsh:1`_
+_Reference: `private_dot_config/zsh/tools.zsh:1`_
 
 ### aliases.zsh
 
@@ -101,12 +110,12 @@ _Reference: `dot_zsh/tools.zsh:1`_
 | Listing (eza) | `l`, `ls`, `ll`, `la`, `ld`, `lda`, `lgit` |
 | Shell | `reload`/`r` = `exec zsh`, `zsh-profile`, `zsh-time` |
 | Apps | `v`/`vi`/`vim` = `nvim`, `lg` = `lazygit`, `b` = `bat`, `oc` = `opencode`, `omo` = isolated OpenCode profile for OMO, `occ` = `opencode --continue` |
-| Mail | `nm` = `neomutt`, `msync` = `mail-sync`, `ab` = `abook` |
+| Mail | `nm` = `neomutt`, `msync` = `mail-sync`, `ab` = `abook` with XDG config/data paths |
 | Tmux | `ta` = `tmux attach`, `td` = `tmux detach`, `tls` = `tmux ls` |
 | Kubernetes | `k` = `kubectl`, `ctx` = `kubectx`, `ns` = `kubens` |
 | Chezmoi | `cz` = `chezmoi` |
 
-_Reference: `dot_zsh/aliases.zsh:1`_
+_Reference: `private_dot_config/zsh/aliases.zsh:1`_
 
 ### functions.zsh
 
@@ -121,7 +130,7 @@ _Reference: `dot_zsh/aliases.zsh:1`_
 | `brew_update` | Full Homebrew maintenance cycle |
 | `reset_internet` | Flush DNS, reset pf, bounce network interface |
 
-_Reference: `dot_zsh/functions.zsh:1`_
+_Reference: `private_dot_config/zsh/functions.zsh:1`_
 
 ### fzf.zsh
 
@@ -140,7 +149,7 @@ Central FZF configuration. `FZF_DEFAULT_OPTS` carries all base settings (Catppuc
 
 Atuin and Atuin AI are initialized at the end of this file: `eval "$(atuin init zsh)"` and `eval "$(atuin ai init zsh)"`.
 
-_Reference: `dot_zsh/fzf.zsh:1`_
+_Reference: `private_dot_config/zsh/fzf.zsh:1`_
 
 ### fzf-tab.zsh
 
@@ -158,7 +167,7 @@ Configures the `fzf-tab` completion plugin with context-sensitive previews:
 
 Group switching: `<` and `>`. Continuous trigger: `/` (accept and continue into subdirectory).
 
-_Reference: `dot_zsh/fzf-tab.zsh:1`_
+_Reference: `private_dot_config/zsh/fzf-tab.zsh:1`_
 
 ### keybindings.zsh
 
@@ -168,7 +177,7 @@ Notable custom bindings include `Ctrl-F` for `ftext-widget`, `Ctrl-G` for `navi`
 
 Final settings: `KEYTIMEOUT=80` (for Alt/Option escape-prefix sequences), `bindkey -e` (emacs mode).
 
-_Reference: `dot_zsh/keybindings.zsh:1`_
+_Reference: `private_dot_config/zsh/keybindings.zsh:1`_
 
 ### local.zsh (templated)
 
@@ -182,9 +191,9 @@ Generated from `local.zsh.tmpl` by chezmoi. Pulls secrets from Bitwarden Secrets
 | `GITHUB_TOKEN`, `GITLAB_TOKEN`, `GITLAB_HOST` | DT work profile only |
 | Work `PATH` additions | DT work profile only |
 
-Never edit `~/.zsh/local.zsh` directly -- edit the `.tmpl` template in the chezmoi source.
+Never edit `~/.config/zsh/local.zsh` directly -- edit the `.tmpl` template in the chezmoi source.
 
-_Reference: `dot_zsh/local.zsh.tmpl:1`_
+_Reference: `private_dot_config/zsh/local.zsh.tmpl:1`_
 
 ## Cross-Layer Interactions
 
@@ -203,14 +212,15 @@ Ghostty sends custom CSI sequences for macOS shortcuts that zsh processes:
 
 ### Zsh shell type note
 
-`.zshenv` is the only file loaded by non-interactive shells (`zsh -c`). PATH additions for background processes must go in `.zshenv`, not `.zshrc`.
+`.zshenv` is the only file loaded by non-interactive shells (`zsh -c`). It exports `ZDOTDIR=~/.config/zsh`, so PATH additions for background processes must go in `.zshenv`, not `$ZDOTDIR/.zshrc`.
 
 The mail LaunchAgent calls `~/bin/mail-sync --quiet` directly, and `mail-sync` sets its own `PATH` + XDG variables internally. Mail background sync does not depend on `.zshrc` load order or shell aliases.
 
 ## References
 
-- Main zshrc: `dot_zshrc:1`
-- Zsh AGENTS: `dot_zsh/AGENTS.md:1`
-- Keybindings: `dot_zsh/keybindings.zsh:1`
-- Shift-select: `dot_zsh/shift-select-enhancements.zsh:1`
-- FZF config: `dot_zsh/fzf.zsh:1`
+- `.zshenv` template: `dot_zshenv.tmpl:1`
+- Main zshrc: `private_dot_config/zsh/dot_zshrc:1`
+- Zsh AGENTS: `private_dot_config/zsh/AGENTS.md:1`
+- Keybindings: `private_dot_config/zsh/keybindings.zsh:1`
+- Shift-select: `private_dot_config/zsh/shift-select-enhancements.zsh:1`
+- FZF config: `private_dot_config/zsh/fzf.zsh:1`

@@ -21,18 +21,20 @@ if [[ -f "${HOME}/.local/share/zinit/zinit.git/zinit.zsh" ]]; then
     # Load fzf-tab for interactive completion menu (must load before compinit)
     zinit light Aloxaf/fzf-tab
 
-    # Initialize completions (carapace must be loaded AFTER this - see dot-zshrc)
+    # Initialize completions (carapace must be loaded AFTER this - see .zshrc)
     # Cache compinit - only rebuild dump file once per day for faster startup
     # Glob qualifier: N=no error if no match, .=regular file, mh+24=modified >24h ago
     if (( ${+_comps} )); then
       : # compinit already initialized (e.g. by system zshrc)
     else
       autoload -Uz compinit
-      if [[ -f ~/.zcompdump && $(find ~/.zcompdump -mtime -1 2>/dev/null) ]]; then
-        compinit -C  # Cache is fresh (<24h), use it
+      _zcompdump="${ZDOTDIR:-$HOME}/.zcompdump"
+      if [[ -f "$_zcompdump" && $(find "$_zcompdump" -mtime -1 2>/dev/null) ]]; then
+        compinit -C -d "$_zcompdump"  # Cache is fresh (<24h), use it
       else
-        compinit     # Cache is stale (>24h) or missing, rebuild
+        compinit -d "$_zcompdump"     # Cache is stale (>24h) or missing, rebuild
       fi
+      unset _zcompdump
     fi
 
     # Load Git plugin from Oh-My-Zsh

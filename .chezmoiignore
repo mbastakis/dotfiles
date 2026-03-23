@@ -36,6 +36,8 @@ Cargo.lock
 
 # Caches and runtime-generated files
 .cache/
+.config/zsh/.zcompdump
+.config/zsh/.zcompdump-*
 .config/aws-login/cache/**
 .config/carapace/.versions
 .config/glab-cli/recover/**
@@ -43,6 +45,10 @@ Cargo.lock
 .config/nvim/lazy-lock.json
 .config/opencode/package.json
 .config/opencode/bun.lock
+.local/share/go/
+.local/state/atuin/logs/
+.local/state/mcp-auth/
+.local/state/vim/
 .config/yazi/plugins/**
 .kube/cache/
 .kube/http-cache/

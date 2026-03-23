@@ -1,0 +1,18 @@
+" Minimal Vim config for XDG state paths.
+
+let s:vim_state = $XDG_STATE_HOME . '/vim'
+let g:netrw_home = s:vim_state
+
+for s:dir in [s:vim_state, s:vim_state . '/undo', s:vim_state . '/swap', s:vim_state . '/backup']
+  if !isdirectory(s:dir)
+    call mkdir(s:dir, 'p')
+  endif
+endfor
+
+execute 'set runtimepath^=' . fnameescape($XDG_CONFIG_HOME . '/vim')
+let &viminfofile = s:vim_state . '/viminfo'
+let &undodir = s:vim_state . '/undo'
+let &directory = s:vim_state . '/swap'
+let &backupdir = s:vim_state . '/backup'
+
+unlet s:dir s:vim_state

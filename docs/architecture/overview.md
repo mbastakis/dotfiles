@@ -41,13 +41,17 @@ Chezmoi translates source-state file names to target paths using naming conventi
 | `private_dot_config/notmuch/default/config.tmpl` | `~/.config/notmuch/default/config` | notmuch profile config |
 | `private_dot_config/notmuch/default/hooks/executable_post-new.tmpl` | `~/.config/notmuch/default/hooks/post-new` | post-index account/folder tagging |
 | `private_dot_config/neomutt/` | `~/.config/neomutt/` | NeoMutt entrypoint, includes, mailcap |
-| `private_dot_abook/` | `~/.abook/` | Abook contact config and data |
+| `private_dot_config/abook/` | `~/.config/abook/` | Abook config |
+| `private_dot_config/terraform/terraform.rc` | `~/.config/terraform/terraform.rc` | Terraform CLI defaults |
+| `private_dot_config/vim/vimrc` | `~/.config/vim/vimrc` | Minimal Vim config for XDG state |
+| `private_dot_local/private_share/abook/` | `~/.local/share/abook/` | Abook data |
+| `private_dot_local/private_share/colima/` | `~/.local/share/colima/` | Colima config and state |
 | `private_Library/LaunchAgents/com.mbastakis.mail-sync.plist.tmpl` | `~/Library/LaunchAgents/com.mbastakis.mail-sync.plist` | Mail sync scheduler |
 | `literal_bin/executable_mail-*` | `~/bin/mail-*` | Mail helper scripts (`mail-sync`, `mail-open`) |
 | `.chezmoiscripts/` | _(lifecycle scripts)_ | Before/after scripts (e.g. LaunchAgent reload, Ghostty-only Cmd+H override), not deployed |
 | `.chezmoidata.yaml` | _(template data)_ | Catppuccin Mocha color palette |
-| `dot_zshrc` | `~/.zshrc` | Zsh entry point |
-| `dot_zsh/` | `~/.zsh/` | Zsh module files |
+| `dot_zshenv.tmpl` | `~/.zshenv` | Zsh bootstrap (exports `ZDOTDIR`) |
+| `private_dot_config/zsh/` | `~/.config/zsh/` | Zsh entry point and module files |
 
 _Reference: `AGENTS.md:78`_
 
@@ -99,7 +103,7 @@ flowchart TD
   B -->|age decrypt| D[~/.supermaven/config.json]
   B -->|age decrypt| E[~/.local/share/bws/token]
   E -->|chezmoi-bws wrapper| F[Bitwarden Secrets Manager]
-  F -->|bitwardenSecrets template func| G[API keys in ~/.zsh/local.zsh]
+  F -->|bitwardenSecrets template func| G[API keys in ~/.config/zsh/local.zsh]
 ```
 
 _Reference: `AGENTS.md:62`_

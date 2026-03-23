@@ -38,7 +38,7 @@ Component-based documentation for the chezmoi-managed dotfiles in this repositor
 Source references use `path:line` format relative to the repo root:
 
 ```
-dot_zsh/keybindings.zsh:14    -- line 14 of the zsh keybindings file
+private_dot_config/zsh/keybindings.zsh:14    -- line 14 of the zsh keybindings file
 AGENTS.md:42                  -- line 42 of the root AGENTS file
 ```
 

@@ -12,49 +12,51 @@ setopt HIST_IGNORE_DUPS  # Don't record duplicates
 setopt HIST_IGNORE_SPACE # Don't record commands starting with space
 
 # History configuration
-# Using atuin for history management
-# export HISTSIZE=10000
-# export SAVEHIST=10000
-# export HISTFILE=~/.zsh_history
+# HISTFILE, HISTSIZE, SAVEHIST are set in .zshenv
+# Atuin manages interactive history search (see fzf.zsh)
+# nix-darwin's /etc/zshrc resets these for interactive shells, so restore them here.
+export HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
+export HISTSIZE=10000
+export SAVEHIST=10000
 
 # ----------------------------------------------------
 # Tool initialization (order matters!)
 # ----------------------------------------------------
 
 # Homebrew shell environment (cached for faster startup)
-_brew_cache="$HOME/.cache/brew-shellenv.zsh"
+_brew_cache="${XDG_CACHE_HOME:-$HOME/.cache}/brew-shellenv.zsh"
 if [[ ! -f "$_brew_cache" || ! -s "$_brew_cache" ]]; then
-  mkdir -p "$HOME/.cache"
+  mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}"
   /opt/homebrew/bin/brew shellenv >"$_brew_cache" 2>/dev/null
 fi
 source "$_brew_cache"
 unset _brew_cache
 
 # Interactive-only exports (PAGER, LESS, tool-specific vars)
-source "$HOME/.zsh/exports.zsh"
+source "$ZDOTDIR/exports.zsh"
 
 # Zinit plugins + fzf-tab + compinit
-source "$HOME/.zsh/plugins.zsh"
+source "$ZDOTDIR/plugins.zsh"
 
 # Carapace completions (must be after compinit)
-source "$HOME/.zsh/carapace.zsh"
+source "$ZDOTDIR/carapace.zsh"
 
 # Tool shell integrations (atuin, zoxide, starship)
-source "$HOME/.zsh/tools.zsh"
+source "$ZDOTDIR/tools.zsh"
 
 # ----------------------------------------------------
 # Shell configuration
 # ----------------------------------------------------
 
-source "$HOME/.zsh/aliases.zsh"
-source "$HOME/.zsh/functions.zsh"
-source "$HOME/.zsh/fzf.zsh"
-source "$HOME/.zsh/fzf-tab.zsh"
-source "$HOME/.zsh/keybindings.zsh"
+source "$ZDOTDIR/aliases.zsh"
+source "$ZDOTDIR/functions.zsh"
+source "$ZDOTDIR/fzf.zsh"
+source "$ZDOTDIR/fzf-tab.zsh"
+source "$ZDOTDIR/keybindings.zsh"
 
 # Local configuration (machine-specific, secrets) - loaded last to override
-[[ -f "$HOME/.zsh/local.zsh" ]] || touch "$HOME/.zsh/local.zsh"
-source "$HOME/.zsh/local.zsh"
+[[ -f "$ZDOTDIR/local.zsh" ]] || touch "$ZDOTDIR/local.zsh"
+source "$ZDOTDIR/local.zsh"
 
 # Output profiling results
 [[ -n "$ZSHRC_PROFILE" ]] && zprof

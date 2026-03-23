@@ -47,8 +47,8 @@ _Reference: `private_dot_config/opencode/README.md:5`, `private_dot_config/openc
 
 ## Profiles
 
-- `oc` uses the exported default profile rooted at `~/.config/opencode/`. `dot_zsh/exports.zsh:25`, `dot_zsh/aliases.zsh:59`
-- `omo` overrides `OPENCODE_CONFIG` and `OPENCODE_CONFIG_DIR` for that invocation, so OpenCode reads from `~/.config/opencode-omo/` instead of the primary profile. `dot_zsh/aliases.zsh:60`
+- `oc` uses the exported default profile rooted at `~/.config/opencode/`. `private_dot_config/zsh/exports.zsh:25`, `private_dot_config/zsh/aliases.zsh:59`
+- `omo` overrides `OPENCODE_CONFIG` and `OPENCODE_CONFIG_DIR` for that invocation, so OpenCode reads from `~/.config/opencode-omo/` instead of the primary profile. `private_dot_config/zsh/aliases.zsh:60`
 - The OMO profile enables `oh-my-opencode@latest` in its isolated `opencode.jsonc` and keeps the plugin's generated model profile in `oh-my-opencode.json`. `private_dot_config/opencode-omo/opencode.jsonc:1`, `private_dot_config/opencode-omo/oh-my-opencode.json:1`
 - The checked-in OMO profile now pins explicit models per agent/category based on the published OMO model guidance, using locally available OpenAI, Google, OpenCode Zen, and Minimax/Kimi-backed model IDs rather than the installer's all-`gpt-5-nano` fallback. `private_dot_config/opencode-omo/oh-my-opencode.json:1`, `private_dot_config/opencode-omo/README.md:28`
 
@@ -75,7 +75,7 @@ Linear operations are handled via `linear-cli` bash commands:
 linear-cli i list --mine --output json --compact
 ```
 
-Authentication is provided via `LINEAR_API_KEY` in `dot_zsh/local.zsh.tmpl`, and the manager agent is constrained to `linear-cli*` shell commands only.
+Authentication is provided via `LINEAR_API_KEY` in `private_dot_config/zsh/local.zsh.tmpl`, and the manager agent is constrained to `linear-cli*` shell commands only.
 
 _Reference: `private_dot_config/opencode/agent/manager.md`_
 

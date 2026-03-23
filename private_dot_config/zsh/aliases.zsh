@@ -37,7 +37,7 @@ alias obs="obsidian"
 # Mail
 alias nm="neomutt"
 alias msync="mail-sync"
-alias ab="abook"
+alias ab='abook --config "$XDG_CONFIG_HOME/abook/abookrc" --datafile "$XDG_DATA_HOME/abook/addressbook"'
 
 # Kubernetes
 alias k="kubectl"

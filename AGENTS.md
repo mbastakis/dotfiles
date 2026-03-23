@@ -71,7 +71,7 @@ key.txt.age (in repo, passphrase-encrypted)
     ├── ~/.ssh/id_ed25519
     ├── ~/.supermaven/config.json
     └── ~/.local/share/bws/token → chezmoi-bws → Bitwarden Secrets Manager
-                                      └── API keys rendered into ~/.zsh/local.zsh
+                                      └── API keys rendered into ~/.config/zsh/local.zsh
 ```
 
 ## Key Paths
@@ -85,6 +85,10 @@ key.txt.age (in repo, passphrase-encrypted)
 | `literal_bin/`        | `~/bin/`                            | Shell utility scripts        |
 | `private_dot_ssh/`    | `~/.ssh/`                           | SSH keys (encrypted)         |
 | `private_dot_config/` | `~/.config/`                        | App configs                  |
+| `private_dot_config/abook/` | `~/.config/abook/`            | Abook config                 |
+| `private_dot_config/zsh/` | `~/.config/zsh/`                | Zsh config via `ZDOTDIR`     |
+| `private_dot_local/private_share/abook/` | `~/.local/share/abook/` | Abook data          |
+| `private_dot_local/private_share/colima/` | `~/.local/share/colima/` | Colima config + state |
 | `.chezmoiscripts/`    | _(lifecycle scripts, not deployed)_ | Before/after scripts         |
 | `.chezmoidata.yaml`   | _(template data)_                   | Catppuccin Mocha colors      |
 
@@ -201,7 +205,9 @@ Always use `{{-` and `-}}` to trim surrounding whitespace in template tags.
 - LSP configs: `after/lsp/<server>.lua` with `vim.lsp.config()`
 - Formatter: stylua. Linter: selene (permissive, `std = "lua51"`)
 
-## Zsh Config (dot_zsh/)
+## Zsh Config (private_dot_config/zsh/)
+
+`dot_zshenv.tmpl` still renders to `~/.zshenv`; interactive/login zsh config lives in `private_dot_config/zsh/` and is loaded via `ZDOTDIR=~/.config/zsh`.
 
 Load order: exports → plugins → completions → tools → aliases → functions →
 fzf → fzf-tab → keybindings → direnv → local
@@ -233,7 +239,7 @@ Source lives in `docs/`; served as a zero-build SPA via `docs/index.html`.
 | Config change                                              | Doc to update                                                             |
 | ---------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `.chezmoiscripts/`, `.chezmoi.toml.tmpl`, `.chezmoiignore` | `docs/architecture/chezmoi-lifecycle.md`, `docs/architecture/overview.md` |
-| `dot_zsh/`, `dot_zshrc`                                    | `docs/components/zsh.md`                                                  |
+| `private_dot_config/zsh/`, `dot_zshenv.tmpl`               | `docs/components/zsh.md`                                                  |
 | `private_dot_config/nvim/`                                 | `docs/components/nvim.md`                                                 |
 | `private_dot_config/opencode/`                             | `docs/components/opencode.md`                                             |
 | `private_dot_config/carapace/`                             | `docs/components/carapace.md`                                             |

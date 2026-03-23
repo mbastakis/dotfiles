@@ -22,5 +22,4 @@ Host github.com github-personal
 Host *
     AddKeysToAgent yes
 
-Include /Users/mbastakis/.colima/ssh_config
-Include /Users/mbastakis/.config/colima/ssh_config
+Include {{ .chezmoi.homeDir }}/.local/share/colima/ssh_config

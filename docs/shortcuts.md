@@ -118,49 +118,49 @@ Prefix: **`Ctrl-a`**
 
 | Key            | Action                                                | Source                       |
 | -------------- | ----------------------------------------------------- | ---------------------------- |
-| `Ctrl+F`       | Interactive ripgrep search (ftext-widget)             | `dot_zsh/keybindings.zsh:33` |
-| `Ctrl+G`       | Navi cheatsheet browser                               | `dot_zsh/keybindings.zsh:17` |
-| `Ctrl+J`       | Insert literal newline (multiline editing)            | `dot_zsh/keybindings.zsh:8`  |
-| `Ctrl+Shift+T` | FZF directory picker (Ghostty `ESC[202~` passthrough) | `dot_zsh/keybindings.zsh:40` |
-| `Ctrl+Z`       | Zoxide interactive directory jump                     | `dot_zsh/keybindings.zsh:57` |
-| `Ctrl+R`       | Atuin history search (replaces fzf)                   | `dot_zsh/fzf.zsh:154`       |
-| `Ctrl+T`       | FZF file picker (fd-based, bat preview)               | `dot_zsh/fzf.zsh:66`        |
+| `Ctrl+F`       | Interactive ripgrep search (ftext-widget)             | `private_dot_config/zsh/keybindings.zsh:33` |
+| `Ctrl+G`       | Navi cheatsheet browser                               | `private_dot_config/zsh/keybindings.zsh:17` |
+| `Ctrl+J`       | Insert literal newline (multiline editing)            | `private_dot_config/zsh/keybindings.zsh:8`  |
+| `Ctrl+Shift+T` | FZF directory picker (Ghostty `ESC[202~` passthrough) | `private_dot_config/zsh/keybindings.zsh:40` |
+| `Ctrl+Z`       | Zoxide interactive directory jump                     | `private_dot_config/zsh/keybindings.zsh:57` |
+| `Ctrl+R`       | Atuin history search (replaces fzf)                   | `private_dot_config/zsh/fzf.zsh:154`       |
+| `Ctrl+T`       | FZF file picker (fd-based, bat preview)               | `private_dot_config/zsh/fzf.zsh:66`        |
 
 ### Shift-Select (Ghostty CSI Integration)
 
 | Key                    | Action                      | Source                                     |
 | ---------------------- | --------------------------- | ------------------------------------------ |
-| `Cmd+C` (via CSI)      | Copy selection to clipboard | `dot_zsh/shift-select-enhancements.zsh:71` |
-| `Cmd+X` (via CSI)      | Cut selection to clipboard  | `dot_zsh/shift-select-enhancements.zsh:72` |
-| `Shift+Cmd+Left/Right` | Select entire line          | `dot_zsh/shift-select-enhancements.zsh:79` |
+| `Cmd+C` (via CSI)      | Copy selection to clipboard | `private_dot_config/zsh/shift-select-enhancements.zsh:71` |
+| `Cmd+X` (via CSI)      | Cut selection to clipboard  | `private_dot_config/zsh/shift-select-enhancements.zsh:72` |
+| `Shift+Cmd+Left/Right` | Select entire line          | `private_dot_config/zsh/shift-select-enhancements.zsh:79` |
 
 ### Word Movement
 
 | Key                    | Action            | Source                       |
 | ---------------------- | ----------------- | ---------------------------- |
-| `Alt+F` / `Ctrl+Right` | Forward word      | `dot_zsh/keybindings.zsh:75` |
-| `Alt+B` / `Ctrl+Left`  | Backward word     | `dot_zsh/keybindings.zsh:76` |
-| `Home`                 | Beginning of line | `dot_zsh/keybindings.zsh:79` |
-| `End`                  | End of line       | `dot_zsh/keybindings.zsh:80` |
+| `Alt+F` / `Ctrl+Right` | Forward word      | `private_dot_config/zsh/keybindings.zsh:75` |
+| `Alt+B` / `Ctrl+Left`  | Backward word     | `private_dot_config/zsh/keybindings.zsh:76` |
+| `Home`                 | Beginning of line | `private_dot_config/zsh/keybindings.zsh:79` |
+| `End`                  | End of line       | `private_dot_config/zsh/keybindings.zsh:80` |
 
 ### FZF Internal Keybindings (inside fzf)
 
 | Key      | Action                     | Source               |
 | -------- | -------------------------- | -------------------- |
-| `Ctrl+/` | Toggle preview             | `dot_zsh/fzf.zsh:21` |
-| `Ctrl+D` | Preview page down          | `dot_zsh/fzf.zsh:22` |
-| `Ctrl+U` | Preview page up            | `dot_zsh/fzf.zsh:23` |
-| `Ctrl+Y` | Copy to clipboard (pbcopy) | `dot_zsh/fzf.zsh:24` |
-| `Ctrl+A` | Toggle all selections      | `dot_zsh/fzf.zsh:25` |
-| `Ctrl+S` | Toggle sort                | `dot_zsh/fzf.zsh:26` |
+| `Ctrl+/` | Toggle preview             | `private_dot_config/zsh/fzf.zsh:21` |
+| `Ctrl+D` | Preview page down          | `private_dot_config/zsh/fzf.zsh:22` |
+| `Ctrl+U` | Preview page up            | `private_dot_config/zsh/fzf.zsh:23` |
+| `Ctrl+Y` | Copy to clipboard (pbcopy) | `private_dot_config/zsh/fzf.zsh:24` |
+| `Ctrl+A` | Toggle all selections      | `private_dot_config/zsh/fzf.zsh:25` |
+| `Ctrl+S` | Toggle sort                | `private_dot_config/zsh/fzf.zsh:26` |
 
 ### FZF-Tab (inside completion menu)
 
 | Key              | Action                                | Source                      |
 | ---------------- | ------------------------------------- | --------------------------- |
-| `<` / `>`        | Switch completion group               | `dot_zsh/fzf-tab.zsh:20`   |
-| `/`              | Accept and continue into subdirectory | `dot_zsh/fzf-tab.zsh:53`   |
-| `Tab` (in ftext) | Insert filename (instead of opening)  | `dot_zsh/functions.zsh:81`  |
+| `<` / `>`        | Switch completion group               | `private_dot_config/zsh/fzf-tab.zsh:20`   |
+| `/`              | Accept and continue into subdirectory | `private_dot_config/zsh/fzf-tab.zsh:53`   |
+| `Tab` (in ftext) | Insert filename (instead of opening)  | `private_dot_config/zsh/functions.zsh:81`  |
 
 ## NeoMutt (Mail Layer)
 
@@ -310,9 +310,9 @@ The following use plugin-default keymaps and are intentionally excluded from thi
 
 ## References
 
-- Zsh keybindings: `dot_zsh/keybindings.zsh:1`
-- Zsh shift-select: `dot_zsh/shift-select-enhancements.zsh:1`
-- FZF config: `dot_zsh/fzf.zsh:1`
+- Zsh keybindings: `private_dot_config/zsh/keybindings.zsh:1`
+- Zsh shift-select: `private_dot_config/zsh/shift-select-enhancements.zsh:1`
+- FZF config: `private_dot_config/zsh/fzf.zsh:1`
 - tmux config: `private_dot_config/tmux/tmux.conf:1`
 - Ghostty config: `private_dot_config/ghostty/config:65`
 - NeoMutt bindings: `private_dot_config/neomutt/bindings.muttrc.tmpl:1`

@@ -1,6 +1,7 @@
 # Zsh Configuration
 
-Modular zsh config files symlinked to `~/.zsh/`, sourced by `~/.zshrc`.
+Modular zsh config lives at `~/.config/zsh/`, sourced by `~/.config/zsh/.zshrc`.
+`ZDOTDIR` is set in `~/.zshenv` to point here.
 
 ## Files
 
@@ -21,7 +22,7 @@ Modular zsh config files symlinked to `~/.zsh/`, sourced by `~/.zshrc`.
 
 ## Load Order (Critical)
 
-Files sourced in this order (defined in `dot-zshrc`):
+Files sourced in this order (defined in `.zshrc`):
 
 ```
 exports → plugins → completions → tools → aliases → functions → fzf → fzf-tab → keybindings → direnv → local
@@ -35,12 +36,12 @@ Dependencies:
 
 ## Commands
 
-| Command             | Purpose             |
-| ------------------- | ------------------- |
-| `source ~/.zshrc`   | Reload config       |
-| `reload`            | Alias for above     |
-| `zinit update`      | Update all plugins  |
-| `zinit self-update` | Update zinit itself |
+| Command                 | Purpose             |
+| ----------------------- | ------------------- |
+| `source $ZDOTDIR/.zshrc` | Reload config      |
+| `reload`                | Fresh shell         |
+| `zinit update`          | Update all plugins  |
+| `zinit self-update`     | Update zinit itself |
 
 ## Code Style
 
@@ -82,14 +83,14 @@ Background processes (launchd, cron, opencode subprocesses) spawn non-interactiv
 | `zsh -l`         | `.zshenv` + `.zprofile` | login shells                |
 | `zsh -i`         | `.zshenv` + `.zshrc`    | interactive terminals       |
 
-**Critical**: Put PATH additions needed by background processes in `dot-zshenv`, not `dot-zshrc`. The `exports.zsh` file is only sourced by interactive shells.
+**Critical**: Put PATH additions needed by background processes in `dot_zshenv.tmpl` (`.zshenv`), not `.zshrc`. `.zshenv` stays at `$HOME`; everything else is loaded from `$ZDOTDIR` (`~/.config/zsh/`).
 
 ## Gotchas
 
-- **Do not** add zsh files to `dot-config/` — all zsh config goes in `dot-zsh/`
-- **Background process PATH**: Homebrew (`/opt/homebrew/bin`) must be in `dot-zshenv` for launchd services to find brew-installed binaries
+- All zsh config lives in `~/.config/zsh/` via `ZDOTDIR`. The chezmoi source is `private_dot_config/zsh/`.
+- **Background process PATH**: Homebrew (`/opt/homebrew/bin`) must be in `dot_zshenv.tmpl` for launchd services to find brew-installed binaries
 - `shift-select-enhancements.zsh` loaded via zinit atload hook, not directly sourced
-- `local.zsh` is generated from `dot_zsh/local.zsh.tmpl` and can be overwritten by `chezmoi apply`; edit the template, not `~/.zsh/local.zsh`
+- `local.zsh` is generated from `private_dot_config/zsh/local.zsh.tmpl` and can be overwritten by `chezmoi apply`; edit the template, not `~/.config/zsh/local.zsh`
 
 ## Startup Performance
 

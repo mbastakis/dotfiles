@@ -12,7 +12,7 @@ Current rollout supports multiple enabled accounts rendered from `.chezmoidata.y
 | Send | `msmtp` | SMTP send via Gmail | `~/.config/msmtp/config` |
 | Index/Search | `notmuch` | Unified inbox + fast search + tags | `~/.config/notmuch/default/config` |
 | Client | `NeoMutt` | Mail UI, mailbox views, compose flow | `~/.config/neomutt/` |
-| Contacts | `abook` | Local contact store + completion | `~/.abook/abookrc`, `~/.abook/addressbook` |
+| Contacts | `abook` | Local contact store + completion | `~/.config/abook/abookrc`, `~/.local/share/abook/addressbook` |
 | Orchestration | `mail-sync` | Locking, logging, sync + index pipeline | `~/bin/mail-sync` |
 | Scheduling | `launchd` LaunchAgent | Run `mail-sync --quiet` at login + interval | `~/Library/LaunchAgents/com.mbastakis.mail-sync.plist` |
 
@@ -141,7 +141,7 @@ Behavior:
 | Unified inbox empty/stale | Run `mail-sync` and verify `notmuch config list` + `notmuch new` |
 | `notmuch new` prints `.uidvalidity` notices | Safe Maildir metadata; `new.ignore=.uidvalidity` suppresses the noise |
 | LaunchAgent not running | `plutil -lint ~/Library/LaunchAgents/com.mbastakis.mail-sync.plist` and `launchctl print gui/$(id -u)/com.mbastakis.mail-sync` |
-| Contacts completion mismatch | Ensure `~/.abook/abookrc` and `~/.abook/addressbook` exist and `query_command` still points to both explicit paths |
+| Contacts completion mismatch | Ensure `~/.config/abook/abookrc` and `~/.local/share/abook/addressbook` exist and `query_command` still points to both explicit paths |
 
 Operational notes:
 

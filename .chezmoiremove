@@ -1,0 +1,5 @@
+# XDG migration cleanup - legacy managed target paths
+.zshrc
+.zsh
+.abook
+.colima

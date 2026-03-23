@@ -11,6 +11,67 @@ export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/config"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_STATE_HOME="$HOME/.local/state"
+
+{{- if eq .chezmoi.os "darwin" }}
+# macOS provides a per-user runtime directory via TMPDIR.
+[[ -n "${TMPDIR:-}" ]] && export XDG_RUNTIME_DIR="${TMPDIR%/}"
+{{- end }}
+
+# Zsh config directory (zsh reads .zshrc/.zprofile from here instead of $HOME)
+export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+
+# Disable Apple Terminal shell session files under $HOME.
+export SHELL_SESSIONS_DISABLE=1
+
+# History file (explicit - HISTFILE does not follow ZDOTDIR)
+export HISTFILE="$XDG_STATE_HOME/zsh/history"
+export HISTSIZE=10000
+export SAVEHIST=10000
+
+## Tool home directories (XDG-compliant overrides)
+
+# Rust/Cargo
+export CARGO_HOME="$XDG_DATA_HOME/cargo"
+
+# Bun
+export BUN_INSTALL="$XDG_DATA_HOME/bun"
+export BUN_INSTALL_CACHE_DIR="$XDG_CACHE_HOME/bun/install/cache"
+
+# Ruby
+export BUNDLE_USER_HOME="$XDG_CONFIG_HOME/bundle"
+export BUNDLE_USER_CACHE="$XDG_CACHE_HOME/bundle"
+export GEM_HOME="$XDG_DATA_HOME/gem"
+export GEM_SPEC_CACHE="$XDG_CACHE_HOME/gem"
+
+# npm
+export NPM_CONFIG_CACHE="$XDG_CACHE_HOME/npm"
+
+# Maven
+export MAVEN_OPTS="-Dmaven.repo.local=$XDG_CACHE_HOME/maven/repository"
+
+# Docker
+export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
+
+# Colima (container runtime)
+export COLIMA_HOME="$XDG_DATA_HOME/colima"
+
+# AWS CDK cache
+export CDK_HOME="$XDG_CACHE_HOME/cdk"
+
+# mcp-remote OAuth state
+export MCP_REMOTE_CONFIG_DIR="$XDG_STATE_HOME/mcp-auth"
+
+# Vim (prevent legacy state under $HOME)
+export VIMINIT='let $MYVIMRC = $XDG_CONFIG_HOME . "/vim/vimrc" | source $MYVIMRC'
+
+# Go
+export GOPATH="$XDG_DATA_HOME/go"
+export GOBIN="$HOME/bin"
+
+# Terraform
+export TF_CLI_CONFIG_FILE="$XDG_CONFIG_HOME/terraform/terraform.rc"
+export TF_PLUGIN_CACHE_DIR="$XDG_CACHE_HOME/terraform/plugins"
 
 # Default programs
 export EDITOR="nvim"
@@ -34,20 +95,26 @@ export LC_ALL="en_US.UTF-8"
 # Ensure user-level bin directories exist
 [[ ! -d "$HOME/bin" ]] && mkdir -p "$HOME/bin"
 [[ ! -d "$HOME/.local/bin" ]] && mkdir -p "$HOME/.local/bin"
+[[ ! -d "$XDG_STATE_HOME/zsh" ]] && mkdir -p "$XDG_STATE_HOME/zsh"
+[[ ! -d "$XDG_STATE_HOME/atuin/logs" ]] && mkdir -p "$XDG_STATE_HOME/atuin/logs"
+[[ ! -d "$BUN_INSTALL_CACHE_DIR" ]] && mkdir -p "$BUN_INSTALL_CACHE_DIR"
+[[ ! -d "$COLIMA_HOME" ]] && mkdir -p "$COLIMA_HOME"
+[[ ! -d "$CDK_HOME" ]] && mkdir -p "$CDK_HOME"
+[[ ! -d "$MCP_REMOTE_CONFIG_DIR" ]] && mkdir -p "$MCP_REMOTE_CONFIG_DIR"
+[[ ! -d "$GOPATH" ]] && mkdir -p "$GOPATH"
+
+# Drop legacy tool paths inherited from older shells before re-adding XDG ones.
+path=(${path:#$HOME/.cargo/bin})
+path=(${path:#$HOME/.bun/bin})
 
 # User bin directories
 [[ -d "$HOME/bin" ]] && PATH="$HOME/bin:$PATH"
 [[ -d "$HOME/.local/bin" ]] && PATH="$HOME/.local/bin:$PATH"
 
 # Cargo (Rust)
-[[ -d "$HOME/.cargo/bin" ]] && PATH="$HOME/.cargo/bin:$PATH"
+[[ -d "$CARGO_HOME/bin" ]] && PATH="$CARGO_HOME/bin:$PATH"
 
-# Go
-export GOPATH="$HOME/go"
-[[ -d "$GOPATH/bin" ]] && PATH="$GOPATH/bin:$PATH"
-
-# Bun
-export BUN_INSTALL="$HOME/.bun"
+# Bun (BUN_INSTALL set above in tool home directories)
 [[ -d "$BUN_INSTALL/bin" ]] && PATH="$BUN_INSTALL/bin:$PATH"
 
 {{- if eq .chezmoi.os "darwin" }}
