@@ -15,7 +15,6 @@ Summary of notable config areas managed by chezmoi, with links to dedicated docs
 | **Carapace** | `private_dot_config/carapace/` | [carapace.md](carapace.md) | Shell completion framework |
 | **Zsh** | `private_dot_config/zsh/`, `dot_zshenv.tmpl` | [zsh.md](zsh.md) | Shell bootstrap plus XDG-aware tool/runtime environment |
 | **Atuin** | `private_dot_config/private_atuin/private_config.toml` | -- | Shell history search, sync, and AI settings |
-| Vim | `private_dot_config/vim/vimrc` | -- | Minimal Vim config that redirects state into XDG paths |
 | Terraform CLI | `private_dot_config/terraform/terraform.rc` | -- | CLI defaults (for example checkpoint suppression) |
 | **NeoMutt** | `private_dot_config/neomutt/` | [email.md](email.md) | Terminal mail client config and custom mailbox bindings |
 | **notmuch** | `private_dot_config/notmuch/default/` | [email.md](email.md) | Mail index/search config and tagging hook |

@@ -49,6 +49,8 @@ _Reference: `private_dot_config/zsh/dot_zshrc:8`_
 
 `dot_zshenv.tmpl` is the global bootstrap for every shell type. It defines the XDG base dirs, exports `ZDOTDIR`, and relocates tool/runtime state such as Cargo, Bun cache, Colima, CDK, `mcp-remote`, Go, and shell history before interactive config loads.
 
+It intentionally avoids exporting editor-specific init variables like `VIMINIT` and explicitly clears inherited `VIMINIT`; Neovim checks `VIMINIT` before `~/.config/nvim/init.lua`, so leaking it through the shell environment breaks normal `nvim` startup, especially for headless runs.
+
 On macOS it also maps `XDG_RUNTIME_DIR` to `TMPDIR` and disables Apple Terminal shell-session files with `SHELL_SESSIONS_DISABLE=1`.
 
 _Reference: `dot_zshenv.tmpl:1`_
@@ -212,7 +214,7 @@ Ghostty sends custom CSI sequences for macOS shortcuts that zsh processes:
 
 ### Zsh shell type note
 
-`.zshenv` is the only file loaded by non-interactive shells (`zsh -c`). It exports `ZDOTDIR=~/.config/zsh`, so PATH additions for background processes must go in `.zshenv`, not `$ZDOTDIR/.zshrc`.
+`~/.zshenv` is the primary bootstrap for non-interactive shells (`zsh -c`). It exports `ZDOTDIR=~/.config/zsh`, and `~/.config/zsh/.zshenv` delegates back to `~/.zshenv` for child shells that inherit `ZDOTDIR`, so PATH additions for background processes still belong in `.zshenv`, not `$ZDOTDIR/.zshrc`.
 
 The mail LaunchAgent calls `~/bin/mail-sync --quiet` directly, and `mail-sync` sets its own `PATH` + XDG variables internally. Mail background sync does not depend on `.zshrc` load order or shell aliases.
 

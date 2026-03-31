@@ -1,0 +1,4 @@
+#!/usr/bin/env zsh
+
+# Child zsh processes inherit ZDOTDIR, so delegate back to ~/.zshenv.
+[[ -f "$HOME/.zshenv" ]] && source "$HOME/.zshenv"

@@ -43,7 +43,6 @@ Chezmoi translates source-state file names to target paths using naming conventi
 | `private_dot_config/neomutt/` | `~/.config/neomutt/` | NeoMutt entrypoint, includes, mailcap |
 | `private_dot_config/abook/` | `~/.config/abook/` | Abook config |
 | `private_dot_config/terraform/terraform.rc` | `~/.config/terraform/terraform.rc` | Terraform CLI defaults |
-| `private_dot_config/vim/vimrc` | `~/.config/vim/vimrc` | Minimal Vim config for XDG state |
 | `private_dot_local/private_share/abook/` | `~/.local/share/abook/` | Abook data |
 | `private_dot_local/private_share/colima/` | `~/.local/share/colima/` | Colima config and state |
 | `private_Library/LaunchAgents/com.mbastakis.mail-sync.plist.tmpl` | `~/Library/LaunchAgents/com.mbastakis.mail-sync.plist` | Mail sync scheduler |

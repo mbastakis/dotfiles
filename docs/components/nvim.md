@@ -19,6 +19,8 @@ flowchart TD
 
 The entry point (`init.lua`) loads four core modules in strict order. `config/lazy.lua` bootstraps lazy.nvim from git if missing, then imports all plugin specs from two directories.
 
+This setup relies on Neovim's native config discovery at `~/.config/nvim/init.lua`. The repo intentionally does not export `VIMINIT` globally, because Neovim evaluates `VIMINIT` before `init.lua` and would otherwise skip this config.
+
 _Reference: `private_dot_config/nvim/init.lua:1`_
 
 ## Core Configuration
