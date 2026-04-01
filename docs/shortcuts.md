@@ -48,7 +48,7 @@ _Reference: `private_dot_config/private_karabiner/src/rules/15-hyper-navigation.
 | `Cmd+D`          | Split horizontal (`prefix`, `h`)     | `private_dot_config/ghostty/config:72`  |
 | `Cmd+Shift+D`    | Split vertical (`prefix`, `v`)       | `private_dot_config/ghostty/config:73`  |
 | `Cmd+P`          | Floax/floating window (`prefix`, `P`) | `private_dot_config/ghostty/config:74` |
-| `Cmd+S`          | Tmux sessionx (`prefix`, `s`)        | `private_dot_config/ghostty/config:75`  |
+| `Cmd+S`          | Sesh session picker (`prefix`, `s`)  | `private_dot_config/ghostty/config:75`  |
 | `Cmd+H`          | Previous tmux window (`prefix`, `p`) | `private_dot_config/ghostty/config:76` |
 | `Cmd+L`          | Next tmux window (`prefix`, `n`)     | `private_dot_config/ghostty/config:77`  |
 | `Cmd+O`          | OpenCode split (`prefix`, `o`)       | `private_dot_config/ghostty/config:80`  |
@@ -110,7 +110,7 @@ Prefix: **`Ctrl-a`**
 
 | Key          | Action                         |
 | ------------ | ------------------------------ |
-| `prefix + s` | Session picker (tmux-sessionx) |
+| `prefix + s` | Session picker (sesh + gum popup) |
 
 ## Zsh (Shell Layer)
 

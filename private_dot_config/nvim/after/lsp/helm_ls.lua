@@ -3,7 +3,7 @@
 -- This file extends the defaults with custom settings for better Helm template support
 -- Documentation: https://github.com/mrjosh/helm-ls
 
-vim.lsp.config("helm_ls", {
+return {
   settings = {
     ["helm-ls"] = {
       logLevel = "info",
@@ -28,4 +28,4 @@ vim.lsp.config("helm_ls", {
       },
     },
   },
-})
+}

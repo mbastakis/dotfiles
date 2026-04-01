@@ -2,11 +2,11 @@
 -- docker_compose_language_service handles docker-compose files
 -- Also configure GitLab CI schema support
 
-vim.lsp.config('yamlls', {
+return {
   on_attach = function(client, bufnr)
     local fname = vim.api.nvim_buf_get_name(bufnr)
     -- Stop yamlls if this is a docker-compose file
-    if fname:match('docker%-compose%.ya?ml$') or fname:match('compose%.ya?ml$') then
+    if fname:match("docker%-compose%.ya?ml$") or fname:match("compose%.ya?ml$") then
       vim.lsp.stop_client(client.id)
       return false
     end
@@ -37,4 +37,4 @@ vim.lsp.config('yamlls', {
       },
     },
   },
-})
+}

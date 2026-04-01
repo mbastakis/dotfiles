@@ -55,5 +55,9 @@ return {
         prefix = "",
       },
     })
+
+    if vim.fn.executable("kdl-lsp") == 1 then
+      vim.lsp.enable("kdl_lsp")
+    end
   end,
 }

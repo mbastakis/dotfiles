@@ -14,7 +14,7 @@ flowchart TD
   A --> E[config/lazy.lua<br/>bootstrap lazy.nvim]
   E --> F["import: plugins/*<br/>23 plugin specs"]
   E --> G["import: plugins/lsp/*<br/>LSP config + Mason"]
-  H["after/lsp/*.lua<br/>6 server overrides"] -.->|loaded by nvim| G
+  H["after/lsp/*.lua<br/>7 server overrides"] -.->|loaded by nvim| G
 ```
 
 The entry point (`init.lua`) loads four core modules in strict order. `config/lazy.lua` bootstraps lazy.nvim from git if missing, then imports all plugin specs from two directories.
@@ -107,16 +107,19 @@ _Reference: `private_dot_config/nvim/lua/plugins/lsp/config.lua:1`_
 
 ### Layer 3: Server Overrides (`after/lsp/`)
 
-Highest-priority overrides loaded by Neovim's native `after/lsp/` mechanism:
+Highest-priority overrides loaded by Neovim's native `after/lsp/` mechanism. Each
+file returns a config table for that server, which Neovim merges when
+`vim.lsp.enable()` activates it:
 
 | File | Override |
 |---|---|
 | `yamlls.lua` | Detaches from docker-compose files, enables schemaStore, adds GitLab CI schema |
+| `bashls.lua` | Extends bashls filetypes to include `zsh` |
 | `jsonls.lua` | Adds `jsonc` filetype, enables validation |
 | `dockerls.lua` | Restricts to `dockerfile` filetype only |
 | `helm_ls.lua` | Custom values file patterns, embedded yamlls with kubernetes schema |
 | `gopls.lua` | Extends filetypes to include `gotmpl` for chezmoi/Go template files |
-| `kdl_lsp.lua` | Manual config (not in Mason), only enables if binary exists |
+| `kdl_lsp.lua` | Manual config (not in Mason), enabled from core LSP config if binary exists |
 
 _Reference: `private_dot_config/nvim/after/lsp/`_
 

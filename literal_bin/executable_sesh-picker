@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! command -v sesh >/dev/null 2>&1; then
+    tmux display-message "sesh is not installed"
+    exit 1
+fi
+
+if ! command -v gum >/dev/null 2>&1; then
+    tmux display-message "gum is not installed"
+    exit 1
+fi
+
+set +e
+selection="$(sesh list -i -H -d | gum filter \
+    --limit 1 \
+    --no-sort \
+    --fuzzy \
+    --no-strip-ansi \
+    --placeholder 'Pick a sesh' \
+    --height 50 \
+    --prompt='sesh> ' )"
+status=$?
+set -e
+
+if [[ $status -ne 0 || -z "$selection" ]]; then
+    exit 0
+fi
+
+exec sesh connect "$selection"

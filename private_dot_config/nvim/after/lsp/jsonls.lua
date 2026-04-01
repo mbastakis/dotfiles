@@ -1,8 +1,8 @@
-vim.lsp.config("jsonls", {
+return {
   filetypes = { "json", "jsonc" },
   settings = {
     json = {
       validate = { enable = true },
     },
   },
-})
+}

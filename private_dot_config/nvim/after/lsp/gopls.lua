@@ -3,6 +3,6 @@
 -- gopls provides completion for Go template functions and basic diagnostics
 -- Documentation: https://pkg.go.dev/golang.org/x/tools/gopls
 
-vim.lsp.config("gopls", {
+return {
   filetypes = { "go", "gomod", "gowork", "gotmpl" },
-})
+}

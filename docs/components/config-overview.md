@@ -58,7 +58,8 @@ _Reference: `private_dot_config/ghostty/config:1`_
 Terminal multiplexer with Catppuccin theme and plugin ecosystem.
 
 - **Prefix:** `Ctrl-a`
-- **Plugins (TPM):** vim-tmux-navigator, catppuccin, tmux-smooth-scroll, tmux-yank, tmux-resurrect, tmux-continuum, tmux-sessionx, tmux-floax, tmux-harpoon
+- **Plugins (TPM):** vim-tmux-navigator, catppuccin, tmux-smooth-scroll, tmux-yank, tmux-resurrect, tmux-continuum, tmux-floax, tmux-harpoon
+- **Session picker:** `prefix + s` opens a `sesh` + `gum` popup helper
 - **Session persistence:** Resurrect + Continuum (auto-save every 15min, restore on start)
 - **Status line:** Top position, oasis-style mode indicator with per-mode colors/icons
 - **History:** 100,000 lines, mouse enabled, base-index 1
@@ -66,6 +67,15 @@ Terminal multiplexer with Catppuccin theme and plugin ecosystem.
 Custom keybindings are documented in [shortcuts.md](../shortcuts.md).
 
 _Reference: `private_dot_config/tmux/tmux.conf:1`_
+
+## sesh
+
+Standalone tmux session manager used by the `prefix + s` popup helper.
+
+- **Config:** `~/.config/sesh/sesh.toml`
+- **Defaults:** two-part session names, separator-aware matching, `main` hidden from picker results
+
+_Reference: `private_dot_config/sesh/sesh.toml:1`_
 
 ## Git
 
