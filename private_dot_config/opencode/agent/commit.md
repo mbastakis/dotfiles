@@ -1,7 +1,6 @@
 ---
 description: Create git commits from staged and unstaged changes. Use for committing work at end of session or when user says "commit".
 mode: subagent
-model: anthropic/claude-haiku-4-5
 tools:
   write: false
   patch: false
