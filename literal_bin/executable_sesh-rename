@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! command -v gum >/dev/null 2>&1; then
+    tmux display-message "gum is not installed"
+    exit 1
+fi
+
+current="$(tmux display-message -p '#S')"
+
+set +e
+new_name="$(gum input \
+    --value "$current" \
+    --placeholder 'New session name' \
+    --prompt 'rename> ' \
+    --header "Rename session: $current" \
+    --width 40 \
+    --char-limit 80)"
+status=$?
+set -e
+
+if [[ $status -ne 0 || -z "$new_name" ]]; then
+    exit 0
+fi
+
+if [[ "$new_name" == "$current" ]]; then
+    exit 0
+fi
+
+tmux rename-session "$new_name"
