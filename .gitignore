@@ -31,3 +31,7 @@ private_dot_config/opencode/bun.lock
 
 # AWS login caches
 private_dot_config/aws-login/private_cache/
+
+# Generated zsh completion cache
+private_dot_config/zsh/.zcompdump
+private_dot_config/zsh/.zcompdump-*
