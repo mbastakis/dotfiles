@@ -15,7 +15,7 @@ flowchart TD
   D --> E[Homebrew shellenv<br/>cached]
   E --> F[exports.zsh]
   F --> G[plugins.zsh<br/>zinit + compinit]
-  G --> H[Carapace completions<br/>cached, after compinit]
+  G --> H[completions.zsh<br/>native + carapace completions]
   H --> I[tools.zsh]
   I --> J[aliases.zsh]
   J --> K[functions.zsh]
@@ -29,7 +29,7 @@ _Reference: `private_dot_config/zsh/dot_zshrc:22`, `dot_zshenv.tmpl:16`_
 
 ### Performance Caching
 
-Both `brew shellenv` and `carapace _carapace zsh` are cached to `~/.cache/` and only regenerated when the cache file is missing or the binary is newer than the cache. Optional startup profiling is available via `ZSHRC_PROFILE=1 zsh -i -c exit`.
+`brew shellenv`, `carapace _carapace zsh`, and `sesh completion zsh` are cached to `~/.cache/` and only regenerated when the cache file is missing or the binary is newer than the cache. Optional startup profiling is available via `ZSHRC_PROFILE=1 zsh -i -c exit`.
 
 ## Shell Options
 
@@ -87,6 +87,19 @@ Manages Zinit (auto-installed if missing) and runs `compinit` with 24h cache TTL
 `shift-select-enhancements.zsh` is loaded via zinit `atload` hook on the shift-select plugin, not directly sourced from `.zshrc`.
 
 _Reference: `private_dot_config/zsh/plugins.zsh:1`_
+
+### completions.zsh
+
+Completion setup for interactive shells:
+
+| Source | Strategy | Notes |
+|---|---|---|
+| `carapace.zsh` | Cached, optional | Loads aggregated completions only when `ZSH_ENABLE_CARAPACE=1` |
+| `sesh completion zsh` | Cached native script | Works even when Carapace is disabled |
+
+`completions.zsh` is sourced after `compinit` and before `tools.zsh`, so command completions are available before tool init mutates shell state.
+
+_Reference: `private_dot_config/zsh/completions.zsh:1`_
 
 ### tools.zsh
 
@@ -222,6 +235,7 @@ The mail LaunchAgent calls `~/bin/mail-sync --quiet` directly, and `mail-sync` s
 
 - `.zshenv` template: `dot_zshenv.tmpl:1`
 - Main zshrc: `private_dot_config/zsh/dot_zshrc:1`
+- Completions: `private_dot_config/zsh/completions.zsh:1`
 - Zsh AGENTS: `private_dot_config/zsh/AGENTS.md:1`
 - Keybindings: `private_dot_config/zsh/keybindings.zsh:1`
 - Shift-select: `private_dot_config/zsh/shift-select-enhancements.zsh:1`

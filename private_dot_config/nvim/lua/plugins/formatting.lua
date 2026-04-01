@@ -35,7 +35,7 @@ return {
         -- Shell scripts
         sh = { "shfmt" },
         bash = { "shfmt" },
-        zsh = { "shfmt" },
+        zsh = { "beautysh" },
 
         -- Dockerfile
         dockerfile = { "dockerfmt" },

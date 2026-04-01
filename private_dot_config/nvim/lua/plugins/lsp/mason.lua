@@ -64,7 +64,8 @@ return {
         "prettier", -- JS/TS/HTML/CSS/JSON/YAML/Markdown formatter
         "prettierd", -- Faster prettier daemon
         "stylua", -- Lua formatter
-        "shfmt", -- Shell script formatter
+        "shfmt", -- POSIX/Bash shell formatter
+        "beautysh", -- Zsh-aware shell formatter
         "gofumpt", -- Go formatter (opinionated)
         "golines", -- Go line length formatter
         "alejandra", -- Nix formatter (modern, fast)

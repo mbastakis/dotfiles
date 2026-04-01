@@ -38,8 +38,8 @@ source "$ZDOTDIR/exports.zsh"
 # Zinit plugins + fzf-tab + compinit
 source "$ZDOTDIR/plugins.zsh"
 
-# Carapace completions (must be after compinit)
-source "$ZDOTDIR/carapace.zsh"
+# Tool completions (must be after compinit)
+source "$ZDOTDIR/completions.zsh"
 
 # Tool shell integrations (atuin, zoxide, starship)
 source "$ZDOTDIR/tools.zsh"

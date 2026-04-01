@@ -134,7 +134,8 @@ Format-on-save enabled (2s timeout, LSP fallback). Key formatter mappings:
 | Lua | stylua |
 | Python | ruff_format |
 | Web (JS/TS/HTML/CSS) | prettierd -> prettier |
-| Shell | shfmt |
+| Shell (`sh`, `bash`) | shfmt |
+| Zsh | beautysh |
 | Go | gofumpt + golines |
 | Rust | rustfmt / LSP |
 | Terraform | terraform_fmt / LSP |
