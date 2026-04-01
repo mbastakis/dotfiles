@@ -1,0 +1,10 @@
+{
+  "cssTheme": "AnuPpuccin",
+  "interfaceFontFamily": "JetBrainsMono Nerd Font Mono",
+  "textFontFamily": "JetBrainsMono Nerd Font Mono",
+  "monospaceFontFamily": "JetBrainsMono Nerd Font Mono",
+  "baseFontSizeAction": true,
+  "showViewHeader": true,
+  "showRibbon": false,
+  "translucency": true
+}

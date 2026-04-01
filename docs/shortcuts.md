@@ -48,9 +48,11 @@ _Reference: `private_dot_config/private_karabiner/src/rules/15-hyper-navigation.
 | `Cmd+D`          | Split horizontal (`prefix`, `h`)     | `private_dot_config/ghostty/config:72`  |
 | `Cmd+Shift+D`    | Split vertical (`prefix`, `v`)       | `private_dot_config/ghostty/config:73`  |
 | `Cmd+P`          | Floax/floating window (`prefix`, `P`) | `private_dot_config/ghostty/config:74` |
-| `Cmd+S`          | Sesh session picker (`prefix`, `s`)  | `private_dot_config/ghostty/config:75`  |
-| `Cmd+H`          | Previous tmux window (`prefix`, `p`) | `private_dot_config/ghostty/config:76` |
-| `Cmd+L`          | Next tmux window (`prefix`, `n`)     | `private_dot_config/ghostty/config:77`  |
+| `Cmd+S`          | Sesh session picker (`prefix`, `s`)  | `private_dot_config/ghostty/config:74`  |
+| `Cmd+H`          | Previous tmux window (`prefix`, `p`) | `private_dot_config/ghostty/config:75` |
+| `Cmd+L`          | Next tmux window (`prefix`, `n`)     | `private_dot_config/ghostty/config:76`  |
+| `Cmd+R`          | Rename tmux window (`prefix`, `,`)   | `private_dot_config/ghostty/config:77`  |
+| `Cmd+Shift+R`    | Rename tmux session (`prefix`, `R`)  | `private_dot_config/ghostty/config:78`  |
 | `Cmd+O`          | OpenCode split (`prefix`, `o`)       | `private_dot_config/ghostty/config:80`  |
 | `Cmd+G`          | Lazygit popup (`prefix`, `G`)        | `private_dot_config/ghostty/config:81`  |
 | `Cmd+Shift+T`    | New Ghostty OS window                | `private_dot_config/ghostty/config:84`  |
@@ -108,9 +110,10 @@ Prefix: **`Ctrl-a`**
 
 ### Plugins
 
-| Key          | Action                         |
-| ------------ | ------------------------------ |
-| `prefix + s` | Session picker (sesh + gum popup) |
+| Key          | Action                                        |
+| ------------ | --------------------------------------------- |
+| `prefix + s` | Session picker (sesh + gum popup)             |
+| `prefix + R` | Rename session (gum input popup)              |
 
 ## Zsh (Shell Layer)
 

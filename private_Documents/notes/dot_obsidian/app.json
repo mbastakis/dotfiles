@@ -1,0 +1,17 @@
+{
+  "readableLineLength": false,
+  "showLineNumber": true,
+  "rightToLeft": false,
+  "vimMode": true,
+  "propertiesInDocument": "source",
+  "showInlineTitle": true,
+  "pdfExportSettings": {
+    "includeName": true,
+    "pageSize": "Letter",
+    "landscape": false,
+    "margin": "0",
+    "downscalePercent": 100
+  },
+  "newFileLocation": "folder",
+  "newFileFolderPath": "0-Inbox"
+}

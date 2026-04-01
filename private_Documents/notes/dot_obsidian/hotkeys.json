@@ -1,0 +1,74 @@
+{
+  "obsidian-admonition:insert-admonition": [
+    {
+      "modifiers": [
+        "Mod"
+      ],
+      "key": "/"
+    }
+  ],
+  "editor:toggle-comments": [],
+  "omnisearch:show-modal": [
+    {
+      "modifiers": [
+        "Mod"
+      ],
+      "key": "O"
+    }
+  ],
+  "switcher:open": [],
+  "editor:save-file": [
+    {
+      "modifiers": [
+        "Ctrl"
+      ],
+      "key": "S"
+    }
+  ],
+  "app:toggle-left-sidebar": [
+    {
+      "modifiers": [
+        "Ctrl"
+      ],
+      "key": "/"
+    }
+  ],
+  "app:toggle-right-sidebar": [
+    {
+      "modifiers": [
+        "Ctrl",
+        "Shift"
+      ],
+      "key": "/"
+    }
+  ],
+  "app:delete-file": [
+    {
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ],
+      "key": "D"
+    }
+  ],
+  "table-editor-obsidian:table-control-bar": [],
+  "editor:open-link-in-new-leaf": [
+    {
+      "modifiers": [
+        "Mod"
+      ],
+      "key": "Enter"
+    }
+  ],
+  "editor:open-link-in-new-split": [],
+  "file-explorer:new-file-in-new-pane": [],
+  "workspace:new-window": [
+    {
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ],
+      "key": "N"
+    }
+  ]
+}

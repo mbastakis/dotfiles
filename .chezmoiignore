@@ -56,6 +56,19 @@ Cargo.lock
 # OS files
 .DS_Store
 
+# Obsidian — volatile state (changes on every navigation)
+Documents/notes/.obsidian/workspace.json
+Documents/notes/.obsidian/workspace-mobile.json
+Documents/notes/.obsidian/cache/
+Documents/notes/.obsidian/updates.json
+# Obsidian — auto-downloaded plugin code (reinstalled by Obsidian)
+Documents/notes/.obsidian/plugins/*/main.js
+Documents/notes/.obsidian/plugins/*/styles.css
+Documents/notes/.obsidian/plugins/*/cache/
+Documents/notes/.obsidian/plugins/*/.cache/
+# Obsidian — trash
+Documents/notes/.trash/
+
 # Karabiner — only deploy karabiner.json, build system stays in source only
 .config/karabiner/automatic_backups/
 .config/karabiner/build.sh
