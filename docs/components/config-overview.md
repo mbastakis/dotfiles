@@ -10,7 +10,6 @@ Summary of notable config areas managed by chezmoi, with links to dedicated docs
 |---|---|---|---|
 | **Neovim** | `private_dot_config/nvim/` | [nvim.md](nvim.md) | Editor with lazy.nvim, LSP, custom keymaps |
 | **OpenCode** | `private_dot_config/opencode/` | [opencode.md](opencode.md) | Primary AI CLI profile with agents, commands, and skills |
-| **OpenCode OMO** | `private_dot_config/opencode-omo/` | [opencode.md](opencode.md) | Isolated OpenCode profile reserved for `oh-my-openagent` |
 | **Karabiner** | `private_dot_config/private_karabiner/` | [karabiner.md](karabiner.md) | Keyboard remapping (generated config) |
 | **Carapace** | `private_dot_config/carapace/` | [carapace.md](carapace.md) | Shell completion framework |
 | **Zsh** | `private_dot_config/zsh/`, `dot_zshenv.tmpl` | [zsh.md](zsh.md) | Shell bootstrap plus XDG-aware tool/runtime environment |
