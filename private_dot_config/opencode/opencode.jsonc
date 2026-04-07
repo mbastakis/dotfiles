@@ -89,6 +89,18 @@
       "chmod*": "ask",
     },
   },
+  "mcp": {
+    "pocketsmith": {
+      "type": "remote",
+      "url": "https://mcp.pocketsmith.com/mcp",
+      "enabled": false,
+    },
+    "pocketsmith-readonly": {
+      "type": "remote",
+      "url": "https://mcp-readonly.pocketsmith.com/mcp",
+      "enabled": false,
+    },
+  },
   "plugin": ["@mohak34/opencode-notifier@latest"],
   "instructions": [],
 }
