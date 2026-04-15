@@ -2,8 +2,16 @@
 # exports.zsh - Environment variables for interactive use
 # (PATH, EDITOR, XDG, etc. are in ~/.zshenv for all shell types)
 
-# Pager
-export PAGER="bat"
+# Pager — disable rich pagers in agent/non-TTY contexts.
+# OpenCode sets OPENCODE=1; its Bash tool uses piped stdout (no PTY).
+if [[ -n "${OPENCODE:-}" ]] || [[ ! -t 1 ]]; then
+  export PAGER="cat"
+  export GIT_PAGER="cat"
+  export BAT_PAGER=""
+  export MANPAGER="cat"
+else
+  export PAGER="bat"
+fi
 
 # Less settings and colors
 export LESS="-R"

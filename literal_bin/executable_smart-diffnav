@@ -1,0 +1,18 @@
+#!/bin/bash
+set -euo pipefail
+
+# smart-diffnav — TTY-aware wrapper for diffnav
+#
+# Uses diffnav (TUI diff viewer) when running in an interactive terminal.
+# Falls back to cat when running in a non-TTY context (e.g. AI agent, pipe, CI).
+#
+# Detection: checks OPENCODE env var (set by OpenCode agent) OR whether
+# stdout is connected to a terminal.
+#
+# Used by: chezmoi diff (diff.pager), git diff/show ([pager] section)
+
+if [[ -n "${OPENCODE:-}" ]] || [[ ! -t 1 ]]; then
+  exec cat "$@"
+else
+  exec diffnav "$@"
+fi

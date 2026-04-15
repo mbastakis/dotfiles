@@ -61,7 +61,7 @@ Interactive-only environment variables. PATH/EDITOR/XDG are set in `~/.zshenv` (
 
 | Variable | Value |
 |---|---|
-| `PAGER` | `bat` |
+| `PAGER` | `bat` (interactive TTY) / `cat` (agent/non-TTY) |
 | `LESS` | `-R` |
 | `CARAPACE_BRIDGES` | `zsh,fish,bash,inshellisense` |
 | `_ZO_ECHO` | `1` (show directory after zoxide cd) |

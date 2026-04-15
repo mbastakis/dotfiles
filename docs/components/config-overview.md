@@ -35,7 +35,7 @@ Summary of notable config areas managed by chezmoi, with links to dedicated docs
 | SketchyBar | `private_dot_config/sketchybar/` | -- | macOS status bar (Darwin only) |
 | Raycast | `private_dot_config/raycast/` | -- | macOS launcher (partial, extensions ignored) |
 | glab CLI | `private_dot_config/glab-cli/` | -- | GitLab CLI (DT work profile only) |
-| Diffnav | `private_dot_config/diffnav/` | -- | Git diff TUI pager (file tree + delta rendering) |
+| Diffnav | `private_dot_config/diffnav/` | -- | Git diff TUI pager (file tree + delta rendering), invoked via `smart-diffnav` wrapper for TTY-aware behavior |
 | gh-dash | `private_dot_config/gh-dash/` | -- | GitHub dashboard TUI (`gh` extension, Catppuccin Mocha Mauve) |
 
 ## Ghostty
@@ -82,7 +82,7 @@ Git configuration with optional work profile:
 
 - Base config at `~/.config/git/config`
 - Work-specific config at `~/.config/git/.gitconfig-work` (DT work profile only, conditional include)
-- Uses diffnav as `git diff`/`git show` pager (TUI with file tree, powered by delta underneath)
+- Uses `smart-diffnav` as `git diff`/`git show` pager — a TTY-aware wrapper that invokes diffnav in interactive terminals and falls back to cat in agent/non-TTY contexts (e.g. OpenCode)
 - Delta remains as `core.pager` for non-diff git output (log, blame) and as interactive diffFilter
 - Catppuccin Mocha theme via delta's `[delta]` config section
 
