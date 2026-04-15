@@ -9,7 +9,7 @@ repos:
         exclude: '\.age$'
       - id: check-yaml
         args: [--allow-multiple-documents]
-        exclude: '(private_dot_config/nvim/test/|private_dot_config/nvim/test/helm)'
+        exclude: '(private_dot_config/nvim/test/|private_dot_config/nvim/test/helm|modify_)'
       - id: check-toml
       - id: check-json
         exclude: 'private_dot_config/(nvim/test/|private_karabiner/src/templates/)'
@@ -40,7 +40,7 @@ repos:
     hooks:
       - id: yamllint
         args: [-d, relaxed]
-        exclude: '(private_dot_config/nvim/test/|private_dot_config/k9s/|private_dot_config/carapace/specs/)'
+        exclude: '(private_dot_config/nvim/test/|private_dot_config/k9s/|private_dot_config/carapace/specs/|modify_)'
 
   # Pre-push: validate chezmoi dry-run
   - repo: local
