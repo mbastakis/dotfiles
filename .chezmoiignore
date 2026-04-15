@@ -50,8 +50,6 @@ Cargo.lock
 .local/state/mcp-auth/
 .local/state/vim/
 .config/yazi/plugins/**
-.kube/cache/
-.kube/http-cache/
 
 # OS files
 .DS_Store
@@ -99,7 +97,6 @@ Documents/notes/.trash/
 .config/karabiner/
 .config/finicky/
 .config/sketchybar/
-Library/LaunchAgents/com.mbastakis.ghostty-tmux.plist
 Library/LaunchAgents/com.mbastakis.mail-sync.plist
 bin/switch-input-source
 {{- end }}

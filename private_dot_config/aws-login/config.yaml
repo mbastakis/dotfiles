@@ -21,7 +21,7 @@ profiles:
     session_duration: 12h
     max-hour: 12
     env:
-      KUBECONFIG: ~/.kube/config-playground
+      KUBECONFIG: ~/.config/kube/config-playground
 
   dev:
     type: cloudshepherd
@@ -36,7 +36,7 @@ profiles:
     min_ttl: 20
     max-hour: 4
     env:
-      KUBECONFIG: ~/.kube/config-dev
+      KUBECONFIG: ~/.config/kube/config-dev
 
   prod:
     type: cloudshepherd
@@ -51,7 +51,7 @@ profiles:
     min_ttl: 20
     max-hour: 4
     env:
-      KUBECONFIG: ~/.kube/config-prod
+      KUBECONFIG: ~/.config/kube/config-prod
 
   claude-code:
     type: cloudshepherd

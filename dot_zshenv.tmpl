@@ -56,6 +56,15 @@ export MAVEN_OPTS="-Dmaven.repo.local=$XDG_CACHE_HOME/maven/repository"
 # Docker
 export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
 
+# GnuPG (keyrings + config live together, DATA_HOME is more appropriate)
+export GNUPGHOME="$XDG_DATA_HOME/gnupg"
+
+# Kubernetes
+{{- if or (eq .profile "dt-work") (eq .profile "work") }}
+export KUBECONFIG="$XDG_CONFIG_HOME/kube/config-dev:$XDG_CONFIG_HOME/kube/config-playground:$XDG_CONFIG_HOME/kube/config-prod"
+{{- end }}
+export KUBECACHEDIR="$XDG_CACHE_HOME/kube"
+
 # Colima (container runtime)
 export COLIMA_HOME="$XDG_DATA_HOME/colima"
 
@@ -98,6 +107,9 @@ export LC_ALL="en_US.UTF-8"
 [[ ! -d "$XDG_STATE_HOME/zsh" ]] && mkdir -p "$XDG_STATE_HOME/zsh"
 [[ ! -d "$XDG_STATE_HOME/atuin/logs" ]] && mkdir -p "$XDG_STATE_HOME/atuin/logs"
 [[ ! -d "$BUN_INSTALL_CACHE_DIR" ]] && mkdir -p "$BUN_INSTALL_CACHE_DIR"
+[[ ! -d "$GNUPGHOME" ]] && mkdir -p "$GNUPGHOME" && chmod 700 "$GNUPGHOME"
+[[ ! -d "$XDG_CONFIG_HOME/kube" ]] && mkdir -p "$XDG_CONFIG_HOME/kube"
+[[ ! -d "$KUBECACHEDIR" ]] && mkdir -p "$KUBECACHEDIR"
 [[ ! -d "$COLIMA_HOME" ]] && mkdir -p "$COLIMA_HOME"
 [[ ! -d "$CDK_HOME" ]] && mkdir -p "$CDK_HOME"
 [[ ! -d "$MCP_REMOTE_CONFIG_DIR" ]] && mkdir -p "$MCP_REMOTE_CONFIG_DIR"
