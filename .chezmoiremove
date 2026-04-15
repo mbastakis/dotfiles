@@ -3,3 +3,11 @@
 .zsh
 .abook
 .colima
+.docker
+.gnupg
+.kube
+.npm
+.zsh_history
+
+# Removed LaunchAgents
+Library/LaunchAgents/com.mbastakis.ghostty-tmux.plist
