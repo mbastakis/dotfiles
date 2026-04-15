@@ -5,7 +5,13 @@
     "fontSize": 16,
     "emojiStyle": "native",
     "iconColor": null,
-    "recentlyUsedIcons": [],
+    "recentlyUsedIcons": [
+      "LiMap",
+      "LiFiles",
+      "LiX",
+      "LiCalendar",
+      "LiArchive"
+    ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
     "extraMargin": {
@@ -27,5 +33,38 @@
     "lucideIconPackType": "native",
     "debugMode": false,
     "useInternalPlugins": false
-  }
+  },
+  "0-Inbox": {
+    "iconName": "LiInbox",
+    "iconColor": "#f38ba8"
+  },
+  "1-Projects": {
+    "iconName": "LiLayoutDashboard",
+    "iconColor": "#a6e3a1"
+  },
+  "2-Areas": {
+    "iconName": "LiChartSpline",
+    "iconColor": "#89dceb"
+  },
+  "3-Resources": {
+    "iconName": "LiFolders",
+    "iconColor": "#fab387"
+  },
+  "4-Archive": {
+    "iconName": "LiArchive",
+    "iconColor": "#7f849c"
+  },
+  "Daily": {
+    "iconName": "LiCalendar",
+    "iconColor": "#b4befe"
+  },
+  "Extras": {
+    "iconName": "LiX",
+    "iconColor": "#f5c2e7"
+  },
+  "5-Sources": {
+    "iconName": "LiFiles",
+    "iconColor": "#dce0e8"
+  },
+  "2-Areas/MOCs": "LiMap"
 }

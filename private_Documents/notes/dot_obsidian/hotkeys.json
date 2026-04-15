@@ -42,15 +42,6 @@
       "key": "/"
     }
   ],
-  "app:delete-file": [
-    {
-      "modifiers": [
-        "Mod",
-        "Shift"
-      ],
-      "key": "D"
-    }
-  ],
   "table-editor-obsidian:table-control-bar": [],
   "editor:open-link-in-new-leaf": [
     {
@@ -69,6 +60,24 @@
         "Shift"
       ],
       "key": "N"
+    }
+  ],
+  "editor:delete-paragraph": [],
+  "workspace:split-horizontal": [
+    {
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ],
+      "key": "D"
+    }
+  ],
+  "workspace:split-vertical": [
+    {
+      "modifiers": [
+        "Mod"
+      ],
+      "key": "D"
     }
   ]
 }

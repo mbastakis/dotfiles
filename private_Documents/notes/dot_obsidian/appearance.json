@@ -6,5 +6,6 @@
   "baseFontSizeAction": true,
   "showViewHeader": true,
   "showRibbon": false,
-  "translucency": true
+  "translucency": true,
+  "enabledCssSnippets": []
 }

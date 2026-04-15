@@ -1,0 +1,200 @@
+{
+  "workspaces": {
+    "Generic": {
+      "main": {
+        "id": "3e25ddda7417b0ea",
+        "type": "split",
+        "children": [
+          {
+            "id": "7aa7ced52e376d2b",
+            "type": "tabs",
+            "children": [
+              {
+                "id": "86b14fd767d883e1",
+                "type": "leaf",
+                "state": {
+                  "type": "canvas",
+                  "state": {
+                    "file": "2-Areas/MOCs/MOC - Vault Dashboard.canvas",
+                    "viewState": {
+                      "x": -758.5901977136015,
+                      "y": -199.3485982521164,
+                      "zoom": -0.8779224511034777
+                    }
+                  },
+                  "icon": "lucide-layout-dashboard",
+                  "title": "MOC - Vault Dashboard"
+                }
+              }
+            ]
+          }
+        ],
+        "direction": "vertical"
+      },
+      "left": {
+        "id": "3aa496fedb33c7c0",
+        "type": "split",
+        "children": [
+          {
+            "id": "b9c025e42313caa2",
+            "type": "tabs",
+            "children": [
+              {
+                "id": "18bd84510409a945",
+                "type": "leaf",
+                "state": {
+                  "type": "file-explorer",
+                  "state": {
+                    "sortOrder": "alphabetical",
+                    "autoReveal": false
+                  },
+                  "icon": "lucide-folder-closed",
+                  "title": "Files"
+                }
+              },
+              {
+                "id": "ff929280bf9d6494",
+                "type": "leaf",
+                "state": {
+                  "type": "search",
+                  "state": {
+                    "query": "",
+                    "matchingCase": false,
+                    "explainSearch": false,
+                    "collapseAll": false,
+                    "extraContext": false,
+                    "sortOrder": "alphabetical"
+                  },
+                  "icon": "lucide-search",
+                  "title": "Search"
+                }
+              },
+              {
+                "id": "d43cd37877c9b420",
+                "type": "leaf",
+                "state": {
+                  "type": "bookmarks",
+                  "state": {},
+                  "icon": "lucide-bookmark",
+                  "title": "Bookmarks"
+                }
+              }
+            ]
+          }
+        ],
+        "direction": "horizontal",
+        "width": 300,
+        "collapsed": true
+      },
+      "right": {
+        "id": "0a612ef230e56412",
+        "type": "split",
+        "children": [
+          {
+            "id": "da10cbbd51848001",
+            "type": "tabs",
+            "children": [
+              {
+                "id": "9bbf315798159d77",
+                "type": "leaf",
+                "pinned": true,
+                "state": {
+                  "type": "git-view",
+                  "state": {},
+                  "pinned": true,
+                  "icon": "git-pull-request",
+                  "title": "Source Control"
+                }
+              },
+              {
+                "id": "c73fb5253e7ab77a",
+                "type": "leaf",
+                "pinned": true,
+                "state": {
+                  "type": "smart-connections-view",
+                  "state": {},
+                  "pinned": true,
+                  "icon": "smart-connections",
+                  "title": "Connections"
+                }
+              },
+              {
+                "id": "6c061711e6067e99",
+                "type": "leaf",
+                "state": {
+                  "type": "backlink",
+                  "state": {
+                    "file": "2-Areas/MOCs/MOC - Vault Dashboard.canvas",
+                    "collapseAll": false,
+                    "extraContext": false,
+                    "sortOrder": "alphabetical",
+                    "showSearch": false,
+                    "searchQuery": "",
+                    "backlinkCollapsed": false,
+                    "unlinkedCollapsed": true
+                  },
+                  "icon": "links-coming-in",
+                  "title": "Backlinks for MOC - Vault Dashboard"
+                }
+              },
+              {
+                "id": "adcdb6c53a200e16",
+                "type": "leaf",
+                "state": {
+                  "type": "outgoing-link",
+                  "state": {
+                    "file": "2-Areas/MOCs/MOC - Vault Dashboard.canvas",
+                    "linksCollapsed": false,
+                    "unlinkedCollapsed": true
+                  },
+                  "icon": "links-going-out",
+                  "title": "Outgoing links from MOC - Vault Dashboard"
+                }
+              },
+              {
+                "id": "c29e84bc4b1ad0fd",
+                "type": "leaf",
+                "pinned": true,
+                "state": {
+                  "type": "smart-lookup-view-connections",
+                  "state": {},
+                  "pinned": true,
+                  "icon": "smart-lookup",
+                  "title": "Lookup"
+                }
+              }
+            ],
+            "currentTab": 1
+          }
+        ],
+        "direction": "horizontal",
+        "width": 319.5,
+        "collapsed": true
+      },
+      "left-ribbon": {
+        "hiddenItems": {
+          "smart-connections:Smart Connections: Open connections view": false,
+          "smart-connections:Smart Connections: Open random connection": false,
+          "smart-connections:Smart Lookup: Open lookup view": false,
+          "switcher:Open quick switcher": true,
+          "obsidian-excalidraw-plugin:New drawing": false,
+          "graph:Open graph view": false,
+          "canvas:Create new canvas": true,
+          "daily-notes:Open today's daily note": true,
+          "templates:Insert template": true,
+          "command-palette:Open command palette": true,
+          "bases:Create new base": true,
+          "table-editor-obsidian:Advanced Tables Toolbar": true,
+          "obsidian-git:Open Git source control": true,
+          "omnisearch:Omnisearch": true,
+          "templater-obsidian:Templater": true,
+          "dashboard-navigator:Open dashboard navigator": false,
+          "workspaces:Manage workspace layouts": false
+        }
+      },
+      "active": "86b14fd767d883e1",
+      "mtime": "2026-04-07T00:19:28+03:00"
+    }
+  },
+  "active": "Generic"
+}
