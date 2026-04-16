@@ -12,7 +12,7 @@ if ! command -v gum >/dev/null 2>&1; then
 fi
 
 set +e
-selection="$(sesh list -i -H -d | gum filter \
+selection="$(sesh list -i -H | gum filter \
     --limit 1 \
     --no-sort \
     --fuzzy \

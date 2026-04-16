@@ -1,0 +1,8 @@
+#!/bin/bash
+set -euo pipefail
+
+if aws-login --auth-status claude-code; then
+    exec aws-login exec claude-code -- opencode
+fi
+
+exec opencode

@@ -1,0 +1,36 @@
+#:schema https://github.com/joshmedeski/sesh/raw/main/sesh.schema.json
+
+cache = true
+strict_mode = true
+dir_length = 1
+separator_aware = true
+sort_order = ["config", "tmux", "zoxide"]
+{{- if .dtWork }}
+import = ["~/.config/sesh/work.toml"]
+{{- end }}
+
+[default_session]
+startup_command = "tmux split-window -h -c '{}' 'opencode-launch'; eza -la --git --icons; tmux select-pane -L; tmux resize-pane -Z"
+preview_command = "eza --all --git --icons --color=always {}"
+windows = []
+
+[[session]]
+name = "main"
+path = "~"
+
+[[session]]
+name = "dotfiles"
+path = "~/.local/share/chezmoi"
+
+[[session]]
+name = "notes"
+path = "~/Documents/notes"
+disable_startup_command = true
+
+[[window]]
+name = "opencode"
+startup_script = "opencode-launch"
+
+[[window]]
+name = "lazygit"
+startup_script = "lazygit"

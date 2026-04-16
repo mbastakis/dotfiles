@@ -1,0 +1,70 @@
+#!/bin/bash
+# Custom tmux session restore with save-file validation.
+# Replaces tmux-continuum's broken auto-restore (continuum issue #152).
+#
+# Why: continuum's `another_tmux_server_running_on_startup` check miscounts
+# tmux processes on macOS, silently skipping restore.  This script bypasses
+# that check, validates the save file, and falls back to the most recent
+# valid backup when `last` points to a corrupt/empty file.
+set -euo pipefail
+
+RESURRECT_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/tmux/resurrect"
+LAST_LINK="$RESURRECT_DIR/last"
+MIN_LINES=3 # at least 1 pane + 1 window + 1 state line
+
+log() { tmux display-message "$*" 2>/dev/null || true; }
+
+# Only restore on a fresh tmux server (exactly 1 pane = the initial shell).
+pane_count="$(tmux list-panes -a 2>/dev/null | wc -l | tr -d ' ')"
+if [[ "$pane_count" -gt 1 ]]; then
+    exit 0
+fi
+
+# Validate a resurrect save file: non-empty, has pane + window lines.
+is_valid_save() {
+    local file="$1"
+    [[ -f "$file" && -s "$file" ]] || return 1
+    local lines
+    lines="$(wc -l < "$file" | tr -d ' ')"
+    [[ "$lines" -ge "$MIN_LINES" ]] || return 1
+    grep -q "^pane" "$file" && grep -q "^window" "$file"
+}
+
+# --- Find a valid save file ---
+
+restore_file=""
+
+# 1. Try the `last` symlink.
+if [[ -L "$LAST_LINK" || -f "$LAST_LINK" ]]; then
+    if is_valid_save "$LAST_LINK"; then
+        restore_file="$LAST_LINK"
+    fi
+fi
+
+# 2. If `last` is invalid, search recent backups (newest first).
+if [[ -z "$restore_file" ]]; then
+    log "tmux-restore: last save invalid, searching backups..."
+    while IFS= read -r f; do
+        if is_valid_save "$f"; then
+            # Fix the symlink so future restores use this file.
+            ln -fs "$(basename "$f")" "$LAST_LINK"
+            restore_file="$LAST_LINK"
+            log "tmux-restore: recovered from $(basename "$f")"
+            break
+        fi
+    done < <(ls -t "$RESURRECT_DIR"/tmux_resurrect_*.txt 2>/dev/null)
+fi
+
+if [[ -z "$restore_file" ]]; then
+    log "tmux-restore: no valid save file found, skipping restore"
+    exit 0
+fi
+
+# --- Run resurrect's restore ---
+
+resurrect_restore="$(tmux show-option -gqv '@resurrect-restore-script-path' 2>/dev/null)"
+if [[ -n "$resurrect_restore" && -x "$resurrect_restore" ]]; then
+    "$resurrect_restore"
+else
+    log "tmux-restore: resurrect restore script not found"
+fi

@@ -27,4 +27,10 @@ if [[ "$new_name" == "$current" ]]; then
     exit 0
 fi
 
+# The "=" prefix forces tmux to match the exact session name (not a prefix).
+if tmux has-session -t "=$new_name" 2>/dev/null; then
+    tmux display-message "Session '$new_name' already exists"
+    exit 1
+fi
+
 tmux rename-session "$new_name"

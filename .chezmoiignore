@@ -87,6 +87,7 @@ Documents/notes/.trash/
 # DT work-specific config
 .config/glab-cli/
 .config/git/.gitconfig-work
+.config/sesh/work.toml
 .ssh/gitlab-telekom
 .ssh/gitlab-telekom.pub
 {{- end }}

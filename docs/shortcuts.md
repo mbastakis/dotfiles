@@ -82,7 +82,7 @@ Prefix: **`Ctrl-a`**
 | `prefix + c`         | New window             | `private_dot_config/tmux/tmux.conf:26` |
 | `prefix + x`         | Kill pane (no confirm) | `private_dot_config/tmux/tmux.conf:27` |
 | `prefix + p`         | Previous window        | `private_dot_config/tmux/tmux.conf:28` |
-| `prefix + o`         | OpenCode split (aws-login + opencode) | `private_dot_config/tmux/tmux.conf:29` |
+| `prefix + o`         | OpenCode split (auth-aware launcher)   | `private_dot_config/tmux/tmux.conf:30` |
 | `prefix + G`         | Lazygit popup (90% overlay) | `private_dot_config/tmux/tmux.conf:30` |
 | `Ctrl+Tab`           | Next window            | `private_dot_config/tmux/tmux.conf:11` |
 | `Ctrl+Shift+Tab`     | Previous window        | `private_dot_config/tmux/tmux.conf:12` |
