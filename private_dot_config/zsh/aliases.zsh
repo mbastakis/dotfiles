@@ -56,9 +56,9 @@ alias td="tmux detach"
 alias tls="tmux ls"
 
 # Opencode
-alias oc="opencode"
-alias oca="OPENCODE_PERMISSION='{\"*\": \"allow\"}' opencode"
-alias occ="opencode --continue"
+alias oc="opencode-launch"
+alias oca="OPENCODE_PERMISSION='{\"*\": \"allow\"}' opencode-launch"
+alias occ="opencode-launch --continue"
 
 # Python
 alias python="python3"

@@ -61,7 +61,7 @@ Terminal multiplexer with Catppuccin theme and plugin ecosystem.
 - **Session picker:** `prefix + s` opens a `sesh` + `gum` popup helper (`~/bin/sesh-picker`)
 - **Session rename:** `prefix + R` opens a `gum` input popup (`~/bin/sesh-rename`); rejects duplicate session names
 - **OpenCode launch:** `prefix + o` splits the current pane and runs `~/bin/opencode-launch`, which checks `aws-login --auth-status claude-code` and uses the Claude profile only when the local cache is valid.
-- **Session persistence:** Resurrect auto-saves every 15 min (via Continuum) and on every client detach. Restore on server start is handled by a custom `~/bin/tmux-restore` script that validates the save file and falls back to recent backups when the latest save is corrupt.
+- **Session persistence:** Resurrect auto-saves every 15 min (via Continuum) and on every client detach. Restore on server start is handled by a custom `~/bin/tmux-restore` script that validates the save file and falls back to recent backups when the latest save is corrupt. OpenCode panes are restored to their exact previous session via per-pane session ID tracking in `~/.local/state/opencode/tmux-panes/`.
 - **Status line:** Top position, oasis-style mode indicator with per-mode colors/icons
 - **History:** 100,000 lines, mouse enabled, base-index 1
 
@@ -77,7 +77,7 @@ Standalone tmux session manager used by the `prefix + s` popup helper.
 - **Defaults:** single-part session names (`dir_length = 1`), cache + strict mode enabled, config sessions listed before tmux sessions and zoxide entries
 - **Pinned sessions:** `main`, `dotfiles`, `notes`, and `ma-proj` (via work-only import)
 - **Startup layout:** new sessions split into a zoomed shell pane running `eza -la --git --icons` plus a right-hand pane running `~/bin/opencode-launch`
-- **Helper scripts:** `~/bin/sesh-picker` (fuzzy session picker), `~/bin/sesh-rename` (rename with duplicate-name guard), `~/bin/opencode-launch` (auth-aware OpenCode launcher)
+- **Helper scripts:** `~/bin/sesh-picker` (fuzzy session picker), `~/bin/sesh-rename` (rename with duplicate-name guard), `~/bin/opencode-launch` (auth-aware OpenCode launcher with tmux session resume)
 
 _Reference: `private_dot_config/sesh/sesh.toml:1`_
 

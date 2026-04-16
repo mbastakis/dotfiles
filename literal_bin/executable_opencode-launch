@@ -1,8 +1,146 @@
 #!/bin/bash
 set -euo pipefail
 
-if aws-login --auth-status claude-code; then
-    exec aws-login exec claude-code -- opencode
+# ---------------------------------------------------------------------------
+# opencode-launch — auth-aware opencode wrapper with per-pane session tracking.
+#
+# Behaviour:
+#   opencode-launch          → always starts a NEW opencode session  (oc)
+#   opencode-launch -c       → resumes this pane's saved session     (occ / resurrect)
+#   opencode-launch -s <id>  → passed through as-is
+#
+# After every exit the active session ID is persisted so that a later
+# --continue (or tmux-resurrect restore) reopens the exact same session.
+#
+# State dir: ~/.local/state/opencode/tmux-panes/
+# File key:  {tmux_session}/{window}/{pane}  →  opencode session ID
+# ---------------------------------------------------------------------------
+
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/opencode/tmux-panes"
+
+# --- helpers ---------------------------------------------------------------
+
+sql_escape() {
+    # Escape single quotes for safe SQL string interpolation.
+    printf '%s' "$1" | sed "s/'/''/g"
+}
+
+pane_key() {
+    # Stable key for the current tmux pane: session/window/pane.
+    # Uses / as delimiter since it's invalid in tmux session names,
+    # avoiding ambiguity (e.g. session "foo_1" vs "foo" window "1").
+    # Uses -t "$TMUX_PANE" so we always query THIS pane, not the
+    # client's currently active pane.
+    if [[ -n "${TMUX:-}" && -n "${TMUX_PANE:-}" ]]; then
+        tmux display-message -t "$TMUX_PANE" -p '#{session_name}/#{window_index}/#{pane_index}' 2>/dev/null || true
+    fi
+}
+
+session_exists() {
+    local sid="$1"
+    local count
+    count="$(opencode db \
+        "SELECT COUNT(*) as c FROM session WHERE id = '$(sql_escape "$sid")'" \
+        --format json 2>/dev/null \
+        | sed -n 's/.*"c"[[:space:]]*:[[:space:]]*\([0-9]*\).*/\1/p' \
+        | head -1)" || true
+    [[ "${count:-0}" -gt 0 ]]
+}
+
+load_session_id() {
+    # Return the saved opencode session ID for this pane, if it still exists.
+    local key="$1"
+    [[ -z "$key" ]] && return 0
+    local file="$STATE_DIR/$key"   # e.g. .../tmux-panes/main/1/1
+    if [[ -f "$file" ]]; then
+        local sid
+        sid="$(cat "$file")"
+        if [[ -n "${sid:-}" ]] && session_exists "$sid"; then
+            printf '%s' "$sid"
+        else
+            rm -f "$file"   # stale — clean up
+        fi
+    fi
+}
+
+save_session_id() {
+    # Persist the session ID for this pane.
+    # $1 = pane key, $2 = known session ID (optional).
+    local key="$1" known_id="${2:-}"
+    [[ -z "$key" ]] && return 0
+
+    local sid="$known_id"
+
+    if [[ -z "$sid" ]]; then
+        # Find the most recently active top-level session in $PWD.
+        # parent_id IS NULL excludes subagent sessions.
+        # ORDER BY time_updated DESC picks the session we were just using
+        # (its time_updated was bumped during our interaction).
+        # pwd -P resolves symlinks (e.g. /tmp → /private/tmp on macOS)
+        # to match the path opencode stores in its DB.
+        sid="$(opencode db \
+            "SELECT id FROM session WHERE directory = '$(sql_escape "$(pwd -P)")' AND parent_id IS NULL ORDER BY time_updated DESC LIMIT 1" \
+            --format json 2>/dev/null \
+            | sed -n 's/.*"id"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' \
+            | head -1)" || true
+    fi
+
+    if [[ -n "${sid:-}" ]]; then
+        mkdir -p "$(dirname "$STATE_DIR/$key")"
+        printf '%s\n' "$sid" > "$STATE_DIR/$key"
+    fi
+}
+
+# --- parse args ------------------------------------------------------------
+
+_pane_key="$(pane_key)"
+
+# Detect whether the caller asked to continue (-c/--continue) or specified
+# an explicit session (-s/--session).  Everything else is passed through.
+want_continue=false
+has_explicit_session=false
+for arg in "$@"; do
+    case "$arg" in
+        -c|--continue) want_continue=true ;;
+        -s|--session)  has_explicit_session=true ;;
+    esac
+done
+
+# --- build launch args -----------------------------------------------------
+
+extra_args=()
+known_id=""
+
+if "$want_continue" && ! "$has_explicit_session" && [[ -n "$_pane_key" ]]; then
+    saved_id="$(load_session_id "$_pane_key")"
+    if [[ -n "${saved_id:-}" ]]; then
+        # Replace the generic --continue with the precise session ID.
+        known_id="$saved_id"
+        extra_args=(-s "$saved_id")
+        # Strip -c/--continue from "$@" since we're replacing it with -s.
+        filtered_args=()
+        for arg in "$@"; do
+            case "$arg" in
+                -c|--continue) ;;          # drop
+                *)             filtered_args+=("$arg") ;;
+            esac
+        done
+        set -- "${filtered_args[@]+"${filtered_args[@]}"}"
+    fi
+    # If no saved ID, fall through — opencode's own -c picks the last session.
 fi
 
-exec opencode
+# --- run opencode ----------------------------------------------------------
+
+rc=0
+if aws-login --auth-status claude-code 2>/dev/null; then
+    aws-login exec claude-code -- opencode "${extra_args[@]+"${extra_args[@]}"}" "$@" || rc=$?
+else
+    opencode "${extra_args[@]+"${extra_args[@]}"}" "$@" || rc=$?
+fi
+
+# --- persist session ID ----------------------------------------------------
+
+save_session_id "$_pane_key" "$known_id"
+
+exit "$rc"
