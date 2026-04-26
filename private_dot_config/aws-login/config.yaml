@@ -13,7 +13,7 @@ bitwarden:
   enabled: true
 
 profiles:
-  playground:
+  aicc-playground:
     type: mfa
     description: "AWS Playground - Requires MFA"
     bitwarden_item: "AWS Playground"
@@ -23,7 +23,7 @@ profiles:
     env:
       KUBECONFIG: ~/.config/kube/config-playground
 
-  dev:
+  aicc-dev:
     type: cloudshepherd
     description: "Development environment"
     auth_url: https://auth2.cs.telekom.de
@@ -38,7 +38,7 @@ profiles:
     env:
       KUBECONFIG: ~/.config/kube/config-dev
 
-  prod:
+  aicc-prod:
     type: cloudshepherd
     description: "Production environment"
     auth_url: https://auth2.cs.telekom.de

@@ -30,6 +30,7 @@
       // === ALLOW: Safe text processing ===
       "sort*": "allow",
       "grep*": "allow",
+      "rg*": "allow",
       "head*": "allow",
       "tail*": "allow",
       "wc*": "allow",

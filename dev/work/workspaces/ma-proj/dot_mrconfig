@@ -1,63 +1,311 @@
-# magenta-apprentice workspace
+# AICC Platform Workspace (.mrconfig)
+#
+# Mirrors gitlab.devops.telekom.de/aicc group structure.
+# Tracks: fiber (631096), infrastructure/argocd (631103), infrastructure/iac (620010)
 #
 # Usage:
-#   cd workspaces/magenta-apprentice
-#   mr checkout    # clones everything
-#   mr -j5 update  # parallel pull all repos
-#   mr status      # status across all repos
+#   cd workspaces/ma-proj
+#   mr checkout          # clone all repos
+#   mr -j8 update        # parallel pull all repos
+#   mr status            # status across all repos
+#   mr -j8 fetch         # parallel fetch all repos
+#
+# Discover new repos not yet tracked:
+#   ./scripts/mr-discover.sh
 #
 
 [DEFAULT]
-jobs = 5
+jobs = 8
+git_update = git pull --rebase --autostash "$@"
 
 # =============================================================================
-# Services
+# Agentic Engineering (aicc/agentic-engineering)
 # =============================================================================
 
-[magenta-apprentice]
+[agentic-engineering/harness]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/agentic-engineering/harness.git' 'harness'
+
+# =============================================================================
+# Fiber - Services (aicc/fiber)
+# =============================================================================
+
+[fiber/magenta-apprentice]
 checkout = git clone 'https://gitlab.devops.telekom.de/aicc/fiber/magenta-apprentice.git' 'magenta-apprentice'
 
-[anonymization-service]
+[fiber/anonymization-service]
 checkout = git clone 'https://gitlab.devops.telekom.de/aicc/fiber/anonymization-service.git' 'anonymization-service'
 
-[trigger-service]
+[fiber/trigger-service]
 checkout = git clone 'https://gitlab.devops.telekom.de/aicc/fiber/trigger-service.git' 'trigger-service'
 
+[fiber/ma-wft-workorder-service-inbound-v2-mcp]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/fiber/ma-wft-workorder-service-inbound-v2-mcp.git' 'ma-wft-workorder-service-inbound-v2-mcp'
+
+[fiber/report-debugger-agent]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/fiber/report-debugger-agent.git' 'report-debugger-agent'
+
+[fiber/sap_gui_mockup]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/fiber/sap_gui_mockup.git' 'sap_gui_mockup'
+
+[fiber/max-cicd-test]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/fiber/max-cicd-test.git' 'max-cicd-test'
+
+# =============================================================================
+# Fiber - Scripts (aicc/fiber/scripts)
+# =============================================================================
+
+[fiber/scripts/magenta-apprentice-playwright-tunnel]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/fiber/scripts/magenta-apprentice-playwright-tunnel.git' 'magenta-apprentice-playwright-tunnel'
+
+# =============================================================================
+# Fiber - ArgoCD Apps (aicc/fiber/argocd)
+# =============================================================================
+
+[fiber/argocd/dev-root-fiber-app-of-apps]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/fiber/argocd/dev-root-fiber-app-of-apps.git' 'dev-root-fiber-app-of-apps'
+
+[fiber/argocd/playground-root-fiber-app-of-apps]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/fiber/argocd/playground-root-fiber-app-of-apps.git' 'playground-root-fiber-app-of-apps'
+
+[fiber/argocd/prod-root-fiber-app-of-apps]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/fiber/argocd/prod-root-fiber-app-of-apps.git' 'prod-root-fiber-app-of-apps'
+
+# =============================================================================
+# Fiber - ArgoCD Helm Charts (aicc/fiber/argocd/helm-charts)
+# =============================================================================
+
+[fiber/argocd/helm-charts/magenta-apprentice-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/fiber/argocd/helm-charts/magenta-apprentice-helm.git' 'magenta-apprentice-helm'
+
+[fiber/argocd/helm-charts/anonymization-service]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/fiber/argocd/helm-charts/anonymization-service.git' 'anonymization-service'
+
+[fiber/argocd/helm-charts/trigger-service-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/fiber/argocd/helm-charts/trigger-service-helm.git' 'trigger-service-helm'
+
+[fiber/argocd/helm-charts/sap-gui-mockup-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/fiber/argocd/helm-charts/sap-gui-mockup-helm.git' 'sap-gui-mockup-helm'
+
+# =============================================================================
+# Infrastructure - ArgoCD Root App-of-Apps (aicc/infrastructure/argocd/root-app-of-apps)
+# =============================================================================
+
+[infrastructure/argocd/root-app-of-apps/dev-root-app-of-apps]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/root-app-of-apps/dev-root-app-of-apps.git' 'dev-root-app-of-apps'
+
+[infrastructure/argocd/root-app-of-apps/playground-root-app-of-apps]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/root-app-of-apps/playground-root-app-of-apps.git' 'playground-root-app-of-apps'
+
+[infrastructure/argocd/root-app-of-apps/prod-root-app-of-apps]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/root-app-of-apps/prod-root-app-of-apps.git' 'prod-root-app-of-apps'
+
+# =============================================================================
+# Infrastructure - ArgoCD Core Infra Apps (aicc/infrastructure/argocd)
+# =============================================================================
+
+[infrastructure/argocd/dev-core-kubernetes-infra-app-of-apps]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/dev-core-kubernetes-infra-app-of-apps.git' 'dev-core-kubernetes-infra-app-of-apps'
+
+[infrastructure/argocd/playground-core-kubernetes-infra-app-of-apps]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/playground-core-kubernetes-infra-app-of-apps.git' 'playground-core-kubernetes-infra-app-of-apps'
+
+[infrastructure/argocd/prod-core-kubernetes-infra-app-of-apps]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/prod-core-kubernetes-infra-app-of-apps.git' 'prod-core-kubernetes-infra-app-of-apps'
+
+# =============================================================================
+# Infrastructure - ArgoCD Helm Charts: MA Dependencies
+# =============================================================================
+
+[infrastructure/argocd/helm-charts/keycloak-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/keycloak-helm.git' 'keycloak-helm'
+
+[infrastructure/argocd/helm-charts/langfuse-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/langfuse-helm.git' 'langfuse-helm'
+
+[infrastructure/argocd/helm-charts/ner-model-chart]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/ner-model-chart.git' 'ner-model-chart'
+
+[infrastructure/argocd/helm-charts/litellm-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/litellm-helm.git' 'litellm-helm'
+
+# =============================================================================
+# Infrastructure - ArgoCD Helm Charts: Observability
+# =============================================================================
+
 [infrastructure/argocd/helm-charts/infra-grafana-dashboards]
-checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/infra-grafana-dashboards.git' 'infrastructure/argocd/helm-charts/infra-grafana-dashboards'
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/infra-grafana-dashboards.git' 'infra-grafana-dashboards'
 
 [infrastructure/argocd/helm-charts/observability-helm]
-checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/observability-helm.git' 'infrastructure/argocd/helm-charts/observability-helm'
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/observability-helm.git' 'observability-helm'
+
+[infrastructure/argocd/helm-charts/grafana-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/grafana-helm.git' 'grafana-helm'
+
+[infrastructure/argocd/helm-charts/jaeger-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/jaeger-helm.git' 'jaeger-helm'
+
+[infrastructure/argocd/helm-charts/phoenix-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/phoenix-helm.git' 'phoenix-helm'
+
+[infrastructure/argocd/helm-charts/opensearch-bootstrap]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/opensearch-bootstrap.git' 'opensearch-bootstrap'
+
+[infrastructure/argocd/helm-charts/opensearch-operator-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/opensearch-operator-helm.git' 'opensearch-operator-helm'
 
 # =============================================================================
-# Fiber ArgoCD - group 631097 (auto-discovered)
+# Infrastructure - ArgoCD Helm Charts: Cluster Management
 # =============================================================================
 
-include =
-    glab api "groups/631097/projects?per_page=100&include_subgroups=true" 2>/dev/null |
-    jq -r 'sort_by(.path_with_namespace)[] | (.path_with_namespace | ltrimstr("aicc/fiber/")) as $local |
-      "[\($local)]\ncheckout = git clone \u0027\(.http_url_to_repo)\u0027 \u0027\(.path)\u0027\n"'
+[infrastructure/argocd/helm-charts/karpenter]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/karpenter.git' 'karpenter'
+
+[infrastructure/argocd/helm-charts/karpenter-overprovisioning-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/karpenter-overprovisioning-helm.git' 'karpenter-overprovisioning-helm'
+
+[infrastructure/argocd/helm-charts/namespace-config-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/namespace-config-helm.git' 'namespace-config-helm'
+
+[infrastructure/argocd/helm-charts/argocd-projects-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/argocd-projects-helm.git' 'argocd-projects-helm'
 
 # =============================================================================
-# Infrastructure ArgoCD - group 631103 (auto-discovered, filtered)
-# Only: app-of-apps + root-app-of-apps + keycloak/langfuse/ner helm charts
+# Infrastructure - ArgoCD Helm Charts: Security & Policy
 # =============================================================================
 
-include =
-    glab api "groups/631103/projects?per_page=100&include_subgroups=true" 2>/dev/null |
-    jq -r '[.[] | select(
-      ((.path_with_namespace | contains("helm-charts") | not) or
-       (.path | IN("keycloak-helm", "langfuse-helm", "ner-model-chart")))
-      and (.path_with_namespace | contains("/digital/") | not)
-    )] | sort_by(.path_with_namespace)[] |
-      (.path_with_namespace | ltrimstr("aicc/infrastructure/")) as $local |
-      "[\($local)]\ncheckout = git clone \u0027\(.http_url_to_repo)\u0027 \u0027\(.path)\u0027\n"'
+[infrastructure/argocd/helm-charts/kyverno-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/kyverno-helm.git' 'kyverno-helm'
+
+[infrastructure/argocd/helm-charts/kyverno-policies-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/kyverno-policies-helm.git' 'kyverno-policies-helm'
+
+[infrastructure/argocd/helm-charts/policy-reporter-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/policy-reporter-helm.git' 'policy-reporter-helm'
 
 # =============================================================================
-# IAC - group 620010 (auto-discovered)
+# Infrastructure - ArgoCD Helm Charts: Core Infra
 # =============================================================================
 
-include =
-    glab api "groups/620010/projects?per_page=100&include_subgroups=true" 2>/dev/null |
-    jq -r 'sort_by(.path_with_namespace)[] | (.path_with_namespace | ltrimstr("aicc/infrastructure/")) as $local |
-      "[\($local)]\ncheckout = git clone \u0027\(.http_url_to_repo)\u0027 \u0027\(.path)\u0027\n"'
+[infrastructure/argocd/helm-charts/cert-manager-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/cert-manager-helm.git' 'cert-manager-helm'
+
+[infrastructure/argocd/helm-charts/aws-privateca-issuer-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/aws-privateca-issuer-helm.git' 'aws-privateca-issuer-helm'
+
+[infrastructure/argocd/helm-charts/fluent-bit-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/fluent-bit-helm.git' 'fluent-bit-helm'
+
+[infrastructure/argocd/helm-charts/gitlab-runner-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/gitlab-runner-helm.git' 'gitlab-runner-helm'
+
+[infrastructure/argocd/helm-charts/gpu-operator]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/gpu-operator.git' 'gpu-operator'
+
+# =============================================================================
+# Infrastructure - ArgoCD Helm Charts: Istio / Service Mesh
+# =============================================================================
+
+[infrastructure/argocd/helm-charts/istio-base-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/istio-base-helm.git' 'istio-base-helm'
+
+[infrastructure/argocd/helm-charts/istio-cni-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/istio-cni-helm.git' 'istio-cni-helm'
+
+[infrastructure/argocd/helm-charts/istio-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/istio-helm.git' 'istio-helm'
+
+[infrastructure/argocd/helm-charts/istio-ingressgateway-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/istio-ingressgateway-helm.git' 'istio-ingressgateway-helm'
+
+[infrastructure/argocd/helm-charts/istio-mtls-policy-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/istio-mtls-policy-helm.git' 'istio-mtls-policy-helm'
+
+[infrastructure/argocd/helm-charts/istiod-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/istiod-helm.git' 'istiod-helm'
+
+[infrastructure/argocd/helm-charts/kiali-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/kiali-helm.git' 'kiali-helm'
+
+# =============================================================================
+# Infrastructure - ArgoCD Helm Charts: Other / Specialized
+# =============================================================================
+
+[infrastructure/argocd/helm-charts/3rd-party-charts]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/3rd-party-charts.git' '3rd-party-charts'
+
+[infrastructure/argocd/helm-charts/code-server-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/code-server-helm.git' 'code-server-helm'
+
+[infrastructure/argocd/helm-charts/cvat-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/cvat-helm.git' 'cvat-helm'
+
+[infrastructure/argocd/helm-charts/digibb-model-chart]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/digibb-model-chart.git' 'digibb-model-chart'
+
+[infrastructure/argocd/helm-charts/digital/keycloak-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/digital/keycloak-helm.git' 'keycloak-helm'
+
+[infrastructure/argocd/helm-charts/echo-ingress-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/echo-ingress-helm.git' 'echo-ingress-helm'
+
+[infrastructure/argocd/helm-charts/imap-demo-helm-chart]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/imap-demo-helm-chart.git' 'imap-demo-helm-chart'
+
+[infrastructure/argocd/helm-charts/infrastructure-test]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/infrastructure-test.git' 'infrastructure-test'
+
+[infrastructure/argocd/helm-charts/kubernetes-dashboard-helm-chart]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/kubernetes-dashboard-helm-chart.git' 'kubernetes-dashboard-helm-chart'
+
+[infrastructure/argocd/helm-charts/labelstudio-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/labelstudio-helm.git' 'labelstudio-helm'
+
+[infrastructure/argocd/helm-charts/n8n-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/n8n-helm.git' 'n8n-helm'
+
+[infrastructure/argocd/helm-charts/skypilot-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/skypilot-helm.git' 'skypilot-helm'
+
+[infrastructure/argocd/helm-charts/trenchvalidator-backend-helm]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/trenchvalidator-backend-helm.git' 'trenchvalidator-backend-helm'
+
+# =============================================================================
+# Infrastructure - IAC / AWS (aicc/infrastructure/iac/aws)
+# =============================================================================
+
+[infrastructure/iac/aws/aicc-aws-cluster]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/iac/aws/aicc-aws-cluster.git' 'aicc-aws-cluster'
+
+[infrastructure/iac/aws/bootstrap-aws-account]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/iac/aws/bootstrap-aws-account.git' 'bootstrap-aws-account'
+
+[infrastructure/iac/aws/eks]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/iac/aws/eks.git' 'eks'
+
+[infrastructure/iac/aws/iac-dev]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/iac/aws/iac-dev.git' 'iac-dev'
+
+[infrastructure/iac/aws/iac-playground]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/iac/aws/iac-playground.git' 'iac-playground'
+
+[infrastructure/iac/aws/k8s-core]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/iac/aws/k8s-core.git' 'k8s-core'
+
+[infrastructure/iac/aws/kpack]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/iac/aws/kpack.git' 'kpack'
+
+[infrastructure/iac/aws/netbird]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/iac/aws/netbird.git' 'netbird'
+
+[infrastructure/iac/aws/playground-aws-nuke]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/iac/aws/playground-aws-nuke.git' 'playground-aws-nuke'
+
+# =============================================================================
+# Infrastructure - IAC / Modules (aicc/infrastructure/iac/modules)
+# =============================================================================
+
+[infrastructure/iac/modules/opensearch]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/iac/modules/opensearch.git' 'opensearch'
+
+[infrastructure/iac/modules/postgres]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/iac/modules/postgres.git' 'postgres'
