@@ -27,6 +27,7 @@ Summary of notable config areas managed by chezmoi, with links to dedicated docs
 | Starship | `private_dot_config/starship.toml` | -- | Prompt theme |
 | Git | `private_dot_config/git/` | -- | Git config and work profile |
 | Bat | `private_dot_config/bat/` | -- | Cat replacement with syntax highlighting |
+| Taskwarrior | `private_dot_config/task/` | -- | CLI todo list manager (data at `~/.local/share/task/`) |
 | Yazi | `private_dot_config/yazi/` | -- | Terminal file manager |
 | Lazygit | `private_dot_config/lazygit/` | -- | Git TUI |
 | Brew | `private_dot_config/brew/` | -- | Homebrew Brewfile |

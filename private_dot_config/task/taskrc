@@ -1,0 +1,23 @@
+# Taskwarrior configuration
+# Managed by chezmoi — edit private_dot_config/task/taskrc in the dotfiles repo.
+# Docs: https://taskwarrior.org/docs/configuration.html
+
+# --- Data ---------------------------------------------------------------------
+# XDG-style data location (default in Taskwarrior 3.x is ~/.task; override
+# explicitly so state lives under ~/.local/share).
+data.location=~/.local/share/task
+
+# --- Dates --------------------------------------------------------------------
+dateformat=Y-M-D
+dateformat.info=Y-M-D H:N:S
+dateformat.report=Y-M-D
+weekstart=monday
+
+# --- Behavior -----------------------------------------------------------------
+default.command=next
+confirmation=yes
+bulk=3
+news.version=3.4.2
+
+# --- UI -----------------------------------------------------------------------
+color=on
