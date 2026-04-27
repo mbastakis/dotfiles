@@ -21,13 +21,15 @@ Summary of notable config areas managed by chezmoi, with links to dedicated docs
 | **isync (mbsync)** | `private_dot_config/isyncrc.tmpl` | [email.md](email.md) | IMAP sync channels and Maildir mapping |
 | **abook** | `private_dot_config/abook/`, `private_dot_local/private_share/abook/` | [email.md](email.md) | Local address book split across XDG config/data paths |
 | Colima | `private_dot_local/private_share/colima/` | -- | Container runtime config and VM state |
-| Mise | `private_dot_config/mise/` | -- | Tool/version manager config (`linear-cli`) |
+| Mise | `private_dot_config/mise/config.toml` (global) + `mise.toml` (repo root, source-only) | -- | Tool/version manager; repo-local pins `go-task` |
+| Taskfile | `Taskfile.yml` (repo root, source-only) | -- | go-task runner for chezmoi repo workflows (apply/diff/lint/docs) |
 | Ghostty | `private_dot_config/ghostty/` | -- | Terminal emulator |
 | tmux | `private_dot_config/tmux/` | -- | Terminal multiplexer |
 | Starship | `private_dot_config/starship.toml` | -- | Prompt theme |
 | Git | `private_dot_config/git/` | -- | Git config and work profile |
 | Bat | `private_dot_config/bat/` | -- | Cat replacement with syntax highlighting |
-| Taskwarrior | `private_dot_config/task/` | -- | CLI todo list manager (data at `~/.local/share/task/`) |
+| Taskwarrior | `private_dot_config/task/` | -- | CLI todo list manager, XDG paths, Linear UDAs, Timewarrior hook (data at `~/.local/share/task/`) |
+| Timewarrior | `private_dot_local/private_share/timewarrior/` | -- | CLI time tracker paired with Taskwarrior via `on-modify.timewarrior` hook |
 | Yazi | `private_dot_config/yazi/` | -- | Terminal file manager |
 | Lazygit | `private_dot_config/lazygit/` | -- | Git TUI |
 | Brew | `private_dot_config/brew/` | -- | Homebrew Brewfile |
@@ -101,6 +103,83 @@ Homebrew Brewfile at `~/.config/brew/Brewfile`. Managed by the lifecycle script 
 `aws-login` is installed from the private tap `mbastakis/tap` (formula `mbastakis/tap/aws-login`) instead of being compiled from dotfiles source.
 
 _Reference: `private_dot_config/brew/Brewfile`_
+
+## Taskwarrior
+
+CLI todo list manager configured to be the primary project/task tracker (replacing Linear).
+
+- **Config:** `~/.config/task/taskrc` (XDG override of default `~/.taskrc`, wired via `TASKRC`/`TASKDATA` env vars in `.zshenv`)
+- **Theme:** `~/.config/task/mocha.theme` — Catppuccin Mocha colors (included from `taskrc`). Since Taskwarrior does not support hex colors, the palette is mapped to the nearest xterm-256 indexes.
+- **Data:** `~/.local/share/task/taskchampion.sqlite3` (ignored by chezmoi)
+- **Default report:** `task` with no args runs `task next` (via `default.command=next`)
+
+### Linear UDAs
+
+Seven user-defined attributes preserve Linear provenance for tasks originally imported from Linear:
+
+| UDA | Purpose |
+|---|---|
+| `linear_id` | Linear issue identifier (e.g. `MBA-79`) |
+| `linear_url` | Full Linear URL for quick browser jump |
+| `linear_state` | Original Linear state name (Backlog / Todo / In Progress / In Review / Done / Canceled / Duplicate) |
+| `linear_team` | Linear team key |
+| `linear_assignee` | Linear assignee email |
+| `linear_project` | Original Linear project name (pre-kebab-case) |
+| `linear_estimate` | Linear point estimate (numeric) |
+
+All Linear-origin tasks also carry the `+linear` tag for quick filtering:
+
+```bash
+task +linear list                     # all tasks imported from Linear
+task linear_id:MBA-79 info            # look up by Linear ID
+task linear_state:Todo +linear list   # only originally-Todo items
+```
+
+### Priority and label mapping
+
+Linear priorities are mapped onto Taskwarrior's H/M/L scale: `Urgent` and `High` both become `H`, `Medium` becomes `M`, `Low` becomes `L`, and `None` leaves priority empty. `Urgent` issues additionally gain a `+urgent` tag so they stay distinguishable. Linear labels are lowercased and carried through as Taskwarrior tags.
+
+### Timewarrior integration
+
+The `on-modify.timewarrior` hook (vendored at `private_dot_config/task/hooks/executable_on-modify.timewarrior`, deployed to `~/.config/task/hooks/on-modify.timewarrior` with `+x`) bridges start/stop events to Timewarrior. `taskrc` sets `hooks.location=~/.config/task/hooks` so the hook is picked up automatically. See the [Timewarrior section](#timewarrior) below.
+
+_Reference: `private_dot_config/task/taskrc`_
+
+## Timewarrior
+
+CLI time tracker paired with Taskwarrior. `task start N` auto-invokes `timew start` with the task's description, project, and tags; `task stop N` mirrors to `timew stop`.
+
+- **Config:** `~/.local/share/timewarrior/timewarrior.cfg` (Timewarrior insists on keeping config and data in the same directory; path is set via `TIMEWARRIORDB` in `.zshenv`)
+- **Theme:** `~/.local/share/timewarrior/mocha.theme` — Catppuccin Mocha colors imported from the main cfg, mirrors the Taskwarrior `mocha.theme` for visual consistency
+- **Data:** `~/.local/share/timewarrior/data/` (ignored by chezmoi)
+- **Bridge hook:** `~/.config/task/hooks/on-modify.timewarrior` (vendored from upstream `GothenburgBitFactory/timewarrior@stable`)
+
+### Working hours
+
+Exclusions are configured for Mon–Fri 09:00–18:00 with a 13:00–14:00 lunch window. Weekends are fully excluded. `timew day` / `timew week` / `timew month` charts default to `hours = working`, so non-work time stays out of the chart unless you explicitly request it.
+
+### Common commands
+
+```bash
+timew                 # current tracking status
+timew day             # today's intervals chart
+timew week            # this week's chart
+timew summary :week   # totals per tag this week
+timew continue        # resume the last stopped interval
+timew cancel          # abandon the active interval (no record)
+```
+
+### Taskwarrior bridge in practice
+
+```bash
+task add "Refactor auth middleware" project:api +backend
+task start 42         # timew start "Refactor auth middleware" api backend
+task stop 42          # timew stop
+task 42 modify +urgent
+                      # timew untag / retag with the new tag set
+```
+
+_Reference: `private_dot_local/private_share/timewarrior/timewarrior.cfg`_
 
 ## References
 

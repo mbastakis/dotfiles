@@ -1,0 +1,93 @@
+###############################################################################
+# Catppuccin Mocha theme for Timewarrior
+# https://github.com/catppuccin/catppuccin
+#
+# Timewarrior uses the same color syntax as Taskwarrior, so hex values are
+# mapped to the nearest xterm-256 palette indexes. Mapping mirrors the
+# companion `private_dot_config/task/mocha.theme` so both tools stay visually
+# consistent.
+#
+# Palette mapping (Catppuccin hex -> xterm-256):
+#   Rosewater #f5e0dc -> color224    Peach    #fab387 -> color216
+#   Flamingo  #f2cdcd -> color217    Yellow   #f9e2af -> color223
+#   Pink      #f5c2e7 -> color218    Green    #a6e3a1 -> color150
+#   Mauve     #cba6f7 -> color183    Teal     #94e2d5 -> color115
+#   Red       #f38ba8 -> color211    Sky      #89dceb -> color117
+#   Maroon    #eba0ac -> color210    Sapphire #74c7ec -> color111
+#   Lavender  #b4befe -> color147    Blue     #89b4fa -> color111
+#   Text      #cdd6f4 -> color189    Subtext0 #a6adc8 -> color146
+#   Overlay1  #7f849c -> color102    Overlay0 #6c7086 -> color60
+#   Surface1  #45475a -> color238    Surface0 #313244 -> color236
+#   Base      #1e1e2e -> color235    Mantle   #181825 -> color234
+#   Crust     #11111b -> color233
+#
+# Imported from ~/.local/share/timewarrior/timewarrior.cfg with:
+#   import ~/.local/share/timewarrior/mocha.theme
+###############################################################################
+
+define theme:
+
+  description = "Catppuccin Mocha — dotfiles default"
+
+  colors:
+    # Excluded periods (weekends, lunch, outside 09:00-18:00). Dim, low contrast.
+    exclusion = color60 on color234
+    # "Today" marker in day/week/month views — Catppuccin mauve accent.
+    today     = color235 on color183
+    # Holiday highlight — Catppuccin teal.
+    holiday   = color235 on color115
+    # Column / row labels.
+    label     = color183
+    # Interval IDs (@1, @2, ...).
+    ids       = color189
+    # Debug output.
+    debug     = color111
+
+  # Rotating tag palette — 42 entries are assigned round-robin to unique tags.
+  # Catppuccin accents with readable foreground contrast, cycling through the
+  # full accent rainbow (mauve -> pink -> rosewater -> flamingo -> red -> maroon
+  # -> peach -> yellow -> green -> teal -> sapphire -> sky -> blue -> lavender)
+  # three times so the first few tags always land on the brightest accents.
+  palette:
+    color01 = color235 on color183    # mauve
+    color02 = color235 on color218    # pink
+    color03 = color235 on color224    # rosewater
+    color04 = color235 on color217    # flamingo
+    color05 = color235 on color211    # red
+    color06 = color235 on color210    # maroon
+    color07 = color235 on color216    # peach
+    color08 = color235 on color223    # yellow
+    color09 = color235 on color150    # green
+    color10 = color235 on color115    # teal
+    color11 = color235 on color111    # sapphire/blue
+    color12 = color235 on color117    # sky
+    color13 = color235 on color147    # lavender
+    color14 = color235 on color189    # text (near-white)
+    color15 = color235 on color183    # mauve
+    color16 = color235 on color218    # pink
+    color17 = color235 on color224    # rosewater
+    color18 = color235 on color217    # flamingo
+    color19 = color235 on color211    # red
+    color20 = color235 on color210    # maroon
+    color21 = color235 on color216    # peach
+    color22 = color235 on color223    # yellow
+    color23 = color235 on color150    # green
+    color24 = color235 on color115    # teal
+    color25 = color235 on color111    # sapphire/blue
+    color26 = color235 on color117    # sky
+    color27 = color235 on color147    # lavender
+    color28 = color235 on color189    # text
+    color29 = color235 on color183    # mauve
+    color30 = color235 on color218    # pink
+    color31 = color235 on color224    # rosewater
+    color32 = color235 on color217    # flamingo
+    color33 = color235 on color211    # red
+    color34 = color235 on color210    # maroon
+    color35 = color235 on color216    # peach
+    color36 = color235 on color223    # yellow
+    color37 = color235 on color150    # green
+    color38 = color235 on color115    # teal
+    color39 = color235 on color111    # sapphire/blue
+    color40 = color235 on color117    # sky
+    color41 = color235 on color147    # lavender
+    color42 = color235 on color189    # text

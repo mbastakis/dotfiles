@@ -1,23 +1,114 @@
 # Taskwarrior configuration
-# Managed by chezmoi — edit private_dot_config/task/taskrc in the dotfiles repo.
-# Docs: https://taskwarrior.org/docs/configuration.html
+# Managed by chezmoi — edit the source in ~/.local/share/chezmoi/private_dot_config/task/taskrc
 
-# --- Data ---------------------------------------------------------------------
-# XDG-style data location (default in Taskwarrior 3.x is ~/.task; override
-# explicitly so state lives under ~/.local/share).
+# Data storage — XDG compliant (set via TASKDATA env var in ~/.zshenv)
+# data.location is resolved from $TASKDATA when that env var is set; keeping
+# an explicit fallback here so `task` works in contexts without the env var.
 data.location=~/.local/share/task
 
-# --- Dates --------------------------------------------------------------------
-dateformat=Y-M-D
-dateformat.info=Y-M-D H:N:S
-dateformat.report=Y-M-D
-weekstart=monday
+# Files
+# hooks/ lives under ~/.config/task/ (chezmoi-managed) rather than the default
+# ~/.local/share/task/hooks so vendored hooks (e.g. on-modify.timewarrior) can
+# be deployed and versioned alongside the rest of the config. Task data
+# (taskchampion.sqlite3) still lives under $TASKDATA and is not tracked.
+hooks.location=~/.config/task/hooks
 
-# --- Behavior -----------------------------------------------------------------
+# Behavior
 default.command=next
 confirmation=yes
 bulk=3
 news.version=3.4.2
 
-# --- UI -----------------------------------------------------------------------
+# Verbosity — default list minus `override` so the "TASKRC override: ..."
+# and "TASKDATA override: ..." banner doesn't print on every invocation
+# (we intentionally set those via env vars in .zshenv).
+verbose=default,-override
+
+# UI
 color=on
+detection=on
+
+# Catppuccin Mocha color theme (must come before any manual color.* overrides)
+include ~/.config/task/mocha.theme
+
+# Dates
+dateformat=Y-M-D
+dateformat.edit=Y-M-D H:N:S
+dateformat.info=Y-M-D H:N:S
+dateformat.report=Y-M-D
+weekstart=Monday
+
+# Journal — record a small audit trail when tasks are modified
+journal.info=on
+journal.time=off
+
+# Urgency tuning. Note: `urgency.user.tag.next.coefficient` boosts tasks that
+# carry the literal `+next` tag (standard Taskwarrior idiom for "pin this to
+# the top"). It does NOT boost items in the `next` report.
+urgency.user.tag.next.coefficient=15.0
+urgency.due.coefficient=12.0
+urgency.blocking.coefficient=8.0
+urgency.priority.coefficient=6.0
+urgency.active.coefficient=4.0
+urgency.project.coefficient=1.0
+urgency.tags.coefficient=1.0
+urgency.annotations.coefficient=1.0
+urgency.age.coefficient=2.0
+urgency.age.max=365
+
+# Reports — tweak defaults so `task` shows useful columns at a glance.
+# Use `description.count` instead of bare `description` so long Linear
+# bodies (stored as annotations) don't balloon each row. Use `task <id> info`
+# or `task <id>` to see the full description + annotations on demand.
+report.next.columns=id,start.age,priority,project,tags,due.relative,linear_id,description.count,urgency
+report.next.labels=ID,Active,P,Project,Tag,Due,Linear,Description,Urg
+
+report.list.columns=id,start.age,depends.indicator,priority,project,tags,due,linear_id,description.count,urgency
+report.list.labels=ID,Active,D,P,Project,Tag,Due,Linear,Description,Urg
+
+report.all.columns=id,status.short,uuid.short,start.active,entry.age,end.age,priority,project,tags,due,linear_id,description.count
+report.all.labels=ID,St,UUID,A,Age,Done,P,Project,Tags,Due,Linear,Description
+
+# A dedicated report for viewing full descriptions + annotations when needed.
+report.long.description=Long-form report with full descriptions and annotations
+report.long.columns=id,priority,project,tags,due,linear_id,description
+report.long.labels=ID,P,Project,Tag,Due,Linear,Description
+report.long.filter=status:pending
+report.long.sort=urgency-
+
+# Context helpers — quickly filter by Linear origin.
+# Activate with `task context linear`, clear with `task context none`.
+context.linear.read=+linear
+context.linear.write=+linear
+
+# -----------------------------------------------------------------------------
+# User-Defined Attributes (UDAs) — mirror Linear metadata that has no
+# native Taskwarrior equivalent. Keeps the Linear provenance of each task.
+# -----------------------------------------------------------------------------
+
+uda.linear_id.type=string
+uda.linear_id.label=Linear ID
+
+uda.linear_url.type=string
+uda.linear_url.label=Linear URL
+
+uda.linear_state.type=string
+uda.linear_state.label=Linear State
+uda.linear_state.values=Backlog,Todo,In Progress,In Review,Done,Canceled,Duplicate
+
+uda.linear_team.type=string
+uda.linear_team.label=Linear Team
+
+uda.linear_assignee.type=string
+uda.linear_assignee.label=Linear Assignee
+
+uda.linear_estimate.type=numeric
+uda.linear_estimate.label=Linear Est
+
+uda.linear_project.type=string
+uda.linear_project.label=Linear Project
+
+# Make the Linear ID searchable / filterable in the default `next` report via
+# the column definitions above. To see the full set, use:
+#   task <id> info       # all fields incl. UDAs
+#   task +LINEAR list    # only Linear-origin tasks

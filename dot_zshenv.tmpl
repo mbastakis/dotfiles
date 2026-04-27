@@ -78,9 +78,21 @@ export MCP_REMOTE_CONFIG_DIR="$XDG_STATE_HOME/mcp-auth"
 export GOPATH="$XDG_DATA_HOME/go"
 export GOBIN="$HOME/bin"
 
+# Mise - pre-trust the chezmoi source dir so repo-local mise.toml activates
+# without prompting (applies to ~/.local/share/chezmoi and any nested configs)
+export MISE_TRUSTED_CONFIG_PATHS="$DOTFILES_PATH"
+
 # Terraform
 export TF_CLI_CONFIG_FILE="$XDG_CONFIG_HOME/terraform/terraform.rc"
 export TF_PLUGIN_CACHE_DIR="$XDG_CACHE_HOME/terraform/plugins"
+
+# Taskwarrior (XDG-compliant override of ~/.taskrc and ~/.task/)
+export TASKRC="$XDG_CONFIG_HOME/task/taskrc"
+export TASKDATA="$XDG_DATA_HOME/task"
+
+# Timewarrior (XDG-compliant override of ~/.timewarrior/; single dir holds both
+# timewarrior.cfg and data/ — the cfg is chezmoi-managed, data/ is ignored).
+export TIMEWARRIORDB="$XDG_DATA_HOME/timewarrior"
 
 # Default programs
 export EDITOR="nvim"
@@ -114,6 +126,8 @@ export LC_ALL="en_US.UTF-8"
 [[ ! -d "$CDK_HOME" ]] && mkdir -p "$CDK_HOME"
 [[ ! -d "$MCP_REMOTE_CONFIG_DIR" ]] && mkdir -p "$MCP_REMOTE_CONFIG_DIR"
 [[ ! -d "$GOPATH" ]] && mkdir -p "$GOPATH"
+[[ ! -d "$TASKDATA" ]] && mkdir -p "$TASKDATA"
+[[ ! -d "$TIMEWARRIORDB" ]] && mkdir -p "$TIMEWARRIORDB"
 
 # Drop legacy tool paths inherited from older shells before re-adding XDG ones.
 path=(${path:#$HOME/.cargo/bin})

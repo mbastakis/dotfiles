@@ -1,0 +1,106 @@
+###############################################################################
+# Catppuccin Mocha theme for Taskwarrior
+# https://github.com/catppuccin/catppuccin
+#
+# Taskwarrior does not support hex colors, so Catppuccin Mocha hex values are
+# mapped to the nearest xterm-256 palette index. See:
+#   https://taskwarrior.org/docs/themes/
+#
+# Palette mapping (Catppuccin hex -> xterm-256):
+#   Rosewater #f5e0dc -> color224    Peach    #fab387 -> color216
+#   Flamingo  #f2cdcd -> color217    Yellow   #f9e2af -> color223
+#   Pink      #f5c2e7 -> color218    Green    #a6e3a1 -> color150
+#   Mauve     #cba6f7 -> color183    Teal     #94e2d5 -> color115
+#   Red       #f38ba8 -> color211    Sky      #89dceb -> color117
+#   Maroon    #eba0ac -> color210    Sapphire #74c7ec -> color111
+#   Lavender  #b4befe -> color147    Blue     #89b4fa -> color111
+#   Text      #cdd6f4 -> color189    Subtext0 #a6adc8 -> color146
+#   Overlay1  #7f849c -> color102    Overlay0 #6c7086 -> color60
+#   Surface1  #45475a -> color238    Surface0 #313244 -> color236
+#   Base      #1e1e2e -> color235    Mantle   #181825 -> color234
+#   Crust     #11111b -> color233
+#
+# Include from ~/.config/task/taskrc with:
+#   include ~/.config/task/mocha.theme
+###############################################################################
+
+rule.precedence.color=deleted,completed,active,keyword.,tag.,project.,overdue,scheduled,due.today,due,blocked,blocking,recurring,tagged,uda.
+
+# General decoration
+color.label=color183
+color.label.sort=color147
+# No row-alternation — rows render on the terminal's default background so the
+# Ghostty transparency/opacity stays consistent across every row.
+color.alternate=
+color.header=color183
+color.footnote=color146
+color.warning=color216
+color.error=color235 on color211
+color.debug=color111
+
+# Task state
+color.completed=color102
+color.deleted=color60
+color.active=color235 on color117
+color.recurring=color115
+color.scheduled=on color236
+color.until=color223
+color.blocked=color60 on color234
+color.blocking=color235 on color223
+
+# Project
+# Leave project.none unset so tasks without a Linear project aren't muted —
+# let other rules (tag.*, overdue, priority) take over.
+color.project.none=
+
+# Priority (overrides the defaults in taskrc)
+color.uda.priority.H=color211
+color.uda.priority.M=color216
+color.uda.priority.L=color150
+
+# Tags
+# color.tag.X takes precedence over project, overdue, due, and priority
+# (see rule.precedence.color above), so explicit tag colors are the most
+# reliable way to make a row stand out regardless of other attributes.
+color.tag.urgent=bold color211
+color.tag.next=color223
+color.tag.none=
+color.tagged=color147
+
+# Due
+color.due.today=color216
+color.due=color223
+color.overdue=color211
+
+# Report: burndown
+color.burndown.done=on color150
+color.burndown.pending=on color211
+color.burndown.started=on color223
+
+# Report: history
+color.history.add=color235 on color150
+color.history.delete=color235 on color211
+color.history.done=color235 on color183
+
+# Report: summary
+color.summary.background=color189 on color236
+color.summary.bar=color235 on color150
+
+# Command: calendar
+color.calendar.due.today=color235 on color216
+color.calendar.due=color235 on color223
+color.calendar.holiday=color235 on color115
+color.calendar.scheduled=
+color.calendar.overdue=color235 on color211
+color.calendar.today=color235 on color183
+color.calendar.weekend=on color234
+color.calendar.weeknumber=color146
+
+# Command: sync
+color.sync.added=color150
+color.sync.changed=color223
+color.sync.rejected=color211
+
+# Command: undo
+color.undo.after=color150
+color.undo.before=color211

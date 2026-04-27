@@ -17,6 +17,7 @@ Update the corresponding doc when any of the following change:
 | Carapace spec added or bridge type changed | [carapace.md](components/carapace.md) |
 | Karabiner rule file added or HRM config changed | [karabiner.md](components/karabiner.md) |
 | Workspace `dot_mrconfig` modified | [mrconfig.md](workspaces/mrconfig.md) |
+| Repo-local `mise.toml` or `Taskfile.yml` modified | [config-overview.md](components/config-overview.md) |
 | Custom keymap added/changed in any layer | [shortcuts.md](shortcuts.md) |
 
 ## Review Order for Quick Updates

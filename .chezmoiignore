@@ -12,6 +12,10 @@ docs/
 ai-docs/
 specs/
 
+# Repo-local tooling (go-task via mise, used inside this repo only)
+mise.toml
+Taskfile.yml
+
 # Age encryption key (decrypted by run_onchange_before script)
 key.txt.age
 
@@ -46,6 +50,9 @@ Cargo.lock
 .config/opencode/package.json
 .config/opencode/bun.lock
 .local/share/go/
+.local/share/task/
+.local/share/timewarrior/backend.json
+.local/share/timewarrior/data/
 .local/state/atuin/logs/
 .local/state/mcp-auth/
 .local/state/vim/

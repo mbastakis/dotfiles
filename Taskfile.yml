@@ -1,0 +1,59 @@
+# go-task runner for the chezmoi dotfiles repo.
+# Source-only: excluded from chezmoi apply via .chezmoiignore.
+# Invoked as `task <name>` (go-task, installed via mise; see mise.toml).
+# Outside this repo, `task` resolves to Taskwarrior (brew).
+# Docs: https://taskfile.dev/
+
+version: "3"
+
+tasks:
+  default:
+    desc: List available tasks
+    cmds:
+      - task --list
+    silent: true
+
+  apply:
+    desc: Apply chezmoi source -> target (daily use)
+    cmds:
+      - chezmoi apply
+
+  diff:
+    desc: Show diff between chezmoi source and target
+    cmds:
+      - chezmoi diff
+
+  dry-run:
+    desc: Non-interactive preview of pending changes
+    cmds:
+      - chezmoi apply --dry-run --force
+
+  update:
+    desc: git pull + chezmoi apply
+    cmds:
+      - chezmoi update
+
+  lint:
+    desc: Run all pre-commit hooks on the whole tree
+    cmds:
+      - pre-commit run --all-files
+
+  lint:shell:
+    desc: Run shellcheck via pre-commit
+    cmds:
+      - pre-commit run shellcheck --all-files
+
+  lint:secrets:
+    desc: Run gitleaks secret scanner via pre-commit
+    cmds:
+      - pre-commit run gitleaks --all-files
+
+  brew:dump:
+    desc: Refresh Brewfile from currently installed formulas/casks
+    cmds:
+      - brew bundle dump --force --file=private_dot_config/brew/Brewfile
+
+  docs:serve:
+    desc: Serve the docsify documentation locally on http://localhost:3000
+    cmds:
+      - npx docsify-cli serve docs

@@ -81,6 +81,8 @@ key.txt.age (in repo, passphrase-encrypted)
 | `.chezmoi.toml.tmpl`  | `~/.config/chezmoi/chezmoi.toml`    | Config, profile, encryption  |
 | `key.txt.age`         | _(ignored, source-only)_            | Passphrase-encrypted age key |
 | `bin/chezmoi-bws`     | _(ignored, source-only)_            | BWS token wrapper            |
+| `mise.toml`           | _(ignored, source-only)_            | Repo-local mise tools (go-task) |
+| `Taskfile.yml`        | _(ignored, source-only)_            | go-task runner for repo workflows |
 | `dev/personal/dev-tools/dot_mrconfig` | `~/dev/personal/dev-tools/.mrconfig` | Personal dev-tools workspace repos |
 | `literal_bin/`        | `~/bin/`                            | Shell utility scripts        |
 | `private_dot_ssh/`    | `~/.ssh/`                           | SSH keys (encrypted)         |
@@ -89,6 +91,7 @@ key.txt.age (in repo, passphrase-encrypted)
 | `private_dot_config/zsh/` | `~/.config/zsh/`                | Zsh config via `ZDOTDIR`     |
 | `private_dot_local/private_share/abook/` | `~/.local/share/abook/` | Abook data          |
 | `private_dot_local/private_share/colima/` | `~/.local/share/colima/` | Colima config + state |
+| `private_dot_local/private_share/timewarrior/` | `~/.local/share/timewarrior/` | Timewarrior cfg + theme (data/ ignored) |
 | `.chezmoiscripts/`    | _(lifecycle scripts, not deployed)_ | Before/after scripts         |
 | `.chezmoidata.yaml`   | _(template data)_                   | Catppuccin Mocha colors      |
 
@@ -247,5 +250,6 @@ Source lives in `docs/`; served as a zero-build SPA via `docs/index.html`.
 | Any custom keymap/keybinding change                        | `docs/shortcuts.md`                                                       |
 | New `private_dot_config/` component                        | `docs/components/config-overview.md`                                      |
 | `dev/*/dot_mrconfig`                                       | `docs/workspaces/mrconfig.md`                                             |
+| `mise.toml`, `Taskfile.yml`                                | `docs/components/config-overview.md`                                      |
 
 See `docs/maintenance.md` for the full update checklist.
