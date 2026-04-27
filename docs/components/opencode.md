@@ -16,7 +16,6 @@ Config model, agent definitions, custom commands, skills, and permission system.
     commit.md
     crawl.md
     librarian.md
-    manager.md
     web-researcher.md
   command/                # Custom slash commands (markdown)
     commit.md
@@ -26,11 +25,7 @@ Config model, agent definitions, custom commands, skills, and permission system.
     research_codebase.md
   skills/                 # Bundled skills shipped in source
     crawl4ai/
-    linear-create/
-    linear-list/
-    linear-projects/
-    linear-update/
-    linear-workflow/
+    skill-creator/
   plugins/                # Empty in source; runtime plugin install location
 ```
 
@@ -55,18 +50,6 @@ Agent definitions live in `agent/*.md` as self-contained markdown files with YAM
 
 _Reference: `private_dot_config/opencode/opencode.jsonc:1`_
 
-## Linear CLI Setup
-
-Linear operations are handled via `linear-cli` bash commands:
-
-```bash
-linear-cli i list --mine --output json --compact
-```
-
-Authentication is provided via `LINEAR_API_KEY` in `private_dot_config/zsh/local.zsh.tmpl`, and the manager agent is constrained to `linear-cli*` shell commands only.
-
-_Reference: `private_dot_config/opencode/agent/manager.md`_
-
 ## Permission System
 
 Bash command permissions use a **last matching rule wins** pattern:
@@ -86,7 +69,7 @@ _Reference: `private_dot_config/opencode/README.md:69`_
 
 ## Agents
 
-5 self-contained agents defined with YAML frontmatter (Pattern B — auto-discovered from `agent/`):
+4 self-contained agents defined with YAML frontmatter (Pattern B — auto-discovered from `agent/`):
 
 | Agent | Mode | Purpose | Key Constraints |
 |---|---|---|---|
@@ -94,7 +77,6 @@ _Reference: `private_dot_config/opencode/README.md:69`_
 | `crawl` | subagent | Web crawling with crawl4ai | Haiku model, deny rm/curl/ssh/sudo |
 | `librarian` | subagent | Research source code via `gh` CLI | Read-only, no file writes |
 | `web-researcher` | subagent | Web research via DuckDuckGo/webfetch | Read-only, no file writes |
-| `manager` | subagent | Linear project management | `linear-cli*` shell only, no web access |
 
 Each agent file contains its own description, mode, model, temperature, tools, and permissions in YAML frontmatter, plus the prompt body below.
 
@@ -137,18 +119,6 @@ Bundled skill for web crawling and data extraction:
 Loaded by agents via `skill({ name: "crawl4ai" })`.
 
 _Reference: `private_dot_config/opencode/skill/crawl4ai/SKILL.md`_
-
-### linear-* skills
-
-Linear CLI helper skills for common PM operations:
-
-- `linear-list` -- list/get issues and planning context
-- `linear-create` -- create new issues with defaults and AC
-- `linear-update` -- update status/labels/assignees/comments
-- `linear-workflow` -- start/stop/close/assign flows
-- `linear-projects` -- project and member operations
-
-_Reference: `private_dot_config/opencode/skill/linear-list/SKILL.md`_
 
 ## Gotchas
 

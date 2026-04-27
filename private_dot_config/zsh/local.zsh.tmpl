@@ -7,7 +7,6 @@
 
 # API keys from Bitwarden Secrets Manager
 export OPENROUTER_API_KEY='{{ (bitwardenSecrets "04781112-325c-468b-90dd-b3ec00d7123c").value | trim }}'
-export LINEAR_API_KEY='{{ (bitwardenSecrets "131a660e-7cf7-4aa1-95d2-b3f7017cd042").value | trim }}'
 
 # Supabase
 export SUPABASE_URL='{{ (bitwardenSecrets "f39ea7bf-477c-44bd-a804-b3ec00d712a7").value | trim }}'
