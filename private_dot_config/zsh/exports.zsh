@@ -23,7 +23,9 @@ export LESS_TERMCAP_se=$'\E[0m'        # reset reverse video
 export LESS_TERMCAP_us=$'\E[1;32m'     # begin underline
 export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
 
-# Carapace completion bridges
+# Carapace completions (aws, kubectl, docker, etc.)
+# Enabled by default. Set this to 0 here if you want to disable the loader.
+export ZSH_ENABLE_CARAPACE=1
 export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
 
 # Zoxide echo (show directory after cd)

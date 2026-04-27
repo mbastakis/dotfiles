@@ -1,7 +1,7 @@
 # Carapace completions - MUST be sourced AFTER compinit (needs compdef command)
 # Cached for faster startup (regenerates when carapace/config/specs change)
-# Temporarily disabled by default for testing. Re-enable with:
-#   ZSH_ENABLE_CARAPACE=1 exec zsh
+# Enabled by default via ZSH_ENABLE_CARAPACE=1 in exports.zsh.
+# To disable persistently, change that export before this file is sourced.
 
 [[ "${ZSH_ENABLE_CARAPACE:-0}" == "1" ]] && command -v carapace &>/dev/null || return 0
 
