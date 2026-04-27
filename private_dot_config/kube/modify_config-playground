@@ -1,3 +1,16 @@
+{{- /* chezmoi:modify-template */ -}}
+{{- /*
+  Preserves current-context from the live kubeconfig while enforcing
+  canonical cluster/context/user definitions.
+*/ -}}
+{{- $preservedCtx := "playground" -}}
+{{- if .chezmoi.stdin -}}
+  {{- $cur := fromYaml .chezmoi.stdin -}}
+  {{- if $cur -}}
+    {{- $v := index $cur "current-context" -}}
+    {{- if $v -}}{{- $preservedCtx = $v -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
 apiVersion: v1
 kind: Config
 clusters:
@@ -10,14 +23,18 @@ contexts:
     cluster: playground
     user: playground
   name: playground
-current-context: playground
+current-context: {{ $preservedCtx }}
 users:
 - name: playground
   user:
     exec:
       apiVersion: client.authentication.k8s.io/v1beta1
-      command: aws
+      command: aws-login
       args:
+      - exec
+      - aicc-playground
+      - --
+      - aws
       - --region
       - eu-central-1
       - eks
@@ -26,8 +43,5 @@ users:
       - aicc-playground
       - --output
       - json
-      env:
-      - name: AWS_PROFILE
-        value: playground
       interactiveMode: IfAvailable
       provideClusterInfo: false

@@ -1,3 +1,16 @@
+{{- /* chezmoi:modify-template */ -}}
+{{- /*
+  Preserves current-context from the live kubeconfig while enforcing
+  canonical cluster/context/user definitions.
+*/ -}}
+{{- $preservedCtx := "prod" -}}
+{{- if .chezmoi.stdin -}}
+  {{- $cur := fromYaml .chezmoi.stdin -}}
+  {{- if $cur -}}
+    {{- $v := index $cur "current-context" -}}
+    {{- if $v -}}{{- $preservedCtx = $v -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
 apiVersion: v1
 kind: Config
 clusters:
@@ -10,14 +23,18 @@ contexts:
     cluster: prod
     user: prod
   name: prod
-current-context: prod
+current-context: {{ $preservedCtx }}
 users:
 - name: prod
   user:
     exec:
       apiVersion: client.authentication.k8s.io/v1beta1
-      command: aws
+      command: aws-login
       args:
+      - exec
+      - aicc-prod
+      - --
+      - aws
       - --region
       - eu-central-1
       - eks
@@ -26,8 +43,5 @@ users:
       - aicc-prod-ec1-shared-eks-0
       - --output
       - json
-      env:
-      - name: AWS_PROFILE
-        value: prod
       interactiveMode: IfAvailable
       provideClusterInfo: false

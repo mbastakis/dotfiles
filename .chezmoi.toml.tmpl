@@ -31,6 +31,15 @@ encryption = "age"
 [diff]
     pager = "smart-diffnav"
 
+# Normalize YAML before diffing kubeconfigs so kubectl's re-serialization
+# (alphabetical key order, 4-space indent, env: null for empty exec.env)
+# doesn't show as drift against our canonical modify_ output.
+# Pattern matches the relative target path that chezmoi passes to textconv.
+[[textconv]]
+    pattern = ".config/kube/config-*"
+    command = "yq"
+    args = ["-P", "sort_keys(..) | del(.. | select(. == null))"]
+
 [edit]
     command = "nvim"
 
