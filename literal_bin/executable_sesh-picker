@@ -11,8 +11,51 @@ if ! command -v gum >/dev/null 2>&1; then
     exit 1
 fi
 
+if ! command -v jq >/dev/null 2>&1; then
+    tmux display-message "jq is not installed"
+    exit 1
+fi
+
+# Dedup strategy:
+# sesh emits both a "config" and "tmux" entry for any config session that is
+# currently running. We suppress the tmux copy (sesh connect will attach to
+# the running session anyway). Ad-hoc tmux sessions (no matching config name)
+# stay visible. We rely on `sesh list -H -j` matching `sesh list -i -H` row
+# for row so we can filter by JSON metadata while keeping sesh's icon output.
+tmp_json="$(mktemp)"
+tmp_disp="$(mktemp)"
+trap 'rm -f "$tmp_json" "$tmp_disp"' EXIT
+
+sesh list -i -H >"$tmp_disp"
+sesh list -H -j >"$tmp_json"
+
+# Names that exist as config sessions (regardless of -H / attached state).
+# Used as the dedup set so the currently-attached session also gets its
+# tmux row suppressed if it would reappear.
+cfg_names="$(sesh list -j | jq -r 'map(select(.Src == "config") | .Name)')"
+
+# Build a jq filter that, given the JSON array, emits a 0/1 per row:
+# 1 = drop, 0 = keep. Rows are dropped when Src == "tmux" AND Name appears
+# in the set of config names.
+mask="$(jq -r --argjson cfg "$cfg_names" '
+    .[]
+    | if (.Src == "tmux" and ([.Name] | inside($cfg))) then 1 else 0 end
+' "$tmp_json")"
+
+# Apply the mask line-by-line against the icon-rendered display.
+# sed strips the "0\t" prefix, preserving the original sesh line verbatim.
+list="$(paste -d '\t' <(printf '%s\n' "$mask") "$tmp_disp" \
+    | sed -n 's/^0	//p')"
+
+# Nothing to pick (e.g. every session was a duplicate of a config entry).
+if [[ -z "$list" ]]; then
+    exit 0
+fi
+
+# Only relax errexit around gum filter: a non-zero exit is expected when
+# the user cancels (Esc/Ctrl-C), and we want to handle it gracefully.
 set +e
-selection="$(sesh list -i -H | gum filter \
+selection="$(printf '%s\n' "$list" | gum filter \
     --limit 1 \
     --no-sort \
     --fuzzy \
