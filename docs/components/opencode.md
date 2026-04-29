@@ -41,7 +41,7 @@ The main config (`opencode.jsonc`) defines:
 
 | Section | Purpose |
 |---|---|
-| `model` | Primary model (`openai/gpt-5.4`) |
+| `model` | Primary model (`openai/gpt-5.5`) |
 | `theme` | `catppuccin` |
 | `plugin` | Community plugins loaded from npm (for example `opencode-notifier`) |
 | `permission` | Granular bash command permission rules |
