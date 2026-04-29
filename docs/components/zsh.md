@@ -202,6 +202,7 @@ Generated from `local.zsh.tmpl` by chezmoi. Pulls secrets from Bitwarden Secrets
 |---|---|
 | `OPENROUTER_API_KEY` | Always (macOS) |
 | `SUPABASE_URL`, `SUPABASE_SERVICE_KEY` | Always (macOS) |
+| `OPENAI_API_KEY` | DT work profile only |
 | `GITHUB_TOKEN`, `GITLAB_TOKEN`, `GITLAB_HOST` | DT work profile only |
 | Work `PATH` additions | DT work profile only |
 

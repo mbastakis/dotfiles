@@ -15,6 +15,7 @@ export SUPABASE_SERVICE_KEY='{{ (bitwardenSecrets "a8a6bdca-cf45-4af9-a42c-b3ec0
 {{- if or (eq .profile "dt-work") (eq .profile "work") }}
 # DT work-specific PATH additions and secrets
 export PATH="/Users/mbastakis/dev/work/scripts/:$PATH"
+export OPENAI_API_KEY='{{ (bitwardenSecrets "3793e671-e3a9-4858-9ab0-b43b007e41c1").value | trim }}'
 export GITHUB_TOKEN='{{ (bitwardenSecrets "8492381a-2a28-48f6-a0cc-b3ec00d713ea").value | trim }}'
 export GITLAB_TOKEN='{{ (bitwardenSecrets "b92fd35b-faf8-42a9-bdd0-b3ec00d71379").value | trim }}'
 export GITLAB_ACCESS_TOKEN='{{ (bitwardenSecrets "b92fd35b-faf8-42a9-bdd0-b3ec00d71379").value | trim }}'
