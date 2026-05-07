@@ -28,6 +28,7 @@ return {
       { "<leader>o", group = "Obsidian", icon = "󰂺 " },
       { "<leader>a", group = "AI", icon = "󱚟 " },
       { "<leader>b", group = "Buffer", icon = "󰓩 " },
+      { "<leader>m", desc = "Markdown Preview" },
       { "<leader>g", group = "Git" },
       { "<leader>u", group = "Utilities", icon = " " },
     })

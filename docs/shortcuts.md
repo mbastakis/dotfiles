@@ -207,6 +207,12 @@ Custom NeoMutt bindings are defined in the template layer and rendered for enabl
 | `Ctrl+S`       | n, i | Save file                      | `private_dot_config/nvim/lua/config/keymaps.lua:15` |
 | `<leader>fm`   | n    | Format buffer (conform, async) | `private_dot_config/nvim/lua/config/keymaps.lua:19` |
 
+### Markdown Preview
+
+| Key         | Mode | Action                  | Source                                                         |
+| ----------- | ---- | ----------------------- | -------------------------------------------------------------- |
+| `<leader>m` | n    | Toggle Markdown preview | `private_dot_config/nvim/lua/plugins/markdown-preview.lua:7`   |
+
 ### Diffview
 
 | Key          | Mode | Action                            | Source                                               |

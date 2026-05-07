@@ -12,7 +12,7 @@ flowchart TD
   A --> C[config/keymaps.lua<br/>global keymaps]
   A --> D[config/autocmds.lua<br/>yank highlight, helm detection]
   A --> E[config/lazy.lua<br/>bootstrap lazy.nvim]
-  E --> F["import: plugins/*<br/>23 plugin specs"]
+  E --> F["import: plugins/*<br/>25 plugin specs"]
   E --> G["import: plugins/lsp/*<br/>LSP config + Mason"]
   H["after/lsp/*.lua<br/>7 server overrides"] -.->|loaded by nvim| G
 ```
@@ -46,12 +46,13 @@ _Reference: `private_dot_config/nvim/lua/config/autocmds.lua:1`_
 
 ## Plugin Organization
 
-23 plugin spec files in `lua/plugins/`, each returning a lazy.nvim spec table:
+25 plugin spec files in `lua/plugins/`, each returning a lazy.nvim spec table:
 
 | File | Plugin | Category |
 |---|---|---|
 | `autopairs.lua` | nvim-autopairs | Editing |
 | `blink.lua` | blink.cmp | Completion |
+| `bufferline.lua` | bufferline.nvim | UI/Tabs |
 | `chezmoi.lua` | chezmoi.vim | Chezmoi templates |
 | `codecompanion.lua` | codecompanion.nvim | AI |
 | `colorscheme.lua` | catppuccin/nvim | Theme |
@@ -60,6 +61,7 @@ _Reference: `private_dot_config/nvim/lua/config/autocmds.lua:1`_
 | `gitsigns.lua` | gitsigns.nvim | Git |
 | `linting.lua` | nvim-lint | Linting |
 | `lualine.lua` | lualine.nvim | UI/Statusline |
+| `markdown-preview.lua` | markdown-preview.nvim | Markdown preview |
 | `noice.lua` | noice.nvim | UI/Cmdline |
 | `obsidian.lua` | obsidian.nvim | Notes |
 | `oil.lua` | oil.nvim | File explorer |
@@ -164,6 +166,8 @@ See [shortcuts.md](../shortcuts.md) for the full Neovim keymap table organized a
 | `<leader>e` | Explorer |
 | `<leader>o` | Obsidian |
 | `<leader>a` | AI |
+| `<leader>b` | Buffer |
+| `<leader>m` | Markdown Preview |
 | `<leader>g` | Git |
 | `<leader>u` | Utilities |
 
