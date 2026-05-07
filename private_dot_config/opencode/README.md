@@ -19,6 +19,38 @@ Custom commands, agents, and skills for OpenCode AI assistant.
 | `oc`          | Alias for opencode   |
 | `bun install` | Install dependencies |
 
+## OpenAI Auth Selection
+
+Two OpenAI provider IDs are configured so subscription and API-key usage can coexist:
+
+| Model ID | Auth Source | Purpose |
+| -------- | ----------- | ------- |
+| `openai/gpt-5.5` | Built-in OpenAI auth (`opencode auth login -p openai`) | ChatGPT Plus/Pro subscription |
+| `openai-api/gpt-5.5` | `OPENAI_API_KEY` or stored `openai-api` API key | OpenAI API billing |
+
+Switch per run with `opencode -m openai/gpt-5.5` or `opencode -m openai-api/gpt-5.5`.
+
+Shell aliases make the split explicit:
+
+```bash
+oc-sub # subscription: openai/gpt-5.5
+oc-api # API key: openai-api/gpt-5.5
+```
+
+In the TUI, use `/models` and select either `OpenAI` or `OpenAI API EU`.
+
+The `openai-api/gpt-5.5` alias defines explicit model pricing because custom provider aliases do not inherit the built-in OpenAI pricing metadata used by `opencode stats`.
+
+Auth setup:
+
+```bash
+opencode auth login -p openai
+# choose ChatGPT Plus/Pro for subscription auth
+
+export OPENAI_API_KEY="sk-..."
+# used by openai-api/gpt-5.5
+```
+
 ## Custom Commands
 
 Create `command/<name>.md` with YAML frontmatter:

@@ -137,6 +137,13 @@ Prefix: **`Ctrl-a`**
 | `Cmd+X` (via CSI)      | Cut selection to clipboard  | `private_dot_config/zsh/shift-select-enhancements.zsh:72` |
 | `Shift+Cmd+Left/Right` | Select entire line          | `private_dot_config/zsh/shift-select-enhancements.zsh:79` |
 
+### Command Aliases
+
+| Alias | Action | Source |
+| ----- | ------ | ------ |
+| `oc-sub` | OpenCode with subscription-backed `openai/gpt-5.5` | `private_dot_config/zsh/aliases.zsh:60` |
+| `oc-api` | OpenCode with API-key-backed `openai-api/gpt-5.5` | `private_dot_config/zsh/aliases.zsh:61` |
+
 ### Word Movement
 
 | Key                    | Action            | Source                       |

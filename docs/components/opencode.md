@@ -41,7 +41,8 @@ The main config (`opencode.jsonc`) defines:
 
 | Section | Purpose |
 |---|---|
-| `model` | Primary model (`openai/gpt-5.5`) |
+| `model` | Primary model (`openai/gpt-5.5`, subscription-backed by default) |
+| `provider.openai-api` | OpenAI API-key alias (`openai-api/gpt-5.5`) using `OPENAI_API_KEY` |
 | `theme` | `catppuccin` |
 | `plugin` | Community plugins loaded from npm (for example `opencode-notifier`) |
 | `permission` | Granular bash command permission rules |
@@ -49,6 +50,19 @@ The main config (`opencode.jsonc`) defines:
 Agent definitions live in `agent/*.md` as self-contained markdown files with YAML frontmatter (Pattern B). No agent blocks in `opencode.jsonc`.
 
 _Reference: `private_dot_config/opencode/opencode.jsonc:1`_
+
+## OpenAI Auth Selection
+
+OpenAI subscription and API-key usage are split across two provider IDs:
+
+| Model ID | Auth Source | Use Case |
+|---|---|---|
+| `openai/gpt-5.5` | Built-in OpenAI auth via `opencode auth login -p openai` | ChatGPT Plus/Pro subscription |
+| `openai-api/gpt-5.5` | `OPENAI_API_KEY` or stored `openai-api` key | OpenAI API billing |
+
+Switch per run with `opencode -m openai/gpt-5.5` or `opencode -m openai-api/gpt-5.5`. Shell aliases make the split explicit: `oc-sub` launches subscription-backed `openai/gpt-5.5`, and `oc-api` launches API-key-backed `openai-api/gpt-5.5`. In the TUI, use `/models` and choose either OpenAI or OpenAI API EU.
+
+The `openai-api/gpt-5.5` alias includes explicit USD-per-1M-token pricing so `opencode stats` can show spend; custom aliases do not inherit pricing metadata from the built-in OpenAI provider.
 
 ## Permission System
 
