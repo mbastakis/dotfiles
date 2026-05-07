@@ -1,7 +1,7 @@
 # AICC Platform Workspace (.mrconfig)
 #
 # Mirrors gitlab.devops.telekom.de/aicc group structure.
-# Tracks: fiber (631096), infrastructure/argocd (631103), infrastructure/iac (620010)
+# Tracks: fiber (631096), infrastructure/argocd (631103), infrastructure/iac (620010), the-forge (1103302)
 #
 # Usage:
 #   cd workspaces/ma-proj
@@ -17,13 +17,6 @@
 [DEFAULT]
 jobs = 8
 git_update = git pull --rebase --autostash "$@"
-
-# =============================================================================
-# Agentic Engineering (aicc/agentic-engineering)
-# =============================================================================
-
-[agentic-engineering/harness]
-checkout = git clone 'https://gitlab.devops.telekom.de/aicc/agentic-engineering/harness.git' 'harness'
 
 # =============================================================================
 # Fiber - Services (aicc/fiber)
@@ -85,6 +78,13 @@ checkout = git clone 'https://gitlab.devops.telekom.de/aicc/fiber/argocd/helm-ch
 
 [fiber/argocd/helm-charts/sap-gui-mockup-helm]
 checkout = git clone 'https://gitlab.devops.telekom.de/aicc/fiber/argocd/helm-charts/sap-gui-mockup-helm.git' 'sap-gui-mockup-helm'
+
+# =============================================================================
+# The Forge (aicc/the-forge)
+# =============================================================================
+
+[the-forge/blacksmith]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/the-forge/blacksmith.git' 'blacksmith'
 
 # =============================================================================
 # Infrastructure - ArgoCD Root App-of-Apps (aicc/infrastructure/argocd/root-app-of-apps)
