@@ -14,7 +14,7 @@ flowchart TD
   B -->|Custom/Native| C[specs/tool.yaml<br/>hand-written spec]
   B -->|Yargs/Cobra| D[carapace-sync<br/>auto-generates spec]
   D --> C
-  C --> E[carapace _carapace zsh<br/>cached completion init]
+  C --> E[carapace tool zsh<br/>cached selective init]
   E --> F[zsh compinit<br/>available at shell prompt]
 ```
 
@@ -101,16 +101,18 @@ _Reference: `private_dot_config/carapace/config.yaml:1`_
 Carapace is loaded in the zsh startup sequence after `compinit`:
 
 1. `plugins.zsh` runs `compinit`
-2. `private_dot_config/zsh/dot_zshrc` caches `carapace _carapace zsh` output to `~/.cache/carapace-init.zsh`
-3. Cache is regenerated only when the carapace binary is newer than the cache
+2. `private_dot_config/zsh/carapace.zsh` caches `carapace <tool> zsh` output for each tool in `ZSH_CARAPACE_COMPLETERS`
+3. Cache is regenerated when the carapace binary, selected tool list, bridge list, config, or specs change
 
-The `CARAPACE_BRIDGES` environment variable is set in `exports.zsh` to `zsh,fish,bash,inshellisense`.
+The global `carapace _carapace zsh` loader is intentionally avoided because it registers Carapace for common commands such as `ls`, `aws`, and `git`, replacing faster native completions with a synchronous Carapace subprocess on every TAB.
+
+The default `ZSH_CARAPACE_COMPLETERS` list is set in `exports.zsh` to the repo-managed specs and `carapace` itself. `CARAPACE_BRIDGES` remains set to `zsh,fish,bash,inshellisense` for selected specs that use bridge macros.
 
 _Reference: `private_dot_config/zsh/dot_zshrc:37`, `private_dot_config/zsh/exports.zsh:8`_
 
 ## Gotchas
 
-- Zsh init cache is **not** invalidated by spec changes; run `rm ~/.cache/carapace-init.zsh && exec zsh` after adding specs.
+- Use `ZSH_CARAPACE_COMPLETERS` to opt additional commands into Carapace; do not re-enable global `carapace _carapace zsh` unless broad native-completion replacement is intentional.
 - `carapace export` returns empty output for some tools; use `carapace-sync --test` to verify.
 - Built-in carapace completers override custom specs for some commands.
 - The `bw.yaml` spec is NOT auto-generated; it must be maintained manually.

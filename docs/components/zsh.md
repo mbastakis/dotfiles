@@ -29,7 +29,7 @@ _Reference: `private_dot_config/zsh/dot_zshrc:22`, `dot_zshenv.tmpl:16`_
 
 ### Performance Caching
 
-`brew shellenv`, `carapace _carapace zsh`, and `sesh completion zsh` are cached to `~/.cache/` and only regenerated when the cache file is missing or the binary is newer than the cache. Optional startup profiling is available via `ZSHRC_PROFILE=1 zsh -i -c exit`.
+`brew shellenv`, selective `carapace <tool> zsh` output, and `sesh completion zsh` are cached to `~/.cache/` and only regenerated when the cache file is missing, the binary is newer than the cache, or Carapace config/spec files change. Optional startup profiling is available via `ZSHRC_PROFILE=1 zsh -i -c exit`.
 
 ## Shell Options
 
@@ -94,7 +94,8 @@ Completion setup for interactive shells:
 
 | Source | Strategy | Notes |
 |---|---|---|
-| `carapace.zsh` | Cached, optional | Loads aggregated completions only when `ZSH_ENABLE_CARAPACE=1` |
+| `carapace.zsh` | Cached, optional | Loads only `ZSH_CARAPACE_COMPLETERS` when `ZSH_ENABLE_CARAPACE=1` |
+| `aws_completer` | Native AWS CLI completer | Registered through `bashcompinit` so `aws` avoids Carapace latency |
 | `sesh completion zsh` | Cached native script | Works even when Carapace is disabled |
 
 `completions.zsh` is sourced after `compinit` and before `tools.zsh`, so command completions are available before tool init mutates shell state.

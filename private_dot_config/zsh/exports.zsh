@@ -23,9 +23,10 @@ export LESS_TERMCAP_se=$'\E[0m'        # reset reverse video
 export LESS_TERMCAP_us=$'\E[1;32m'     # begin underline
 export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
 
-# Carapace completions (aws, kubectl, docker, etc.)
+# Carapace completions are opt-in per command so common native completions stay fast.
 # Enabled by default. Set this to 0 here if you want to disable the loader.
 export ZSH_ENABLE_CARAPACE=1
+export ZSH_CARAPACE_COMPLETERS="${ZSH_CARAPACE_COMPLETERS:-add-zoxide-tree aws-login build_apps.sh bw carapace carapace-sync chezmoi opencode starship-timer}"
 export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
 
 # Zoxide echo (show directory after cd)

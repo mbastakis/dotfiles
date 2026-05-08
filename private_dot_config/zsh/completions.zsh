@@ -1,8 +1,17 @@
 #!/usr/bin/env zsh
 # completions.zsh - Tool-specific completions
 
-# Aggregated completions (optional; disabled by default in carapace.zsh)
+# Selective Carapace completions. This intentionally does not replace native
+# completions for common commands like ls/aws/git.
 source "$ZDOTDIR/carapace.zsh"
+
+# AWS CLI ships a bash completer; register it through bashcompinit so aws stays
+# off the Carapace hot path while still completing subcommands and options.
+if command -v aws_completer &>/dev/null; then
+  autoload -Uz bashcompinit
+  bashcompinit
+  complete -C "$(command -v aws_completer)" aws
+fi
 
 # Cache sesh's native completion so it works even when carapace is disabled.
 if command -v sesh &>/dev/null; then
