@@ -44,6 +44,7 @@ The main config (`opencode.jsonc`) defines:
 | `model` | Primary model (`openai/gpt-5.5`, subscription-backed by default) |
 | `provider.openai-api` | OpenAI API-key alias (`openai-api/gpt-5.5`) using `OPENAI_API_KEY` |
 | `theme` | `catppuccin` |
+| `mcp` | Remote MCP servers, disabled by default unless explicitly enabled |
 | `plugin` | Community plugins loaded from npm (for example `opencode-notifier`) |
 | `permission` | Granular bash command permission rules |
 
@@ -63,6 +64,17 @@ OpenAI subscription and API-key usage are split across two provider IDs:
 Switch per run with `opencode -m openai/gpt-5.5` or `opencode -m openai-api/gpt-5.5`. Shell aliases make the split explicit: `oc-sub` launches subscription-backed `openai/gpt-5.5`, and `oc-api` launches API-key-backed `openai-api/gpt-5.5`. In the TUI, use `/models` and choose either OpenAI or OpenAI API EU.
 
 The `openai-api/gpt-5.5` alias includes explicit USD-per-1M-token pricing so `opencode stats` can show spend; custom aliases do not inherit pricing metadata from the built-in OpenAI provider.
+
+## MCP Servers
+
+MCP servers are configured globally but left disabled by default so they do not add tools or authentication prompts unless explicitly enabled.
+
+| Server | Type | Default | Purpose |
+|---|---|---|---|
+| `pocketsmith` | remote | disabled | PocketSmith MCP endpoint |
+| `telecontext` | remote | disabled | Deutsche Telekom Telecontext MCP endpoint at `https://telecontext.trap.ng.telekom.net/mcp` |
+
+Enable and authenticate MCP servers from OpenCode only when needed, for example with `/mcp` in the TUI or the relevant `opencode mcp` command.
 
 ## Permission System
 

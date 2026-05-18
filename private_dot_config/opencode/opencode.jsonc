@@ -132,6 +132,11 @@
       "url": "https://mcp.pocketsmith.com/mcp",
       "enabled": false,
     },
+    "telecontext": {
+      "type": "remote",
+      "url": "https://telecontext.trap.ng.telekom.net/mcp",
+      "enabled": false,
+    },
   },
   "plugin": ["@mohak34/opencode-notifier@latest"],
   "instructions": [],
