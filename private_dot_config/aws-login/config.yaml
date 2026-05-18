@@ -52,16 +52,3 @@ profiles:
     max-hour: 4
     env:
       KUBECONFIG: ~/.config/kube/config-prod
-
-  claude-code:
-    type: cloudshepherd
-    description: "Claude Code profile"
-    auth_url: https://auth2.cs.telekom.de
-    api_url: https://api.cs.telekom.de/public
-    account: "110869144691"
-    role: CS_DTIT_Bedrock_User
-    otp_source: bitwarden
-    bitwarden_item: "auth.devops.telekom.de"
-    storage: file
-    min_ttl: 20
-    max-hour: 3

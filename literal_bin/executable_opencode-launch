@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ---------------------------------------------------------------------------
-# opencode-launch — auth-aware opencode wrapper with per-pane session tracking.
+# opencode-launch — opencode wrapper with per-pane session tracking.
 #
 # Behaviour:
 #   opencode-launch          → always starts a NEW opencode session  (oc)
@@ -133,11 +133,7 @@ fi
 # --- run opencode ----------------------------------------------------------
 
 rc=0
-if aws-login --auth-status claude-code 2>/dev/null; then
-    aws-login exec claude-code -- opencode "${extra_args[@]+"${extra_args[@]}"}" "$@" || rc=$?
-else
-    opencode "${extra_args[@]+"${extra_args[@]}"}" "$@" || rc=$?
-fi
+opencode "${extra_args[@]+"${extra_args[@]}"}" "$@" || rc=$?
 
 # --- persist session ID ----------------------------------------------------
 
