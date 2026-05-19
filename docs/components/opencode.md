@@ -23,6 +23,7 @@ Config model, agent definitions, custom commands, skills, and permission system.
     learn.md
     create_plan.md
     research_codebase.md
+    session_analysis.md
   skills/                 # Bundled skills shipped in source
     crawl4ai/
     skill-creator/
@@ -138,6 +139,7 @@ _Reference: `private_dot_config/opencode/AGENTS.md:1`_
 | `/learn` | `command/learn.md` | Extract AGENTS.md learnings with `openai/gpt-5.4-mini-fast` |
 | `/create_plan` | `command/create_plan.md` | Create an implementation plan with `@plan` and `openai/gpt-5.5` |
 | `/research_codebase` | `command/research_codebase.md` | Research the current codebase with `openai/gpt-5.3-codex` |
+| `/session_analysis` | `command/session_analysis.md` | Export and analyze a previous OpenCode session with `@scout` |
 
 _Reference: `private_dot_config/opencode/README.md:24`_
 

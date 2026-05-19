@@ -71,6 +71,7 @@ Instructions for the command in markdown...
 - `research_codebase.md` — Document codebase through parallel research (`openai/gpt-5.3-codex`)
 - `create_plan.md` — Create detailed implementation plans (`@plan`, `openai/gpt-5.5`)
 - `learn.md` — Extract non-obvious learnings into AGENTS.md files (`openai/gpt-5.4-mini-fast`)
+- `session_analysis.md` — Export and analyze a previous OpenCode session (`@scout`, subtask)
 
 ## Custom Agents (Pattern B — Self-Contained .md)
 
