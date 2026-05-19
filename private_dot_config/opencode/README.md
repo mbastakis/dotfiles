@@ -143,19 +143,23 @@ These are **enabled by default** and can only be disabled via `tools: false`:
 
 **Critical: Last matching rule wins.** When multiple patterns match a command, the rule defined **last** in the config takes precedence.
 
+The global `opencode.jsonc` policy is intentionally permissive: `edit` and `external_directory` are allowed, and bash defaults to `"*": "allow"`. Only specific risky commands are changed back to `"ask"`, including destructive filesystem commands, git remote/history changes, mutating `kubectl`/`helm` commands, and risky `terraform`/`tofu` commands.
+
+Because OpenCode may normalize command flags before bash permission matching, broad patterns like `"rm*"`, `"chmod*"`, and `"chown*"` are used to ensure recursive forms such as `rm -rf` still prompt. For CLI tools that support flags before the subcommand, both forms are listed, for example `"kubectl apply*"` and `"kubectl * apply*"`.
+
 ```jsonc
 // WRONG - "*" at end overrides everything
 "bash": {
-  "git status*": "allow",
-  "git commit*": "ask",
-  "*": "ask"              // This matches last, so git status still asks!
+  "git push*": "ask",
+  "kubectl apply*": "ask",
+  "*": "allow"            // This matches last, so nothing asks!
 }
 
 // CORRECT - "*" first, specific rules override it
 "bash": {
-  "*": "ask",             // Default (matched first)
-  "git status*": "allow", // Overrides default (matched last)
-  "git commit*": "ask"
+  "*": "allow",           // Default (matched first)
+  "git push*": "ask",
+  "kubectl apply*": "ask"
 }
 ```
 

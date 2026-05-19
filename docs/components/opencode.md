@@ -79,14 +79,18 @@ Enable and authenticate MCP servers from OpenCode only when needed, for example 
 
 ## Permission System
 
-Bash command permissions use a **last matching rule wins** pattern:
+Global permissions are default-allow for a freer primary agent:
 
 | Pattern | Permission | Rationale |
 |---|---|---|
-| `*` | `ask` | Default: prompt for unknown commands |
-| Read-only tools (grep, cat, ls, git status, etc.) | `allow` | Safe information gathering |
-| Dangerous commands (sudo, rm -rf /, chown) | `deny` | Prevent destructive operations |
-| Git write operations (commit, push, merge, rebase) | `ask` | Require confirmation |
+| `edit` | `allow` | File edits do not prompt by default |
+| `external_directory` | `allow` | Work outside the repo is allowed by default |
+| Bash `*` | `allow` | Unknown commands run without approval |
+| `rm*`, `rmdir*`, `chmod*`, `chown*`, `sudo`, `su` | `ask` | Prompt for destructive or privileged filesystem operations |
+| `git push*`, `git reset*`, `git clean*`, `git rm*`, `git rebase*` | `ask` | Require confirmation for remote/history-destructive git operations |
+| Mutating `kubectl`/`helm`, risky `terraform`/`tofu` commands | `ask` | Require confirmation for cluster and infrastructure changes |
+
+Bash command permissions still use **last matching rule wins**, so broad `"*": "allow"` must stay before the specific `"ask"` patterns. Patterns include common flag-before-subcommand forms such as `kubectl * apply*` and `git * push*`. Specialized subagents can override the global policy with their own stricter permissions.
 
 **Tool types:**
 - **Permissionable:** edit, bash, skill, webfetch, doom_loop, external_directory
