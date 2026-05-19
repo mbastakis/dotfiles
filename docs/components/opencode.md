@@ -42,7 +42,7 @@ The main config (`opencode.jsonc`) defines:
 | Section | Purpose |
 |---|---|
 | `model` | Primary model (`openai/gpt-5.5`, subscription-backed by default) |
-| `provider.openai-api` | OpenAI API-key alias (`openai-api/gpt-5.5`) using `OPENAI_API_KEY` |
+| `provider.openai-api` | OpenAI API-key aliases (`openai-api/gpt-5.4`, `openai-api/gpt-5.5`) using `OPENAI_API_KEY` |
 | `theme` | `catppuccin` |
 | `mcp` | Remote MCP servers, disabled by default unless explicitly enabled |
 | `plugin` | Community plugins loaded from npm (for example `opencode-notifier`) |
@@ -59,11 +59,12 @@ OpenAI subscription and API-key usage are split across two provider IDs:
 | Model ID | Auth Source | Use Case |
 |---|---|---|
 | `openai/gpt-5.5` | Built-in OpenAI auth via `opencode auth login -p openai` | ChatGPT Plus/Pro subscription |
+| `openai-api/gpt-5.4` | `OPENAI_API_KEY` or stored `openai-api` key | OpenAI API billing |
 | `openai-api/gpt-5.5` | `OPENAI_API_KEY` or stored `openai-api` key | OpenAI API billing |
 
-Switch per run with `opencode -m openai/gpt-5.5` or `opencode -m openai-api/gpt-5.5`. Shell aliases make the split explicit: `oc-sub` launches subscription-backed `openai/gpt-5.5`, and `oc-api` launches API-key-backed `openai-api/gpt-5.5`. In the TUI, use `/models` and choose either OpenAI or OpenAI API EU.
+Switch per run with `opencode -m openai/gpt-5.5`, `opencode -m openai-api/gpt-5.4`, or `opencode -m openai-api/gpt-5.5`. Shell aliases make the split explicit: `oc-sub` launches subscription-backed `openai/gpt-5.5`, and `oc-api` launches API-key-backed `openai-api/gpt-5.5`. In the TUI, use `/models` and choose either OpenAI or OpenAI API EU.
 
-The `openai-api/gpt-5.5` alias includes explicit USD-per-1M-token pricing so `opencode stats` can show spend; custom aliases do not inherit pricing metadata from the built-in OpenAI provider.
+The `openai-api` aliases are hand-curated. `openai-api/gpt-5.5` includes explicit USD-per-1M-token pricing so `opencode stats` can show spend; custom aliases do not inherit pricing metadata from the built-in OpenAI provider.
 
 ## MCP Servers
 
