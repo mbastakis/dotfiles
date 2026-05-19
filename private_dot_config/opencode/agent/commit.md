@@ -1,6 +1,7 @@
 ---
 description: Create git commits from staged and unstaged changes. Use for committing work at end of session or when user says "commit".
 mode: subagent
+model: openai/gpt-5.4-mini-fast
 tools:
   write: false
   patch: false

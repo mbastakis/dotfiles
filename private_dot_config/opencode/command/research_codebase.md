@@ -1,5 +1,6 @@
 ---
 description: Document codebase as-is through comprehensive parallel research
+model: openai/gpt-5.3-codex
 ---
 
 # Research Codebase

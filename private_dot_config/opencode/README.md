@@ -19,38 +19,34 @@ Custom commands, agents, and skills for OpenCode AI assistant.
 | `oc`          | Alias for opencode   |
 | `bun install` | Install dependencies |
 
-## OpenAI Auth Selection
+## OpenAI Auth
 
-Two OpenAI provider IDs are configured so subscription and API-key usage can coexist:
+Only the built-in OpenAI provider is enabled, so all configured models use OAuth subscription auth from `opencode auth login -p openai`.
 
-| Model ID | Auth Source | Purpose |
-| -------- | ----------- | ------- |
-| `openai/gpt-5.5` | Built-in OpenAI auth (`opencode auth login -p openai`) | ChatGPT Plus/Pro subscription |
-| `openai-api/gpt-5.4` | `OPENAI_API_KEY` or stored `openai-api` API key | OpenAI API billing |
-| `openai-api/gpt-5.5` | `OPENAI_API_KEY` or stored `openai-api` API key | OpenAI API billing |
+| Model ID | Purpose |
+| -------- | ------- |
+| `openai/gpt-5.5` | Default high-quality fallback, planning, broad research |
+| `openai/gpt-5.3-codex` | Coding, source research, repo scouting |
+| `openai/gpt-5.4-mini-fast` | Fast bounded tasks, exploration, titles, small model fallback |
+| `openai/gpt-5.4` | Conversation compaction |
 
-Switch per run with `opencode -m openai/gpt-5.5`, `opencode -m openai-api/gpt-5.4`, or `opencode -m openai-api/gpt-5.5`.
+The `-fast` suffix is an actual OAuth-provider model variant. It is used where lower latency matters more than maximum reasoning depth.
 
-Shell aliases make the split explicit:
+Shell aliases:
 
 ```bash
-oc-sub # subscription: openai/gpt-5.5
-oc-api # API key: openai-api/gpt-5.5
+oc-sub   # subscription: openai/gpt-5.5
+oc-oauth # subscription: openai/gpt-5.5
 ```
-
-In the TUI, use `/models` and select either `OpenAI` or `OpenAI API EU`.
-
-The `openai-api` aliases are hand-curated. `openai-api/gpt-5.5` defines explicit model pricing because custom provider aliases do not inherit the built-in OpenAI pricing metadata used by `opencode stats`.
 
 Auth setup:
 
 ```bash
 opencode auth login -p openai
 # choose ChatGPT Plus/Pro for subscription auth
-
-export OPENAI_API_KEY="sk-..."
-# used by openai-api/gpt-5.4 and openai-api/gpt-5.5
 ```
+
+`enabled_providers` is set to `["openai"]`; API-key providers are intentionally unavailable unless that allowlist is changed.
 
 ## Custom Commands
 
@@ -72,9 +68,9 @@ Instructions for the command in markdown...
 
 - `commit.md` — Guided git commit (routes to `@commit`, subtask)
 - `crawl.md` — Crawl a URL with crawl4ai (routes to `@crawl`, subtask)
-- `research_codebase.md` — Document codebase through parallel research (subtask)
-- `create_plan.md` — Create detailed implementation plans
-- `learn.md` — Learn from documentation
+- `research_codebase.md` — Document codebase through parallel research (`openai/gpt-5.3-codex`)
+- `create_plan.md` — Create detailed implementation plans (`@plan`, `openai/gpt-5.5`)
+- `learn.md` — Extract non-obvious learnings into AGENTS.md files (`openai/gpt-5.4-mini-fast`)
 
 ## Custom Agents (Pattern B — Self-Contained .md)
 
@@ -111,7 +107,31 @@ You are an agent that does X.
 ...
 ```
 
-No agent blocks needed in `opencode.jsonc` — agents are auto-discovered from the `agent/` directory.
+Custom agent blocks are not needed in `opencode.jsonc` because agents are auto-discovered from the `agent/` directory.
+
+Built-in agents are configured in `opencode.jsonc`:
+
+| Agent | Model | Purpose |
+| ----- | ----- | ------- |
+| `build` | `openai/gpt-5.3-codex` | Code implementation |
+| `plan` | `openai/gpt-5.5` | Planning and no-edit reasoning |
+| `general` | `openai/gpt-5.5` | Broad subagent work |
+| `explore` | `openai/gpt-5.4-mini-fast` | Fast repo exploration |
+| `scout` | `openai/gpt-5.3-codex` | Manual broad reference/repo scouting |
+| `title` | `openai/gpt-5.4-mini-fast` | Session titles |
+| `summary` | `openai/gpt-5.4-mini-fast` | Lightweight summaries |
+| `compaction` | `openai/gpt-5.4` | Conversation compaction |
+
+Custom agents set their model in frontmatter:
+
+| Agent | Model | Purpose |
+| ----- | ----- | ------- |
+| `commit` | `openai/gpt-5.4-mini-fast` | Git commit planning and execution |
+| `crawl` | `openai/gpt-5.4-mini-fast` | crawl4ai execution |
+| `librarian` | `openai/gpt-5.3-codex` | External source/GitHub forensics with permalinks |
+| `web-researcher` | `openai/gpt-5.5` | Web documentation and synthesis |
+
+Role split: `@scout` is user-invoked for broad reconnaissance, while `librarian` is for source-backed implementation and change-history answers.
 
 ## Permissions (v1.1.1+)
 

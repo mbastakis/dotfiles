@@ -1,9 +1,9 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  // Default to the built-in OpenAI provider, which can use ChatGPT Plus/Pro
-  // subscription auth. Use openai-api/gpt-5.4 or openai-api/gpt-5.5 when you
-  // want API-key billing.
+  // Use only the built-in OpenAI provider backed by OAuth subscription auth.
   "model": "openai/gpt-5.5",
+  "small_model": "openai/gpt-5.4-mini-fast",
+  "enabled_providers": ["openai"],
   "autoshare": false,
   "share": "manual",
   "autoupdate": true,
@@ -16,32 +16,31 @@
         "baseURL": "https://eu.api.openai.com/v1",
       },
     },
-    "openai-api": {
-      "npm": "@ai-sdk/openai",
-      "name": "OpenAI API EU",
-      "env": ["OPENAI_API_KEY"],
-      "options": {
-        "baseURL": "https://eu.api.openai.com/v1",
-      },
-      "models": {
-        "gpt-5.4": {
-          "name": "GPT-5.4 (API)",
-        },
-        "gpt-5.5": {
-          "name": "GPT-5.5 (API)",
-          "cost": {
-            // USD per 1M tokens. Keep in sync with models.dev openai/gpt-5.5.
-            "input": 5,
-            "output": 30,
-            "cache_read": 0.5,
-            "context_over_200k": {
-              "input": 10,
-              "output": 45,
-              "cache_read": 1,
-            },
-          },
-        },
-      },
+  },
+  "agent": {
+    "build": {
+      "model": "openai/gpt-5.3-codex",
+    },
+    "plan": {
+      "model": "openai/gpt-5.5",
+    },
+    "general": {
+      "model": "openai/gpt-5.5",
+    },
+    "explore": {
+      "model": "openai/gpt-5.4-mini-fast",
+    },
+    "scout": {
+      "model": "openai/gpt-5.3-codex",
+    },
+    "title": {
+      "model": "openai/gpt-5.4-mini-fast",
+    },
+    "summary": {
+      "model": "openai/gpt-5.4-mini-fast",
+    },
+    "compaction": {
+      "model": "openai/gpt-5.4",
     },
   },
   "permission": {

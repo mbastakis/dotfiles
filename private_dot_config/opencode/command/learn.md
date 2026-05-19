@@ -1,5 +1,6 @@
 ---
 description: Extract non-obvious learnings from session to AGENTS.md files
+model: openai/gpt-5.4-mini-fast
 ---
 
 # Extract Learnings

@@ -58,7 +58,7 @@ alias tls="tmux ls"
 # Opencode
 alias oc="opencode-launch"
 alias oc-sub="opencode-launch -m openai/gpt-5.5"
-alias oc-api="opencode-launch -m openai-api/gpt-5.5"
+alias oc-oauth="opencode-launch -m openai/gpt-5.5"
 alias oca="OPENCODE_PERMISSION='{\"*\": \"allow\"}' opencode-launch"
 alias occ="opencode-launch --continue"
 
