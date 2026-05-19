@@ -142,7 +142,7 @@ Prefix: **`Ctrl-a`**
 | Alias | Action | Source |
 | ----- | ------ | ------ |
 | `oc-sub` | OpenCode with subscription-backed `openai/gpt-5.5` | `private_dot_config/zsh/aliases.zsh:60` |
-| `oc-api` | OpenCode with API-key-backed `openai-api/gpt-5.5` | `private_dot_config/zsh/aliases.zsh:61` |
+| `oc-oauth` | OpenCode with OAuth subscription-backed `openai/gpt-5.5` | `private_dot_config/zsh/aliases.zsh:61` |
 
 ### Word Movement
 

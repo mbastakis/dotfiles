@@ -33,7 +33,7 @@ _Reference: `private_dot_config/opencode/README.md:5`_
 
 ## Profiles
 
-- `oc` uses the exported default profile rooted at `~/.config/opencode/`. `private_dot_config/zsh/exports.zsh:25`, `private_dot_config/zsh/aliases.zsh:59`
+- `oc` uses the exported default profile rooted at `~/.config/opencode/`. `oc-sub` and `oc-oauth` explicitly select `openai/gpt-5.5`. `private_dot_config/zsh/exports.zsh:25`, `private_dot_config/zsh/aliases.zsh:59`
 
 ## Config Model
 
@@ -42,29 +42,30 @@ The main config (`opencode.jsonc`) defines:
 | Section | Purpose |
 |---|---|
 | `model` | Primary model (`openai/gpt-5.5`, subscription-backed by default) |
-| `provider.openai-api` | OpenAI API-key aliases (`openai-api/gpt-5.4`, `openai-api/gpt-5.5`) using `OPENAI_API_KEY` |
-| `theme` | `catppuccin` |
+| `small_model` | Lightweight fallback model (`openai/gpt-5.4-mini-fast`) |
+| `enabled_providers` | Restricts available providers to OAuth-backed `openai` |
+| `provider.openai` | OpenAI OAuth provider options, including EU base URL |
+| `agent` | Built-in agent model routing |
 | `mcp` | Remote MCP servers, disabled by default unless explicitly enabled |
 | `plugin` | Community plugins loaded from npm (for example `opencode-notifier`) |
 | `permission` | Granular bash command permission rules |
 
-Agent definitions live in `agent/*.md` as self-contained markdown files with YAML frontmatter (Pattern B). No agent blocks in `opencode.jsonc`.
+Custom agent definitions live in `agent/*.md` as self-contained markdown files with YAML frontmatter (Pattern B). Built-in agent model overrides live in `opencode.jsonc`.
 
 _Reference: `private_dot_config/opencode/opencode.jsonc:1`_
 
-## OpenAI Auth Selection
+## OpenAI Auth
 
-OpenAI subscription and API-key usage are split across two provider IDs:
+Only the built-in OpenAI provider is enabled, so configured models use OAuth subscription auth from `opencode auth login -p openai`.
 
-| Model ID | Auth Source | Use Case |
-|---|---|---|
-| `openai/gpt-5.5` | Built-in OpenAI auth via `opencode auth login -p openai` | ChatGPT Plus/Pro subscription |
-| `openai-api/gpt-5.4` | `OPENAI_API_KEY` or stored `openai-api` key | OpenAI API billing |
-| `openai-api/gpt-5.5` | `OPENAI_API_KEY` or stored `openai-api` key | OpenAI API billing |
+| Model ID | Use Case |
+|---|---|
+| `openai/gpt-5.5` | Default high-quality fallback, planning, broad research |
+| `openai/gpt-5.3-codex` | Coding, source research, repo scouting |
+| `openai/gpt-5.4-mini-fast` | Fast bounded tasks, exploration, titles, small model fallback |
+| `openai/gpt-5.4` | Conversation compaction |
 
-Switch per run with `opencode -m openai/gpt-5.5`, `opencode -m openai-api/gpt-5.4`, or `opencode -m openai-api/gpt-5.5`. Shell aliases make the split explicit: `oc-sub` launches subscription-backed `openai/gpt-5.5`, and `oc-api` launches API-key-backed `openai-api/gpt-5.5`. In the TUI, use `/models` and choose either OpenAI or OpenAI API EU.
-
-The `openai-api` aliases are hand-curated. `openai-api/gpt-5.5` includes explicit USD-per-1M-token pricing so `opencode stats` can show spend; custom aliases do not inherit pricing metadata from the built-in OpenAI provider.
+The `-fast` suffix is an actual OAuth-provider model variant. It is used where lower latency matters more than maximum reasoning depth. `enabled_providers` is set to `["openai"]`; API-key providers are intentionally unavailable unless that allowlist is changed. Shell aliases `oc-sub` and `oc-oauth` both launch subscription-backed `openai/gpt-5.5`.
 
 ## MCP Servers
 
@@ -100,16 +101,31 @@ _Reference: `private_dot_config/opencode/README.md:69`_
 
 ## Agents
 
-4 self-contained agents defined with YAML frontmatter (Pattern B — auto-discovered from `agent/`):
+4 self-contained custom agents are defined with YAML frontmatter (Pattern B — auto-discovered from `agent/`). Built-in agents are overridden in `opencode.jsonc`.
 
 | Agent | Mode | Purpose | Key Constraints |
 |---|---|---|---|
-| `commit` | subagent | Git commit with pre-approved commands | Haiku model, minimal tools, git-only bash |
-| `crawl` | subagent | Web crawling with crawl4ai | Haiku model, deny rm/curl/ssh/sudo |
-| `librarian` | subagent | Research source code via `gh` CLI | Read-only, no file writes |
-| `web-researcher` | subagent | Web research via DuckDuckGo/webfetch | Read-only, no file writes |
+| `commit` | subagent | Git commit with pre-approved commands | `openai/gpt-5.4-mini-fast`, minimal tools, git-only bash |
+| `crawl` | subagent | Web crawling with crawl4ai | `openai/gpt-5.4-mini-fast`, deny rm/curl/ssh/sudo |
+| `librarian` | subagent | External source/GitHub forensics with permalink evidence | `openai/gpt-5.3-codex`, read-only, no file writes |
+| `web-researcher` | subagent | Web research via DuckDuckGo/webfetch | `openai/gpt-5.5`, read-only, no file writes |
+
+Role split: `@scout` is user-invoked for broad reconnaissance, while `librarian` is used for source-backed implementation and change-history analysis.
 
 Each agent file contains its own description, mode, model, temperature, tools, and permissions in YAML frontmatter, plus the prompt body below.
+
+Built-in model overrides:
+
+| Agent | Model | Purpose |
+|---|---|---|
+| `build` | `openai/gpt-5.3-codex` | Code implementation |
+| `plan` | `openai/gpt-5.5` | Planning and no-edit reasoning |
+| `general` | `openai/gpt-5.5` | Broad subagent work |
+| `explore` | `openai/gpt-5.4-mini-fast` | Fast repo exploration |
+| `scout` | `openai/gpt-5.3-codex` | Manual broad reference/repo scouting |
+| `title` | `openai/gpt-5.4-mini-fast` | Session titles |
+| `summary` | `openai/gpt-5.4-mini-fast` | Lightweight summaries |
+| `compaction` | `openai/gpt-5.4` | Conversation compaction |
 
 _Reference: `private_dot_config/opencode/AGENTS.md:1`_
 
@@ -119,9 +135,9 @@ _Reference: `private_dot_config/opencode/AGENTS.md:1`_
 |---|---|---|
 | `/commit` | `command/commit.md` | Guided git commit (subtask, routes to `@commit`) |
 | `/crawl` | `command/crawl.md` | Crawl a URL with crawl4ai (subtask, routes to `@crawl`) |
-| `/learn` | `command/learn.md` | Learn from documentation |
-| `/create_plan` | `command/create_plan.md` | Create an implementation plan |
-| `/research_codebase` | `command/research_codebase.md` | Research the current codebase (subtask) |
+| `/learn` | `command/learn.md` | Extract AGENTS.md learnings with `openai/gpt-5.4-mini-fast` |
+| `/create_plan` | `command/create_plan.md` | Create an implementation plan with `@plan` and `openai/gpt-5.5` |
+| `/research_codebase` | `command/research_codebase.md` | Research the current codebase with `openai/gpt-5.3-codex` |
 
 _Reference: `private_dot_config/opencode/README.md:24`_
 
