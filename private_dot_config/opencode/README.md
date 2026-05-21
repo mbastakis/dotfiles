@@ -26,9 +26,8 @@ Only the built-in OpenAI provider is enabled, so all configured models use OAuth
 | Model ID | Purpose |
 | -------- | ------- |
 | `openai/gpt-5.5` | Default high-quality fallback, planning, broad research |
-| `openai/gpt-5.3-codex` | Coding, source research, repo scouting |
 | `openai/gpt-5.4-mini-fast` | Fast bounded tasks, exploration, titles, small model fallback |
-| `openai/gpt-5.4` | Conversation compaction |
+| `openai/gpt-5.4` | Source research, repo scouting, conversation compaction |
 
 The `-fast` suffix is an actual OAuth-provider model variant. It is used where lower latency matters more than maximum reasoning depth.
 
@@ -68,7 +67,7 @@ Instructions for the command in markdown...
 
 - `commit.md` — Guided git commit (routes to `@commit`, subtask)
 - `crawl.md` — Crawl a URL with crawl4ai (routes to `@crawl`, subtask)
-- `research_codebase.md` — Document codebase through parallel research (`openai/gpt-5.3-codex`)
+- `research_codebase.md` — Document codebase through parallel research (`openai/gpt-5.4`)
 - `create_plan.md` — Create detailed implementation plans (`@plan`, `openai/gpt-5.5`)
 - `learn.md` — Extract non-obvious learnings into AGENTS.md files (`openai/gpt-5.4-mini-fast`)
 - `session_analysis.md` — Export and analyze a previous OpenCode session (`@scout`, subtask)
@@ -110,15 +109,14 @@ You are an agent that does X.
 
 Custom agent blocks are not needed in `opencode.jsonc` because agents are auto-discovered from the `agent/` directory.
 
-Built-in agents are configured in `opencode.jsonc`:
+Built-in agents with explicit model overrides are configured in `opencode.jsonc`. `build` uses the global default model.
 
 | Agent | Model | Purpose |
 | ----- | ----- | ------- |
-| `build` | `openai/gpt-5.3-codex` | Code implementation |
 | `plan` | `openai/gpt-5.5` | Planning and no-edit reasoning |
 | `general` | `openai/gpt-5.5` | Broad subagent work |
 | `explore` | `openai/gpt-5.4-mini-fast` | Fast repo exploration |
-| `scout` | `openai/gpt-5.3-codex` | Manual broad reference/repo scouting |
+| `scout` | `openai/gpt-5.4` | Manual broad reference/repo scouting |
 | `title` | `openai/gpt-5.4-mini-fast` | Session titles |
 | `summary` | `openai/gpt-5.4-mini-fast` | Lightweight summaries |
 | `compaction` | `openai/gpt-5.4` | Conversation compaction |
@@ -129,7 +127,7 @@ Custom agents set their model in frontmatter:
 | ----- | ----- | ------- |
 | `commit` | `openai/gpt-5.4-mini-fast` | Git commit planning and execution |
 | `crawl` | `openai/gpt-5.4-mini-fast` | crawl4ai execution |
-| `librarian` | `openai/gpt-5.3-codex` | External source/GitHub forensics with permalinks |
+| `librarian` | `openai/gpt-5.4` | External source/GitHub forensics with permalinks |
 | `web-researcher` | `openai/gpt-5.5` | Web documentation and synthesis |
 
 Role split: `@scout` is user-invoked for broad reconnaissance, while `librarian` is for source-backed implementation and change-history answers.

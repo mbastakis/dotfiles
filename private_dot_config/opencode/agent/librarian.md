@@ -5,7 +5,7 @@ description: >-
   X?", regressions, and behavior changes. Returns evidence with
   commit-pinned GitHub permalinks.
 mode: subagent
-model: openai/gpt-5.3-codex
+model: openai/gpt-5.4
 temperature: 0.1
 tools:
   write: false

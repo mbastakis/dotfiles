@@ -46,7 +46,7 @@ The main config (`opencode.jsonc`) defines:
 | `small_model` | Lightweight fallback model (`openai/gpt-5.4-mini-fast`) |
 | `enabled_providers` | Restricts available providers to OAuth-backed `openai` |
 | `provider.openai` | OpenAI OAuth provider options, including EU base URL |
-| `agent` | Built-in agent model routing |
+| `agent` | Explicit built-in agent model overrides |
 | `mcp` | Remote MCP servers, disabled by default unless explicitly enabled |
 | `plugin` | Community plugins loaded from npm (for example `opencode-notifier`) |
 | `permission` | Granular bash command permission rules |
@@ -62,9 +62,8 @@ Only the built-in OpenAI provider is enabled, so configured models use OAuth sub
 | Model ID | Use Case |
 |---|---|
 | `openai/gpt-5.5` | Default high-quality fallback, planning, broad research |
-| `openai/gpt-5.3-codex` | Coding, source research, repo scouting |
 | `openai/gpt-5.4-mini-fast` | Fast bounded tasks, exploration, titles, small model fallback |
-| `openai/gpt-5.4` | Conversation compaction |
+| `openai/gpt-5.4` | Source research, repo scouting, conversation compaction |
 
 The `-fast` suffix is an actual OAuth-provider model variant. It is used where lower latency matters more than maximum reasoning depth. `enabled_providers` is set to `["openai"]`; API-key providers are intentionally unavailable unless that allowlist is changed. Shell aliases `oc-sub` and `oc-oauth` both launch subscription-backed `openai/gpt-5.5`.
 
@@ -102,28 +101,27 @@ _Reference: `private_dot_config/opencode/README.md:69`_
 
 ## Agents
 
-4 self-contained custom agents are defined with YAML frontmatter (Pattern B — auto-discovered from `agent/`). Built-in agents are overridden in `opencode.jsonc`.
+4 self-contained custom agents are defined with YAML frontmatter (Pattern B — auto-discovered from `agent/`). Explicit built-in agent overrides live in `opencode.jsonc`.
 
 | Agent | Mode | Purpose | Key Constraints |
 |---|---|---|---|
 | `commit` | subagent | Git commit with pre-approved commands | `openai/gpt-5.4-mini-fast`, minimal tools, git-only bash |
 | `crawl` | subagent | Web crawling with crawl4ai | `openai/gpt-5.4-mini-fast`, deny rm/curl/ssh/sudo |
-| `librarian` | subagent | External source/GitHub forensics with permalink evidence | `openai/gpt-5.3-codex`, read-only, no file writes |
+| `librarian` | subagent | External source/GitHub forensics with permalink evidence | `openai/gpt-5.4`, read-only, no file writes |
 | `web-researcher` | subagent | Web research via DuckDuckGo/webfetch | `openai/gpt-5.5`, read-only, no file writes |
 
 Role split: `@scout` is user-invoked for broad reconnaissance, while `librarian` is used for source-backed implementation and change-history analysis.
 
 Each agent file contains its own description, mode, model, temperature, tools, and permissions in YAML frontmatter, plus the prompt body below.
 
-Built-in model overrides:
+Built-in model overrides. `build` uses the global default model.
 
 | Agent | Model | Purpose |
 |---|---|---|
-| `build` | `openai/gpt-5.3-codex` | Code implementation |
 | `plan` | `openai/gpt-5.5` | Planning and no-edit reasoning |
 | `general` | `openai/gpt-5.5` | Broad subagent work |
 | `explore` | `openai/gpt-5.4-mini-fast` | Fast repo exploration |
-| `scout` | `openai/gpt-5.3-codex` | Manual broad reference/repo scouting |
+| `scout` | `openai/gpt-5.4` | Manual broad reference/repo scouting |
 | `title` | `openai/gpt-5.4-mini-fast` | Session titles |
 | `summary` | `openai/gpt-5.4-mini-fast` | Lightweight summaries |
 | `compaction` | `openai/gpt-5.4` | Conversation compaction |
@@ -138,7 +136,7 @@ _Reference: `private_dot_config/opencode/AGENTS.md:1`_
 | `/crawl` | `command/crawl.md` | Crawl a URL with crawl4ai (subtask, routes to `@crawl`) |
 | `/learn` | `command/learn.md` | Extract AGENTS.md learnings with `openai/gpt-5.4-mini-fast` |
 | `/create_plan` | `command/create_plan.md` | Create an implementation plan with `@plan` and `openai/gpt-5.5` |
-| `/research_codebase` | `command/research_codebase.md` | Research the current codebase with `openai/gpt-5.3-codex` |
+| `/research_codebase` | `command/research_codebase.md` | Research the current codebase with `openai/gpt-5.4` |
 | `/session_analysis` | `command/session_analysis.md` | Export and analyze a previous OpenCode session with `@scout` |
 
 _Reference: `private_dot_config/opencode/README.md:24`_
