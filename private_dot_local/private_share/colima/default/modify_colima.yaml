@@ -1,3 +1,6 @@
+{{- /* chezmoi:modify-template */ -}}
+{{- if .chezmoi.stdin -}}
+{{ .chezmoi.stdin }}{{- else -}}
 # Number of CPUs to be allocated to the virtual machine.
 # Default: 2
 cpu: 2
@@ -281,3 +284,4 @@ rootDisk: 20
 #
 # Default: {}
 env: {}
+{{ end -}}

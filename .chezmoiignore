@@ -45,6 +45,7 @@ Cargo.lock
 .config/aws-login/cache/**
 .config/carapace/.versions
 .config/glab-cli/recover/**
+.kube/
 .config/navi/navi.log
 .config/nvim/lazy-lock.json
 .config/opencode/package.json

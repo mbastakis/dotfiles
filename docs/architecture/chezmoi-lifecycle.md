@@ -162,6 +162,8 @@ _Reference: `AGENTS.md:155`_
 - `.chezmoiignore` is rendered as a template; missing data keys in conditions can break unrelated commands.
 - Use `chezmoi apply --dry-run --force` for non-interactive checks; without `--force`, changed files may trigger TTY prompts.
 - `chezmoi diff` is most reliable with absolute target paths when diffing a single file.
+- `textconv` patterns also match absolute target paths, not the relative paths printed in diff headers.
+- Kubeconfig and Colima files are bootstrap seeds once missing; existing live files are preserved because external CLIs own ongoing runtime state.
 - OS guards at the top of every `.tmpl` script: `{{- if ne .chezmoi.os "darwin" }} exit 0 {{- end }}`.
 - Whitespace control: always use `{{-` and `-}}` to trim surrounding whitespace in template tags.
 

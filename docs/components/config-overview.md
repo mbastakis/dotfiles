@@ -20,7 +20,9 @@ Summary of notable config areas managed by chezmoi, with links to dedicated docs
 | **msmtp** | `private_dot_config/msmtp/private_config.tmpl` | [email.md](email.md) | SMTP account config rendered from Bitwarden secrets |
 | **isync (mbsync)** | `private_dot_config/isyncrc.tmpl` | [email.md](email.md) | IMAP sync channels and Maildir mapping |
 | **abook** | `private_dot_config/abook/`, `private_dot_local/private_share/abook/` | [email.md](email.md) | Local address book split across XDG config/data paths |
-| Colima | `private_dot_local/private_share/colima/` | -- | Container runtime config and VM state |
+| Colima | `private_dot_local/private_share/colima/` | -- | Container runtime seed; live VM config is preserved after creation |
+| Kubernetes | `private_dot_config/kube/` | -- | DT work kubeconfig seeds; live files are preserved after `kubectl`/`aws`/`kind` rewrites |
+| aws-login | `private_dot_config/aws-login/` | -- | Work AWS profiles and per-profile `KUBECONFIG` wiring |
 | Mise | `private_dot_config/mise/config.toml` (global) + `mise.toml` (repo root, source-only) | -- | Tool/version manager; repo-local pins `go-task` |
 | Taskfile | `Taskfile.yml` (repo root, source-only) | -- | go-task runner for chezmoi repo workflows (apply/diff/lint/docs) |
 | Ghostty | `private_dot_config/ghostty/` | -- | Terminal emulator |
@@ -37,7 +39,7 @@ Summary of notable config areas managed by chezmoi, with links to dedicated docs
 | Finicky | `private_dot_config/finicky/` | -- | macOS browser routing (Darwin only) |
 | SketchyBar | `private_dot_config/sketchybar/` | -- | macOS status bar (Darwin only) |
 | Raycast | `private_dot_config/raycast/` | -- | macOS launcher (partial, extensions ignored) |
-| glab CLI | `private_dot_config/glab-cli/` | -- | GitLab CLI (DT work profile only) |
+| glab CLI | `private_dot_config/glab-cli/` | -- | GitLab CLI config seed; live auth-bearing config is preserved (DT work profile only) |
 | Diffnav | `private_dot_config/diffnav/` | -- | Git diff TUI pager (file tree + delta rendering), invoked via `smart-diffnav` wrapper for TTY-aware behavior |
 | gh-dash | `private_dot_config/gh-dash/` | -- | GitHub dashboard TUI (`gh` extension, Catppuccin Mocha Mauve) |
 

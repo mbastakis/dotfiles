@@ -1,35 +1,35 @@
 {{- /* chezmoi:modify-template */ -}}
-{{- /* Desired glab config — chezmoi enforces these values.                  */ -}}
-{{- /* Fields glab writes on its own (e.g. last_update_check_timestamp) are  */ -}}
-{{- /* preserved via merge so chezmoi diff stays clean between applies.      */ -}}
-{{- $desired := dict
-      "git_protocol"      "https"
-      "glamour_style"     "dark"
-      "check_update"      true
-      "display_hyperlinks" true
-      "host"              "gitlab.devops.telekom.de"
-      "glab_pager"        "bat"
-      "hostname"          "gitlab.devops.telekom.de"
-      "no_prompt"         false
-      "telemetry"         false
-      "hosts" (dict
-        "gitlab.com" (dict
-          "api_protocol"               "ssh"
-          "api_host"                   "gitlab.com"
-          "container_registry_domains" (list "gitlab.com" "gitlab.com:443" "registry.gitlab.com")
-        )
-        "gitlab.devops.telekom.de" (dict
-          "user"                       "michail.bastakis"
-          "email"                      "michail.bastakis@telekom.com"
-          "api_host"                   "gitlab.devops.telekom.de"
-          "git_protocol"               "https"
-          "api_protocol"               "https"
-          "container_registry_domains" (list "gitlab.devops.telekom.de" "gitlab.devops.telekom.de:443" "registry.gitlab.devops.telekom.de")
-        )
-      )
--}}
-{{- $current := dict -}}
-{{- with .chezmoi.stdin | fromYaml -}}
-{{-   $current = . -}}
+{{- if .chezmoi.stdin -}}
+{{ .chezmoi.stdin }}{{- else -}}
+{{- /*
+  Seed config for new machines. Existing glab config can contain auth fields
+  and timestamps written by glab, so the live file is preserved byte-for-byte.
+*/ -}}
+check_update: true
+display_hyperlinks: true
+git_protocol: https
+glab_pager: bat
+glamour_style: dark
+host: gitlab.devops.telekom.de
+hostname: gitlab.devops.telekom.de
+hosts:
+    gitlab.com:
+        api_host: gitlab.com
+        api_protocol: ssh
+        container_registry_domains:
+            - gitlab.com
+            - gitlab.com:443
+            - registry.gitlab.com
+    gitlab.devops.telekom.de:
+        api_host: gitlab.devops.telekom.de
+        api_protocol: https
+        container_registry_domains:
+            - gitlab.devops.telekom.de
+            - gitlab.devops.telekom.de:443
+            - registry.gitlab.devops.telekom.de
+        email: michail.bastakis@telekom.com
+        git_protocol: https
+        user: michail.bastakis
+no_prompt: false
+telemetry: false
 {{- end -}}
-{{- merge $desired $current | toYaml -}}

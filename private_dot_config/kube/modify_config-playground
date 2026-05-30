@@ -1,16 +1,10 @@
 {{- /* chezmoi:modify-template */ -}}
-{{- /*
-  Preserves current-context from the live kubeconfig while enforcing
-  canonical cluster/context/user definitions.
-*/ -}}
-{{- $preservedCtx := "playground" -}}
 {{- if .chezmoi.stdin -}}
-  {{- $cur := fromYaml .chezmoi.stdin -}}
-  {{- if $cur -}}
-    {{- $v := index $cur "current-context" -}}
-    {{- if $v -}}{{- $preservedCtx = $v -}}{{- end -}}
-  {{- end -}}
-{{- end -}}
+{{ .chezmoi.stdin }}{{- else -}}
+{{- /*
+  Seed config for new machines. Existing kubeconfigs are runtime state owned by
+  kubectl/aws/kind, so the live file is preserved byte-for-byte above.
+*/ -}}
 apiVersion: v1
 kind: Config
 clusters:
@@ -23,7 +17,7 @@ contexts:
     cluster: playground
     user: playground
   name: playground
-current-context: {{ $preservedCtx }}
+current-context: playground
 users:
 - name: playground
   user:
@@ -45,3 +39,4 @@ users:
       - json
       interactiveMode: IfAvailable
       provideClusterInfo: false
+{{- end -}}

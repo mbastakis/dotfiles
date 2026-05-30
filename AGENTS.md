@@ -111,7 +111,9 @@ Supports chezmoi template conditionals for OS-specific ignores.
 - For non-interactive checks, prefer `chezmoi apply --dry-run --force`; without `--force`, changed files may trigger TTY prompts and fail in headless shells.
 - In this repo, `chezmoi diff` is most reliable with absolute target paths (for example `/Users/mbastakis/.config/git/config`) when diffing a single file.
 - `Documents/notes/.obsidian/workspace.json` is volatile UI state (recent files/workspace layout) and should stay ignored to avoid noisy churn and accidental overwrite.
-- `glab` rewrites `last_update_check_timestamp` in `.config/glab-cli/config.yml`; expect frequent drift unless that field is ignored or normalized.
+- `glab` can write auth fields and `last_update_check_timestamp` in `.config/glab-cli/config.yml`; the modify template treats it as a bootstrap seed and preserves an existing live file.
+- Chezmoi `textconv` patterns match absolute target paths, not the relative paths displayed in `chezmoi diff` headers.
+- Kubeconfig and Colima files are bootstrap seeds after first creation; existing live files are preserved because `kubectl`, `aws`, `kind`, and Colima rewrite runtime state.
 - Any new repo-only directory (like `docs/`) must be added to `.chezmoiignore` or chezmoi will deploy it to `~/`. The ignore file uses target-state paths, so `docs/` not `literal_docs/`.
 
 ## Shell Script Conventions

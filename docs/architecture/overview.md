@@ -73,12 +73,22 @@ The `.chezmoiignore` file uses **target-state paths** (not source-state names) a
 
 - **Build artifacts:** `node_modules/`, `target/`, `__pycache__/`, lock files
 - **Caches:** `.cache/`, `.config/carapace/.versions`, `lazy-lock.json`, yazi plugins
-- **Runtime state:** `glab-cli/recover/`, `.obsidian/`, `.DS_Store`
+- **Runtime state:** `.kube/`, `glab-cli/recover/`, `.obsidian/`, `.DS_Store`
 - **Obsidian vault generated files:** Plugin binaries (`main.js`, `manifest.json`, `styles.css`), themes, icons, and `workspace.json` under `Documents/notes/.obsidian/` are ignored — only settings JSONs and plugin `data.json` files are managed
 - **Profile-conditional:** DT work configs (glab, git work config, GitLab SSH keys) excluded when profile is not `dt-work`
 - **OS-conditional:** macOS-only configs (Aerospace, Karabiner, Finicky, SketchyBar, Ghostty LaunchAgent, mail LaunchAgent) excluded on Linux
 
 _Reference: `.chezmoiignore:19`, `.chezmoiignore:54`_
+
+## Runtime-Owned Files
+
+Some files are useful as bootstrap seeds but are owned by CLIs after first use:
+
+- `~/.config/kube/config-*` seeds DT work kubeconfigs, then preserves the live file because `kubectl`, `aws`, and `kind` rewrite contexts and serialization.
+- `~/.local/share/colima/default/colima.yaml` seeds Colima defaults, then preserves the live VM config because Colima rewrites generated formatting.
+- `~/.config/glab-cli/config.yml` seeds glab settings, then preserves the live file because glab can store auth fields and timestamps there.
+
+`textconv` rules in `.chezmoi.toml.tmpl` normalize formatting-only diffs for YAML files. Chezmoi matches these patterns against absolute target paths.
 
 ## Profile System
 
