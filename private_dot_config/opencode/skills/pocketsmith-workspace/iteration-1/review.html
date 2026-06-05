@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eval Review</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js" integrity="sha384-EnyY0/GSHQGSxSgMwaIPzSESbqoOLSexfnSMN2AP+39Ckmn92stwABZynq1JyzdT" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg: #faf9f5;
+      --surface: #ffffff;
+      --border: #e8e6dc;
+      --text: #141413;
+      --text-muted: #b0aea5;
+      --accent: #d97757;
+      --accent-hover: #c4613f;
+      --green: #788c5d;
+      --green-bg: #eef2e8;
+      --red: #c44;
+      --red-bg: #fceaea;
+      --header-bg: #141413;
+      --header-text: #faf9f5;
+      --radius: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lora', Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---- Header ---- */
+    .header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    .header .instructions {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-top: 0.25rem;
+    }
+    .header .progress {
+      font-size: 0.875rem;
+      opacity: 0.8;
+      text-align: right;
+    }
+
+    /* ---- Main content ---- */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* ---- Sections ---- */
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      flex-shrink: 0;
+    }
+    .section-header {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .section-body {
+      padding: 1rem;
+    }
+
+    /* ---- Config badge ---- */
+    .config-badge {
+      display: inline-block;
+      padding: 0.2rem 0.625rem;
+      border-radius: 9999px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-left: 0.75rem;
+      vertical-align: middle;
+    }
+    .config-badge.config-primary {
+      background: rgba(33, 150, 243, 0.12);
+      color: #1976d2;
+    }
+    .config-badge.config-baseline {
+      background: rgba(255, 193, 7, 0.15);
+      color: #f57f17;
+    }
+
+    /* ---- Prompt ---- */
+    .prompt-text {
+      white-space: pre-wrap;
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    /* ---- Outputs ---- */
+    .output-file {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .output-file + .output-file {
+      margin-top: 1rem;
+    }
+    .output-file-header {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .output-file-header .dl-btn {
+      font-size: 0.7rem;
+      color: var(--accent);
+      text-decoration: none;
+      cursor: pointer;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+    .output-file-header .dl-btn:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+    .output-file-content {
+      padding: 0.75rem;
+      overflow-x: auto;
+    }
+    .output-file-content pre {
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+    }
+    .output-file-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .output-file-content iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+    }
+    .output-file-content table {
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+      width: 100%;
+    }
+    .output-file-content table td,
+    .output-file-content table th {
+      border: 1px solid var(--border);
+      padding: 0.375rem 0.5rem;
+      text-align: left;
+    }
+    .output-file-content table th {
+      background: var(--bg);
+      font-weight: 600;
+    }
+    .output-file-content .download-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+    .output-file-content .download-link:hover {
+      background: var(--border);
+    }
+    .empty-state {
+      color: var(--text-muted);
+      font-style: italic;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    /* ---- Feedback ---- */
+    .prev-feedback {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.625rem 0.75rem;
+      margin-top: 0.75rem;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .prev-feedback-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.25rem;
+      color: var(--text-muted);
+    }
+    .feedback-textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      resize: vertical;
+      color: var(--text);
+    }
+    .feedback-textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    .feedback-status {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      min-height: 1.1em;
+    }
+
+    /* ---- Grades (collapsible) ---- */
+    .grades-toggle {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .grades-toggle:hover {
+      color: var(--accent);
+    }
+    .grades-toggle .arrow {
+      margin-right: 0.5rem;
+      transition: transform 0.15s;
+      font-size: 0.75rem;
+    }
+    .grades-toggle .arrow.open {
+      transform: rotate(90deg);
+    }
+    .grades-content {
+      display: none;
+      margin-top: 0.75rem;
+    }
+    .grades-content.open {
+      display: block;
+    }
+    .grades-summary {
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .grade-badge {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .grade-pass { background: var(--green-bg); color: var(--green); }
+    .grade-fail { background: var(--red-bg); color: var(--red); }
+    .assertion-list {
+      list-style: none;
+    }
+    .assertion-item {
+      padding: 0.625rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8125rem;
+    }
+    .assertion-item:last-child { border-bottom: none; }
+    .assertion-status {
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+    .assertion-status.pass { color: var(--green); }
+    .assertion-status.fail { color: var(--red); }
+    .assertion-evidence {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      padding-left: 1.5rem;
+    }
+
+    /* ---- View tabs ---- */
+    .view-tabs {
+      display: flex;
+      gap: 0;
+      padding: 0 2rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .view-tab {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.625rem 1.25rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+    }
+    .view-tab:hover { color: var(--text); }
+    .view-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    .view-panel { display: none; }
+    .view-panel.active { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+
+    /* ---- Benchmark view ---- */
+    .benchmark-view {
+      padding: 1.5rem 2rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .benchmark-table {
+      border-collapse: collapse;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.8125rem;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+    .benchmark-table th, .benchmark-table td {
+      padding: 0.625rem 0.75rem;
+      text-align: left;
+      border: 1px solid var(--border);
+    }
+    .benchmark-table th {
+      font-family: 'Poppins', sans-serif;
+      background: var(--header-bg);
+      color: var(--header-text);
+      font-weight: 500;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .benchmark-table tr:hover { background: var(--bg); }
+    .benchmark-table tr.benchmark-row-with { background: rgba(33, 150, 243, 0.06); }
+    .benchmark-table tr.benchmark-row-without { background: rgba(255, 193, 7, 0.06); }
+    .benchmark-table tr.benchmark-row-with:hover { background: rgba(33, 150, 243, 0.12); }
+    .benchmark-table tr.benchmark-row-without:hover { background: rgba(255, 193, 7, 0.12); }
+    .benchmark-table tr.benchmark-row-avg { font-weight: 600; border-top: 2px solid var(--border); }
+    .benchmark-table tr.benchmark-row-avg.benchmark-row-with { background: rgba(33, 150, 243, 0.12); }
+    .benchmark-table tr.benchmark-row-avg.benchmark-row-without { background: rgba(255, 193, 7, 0.12); }
+    .benchmark-delta-positive { color: var(--green); font-weight: 600; }
+    .benchmark-delta-negative { color: var(--red); font-weight: 600; }
+    .benchmark-notes {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+    }
+    .benchmark-notes h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+    .benchmark-notes ul {
+      list-style: disc;
+      padding-left: 1.25rem;
+    }
+    .benchmark-notes li {
+      font-size: 0.8125rem;
+      line-height: 1.6;
+      margin-bottom: 0.375rem;
+    }
+    .benchmark-empty {
+      color: var(--text-muted);
+      font-style: italic;
+      text-align: center;
+      padding: 3rem;
+    }
+
+    /* ---- Navigation ---- */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+    .nav-btn {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text);
+      transition: all 0.15s;
+    }
+    .nav-btn:hover:not(:disabled) {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .nav-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .done-btn {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+    .done-btn:hover {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .done-btn.ready {
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+    }
+    .done-btn.ready:hover {
+      background: var(--accent-hover);
+    }
+    /* ---- Done overlay ---- */
+    .done-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+    .done-overlay.visible {
+      display: flex;
+    }
+    .done-card {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 2rem 3rem;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 500px;
+    }
+    .done-card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .done-card p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+    .done-card .btn-row {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .done-card button {
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    .done-card button:hover {
+      background: var(--bg);
+    }
+    /* ---- Toast ---- */
+    .toast {
+      position: fixed;
+      bottom: 5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 0.625rem 1.25rem;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 200;
+    }
+    .toast.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" style="height:100vh; display:flex; flex-direction:column;">
+    <div class="header">
+      <div>
+        <h1>Eval Review: <span id="skill-name"></span></h1>
+        <div class="instructions">Review each output and leave feedback below. Navigate with arrow keys or buttons. When done, copy feedback and paste into Claude Code.</div>
+      </div>
+      <div class="progress" id="progress"></div>
+    </div>
+
+    <!-- View tabs (only shown when benchmark data exists) -->
+    <div class="view-tabs" id="view-tabs" style="display:none;">
+      <button class="view-tab active" onclick="switchView('outputs')">Outputs</button>
+      <button class="view-tab" onclick="switchView('benchmark')">Benchmark</button>
+    </div>
+
+    <!-- Outputs panel (qualitative review) -->
+    <div class="view-panel active" id="panel-outputs">
+    <div class="main">
+      <!-- Prompt -->
+      <div class="section">
+        <div class="section-header">Prompt <span class="config-badge" id="config-badge" style="display:none;"></span></div>
+        <div class="section-body">
+          <div class="prompt-text" id="prompt-text"></div>
+        </div>
+      </div>
+
+      <!-- Outputs -->
+      <div class="section">
+        <div class="section-header">Output</div>
+        <div class="section-body" id="outputs-body">
+          <div class="empty-state">No output files found</div>
+        </div>
+      </div>
+
+      <!-- Previous Output (collapsible) -->
+      <div class="section" id="prev-outputs-section" style="display:none;">
+        <div class="section-header">
+          <div class="grades-toggle" onclick="togglePrevOutputs()">
+            <span class="arrow" id="prev-outputs-arrow">&#9654;</span>
+            Previous Output
+          </div>
+        </div>
+        <div class="grades-content" id="prev-outputs-content"></div>
+      </div>
+
+      <!-- Grades (collapsible) -->
+      <div class="section" id="grades-section" style="display:none;">
+        <div class="section-header">
+          <div class="grades-toggle" onclick="toggleGrades()">
+            <span class="arrow" id="grades-arrow">&#9654;</span>
+            Formal Grades
+          </div>
+        </div>
+        <div class="grades-content" id="grades-content"></div>
+      </div>
+
+      <!-- Feedback -->
+      <div class="section">
+        <div class="section-header">Your Feedback</div>
+        <div class="section-body">
+          <textarea
+            class="feedback-textarea"
+            id="feedback"
+            placeholder="What do you think of this output? Any issues, suggestions, or things that look great?"
+          ></textarea>
+          <div class="feedback-status" id="feedback-status"></div>
+          <div class="prev-feedback" id="prev-feedback" style="display:none;">
+            <div class="prev-feedback-label">Previous feedback</div>
+            <div id="prev-feedback-text"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav" id="outputs-nav">
+      <button class="nav-btn" id="prev-btn" onclick="navigate(-1)">&#8592; Previous</button>
+      <button class="done-btn" id="done-btn" onclick="showDoneDialog()">Submit All Reviews</button>
+      <button class="nav-btn" id="next-btn" onclick="navigate(1)">Next &#8594;</button>
+    </div>
+    </div><!-- end panel-outputs -->
+
+    <!-- Benchmark panel (quantitative stats) -->
+    <div class="view-panel" id="panel-benchmark">
+      <div class="benchmark-view" id="benchmark-content">
+        <div class="benchmark-empty">No benchmark data available. Run a benchmark to see quantitative results here.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Done overlay -->
+  <div class="done-overlay" id="done-overlay">
+    <div class="done-card">
+      <h2>Review Complete</h2>
+      <p>Your feedback has been saved. Go back to your Claude Code session and tell Claude you're done reviewing.</p>
+      <div class="btn-row">
+        <button onclick="closeDoneDialog()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ---- Embedded data (injected by generate_review.py) ----
+    const EMBEDDED_DATA = {"skill_name": "pocketsmith", "runs": [{"id": "eval-0-call-efficient-workflow-with_skill-run-1", "prompt": "(No prompt found)", "eval_id": null, "outputs": [{"name": "response.md", "type": "text", "content": "# June PocketSmith Monthly Close Workflow\n\nThis is the exact workflow I would follow before making any live PocketSmith calls. I would not edit the business-plan note until the PocketSmith data state is stable and the final metrics have been rerun.\n\n## 1. Establish Scope Before Live Calls\n\n- Period: `2026-06-01` through `2026-06-30`, unless the user confirms a different June year.\n- Output: June monthly close plus an update to the business-plan note.\n- Mutations: I would assume no PocketSmith mutations are allowed unless the user explicitly approves transaction updates.\n- Note edits: I would defer all note edits until after feed freshness, headline metrics, unresolved items, and caveats are known.\n- Quality goal: avoid guessed IDs, repeated failed calls, broad transaction dumps, and context blowups from large transaction output.\n\nIf the year or target business-plan note path is not already known from context, I would ask one short clarification before making calls.\n\n## 2. Resolve IDs Once, Then Cache Them\n\nFirst PocketSmith calls would be discovery only:\n\n1. `pocketsmith_get_current_user`\n2. `pocketsmith_list_transaction_accounts`\n3. `pocketsmith_get_data_feeds_connection_status`\n\nI would build and keep a compact ID map before calling any detail endpoint:\n\n```text\nPocketSmith ID map\n- user_id: ...\n- account: Bank/account name -> account_id ..., transaction_account_id ...\n- feed status: Bank/account name -> status ..., last_successful_sync_at ...\n```\n\nRules for avoiding `That resource was not found`:\n\n- Never guess IDs.\n- Never use placeholder IDs such as `0`.\n- Treat account IDs and transaction account IDs as different values unless the tool documentation/output proves otherwise.\n- After the first `That resource was not found`, stop retrying variants and return to the ID map.\n- After the second resource/ID failure, stop live analysis and produce a compact ID diagnosis instead of burning more calls.\n\n## 3. Run Feed Freshness Gate\n\nBefore interpreting June as final, I would inspect feed status from `pocketsmith_get_data_feeds_connection_status`.\n\nThe close becomes provisional or blocked if any key feed shows:\n\n- `authorisation_failed`\n- `provider_error`\n- stale `last_successful_sync_at`\n- missing expected payroll, rent, loan, tax, subscription, or other fixed business/personal flows\n- obviously incomplete end-of-month activity\n\nIf a key feed is stale, I would not state final runway, savings rate, cash position, or business-plan implications. I would report what is still reliable and ask the user to sync or reauthorize before finalizing.\n\n## 4. Pull Headline Summaries Before Transaction Detail\n\nOnly after IDs and feed freshness are stable would I call broad summary tools:\n\n1. `pocketsmith_month_end_review` for June close metrics and review flags.\n2. `pocketsmith_get_budget_summary` for actuals vs budget.\n3. `pocketsmith_spending_comparison` for month-over-month spending context.\n4. `pocketsmith_financial_health_snapshot` only if the business-plan update needs cash, runway, net worth, debt, or savings-rate implications.\n\nI would store a compact metrics packet:\n\n```text\nMetrics packet\n- income:\n- expenses:\n- net cashflow:\n- savings rate:\n- budget variance:\n- refunds/credits:\n- raw spending comparison:\n- cash/runway:\n- uncategorized count and amount:\n- needs-review count:\n```\n\nI would not force all tools to reconcile to one expense number. If definitions differ, I would label them clearly, for example budgeted expenses vs raw spending including transfers, savings, investments, or uncategorized items.\n\n## 5. Triage Transactions Narrowly\n\nI would call `pocketsmith_list_transactions` only after summaries show exactly what needs investigation.\n\nQuery strategy:\n\n- Use the June date range only.\n- Add account filters only from the resolved ID map.\n- Add category, uncategorized, or needs-review filters where possible.\n- Prefer several narrow queries over one broad month dump.\n- Avoid retrieving full transaction history unless a specific reconciliation problem requires it.\n\nBefore any mutation, I would prepare this table:\n\n```markdown\n| transaction_id | date | payee | amount | current state | proposed change | confidence | rationale |\n|---|---|---:|---:|---|---|---|---|\n```\n\nI would only propose high-confidence updates, such as clear payroll, known reimbursements, obvious subscriptions, known merchant/category matches, or transfer patterns already confirmed by the user.\n\nAmbiguous cash withdrawals, opaque POS labels, unknown person names, foreign-language merchant strings, and split transfers would stay unresolved with caveats unless the user has supplied a rule.\n\n## 6. Avoid Truncated Transaction Output\n\nTo avoid the prior truncation problem:\n\n- I would not request a broad June transaction dump at the start.\n- I would narrow by review status, category, account, or date segment before listing transactions.\n- If the tool output is still large or saved externally, I would stop and delegate summarization before continuing.\n- I would ask the delegate to extract only decision-relevant fields: transaction IDs, dates, payees, amounts, categories, proposed actions, totals, and caveats.\n- I would not continue interpreting a truncated transaction list as complete.\n\n## 7. Delegation Points\n\nI would delegate as a context firewall, not as a last resort.\n\nI would delegate to `general` when:\n\n- A PocketSmith transaction output is truncated or saved to a large file.\n- There are more than 5 ambiguous transactions to classify.\n- I need to reconcile metrics across 3 or more PocketSmith summary tools.\n- The monthly close requires both finance interpretation and note-writing synthesis.\n- I have already hit 2 PocketSmith resource/ID failures.\n\nExample delegation packet for transaction digestion:\n\n```text\nSummarize this PocketSmith transaction output for the June close.\nReturn:\n- high-confidence category or transfer updates\n- ambiguous items to leave unresolved\n- totals by category/payee\n- caveats affecting close quality\nDo not mutate PocketSmith.\n```\n\nI would delegate to `explore` only for local file work, such as locating and reading the business-plan note or reading a saved large PocketSmith output file. I would not use `explore` for live PocketSmith calls.\n\n## 8. Mutation Policy\n\nFor this requested workflow, I would not mutate PocketSmith without explicit approval.\n\nIf the user later approves transaction cleanup, then before each `pocketsmith_update_transaction` I would require:\n\n- transaction ID\n- current category/status\n- new category and/or `is_transfer` change\n- high-confidence rationale\n\nAfter any mutation, I would rerun relevant headline summaries and transaction counts. I would never use pre-update metrics in the final monthly close or note update.\n\n## 9. Business-Plan Note Update Sequence\n\nI would edit the business-plan note only after data is stable.\n\nBefore editing, I would confirm:\n\n- feed freshness status\n- final rerun headline metrics after any approved transaction updates\n- unresolved transaction count and amount\n- caveats for stale feeds, transfer semantics, refunds, and uncategorized items\n- exact note path and section to update\n\nThe note update would separate:\n\n- clean facts from PocketSmith\n- interpretation for the business plan\n- caveats and provisionality\n- decisions or next actions\n\nIf June is provisional, the note would say so explicitly.\n\n## 10. Final Report Format\n\nAfter live work is complete, I would report in this structure:\n\n```markdown\n## PocketSmith Status\n- Period: June 2026\n- Feed freshness:\n- Finality: clean / provisional / blocked\n\n## Headline Metrics\n- Income:\n- Expenses:\n- Net cashflow:\n- Savings rate:\n- Budget variance:\n- Cash/runway, if reliable:\n\n## Transaction Changes\n| transaction_id | payee | amount | change | rationale |\n|---|---:|---:|---|---|\n\n## Unresolved Items\n| payee | amount | reason left unresolved |\n|---|---:|---|\n\n## Business-Plan Note Update\n- File changed:\n- Section changed:\n- Main interpretation added:\n- Caveats preserved:\n\n## Next Actions\n- ...\n```\n\n## Stop Rules\n\n- First `That resource was not found`: re-check the ID map instead of retrying variants.\n- Second resource/ID failure: stop and produce an ID diagnosis.\n- Truncated transaction output: delegate summarization before interpreting it.\n- Stale key feed: mark the close provisional or blocked and ask for sync/reauthorization if final metrics are required.\n- Ambiguous transaction semantics after one pass: record the caveat and move on.\n- Note editing requested while data is unstable: defer the edit unless the user explicitly wants a provisional entry.\n"}], "grading": {"expectations": [{"text": "The answer starts with ID discovery using current user and transaction account listing before detail calls.", "passed": true, "evidence": "Lines 15-22 put `pocketsmith_get_current_user`, `pocketsmith_list_transaction_accounts`, and feed status before detail calls."}, {"text": "The answer includes a feed freshness gate before treating the monthly close as final.", "passed": true, "evidence": "Lines 40-53 define the feed freshness gate and say stale feeds block final metrics."}, {"text": "The answer includes explicit delegation triggers for truncated outputs or many ambiguous transactions.", "passed": true, "evidence": "Lines 114-124 list delegation triggers including truncated output and more than 5 ambiguous transactions."}, {"text": "The answer says not to edit the note until metrics are stable or the user asks for a provisional entry.", "passed": true, "evidence": "Lines 3, 9-10, and 153-164 defer note edits until data and metrics are stable."}], "summary": {"passed": 4, "failed": 0, "total": 4, "pass_rate": 1.0}, "execution_metrics": {"total_tool_calls": 0, "errors_encountered": 0, "output_chars": 10300}, "timing": {"total_duration_seconds": 0.0}}}, {"id": "eval-0-call-efficient-workflow-without_skill-run-1", "prompt": "(No prompt found)", "eval_id": null, "outputs": [{"name": "response.md", "type": "text", "content": "# June PocketSmith Monthly Close Workflow\n\nBefore making any live PocketSmith calls, I would treat this as a two-phase job: first establish the exact identifiers and scope, then run a small number of targeted calls with pagination or date windows to avoid missing resources and truncated transaction output.\n\n## Preflight\n\n1. Confirm the close period: June 1 through June 30, including the relevant year and timezone.\n2. Confirm the target business-plan note path and what section should be updated.\n3. Inspect the existing business-plan note only after confirmation, to preserve its structure and avoid rewriting unrelated content.\n4. Identify the required close outputs before calling PocketSmith, such as income, expenses, net cash flow, account balances, uncategorized transactions, unusual transactions, and business-plan implications.\n5. Do not assume resource IDs from memory or prior runs.\n\n## Resource Discovery To Avoid `That Resource Was Not Found`\n\n1. Start with account and institution discovery calls, not transaction or category calls against guessed IDs.\n2. Record the canonical IDs returned by PocketSmith for accounts, transaction accounts, categories, scenarios, and budgets as needed.\n3. Use names only for human-readable matching; use returned IDs for all later calls.\n4. If a resource lookup fails, stop and re-run discovery for that resource type instead of retrying variants of the same guessed ID.\n5. Keep a short local working map during the session: resource name, resource type, canonical ID, and why it is needed.\n\n## Transaction Retrieval Strategy To Avoid Truncation\n\n1. Query transactions by explicit date range for June only.\n2. Use pagination, limits, or smaller date windows rather than requesting the entire month if the result set may be large.\n3. Prefer weekly windows if the API output is verbose or transaction count is unknown.\n4. Request only fields needed for close analysis when the tool supports filtering or field selection.\n5. If output is still too large, split by account first, then by week.\n6. After each page or window, summarize counts and totals before moving on.\n7. Track whether each account/date window is complete so no period is double-counted or skipped.\n\n## Monthly Close Workflow\n\n1. Discover accounts and confirm which accounts are in scope for the business close.\n2. Retrieve June transactions for each in-scope account using paginated or weekly windows.\n3. Check for uncategorized, duplicate-looking, pending, transfer, or anomalous transactions.\n4. Retrieve category or budget metadata only after transactions show which categories matter.\n5. Aggregate June totals by income, expense, transfers, category, account, and business-relevant groupings.\n6. Compare June totals with the prior month or plan targets only if those figures are already available or can be fetched with similarly bounded calls.\n7. Draft the close summary separately from the note edit.\n8. Update only the relevant business-plan note section after the numbers are verified.\n9. Preserve existing note structure, links, and frontmatter.\n10. Report what changed, what assumptions were made, and what still needs human review.\n\n## Delegation Points\n\nI would delegate only when it reduces uncertainty or avoids broad, expensive exploration.\n\n1. Delegate repository or vault reconnaissance if I need to locate the business-plan note and the location is not obvious from filenames or existing instructions.\n2. Delegate web or external documentation research only if PocketSmith API behavior, pagination, or resource semantics are unclear from available tool descriptions.\n3. Do not delegate live PocketSmith calls unless the delegate has the same explicit guardrails: no guessed IDs, bounded date ranges, pagination, and no note edits until the draft is verified.\n4. Do not delegate note editing unless the target path and intended section are already known.\n\n## Call-Efficiency Rules\n\n1. Never call a transaction endpoint with a guessed account, category, or budget ID.\n2. Never request all historical transactions for a monthly close.\n3. Prefer one discovery call per resource type over multiple failed direct lookups.\n4. Prefer bounded transaction calls by account and date window.\n5. Summarize each retrieved batch immediately so large raw outputs do not need to be re-read.\n6. Stop after the minimum data needed for the June close and business-plan update is collected.\n\n## Failure Handling\n\n1. If a resource is not found, re-discover the parent resource list and remap IDs.\n2. If transaction output truncates, reduce the query scope by account, week, or page size.\n3. If totals do not reconcile, inspect only the smallest suspicious slice rather than re-fetching everything.\n4. If the business-plan note location or edit target is ambiguous, ask before editing.\n5. If PocketSmith data is incomplete or unavailable, produce a draft close with explicit gaps instead of inventing figures.\n"}], "grading": {"expectations": [{"text": "The answer starts with ID discovery using current user and transaction account listing before detail calls.", "passed": false, "evidence": "It starts with generic preflight and resource discovery, but does not name current-user or transaction-account discovery."}, {"text": "The answer includes a feed freshness gate before treating the monthly close as final.", "passed": false, "evidence": "No feed status/freshness gate is described."}, {"text": "The answer includes explicit delegation triggers for truncated outputs or many ambiguous transactions.", "passed": false, "evidence": "It handles truncation by narrowing queries, but does not delegate truncated outputs or ambiguous transaction triage."}, {"text": "The answer says not to edit the note until metrics are stable or the user asks for a provisional entry.", "passed": true, "evidence": "Lines 39-40 say to draft the close separately and update the note only after numbers are verified."}], "summary": {"passed": 1, "failed": 3, "total": 4, "pass_rate": 0.25}, "execution_metrics": {"total_tool_calls": 0, "errors_encountered": 0, "output_chars": 3700}, "timing": {"total_duration_seconds": 0.0}}}, {"id": "eval-1-stale-feed-provisional-with_skill-run-1", "prompt": "(No prompt found)", "eval_id": null, "outputs": [{"name": "response.md", "type": "text", "content": "## PocketSmith Status\n- Period: May finance review, presumed `2026-05-01` to `2026-05-31` unless the user specifies a different May.\n- Feed freshness: Not clean. NBG is `authorisation_failed`; Eurobank is stale since March.\n- Finality: provisional / blocked for final close.\n\n## Headline Metrics\n- Income: Report PocketSmith's current May income as `EUR 0`, but treat it as a data-quality signal, not a reliable conclusion.\n- Expenses: Report only already-imported May expenses that are present in PocketSmith, with a caveat that missing NBG/Eurobank activity may materially change the total.\n- Net cashflow: Do not treat as final because income and bank activity may be incomplete.\n- Savings rate: Refuse to state as final while key feeds are failed or stale and May income appears missing.\n- Budget variance: May be discussed only as provisional against imported/categorized transactions.\n- Cash/runway: Refuse to state as final unless the stale/failed feeds are proven immaterial.\n\n## Transaction Changes\nNo transaction changes should be made for this eval. Do not call live PocketSmith tools and do not modify PocketSmith.\n\n## Unresolved Items\n| item | reason left unresolved |\n| --- | --- |\n| NBG feed | `authorisation_failed`; May activity may be missing or incomplete. |\n| Eurobank feed | Stale since March; May activity is not reliable for final review. |\n| May income showing `EUR 0` | Likely incomplete or missing payroll/import data; cannot be interpreted as true zero income without refreshed feeds and transaction verification. |\n\n## Interpretation\n- What can be reported: a provisional May finance review based on the data currently present in PocketSmith, clearly labeled as incomplete.\n- What the month may indicate: imported spending patterns, visible budget pressure, and any already-present categorized transactions can be summarized as directional findings.\n- What not to overread: `EUR 0` income, net cashflow, savings rate, runway, final cash position, and final budget performance should not be treated as final because core feeds are failed/stale.\n- Data-quality caveat: the failed NBG authorization and Eurobank staleness are not minor footnotes; they are blockers for a final monthly close if those accounts carry payroll, bills, transfers, savings, or ordinary spending.\n\n## Next Actions\n- Reauthorize or fix the NBG connection.\n- Refresh or reconnect Eurobank.\n- After feeds sync successfully, rerun feed status and all headline summaries before producing a final May close.\n- Verify expected payroll/income transactions before accepting or explaining `EUR 0` income.\n"}], "grading": {"expectations": [{"text": "The answer labels the close provisional or blocked rather than clean/final.", "passed": true, "evidence": "Line 4 says finality is provisional / blocked for final close."}, {"text": "The answer treats `EUR 0` income as a data-feed failure, not a real income result.", "passed": true, "evidence": "Line 7 says `EUR 0` is a data-quality signal, not a reliable conclusion."}, {"text": "The answer avoids final runway or savings-rate conclusions while key feeds are stale.", "passed": true, "evidence": "Lines 10-12 refuse final savings rate and cash/runway while feeds are failed or stale."}, {"text": "The answer asks for NBG/Eurobank sync or reauthorization before finalizing.", "passed": true, "evidence": "Lines 30-34 ask to reauthorize NBG, refresh Eurobank, and rerun summaries."}], "summary": {"passed": 4, "failed": 0, "total": 4, "pass_rate": 1.0}, "execution_metrics": {"total_tool_calls": 0, "errors_encountered": 0, "output_chars": 1900}, "timing": {"total_duration_seconds": 0.0}}}, {"id": "eval-1-stale-feed-provisional-without_skill-run-1", "prompt": "(No prompt found)", "eval_id": null, "outputs": [{"name": "response.md", "type": "text", "content": "## May Finance Review Status\n\nI can provide a provisional May finance review, but I would not treat it as final.\n\n## What To Report\n\n- PocketSmith data quality is impaired for May.\n- NBG is currently unavailable because its feed is `authorisation_failed`.\n- Eurobank is stale because it has not refreshed since March.\n- May income showing `EUR 0` is not reliable evidence that there was no May income.\n- Any May spending, cashflow, savings rate, income-versus-expense, category totals, and account-balance conclusions should be labelled provisional.\n- The review can still describe known limitations, visible transactions that are present, obvious anomalies, and what needs to be refreshed before final analysis.\n\n## What To Refuse To Treat As Final\n\n- Do not finalize May income as `EUR 0`.\n- Do not finalize net cashflow for May.\n- Do not finalize savings rate, surplus, deficit, or budget performance.\n- Do not finalize account balances or account-by-account movement for NBG or Eurobank.\n- Do not make firm conclusions about whether May was good, bad, overspent, underspent, or income-free.\n- Do not use stale or failed-feed data as the basis for irreversible decisions.\n\n## Bottom Line\n\nThe May review should be reported as a provisional review with explicit feed-health caveats. The final May finance review should wait until NBG authorization is restored, Eurobank is refreshed, and May income is confirmed from reliable transaction data.\n"}], "grading": {"expectations": [{"text": "The answer labels the close provisional or blocked rather than clean/final.", "passed": true, "evidence": "Lines 3 and 25 label the review provisional."}, {"text": "The answer treats `EUR 0` income as a data-feed failure, not a real income result.", "passed": true, "evidence": "Lines 10 and 16 say `EUR 0` income is not reliable/final."}, {"text": "The answer avoids final runway or savings-rate conclusions while key feeds are stale.", "passed": true, "evidence": "Line 18 refuses final savings rate; lines 19-21 refuse related final account/budget conclusions."}, {"text": "The answer asks for NBG/Eurobank sync or reauthorization before finalizing.", "passed": true, "evidence": "Line 25 says final review should wait until NBG authorization is restored and Eurobank refreshed."}], "summary": {"passed": 4, "failed": 0, "total": 4, "pass_rate": 1.0}, "execution_metrics": {"total_tool_calls": 0, "errors_encountered": 0, "output_chars": 1300}, "timing": {"total_duration_seconds": 0.0}}}, {"id": "eval-2-transaction-triage-with_skill-run-1", "prompt": "(No prompt found)", "eval_id": null, "outputs": [{"name": "response.md", "type": "text", "content": "## Transaction Triage\n\n| Transaction | Decision | Proposed handling | Rationale |\n| --- | --- | --- | --- |\n| PAYROLL MAY 2026 +2223.35 | Update | Categorize as salary/payroll income. | Clear payroll label and positive income amount. |\n| REMOTE WORKING MAY 2026 +10.03 | Update | Categorize as remote-work allowance, reimbursement, or employment-related income, depending on the existing category set. | Clear recurring work-related credit. |\n| Revolut9183 -200 | Update only with the matching +200 transfer | Mark as transfer if it pairs with `MICHAIL BASTAKIS +200`; otherwise leave for review. | The amount exactly matches the apparent own-name inbound transfer, so this is likely an internal movement, but transfer semantics should be kept explicit. |\n| AKTSIALIS PHARMACY -5.52 | Update | Categorize as pharmacy/health spending. | Merchant and amount are clear enough for a category match. |\n| `\u0391\u0393\u039f\u03a1\u0391 1948 5812` -320 | Leave alone | Keep uncategorized / needs review. | Opaque foreign-language POS-style label; not enough information to infer category safely. |\n| `\u0391\u039d\u0391\u039b\u0397\u03a8\u0397 \u0395\u039e\u03a9\u03a4\u0395\u03a1\u0399\u039a\u039f\u03a5` -200 | Leave alone | Keep uncategorized / needs review. | This appears to be a foreign cash withdrawal, but cash use is ambiguous and should not be force-categorized without the user's rule. |\n| `MICHAIL BASTAKIS` +200 | Update only with the matching Revolut transfer | Mark as transfer if it pairs with `Revolut9183 -200`; otherwise leave for review. | Own-name credit plus exact matching amount supports an internal transfer interpretation, but it should not be categorized as income. |\n\n## Summary\n\nI would update the clear payroll, remote-working credit, pharmacy purchase, and the `Revolut9183` / `MICHAIL BASTAKIS` pair only as a transfer pair. I would leave `\u0391\u0393\u039f\u03a1\u0391 1948 5812` and `\u0391\u039d\u0391\u039b\u0397\u03a8\u0397 \u0395\u039e\u03a9\u03a4\u0395\u03a1\u0399\u039a\u039f\u03a5` unresolved.\n"}], "grading": {"expectations": [{"text": "The answer separates high-confidence updates from ambiguous unresolved items.", "passed": true, "evidence": "The table marks update decisions separately from leave-alone decisions."}, {"text": "The answer marks payroll and remote-working allowance as income/paycheck with high confidence.", "passed": true, "evidence": "Lines 5-6 categorize payroll and remote-working credit as employment income/allowance."}, {"text": "The answer treats clear Revolut or self-transfer movements as transfer candidates with transfer-flag caution.", "passed": true, "evidence": "Lines 7 and 11 mark the Revolut/Michail pair as transfer candidates only if matched."}, {"text": "The answer leaves opaque POS and cash withdrawal items unresolved instead of guessing.", "passed": true, "evidence": "Lines 9-10 leave the opaque POS label and cash withdrawal unresolved."}], "summary": {"passed": 4, "failed": 0, "total": 4, "pass_rate": 1.0}, "execution_metrics": {"total_tool_calls": 0, "errors_encountered": 0, "output_chars": 1700}, "timing": {"total_duration_seconds": 0.0}}}, {"id": "eval-2-transaction-triage-without_skill-run-1", "prompt": "(No prompt found)", "eval_id": null, "outputs": [{"name": "response.md", "type": "text", "content": "## PocketSmith May Cleanup Triage\n\nI would update the transactions that have clear, low-risk meanings, and leave alone the ambiguous transfers/cash movements until they can be matched or confirmed.\n\n### Update\n\n| Transaction | Suggested treatment | Why |\n|---|---|---|\n| `PAYROLL MAY 2026` `+2223.35` | Categorize as salary/payroll income | Clear employer/payroll income. |\n| `REMOTE WORKING MAY 2026` `+10.03` | Categorize as remote work allowance/reimbursement income | Clear work-related reimbursement/allowance. |\n| `AKTSIALIS PHARMACY` `-5.52` | Categorize as pharmacy/health/medical expense | Merchant and amount are straightforward. |\n| `\u0391\u0393\u039f\u03a1\u0391 1948 5812` `-320` | Categorize as purchase/shopping only if this merchant is known | `\u0391\u0393\u039f\u03a1\u0391` means purchase, but the merchant/category is not obvious. If there is no known rule, I would leave it uncategorized for review rather than guessing. |\n\n### Leave Alone\n\n| Transaction | Why |\n|---|---|\n| `Revolut9183` `-200` | Likely transfer/top-up/payment between accounts. Should not be categorized as spending unless the counterparty and purpose are known. |\n| `\u0391\u039d\u0391\u039b\u0397\u03a8\u0397 \u0395\u039e\u03a9\u03a4\u0395\u03a1\u0399\u039a\u039f\u03a5` `-200` | Means foreign/overseas withdrawal. Cash withdrawals are usually better left uncategorized or treated specially until the actual cash spending is known. |\n| `MICHAIL BASTAKIS` `+200` | Likely self-transfer or reimbursement from/to an own account. Needs matching/confirmation before categorizing as income. |\n\n## Summary\n\nDefinite updates: `PAYROLL MAY 2026`, `REMOTE WORKING MAY 2026`, `AKTSIALIS PHARMACY`.\n\nConditional update: `\u0391\u0393\u039f\u03a1\u0391 1948 5812`, only if prior knowledge identifies the merchant/category.\n\nLeave alone: `Revolut9183`, `\u0391\u039d\u0391\u039b\u0397\u03a8\u0397 \u0395\u039e\u03a9\u03a4\u0395\u03a1\u0399\u039a\u039f\u03a5`, `MICHAIL BASTAKIS`.\n"}], "grading": {"expectations": [{"text": "The answer separates high-confidence updates from ambiguous unresolved items.", "passed": true, "evidence": "It has separate Update and Leave Alone sections."}, {"text": "The answer marks payroll and remote-working allowance as income/paycheck with high confidence.", "passed": true, "evidence": "Lines 9-10 categorize payroll and remote-working allowance as income/reimbursement."}, {"text": "The answer treats clear Revolut or self-transfer movements as transfer candidates with transfer-flag caution.", "passed": false, "evidence": "Lines 18 and 20 say likely transfer/self-transfer but leave them alone rather than presenting a cautious transfer-pair update."}, {"text": "The answer leaves opaque POS and cash withdrawal items unresolved instead of guessing.", "passed": true, "evidence": "Lines 12, 19, and 26-28 avoid guessing for opaque/cash items."}], "summary": {"passed": 3, "failed": 1, "total": 4, "pass_rate": 0.75}, "execution_metrics": {"total_tool_calls": 0, "errors_encountered": 0, "output_chars": 1600}, "timing": {"total_duration_seconds": 0.0}}}, {"id": "eval-3-post-sync-note-update-with_skill-run-1", "prompt": "(No prompt found)", "eval_id": null, "outputs": [{"name": "response.md", "type": "text", "content": "## Checks Before Replacing The Provisional May Section\n\n- Confirm NBG feed freshness after the user-reported sync, including status and `last_successful_sync_at`.\n- Rerun all May headline summaries after the sync instead of reusing pre-sync numbers: month-end review, budget summary, spending comparison, and financial health snapshot if cash/runway is being mentioned.\n- Check that expected May activity is now present, especially payroll, rent, loan payments, fixed bills, and end-of-month NBG transactions.\n- Reconcile metric definitions before writing: budget expenses, raw spending, transfers, refunds, savings, investments, and uncategorized items may not be counted the same way by each summary.\n- Recheck unresolved transaction state after any cleanup: uncategorized count and total, needs-review count, and whether any remaining items are ambiguous rather than obviously classifiable.\n- Confirm the exact existing May section in the note and replace only that provisional section, preserving unrelated note content.\n\n## Caveats To Keep If 5 Uncategorized Debits Remain\n\n- The May close can be updated after the fresh sync, but it should not be described as fully clean while 5 uncategorized debits totaling EUR 546.82 remain.\n- Expense totals, budget variance, net cashflow, and savings rate may shift once those debits are categorized.\n- Any interpretation of discretionary spending should be qualified because the uncategorized debits may belong to meaningful spending categories.\n- Runway or cash-position commentary can be included only if based on fresh account data, but it should note that category-level conclusions remain incomplete.\n- The note should separate final sync-dependent facts from remaining data-quality caveats and list the unresolved EUR 546.82 as a follow-up action.\n"}], "grading": {"expectations": [{"text": "The answer reruns feed status and headline PocketSmith summaries after the sync.", "passed": true, "evidence": "Lines 3-4 rerun feed freshness and headline summaries after sync."}, {"text": "The answer replaces the provisional note section only after revalidation.", "passed": true, "evidence": "Lines 3-8 list revalidation checks before replacing the section."}, {"text": "The answer keeps the uncategorized EUR 546.82 caveat in the final note.", "passed": true, "evidence": "Lines 10-16 keep the 5-debit/EUR 546.82 caveat."}, {"text": "The answer includes a final diff/status verification step for the note edit.", "passed": false, "evidence": "It says to replace only the provisional section, but does not mention verifying the final diff or status."}], "summary": {"passed": 3, "failed": 1, "total": 4, "pass_rate": 0.75}, "execution_metrics": {"total_tool_calls": 0, "errors_encountered": 0, "output_chars": 1450}, "timing": {"total_duration_seconds": 0.0}}}, {"id": "eval-3-post-sync-note-update-without_skill-run-1", "prompt": "(No prompt found)", "eval_id": null, "outputs": [{"name": "response.md", "type": "text", "content": "Before replacing the provisional May section, the close should verify:\n\n1. NBG sync completed successfully and the expected May transaction window is fully represented.\n2. No obvious duplicate, pending, reversed, or missing NBG transactions remain after sync.\n3. PocketSmith balances reconcile closely enough against NBG closing balances for the relevant accounts.\n4. All May debits and credits have been reviewed for category accuracy, especially newly synced NBG items.\n5. The prior provisional May figures are compared against the refreshed post-sync figures so any material changes are understood before overwriting them.\n6. Any uncategorized transactions are isolated from final category totals or clearly included as unresolved variance.\n\nIf there are still 5 uncategorized debits totaling EUR 546.82, the updated note should not present May as fully closed. It can replace the provisional section with a post-sync May section, but it should retain caveats that:\n\n- May is synced but not fully categorized.\n- Expense totals by category remain provisional because EUR 546.82 of debits are uncategorized.\n- Net cashflow and account-level totals may be usable if transaction completeness and balances reconcile, but category-level analysis is incomplete.\n- Any conclusions about discretionary spend, budget overruns, or category trends should exclude or explicitly qualify the uncategorized EUR 546.82.\n- A follow-up action remains to categorize the 5 debits and then re-run the final May close.\n"}], "grading": {"expectations": [{"text": "The answer reruns feed status and headline PocketSmith summaries after the sync.", "passed": false, "evidence": "It verifies NBG sync and completeness, but does not explicitly rerun PocketSmith headline summaries."}, {"text": "The answer replaces the provisional note section only after revalidation.", "passed": true, "evidence": "Lines 1-9 list checks before replacing the provisional May section."}, {"text": "The answer keeps the uncategorized EUR 546.82 caveat in the final note.", "passed": true, "evidence": "Lines 10-16 preserve the EUR 546.82 uncategorized caveat."}, {"text": "The answer includes a final diff/status verification step for the note edit.", "passed": false, "evidence": "No final diff/status verification step is mentioned."}], "summary": {"passed": 2, "failed": 2, "total": 4, "pass_rate": 0.5}, "execution_metrics": {"total_tool_calls": 0, "errors_encountered": 0, "output_chars": 1200}, "timing": {"total_duration_seconds": 0.0}}}], "previous_feedback": {}, "previous_outputs": {}, "benchmark": {"metadata": {"skill_name": "pocketsmith", "skill_path": "/Users/mbastakis/.config/opencode/skills/pocketsmith", "executor_model": "<model-name>", "analyzer_model": "<model-name>", "timestamp": "2026-05-31T22:11:26Z", "evals_run": [0, 1, 2, 3], "runs_per_configuration": 1}, "runs": [{"eval_id": 0, "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4, "time_seconds": 0.0, "tokens": 10300, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "The answer starts with ID discovery using current user and transaction account listing before detail calls.", "passed": true, "evidence": "Lines 15-22 put `pocketsmith_get_current_user`, `pocketsmith_list_transaction_accounts`, and feed status before detail calls."}, {"text": "The answer includes a feed freshness gate before treating the monthly close as final.", "passed": true, "evidence": "Lines 40-53 define the feed freshness gate and say stale feeds block final metrics."}, {"text": "The answer includes explicit delegation triggers for truncated outputs or many ambiguous transactions.", "passed": true, "evidence": "Lines 114-124 list delegation triggers including truncated output and more than 5 ambiguous transactions."}, {"text": "The answer says not to edit the note until metrics are stable or the user asks for a provisional entry.", "passed": true, "evidence": "Lines 3, 9-10, and 153-164 defer note edits until data and metrics are stable."}], "notes": []}, {"eval_id": 1, "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4, "time_seconds": 0.0, "tokens": 1900, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "The answer labels the close provisional or blocked rather than clean/final.", "passed": true, "evidence": "Line 4 says finality is provisional / blocked for final close."}, {"text": "The answer treats `EUR 0` income as a data-feed failure, not a real income result.", "passed": true, "evidence": "Line 7 says `EUR 0` is a data-quality signal, not a reliable conclusion."}, {"text": "The answer avoids final runway or savings-rate conclusions while key feeds are stale.", "passed": true, "evidence": "Lines 10-12 refuse final savings rate and cash/runway while feeds are failed or stale."}, {"text": "The answer asks for NBG/Eurobank sync or reauthorization before finalizing.", "passed": true, "evidence": "Lines 30-34 ask to reauthorize NBG, refresh Eurobank, and rerun summaries."}], "notes": []}, {"eval_id": 2, "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4, "time_seconds": 0.0, "tokens": 1700, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "The answer separates high-confidence updates from ambiguous unresolved items.", "passed": true, "evidence": "The table marks update decisions separately from leave-alone decisions."}, {"text": "The answer marks payroll and remote-working allowance as income/paycheck with high confidence.", "passed": true, "evidence": "Lines 5-6 categorize payroll and remote-working credit as employment income/allowance."}, {"text": "The answer treats clear Revolut or self-transfer movements as transfer candidates with transfer-flag caution.", "passed": true, "evidence": "Lines 7 and 11 mark the Revolut/Michail pair as transfer candidates only if matched."}, {"text": "The answer leaves opaque POS and cash withdrawal items unresolved instead of guessing.", "passed": true, "evidence": "Lines 9-10 leave the opaque POS label and cash withdrawal unresolved."}], "notes": []}, {"eval_id": 3, "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 0.75, "passed": 3, "failed": 1, "total": 4, "time_seconds": 0.0, "tokens": 1450, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "The answer reruns feed status and headline PocketSmith summaries after the sync.", "passed": true, "evidence": "Lines 3-4 rerun feed freshness and headline summaries after sync."}, {"text": "The answer replaces the provisional note section only after revalidation.", "passed": true, "evidence": "Lines 3-8 list revalidation checks before replacing the section."}, {"text": "The answer keeps the uncategorized EUR 546.82 caveat in the final note.", "passed": true, "evidence": "Lines 10-16 keep the 5-debit/EUR 546.82 caveat."}, {"text": "The answer includes a final diff/status verification step for the note edit.", "passed": false, "evidence": "It says to replace only the provisional section, but does not mention verifying the final diff or status."}], "notes": []}, {"eval_id": 0, "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.25, "passed": 1, "failed": 3, "total": 4, "time_seconds": 0.0, "tokens": 3700, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "The answer starts with ID discovery using current user and transaction account listing before detail calls.", "passed": false, "evidence": "It starts with generic preflight and resource discovery, but does not name current-user or transaction-account discovery."}, {"text": "The answer includes a feed freshness gate before treating the monthly close as final.", "passed": false, "evidence": "No feed status/freshness gate is described."}, {"text": "The answer includes explicit delegation triggers for truncated outputs or many ambiguous transactions.", "passed": false, "evidence": "It handles truncation by narrowing queries, but does not delegate truncated outputs or ambiguous transaction triage."}, {"text": "The answer says not to edit the note until metrics are stable or the user asks for a provisional entry.", "passed": true, "evidence": "Lines 39-40 say to draft the close separately and update the note only after numbers are verified."}], "notes": []}, {"eval_id": 1, "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4, "time_seconds": 0.0, "tokens": 1300, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "The answer labels the close provisional or blocked rather than clean/final.", "passed": true, "evidence": "Lines 3 and 25 label the review provisional."}, {"text": "The answer treats `EUR 0` income as a data-feed failure, not a real income result.", "passed": true, "evidence": "Lines 10 and 16 say `EUR 0` income is not reliable/final."}, {"text": "The answer avoids final runway or savings-rate conclusions while key feeds are stale.", "passed": true, "evidence": "Line 18 refuses final savings rate; lines 19-21 refuse related final account/budget conclusions."}, {"text": "The answer asks for NBG/Eurobank sync or reauthorization before finalizing.", "passed": true, "evidence": "Line 25 says final review should wait until NBG authorization is restored and Eurobank refreshed."}], "notes": []}, {"eval_id": 2, "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.75, "passed": 3, "failed": 1, "total": 4, "time_seconds": 0.0, "tokens": 1600, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "The answer separates high-confidence updates from ambiguous unresolved items.", "passed": true, "evidence": "It has separate Update and Leave Alone sections."}, {"text": "The answer marks payroll and remote-working allowance as income/paycheck with high confidence.", "passed": true, "evidence": "Lines 9-10 categorize payroll and remote-working allowance as income/reimbursement."}, {"text": "The answer treats clear Revolut or self-transfer movements as transfer candidates with transfer-flag caution.", "passed": false, "evidence": "Lines 18 and 20 say likely transfer/self-transfer but leave them alone rather than presenting a cautious transfer-pair update."}, {"text": "The answer leaves opaque POS and cash withdrawal items unresolved instead of guessing.", "passed": true, "evidence": "Lines 12, 19, and 26-28 avoid guessing for opaque/cash items."}], "notes": []}, {"eval_id": 3, "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.5, "passed": 2, "failed": 2, "total": 4, "time_seconds": 0.0, "tokens": 1200, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "The answer reruns feed status and headline PocketSmith summaries after the sync.", "passed": false, "evidence": "It verifies NBG sync and completeness, but does not explicitly rerun PocketSmith headline summaries."}, {"text": "The answer replaces the provisional note section only after revalidation.", "passed": true, "evidence": "Lines 1-9 list checks before replacing the provisional May section."}, {"text": "The answer keeps the uncategorized EUR 546.82 caveat in the final note.", "passed": true, "evidence": "Lines 10-16 preserve the EUR 546.82 uncategorized caveat."}, {"text": "The answer includes a final diff/status verification step for the note edit.", "passed": false, "evidence": "No final diff/status verification step is mentioned."}], "notes": []}], "run_summary": {"with_skill": {"pass_rate": {"mean": 0.9375, "stddev": 0.125, "min": 0.75, "max": 1.0}, "time_seconds": {"mean": 0.0, "stddev": 0.0, "min": 0.0, "max": 0.0}, "tokens": {"mean": 3837.5, "stddev": 4312.2645, "min": 1450, "max": 10300}}, "without_skill": {"pass_rate": {"mean": 0.625, "stddev": 0.3227, "min": 0.25, "max": 1.0}, "time_seconds": {"mean": 0.0, "stddev": 0.0, "min": 0.0, "max": 0.0}, "tokens": {"mean": 1950.0, "stddev": 1178.9826, "min": 1200, "max": 3700}}, "delta": {"pass_rate": "+0.31", "time_seconds": "+0.0", "tokens": "+1888"}}, "notes": ["With-skill runs improved pass rate from 62.5% to 93.8%, with the largest gains on eval 0 call-efficiency workflow and eval 3 post-sync revalidation.", "Eval 1 stale-feed handling passed in both configurations, so that eval is useful as a safety check but does not strongly differentiate the skill.", "Both configurations missed the final diff/status verification expectation in eval 3; the skill output still performed better because it explicitly reran feed status and headline summaries after sync.", "Token figures are derived from output character counts because task timing/token metadata was not exposed in these task results. Treat time/token comparisons as approximate."]}};
+
+    // ---- State ----
+    let feedbackMap = {};  // run_id -> feedback text
+    let currentIndex = 0;
+    let visitedRuns = new Set();
+
+    // ---- Init ----
+    async function init() {
+      // Load saved feedback from server — but only if this isn't a fresh
+      // iteration (indicated by previous_feedback being present). When
+      // previous feedback exists, the feedback.json on disk is stale from
+      // the prior iteration and should not pre-fill the textareas.
+      const hasPrevious = Object.keys(EMBEDDED_DATA.previous_feedback || {}).length > 0
+        || Object.keys(EMBEDDED_DATA.previous_outputs || {}).length > 0;
+      if (!hasPrevious) {
+        try {
+          const resp = await fetch("/api/feedback");
+          const data = await resp.json();
+          if (data.reviews) {
+            for (const r of data.reviews) feedbackMap[r.run_id] = r.feedback;
+          }
+        } catch { /* first run, no feedback yet */ }
+      }
+
+      document.getElementById("skill-name").textContent = EMBEDDED_DATA.skill_name;
+      showRun(0);
+
+      // Wire up feedback auto-save
+      const textarea = document.getElementById("feedback");
+      let saveTimeout = null;
+      textarea.addEventListener("input", () => {
+        clearTimeout(saveTimeout);
+        document.getElementById("feedback-status").textContent = "";
+        saveTimeout = setTimeout(() => saveCurrentFeedback(), 800);
+      });
+    }
+
+    // ---- Navigation ----
+    function navigate(delta) {
+      const newIndex = currentIndex + delta;
+      if (newIndex >= 0 && newIndex < EMBEDDED_DATA.runs.length) {
+        saveCurrentFeedback();
+        showRun(newIndex);
+      }
+    }
+
+    function updateNavButtons() {
+      document.getElementById("prev-btn").disabled = currentIndex === 0;
+      document.getElementById("next-btn").disabled =
+        currentIndex === EMBEDDED_DATA.runs.length - 1;
+    }
+
+    // ---- Show a run ----
+    function showRun(index) {
+      currentIndex = index;
+      const run = EMBEDDED_DATA.runs[index];
+
+      // Progress
+      document.getElementById("progress").textContent =
+        `${index + 1} of ${EMBEDDED_DATA.runs.length}`;
+
+      // Prompt
+      document.getElementById("prompt-text").textContent = run.prompt;
+
+      // Config badge
+      const badge = document.getElementById("config-badge");
+      const configMatch = run.id.match(/(with_skill|without_skill|new_skill|old_skill)/);
+      if (configMatch) {
+        const config = configMatch[1];
+        const isBaseline = config === "without_skill" || config === "old_skill";
+        badge.textContent = config.replace(/_/g, " ");
+        badge.className = "config-badge " + (isBaseline ? "config-baseline" : "config-primary");
+        badge.style.display = "inline-block";
+      } else {
+        badge.style.display = "none";
+      }
+
+      // Outputs
+      renderOutputs(run);
+
+      // Previous outputs
+      renderPrevOutputs(run);
+
+      // Grades
+      renderGrades(run);
+
+      // Previous feedback
+      const prevFb = (EMBEDDED_DATA.previous_feedback || {})[run.id];
+      const prevEl = document.getElementById("prev-feedback");
+      if (prevFb) {
+        document.getElementById("prev-feedback-text").textContent = prevFb;
+        prevEl.style.display = "block";
+      } else {
+        prevEl.style.display = "none";
+      }
+
+      // Feedback
+      document.getElementById("feedback").value = feedbackMap[run.id] || "";
+      document.getElementById("feedback-status").textContent = "";
+
+      updateNavButtons();
+
+      // Track visited runs and promote done button when all visited
+      visitedRuns.add(index);
+      const doneBtn = document.getElementById("done-btn");
+      if (visitedRuns.size >= EMBEDDED_DATA.runs.length) {
+        doneBtn.classList.add("ready");
+      }
+
+      // Scroll main content to top
+      document.querySelector(".main").scrollTop = 0;
+    }
+
+    // ---- Render outputs ----
+    function renderOutputs(run) {
+      const container = document.getElementById("outputs-body");
+      container.innerHTML = "";
+
+      const outputs = run.outputs || [];
+      if (outputs.length === 0) {
+        container.innerHTML = '<div class="empty-state">No output files</div>';
+        return;
+      }
+
+      for (const file of outputs) {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "output-file";
+
+        // Always show file header with download link
+        const header = document.createElement("div");
+        header.className = "output-file-header";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = file.name;
+        header.appendChild(nameSpan);
+        const dlBtn = document.createElement("a");
+        dlBtn.className = "dl-btn";
+        dlBtn.textContent = "Download";
+        dlBtn.download = file.name;
+        dlBtn.href = getDownloadUri(file);
+        header.appendChild(dlBtn);
+        fileDiv.appendChild(header);
+
+        const content = document.createElement("div");
+        content.className = "output-file-content";
+
+        if (file.type === "text") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          content.appendChild(pre);
+        } else if (file.type === "image") {
+          const img = document.createElement("img");
+          img.src = file.data_uri;
+          img.alt = file.name;
+          content.appendChild(img);
+        } else if (file.type === "pdf") {
+          const iframe = document.createElement("iframe");
+          iframe.src = file.data_uri;
+          content.appendChild(iframe);
+        } else if (file.type === "xlsx") {
+          renderXlsx(content, file.data_b64);
+        } else if (file.type === "binary") {
+          const a = document.createElement("a");
+          a.className = "download-link";
+          a.href = file.data_uri;
+          a.download = file.name;
+          a.textContent = "Download " + file.name;
+          content.appendChild(a);
+        } else if (file.type === "error") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          pre.style.color = "var(--red)";
+          content.appendChild(pre);
+        }
+
+        fileDiv.appendChild(content);
+        container.appendChild(fileDiv);
+      }
+    }
+
+    // ---- XLSX rendering via SheetJS ----
+    function renderXlsx(container, b64Data) {
+      try {
+        const raw = Uint8Array.from(atob(b64Data), c => c.charCodeAt(0));
+        const wb = XLSX.read(raw, { type: "array" });
+
+        for (let i = 0; i < wb.SheetNames.length; i++) {
+          const sheetName = wb.SheetNames[i];
+          const ws = wb.Sheets[sheetName];
+
+          if (wb.SheetNames.length > 1) {
+            const sheetLabel = document.createElement("div");
+            sheetLabel.style.cssText =
+              "font-weight:600; font-size:0.8rem; color:#b0aea5; margin-top:0.5rem; margin-bottom:0.25rem;";
+            sheetLabel.textContent = "Sheet: " + sheetName;
+            container.appendChild(sheetLabel);
+          }
+
+          const htmlStr = XLSX.utils.sheet_to_html(ws, { editable: false });
+          const wrapper = document.createElement("div");
+          wrapper.innerHTML = htmlStr;
+          container.appendChild(wrapper);
+        }
+      } catch (err) {
+        container.textContent = "Error rendering spreadsheet: " + err.message;
+      }
+    }
+
+    // ---- Grades ----
+    function renderGrades(run) {
+      const section = document.getElementById("grades-section");
+      const content = document.getElementById("grades-content");
+
+      if (!run.grading) {
+        section.style.display = "none";
+        return;
+      }
+
+      const grading = run.grading;
+      section.style.display = "block";
+      // Reset to collapsed
+      content.classList.remove("open");
+      document.getElementById("grades-arrow").classList.remove("open");
+
+      const summary = grading.summary || {};
+      const expectations = grading.expectations || [];
+
+      let html = '<div style="padding: 1rem;">';
+
+      // Summary line
+      const passRate = summary.pass_rate != null
+        ? Math.round(summary.pass_rate * 100) + "%"
+        : "?";
+      const badgeClass = summary.pass_rate >= 0.8 ? "grade-pass" : summary.pass_rate >= 0.5 ? "" : "grade-fail";
+      html += '<div class="grades-summary">';
+      html += '<span class="grade-badge ' + badgeClass + '">' + passRate + '</span>';
+      html += '<span>' + (summary.passed || 0) + ' passed, ' + (summary.failed || 0) + ' failed of ' + (summary.total || 0) + '</span>';
+      html += '</div>';
+
+      // Assertions list
+      html += '<ul class="assertion-list">';
+      for (const exp of expectations) {
+        const statusClass = exp.passed ? "pass" : "fail";
+        const statusIcon = exp.passed ? "\u2713" : "\u2717";
+        html += '<li class="assertion-item">';
+        html += '<span class="assertion-status ' + statusClass + '">' + statusIcon + '</span>';
+        html += '<span>' + escapeHtml(exp.text) + '</span>';
+        if (exp.evidence) {
+          html += '<div class="assertion-evidence">' + escapeHtml(exp.evidence) + '</div>';
+        }
+        html += '</li>';
+      }
+      html += '</ul>';
+
+      html += '</div>';
+      content.innerHTML = html;
+    }
+
+    function toggleGrades() {
+      const content = document.getElementById("grades-content");
+      const arrow = document.getElementById("grades-arrow");
+      content.classList.toggle("open");
+      arrow.classList.toggle("open");
+    }
+
+    // ---- Previous outputs (collapsible) ----
+    function renderPrevOutputs(run) {
+      const section = document.getElementById("prev-outputs-section");
+      const content = document.getElementById("prev-outputs-content");
+      const prevOutputs = (EMBEDDED_DATA.previous_outputs || {})[run.id];
+
+      if (!prevOutputs || prevOutputs.length === 0) {
+        section.style.display = "none";
+        return;
+      }
+
+      section.style.display = "block";
+      // Reset to collapsed
+      content.classList.remove("open");
+      document.getElementById("prev-outputs-arrow").classList.remove("open");
+
+      // Render the files into the content area
+      content.innerHTML = "";
+      const wrapper = document.createElement("div");
+      wrapper.style.padding = "1rem";
+
+      for (const file of prevOutputs) {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "output-file";
+
+        const header = document.createElement("div");
+        header.className = "output-file-header";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = file.name;
+        header.appendChild(nameSpan);
+        const dlBtn = document.createElement("a");
+        dlBtn.className = "dl-btn";
+        dlBtn.textContent = "Download";
+        dlBtn.download = file.name;
+        dlBtn.href = getDownloadUri(file);
+        header.appendChild(dlBtn);
+        fileDiv.appendChild(header);
+
+        const fc = document.createElement("div");
+        fc.className = "output-file-content";
+
+        if (file.type === "text") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          fc.appendChild(pre);
+        } else if (file.type === "image") {
+          const img = document.createElement("img");
+          img.src = file.data_uri;
+          img.alt = file.name;
+          fc.appendChild(img);
+        } else if (file.type === "pdf") {
+          const iframe = document.createElement("iframe");
+          iframe.src = file.data_uri;
+          fc.appendChild(iframe);
+        } else if (file.type === "xlsx") {
+          renderXlsx(fc, file.data_b64);
+        } else if (file.type === "binary") {
+          const a = document.createElement("a");
+          a.className = "download-link";
+          a.href = file.data_uri;
+          a.download = file.name;
+          a.textContent = "Download " + file.name;
+          fc.appendChild(a);
+        }
+
+        fileDiv.appendChild(fc);
+        wrapper.appendChild(fileDiv);
+      }
+
+      content.appendChild(wrapper);
+    }
+
+    function togglePrevOutputs() {
+      const content = document.getElementById("prev-outputs-content");
+      const arrow = document.getElementById("prev-outputs-arrow");
+      content.classList.toggle("open");
+      arrow.classList.toggle("open");
+    }
+
+    // ---- Feedback (saved to server -> feedback.json) ----
+    function saveCurrentFeedback() {
+      const run = EMBEDDED_DATA.runs[currentIndex];
+      const text = document.getElementById("feedback").value;
+
+      if (text.trim() === "") {
+        delete feedbackMap[run.id];
+      } else {
+        feedbackMap[run.id] = text;
+      }
+
+      // Build reviews array from map
+      const reviews = [];
+      for (const [run_id, feedback] of Object.entries(feedbackMap)) {
+        if (feedback.trim()) {
+          reviews.push({ run_id, feedback, timestamp: new Date().toISOString() });
+        }
+      }
+
+      fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reviews, status: "in_progress" }),
+      }).then(() => {
+        document.getElementById("feedback-status").textContent = "Saved";
+      }).catch(() => {
+        // Static mode or server unavailable — no-op on auto-save,
+        // feedback will be downloaded on final submit
+        document.getElementById("feedback-status").textContent = "Will download on submit";
+      });
+    }
+
+    // ---- Done ----
+    function showDoneDialog() {
+      // Save current textarea to feedbackMap (but don't POST yet)
+      const run = EMBEDDED_DATA.runs[currentIndex];
+      const text = document.getElementById("feedback").value;
+      if (text.trim() === "") {
+        delete feedbackMap[run.id];
+      } else {
+        feedbackMap[run.id] = text;
+      }
+
+      // POST once with status: complete — include ALL runs so the model
+      // can distinguish "no feedback" (looks good) from "not reviewed"
+      const reviews = [];
+      const ts = new Date().toISOString();
+      for (const r of EMBEDDED_DATA.runs) {
+        reviews.push({ run_id: r.id, feedback: feedbackMap[r.id] || "", timestamp: ts });
+      }
+      const payload = JSON.stringify({ reviews, status: "complete" }, null, 2);
+      fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
+      }).then(() => {
+        document.getElementById("done-overlay").classList.add("visible");
+      }).catch(() => {
+        // Server not available (static mode) — download as file
+        const blob = new Blob([payload], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "feedback.json";
+        a.click();
+        URL.revokeObjectURL(url);
+        document.getElementById("done-overlay").classList.add("visible");
+      });
+    }
+
+    function closeDoneDialog() {
+      // Reset status back to in_progress
+      saveCurrentFeedback();
+      document.getElementById("done-overlay").classList.remove("visible");
+    }
+
+    // ---- Toast ----
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("visible");
+      setTimeout(() => toast.classList.remove("visible"), 2000);
+    }
+
+    // ---- Keyboard nav ----
+    document.addEventListener("keydown", (e) => {
+      // Don't capture when typing in textarea
+      if (e.target.tagName === "TEXTAREA") return;
+
+      if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        navigate(-1);
+      } else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        navigate(1);
+      }
+    });
+
+    // ---- Util ----
+    function getDownloadUri(file) {
+      if (file.data_uri) return file.data_uri;
+      if (file.data_b64) return "data:application/octet-stream;base64," + file.data_b64;
+      if (file.type === "text") return "data:text/plain;charset=utf-8," + encodeURIComponent(file.content);
+      return "#";
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // ---- View switching ----
+    function switchView(view) {
+      document.querySelectorAll(".view-tab").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".view-panel").forEach(p => p.classList.remove("active"));
+      document.querySelector(`[onclick="switchView('${view}')"]`).classList.add("active");
+      document.getElementById("panel-" + view).classList.add("active");
+    }
+
+    // ---- Benchmark rendering ----
+    function renderBenchmark() {
+      const data = EMBEDDED_DATA.benchmark;
+      if (!data) return;
+
+      // Show the tabs
+      document.getElementById("view-tabs").style.display = "flex";
+
+      const container = document.getElementById("benchmark-content");
+      const summary = data.run_summary || {};
+      const metadata = data.metadata || {};
+      const notes = data.notes || [];
+
+      let html = "";
+
+      // Header
+      html += "<h2 style='font-family: Poppins, sans-serif; margin-bottom: 0.5rem;'>Benchmark Results</h2>";
+      html += "<p style='color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.25rem;'>";
+      if (metadata.skill_name) html += "<strong>" + escapeHtml(metadata.skill_name) + "</strong> &mdash; ";
+      if (metadata.timestamp) html += metadata.timestamp + " &mdash; ";
+      if (metadata.evals_run) html += "Evals: " + metadata.evals_run.join(", ") + " &mdash; ";
+      html += (metadata.runs_per_configuration || "?") + " runs per configuration";
+      html += "</p>";
+
+      // Summary table
+      html += '<table class="benchmark-table">';
+
+      function fmtStat(stat, pct) {
+        if (!stat) return "—";
+        const suffix = pct ? "%" : "";
+        const m = pct ? (stat.mean * 100).toFixed(0) : stat.mean.toFixed(1);
+        const s = pct ? (stat.stddev * 100).toFixed(0) : stat.stddev.toFixed(1);
+        return m + suffix + " ± " + s + suffix;
+      }
+
+      function deltaClass(val) {
+        if (!val) return "";
+        const n = parseFloat(val);
+        if (n > 0) return "benchmark-delta-positive";
+        if (n < 0) return "benchmark-delta-negative";
+        return "";
+      }
+
+      // Discover config names dynamically (everything except "delta")
+      const configs = Object.keys(summary).filter(k => k !== "delta");
+      const configA = configs[0] || "config_a";
+      const configB = configs[1] || "config_b";
+      const labelA = configA.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const labelB = configB.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const a = summary[configA] || {};
+      const b = summary[configB] || {};
+      const delta = summary.delta || {};
+
+      html += "<thead><tr><th>Metric</th><th>" + escapeHtml(labelA) + "</th><th>" + escapeHtml(labelB) + "</th><th>Delta</th></tr></thead>";
+      html += "<tbody>";
+
+      html += "<tr><td><strong>Pass Rate</strong></td>";
+      html += "<td>" + fmtStat(a.pass_rate, true) + "</td>";
+      html += "<td>" + fmtStat(b.pass_rate, true) + "</td>";
+      html += '<td class="' + deltaClass(delta.pass_rate) + '">' + (delta.pass_rate || "—") + "</td></tr>";
+
+      // Time (only show row if data exists)
+      if (a.time_seconds || b.time_seconds) {
+        html += "<tr><td><strong>Time (s)</strong></td>";
+        html += "<td>" + fmtStat(a.time_seconds, false) + "</td>";
+        html += "<td>" + fmtStat(b.time_seconds, false) + "</td>";
+        html += '<td class="' + deltaClass(delta.time_seconds) + '">' + (delta.time_seconds ? delta.time_seconds + "s" : "—") + "</td></tr>";
+      }
+
+      // Tokens (only show row if data exists)
+      if (a.tokens || b.tokens) {
+        html += "<tr><td><strong>Tokens</strong></td>";
+        html += "<td>" + fmtStat(a.tokens, false) + "</td>";
+        html += "<td>" + fmtStat(b.tokens, false) + "</td>";
+        html += '<td class="' + deltaClass(delta.tokens) + '">' + (delta.tokens || "—") + "</td></tr>";
+      }
+
+      html += "</tbody></table>";
+
+      // Per-eval breakdown (if runs data available)
+      const runs = data.runs || [];
+      if (runs.length > 0) {
+        const evalIds = [...new Set(runs.map(r => r.eval_id))].sort((a, b) => a - b);
+
+        html += "<h3 style='font-family: Poppins, sans-serif; margin-bottom: 0.75rem;'>Per-Eval Breakdown</h3>";
+
+        const hasTime = runs.some(r => r.result && r.result.time_seconds != null);
+        const hasErrors = runs.some(r => r.result && r.result.errors > 0);
+
+        for (const evalId of evalIds) {
+          const evalRuns = runs.filter(r => r.eval_id === evalId);
+          const evalName = evalRuns[0] && evalRuns[0].eval_name ? evalRuns[0].eval_name : "Eval " + evalId;
+
+          html += "<h4 style='font-family: Poppins, sans-serif; margin: 1rem 0 0.5rem; color: var(--text);'>" + escapeHtml(evalName) + "</h4>";
+          html += '<table class="benchmark-table">';
+          html += "<thead><tr><th>Config</th><th>Run</th><th>Pass Rate</th>";
+          if (hasTime) html += "<th>Time (s)</th>";
+          if (hasErrors) html += "<th>Crashes During Execution</th>";
+          html += "</tr></thead>";
+          html += "<tbody>";
+
+          // Group by config and render with average rows
+          const configGroups = [...new Set(evalRuns.map(r => r.configuration))];
+          for (let ci = 0; ci < configGroups.length; ci++) {
+            const config = configGroups[ci];
+            const configRuns = evalRuns.filter(r => r.configuration === config);
+            if (configRuns.length === 0) continue;
+
+            const rowClass = ci === 0 ? "benchmark-row-with" : "benchmark-row-without";
+            const configLabel = config.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+
+            for (const run of configRuns) {
+              const r = run.result || {};
+              const prClass = r.pass_rate >= 0.8 ? "benchmark-delta-positive" : r.pass_rate < 0.5 ? "benchmark-delta-negative" : "";
+              html += '<tr class="' + rowClass + '">';
+              html += "<td>" + configLabel + "</td>";
+              html += "<td>" + run.run_number + "</td>";
+              html += '<td class="' + prClass + '">' + ((r.pass_rate || 0) * 100).toFixed(0) + "% (" + (r.passed || 0) + "/" + (r.total || 0) + ")</td>";
+              if (hasTime) html += "<td>" + (r.time_seconds != null ? r.time_seconds.toFixed(1) : "—") + "</td>";
+              if (hasErrors) html += "<td>" + (r.errors || 0) + "</td>";
+              html += "</tr>";
+            }
+
+            // Average row
+            const rates = configRuns.map(r => (r.result || {}).pass_rate || 0);
+            const avgRate = rates.reduce((a, b) => a + b, 0) / rates.length;
+            const avgPrClass = avgRate >= 0.8 ? "benchmark-delta-positive" : avgRate < 0.5 ? "benchmark-delta-negative" : "";
+            html += '<tr class="benchmark-row-avg ' + rowClass + '">';
+            html += "<td>" + configLabel + "</td>";
+            html += "<td>Avg</td>";
+            html += '<td class="' + avgPrClass + '">' + (avgRate * 100).toFixed(0) + "%</td>";
+            if (hasTime) {
+              const times = configRuns.map(r => (r.result || {}).time_seconds).filter(t => t != null);
+              html += "<td>" + (times.length ? (times.reduce((a, b) => a + b, 0) / times.length).toFixed(1) : "—") + "</td>";
+            }
+            if (hasErrors) html += "<td></td>";
+            html += "</tr>";
+          }
+          html += "</tbody></table>";
+
+          // Per-assertion detail for this eval
+          const runsWithExpectations = {};
+          for (const config of configGroups) {
+            runsWithExpectations[config] = evalRuns.filter(r => r.configuration === config && r.expectations && r.expectations.length > 0);
+          }
+          const hasAnyExpectations = Object.values(runsWithExpectations).some(runs => runs.length > 0);
+          if (hasAnyExpectations) {
+            // Collect all unique assertion texts across all configs
+            const allAssertions = [];
+            const seen = new Set();
+            for (const config of configGroups) {
+              for (const run of runsWithExpectations[config]) {
+                for (const exp of (run.expectations || [])) {
+                  if (!seen.has(exp.text)) {
+                    seen.add(exp.text);
+                    allAssertions.push(exp.text);
+                  }
+                }
+              }
+            }
+
+            html += '<table class="benchmark-table" style="margin-top: 0.5rem;">';
+            html += "<thead><tr><th>Assertion</th>";
+            for (const config of configGroups) {
+              const label = config.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+              html += "<th>" + escapeHtml(label) + "</th>";
+            }
+            html += "</tr></thead><tbody>";
+
+            for (const assertionText of allAssertions) {
+              html += "<tr><td>" + escapeHtml(assertionText) + "</td>";
+
+              for (const config of configGroups) {
+                html += "<td>";
+                for (const run of runsWithExpectations[config]) {
+                  const exp = (run.expectations || []).find(e => e.text === assertionText);
+                  if (exp) {
+                    const cls = exp.passed ? "benchmark-delta-positive" : "benchmark-delta-negative";
+                    const icon = exp.passed ? "\u2713" : "\u2717";
+                    html += '<span class="' + cls + '" title="Run ' + run.run_number + ': ' + escapeHtml(exp.evidence || "") + '">' + icon + "</span> ";
+                  } else {
+                    html += "— ";
+                  }
+                }
+                html += "</td>";
+              }
+              html += "</tr>";
+            }
+            html += "</tbody></table>";
+          }
+        }
+      }
+
+      // Notes
+      if (notes.length > 0) {
+        html += '<div class="benchmark-notes">';
+        html += "<h3>Analysis Notes</h3>";
+        html += "<ul>";
+        for (const note of notes) {
+          html += "<li>" + escapeHtml(note) + "</li>";
+        }
+        html += "</ul></div>";
+      }
+
+      container.innerHTML = html;
+    }
+
+    // ---- Start ----
+    init();
+    renderBenchmark();
+  </script>
+</body>
+</html>

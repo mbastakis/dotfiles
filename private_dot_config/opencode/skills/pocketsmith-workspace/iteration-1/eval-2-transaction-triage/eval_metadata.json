@@ -1,0 +1,11 @@
+{
+  "eval_id": 2,
+  "eval_name": "transaction-triage",
+  "prompt": "For a PocketSmith cleanup, these May transactions are uncategorized: PAYROLL MAY 2026 +2223.35, REMOTE WORKING MAY 2026 +10.03, Revolut9183 -200, AKTSIALIS PHARMACY -5.52, `ΑΓΟΡΑ 1948 5812` -320, `ΑΝΑΛΗΨΗ ΕΞΩΤΕΡΙΚΟΥ` -200, and `MICHAIL BASTAKIS` +200. Which ones would you update and which would you leave alone?",
+  "assertions": [
+    "The answer separates high-confidence updates from ambiguous unresolved items.",
+    "The answer marks payroll and remote-working allowance as income/paycheck with high confidence.",
+    "The answer treats clear Revolut or self-transfer movements as transfer candidates with transfer-flag caution.",
+    "The answer leaves opaque POS and cash withdrawal items unresolved instead of guessing."
+  ]
+}

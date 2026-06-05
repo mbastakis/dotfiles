@@ -1,0 +1,11 @@
+{
+  "eval_id": 0,
+  "eval_name": "call-efficient-workflow",
+  "prompt": "I need to do my June PocketSmith monthly close and update my business-plan note, but last time we wasted a lot of calls with `That resource was not found` and one transaction output got truncated. Before making live calls, write the exact workflow you would follow and when you would delegate.",
+  "assertions": [
+    "The answer starts with ID discovery using current user and transaction account listing before detail calls.",
+    "The answer includes a feed freshness gate before treating the monthly close as final.",
+    "The answer includes explicit delegation triggers for truncated outputs or many ambiguous transactions.",
+    "The answer says not to edit the note until metrics are stable or the user asks for a provisional entry."
+  ]
+}

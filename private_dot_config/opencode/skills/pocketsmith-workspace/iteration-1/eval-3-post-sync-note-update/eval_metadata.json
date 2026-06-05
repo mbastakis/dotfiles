@@ -1,0 +1,11 @@
+{
+  "eval_id": 3,
+  "eval_name": "post-sync-note-update",
+  "prompt": "NBG is now synced. Continue the PocketSmith close and update the note. The previous note already has a provisional May section. What checks should happen before replacing it, and what caveats should remain if there are still 5 uncategorized debits totaling EUR 546.82?",
+  "assertions": [
+    "The answer reruns feed status and headline PocketSmith summaries after the sync.",
+    "The answer replaces the provisional note section only after revalidation.",
+    "The answer keeps the uncategorized EUR 546.82 caveat in the final note.",
+    "The answer includes a final diff/status verification step for the note edit."
+  ]
+}

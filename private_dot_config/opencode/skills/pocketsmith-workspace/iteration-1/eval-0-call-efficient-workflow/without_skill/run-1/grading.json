@@ -1,0 +1,27 @@
+{
+  "expectations": [
+    {
+      "text": "The answer starts with ID discovery using current user and transaction account listing before detail calls.",
+      "passed": false,
+      "evidence": "It starts with generic preflight and resource discovery, but does not name current-user or transaction-account discovery."
+    },
+    {
+      "text": "The answer includes a feed freshness gate before treating the monthly close as final.",
+      "passed": false,
+      "evidence": "No feed status/freshness gate is described."
+    },
+    {
+      "text": "The answer includes explicit delegation triggers for truncated outputs or many ambiguous transactions.",
+      "passed": false,
+      "evidence": "It handles truncation by narrowing queries, but does not delegate truncated outputs or ambiguous transaction triage."
+    },
+    {
+      "text": "The answer says not to edit the note until metrics are stable or the user asks for a provisional entry.",
+      "passed": true,
+      "evidence": "Lines 39-40 say to draft the close separately and update the note only after numbers are verified."
+    }
+  ],
+  "summary": {"passed": 1, "failed": 3, "total": 4, "pass_rate": 0.25},
+  "execution_metrics": {"total_tool_calls": 0, "errors_encountered": 0, "output_chars": 3700},
+  "timing": {"total_duration_seconds": 0.0}
+}

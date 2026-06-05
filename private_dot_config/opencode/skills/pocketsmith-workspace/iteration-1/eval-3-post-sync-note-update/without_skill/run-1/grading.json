@@ -1,0 +1,27 @@
+{
+  "expectations": [
+    {
+      "text": "The answer reruns feed status and headline PocketSmith summaries after the sync.",
+      "passed": false,
+      "evidence": "It verifies NBG sync and completeness, but does not explicitly rerun PocketSmith headline summaries."
+    },
+    {
+      "text": "The answer replaces the provisional note section only after revalidation.",
+      "passed": true,
+      "evidence": "Lines 1-9 list checks before replacing the provisional May section."
+    },
+    {
+      "text": "The answer keeps the uncategorized EUR 546.82 caveat in the final note.",
+      "passed": true,
+      "evidence": "Lines 10-16 preserve the EUR 546.82 uncategorized caveat."
+    },
+    {
+      "text": "The answer includes a final diff/status verification step for the note edit.",
+      "passed": false,
+      "evidence": "No final diff/status verification step is mentioned."
+    }
+  ],
+  "summary": {"passed": 2, "failed": 2, "total": 4, "pass_rate": 0.5},
+  "execution_metrics": {"total_tool_calls": 0, "errors_encountered": 0, "output_chars": 1200},
+  "timing": {"total_duration_seconds": 0.0}
+}

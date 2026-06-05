@@ -1,0 +1,27 @@
+{
+  "expectations": [
+    {
+      "text": "The answer starts with ID discovery using current user and transaction account listing before detail calls.",
+      "passed": true,
+      "evidence": "Lines 15-22 put `pocketsmith_get_current_user`, `pocketsmith_list_transaction_accounts`, and feed status before detail calls."
+    },
+    {
+      "text": "The answer includes a feed freshness gate before treating the monthly close as final.",
+      "passed": true,
+      "evidence": "Lines 40-53 define the feed freshness gate and say stale feeds block final metrics."
+    },
+    {
+      "text": "The answer includes explicit delegation triggers for truncated outputs or many ambiguous transactions.",
+      "passed": true,
+      "evidence": "Lines 114-124 list delegation triggers including truncated output and more than 5 ambiguous transactions."
+    },
+    {
+      "text": "The answer says not to edit the note until metrics are stable or the user asks for a provisional entry.",
+      "passed": true,
+      "evidence": "Lines 3, 9-10, and 153-164 defer note edits until data and metrics are stable."
+    }
+  ],
+  "summary": {"passed": 4, "failed": 0, "total": 4, "pass_rate": 1.0},
+  "execution_metrics": {"total_tool_calls": 0, "errors_encountered": 0, "output_chars": 10300},
+  "timing": {"total_duration_seconds": 0.0}
+}

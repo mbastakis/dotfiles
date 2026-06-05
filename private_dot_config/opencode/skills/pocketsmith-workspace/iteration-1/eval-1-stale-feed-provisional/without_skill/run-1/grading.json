@@ -1,0 +1,27 @@
+{
+  "expectations": [
+    {
+      "text": "The answer labels the close provisional or blocked rather than clean/final.",
+      "passed": true,
+      "evidence": "Lines 3 and 25 label the review provisional."
+    },
+    {
+      "text": "The answer treats `EUR 0` income as a data-feed failure, not a real income result.",
+      "passed": true,
+      "evidence": "Lines 10 and 16 say `EUR 0` income is not reliable/final."
+    },
+    {
+      "text": "The answer avoids final runway or savings-rate conclusions while key feeds are stale.",
+      "passed": true,
+      "evidence": "Line 18 refuses final savings rate; lines 19-21 refuse related final account/budget conclusions."
+    },
+    {
+      "text": "The answer asks for NBG/Eurobank sync or reauthorization before finalizing.",
+      "passed": true,
+      "evidence": "Line 25 says final review should wait until NBG authorization is restored and Eurobank refreshed."
+    }
+  ],
+  "summary": {"passed": 4, "failed": 0, "total": 4, "pass_rate": 1.0},
+  "execution_metrics": {"total_tool_calls": 0, "errors_encountered": 0, "output_chars": 1300},
+  "timing": {"total_duration_seconds": 0.0}
+}

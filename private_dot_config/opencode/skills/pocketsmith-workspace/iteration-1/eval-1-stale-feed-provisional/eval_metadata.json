@@ -1,0 +1,11 @@
+{
+  "eval_id": 1,
+  "eval_name": "stale-feed-provisional",
+  "prompt": "PocketSmith says NBG is `authorisation_failed`, Eurobank is stale since March, and May income shows `EUR 0`, but I still want a May finance review. What should you report and what should you refuse to treat as final?",
+  "assertions": [
+    "The answer labels the close provisional or blocked rather than clean/final.",
+    "The answer treats `EUR 0` income as a data-feed failure, not a real income result.",
+    "The answer avoids final runway or savings-rate conclusions while key feeds are stale.",
+    "The answer asks for NBG/Eurobank sync or reauthorization before finalizing."
+  ]
+}

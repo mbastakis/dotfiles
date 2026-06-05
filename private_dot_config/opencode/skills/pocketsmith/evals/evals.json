@@ -1,0 +1,53 @@
+{
+  "skill_name": "pocketsmith",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "I need to do my June PocketSmith monthly close and update my business-plan note, but last time we wasted a lot of calls with `That resource was not found` and one transaction output got truncated. Before making live calls, write the exact workflow you would follow and when you would delegate.",
+      "expected_output": "A phased PocketSmith workflow that resolves user/account IDs first, checks feed status, gathers headline summaries before transactions, delegates large/truncated outputs, and delays note edits until final metrics are stable.",
+      "files": [],
+      "expectations": [
+        "The answer starts with ID discovery using current user and transaction account listing before detail calls.",
+        "The answer includes a feed freshness gate before treating the monthly close as final.",
+        "The answer includes explicit delegation triggers for truncated outputs or many ambiguous transactions.",
+        "The answer says not to edit the note until metrics are stable or the user asks for a provisional entry."
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "PocketSmith says NBG is `authorisation_failed`, Eurobank is stale since March, and May income shows `EUR 0`, but I still want a May finance review. What should you report and what should you refuse to treat as final?",
+      "expected_output": "A provisional-close response that reports trustworthy imported spending, flags feed blockers, avoids final runway/savings-rate claims, and asks for sync/reauthorization before final note updates.",
+      "files": [],
+      "expectations": [
+        "The answer labels the close provisional or blocked rather than clean/final.",
+        "The answer treats `EUR 0` income as a data-feed failure, not a real income result.",
+        "The answer avoids final runway or savings-rate conclusions while key feeds are stale.",
+        "The answer asks for NBG/Eurobank sync or reauthorization before finalizing."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "For a PocketSmith cleanup, these May transactions are uncategorized: PAYROLL MAY 2026 +2223.35, REMOTE WORKING MAY 2026 +10.03, Revolut9183 -200, AKTSIALIS PHARMACY -5.52, `ΑΓΟΡΑ 1948 5812` -320, `ΑΝΑΛΗΨΗ ΕΞΩΤΕΡΙΚΟΥ` -200, and `MICHAIL BASTAKIS` +200. Which ones would you update and which would you leave alone?",
+      "expected_output": "A confidence table that updates obvious payroll/allowance/pharmacy/transfer items and leaves opaque POS, cash withdrawal, or person-name items unresolved unless a user rule confirms them.",
+      "files": [],
+      "expectations": [
+        "The answer separates high-confidence updates from ambiguous unresolved items.",
+        "The answer marks payroll and remote-working allowance as income/paycheck with high confidence.",
+        "The answer treats clear Revolut or self-transfer movements as transfer candidates with transfer-flag caution.",
+        "The answer leaves opaque POS and cash withdrawal items unresolved instead of guessing."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "NBG is now synced. Continue the PocketSmith close and update the note. The previous note already has a provisional May section. What checks should happen before replacing it, and what caveats should remain if there are still 5 uncategorized debits totaling EUR 546.82?",
+      "expected_output": "A post-sync revalidation plan that reruns feed status and all headline summaries, replaces the provisional section only after final reruns, keeps Eurobank/uncategorized caveats, and verifies the note diff.",
+      "files": [],
+      "expectations": [
+        "The answer reruns feed status and headline PocketSmith summaries after the sync.",
+        "The answer replaces the provisional note section only after revalidation.",
+        "The answer keeps the uncategorized EUR 546.82 caveat in the final note.",
+        "The answer includes a final diff/status verification step for the note edit."
+      ]
+    }
+  ]
+}

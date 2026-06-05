@@ -1,0 +1,27 @@
+{
+  "expectations": [
+    {
+      "text": "The answer reruns feed status and headline PocketSmith summaries after the sync.",
+      "passed": true,
+      "evidence": "Lines 3-4 rerun feed freshness and headline summaries after sync."
+    },
+    {
+      "text": "The answer replaces the provisional note section only after revalidation.",
+      "passed": true,
+      "evidence": "Lines 3-8 list revalidation checks before replacing the section."
+    },
+    {
+      "text": "The answer keeps the uncategorized EUR 546.82 caveat in the final note.",
+      "passed": true,
+      "evidence": "Lines 10-16 keep the 5-debit/EUR 546.82 caveat."
+    },
+    {
+      "text": "The answer includes a final diff/status verification step for the note edit.",
+      "passed": false,
+      "evidence": "It says to replace only the provisional section, but does not mention verifying the final diff or status."
+    }
+  ],
+  "summary": {"passed": 3, "failed": 1, "total": 4, "pass_rate": 0.75},
+  "execution_metrics": {"total_tool_calls": 0, "errors_encountered": 0, "output_chars": 1450},
+  "timing": {"total_duration_seconds": 0.0}
+}

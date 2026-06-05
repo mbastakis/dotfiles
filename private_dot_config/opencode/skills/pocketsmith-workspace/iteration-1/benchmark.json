@@ -1,0 +1,375 @@
+{
+  "metadata": {
+    "skill_name": "pocketsmith",
+    "skill_path": "/Users/mbastakis/.config/opencode/skills/pocketsmith",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-05-31T22:11:26Z",
+    "evals_run": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": 0,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 0.0,
+        "tokens": 10300,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The answer starts with ID discovery using current user and transaction account listing before detail calls.",
+          "passed": true,
+          "evidence": "Lines 15-22 put `pocketsmith_get_current_user`, `pocketsmith_list_transaction_accounts`, and feed status before detail calls."
+        },
+        {
+          "text": "The answer includes a feed freshness gate before treating the monthly close as final.",
+          "passed": true,
+          "evidence": "Lines 40-53 define the feed freshness gate and say stale feeds block final metrics."
+        },
+        {
+          "text": "The answer includes explicit delegation triggers for truncated outputs or many ambiguous transactions.",
+          "passed": true,
+          "evidence": "Lines 114-124 list delegation triggers including truncated output and more than 5 ambiguous transactions."
+        },
+        {
+          "text": "The answer says not to edit the note until metrics are stable or the user asks for a provisional entry.",
+          "passed": true,
+          "evidence": "Lines 3, 9-10, and 153-164 defer note edits until data and metrics are stable."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 0.0,
+        "tokens": 1900,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The answer labels the close provisional or blocked rather than clean/final.",
+          "passed": true,
+          "evidence": "Line 4 says finality is provisional / blocked for final close."
+        },
+        {
+          "text": "The answer treats `EUR 0` income as a data-feed failure, not a real income result.",
+          "passed": true,
+          "evidence": "Line 7 says `EUR 0` is a data-quality signal, not a reliable conclusion."
+        },
+        {
+          "text": "The answer avoids final runway or savings-rate conclusions while key feeds are stale.",
+          "passed": true,
+          "evidence": "Lines 10-12 refuse final savings rate and cash/runway while feeds are failed or stale."
+        },
+        {
+          "text": "The answer asks for NBG/Eurobank sync or reauthorization before finalizing.",
+          "passed": true,
+          "evidence": "Lines 30-34 ask to reauthorize NBG, refresh Eurobank, and rerun summaries."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 0.0,
+        "tokens": 1700,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The answer separates high-confidence updates from ambiguous unresolved items.",
+          "passed": true,
+          "evidence": "The table marks update decisions separately from leave-alone decisions."
+        },
+        {
+          "text": "The answer marks payroll and remote-working allowance as income/paycheck with high confidence.",
+          "passed": true,
+          "evidence": "Lines 5-6 categorize payroll and remote-working credit as employment income/allowance."
+        },
+        {
+          "text": "The answer treats clear Revolut or self-transfer movements as transfer candidates with transfer-flag caution.",
+          "passed": true,
+          "evidence": "Lines 7 and 11 mark the Revolut/Michail pair as transfer candidates only if matched."
+        },
+        {
+          "text": "The answer leaves opaque POS and cash withdrawal items unresolved instead of guessing.",
+          "passed": true,
+          "evidence": "Lines 9-10 leave the opaque POS label and cash withdrawal unresolved."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.75,
+        "passed": 3,
+        "failed": 1,
+        "total": 4,
+        "time_seconds": 0.0,
+        "tokens": 1450,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The answer reruns feed status and headline PocketSmith summaries after the sync.",
+          "passed": true,
+          "evidence": "Lines 3-4 rerun feed freshness and headline summaries after sync."
+        },
+        {
+          "text": "The answer replaces the provisional note section only after revalidation.",
+          "passed": true,
+          "evidence": "Lines 3-8 list revalidation checks before replacing the section."
+        },
+        {
+          "text": "The answer keeps the uncategorized EUR 546.82 caveat in the final note.",
+          "passed": true,
+          "evidence": "Lines 10-16 keep the 5-debit/EUR 546.82 caveat."
+        },
+        {
+          "text": "The answer includes a final diff/status verification step for the note edit.",
+          "passed": false,
+          "evidence": "It says to replace only the provisional section, but does not mention verifying the final diff or status."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.25,
+        "passed": 1,
+        "failed": 3,
+        "total": 4,
+        "time_seconds": 0.0,
+        "tokens": 3700,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The answer starts with ID discovery using current user and transaction account listing before detail calls.",
+          "passed": false,
+          "evidence": "It starts with generic preflight and resource discovery, but does not name current-user or transaction-account discovery."
+        },
+        {
+          "text": "The answer includes a feed freshness gate before treating the monthly close as final.",
+          "passed": false,
+          "evidence": "No feed status/freshness gate is described."
+        },
+        {
+          "text": "The answer includes explicit delegation triggers for truncated outputs or many ambiguous transactions.",
+          "passed": false,
+          "evidence": "It handles truncation by narrowing queries, but does not delegate truncated outputs or ambiguous transaction triage."
+        },
+        {
+          "text": "The answer says not to edit the note until metrics are stable or the user asks for a provisional entry.",
+          "passed": true,
+          "evidence": "Lines 39-40 say to draft the close separately and update the note only after numbers are verified."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 0.0,
+        "tokens": 1300,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The answer labels the close provisional or blocked rather than clean/final.",
+          "passed": true,
+          "evidence": "Lines 3 and 25 label the review provisional."
+        },
+        {
+          "text": "The answer treats `EUR 0` income as a data-feed failure, not a real income result.",
+          "passed": true,
+          "evidence": "Lines 10 and 16 say `EUR 0` income is not reliable/final."
+        },
+        {
+          "text": "The answer avoids final runway or savings-rate conclusions while key feeds are stale.",
+          "passed": true,
+          "evidence": "Line 18 refuses final savings rate; lines 19-21 refuse related final account/budget conclusions."
+        },
+        {
+          "text": "The answer asks for NBG/Eurobank sync or reauthorization before finalizing.",
+          "passed": true,
+          "evidence": "Line 25 says final review should wait until NBG authorization is restored and Eurobank refreshed."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.75,
+        "passed": 3,
+        "failed": 1,
+        "total": 4,
+        "time_seconds": 0.0,
+        "tokens": 1600,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The answer separates high-confidence updates from ambiguous unresolved items.",
+          "passed": true,
+          "evidence": "It has separate Update and Leave Alone sections."
+        },
+        {
+          "text": "The answer marks payroll and remote-working allowance as income/paycheck with high confidence.",
+          "passed": true,
+          "evidence": "Lines 9-10 categorize payroll and remote-working allowance as income/reimbursement."
+        },
+        {
+          "text": "The answer treats clear Revolut or self-transfer movements as transfer candidates with transfer-flag caution.",
+          "passed": false,
+          "evidence": "Lines 18 and 20 say likely transfer/self-transfer but leave them alone rather than presenting a cautious transfer-pair update."
+        },
+        {
+          "text": "The answer leaves opaque POS and cash withdrawal items unresolved instead of guessing.",
+          "passed": true,
+          "evidence": "Lines 12, 19, and 26-28 avoid guessing for opaque/cash items."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.5,
+        "passed": 2,
+        "failed": 2,
+        "total": 4,
+        "time_seconds": 0.0,
+        "tokens": 1200,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The answer reruns feed status and headline PocketSmith summaries after the sync.",
+          "passed": false,
+          "evidence": "It verifies NBG sync and completeness, but does not explicitly rerun PocketSmith headline summaries."
+        },
+        {
+          "text": "The answer replaces the provisional note section only after revalidation.",
+          "passed": true,
+          "evidence": "Lines 1-9 list checks before replacing the provisional May section."
+        },
+        {
+          "text": "The answer keeps the uncategorized EUR 546.82 caveat in the final note.",
+          "passed": true,
+          "evidence": "Lines 10-16 preserve the EUR 546.82 uncategorized caveat."
+        },
+        {
+          "text": "The answer includes a final diff/status verification step for the note edit.",
+          "passed": false,
+          "evidence": "No final diff/status verification step is mentioned."
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 0.9375,
+        "stddev": 0.125,
+        "min": 0.75,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "tokens": {
+        "mean": 3837.5,
+        "stddev": 4312.2645,
+        "min": 1450,
+        "max": 10300
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.625,
+        "stddev": 0.3227,
+        "min": 0.25,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "tokens": {
+        "mean": 1950.0,
+        "stddev": 1178.9826,
+        "min": 1200,
+        "max": 3700
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.31",
+      "time_seconds": "+0.0",
+      "tokens": "+1888"
+    }
+  },
+  "notes": [
+    "With-skill runs improved pass rate from 62.5% to 93.8%, with the largest gains on eval 0 call-efficiency workflow and eval 3 post-sync revalidation.",
+    "Eval 1 stale-feed handling passed in both configurations, so that eval is useful as a safety check but does not strongly differentiate the skill.",
+    "Both configurations missed the final diff/status verification expectation in eval 3; the skill output still performed better because it explicitly reran feed status and headline summaries after sync.",
+    "Token figures are derived from output character counts because task timing/token metadata was not exposed in these task results. Treat time/token comparisons as approximate."
+  ]
+}

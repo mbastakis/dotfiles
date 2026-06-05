@@ -1,0 +1,27 @@
+{
+  "expectations": [
+    {
+      "text": "The answer separates high-confidence updates from ambiguous unresolved items.",
+      "passed": true,
+      "evidence": "The table marks update decisions separately from leave-alone decisions."
+    },
+    {
+      "text": "The answer marks payroll and remote-working allowance as income/paycheck with high confidence.",
+      "passed": true,
+      "evidence": "Lines 5-6 categorize payroll and remote-working credit as employment income/allowance."
+    },
+    {
+      "text": "The answer treats clear Revolut or self-transfer movements as transfer candidates with transfer-flag caution.",
+      "passed": true,
+      "evidence": "Lines 7 and 11 mark the Revolut/Michail pair as transfer candidates only if matched."
+    },
+    {
+      "text": "The answer leaves opaque POS and cash withdrawal items unresolved instead of guessing.",
+      "passed": true,
+      "evidence": "Lines 9-10 leave the opaque POS label and cash withdrawal unresolved."
+    }
+  ],
+  "summary": {"passed": 4, "failed": 0, "total": 4, "pass_rate": 1.0},
+  "execution_metrics": {"total_tool_calls": 0, "errors_encountered": 0, "output_chars": 1700},
+  "timing": {"total_duration_seconds": 0.0}
+}
