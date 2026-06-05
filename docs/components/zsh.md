@@ -29,7 +29,7 @@ _Reference: `private_dot_config/zsh/dot_zshrc:22`, `dot_zshenv.tmpl:16`_
 
 ### Performance Caching
 
-`brew shellenv`, selective `carapace <tool> zsh` output, and `sesh completion zsh` are cached to `~/.cache/` and only regenerated when the cache file is missing, the binary is newer than the cache, or Carapace config/spec files change. Optional startup profiling is available via `ZSHRC_PROFILE=1 zsh -i -c exit`.
+`brew shellenv`, selective `carapace <tool> zsh` output, `sesh completion zsh`, `mise completion zsh`, and go-task's `task --completion zsh` are cached and only regenerated when the cache file is missing, the binary/source changes, or Carapace config/spec files change. Optional startup profiling is available via `ZSHRC_PROFILE=1 zsh -i -c exit`.
 
 ## Shell Options
 
@@ -63,6 +63,8 @@ Interactive-only environment variables. PATH/EDITOR/XDG are set in `~/.zshenv` (
 |---|---|
 | `PAGER` | `bat` (interactive TTY) / `cat` (agent/non-TTY) |
 | `LESS` | `-R` |
+| `ZSH_COMPLETION_DIR` | `$ZDOTDIR/completions` |
+| `ZSH_COMPLETION_CACHE_DIR` | `$XDG_CACHE_HOME/zsh/completions` |
 | `CARAPACE_BRIDGES` | `zsh,fish,bash,inshellisense` |
 | `_ZO_ECHO` | `1` (show directory after zoxide cd) |
 | `OPENCODE_CONFIG` | `$HOME/.config/opencode/opencode.jsonc` |
@@ -71,6 +73,8 @@ Interactive-only environment variables. PATH/EDITOR/XDG are set in `~/.zshenv` (
 | `OPENCODE_CONFIG_DIR` | `$HOME/.config/opencode` |
 
 _Reference: `private_dot_config/zsh/exports.zsh:1`_
+
+`exports.zsh` creates the completion directories and prepends `ZSH_COMPLETION_DIR` to `fpath` before `plugins.zsh` runs `compinit`, so generated function files such as `_mise` can be discovered by zsh.
 
 ### plugins.zsh
 
@@ -98,7 +102,7 @@ Completion setup for interactive shells:
 | `aws_completer` | Native AWS CLI completer | Registered through `bashcompinit` so `aws` avoids Carapace latency |
 | `sesh completion zsh` | Cached native script | Works even when Carapace is disabled |
 
-`completions.zsh` is sourced after `compinit` and before `tools.zsh`, so command completions are available before tool init mutates shell state.
+`completions.zsh` is sourced after `compinit` and before `tools.zsh`. Mise-specific completions are generated in `tools.zsh` because they depend on `mise activate zsh`; `exports.zsh` prepares `fpath` before `compinit`.
 
 _Reference: `private_dot_config/zsh/completions.zsh:1`_
 
@@ -108,7 +112,8 @@ Tool initialization for interactive shells:
 
 | Tool | Init | Notes |
 |---|---|---|
-| Mise | `mise activate zsh` | Activates mise-managed tools in PATH |
+| Mise | `mise activate zsh` + cached completions | Activates mise-managed tools in PATH; writes `_mise` to `$ZSH_COMPLETION_DIR` |
+| go-task | Conditional `task` completion hook | Registers go-task completion only when `task` resolves to mise's `installs/task/...` path |
 | Zoxide | `zoxide init --cmd cd zsh` | Replaces `cd`; unaliases `zi` to avoid zinit conflict |
 | Direnv | `direnv hook zsh` | Per-directory environment variables |
 | Starship | `starship init zsh` | Prompt |

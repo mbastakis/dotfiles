@@ -23,6 +23,13 @@ export LESS_TERMCAP_se=$'\E[0m'        # reset reverse video
 export LESS_TERMCAP_us=$'\E[1;32m'     # begin underline
 export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
 
+# Native zsh completion function files. fpath must be updated before compinit.
+export ZSH_COMPLETION_DIR="${ZSH_COMPLETION_DIR:-$ZDOTDIR/completions}"
+export ZSH_COMPLETION_CACHE_DIR="${ZSH_COMPLETION_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/zsh/completions}"
+mkdir -p "$ZSH_COMPLETION_DIR" "$ZSH_COMPLETION_CACHE_DIR"
+fpath=(${fpath:#$ZSH_COMPLETION_DIR})
+fpath=("$ZSH_COMPLETION_DIR" $fpath)
+
 # Carapace completions are opt-in per command so common native completions stay fast.
 # Enabled by default. Set this to 0 here if you want to disable the loader.
 export ZSH_ENABLE_CARAPACE=1
