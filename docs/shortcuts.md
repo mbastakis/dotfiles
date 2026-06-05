@@ -86,6 +86,7 @@ Prefix: **`Ctrl-a`**
 | `prefix + G`         | Lazygit popup (90% overlay) | `private_dot_config/tmux/tmux.conf:30` |
 | `Ctrl+Tab`           | Next window            | `private_dot_config/tmux/tmux.conf:11` |
 | `Ctrl+Shift+Tab`     | Previous window        | `private_dot_config/tmux/tmux.conf:12` |
+| `PageUp` / `PageDown` | Tmux scrollback in shell; forwarded to fullscreen pane apps | `private_dot_config/tmux/tmux.conf:35-36` |
 | `v` (copy mode)      | Begin selection  | `private_dot_config/tmux/tmux.conf:30` |
 | `y` (copy mode)      | Copy selection   | `private_dot_config/tmux/tmux.conf:32` |
 | `Escape` (copy mode) | Cancel           | `private_dot_config/tmux/tmux.conf:29` |
