@@ -62,11 +62,11 @@ _Reference: `private_dot_config/ghostty/config:1`_
 Terminal multiplexer with Catppuccin theme and plugin ecosystem.
 
 - **Prefix:** `Ctrl-a`
-- **Plugins (TPM):** vim-tmux-navigator, catppuccin, tmux-smooth-scroll, tmux-yank, tmux-resurrect, tmux-continuum, tmux-floax, tmux-harpoon
+- **Plugins (TPM):** vim-tmux-navigator, catppuccin, tmux-yank, tmux-resurrect, tmux-continuum, tmux-floax, tmux-harpoon
 - **Session picker:** `prefix + s` opens a `sesh` + `gum` popup helper (`~/bin/sesh-picker`)
 - **Session rename:** `prefix + R` opens a `gum` input popup (`~/bin/sesh-rename`); rejects duplicate session names
 - **OpenCode launch:** `prefix + o` splits the current pane and runs `~/bin/opencode-launch`, which preserves per-pane OpenCode session tracking across tmux restores.
-- **Scrollback:** `PageUp`/`PageDown` start tmux copy-mode scrollback in the shell, but are forwarded to fullscreen pane applications using the alternate screen.
+- **Scrollback:** `PageUp`/`PageDown` move by half-pages in tmux copy-mode scrollback, but are forwarded to fullscreen pane applications using the alternate screen.
 - **Session persistence:** Resurrect auto-saves every 15 min (via Continuum) and on every client detach. Restore on server start is handled by a custom `~/bin/tmux-restore` script that validates the save file and falls back to recent backups when the latest save is corrupt. OpenCode panes are restored to their exact previous session via per-pane session ID tracking in `~/.local/state/opencode/tmux-panes/`.
 - **Status line:** Top position, oasis-style mode indicator with per-mode colors/icons
 - **History:** 100,000 lines, mouse enabled, base-index 1
