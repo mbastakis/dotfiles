@@ -1,0 +1,133 @@
+#!/bin/bash
+set -euo pipefail
+
+trim_url() {
+    local url="$1"
+
+    while [[ "$url" =~ [\]\)\}\>.,\;:\!\?]$ ]]; do
+        url="${url%?}"
+    done
+
+    printf '%s' "$url"
+}
+
+is_openable_url() {
+    local url="$1"
+
+    case "$url" in
+        http://* | https://* | ftp://* | file://* | mailto:* | www.*)
+            return 0
+            ;;
+    esac
+
+    return 1
+}
+
+normalize_url() {
+    local url
+    url="$(trim_url "$1")"
+
+    if [[ "$url" == www.* ]]; then
+        url="https://$url"
+    fi
+
+    printf '%s' "$url"
+}
+
+url_from_line() {
+    local line="$1"
+    local relative_x="$2"
+    local absolute_x="$3"
+
+    TMUX_URL_LINE="$line" \
+        TMUX_URL_RELATIVE_X="$relative_x" \
+        TMUX_URL_ABSOLUTE_X="$absolute_x" \
+        perl -CS -e '
+use strict;
+use warnings;
+
+my $line = $ENV{"TMUX_URL_LINE"} // "";
+my @columns = grep { defined $_ && /^-?\d+$/ } (
+    $ENV{"TMUX_URL_RELATIVE_X"},
+    $ENV{"TMUX_URL_ABSOLUTE_X"},
+);
+
+while ($line =~ m{(?:https?|ftp|file)://[^\s<>"'\''`\\]+|mailto:[^\s<>"'\''`\\]+|www\.[^\s<>"'\''`\\]+}g) {
+    my $url = $&;
+    my $start = $-[0];
+
+    $url =~ s/[)\]\}>.,;:!?]+$//;
+    my $end = $start + length($url);
+
+    for my $column (@columns) {
+        if ($column >= $start && $column <= $end) {
+            print $url;
+            exit 0;
+        }
+    }
+}
+'
+}
+
+open_url() {
+    local url="$1"
+    local message
+
+    url="$(normalize_url "$url")"
+    message="$url"
+
+    if [[ ${#message} -gt 100 ]]; then
+        message="${message:0:97}..."
+    fi
+
+    if [[ "$(uname)" == "Darwin" ]]; then
+        if ! open "$url" >/dev/null 2>&1; then
+            tmux display-message "Failed to open $message" || true
+            return 1
+        fi
+    elif command -v xdg-open &>/dev/null; then
+        if ! xdg-open "$url" >/dev/null 2>&1; then
+            tmux display-message "Failed to open $message" || true
+            return 1
+        fi
+    else
+        tmux display-message "No browser opener found for $message" || true
+        return 1
+    fi
+
+    tmux display-message "Opened $message" || true
+}
+
+main() {
+    local candidate=""
+    local mouse_x="${TMUX_URL_X:-}"
+    local pane_left="${TMUX_PANE_LEFT:-0}"
+    local relative_x="$mouse_x"
+
+    if [[ "$mouse_x" =~ ^[0-9]+$ && "$pane_left" =~ ^[0-9]+$ ]]; then
+        relative_x=$((mouse_x - pane_left))
+    fi
+
+    candidate="$(trim_url "${TMUX_URL_HYPERLINK:-}")"
+    if is_openable_url "$candidate"; then
+        open_url "$candidate"
+        return
+    fi
+
+    candidate="$(url_from_line "${TMUX_URL_LINE:-}" "$relative_x" "$mouse_x")"
+    candidate="$(trim_url "$candidate")"
+    if is_openable_url "$candidate"; then
+        open_url "$candidate"
+        return
+    fi
+
+    candidate="$(trim_url "${TMUX_URL_WORD:-}")"
+    if is_openable_url "$candidate"; then
+        open_url "$candidate"
+        return
+    fi
+
+    return 1
+}
+
+main "$@"

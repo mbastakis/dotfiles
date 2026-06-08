@@ -67,6 +67,7 @@ Terminal multiplexer with Catppuccin theme and plugin ecosystem.
 - **Session rename:** `prefix + R` opens a `gum` input popup (`~/bin/sesh-rename`); rejects duplicate session names
 - **OpenCode launch:** `prefix + o` splits the current pane and runs `~/bin/opencode-launch`, which preserves per-pane OpenCode session tracking across tmux restores.
 - **Scrollback:** `PageUp`/`PageDown` move by half-pages in tmux copy-mode scrollback, but are forwarded to fullscreen pane applications using the alternate screen.
+- **URL opening:** double-clicking a URL in a pane opens it with the system browser via `~/bin/tmux-open-url-at-mouse`; non-URL double-clicks keep tmux's default word-copy behavior.
 - **Session persistence:** Resurrect auto-saves every 15 min (via Continuum) and on every client detach. Restore on server start is handled by a custom `~/bin/tmux-restore` script that validates the save file and falls back to recent backups when the latest save is corrupt. OpenCode panes are restored to their exact previous session via per-pane session ID tracking in `~/.local/state/opencode/tmux-panes/`.
 - **Status line:** Top position, oasis-style mode indicator with per-mode colors/icons
 - **History:** 100,000 lines, mouse enabled, base-index 1

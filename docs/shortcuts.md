@@ -87,6 +87,7 @@ Prefix: **`Ctrl-a`**
 | `Ctrl+Tab`           | Next window            | `private_dot_config/tmux/tmux.conf:11` |
 | `Ctrl+Shift+Tab`     | Previous window        | `private_dot_config/tmux/tmux.conf:12` |
 | `PageUp` / `PageDown` | Half-page tmux scrollback in shell; forwarded to fullscreen pane apps | `private_dot_config/tmux/tmux.conf:35-38` |
+| Double-click URL     | Open URL in browser    | `private_dot_config/tmux/tmux.conf:45` |
 | `v` (copy mode)      | Begin selection  | `private_dot_config/tmux/tmux.conf:30` |
 | `y` (copy mode)      | Copy selection   | `private_dot_config/tmux/tmux.conf:32` |
 | `Escape` (copy mode) | Cancel           | `private_dot_config/tmux/tmux.conf:29` |
