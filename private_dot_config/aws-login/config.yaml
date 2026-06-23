@@ -27,7 +27,7 @@ profiles:
     type: sso
     description: "Personal AWS account - AdministratorAccess"
     sso_start_url: "https://d-c36703a864.awsapps.com/start"
-    sso_region: eu-central-1
+    sso_region: eu-north-1
     sso_account_id: "308721625651"
     sso_role_name: AdministratorAccess
     region: eu-central-1
