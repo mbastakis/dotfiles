@@ -28,6 +28,15 @@ profiles:
     session_duration: 12h
     max-hour: 12
 
+  personal:
+    type: sso
+    description: "Personal AWS account"
+    sso_start_url: "https://example.awsapps.com/start/#/"
+    sso_region: eu-central-1
+    sso_account_id: "123456789012"
+    sso_role_name: AdministratorAccess
+    region: eu-central-1
+
   dev:
     type: cloudshepherd
     description: "Development environment"

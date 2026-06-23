@@ -22,7 +22,7 @@ Summary of notable config areas managed by chezmoi, with links to dedicated docs
 | **abook** | `private_dot_config/abook/`, `private_dot_local/private_share/abook/` | [email.md](email.md) | Local address book split across XDG config/data paths |
 | Colima | `private_dot_local/private_share/colima/` | -- | Container runtime seed; live VM config is preserved after creation |
 | Kubernetes | `private_dot_config/kube/` | -- | DT work kubeconfig seeds; live files are preserved after `kubectl`/`aws`/`kind` rewrites |
-| aws-login | `private_dot_config/aws-login/` | -- | Work AWS profiles and per-profile `KUBECONFIG` wiring |
+| aws-login | `private_dot_config/aws-login/` | -- | Work and personal AWS profiles, AWS SSO bootstrap, and per-profile `KUBECONFIG` wiring |
 | Mise | `private_dot_config/mise/config.toml` (global) + `mise.toml` (repo root, source-only) | -- | Tool/version manager; repo-local pins `go-task` |
 | Taskfile | `Taskfile.yml` (repo root, source-only) | -- | go-task runner for chezmoi repo workflows (apply/diff/lint/docs) |
 | Ghostty | `private_dot_config/ghostty/` | -- | Terminal emulator |

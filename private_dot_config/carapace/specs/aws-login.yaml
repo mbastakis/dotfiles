@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: aws-login
-description: AWS profile switcher with MFA, IAM, and CloudShepherd support
+description: AWS profile switcher with MFA, IAM, SSO, and CloudShepherd support
 flags:
   -h, --help: Show help message
   -v, --verbose: Show detailed output
@@ -29,7 +29,7 @@ commands:
       positional:
         - ["$carapace.tools.Exec([aws-login, --list-profiles])"]
   - name: login
-    description: Interactive CloudShepherd login
+    description: Interactive CloudShepherd or AWS SSO login
     completion:
       positional:
         - ["$carapace.tools.Exec([aws-login, --list-profiles])"]
