@@ -10,7 +10,6 @@ import = ["~/.config/sesh/work.toml"]
 {{- end }}
 
 [default_session]
-startup_command = "tmux split-window -h -c '{}' 'opencode-launch'; eza -la --git --icons; tmux select-pane -L; tmux resize-pane -Z"
 preview_command = "eza --all --git --icons --color=always {}"
 windows = []
 

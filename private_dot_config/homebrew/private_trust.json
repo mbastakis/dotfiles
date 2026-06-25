@@ -1,0 +1,11 @@
+{
+  "trustedformulae": [
+    "anomalyco/tap/opencode",
+    "dlvhdr/formulae/diffnav",
+    "mbastakis/tap/aws-login",
+    "oven-sh/bun/bun"
+  ],
+  "trustedcasks": [
+    "nikitabobko/tap/aerospace"
+  ]
+}

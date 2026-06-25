@@ -73,7 +73,7 @@ Ghostty remaps `Hide Ghostty` to `Ctrl+Option+Cmd+H` via `.chezmoiscripts/run_on
 
 ## tmux (Multiplexer Layer)
 
-Prefix: **`Ctrl-a`**
+Prefix: **`Ctrl-a`** everywhere. In a local tmux pane attached to remote tmux over SSH, use **`Ctrl-a a`** to forward one prefix to the remote tmux, then press the remote command key. Example: `Ctrl-a h` splits locally; `Ctrl-a a h` splits the remote tmux.
 
 | Key                  | Action                 | Source                                 |
 | -------------------- | ---------------------- | -------------------------------------- |
@@ -118,6 +118,10 @@ Prefix: **`Ctrl-a`**
 | `prefix + R` | Rename session (gum input popup)              |
 
 ## Zsh (Shell Layer)
+
+atlas receives a server-safe subset of these Zsh bindings through Ansible, including `Ctrl+F`, `Ctrl+J`, `Ctrl+Shift+T`, `Ctrl+Z`, word movement, and Home/End. Workstation-only integrations such as Atuin, Zinit plugins, and macOS clipboard bindings are not deployed to atlas.
+
+_Atlas reference: `infra/ansible/roles/terminal_comfort/templates/keybindings.zsh.j2:1`_
 
 ### Custom Widget Keybindings
 

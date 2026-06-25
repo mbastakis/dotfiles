@@ -1,6 +1,7 @@
 # Documentation
 README.md
 AGENTS.md
+CONTEXT.md
 docs/
 
 # Git
@@ -11,10 +12,14 @@ docs/
 # Source-only directories (kept in repo, not deployed by chezmoi)
 ai-docs/
 specs/
+infra/
 
 # Repo-local tooling (go-task via mise, used inside this repo only)
 mise.toml
 Taskfile.yml
+.pre-commit-config.yaml
+.tflint.hcl
+.terraform-docs.yml
 
 # Age encryption key (decrypted by run_onchange_before script)
 key.txt.age
@@ -25,6 +30,14 @@ bin/chezmoi-bws
 # Build artifacts and generated files
 node_modules/
 **/node_modules/**
+.tflint.d/
+.terraform/
+**/.terraform/**
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfvars
+*.tfvars.json
 **/target/**
 *.pyc
 __pycache__/
@@ -50,6 +63,16 @@ Cargo.lock
 .config/nvim/lazy-lock.json
 .config/opencode/package.json
 .config/opencode/bun.lock
+.config/pi/context-snapshot*.local.*
+.config/pi/auth.json
+.config/pi/oauth.json
+.config/pi/trust.json
+.config/pi/sessions/**
+.config/pi/git/**
+.config/pi/npm/**
+.config/pi/tools/**
+.config/pi/bin/**
+.config/pi/pi-debug.log
 .local/share/go/
 .local/share/task/
 .local/share/timewarrior/backend.json
@@ -105,7 +128,6 @@ Documents/notes/.trash/
 .config/aerospace/
 .config/karabiner/
 .config/finicky/
-.config/sketchybar/
 Library/LaunchAgents/com.mbastakis.mail-sync.plist
 bin/switch-input-source
 {{- end }}

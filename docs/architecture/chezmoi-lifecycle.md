@@ -25,7 +25,8 @@ flowchart TD
   E --> E4[07 - mail runtime dirs<br/>run_once]
   E --> E5[07 - mail maildirs<br/>run_onchange]
   E --> E6[08 - mail-sync LaunchAgent reload<br/>run_onchange]
-  E --> E7[macos-settings<br/>run_once]
+  E --> E7[09 - install/update Pi<br/>run_after]
+  E --> E8[macos-settings<br/>run_once]
 ```
 
 _Reference: `AGENTS.md:42`_
@@ -115,6 +116,14 @@ Reloads `com.mbastakis.mail-sync` LaunchAgent when plist template content or con
 
 _Reference: `.chezmoiscripts/run_onchange_after_08-mail-sync-launchagent.sh.tmpl:1`_
 
+### 09 - Install/Update Pi (`run_after`)
+
+Installs or updates the Pi coding agent from the official npm package `@earendil-works/pi-coding-agent@latest`. Runs after each apply so new npm `latest` releases are picked up automatically, but compares the installed package version first and exits without changes when Pi is current.
+
+The install uses `npm install -g --ignore-scripts` to match Pi's documented npm installation path and avoid npm lifecycle scripts. If npm or node are unavailable, or npm's registry cannot be reached, the script logs a warning and leaves the system unchanged.
+
+_Reference: `.chezmoiscripts/run_after_09-install-pi.sh.tmpl:1`_
+
 ### macOS Settings (`run_once`)
 
 Comprehensive macOS `defaults write` configuration replacing nix-darwin `system.defaults`:
@@ -134,6 +143,7 @@ _Reference: `.chezmoiscripts/run_once_after_macos-settings.sh.tmpl:1`_
 
 | Type | Behavior |
 |---|---|
+| `run_before` / `run_after` | Executes on every apply; scripts must be idempotent |
 | `run_once` | Executes once, ever (tracked by script name) |
 | `run_onchange` | Re-executes when embedded hash comment changes |
 

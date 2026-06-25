@@ -36,7 +36,8 @@ pre-commit run gitleaks     # Secrets detection only
 ```
 
 Hooks: shellcheck (`-x -e SC1091`), gitleaks, yamllint (relaxed), trailing-whitespace,
-end-of-file-fixer, check-yaml/toml/json, detect-private-key (excludes `.age`), large files (500KB).
+end-of-file-fixer, check-yaml/toml/json, detect-private-key (excludes `.age`), large files (500KB),
+OpenTofu fmt, TFLint, and terraform-docs.
 Pre-push: `chezmoi apply --dry-run --force`.
 
 ## Apply Order
@@ -56,6 +57,7 @@ Pre-push: `chezmoi apply --dry-run --force`.
    03-setup                → bat cache, yazi plugins, carapace sync (run_once)
    05-ghostty-tmux         → installs LaunchAgent for tmux startup (run_onchange)
    06-ghostty-hide-shortcut → clears global Hide overrides, remaps Ghostty hide (run_once)
+   09-install-pi           → installs/updates Pi from official npm package (run_after)
    macos-settings          → macOS defaults (run_once)
 ```
 
@@ -83,9 +85,14 @@ key.txt.age (in repo, passphrase-encrypted)
 | `bin/chezmoi-bws`     | _(ignored, source-only)_            | BWS token wrapper            |
 | `mise.toml`           | _(ignored, source-only)_            | Repo-local mise tools (go-task) |
 | `Taskfile.yml`        | _(ignored, source-only)_            | go-task runner for repo workflows |
+| `.pre-commit-config.yaml`, `.tflint.hcl`, `.terraform-docs.yml` | _(ignored, source-only)_ | Repo-local hooks and IaC quality tooling |
+| `infra/terraform/`    | _(ignored, source-only)_            | OpenTofu stacks for homeserver AWS foundation and TrueNAS automation |
+| `infra/truenas/`      | _(ignored, source-only)_            | TrueNAS catalog app declarations and API wrapper area |
+| `private_dot_agents/skills/` | `~/.agents/skills/`          | Shared harness-agnostic Agent Skills for OpenCode and Pi |
+| `private_dot_config/pi/` | `~/.config/pi/`              | Pi global config, extensions, keybindings, and Pi-specific skills |
 | `dev/personal/dev-tools/dot_mrconfig` | `~/dev/personal/dev-tools/.mrconfig` | Personal dev-tools workspace repos |
 | `literal_bin/`        | `~/bin/`                            | Shell utility scripts        |
-| `private_dot_ssh/`    | `~/.ssh/`                           | SSH keys (encrypted)         |
+| `private_dot_ssh/`    | `~/.ssh/`                           | SSH keys (encrypted) and host aliases |
 | `private_dot_config/` | `~/.config/`                        | App configs                  |
 | `private_dot_config/abook/` | `~/.config/abook/`            | Abook config                 |
 | `private_dot_config/zsh/` | `~/.config/zsh/`                | Zsh config via `ZDOTDIR`     |

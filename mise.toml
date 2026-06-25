@@ -5,8 +5,16 @@
 # this repo the `task` binary resolves to go-task for Taskfile.yml workflows.
 # Outside the repo, `task` still resolves to the brew-installed Taskwarrior.
 #
+# Homeserver infrastructure tooling is pinned here as repo-local tooling:
+# OpenTofu for Terraform-compatible IaC, TFLint for HCL/provider linting,
+# terraform-docs for generated module docs, and pre-commit for hooks.
+#
 # Trust: this directory is pre-trusted via MISE_TRUSTED_CONFIG_PATHS in
 # dot_zshenv.tmpl (resolves to $DOTFILES_PATH / chezmoi sourceDir).
 
 [tools]
 task = "3.50.0"
+opentofu = "1.12.3"
+tflint = "0.63.1"
+terraform-docs = "0.24.0"
+pre-commit = "4.6.0"

@@ -9,7 +9,8 @@ Custom commands, agents, and skills for OpenCode AI assistant.
 | `opencode.jsonc`   | Main config (provider, global permissions) |
 | `command/*.md`     | Custom slash commands                    |
 | `agent/*.md`       | Self-contained agents (YAML frontmatter) |
-| `skill/*/SKILL.md` | Skills with scripts and references       |
+| `skills/*/SKILL.md` | OpenCode-only skills with scripts and references |
+| `~/.agents/skills/*/SKILL.md` | Shared harness-agnostic skills managed from `private_dot_agents/skills/` |
 
 ## Commands
 
@@ -198,15 +199,21 @@ Because OpenCode may normalize command flags before bash permission matching, br
 
 ## Skills
 
-Skills live in `skill/<name>/` with this structure:
+OpenCode scans both OpenCode-specific skills in `~/.config/opencode/skills/` and shared Agent Skills in `~/.agents/skills/`. Shared skills are managed from `private_dot_agents/skills/` so Pi can load the same skill definitions.
+
+OpenCode-only skills live in `skills/<name>/` with this structure:
 
 ```
-skill/<name>/
+skills/<name>/
 ├── SKILL.md          # Instructions and documentation
 ├── scripts/          # Executable scripts
 ├── references/       # Reference documentation
 └── tests/            # Test files
 ```
+
+### Shared Skills
+
+- `grill-with-docs` lives in `~/.agents/skills/grill-with-docs/` and is intentionally harness-agnostic.
 
 ### crawl4ai Skill
 

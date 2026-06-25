@@ -1,0 +1,89 @@
+#!/bin/bash
+set -euo pipefail
+# Install/update Pi globally from the official npm package.
+
+{{- if ne .chezmoi.os "darwin" }}
+exit 0
+{{- end }}
+
+PACKAGE="@earendil-works/pi-coding-agent"
+INSTALL_SPEC="${PACKAGE}@latest"
+
+log_info() {
+    echo "[pi] $*"
+}
+
+log_warning() {
+    echo "[pi] Warning: $*" >&2
+}
+
+get_installed_version() {
+    local npm_root package_json
+
+    npm_root="$(npm root -g 2>/dev/null || true)"
+    if [[ -z "$npm_root" ]]; then
+        return 0
+    fi
+
+    package_json="${npm_root}/${PACKAGE}/package.json"
+    if [[ ! -f "$package_json" ]]; then
+        return 0
+    fi
+
+    node -e '
+const fs = require("fs");
+const packageJson = process.argv[1];
+const pkg = JSON.parse(fs.readFileSync(packageJson, "utf8"));
+if (pkg.version) process.stdout.write(pkg.version);
+' "$package_json"
+}
+
+if ! command -v npm &>/dev/null; then
+    log_warning "npm not found; skipping Pi install"
+    exit 0
+fi
+
+if ! command -v node &>/dev/null; then
+    log_warning "node not found; skipping Pi install"
+    exit 0
+fi
+
+installed_version="$(get_installed_version || true)"
+pi_bin="$(command -v pi || true)"
+
+set +e
+latest_version="$(npm view "$PACKAGE" version 2>/dev/null)"
+npm_view_rc=$?
+set -e
+
+if [[ $npm_view_rc -ne 0 || -z "$latest_version" ]]; then
+    if [[ -n "$installed_version" ]]; then
+        log_warning "could not check latest version; leaving installed Pi ${installed_version} unchanged"
+        exit 0
+    fi
+
+    log_warning "could not check latest version; skipping Pi install"
+    exit 0
+fi
+
+if [[ "$installed_version" == "$latest_version" && -n "$pi_bin" ]]; then
+    log_info "Pi is up to date (${installed_version})"
+    exit 0
+fi
+
+if [[ -z "$installed_version" ]]; then
+    log_info "Installing Pi ${latest_version}"
+elif [[ -z "$pi_bin" ]]; then
+    log_info "Pi package ${installed_version} is installed, but pi is not on PATH; reinstalling"
+else
+    log_info "Updating Pi ${installed_version} -> ${latest_version}"
+fi
+
+npm install -g --ignore-scripts "$INSTALL_SPEC"
+
+pi_bin="$(command -v pi || true)"
+if [[ -n "$pi_bin" ]]; then
+    log_info "Pi command available at ${pi_bin}"
+else
+    log_warning "Pi installed, but pi is not on PATH"
+fi

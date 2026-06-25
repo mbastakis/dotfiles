@@ -5,12 +5,12 @@
 # Pager — disable rich pagers in agent/non-TTY contexts.
 # OpenCode sets OPENCODE=1; its Bash tool uses piped stdout (no PTY).
 if [[ -n "${OPENCODE:-}" ]] || [[ ! -t 1 ]]; then
-  export PAGER="cat"
-  export GIT_PAGER="cat"
-  export BAT_PAGER=""
-  export MANPAGER="cat"
+    export PAGER="cat"
+    export GIT_PAGER="cat"
+    export BAT_PAGER=""
+    export MANPAGER="cat"
 else
-  export PAGER="bat"
+    export PAGER="bat"
 fi
 
 # Less settings and colors
@@ -42,3 +42,9 @@ export _ZO_ECHO=1
 # OpenCode
 export OPENCODE_CONFIG="$HOME/.config/opencode/opencode.jsonc"
 export OPENCODE_CONFIG_DIR="$HOME/.config/opencode"
+
+# Pi coding agent
+# Pi's override variable points at the agent dir itself; keeping it at
+# ~/.config/pi lets global Pi config, extensions, and Pi-specific skills live
+# directly under that XDG config directory.
+export PI_CODING_AGENT_DIR="$HOME/.config/pi"

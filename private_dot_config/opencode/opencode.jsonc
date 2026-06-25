@@ -7,6 +7,7 @@
   "autoshare": false,
   "share": "manual",
   "autoupdate": true,
+  "enabled_providers": ["openai", "openai-api"],
   "provider": {
     // Route OpenAI requests to the EU endpoint (required when the OpenAI
     // project is pinned to EU data residency). See:
@@ -14,6 +15,82 @@
     "openai": {
       "options": {
         "baseURL": "https://eu.api.openai.com/v1",
+      },
+    },
+    "openai-api": {
+      "npm": "@ai-sdk/openai",
+      "name": "OpenAI API Key",
+      "options": {
+        "baseURL": "https://eu.api.openai.com/v1",
+        "apiKey": "{env:OPENAI_API_KEY}",
+      },
+      "models": {
+        "gpt-5.5": {
+          "name": "GPT-5.5 via API key",
+
+          "variants": {
+            "none": {
+              "reasoningEffort": "none",
+
+              "textVerbosity": "low",
+
+              "reasoningSummary": "auto",
+            },
+
+            "low": {
+              "reasoningEffort": "low",
+
+              "textVerbosity": "low",
+
+              "reasoningSummary": "auto",
+            },
+
+            "medium": {
+              "reasoningEffort": "medium",
+
+              "textVerbosity": "low",
+
+              "reasoningSummary": "auto",
+            },
+
+            "high": {
+              "reasoningEffort": "high",
+
+              "textVerbosity": "low",
+
+              "reasoningSummary": "auto",
+            },
+            "xhigh": {
+              "reasoningEffort": "xhigh",
+
+              "textVerbosity": "low",
+
+              "reasoningSummary": "auto",
+            },
+          },
+        },
+
+        "gpt-5.4": {
+          "name": "GPT-5.4 via API key",
+
+          "variants": {
+            "low": {
+              "reasoningEffort": "low",
+
+              "reasoningSummary": "auto",
+            },
+
+            "high": {
+              "reasoningEffort": "high",
+
+              "reasoningSummary": "auto",
+            },
+          },
+        },
+
+        "gpt-5.4-mini-fast": {
+          "name": "GPT-5.4 Mini Fast via API key",
+        },
       },
     },
   },

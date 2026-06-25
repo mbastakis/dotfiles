@@ -18,6 +18,18 @@ Host github.com github-personal
     IdentityFile ~/.ssh/github-personal
     IdentitiesOnly yes
 
+Host atlas
+    HostName 192.168.1.19
+    User mbastakis
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
+
+Host truenas 192.168.1.74
+    HostName 192.168.1.74
+    User mbastakis
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
+
 # Default key
 Host *
     AddKeysToAgent yes

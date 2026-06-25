@@ -35,3 +35,26 @@ private_dot_config/aws-login/private_cache/
 # Generated zsh completion cache
 private_dot_config/zsh/.zcompdump
 private_dot_config/zsh/.zcompdump-*
+
+# Pi coding agent runtime/state
+.pi/context-snapshot*.local.*
+private_dot_config/pi/context-snapshot*.local.*
+private_dot_config/pi/agent/auth.json
+private_dot_config/pi/agent/trust.json
+private_dot_config/pi/agent/sessions/
+private_dot_config/pi/agent/bin/
+private_dot_config/pi/agent/git/
+private_dot_config/pi/agent/npm/
+private_dot_config/pi/agent/*-debug.log
+
+# OpenTofu / Terraform
+**/.terraform/
+.tflint.d/
+**/backend.generated.tf
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfvars
+*.tfvars.json
+crash.log
+crash.*.log

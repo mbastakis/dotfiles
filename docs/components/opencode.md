@@ -4,6 +4,8 @@ Config model, agent definitions, custom commands, skills, and permission system.
 
 **Source:** `private_dot_config/opencode/` -> `~/.config/opencode/`
 
+Shared harness-agnostic skills are managed separately from `private_dot_agents/skills/` -> `~/.agents/skills/`. OpenCode auto-loads that external skill location alongside `~/.config/opencode/skills/`.
+
 ## Directory Structure
 
 ```
@@ -24,7 +26,7 @@ Config model, agent definitions, custom commands, skills, and permission system.
     create_plan.md
     research_codebase.md
     session_analysis.md
-  skills/                 # Bundled skills shipped in source
+  skills/                 # OpenCode-only bundled skills shipped in source
     crawl4ai/
     skill-creator/
   plugins/                # Empty in source; runtime plugin install location
@@ -142,6 +144,19 @@ _Reference: `private_dot_config/opencode/AGENTS.md:1`_
 _Reference: `private_dot_config/opencode/README.md:24`_
 
 ## Skills
+
+OpenCode discovers two managed skill classes:
+
+| Class | Source | Target | Use |
+|---|---|---|---|
+| OpenCode-only | `private_dot_config/opencode/skills/` | `~/.config/opencode/skills/` | Skills that depend on OpenCode workflows or tooling |
+| Shared Agent Skills | `private_dot_agents/skills/` | `~/.agents/skills/` | Harness-agnostic skills loaded by both OpenCode and Pi |
+
+### grill-with-docs
+
+Shared skill for stress-testing plans against a repository's domain language and documented decisions. It uses `CONTEXT.md` as a glossary and offers ADRs only for hard-to-reverse, surprising trade-offs.
+
+_Reference: `private_dot_agents/skills/grill-with-docs/SKILL.md`_
 
 ### aws-login
 

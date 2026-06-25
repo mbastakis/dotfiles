@@ -3,6 +3,38 @@ vim.g.mapleader = " "
 
 vim.g.have_nerd_font = true
 
+-- Compatibility for nvim-treesitter main on Neovim 0.11 builds that do not
+-- expose vim.list yet, such as Ubuntu Server 26.04's packaged Neovim.
+vim.list = vim.list or {}
+vim.list.unique = vim.list.unique or function(list)
+  local seen = {}
+  local unique = {}
+  for _, item in ipairs(list) do
+    if not seen[item] then
+      seen[item] = true
+      unique[#unique + 1] = item
+    end
+  end
+  return unique
+end
+
+if vim.env.SSH_CONNECTION or vim.env.SSH_CLIENT or vim.env.SSH_TTY then
+  local ok, osc52 = pcall(require, "vim.ui.clipboard.osc52")
+  if ok then
+    vim.g.clipboard = {
+      name = "OSC52",
+      copy = {
+        ["+"] = osc52.copy("+"),
+        ["*"] = osc52.copy("*"),
+      },
+      paste = {
+        ["+"] = osc52.paste("+"),
+        ["*"] = osc52.paste("*"),
+      },
+    }
+  end
+end
+
 vim.o.number = true
 vim.o.relativenumber = true
 vim.o.winborder = "rounded"

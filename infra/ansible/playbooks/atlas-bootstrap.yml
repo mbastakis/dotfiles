@@ -1,0 +1,39 @@
+---
+- name: Bootstrap atlas for Ansible
+  hosts: atlas
+  become: false
+  gather_facts: false
+
+  pre_tasks:
+    - name: Require bootstrap SSH user to match atlas admin user
+      ansible.builtin.assert:
+        that:
+          - ansible_user == atlas_admin_user
+        fail_msg: >-
+          Connect as {{ atlas_admin_user }} for bootstrap so the SSH key can be
+          installed without privilege escalation.
+
+    - name: Require at least one admin SSH key
+      ansible.builtin.assert:
+        that:
+          - atlas_admin_authorized_keys | length > 0
+          - >-
+            atlas_admin_authorized_keys | reject('equalto', '') | list |
+            length == atlas_admin_authorized_keys | length
+        fail_msg: >-
+          Set atlas_admin_authorized_keys before running the atlas bootstrap
+          playbook.
+
+  tasks:
+    - name: Ensure atlas admin SSH directory exists
+      ansible.builtin.file:
+        path: "/home/{{ atlas_admin_user }}/.ssh"
+        state: directory
+        mode: "0700"
+
+    - name: Install atlas admin SSH keys
+      ansible.builtin.copy:
+        dest: "/home/{{ atlas_admin_user }}/.ssh/authorized_keys"
+        mode: "0600"
+        content: |
+          {{ atlas_admin_authorized_keys | join('\n') }}

@@ -13,16 +13,18 @@ flowchart LR
   Z --> N[Neovim]
   Z --> M[Mail Stack\nNeoMutt + mbsync + msmtp + notmuch + abook]
   Z --> O[OpenCode CLI]
+  Z --> P[Pi CLI]
   C[chezmoi lifecycle] --> Z
   C --> N
   C --> M
   C --> O
+  C --> P
   C --> K
   C --> G
   C --> T
 ```
 
-Input flows from the physical keyboard through Karabiner (home row mods, hyper key), into Ghostty (terminal keybindings), then into tmux (prefix commands) or directly to zsh (shell keybindings). From zsh, input reaches Neovim, OpenCode, and NeoMutt. Chezmoi manages configuration for all layers, including the mail stack and its launchd automation.
+Input flows from the physical keyboard through Karabiner (home row mods, hyper key), into Ghostty (terminal keybindings), then into tmux (prefix commands) or directly to zsh (shell keybindings). From zsh, input reaches Neovim, OpenCode, Pi, and NeoMutt. Chezmoi manages configuration for all layers, including the mail stack and its launchd automation.
 
 ## Source-to-Target Mapping
 
@@ -33,6 +35,10 @@ Chezmoi translates source-state file names to target paths using naming conventi
 | `.chezmoi.toml.tmpl` | `~/.config/chezmoi/chezmoi.toml` | Config, profile selection, encryption settings |
 | `key.txt.age` | _(source-only)_ | Passphrase-encrypted age private key |
 | `bin/chezmoi-bws` | _(source-only)_ | BWS token wrapper script |
+| `private_dot_agents/skills/` | `~/.agents/skills/` | Harness-agnostic Agent Skills loaded by OpenCode and Pi |
+| `private_dot_config/pi/` | `~/.config/pi/` | Pi global config, extensions, keybindings, and Pi-specific skills (`PI_CODING_AGENT_DIR=$HOME/.config/pi`) |
+| `.pre-commit-config.yaml`, `.tflint.hcl`, `.terraform-docs.yml` | _(source-only)_ | Repo-local quality gates for hooks, OpenTofu linting, and generated module docs |
+| `mise.toml`, `Taskfile.yml` | _(source-only)_ | Repo-local tool pins and task runner workflows |
 | `literal_bin/` | `~/bin/` | Shell utility scripts |
 | `private_dot_ssh/` | `~/.ssh/` | SSH keys (encrypted) |
 | `private_dot_config/` | `~/.config/` | Application configs |
@@ -47,23 +53,26 @@ Chezmoi translates source-state file names to target paths using naming conventi
 | `private_dot_local/private_share/colima/` | `~/.local/share/colima/` | Colima config and state |
 | `private_Library/LaunchAgents/com.mbastakis.mail-sync.plist.tmpl` | `~/Library/LaunchAgents/com.mbastakis.mail-sync.plist` | Mail sync scheduler |
 | `literal_bin/executable_mail-*` | `~/bin/mail-*` | Mail helper scripts (`mail-sync`, `mail-open`) |
-| `.chezmoiscripts/` | _(lifecycle scripts)_ | Before/after scripts (e.g. LaunchAgent reload, Ghostty-only Cmd+H override), not deployed |
+| `.chezmoiscripts/` | _(lifecycle scripts)_ | Before/after scripts (e.g. package installs, LaunchAgent reload, Pi installer), not deployed |
 | `.chezmoidata.yaml` | _(template data)_ | Catppuccin Mocha color palette |
 | `dot_zshenv.tmpl` | `~/.zshenv` | Zsh bootstrap (exports `ZDOTDIR`) |
 | `private_dot_config/zsh/` | `~/.config/zsh/` | Zsh entry point and module files |
 
 _Reference: `AGENTS.md:78`_
 
-## Source-Only Directories
+## Source-Only Paths
 
-These directories exist in the repo but are never deployed to the target filesystem:
+These paths exist in the repo but are never deployed to the target filesystem:
 
-| Directory | Purpose |
+| Path | Purpose |
 |---|---|
 | `ai-docs/` | Crawled documentation for AI agents |
 | `code-portable-data/` | VS Code portable data |
+| `infra/` | Source-only infrastructure automation, including Ansible, OpenTofu, and TrueNAS app declarations |
 | `bin/chezmoi-bws` | BWS helper (used during template rendering only) |
+| `CONTEXT.md` | Repository glossary for agent/user terminology |
 | `docs/` | This documentation tree |
+| `.pre-commit-config.yaml`, `.tflint.hcl`, `.terraform-docs.yml` | Repo-only tooling configuration |
 
 _Reference: `.chezmoiignore:11`_
 
@@ -74,11 +83,12 @@ The `.chezmoiignore` file uses **target-state paths** (not source-state names) a
 - **Build artifacts:** `node_modules/`, `target/`, `__pycache__/`, lock files
 - **Caches:** `.cache/`, `.config/carapace/.versions`, `lazy-lock.json`, yazi plugins
 - **Runtime state:** `.kube/`, `glab-cli/recover/`, `.obsidian/`, `.DS_Store`
+- **Infrastructure artifacts:** OpenTofu state, plan files, `.terraform/`, and secret variable files are ignored by Git and never committed
 - **Obsidian vault generated files:** Plugin binaries (`main.js`, `manifest.json`, `styles.css`), themes, icons, and `workspace.json` under `Documents/notes/.obsidian/` are ignored — only settings JSONs and plugin `data.json` files are managed
 - **Profile-conditional:** DT work configs (glab, git work config, GitLab SSH keys) excluded when profile is not `dt-work`
-- **OS-conditional:** macOS-only configs (Aerospace, Karabiner, Finicky, SketchyBar, Ghostty LaunchAgent, mail LaunchAgent) excluded on Linux
+- **OS-conditional:** macOS-only configs (Aerospace, Karabiner, Finicky, Ghostty LaunchAgent, mail LaunchAgent) excluded on Linux
 
-_Reference: `.chezmoiignore:19`, `.chezmoiignore:54`_
+_Reference: `.chezmoiignore:17`, `.chezmoiignore:30`, `.chezmoiignore:54`_
 
 ## Runtime-Owned Files
 

@@ -1,3 +1,5 @@
 # Personal repositories
 [whocaressoftware]
 checkout = git clone git@github.com:WhoCaresSoftware/whocaressoftware.git whocaressoftware
+[trazyn]
+checkout = git clone git@github.com:WhoCaresSoftware/trazyn.git trazyn

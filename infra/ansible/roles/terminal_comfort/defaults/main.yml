@@ -1,0 +1,18 @@
+---
+atlas_dotfiles_source_dir: "{{ playbook_dir }}/../../.."
+atlas_nvim_config_source_dir: >-
+  {{ atlas_dotfiles_source_dir }}/private_dot_config/nvim
+atlas_tmux_config_source_dir: >-
+  {{ atlas_dotfiles_source_dir }}/private_dot_config/tmux
+atlas_yazi_config_source_dir: >-
+  {{ atlas_dotfiles_source_dir }}/private_dot_config/yazi
+atlas_lazygit_config_source_dir: >-
+  {{ atlas_dotfiles_source_dir }}/private_dot_config/lazygit
+atlas_yazi_version: "26.5.6"
+atlas_yazi_release_base_url: >-
+  https://github.com/sxyazi/yazi/releases/download/v{{ atlas_yazi_version }}
+atlas_yazi_deb_asset: yazi-x86_64-unknown-linux-gnu.deb
+atlas_yazi_deb_url: >-
+  {{ atlas_yazi_release_base_url }}/{{ atlas_yazi_deb_asset }}
+atlas_yazi_deb_checksum: >-
+  sha256:51ed35d7be4e9a33aa4d8a983849395bd38377cd0e03e8e7b96b3f0557c6cfad

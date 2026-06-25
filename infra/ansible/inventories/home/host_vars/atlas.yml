@@ -1,0 +1,95 @@
+---
+atlas_admin_user: mbastakis
+atlas_admin_shell: /usr/bin/zsh
+atlas_wired_interface: enp3s0
+ansible_become_exe: /usr/bin/sudo.ws
+ansible_become_flags: "-H -S"
+
+atlas_admin_authorized_keys:
+  - "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_ed25519.pub') }}"
+
+atlas_base_packages:
+  - ca-certificates
+  - curl
+  - git
+  - gnupg
+  - openssh-server
+  - python3
+  - python3-apt
+  - rsync
+  - sudo
+  - zsh
+
+atlas_docker_packages:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+  - docker-buildx-plugin
+  - docker-compose-plugin
+
+atlas_terminal_packages:
+  - bat
+  - build-essential
+  - cargo
+  - eza
+  - ffmpeg
+  - fd-find
+  - file
+  - fzf
+  - git-delta
+  - golang-go
+  - glow
+  - imagemagick
+  - lazygit
+  - libimage-exiftool-perl
+  - libssl-dev
+  - mediainfo
+  - neovim
+  - nix-bin
+  - nodejs
+  - npm
+  - pkg-config
+  - poppler-utils
+  - python3-pynvim
+  - python3-pip
+  - python3-venv
+  - ripgrep
+  - starship
+  - tmux
+  - tree-sitter-cli
+  - unzip
+  - zoxide
+
+atlas_nvim_treesitter_parsers:
+  - bash
+  - c
+  - comment
+  - css
+  - diff
+  - dockerfile
+  - go
+  - gomod
+  - gosum
+  - gotmpl
+  - hcl
+  - html
+  - javascript
+  - json
+  - kdl
+  - lua
+  - luadoc
+  - markdown
+  - markdown_inline
+  - nix
+  - python
+  - query
+  - rust
+  - scss
+  - terraform
+  - toml
+  - tsx
+  - typescript
+  - vim
+  - vimdoc
+  - yaml
+  - zig

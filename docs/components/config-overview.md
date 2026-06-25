@@ -9,12 +9,15 @@ Summary of notable config areas managed by chezmoi, with links to dedicated docs
 | Component | Source Path | Dedicated Doc | Description |
 |---|---|---|---|
 | **Neovim** | `private_dot_config/nvim/` | [nvim.md](nvim.md) | Editor with lazy.nvim, LSP, custom keymaps |
-| **OpenCode** | `private_dot_config/opencode/` | [opencode.md](opencode.md) | Primary AI CLI profile with agents, commands, and skills |
+| **OpenCode** | `private_dot_config/opencode/` | [opencode.md](opencode.md) | Primary AI CLI profile with agents, commands, and OpenCode-only skills |
+| **Pi** | `private_dot_config/pi/` | -- | Pi global config rooted at `~/.config/pi`, including settings, keybindings, extensions, and Pi-specific skills |
+| **Shared Agent Skills** | `private_dot_agents/skills/` | [opencode.md](opencode.md#skills) | Harness-agnostic skills loaded from `~/.agents/skills/` by OpenCode and Pi |
 | **Karabiner** | `private_dot_config/private_karabiner/` | [karabiner.md](karabiner.md) | Keyboard remapping (generated config) |
 | **Carapace** | `private_dot_config/carapace/` | [carapace.md](carapace.md) | Shell completion framework |
 | **Zsh** | `private_dot_config/zsh/`, `dot_zshenv.tmpl` | [zsh.md](zsh.md) | Shell bootstrap plus XDG-aware tool/runtime environment |
+| **SSH** | `private_dot_ssh/` | -- | Encrypted/private SSH keys plus host aliases; `truenas` and `192.168.1.74` use `~/.ssh/id_ed25519` |
 | **Atuin** | `private_dot_config/private_atuin/private_config.toml` | -- | Shell history search, sync, and AI settings |
-| Terraform CLI | `private_dot_config/terraform/terraform.rc` | -- | CLI defaults (for example checkpoint suppression) |
+| Terraform CLI | `private_dot_config/terraform/terraform.rc` | -- | Legacy Terraform CLI defaults (for example checkpoint suppression); homeserver IaC uses repo-local OpenTofu instead |
 | **NeoMutt** | `private_dot_config/neomutt/` | [email.md](email.md) | Terminal mail client config and custom mailbox bindings |
 | **notmuch** | `private_dot_config/notmuch/default/` | [email.md](email.md) | Mail index/search config and tagging hook |
 | **msmtp** | `private_dot_config/msmtp/private_config.tmpl` | [email.md](email.md) | SMTP account config rendered from Bitwarden secrets |
@@ -23,8 +26,8 @@ Summary of notable config areas managed by chezmoi, with links to dedicated docs
 | Colima | `private_dot_local/private_share/colima/` | -- | Container runtime seed; live VM config is preserved after creation |
 | Kubernetes | `private_dot_config/kube/` | -- | DT work kubeconfig seeds; live files are preserved after `kubectl`/`aws`/`kind` rewrites |
 | aws-login | `private_dot_config/aws-login/` | -- | Work and personal AWS profiles, AWS SSO bootstrap, and per-profile `KUBECONFIG` wiring |
-| Mise | `private_dot_config/mise/config.toml` (global) + `mise.toml` (repo root, source-only) | -- | Tool/version manager; repo-local pins `go-task` |
-| Taskfile | `Taskfile.yml` (repo root, source-only) | -- | go-task runner for chezmoi repo workflows (apply/diff/lint/docs) |
+| Mise | `private_dot_config/mise/config.toml` (global) + `mise.toml` (repo root, source-only) | -- | Tool/version manager; repo-local pins `go-task`, OpenTofu, TFLint, terraform-docs, and pre-commit |
+| Taskfile | `Taskfile.yml` (repo root, source-only) | -- | go-task runner for chezmoi and homeserver IaC workflows, including OpenTofu backend bootstrap, plan/apply, lint, and docs tasks |
 | Ghostty | `private_dot_config/ghostty/` | -- | Terminal emulator |
 | tmux | `private_dot_config/tmux/` | -- | Terminal multiplexer |
 | Starship | `private_dot_config/starship.toml` | -- | Prompt theme |
@@ -34,14 +37,19 @@ Summary of notable config areas managed by chezmoi, with links to dedicated docs
 | Timewarrior | `private_dot_local/private_share/timewarrior/` | -- | CLI time tracker paired with Taskwarrior via `on-modify.timewarrior` hook |
 | Yazi | `private_dot_config/yazi/` | -- | Terminal file manager |
 | Lazygit | `private_dot_config/lazygit/` | -- | Git TUI |
-| Brew | `private_dot_config/brew/` | -- | Homebrew Brewfile |
+| Brew | `private_dot_config/brew/`, `private_dot_config/homebrew/` | -- | Homebrew Brewfile and package trust allowlist |
 | Aerospace | `private_dot_config/aerospace/` | -- | macOS window manager (Darwin only) |
 | Finicky | `private_dot_config/finicky/` | -- | macOS browser routing (Darwin only) |
-| SketchyBar | `private_dot_config/sketchybar/` | -- | macOS status bar (Darwin only) |
 | Raycast | `private_dot_config/raycast/` | -- | macOS launcher (partial, extensions ignored) |
 | glab CLI | `private_dot_config/glab-cli/` | -- | GitLab CLI config seed; live auth-bearing config is preserved (DT work profile only) |
 | Diffnav | `private_dot_config/diffnav/` | -- | Git diff TUI pager (file tree + delta rendering), invoked via `smart-diffnav` wrapper for TTY-aware behavior |
 | gh-dash | `private_dot_config/gh-dash/` | -- | GitHub dashboard TUI (`gh` extension, Catppuccin Mocha Mauve) |
+
+## Pi
+
+Global Pi config lives under `~/.config/pi` via `PI_CODING_AGENT_DIR`. `settings.json` installs `npm:pi-web-access` for web search, URL fetching, GitHub repo cloning, PDF extraction, and video/YouTube analysis tools, plus `npm:pi-annotate` for visual annotation with inline note cards. It also keeps `npm:@injaneity/pi-computer-use` installed but filters its `extensions` to `[]`, so macOS computer-use tools such as `list_apps`, `list_windows`, `screenshot`, and GUI actions are not loaded by default. The local `computer-use-toggle` extension adds `/computer-use-enable` to opt in for the current Pi session, `/computer-use-disable` to unload it again, and `/computer-use-status` to inspect state; future sessions remain disabled unless enabled again. Package code is installed under ignored `~/.config/pi/npm/`; the computer-use native helper is placed at `~/.pi/agent/helpers/pi-computer-use/bridge` and needs macOS Accessibility and Screen Recording permissions on first use.
+
+The local `context-inspector` extension provides `/context`; default HTML/JSON exports now go to the OS temp directory under `pi-context-snapshots/` with private file permissions instead of project-local `.pi/` paths, because snapshots can contain prompts, tool calls, file contents, and secrets.
 
 ## Ghostty
 
@@ -59,10 +67,12 @@ _Reference: `private_dot_config/ghostty/config:1`_
 
 ## tmux
 
-Terminal multiplexer with Catppuccin theme and plugin ecosystem.
+Terminal multiplexer with Catppuccin theme and plugin ecosystem on the workstation, and the same shared config in a server-safe mode on SSH hosts such as `atlas`.
 
-- **Prefix:** `Ctrl-a`
+- **Prefix:** `Ctrl-a` everywhere. In nested SSH tmux sessions, use `Ctrl-a a` to forward one prefix to the remote tmux, then press the remote command key.
 - **Plugins (TPM):** vim-tmux-navigator, catppuccin, tmux-yank, tmux-resurrect, tmux-continuum, tmux-floax, tmux-harpoon
+- **Server mode:** SSH sessions skip TPM startup, Mac-only helper scripts, and the workstation status line while keeping the core pane/window/copy-mode behavior.
+- **Clipboard:** tmux allows OSC52 clipboard forwarding so yanks from remote Neovim can reach the workstation terminal clipboard. The atlas Ansible role reloads a running tmux server when the shared tmux config changes so existing sessions pick up `set-clipboard on` and passthrough settings.
 - **Session picker:** `prefix + s` opens a `sesh` + `gum` popup helper (`~/bin/sesh-picker`)
 - **Session rename:** `prefix + R` opens a `gum` input popup (`~/bin/sesh-rename`); rejects duplicate session names
 - **OpenCode launch:** `prefix + o` splits the current pane and runs `~/bin/opencode-launch`, which preserves per-pane OpenCode session tracking across tmux restores.
@@ -76,6 +86,18 @@ Custom keybindings are documented in [shortcuts.md](../shortcuts.md).
 
 _Reference: `private_dot_config/tmux/tmux.conf:1`_
 
+## Yazi
+
+Terminal file manager. `atlas` receives the shared config from `private_dot_config/yazi/` via Ansible, installs the upstream `yazi` `.deb` matching the workstation version, and runs `ya pkg install` against `package.toml` for plugins.
+
+_Reference: `private_dot_config/yazi/yazi.toml:1`, `infra/ansible/roles/terminal_comfort/tasks/main.yml:84`_
+
+## Lazygit
+
+Git TUI with Catppuccin-style colors and `delta --dark --paging=never` as the pager. `atlas` receives the same `private_dot_config/lazygit/config.yml` via Ansible and installs Ubuntu's `git-delta` package so the pager command resolves to `delta`.
+
+_Reference: `private_dot_config/lazygit/config.yml:1`, `infra/ansible/roles/terminal_comfort/tasks/main.yml:76`_
+
 ## sesh
 
 Standalone tmux session manager used by the `prefix + s` popup helper.
@@ -83,7 +105,7 @@ Standalone tmux session manager used by the `prefix + s` popup helper.
 - **Config:** `~/.config/sesh/sesh.toml`
 - **Defaults:** single-part session names (`dir_length = 1`), cache + strict mode enabled, config sessions listed before tmux sessions and zoxide entries
 - **Pinned sessions:** `main`, `dotfiles`, `notes`, and `ma-proj` (via work-only import)
-- **Startup layout:** new sessions split into a zoomed shell pane running `eza -la --git --icons` plus a right-hand pane running `~/bin/opencode-launch`
+- **Startup layout:** new sessions start as a plain single-window tmux session by default
 - **Helper scripts:** `~/bin/sesh-picker` (fuzzy session picker), `~/bin/sesh-rename` (rename with duplicate-name guard), `~/bin/opencode-launch` (OpenCode launcher with tmux session resume)
 
 _Reference: `private_dot_config/sesh/sesh.toml:1`_
@@ -104,9 +126,11 @@ _Reference: `private_dot_config/git/`_
 
 Homebrew Brewfile at `~/.config/brew/Brewfile`. Managed by the lifecycle script `02-install-packages` which runs `brew bundle` when the Brewfile content changes.
 
+Homebrew package trust is managed at `~/.config/homebrew/trust.json` using narrow formula- and cask-level allowlists for trusted third-party packages.
+
 `aws-login` is installed from the private tap `mbastakis/tap` (formula `mbastakis/tap/aws-login`) instead of being compiled from dotfiles source.
 
-_Reference: `private_dot_config/brew/Brewfile`_
+_Reference: `private_dot_config/brew/Brewfile`, `private_dot_config/homebrew/private_trust.json`_
 
 ## Taskwarrior
 
@@ -189,6 +213,7 @@ _Reference: `private_dot_local/private_share/timewarrior/timewarrior.cfg`_
 
 - Neovim AGENTS: `private_dot_config/nvim/AGENTS.md:1`
 - OpenCode README: `private_dot_config/opencode/README.md:1`
+- Homeserver IaC: `docs/architecture/homeserver-iac.md:1`
 - Email stack doc: `docs/components/email.md:1`
 - mbsync template: `private_dot_config/isyncrc.tmpl:1`
 - Ghostty config: `private_dot_config/ghostty/config:1`

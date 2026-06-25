@@ -23,6 +23,16 @@ This setup relies on Neovim's native config discovery at `~/.config/nvim/init.lu
 
 _Reference: `private_dot_config/nvim/init.lua:1`_
 
+### atlas Deployment
+
+The atlas Ansible `terminal_comfort` role copies the main Neovim config from `private_dot_config/nvim/` to `~/.config/nvim/` without running chezmoi on the server. It deploys `init.lua`, `lua/`, `after/`, and the hidden Lua/Stylua helper files, then runs headless Neovim to install missing lazy.nvim plugins, the configured Tree-sitter parsers, Mason tools, and Mason LSP servers synchronously. The server package set includes Go, Rust/Cargo, and Nix because some Mason-managed tools build through those toolchains.
+
+Ubuntu Server 26.04's packaged Neovim 0.11 does not expose `vim.list.unique`, so the core options file includes a small compatibility shim used by `nvim-treesitter` main.
+
+When Neovim starts inside SSH, it switches the `+` and `*` clipboard providers to Neovim's built-in OSC52 provider. This keeps the shared `clipboard=unnamedplus` behavior while letting yanks from remote Neovim reach the workstation terminal clipboard through Ghostty/tmux.
+
+_Reference: `infra/ansible/roles/terminal_comfort/tasks/main.yml:67`, `private_dot_config/nvim/lua/config/options.lua:6`_
+
 ## Core Configuration
 
 ### options.lua

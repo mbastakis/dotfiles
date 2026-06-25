@@ -1,0 +1,15 @@
+{
+  "lastChangelogVersion": "0.80.2",
+  "defaultThinkingLevel": "xhigh",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.5",
+  "theme": "dark",
+  "packages": [
+    "npm:pi-web-access",
+    {
+      "source": "npm:@injaneity/pi-computer-use",
+      "extensions": []
+    },
+    "npm:pi-annotate"
+  ]
+}
