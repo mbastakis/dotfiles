@@ -1,0 +1,26 @@
+{
+  "colors": {
+    "model": "#cba6f7",
+    "shellMode": "#fab387",
+    "path": "#89dceb",
+    "gitClean": "#a6e3a1",
+    "gitDirty": "#fab387",
+    "thinking": "#7f849c",
+    "thinkingMinimal": "#94e2d5",
+    "thinkingLow": "#89b4fa",
+    "thinkingMedium": "#f9e2af",
+    "thinkingHigh": "#fab387",
+    "thinkingXHigh": "#f38ba8",
+    "context": "#bac2de",
+    "contextWarn": "#f9e2af",
+    "contextError": "#f38ba8",
+    "cost": "#f5c2e7",
+    "tokens": "#74c7ec",
+    "separator": "#6c7086",
+    "border": "#45475a"
+  },
+  "icons": {
+    "auto": "↯",
+    "warning": "!"
+  }
+}

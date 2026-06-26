@@ -4,6 +4,59 @@
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.5",
   "theme": "dark",
+  "quietStartup": true,
+  "showLastPrompt": true,
+  "powerline": {
+    "preset": "default",
+    "fixedEditor": false,
+    "mouseScroll": true,
+    "model": {
+      "showThinkingLevel": false
+    },
+    "path": {
+      "mode": "abbreviated",
+      "maxLength": 48
+    },
+    "git": {
+      "showBranch": true,
+      "showStaged": true,
+      "showUnstaged": true,
+      "showUntracked": true,
+      "polling": "full"
+    },
+    "context": {
+      "display": "tokens",
+      "tokenFormat": "exact"
+    },
+    "customItems": [
+      {
+        "id": "stash",
+        "statusKey": "stash",
+        "position": "right",
+        "prefix": "stash",
+        "color": "#f9e2af"
+      }
+    ]
+  },
+  "bashMode": {
+    "toggleShortcut": "ctrl+shift+b",
+    "transcriptMaxLines": 2000,
+    "transcriptMaxBytes": 524288
+  },
+  "powerlineShortcuts": {
+    "stashHistory": "ctrl+alt+h",
+    "copyEditor": "ctrl+alt+c",
+    "cutEditor": "ctrl+alt+x",
+    "jumpPreviousUserMessage": "ctrl+shift+u",
+    "jumpNextUserMessage": "ctrl+shift+i",
+    "jumpPreviousLlmMessage": "ctrl+alt+,",
+    "jumpNextLlmMessage": "ctrl+alt+.",
+    "jumpChatBottom": "ctrl+shift+g",
+    "scrollChatUp": "super+up",
+    "scrollChatDown": "super+down",
+    "editorStart": "super+shift+up",
+    "editorEnd": "super+shift+down"
+  },
   "packages": [
     "npm:pi-web-access",
     {
