@@ -1,0 +1,3 @@
+# Manage TrueNAS with OpenTofu and API app automation
+
+TrueNAS SCALE is managed as a storage-first appliance, not as another Ansible-owned Linux host. We use OpenTofu for low-blast-radius API/provider-managed configuration such as datasets, permissions, snapshots, backup jobs, and AWS backup infrastructure; stable TrueNAS catalog apps are preferred over custom Compose and are applied through a small API wrapper until provider support can manage catalog app values directly. Terraform-compatible state lives in an S3 backend owned by a dedicated bootstrap stack, while restic backups use a separate cost-optimized S3 bucket.

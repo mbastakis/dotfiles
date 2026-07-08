@@ -63,6 +63,7 @@
       "source": "npm:@injaneity/pi-computer-use",
       "extensions": []
     },
-    "npm:pi-annotate"
+    "npm:pi-annotate",
+    "npm:pi-subagents"
   ]
 }

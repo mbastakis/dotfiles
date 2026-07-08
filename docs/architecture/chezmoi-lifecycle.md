@@ -174,6 +174,7 @@ _Reference: `AGENTS.md:155`_
 - `chezmoi diff` is most reliable with absolute target paths when diffing a single file.
 - `textconv` patterns also match absolute target paths, not the relative paths printed in diff headers.
 - Kubeconfig and Colima files are bootstrap seeds once missing; existing live files are preserved because external CLIs own ongoing runtime state.
+- Pi powerline runtime files under `.config/pi/powerline-footer/` and generated vibe files under `.config/pi/vibes/` are ignored; code-managed Pi powerline behavior lives in `private_dot_config/pi/settings.json` and `private_dot_config/pi/extensions/powerline-footer/theme.json`.
 - OS guards at the top of every `.tmpl` script: `{{- if ne .chezmoi.os "darwin" }} exit 0 {{- end }}`.
 - Whitespace control: always use `{{-` and `-}}` to trim surrounding whitespace in template tags.
 

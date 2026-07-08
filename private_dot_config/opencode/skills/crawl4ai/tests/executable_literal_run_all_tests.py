@@ -22,10 +22,10 @@ def run_test(test_file):
 def main():
     test_dir = Path(__file__).parent
     test_files = [
-        "test_basic_crawling.py",
-        "test_markdown_generation.py",
-        "test_data_extraction.py",
-        "test_advanced_patterns.py",
+        "executable_test_basic_crawling.py",
+        "executable_test_markdown_generation.py",
+        "executable_test_data_extraction.py",
+        "executable_test_advanced_patterns.py",
         "test_site_crawler.py",
     ]
 

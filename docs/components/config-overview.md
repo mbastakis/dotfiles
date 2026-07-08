@@ -10,7 +10,7 @@ Summary of notable config areas managed by chezmoi, with links to dedicated docs
 |---|---|---|---|
 | **Neovim** | `private_dot_config/nvim/` | [nvim.md](nvim.md) | Editor with lazy.nvim, LSP, custom keymaps |
 | **OpenCode** | `private_dot_config/opencode/` | [opencode.md](opencode.md) | Primary AI CLI profile with agents, commands, and OpenCode-only skills |
-| **Pi** | `private_dot_config/pi/` | -- | Pi global config rooted at `~/.config/pi`, including settings, keybindings, extensions, and Pi-specific skills |
+| **Pi** | `private_dot_config/pi/` | -- | Pi global config rooted at `~/.config/pi`, including settings, keybindings, extensions, prompt templates, and Pi-specific skills |
 | **Shared Agent Skills** | `private_dot_agents/skills/` | [opencode.md](opencode.md#skills) | Harness-agnostic skills loaded from `~/.agents/skills/` by OpenCode and Pi |
 | **Karabiner** | `private_dot_config/private_karabiner/` | [karabiner.md](karabiner.md) | Keyboard remapping (generated config) |
 | **Carapace** | `private_dot_config/carapace/` | [carapace.md](carapace.md) | Shell completion framework |
@@ -27,7 +27,7 @@ Summary of notable config areas managed by chezmoi, with links to dedicated docs
 | Kubernetes | `private_dot_config/kube/` | -- | DT work kubeconfig seeds; live files are preserved after `kubectl`/`aws`/`kind` rewrites |
 | aws-login | `private_dot_config/aws-login/` | -- | Work and personal AWS profiles, AWS SSO bootstrap, and per-profile `KUBECONFIG` wiring |
 | Mise | `private_dot_config/mise/config.toml` (global) + `mise.toml` (repo root, source-only) | -- | Tool/version manager; repo-local pins `go-task`, OpenTofu, TFLint, terraform-docs, and pre-commit |
-| Taskfile | `Taskfile.yml` (repo root, source-only) | -- | go-task runner for chezmoi and homeserver IaC workflows, including OpenTofu backend bootstrap, plan/apply, lint, and docs tasks |
+| Taskfile | `Taskfile.yml` (repo root, source-only) | -- | go-task runner for chezmoi and homeserver IaC workflows, including OpenTofu backend bootstrap, DNS, Tailscale policy validation/apply, plan/apply, lint, and docs tasks |
 | Ghostty | `private_dot_config/ghostty/` | -- | Terminal emulator |
 | tmux | `private_dot_config/tmux/` | -- | Terminal multiplexer |
 | Starship | `private_dot_config/starship.toml` | -- | Prompt theme |
@@ -47,7 +47,9 @@ Summary of notable config areas managed by chezmoi, with links to dedicated docs
 
 ## Pi
 
-Global Pi config lives under `~/.config/pi` via `PI_CODING_AGENT_DIR`. `settings.json` installs `npm:pi-web-access` for web search, URL fetching, GitHub repo cloning, PDF extraction, and video/YouTube analysis tools, plus `npm:pi-annotate` for visual annotation with inline note cards. It also keeps `npm:@injaneity/pi-computer-use` installed but filters its `extensions` to `[]`, so macOS computer-use tools such as `list_apps`, `list_windows`, `screenshot`, and GUI actions are not loaded by default. The local `computer-use-toggle` extension adds `/computer-use-enable` to opt in for the current Pi session, `/computer-use-disable` to unload it again, and `/computer-use-status` to inspect state; future sessions remain disabled unless enabled again. Package code is installed under ignored `~/.config/pi/npm/`; the computer-use native helper is placed at `~/.pi/agent/helpers/pi-computer-use/bridge` and needs macOS Accessibility and Screen Recording permissions on first use.
+Global Pi config lives under `~/.config/pi` via `PI_CODING_AGENT_DIR`. `settings.json` installs `npm:pi-web-access` for web search, URL fetching, GitHub repo cloning, PDF extraction, and video/YouTube analysis tools, `npm:pi-annotate` for visual annotation with inline note cards, and `npm:pi-subagents` for optional delegated research/execution workflows. It also keeps `npm:@injaneity/pi-computer-use` installed but filters its `extensions` to `[]`, so macOS computer-use tools such as `list_apps`, `list_windows`, `screenshot`, and GUI actions are not loaded by default. The local `computer-use-toggle` extension adds `/computer-use-enable` to opt in for the current Pi session, `/computer-use-disable` to unload it again, and `/computer-use-status` to inspect state; future sessions remain disabled unless enabled again. Prompt templates live directly under `private_dot_config/pi/prompts/`; `research_codebase.md` expands as `/research_codebase` and documents codebases as-is, using Pi subagents when available and `thoughts/` as historical context when present. Package code is installed under ignored `~/.config/pi/npm/`; the computer-use native helper is placed at `~/.pi/agent/helpers/pi-computer-use/bridge` and needs macOS Accessibility and Screen Recording permissions on first use.
+
+The local `powerline-footer` extension is vendored from `nicobailon/pi-powerline-footer` under `private_dot_config/pi/extensions/powerline-footer/` and patched to respect `PI_CODING_AGENT_DIR` via Pi's `getAgentDir()`. Powerline settings are code-managed in `settings.json`: Catppuccin Mocha segment colors come from the extension-local `theme.json`, high thinking levels use fixed Catppuccin warning/error colors instead of the upstream rainbow gradient, the thinking label is shortened (`think:xh`), the context segment is right-aligned and shows exact token counts, subscription cost noise is hidden, cache/cost details overflow to the secondary row, fixed-editor mode is off by default for a less invasive startup, and `/powerline fixed-editor on` opts into the fixed editor cluster. Runtime stash/bash history and generated vibe files live under ignored `~/.config/pi/powerline-footer/` and `~/.config/pi/vibes/`.
 
 The local `context-inspector` extension provides `/context`; default HTML/JSON exports now go to the OS temp directory under `pi-context-snapshots/` with private file permissions instead of project-local `.pi/` paths, because snapshots can contain prompts, tool calls, file contents, and secrets.
 
@@ -76,8 +78,10 @@ Terminal multiplexer with Catppuccin theme and plugin ecosystem on the workstati
 - **Session picker:** `prefix + s` opens a `sesh` + `gum` popup helper (`~/bin/sesh-picker`)
 - **Session rename:** `prefix + R` opens a `gum` input popup (`~/bin/sesh-rename`); rejects duplicate session names
 - **OpenCode launch:** `prefix + o` splits the current pane and runs `~/bin/opencode-launch`, which preserves per-pane OpenCode session tracking across tmux restores.
+- **OpenCode picker:** `prefix + O` opens `~/bin/opencode-session-picker`, listing live OpenCode panes with session status from the local OpenCode plugin and jumping to the selected pane.
 - **Scrollback:** `PageUp`/`PageDown` move by half-pages in tmux copy-mode scrollback, but are forwarded to fullscreen pane applications using the alternate screen.
 - **URL opening:** double-clicking a URL in a pane opens it with the system browser via `~/bin/tmux-open-url-at-mouse`; non-URL double-clicks keep tmux's default word-copy behavior.
+- **Pane separators:** tmux uses shared separator cells rather than independent pane boxes; the config uses thin active blue/inactive gray separator styling and top pane labels to approximate boxed panes.
 - **Session persistence:** Resurrect auto-saves every 15 min (via Continuum) and on every client detach. Restore on server start is handled by a custom `~/bin/tmux-restore` script that validates the save file and falls back to recent backups when the latest save is corrupt. OpenCode panes are restored to their exact previous session via per-pane session ID tracking in `~/.local/state/opencode/tmux-panes/`.
 - **Status line:** Top position, oasis-style mode indicator with per-mode colors/icons
 - **History:** 100,000 lines, mouse enabled, base-index 1
@@ -106,7 +110,7 @@ Standalone tmux session manager used by the `prefix + s` popup helper.
 - **Defaults:** single-part session names (`dir_length = 1`), cache + strict mode enabled, config sessions listed before tmux sessions and zoxide entries
 - **Pinned sessions:** `main`, `dotfiles`, `notes`, and `ma-proj` (via work-only import)
 - **Startup layout:** new sessions start as a plain single-window tmux session by default
-- **Helper scripts:** `~/bin/sesh-picker` (fuzzy session picker), `~/bin/sesh-rename` (rename with duplicate-name guard), `~/bin/opencode-launch` (OpenCode launcher with tmux session resume)
+- **Helper scripts:** `~/bin/sesh-picker` (fuzzy session picker), `~/bin/sesh-rename` (rename with duplicate-name guard), `~/bin/opencode-launch` (OpenCode launcher with tmux session resume), `~/bin/opencode-session-picker` (jump to live OpenCode panes)
 
 _Reference: `private_dot_config/sesh/sesh.toml:1`_
 

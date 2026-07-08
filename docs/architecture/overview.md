@@ -36,7 +36,7 @@ Chezmoi translates source-state file names to target paths using naming conventi
 | `key.txt.age` | _(source-only)_ | Passphrase-encrypted age private key |
 | `bin/chezmoi-bws` | _(source-only)_ | BWS token wrapper script |
 | `private_dot_agents/skills/` | `~/.agents/skills/` | Harness-agnostic Agent Skills loaded by OpenCode and Pi |
-| `private_dot_config/pi/` | `~/.config/pi/` | Pi global config, extensions, keybindings, and Pi-specific skills (`PI_CODING_AGENT_DIR=$HOME/.config/pi`) |
+| `private_dot_config/pi/` | `~/.config/pi/` | Pi global config, extensions, keybindings, prompt templates, and Pi-specific skills (`PI_CODING_AGENT_DIR=$HOME/.config/pi`) |
 | `.pre-commit-config.yaml`, `.tflint.hcl`, `.terraform-docs.yml` | _(source-only)_ | Repo-local quality gates for hooks, OpenTofu linting, and generated module docs |
 | `mise.toml`, `Taskfile.yml` | _(source-only)_ | Repo-local tool pins and task runner workflows |
 | `literal_bin/` | `~/bin/` | Shell utility scripts |
@@ -82,7 +82,7 @@ The `.chezmoiignore` file uses **target-state paths** (not source-state names) a
 
 - **Build artifacts:** `node_modules/`, `target/`, `__pycache__/`, lock files
 - **Caches:** `.cache/`, `.config/carapace/.versions`, `lazy-lock.json`, yazi plugins
-- **Runtime state:** `.kube/`, `glab-cli/recover/`, `.obsidian/`, `.DS_Store`
+- **Runtime state:** `.kube/`, `glab-cli/recover/`, `.config/pi/powerline-footer/`, `.config/pi/vibes/`, `.obsidian/`, `.DS_Store`
 - **Infrastructure artifacts:** OpenTofu state, plan files, `.terraform/`, and secret variable files are ignored by Git and never committed
 - **Obsidian vault generated files:** Plugin binaries (`main.js`, `manifest.json`, `styles.css`), themes, icons, and `workspace.json` under `Documents/notes/.obsidian/` are ignored — only settings JSONs and plugin `data.json` files are managed
 - **Profile-conditional:** DT work configs (glab, git work config, GitLab SSH keys) excluded when profile is not `dt-work`

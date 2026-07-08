@@ -1,0 +1,3 @@
+# Rebuild atlas with clean Ubuntu and Ansible
+
+atlas will be rebuilt as a clean-disk Ubuntu Server 26.04 LTS host, then configured from Ansible as the source of truth. We will not use `do-release-upgrade` or in-place cleanup because those preserve unknown system state from the current Portainer-managed server. The OS installation is done from physical USB media; Ansible starts only after Ubuntu Server is installed and reachable over SSH. Ansible automation lives source-only in this repository and is not deployed by chezmoi. atlas may receive selected Ansible-managed Neovim, Zsh, and Starship configuration for server administration, but it does not run the full chezmoi workstation profile.

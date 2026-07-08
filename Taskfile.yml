@@ -106,7 +106,7 @@ tasks:
         tf_data_root="$(mktemp -d)"
         trap 'rm -rf "$tf_data_root"' EXIT
 
-        for stack in infra/terraform/bootstrap infra/terraform/aws-foundation infra/terraform/truenas; do
+        for stack in infra/terraform/bootstrap infra/terraform/dns infra/terraform/aws-foundation infra/terraform/truenas infra/terraform/authentik; do
           stack_name="$(basename "$stack")"
           export TF_DATA_DIR="$tf_data_root/$stack_name"
           tofu -chdir="$stack" init -backend=false -reconfigure -input=false
@@ -118,7 +118,7 @@ tasks:
     cmds:
       - |
         tflint --init --config="${PWD}/.tflint.hcl"
-        for stack in infra/terraform/bootstrap infra/terraform/aws-foundation infra/terraform/truenas; do
+        for stack in infra/terraform/bootstrap infra/terraform/dns infra/terraform/aws-foundation infra/terraform/truenas infra/terraform/authentik; do
           tflint --chdir="$stack" --config="${PWD}/.tflint.hcl"
         done
 
@@ -126,8 +126,39 @@ tasks:
     desc: Regenerate terraform-docs output for homeserver OpenTofu stacks
     cmds:
       - terraform-docs --config .terraform-docs.yml infra/terraform/bootstrap
+      - terraform-docs --config .terraform-docs.yml infra/terraform/dns
       - terraform-docs --config .terraform-docs.yml infra/terraform/aws-foundation
       - terraform-docs --config .terraform-docs.yml infra/terraform/truenas
+      - terraform-docs --config .terraform-docs.yml infra/terraform/authentik
+
+  tf:dns:init:
+    desc: Initialize the DNS OpenTofu stack
+    dir: infra/terraform/dns
+    cmds:
+      - task: tf:backend:check
+      - |
+        aws-login exec mbastakis -- tofu init \
+          -input=false \
+          -reconfigure \
+          -backend-config="bucket={{.TF_STATE_BUCKET}}" \
+          -backend-config="key=homeserver/dns/terraform.tfstate" \
+          -backend-config="region={{.TF_STATE_REGION}}" \
+          -backend-config="encrypt=true" \
+          -backend-config="use_lockfile=true"
+
+  tf:dns:plan:
+    desc: Plan the DNS OpenTofu stack
+    dir: infra/terraform/dns
+    cmds:
+      - task: tf:dns:init
+      - aws-login exec mbastakis -- tofu plan {{.CLI_ARGS}}
+
+  tf:dns:apply:
+    desc: Apply the DNS OpenTofu stack
+    dir: infra/terraform/dns
+    cmds:
+      - task: tf:dns:init
+      - aws-login exec mbastakis -- tofu apply {{.CLI_ARGS}}
 
   tf:aws-foundation:init:
     desc: Initialize the AWS foundation OpenTofu stack
@@ -157,6 +188,33 @@ tasks:
     cmds:
       - task: tf:aws-foundation:init
       - aws-login exec mbastakis -- tofu apply {{.CLI_ARGS}}
+
+  tf:authentik:init:
+    desc: Initialize the Authentik OpenTofu stack
+    dir: infra/terraform/authentik
+    cmds:
+      - task: tf:backend:check
+      - |
+        aws-login exec mbastakis -- tofu init \
+          -input=false \
+          -reconfigure \
+          -backend-config="bucket={{.TF_STATE_BUCKET}}" \
+          -backend-config="key=homeserver/authentik/terraform.tfstate" \
+          -backend-config="region={{.TF_STATE_REGION}}" \
+          -backend-config="encrypt=true" \
+          -backend-config="use_lockfile=true"
+
+  tf:authentik:plan:
+    desc: Plan the Authentik OpenTofu stack
+    cmds:
+      - task: tf:authentik:init
+      - infra/secrets/homeserver-secrets exec terraform-authentik -- tofu -chdir=infra/terraform/authentik plan {{.CLI_ARGS}}
+
+  tf:authentik:apply:
+    desc: Apply the Authentik OpenTofu stack
+    cmds:
+      - task: tf:authentik:init
+      - infra/secrets/homeserver-secrets exec terraform-authentik -- tofu -chdir=infra/terraform/authentik apply {{.CLI_ARGS}}
 
   tf:truenas:init:
     desc: Initialize the TrueNAS OpenTofu stack
@@ -203,26 +261,30 @@ tasks:
         export TF_VAR_truenas_ssh_private_key="$(< "$key_path")"
         aws-login exec mbastakis -- tofu apply {{.CLI_ARGS}}
 
+  tailscale:policy:validate:
+    desc: Validate the homeserver Tailscale policy through the Tailscale API
+    cmds:
+      - bash infra/tailscale/manage-policy validate {{.CLI_ARGS}}
+
+  tailscale:policy:apply:
+    desc: Apply the homeserver Tailscale policy through the Tailscale API
+    cmds:
+      - bash infra/tailscale/manage-policy apply {{.CLI_ARGS}}
+
   truenas:bootstrap-ssh-key:
     desc: Bootstrap TrueNAS key-based SSH access for OpenTofu
     cmds:
       - bash infra/truenas/bootstrap-ssh-key.sh {{.CLI_ARGS}}
 
   truenas:apps:plan:
-    desc: Placeholder for planned TrueNAS catalog app API diff
+    desc: Show TrueNAS catalog app declarations and required secret refs
     cmds:
-      - |
-        printf '%s\n' "TrueNAS catalog app wrapper is not implemented yet."
-        printf '%s\n' "Declarations will live under infra/truenas/apps/."
-        exit 1
+      - bash infra/truenas/apps/manage-apps plan {{.CLI_ARGS}}
 
   truenas:apps:apply:
-    desc: Placeholder for planned TrueNAS catalog app API apply
+    desc: Apply TrueNAS catalog app declarations over SSH/midclt
     cmds:
-      - |
-        printf '%s\n' "TrueNAS catalog app wrapper is not implemented yet."
-        printf '%s\n' "Declarations will live under infra/truenas/apps/."
-        exit 1
+      - bash infra/truenas/apps/manage-apps apply {{.CLI_ARGS}}
 
   brew:dump:
     desc: Refresh Brewfile from currently installed formulas/casks

@@ -10,6 +10,7 @@ Custom commands, agents, and skills for OpenCode AI assistant.
 | `command/*.md`     | Custom slash commands                    |
 | `agent/*.md`       | Self-contained agents (YAML frontmatter) |
 | `skills/*/SKILL.md` | OpenCode-only skills with scripts and references |
+| `plugins/*.js`     | Local OpenCode plugins loaded by `opencode.jsonc` |
 | `~/.agents/skills/*/SKILL.md` | Shared harness-agnostic skills managed from `private_dot_agents/skills/` |
 
 ## Commands
@@ -20,15 +21,26 @@ Custom commands, agents, and skills for OpenCode AI assistant.
 | `oc`          | Alias for opencode   |
 | `bun install` | Install dependencies |
 
-## OpenAI Auth
+## Providers
 
-Only the built-in OpenAI provider is enabled, so all configured models use OAuth subscription auth from `opencode auth login -p openai`.
+The built-in OpenAI provider remains the default and uses OAuth subscription auth from `opencode auth login -p openai`. API-key backed `openai-api`, direct OpenCode Zen (`opencode`), and WCS (`wcs`) providers are also allowlisted for explicit model selection. WCS is the private WhoCaresSoftware gateway at `https://ai.whocaressoftware.com/v1`; the live gateway currently exposes the short aliases `gpt`, `deepseek`, `glm`, `kimi`, `qwen`, and `minimax`.
 
-| Model ID | Purpose |
-| -------- | ------- |
-| `openai/gpt-5.5` | Default high-quality fallback, planning, broad research |
-| `openai/gpt-5.4-mini-fast` | Fast bounded tasks, exploration, titles, small model fallback |
-| `openai/gpt-5.4` | Source research, repo scouting, conversation compaction |
+| Model ID | Purpose | Variants |
+| -------- | ------- | -------- |
+| `openai/gpt-5.5` | Default high-quality fallback, planning, broad research | OAuth provider defaults |
+| `openai/gpt-5.4-mini-fast` | Fast bounded tasks, exploration, titles, small model fallback | OAuth provider defaults |
+| `openai/gpt-5.4` | Source research, repo scouting, conversation compaction | OAuth provider defaults |
+| `opencode/*` | Selected free OpenCode Zen models via `https://opencode.ai/zen/v1` | Per-model Models.dev metadata |
+| `wcs/gpt` | GPT-5.5 through WCS ChatGPT OAuth | `none`, `low`, `medium`, `high`, `xhigh` reasoning effort |
+| `wcs/deepseek` | DeepSeek V4 Pro through WCS OpenCode Go | `high`, `max` reasoning effort |
+| `wcs/glm` | GLM-5.2 through WCS OpenCode Go | `high`, `max` reasoning effort |
+| `wcs/kimi` | Kimi K2.7 Code through WCS OpenCode Go | none; Models.dev lists no reasoning options |
+| `wcs/qwen` | Qwen3.7 Max through WCS OpenCode Go | `off`, `on`, `max` thinking; max budget `262144` |
+| `wcs/minimax` | MiniMax-M3 through WCS OpenCode Go | `off`, `on` thinking |
+
+Selected direct OpenCode Zen free models: `opencode/big-pickle`, `opencode/deepseek-v4-flash-free`, `opencode/glm-5-free`, `opencode/grok-code`, `opencode/hy3-preview-free`, `opencode/kimi-k2.5-free`, `opencode/ling-2.6-flash-free`, `opencode/mimo-v2.5-free`, `opencode/minimax-m3-free`, `opencode/nemotron-3-ultra-free`, `opencode/north-mini-code-free`, `opencode/qwen3.6-plus-free`, `opencode/ring-2.6-1t-free`, and `opencode/trinity-large-preview-free`.
+
+Commented-out WCS aliases: `deepseek-v4-flash`, `deepseek-v4-pro`, `glm-5.2`, `kimi-k2.7-code`, `qwen3.6-plus`, and `minimax-m3`. They need matching LiteLLM `model_name` routes on the WCS VM before they can be enabled in the client config.
 
 The `-fast` suffix is an actual OAuth-provider model variant. It is used where lower latency matters more than maximum reasoning depth.
 
@@ -46,7 +58,14 @@ opencode auth login -p openai
 # choose ChatGPT Plus/Pro for subscription auth
 ```
 
-`enabled_providers` is set to `["openai"]`; API-key providers are intentionally unavailable unless that allowlist is changed.
+`enabled_providers` is set to `["openai", "openai-api", "opencode", "wcs"]`.
+
+## Plugins
+
+- `plugins/tmux-session-state.js` records OpenCode session lifecycle events into `~/.local/state/opencode/tmux-session-state/` so `~/bin/opencode-session-picker` can show live tmux panes as `working`, `blocked`, `done`, or `error`.
+- `@mohak34/opencode-notifier@latest` provides desktop sound/notification alerts for permissions, questions, completions, and errors.
+
+Restart OpenCode after changing plugin files or the `plugin` array; running panes keep the config loaded at process start.
 
 ## Custom Commands
 
@@ -68,7 +87,7 @@ Instructions for the command in markdown...
 
 - `commit.md` — Guided git commit (routes to `@commit`, subtask)
 - `crawl.md` — Crawl a URL with crawl4ai (routes to `@crawl`, subtask)
-- `research_codebase.md` — Document codebase through parallel research (`openai/gpt-5.4`)
+- `research_codebase.md` — Document codebase through parallel research (`wcs/kimi`)
 - `create_plan.md` — Create detailed implementation plans (`@plan`, `openai/gpt-5.5`)
 - `learn.md` — Extract non-obvious learnings into AGENTS.md files (`openai/gpt-5.4-mini-fast`)
 - `session_analysis.md` — Export and analyze a previous OpenCode session (`@scout`, subtask)
@@ -214,6 +233,8 @@ skills/<name>/
 ### Shared Skills
 
 - `grill-with-docs` lives in `~/.agents/skills/grill-with-docs/` and is intentionally harness-agnostic.
+- `writing-great-skills` lives in `~/.agents/skills/writing-great-skills/` and documents skill-writing vocabulary and structure.
+- `teach` lives in `~/.agents/skills/teach/` and supports stateful teaching workspaces with mission-grounded lessons, resources, glossaries, and learning records.
 
 ### crawl4ai Skill
 

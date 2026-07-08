@@ -10,6 +10,7 @@ flowchart LR
   G --> T["tmux<br/>(multiplexer layer)"]
   G --> Z["zsh<br/>(shell layer)"]
   T --> Z
+  Z --> P["Pi<br/>(agent TUI layer)"]
   Z --> M["NeoMutt<br/>(mail layer)"]
   Z --> N["Neovim<br/>(editor layer)"]
 ```
@@ -54,20 +55,21 @@ _Reference: `private_dot_config/private_karabiner/src/rules/15-hyper-navigation.
 | `Cmd+R`          | Rename tmux window (`prefix`, `,`)   | `private_dot_config/ghostty/config:77`  |
 | `Cmd+Shift+R`    | Rename tmux session (`prefix`, `R`)  | `private_dot_config/ghostty/config:78`  |
 | `Cmd+O`          | OpenCode split (`prefix`, `o`)       | `private_dot_config/ghostty/config:80`  |
-| `Cmd+G`          | Lazygit popup (`prefix`, `G`)        | `private_dot_config/ghostty/config:81`  |
-| `Cmd+Shift+T`    | New Ghostty OS window                | `private_dot_config/ghostty/config:84`  |
-| `Cmd+Shift+W`    | Close Ghostty OS window              | `private_dot_config/ghostty/config:85`  |
-| `Cmd+Backspace`  | Delete to start of line (Ctrl+U)     | `private_dot_config/ghostty/config:88`  |
-| `Ctrl+Shift+T`   | Send `ESC[202~` to zsh               | `private_dot_config/ghostty/config:91`  |
-| `Ctrl+Tab`       | _(pass-through to tmux)_             | `private_dot_config/ghostty/config:94`  |
-| `Ctrl+Shift+Tab` | _(pass-through to tmux)_             | `private_dot_config/ghostty/config:95`  |
-| `Cmd+Left`       | Home (line start)                    | `private_dot_config/ghostty/config:98`  |
-| `Cmd+Right`      | End (line end)                       | `private_dot_config/ghostty/config:99`  |
-| `Cmd+Shift+E`    | Write screen to file + open          | `private_dot_config/ghostty/config:102` |
-| `Shift+Enter`    | CSI 13;2u                            | `private_dot_config/ghostty/config:105` |
-| `Super+0`        | Reset font size                      | `private_dot_config/ghostty/config:108` |
-| `Super+Shift+]`  | Increase font size                   | `private_dot_config/ghostty/config:109` |
-| `Super+-`        | Decrease font size                   | `private_dot_config/ghostty/config:110` |
+| `Cmd+Shift+O`    | OpenCode session picker (`prefix`, `O`) | `private_dot_config/ghostty/config:81` |
+| `Cmd+G`          | Lazygit popup (`prefix`, `G`)        | `private_dot_config/ghostty/config:82`  |
+| `Cmd+Shift+T`    | New Ghostty OS window                | `private_dot_config/ghostty/config:85`  |
+| `Cmd+Shift+W`    | Close Ghostty OS window              | `private_dot_config/ghostty/config:86`  |
+| `Cmd+Backspace`  | Delete to start of line (Ctrl+U)     | `private_dot_config/ghostty/config:89`  |
+| `Ctrl+Shift+T`   | Send `ESC[202~` to zsh               | `private_dot_config/ghostty/config:92`  |
+| `Ctrl+Tab`       | _(pass-through to tmux)_             | `private_dot_config/ghostty/config:95`  |
+| `Ctrl+Shift+Tab` | _(pass-through to tmux)_             | `private_dot_config/ghostty/config:96`  |
+| `Cmd+Left`       | Home (line start)                    | `private_dot_config/ghostty/config:99`  |
+| `Cmd+Right`      | End (line end)                       | `private_dot_config/ghostty/config:100` |
+| `Cmd+Shift+E`    | Write screen to file + open          | `private_dot_config/ghostty/config:103` |
+| `Shift+Enter`    | CSI 13;2u                            | `private_dot_config/ghostty/config:106` |
+| `Super+0`        | Reset font size                      | `private_dot_config/ghostty/config:109` |
+| `Super+Shift+]`  | Increase font size                   | `private_dot_config/ghostty/config:110` |
+| `Super+-`        | Decrease font size                   | `private_dot_config/ghostty/config:111` |
 
 Ghostty remaps `Hide Ghostty` to `Ctrl+Option+Cmd+H` via `.chezmoiscripts/run_once_after_06-ghostty-hide-shortcut.sh.tmpl` so `Cmd+H` reaches tmux navigation while other apps keep the macOS default hide shortcut.
 
@@ -82,8 +84,9 @@ Prefix: **`Ctrl-a`** everywhere. In a local tmux pane attached to remote tmux ov
 | `prefix + c`         | New window             | `private_dot_config/tmux/tmux.conf:26` |
 | `prefix + x`         | Kill pane (no confirm) | `private_dot_config/tmux/tmux.conf:27` |
 | `prefix + p`         | Previous window        | `private_dot_config/tmux/tmux.conf:28` |
-| `prefix + o`         | OpenCode split (auth-aware launcher)   | `private_dot_config/tmux/tmux.conf:30` |
-| `prefix + G`         | Lazygit popup (90% overlay) | `private_dot_config/tmux/tmux.conf:30` |
+| `prefix + o`         | OpenCode split (auth-aware launcher)   | `private_dot_config/tmux/tmux.conf:32` |
+| `prefix + O`         | OpenCode session picker | `private_dot_config/tmux/tmux.conf:95` |
+| `prefix + G`         | Lazygit popup (90% overlay) | `private_dot_config/tmux/tmux.conf:33` |
 | `Ctrl+Tab`           | Next window            | `private_dot_config/tmux/tmux.conf:11` |
 | `Ctrl+Shift+Tab`     | Previous window        | `private_dot_config/tmux/tmux.conf:12` |
 | `PageUp` / `PageDown` | Half-page tmux scrollback in shell; forwarded to fullscreen pane apps | `private_dot_config/tmux/tmux.conf:35-38` |
@@ -177,6 +180,27 @@ _Atlas reference: `infra/ansible/roles/terminal_comfort/templates/keybindings.zs
 | `<` / `>`        | Switch completion group               | `private_dot_config/zsh/fzf-tab.zsh:20`   |
 | `/`              | Accept and continue into subdirectory | `private_dot_config/zsh/fzf-tab.zsh:53`   |
 | `Tab` (in ftext) | Insert filename (instead of opening)  | `private_dot_config/zsh/functions.zsh:81`  |
+
+## Pi (Agent TUI Layer)
+
+Global Pi keybindings and powerline extension shortcuts are managed under `private_dot_config/pi/`.
+
+| Key | Action | Source |
+| --- | --- | --- |
+| `Ctrl+T` | Cycle thinking level | `private_dot_config/pi/keybindings.json:2` |
+| `Shift+Tab` | Toggle thinking level | `private_dot_config/pi/keybindings.json:3` |
+| `Ctrl+Shift+B` | Toggle powerline sticky bash mode | `private_dot_config/pi/settings.json:41` |
+| `Alt+S` | Stash/restore the full editor draft | `private_dot_config/pi/extensions/powerline-footer/index.ts:1926` |
+| `Ctrl+Alt+H` | Open powerline prompt/stash history | `private_dot_config/pi/settings.json:46` |
+| `Ctrl+Alt+C` | Copy full Pi editor text | `private_dot_config/pi/settings.json:46` |
+| `Ctrl+Alt+X` | Cut full Pi editor text | `private_dot_config/pi/settings.json:46` |
+| `Ctrl+Shift+U` / `Ctrl+Shift+I` | Jump to previous/next user message in fixed-editor mode | `private_dot_config/pi/settings.json:46` |
+| `Ctrl+Alt+,` / `Ctrl+Alt+.` | Jump to previous/next assistant message in fixed-editor mode | `private_dot_config/pi/settings.json:46` |
+| `Ctrl+Shift+G` | Jump fixed-editor chat viewport to bottom | `private_dot_config/pi/settings.json:46` |
+| `Super+Up` / `Super+Down` | Scroll fixed-editor chat viewport | `private_dot_config/pi/settings.json:46` |
+| `Super+Shift+Up` / `Super+Shift+Down` | Move Pi editor cursor to start/end | `private_dot_config/pi/settings.json:46` |
+
+Fixed-editor mode is disabled by default in `settings.json`; enable it per session with `/powerline fixed-editor on` to use the viewport jump/scroll shortcuts.
 
 ## NeoMutt (Mail Layer)
 

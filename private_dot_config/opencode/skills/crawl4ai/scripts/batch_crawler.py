@@ -22,11 +22,13 @@ except ImportError:
 
 from crawl4ai import AsyncWebCrawler, BrowserConfig, CrawlerRunConfig, CacheMode
 
-async def crawl_batch(urls: List[str], max_concurrent: int = 5):
+async def crawl_batch(urls: List[str], max_concurrent: int = 5, output_dir: str = "."):
     """
     Crawl multiple URLs efficiently with concurrent processing
     """
     print(f"🚀 Starting batch crawl of {len(urls)} URLs (max {max_concurrent} concurrent)")
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
 
     # Configure browser for efficiency
     browser_config = BrowserConfig(
@@ -82,11 +84,12 @@ async def crawl_batch(urls: List[str], max_concurrent: int = 5):
         "failed": failed
     }
 
-    with open("batch_results.json", "w") as f:
+    results_path = output_path / "batch_results.json"
+    with open(results_path, "w", encoding="utf-8") as f:
         json.dump(output, f, indent=2)
 
     # Save individual markdown files
-    markdown_dir = Path("batch_markdown")
+    markdown_dir = output_path / "batch_markdown"
     markdown_dir.mkdir(exist_ok=True)
 
     for i, result in enumerate(batch_results):
@@ -96,7 +99,7 @@ async def crawl_batch(urls: List[str], max_concurrent: int = 5):
             safe_name = "".join(c if c.isalnum() or c in "-_" else "_" for c in safe_name)[:100]
 
             file_path = markdown_dir / f"{i:03d}_{safe_name}.md"
-            with open(file_path, "w") as f:
+            with open(file_path, "w", encoding="utf-8") as f:
                 f.write(f"# {result.metadata.get('title', result.url)}\n\n")
                 f.write(f"URL: {result.url}\n\n")
                 f.write(result.markdown)
@@ -104,20 +107,22 @@ async def crawl_batch(urls: List[str], max_concurrent: int = 5):
     print(f"\n📊 Batch Crawl Complete:")
     print(f"   ✅ Success: {len(results)}")
     print(f"   ❌ Failed: {len(failed)}")
-    print(f"   💾 Results saved to: batch_results.json")
+    print(f"   💾 Results saved to: {results_path}")
     print(f"   📁 Markdown files saved to: {markdown_dir}/")
 
     return output
 
-async def crawl_with_extraction(urls: List[str], schema_file: str = None):
+async def crawl_with_extraction(urls: List[str], schema_file: str = None, output_dir: str = "."):
     """
     Batch crawl with structured data extraction
     """
     from crawl4ai.extraction_strategy import JsonCssExtractionStrategy
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
 
     schema = None
     if schema_file and Path(schema_file).exists():
-        with open(schema_file) as f:
+        with open(schema_file, encoding="utf-8") as f:
             schema = json.load(f)
         print(f"📋 Using extraction schema from: {schema_file}")
     else:
@@ -161,16 +166,17 @@ async def crawl_with_extraction(urls: List[str], schema_file: str = None):
                     print(f"⚠️ Failed to parse JSON from: {result.url}")
 
     # Save extracted data
-    with open("batch_extracted.json", "w") as f:
+    extracted_path = output_path / "batch_extracted.json"
+    with open(extracted_path, "w", encoding="utf-8") as f:
         json.dump(extracted_data, f, indent=2)
 
-    print(f"\n💾 Extracted data saved to: batch_extracted.json")
+    print(f"\n💾 Extracted data saved to: {extracted_path}")
     return extracted_data
 
 def load_urls(source: str) -> List[str]:
     """Load URLs from file or string"""
     if Path(source).exists():
-        with open(source) as f:
+        with open(source, encoding="utf-8") as f:
             urls = [line.strip() for line in f if line.strip() and not line.startswith("#")]
     else:
         # Treat as comma-separated URLs
@@ -190,12 +196,16 @@ Usage:
     # Crawl with extraction
     python batch_crawler.py urls.txt --extract [schema.json]
 
+    # Write artifacts to an explicit directory
+    python batch_crawler.py urls.txt --output-dir ./crawl-output
+
     # Crawl comma-separated URLs
     python batch_crawler.py "https://example.com,https://example.org"
 
 Options:
     --max-concurrent N    Max concurrent crawls (default: 5)
     --extract [schema]    Extract structured data using schema
+    --output-dir DIR      Directory for JSON and markdown artifacts
 
 Example urls.txt:
     https://example.com
@@ -218,19 +228,32 @@ Example urls.txt:
     max_concurrent = 5
     extract_mode = False
     schema_file = None
+    output_dir = "."
 
-    for i, arg in enumerate(sys.argv[2:], 2):
-        if arg == "--max-concurrent" and i + 1 < len(sys.argv):
-            max_concurrent = int(sys.argv[i + 1])
+    extra_args = sys.argv[2:]
+    i = 0
+    while i < len(extra_args):
+        arg = extra_args[i]
+        if arg == "--max-concurrent" and i + 1 < len(extra_args):
+            max_concurrent = int(extra_args[i + 1])
+            i += 2
         elif arg == "--extract":
             extract_mode = True
-            if i + 1 < len(sys.argv) and not sys.argv[i + 1].startswith("--"):
-                schema_file = sys.argv[i + 1]
+            if i + 1 < len(extra_args) and not extra_args[i + 1].startswith("--"):
+                schema_file = extra_args[i + 1]
+                i += 2
+            else:
+                i += 1
+        elif arg in ("--output-dir", "-o") and i + 1 < len(extra_args):
+            output_dir = extra_args[i + 1]
+            i += 2
+        else:
+            i += 1
 
     if extract_mode:
-        await crawl_with_extraction(urls, schema_file)
+        await crawl_with_extraction(urls, schema_file, output_dir=output_dir)
     else:
-        await crawl_batch(urls, max_concurrent)
+        await crawl_batch(urls, max_concurrent, output_dir=output_dir)
 
 if __name__ == "__main__":
     asyncio.run(main())

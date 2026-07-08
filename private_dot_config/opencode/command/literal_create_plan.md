@@ -1,7 +1,6 @@
 ---
 description: Create detailed implementation plans through interactive research and iteration
 agent: plan
-model: openai/gpt-5.5
 ---
 
 # Implementation Plan

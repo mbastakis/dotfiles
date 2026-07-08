@@ -1,0 +1,337 @@
+#!/bin/bash
+set -euo pipefail
+
+STATE_ROOT="${XDG_STATE_HOME:-$HOME/.local/state}/opencode"
+LEGACY_PANE_DIR="$STATE_ROOT/tmux-panes"
+PLUGIN_STATE_DIR="$STATE_ROOT/tmux-session-state"
+PLUGIN_SESSION_DIR="$PLUGIN_STATE_DIR/sessions"
+PLUGIN_PANE_DIR="$PLUGIN_STATE_DIR/panes"
+
+require_tool() {
+    local tool="$1"
+    if ! command -v "$tool" >/dev/null 2>&1; then
+        tmux display-message "$tool is not installed"
+        exit 1
+    fi
+}
+
+safe_name() {
+    printf '%s' "$1" | tr -c 'A-Za-z0-9_.%-' '_'
+}
+
+sql_escape() {
+    printf '%s' "$1" | sed "s/'/''/g"
+}
+
+is_live_pid() {
+    local pid="$1"
+    [[ "$pid" =~ ^[0-9]+$ ]] && kill -0 "$pid" 2>/dev/null
+}
+
+is_opencode_command() {
+    case "$1" in
+        opencode | opencode-launch)
+            return 0
+            ;;
+    esac
+
+    return 1
+}
+
+session_info() {
+    local session_id="$1"
+    [[ -z "$session_id" ]] && return 0
+
+    opencode db \
+        "SELECT id, title, directory, agent, time_updated FROM session WHERE id = '$(sql_escape "$session_id")'" \
+        --format json 2>/dev/null \
+        | jq -r '.[0] // {} | [.title // "", .directory // "", .agent // "", (.time_updated // 0 | tostring)] | @tsv' \
+        || true
+}
+
+status_priority() {
+    case "$1" in
+        blocked) printf '1' ;;
+        working) printf '2' ;;
+        error) printf '3' ;;
+        done) printf '4' ;;
+        *) printf '5' ;;
+    esac
+}
+
+status_label() {
+    case "$1" in
+        blocked) printf 'blocked' ;;
+        done) printf 'done' ;;
+        working) printf 'working' ;;
+        error) printf 'error' ;;
+        deleted) printf 'deleted' ;;
+        exited) printf 'exited' ;;
+        *) printf 'unknown' ;;
+    esac
+}
+
+short_session_id() {
+    local session_id="$1"
+    if [[ ${#session_id} -gt 18 ]]; then
+        printf '%s...%s' "${session_id:0:10}" "${session_id: -5}"
+    else
+        printf '%s' "$session_id"
+    fi
+}
+
+terminal_cols() {
+    local size cols=""
+
+    if size="$({ stty size </dev/tty; } 2>/dev/null)"; then
+        cols="${size##* }"
+    fi
+
+    if [[ ! "$cols" =~ ^[0-9]+$ ]] || [[ "$cols" -lt 40 ]]; then
+        cols="${COLUMNS:-}"
+    fi
+
+    if [[ ! "$cols" =~ ^[0-9]+$ ]] || [[ "$cols" -lt 40 ]]; then
+        cols="$(tput cols 2>/dev/null || printf '120')"
+    fi
+
+    if [[ ! "$cols" =~ ^[0-9]+$ ]]; then
+        cols=120
+    fi
+
+    printf '%s' "$cols"
+}
+
+truncate_end() {
+    local value="$1" max="$2"
+
+    if [[ "$max" -le 0 ]]; then
+        return 0
+    fi
+
+    if [[ ${#value} -le "$max" ]]; then
+        printf '%s' "$value"
+        return 0
+    fi
+
+    if [[ "$max" -le 3 ]]; then
+        printf '%s' "${value:0:max}"
+        return 0
+    fi
+
+    printf '%s...' "${value:0:$((max - 3))}"
+}
+
+compact_path() {
+    local path="$1" max="$2" keep start
+
+    if [[ "$path" == "$HOME"* ]]; then
+        path="~${path#"$HOME"}"
+    fi
+
+    if [[ ${#path} -le "$max" ]]; then
+        printf '%s' "$path"
+        return 0
+    fi
+
+    if [[ "$max" -le 6 ]]; then
+        truncate_end "$path" "$max"
+        return 0
+    fi
+
+    keep=$((max - 3))
+    start=$((${#path} - keep))
+    printf '...%s' "${path:$start}"
+}
+
+status_icon() {
+    case "$1" in
+        blocked) printf '🟠' ;;
+        working) printf '🟡' ;;
+        error) printf '🔴' ;;
+        done) printf '🟢' ;;
+        deleted | exited) printf '⚫' ;;
+        *) printf '⚪' ;;
+    esac
+}
+
+status_display() {
+    local status="$1"
+
+    status_icon "$status"
+}
+
+format_display() {
+    local cols="$1" status="$2" status_text="$3" session_name="$4" window_index="$5"
+    local pane_index="$6" session_id="$7" title="$8" agent="$9" directory="${10}"
+    local max state pane path short_id meta title_max title_text display
+
+    max=$((cols - 12))
+    if [[ "$max" -lt 40 ]]; then
+        max=40
+    fi
+
+    state="$(status_display "$status" "$status_text" "$max")"
+    pane="$session_name:$window_index.$pane_index"
+
+    if [[ "$max" -lt 70 ]]; then
+        title_max=$((max - ${#state} - 1))
+        title_text="$(truncate_end "$title" "$title_max")"
+        display="$state $title_text"
+    elif [[ "$max" -lt 110 ]]; then
+        meta="$pane"
+        title_max=$((max - ${#state} - ${#meta} - 4))
+        title_text="$(truncate_end "$title" "$title_max")"
+        display="$state  $title_text  $meta"
+    elif [[ "$max" -lt 150 ]]; then
+        path="$(compact_path "$directory" 26)"
+        meta="$pane  $agent  $path"
+        title_max=$((max - ${#state} - ${#meta} - 4))
+        title_text="$(truncate_end "$title" "$title_max")"
+        display="$state  $title_text  $meta"
+    else
+        path="$(compact_path "$directory" 44)"
+        short_id="$(short_session_id "$session_id")"
+        meta="$pane  $agent  $short_id  $path"
+        title_max=$((max - ${#state} - ${#meta} - 4))
+        title_text="$(truncate_end "$title" "$title_max")"
+        display="$state  $title_text  $meta"
+    fi
+
+    truncate_end "$display" "$max"
+}
+
+build_rows() {
+    local pane_id session_name tmux_session_id window_id window_index pane_index pane_path pane_command window_name
+    local pane_state pane_state_file session_id session_state_file legacy_file
+    local status status_text title directory agent updated process_id live
+    local db_title db_directory db_agent db_updated info display target tmux_format cols
+
+    cols="$(terminal_cols)"
+    tmux_format=$'#{pane_id}\t#{session_name}\t#{session_id}\t#{window_id}\t#{window_index}\t#{pane_index}\t#{pane_current_path}\t#{pane_current_command}\t#{window_name}'
+
+    while IFS=$'\t' read -r pane_id session_name tmux_session_id window_id window_index pane_index pane_path pane_command window_name; do
+        pane_state_file="$PLUGIN_PANE_DIR/$(safe_name "$pane_id").json"
+        pane_state="{}"
+        if [[ -f "$pane_state_file" ]]; then
+            pane_state="$(jq -c '.' "$pane_state_file" 2>/dev/null || printf '{}')"
+        fi
+
+        session_id="$(jq -r '.sessionID // empty' <<<"$pane_state")"
+        process_id="$(jq -r '.processID // empty' <<<"$pane_state")"
+
+        if [[ -z "$session_id" ]]; then
+            legacy_file="$LEGACY_PANE_DIR/$session_name/$window_index/$pane_index"
+            [[ -f "$legacy_file" ]] && session_id="$(<"$legacy_file")"
+        fi
+
+        live=false
+        if [[ -n "$process_id" ]] && is_live_pid "$process_id"; then
+            live=true
+        elif is_opencode_command "$pane_command"; then
+            live=true
+        fi
+
+        [[ "$live" != true ]] && continue
+        [[ -z "$session_id" ]] && session_id="unknown"
+
+        status="unknown"
+        status_text=""
+        title=""
+        directory=""
+        agent=""
+        updated="0"
+
+        if [[ "$session_id" != "unknown" ]]; then
+            session_state_file="$PLUGIN_SESSION_DIR/$(safe_name "$session_id").json"
+            if [[ -f "$session_state_file" ]]; then
+                status="$(jq -r '.status // "unknown"' "$session_state_file" 2>/dev/null || printf 'unknown')"
+                status_text="$(jq -r '.statusText // empty' "$session_state_file" 2>/dev/null || true)"
+                title="$(jq -r '.title // empty' "$session_state_file" 2>/dev/null || true)"
+                directory="$(jq -r '.directory // empty' "$session_state_file" 2>/dev/null || true)"
+                agent="$(jq -r '.agent // empty' "$session_state_file" 2>/dev/null || true)"
+                updated="$(jq -r '.timeUpdated // .lastUpdated // 0' "$session_state_file" 2>/dev/null || printf '0')"
+            fi
+
+            if [[ -z "$title" || -z "$directory" || -z "$agent" || "$updated" == "0" ]]; then
+                info="$(session_info "$session_id")"
+                IFS=$'\t' read -r db_title db_directory db_agent db_updated <<<"$info"
+                [[ -z "$title" ]] && title="$db_title"
+                [[ -z "$directory" ]] && directory="$db_directory"
+                [[ -z "$agent" ]] && agent="$db_agent"
+                [[ "$updated" == "0" ]] && updated="${db_updated:-0}"
+            fi
+        fi
+
+        [[ -z "$title" ]] && title="$window_name"
+        [[ -z "$directory" ]] && directory="$pane_path"
+        [[ -z "$agent" ]] && agent="opencode"
+
+        target="$pane_id"
+        display="$(format_display "$cols" "$status" "$status_text" "$session_name" "$window_index" "$pane_index" "$session_id" "$title" "$agent" "$directory")"
+
+        printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$(status_priority "$status")" "$updated" "$target" "$window_id" "$tmux_session_id" "$display"
+    done < <(tmux list-panes -a -F "$tmux_format")
+}
+
+main() {
+    require_tool tmux
+    require_tool gum
+    require_tool jq
+    require_tool opencode
+
+    local rows list selection status pane_id window_id tmux_session_id tmp_map display selected_index selected_row index cols gum_width
+    rows="$(build_rows | sort -t $'\t' -k1,1n -k2,2nr)"
+
+    if [[ -z "$rows" ]]; then
+        tmux display-message "No running OpenCode panes found"
+        exit 0
+    fi
+
+    tmp_map="$(mktemp)"
+    trap 'rm -f "${tmp_map:-}"' EXIT
+
+    list=""
+    index=1
+    while IFS=$'\t' read -r _ _ pane_id window_id tmux_session_id display; do
+        printf '%s\t%s\t%s\t%s\n' "$index" "$pane_id" "$window_id" "$tmux_session_id" >>"$tmp_map"
+        list+="$index $display"$'\n'
+        index=$((index + 1))
+    done <<<"$rows"
+    list="${list%$'\n'}"
+
+    cols="$(terminal_cols)"
+    gum_width=$((cols - 2))
+    if [[ "$gum_width" -lt 40 ]]; then
+        gum_width=40
+    fi
+
+    set +e
+    selection="$(printf '%s\n' "$list" | gum filter \
+        --limit 1 \
+        --no-sort \
+        --fuzzy \
+        --width "$gum_width" \
+        --placeholder 'Search OpenCode sessions' \
+        --height 50 \
+        --prompt='🔎 ')"
+    status=$?
+    set -e
+
+    if [[ $status -ne 0 || -z "$selection" ]]; then
+        exit 0
+    fi
+
+    selected_index="${selection%% *}"
+    selected_row="$(awk -F '\t' -v idx="$selected_index" '$1 == idx { print; exit }' "$tmp_map")"
+    IFS=$'\t' read -r _ pane_id window_id tmux_session_id <<<"$selected_row"
+
+    if [[ -z "${pane_id:-}" || -z "${window_id:-}" || -z "${tmux_session_id:-}" ]]; then
+        tmux display-message "OpenCode picker selection could not be resolved"
+        exit 1
+    fi
+
+    tmux switch-client -t "$tmux_session_id" \; select-window -t "$window_id" \; select-pane -t "$pane_id"
+}
+
+main "$@"

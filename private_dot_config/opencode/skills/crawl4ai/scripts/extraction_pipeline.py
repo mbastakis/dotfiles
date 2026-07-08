@@ -34,11 +34,24 @@ from crawl4ai.extraction_strategy import (
     CosineStrategy
 )
 
+
+def resolve_output_path(output_dir: str, filename: str) -> Path:
+    """Resolve an artifact path, preserving absolute filenames."""
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
+    path = Path(filename)
+    return path if path.is_absolute() else output_path / path
+
 # =============================================================================
 # APPROACH 1: Generate Schema (Most Efficient for Repetitive Patterns)
 # =============================================================================
 
-async def generate_schema(url: str, instruction: str, output_file: str = "generated_schema.json"):
+async def generate_schema(
+    url: str,
+    instruction: str,
+    output_file: str = "generated_schema.json",
+    output_dir: str = ".",
+):
     """
     Step 1: Generate a reusable schema using LLM (one-time cost)
     Best for: E-commerce sites, blogs, news sites with repetitive patterns
@@ -100,10 +113,11 @@ async def generate_schema(url: str, instruction: str, output_file: str = "genera
                     }
 
                 # Save schema
-                with open(output_file, "w") as f:
+                output_path = resolve_output_path(output_dir, output_file)
+                with open(output_path, "w", encoding="utf-8") as f:
                     json.dump(schema, f, indent=2)
 
-                print(f"✅ Schema generated and saved to: {output_file}")
+                print(f"✅ Schema generated and saved to: {output_path}")
                 print(f"📋 Schema structure:")
                 print(json.dumps(schema, indent=2))
 
@@ -117,7 +131,7 @@ async def generate_schema(url: str, instruction: str, output_file: str = "genera
             print(f"❌ Failed to generate schema: {result.error_message if result else 'Unknown error'}")
             return None
 
-async def use_generated_schema(url: str, schema_file: str):
+async def use_generated_schema(url: str, schema_file: str, output_dir: str = "."):
     """
     Step 2: Use the generated schema for fast, repeated extractions
     No LLM calls needed - pure CSS extraction
@@ -125,7 +139,7 @@ async def use_generated_schema(url: str, schema_file: str):
     print(f"📂 Loading schema from: {schema_file}")
 
     try:
-        with open(schema_file, "r") as f:
+        with open(schema_file, "r", encoding="utf-8") as f:
             schema = json.load(f)
     except FileNotFoundError:
         print(f"❌ Schema file not found: {schema_file}")
@@ -154,9 +168,10 @@ async def use_generated_schema(url: str, schema_file: str):
             print(f"✅ Extracted {len(items)} items using schema")
 
             # Save results
-            with open("extracted_data.json", "w") as f:
+            output_path = resolve_output_path(output_dir, "extracted_data.json")
+            with open(output_path, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)
-            print("💾 Saved to extracted_data.json")
+            print(f"💾 Saved to {output_path}")
 
             # Show sample
             if items:
@@ -172,7 +187,7 @@ async def use_generated_schema(url: str, schema_file: str):
 # APPROACH 2: Manual Schema Definition
 # =============================================================================
 
-async def extract_with_manual_schema(url: str, schema: dict = None):
+async def extract_with_manual_schema(url: str, schema: dict = None, output_dir: str = "."):
     """
     Use a manually defined CSS/JSON schema
     Best for: When you know the exact structure of the website
@@ -214,9 +229,10 @@ async def extract_with_manual_schema(url: str, schema: dict = None):
 
             print(f"✅ Extracted {len(items)} items using manual schema")
 
-            with open("manual_extracted.json", "w") as f:
+            output_path = resolve_output_path(output_dir, "manual_extracted.json")
+            with open(output_path, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)
-            print("💾 Saved to manual_extracted.json")
+            print(f"💾 Saved to {output_path}")
 
             return data
         else:
@@ -227,7 +243,7 @@ async def extract_with_manual_schema(url: str, schema: dict = None):
 # APPROACH 3: Direct LLM Extraction
 # =============================================================================
 
-async def extract_with_llm(url: str, instruction: str):
+async def extract_with_llm(url: str, instruction: str, output_dir: str = "."):
     """
     Direct LLM extraction - uses LLM for every request
     Best for: Complex, irregular content or one-time extractions
@@ -269,9 +285,10 @@ async def extract_with_llm(url: str, instruction: str):
                 print(f"✅ LLM extracted {len(items)} items")
                 print(f"📝 Summary: {data.get('summary', 'N/A')}")
 
-                with open("llm_extracted.json", "w") as f:
+                output_path = resolve_output_path(output_dir, "llm_extracted.json")
+                with open(output_path, "w", encoding="utf-8") as f:
                     json.dump(data, f, indent=2)
-                print("💾 Saved to llm_extracted.json")
+                print(f"💾 Saved to {output_path}")
 
                 if items:
                     print("\n📋 Sample (first item):")
@@ -291,16 +308,28 @@ async def extract_with_llm(url: str, instruction: str):
 # =============================================================================
 
 async def main():
-    if len(sys.argv) < 3:
+    args = sys.argv[1:]
+    output_dir = "."
+    for flag in ("--output-dir", "-o"):
+        if flag in args:
+            idx = args.index(flag)
+            if idx + 1 >= len(args):
+                print(f"Error: Missing value for {flag}")
+                sys.exit(1)
+            output_dir = args[idx + 1]
+            del args[idx:idx + 2]
+            break
+
+    if len(args) < 2:
         print("""
 Crawl4AI Extraction Pipeline - Three Approaches
 
 1️⃣  GENERATE & USE SCHEMA (Most Efficient for Repetitive Patterns):
     Step 1: Generate schema (one-time LLM cost)
-    python extraction_pipeline.py --generate-schema <url> "<what to extract>"
+    python extraction_pipeline.py --generate-schema <url> "<what to extract>" --output-dir ./extract-output
 
     Step 2: Use schema for fast extraction (no LLM)
-    python extraction_pipeline.py --use-schema <url> generated_schema.json
+    python extraction_pipeline.py --use-schema <url> generated_schema.json --output-dir ./extract-output
 
 2️⃣  MANUAL SCHEMA (When You Know the Structure):
     python extraction_pipeline.py --manual <url>
@@ -322,36 +351,36 @@ Examples:
 """)
         sys.exit(1)
 
-    mode = sys.argv[1]
-    url = sys.argv[2]
+    mode = args[0]
+    url = args[1]
 
     if mode == "--generate-schema":
-        if len(sys.argv) < 4:
+        if len(args) < 3:
             print("Error: Missing extraction instruction")
-            print("Usage: python extraction_pipeline.py --generate-schema <url> \"<instruction>\"")
+            print("Usage: python extraction_pipeline.py --generate-schema <url> \"<instruction>\" [output_schema.json] [--output-dir DIR]")
             sys.exit(1)
-        instruction = sys.argv[3]
-        output_file = sys.argv[4] if len(sys.argv) > 4 else "generated_schema.json"
-        await generate_schema(url, instruction, output_file)
+        instruction = args[2]
+        output_file = args[3] if len(args) > 3 else "generated_schema.json"
+        await generate_schema(url, instruction, output_file, output_dir=output_dir)
 
     elif mode == "--use-schema":
-        if len(sys.argv) < 4:
+        if len(args) < 3:
             print("Error: Missing schema file")
-            print("Usage: python extraction_pipeline.py --use-schema <url> <schema.json>")
+            print("Usage: python extraction_pipeline.py --use-schema <url> <schema.json> [--output-dir DIR]")
             sys.exit(1)
-        schema_file = sys.argv[3]
-        await use_generated_schema(url, schema_file)
+        schema_file = args[2]
+        await use_generated_schema(url, schema_file, output_dir=output_dir)
 
     elif mode == "--manual":
-        await extract_with_manual_schema(url)
+        await extract_with_manual_schema(url, output_dir=output_dir)
 
     elif mode == "--llm":
-        if len(sys.argv) < 4:
+        if len(args) < 3:
             print("Error: Missing extraction instruction")
-            print("Usage: python extraction_pipeline.py --llm <url> \"<instruction>\"")
+            print("Usage: python extraction_pipeline.py --llm <url> \"<instruction>\" [--output-dir DIR]")
             sys.exit(1)
-        instruction = sys.argv[3]
-        await extract_with_llm(url, instruction)
+        instruction = args[2]
+        await extract_with_llm(url, instruction, output_dir=output_dir)
 
     else:
         print(f"Unknown mode: {mode}")

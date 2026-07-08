@@ -12,6 +12,7 @@ Usage:
 import argparse
 import asyncio
 import sys
+from pathlib import Path
 
 # Version check
 MIN_CRAWL4AI_VERSION = "0.7.4"
@@ -37,8 +38,12 @@ async def crawl_basic(
     bm25_threshold: float = 1.0,
     use_pruning: bool = False,
     pruning_threshold: float = 0.48,
+    output_dir: str = ".",
 ):
     """Basic crawling with markdown output and optional content filtering."""
+
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
 
     # Configure browser
     browser_config = BrowserConfig(
@@ -108,25 +113,28 @@ async def crawl_basic(
                     print(f"   Content reduction: {reduction:.1f}%")
 
                 # Save both versions
-                with open("output_raw.md", "w") as f:
+                raw_path = output_path / "output_raw.md"
+                fit_path = output_path / "output_fit.md"
+                with open(raw_path, "w", encoding="utf-8") as f:
                     f.write(
                         result.markdown.raw_markdown
                         if hasattr(result.markdown, "raw_markdown")
                         else str(result.markdown)
                     )
-                with open("output_fit.md", "w") as f:
+                with open(fit_path, "w", encoding="utf-8") as f:
                     f.write(
                         result.markdown.fit_markdown
                         if hasattr(result.markdown, "fit_markdown")
                         else ""
                     )
-                print("📄 Saved to output_raw.md and output_fit.md")
+                print(f"📄 Saved to {raw_path} and {fit_path}")
             else:
                 content = str(result.markdown)
                 print(f"   Content length: {len(content)} chars")
-                with open("output.md", "w") as f:
+                output_file = output_path / "output.md"
+                with open(output_file, "w", encoding="utf-8") as f:
                     f.write(content)
-                print("📄 Saved to output.md")
+                print(f"📄 Saved to {output_file}")
 
             # Save screenshot if available
             if result.screenshot:
@@ -136,9 +144,10 @@ async def crawl_basic(
                     screenshot_data = base64.b64decode(result.screenshot)
                 else:
                     screenshot_data = result.screenshot
-                with open("screenshot.png", "wb") as f:
+                screenshot_path = output_path / "screenshot.png"
+                with open(screenshot_path, "wb") as f:
                     f.write(screenshot_data)
-                print("📸 Saved screenshot.png")
+                print(f"📸 Saved {screenshot_path}")
         else:
             print(f"❌ Failed: {result.error_message}")
 
@@ -189,6 +198,12 @@ Examples:
         default=0.48,
         help="Pruning threshold (default: 0.48, higher = more aggressive pruning)",
     )
+    parser.add_argument(
+        "--output-dir",
+        "-o",
+        default=".",
+        help="Directory for markdown and screenshot artifacts (default: current directory)",
+    )
 
     args = parser.parse_args()
 
@@ -202,6 +217,7 @@ Examples:
             bm25_threshold=args.bm25_threshold,
             use_pruning=args.pruning,
             pruning_threshold=args.pruning_threshold,
+            output_dir=args.output_dir,
         )
     )
 

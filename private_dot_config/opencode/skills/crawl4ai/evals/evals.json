@@ -1,0 +1,63 @@
+{
+  "skill_name": "crawl4ai",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Summarize https://www.iana.org/help/example-domains for me. I only need the key points in chat; don't save anything.",
+      "expected_output": "Uses ordinary single-page reading or defuddle-style extraction, not a crawl4ai pipeline.",
+      "files": [],
+      "expectations": [
+        "The agent treats the request as ordinary single-page reading rather than archival crawling.",
+        "The agent does not load or recommend crawl4ai unless ordinary extraction fails.",
+        "The agent does not create ai-docs/ artifacts."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "/crawl https://www.iana.org/help/example-domains",
+      "expected_output": "Uses crawl4ai because explicit /crawl means persisted archival intent, even for one URL.",
+      "files": [],
+      "expectations": [
+        "The agent routes the request to the crawl agent or crawl4ai skill.",
+        "The agent treats the task as persisted archival crawling rather than ordinary page reading.",
+        "The agent saves or plans to save artifacts under ai-docs/ and reports the output path."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Crawl all pages under https://docs.python.org/3/tutorial/ and make sure the crawl is complete. If the first pass hits a page limit, continue instead of stopping early.",
+      "expected_output": "Uses the site crawl pipeline, stays within the requested path boundary, and resumes until the queue is empty or reports a real blocker.",
+      "files": [],
+      "expectations": [
+        "The agent chooses site_crawler.py or an equivalent site crawl pipeline.",
+        "The agent treats the requested path as the crawl boundary rather than the whole domain by default.",
+        "The agent checks site_index.json for remaining queued URLs, failures, or a page-limit stop.",
+        "The agent resumes an incomplete crawl unless the user set an explicit hard max-pages cap."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Extract product names, prices, and availability from this repeated listing pattern across 25 product pages. Build it so we can rerun it next week without paying for an LLM on every page.",
+      "expected_output": "Chooses a schema-based structured extraction pipeline and reserves direct LLM extraction for schema generation or fallback.",
+      "files": [],
+      "expectations": [
+        "The agent chooses CSS/JSON schema extraction for repeated structured data.",
+        "The agent validates the schema on representative pages before batch reuse.",
+        "The agent avoids direct LLM extraction for every page unless the layout is irregular or schema extraction fails.",
+        "The agent reports empty or missing extracted fields as extraction failures, not success."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "I tried normal page extraction on this React dashboard page and got almost no content. Use a browser-rendered fallback to extract the rendered table.",
+      "expected_output": "Escalates from ordinary extraction to crawl4ai because the single page needs JavaScript-rendered browser extraction.",
+      "files": [],
+      "expectations": [
+        "The agent recognizes this as the single-page JavaScript fallback case for crawl4ai.",
+        "The agent uses browser rendering, waits for the relevant rendered content, and extracts the table content.",
+        "The agent compares or otherwise verifies that the rendered extraction captured materially useful content.",
+        "The agent reports a crawl or selector failure instead of claiming success on empty content."
+      ]
+    }
+  ]
+}

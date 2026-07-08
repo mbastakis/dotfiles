@@ -8,6 +8,12 @@ Component-based documentation for the chezmoi-managed dotfiles in this repositor
 
 - [System Overview](architecture/overview.md) -- source-to-target mapping, component boundaries, deployment scope
 - [Chezmoi Lifecycle](architecture/chezmoi-lifecycle.md) -- apply order, encryption, templates, and secrets flow
+- [Homeserver IaC](architecture/homeserver-iac.md) -- OpenTofu, TrueNAS, catalog apps, and backup architecture
+
+## Decisions
+
+- [0001: Rebuild atlas with clean Ubuntu and Ansible](adr/0001-rebuild-atlas-with-clean-ubuntu-and-ansible.md)
+- [0002: Manage TrueNAS with OpenTofu and API app automation](adr/0002-manage-truenas-with-opentofu-and-api-app-automation.md)
 
 ## Components
 

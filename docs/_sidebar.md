@@ -3,6 +3,11 @@
 - **Architecture**
   - [System Overview](architecture/overview.md)
   - [Chezmoi Lifecycle](architecture/chezmoi-lifecycle.md)
+  - [Homeserver IaC](architecture/homeserver-iac.md)
+
+- **Decisions**
+  - [0001: Rebuild atlas](adr/0001-rebuild-atlas-with-clean-ubuntu-and-ansible.md)
+  - [0002: Manage TrueNAS](adr/0002-manage-truenas-with-opentofu-and-api-app-automation.md)
 
 - **Components**
   - [Zsh](components/zsh.md)

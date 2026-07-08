@@ -63,6 +63,7 @@ Cargo.lock
 .config/nvim/lazy-lock.json
 .config/opencode/package.json
 .config/opencode/bun.lock
+.config/opencode/skills/*-workspace/
 .config/pi/context-snapshot*.local.*
 .config/pi/auth.json
 .config/pi/oauth.json
@@ -72,6 +73,8 @@ Cargo.lock
 .config/pi/npm/**
 .config/pi/tools/**
 .config/pi/bin/**
+.config/pi/powerline-footer/**
+.config/pi/vibes/**
 .config/pi/pi-debug.log
 .local/share/go/
 .local/share/task/

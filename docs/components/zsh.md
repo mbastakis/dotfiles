@@ -214,6 +214,8 @@ Generated from `local.zsh.tmpl` by chezmoi. Pulls secrets from Bitwarden Secrets
 | Variable | Condition |
 |---|---|
 | `OPENROUTER_API_KEY` | Always (macOS) |
+| `OPENCODE_API_KEY` | Always (macOS), OpenCode Zen API key from Bitwarden |
+| `WCS_API_KEY` | Always (macOS), WhoCaresSoftware LLM gateway API key from Bitwarden |
 | `SUPABASE_URL`, `SUPABASE_SERVICE_KEY` | Always (macOS) |
 | `OPENAI_API_KEY` | DT work profile only |
 | `GITHUB_TOKEN`, `GITLAB_TOKEN`, `GITLAB_HOST` | DT work profile only |

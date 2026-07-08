@@ -5,7 +5,6 @@ description: >-
   do X?", and technology comparisons. Does NOT perform upstream source
   forensics — use librarian for that.
 mode: subagent
-model: openai/gpt-5.5
 temperature: 0.5
 tools:
   write: false
@@ -50,7 +49,9 @@ For broad repo/reference reconnaissance, users can invoke `@scout` manually.
    - Try 2-3 query variations (add year, `site:`, exact phrases)
    - Use operators: `"exact phrase"`, `site:example.com`, `-unwanted`
 2. **Fetch top results**: Parse DuckDuckGo results, webfetch the 5-10 most relevant pages
-3. **For JS-heavy sites**: Load crawl4ai skill — `skill({ name: "crawl4ai" })` — use BM25ContentFilter for query-focused extraction or adaptive_crawler for multi-page research
+3. **Choose extraction depth**: use ordinary `webfetch` or defuddle-style single-page extraction for normal page reading, summaries, and small known URL sets. Load `crawl4ai` only for multi-page crawling, browser-rendered JavaScript content that ordinary extraction cannot read, authenticated/session-based access with user authorization, structured repeated extraction, or persisted archival output such as `ai-docs/`.
+   - If the user says "crawl" ambiguously, ask whether they want a saved crawl artifact/pipeline or ordinary research.
+   - Explicit `/crawl <url>` usage means persisted archival intent; route that to the crawl agent rather than handling it as research.
 4. **Synthesize**: Cross-reference findings, note publication dates, prefer recent sources
 
 ### Search Strategy by Query Type

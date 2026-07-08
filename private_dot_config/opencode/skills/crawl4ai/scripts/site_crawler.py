@@ -30,6 +30,14 @@ except ImportError:
 from crawl4ai import AsyncWebCrawler, BrowserConfig, CrawlerRunConfig, CacheMode
 
 
+def write_index(index_path: Path, stats: Dict, url_manager: "URLManager") -> None:
+    """Persist crawl progress so incomplete crawls can resume safely."""
+    stats["total_urls_discovered"] = len(url_manager.discovered)
+    stats["urls_in_queue_remaining"] = len(url_manager.queue)
+    with open(index_path, "w", encoding="utf-8") as f:
+        json.dump({"stats": stats, "all_urls": url_manager.discovered}, f, indent=2)
+
+
 class URLManager:
     """Manages URL queue, visited tracking, and normalization"""
 
@@ -166,9 +174,11 @@ async def crawl_site(
     max_pages: int = 250,
     delay: float = 1.0,
     stay_within_path: bool = True,
-    headless: bool = False,
+    headless: bool = True,
     verbose: bool = True,
     resume: bool = False,
+    complete: bool = False,
+    max_total_pages: Optional[int] = None,
 ) -> Dict:
     """
     Crawl entire site starting from start_url
@@ -182,10 +192,17 @@ async def crawl_site(
         headless: If True, run browser in headless mode
         verbose: If True, print detailed progress
         resume: If True, resume from previous crawl using site_index.json
+        complete: If True, keep extending max_pages chunks until the queue is empty
+        max_total_pages: Optional hard cap for complete crawls
 
     Returns:
         Dictionary with crawl statistics and results
     """
+
+    if max_pages < 1:
+        raise ValueError("max_pages must be at least 1")
+    if max_total_pages is not None and max_total_pages < 1:
+        raise ValueError("max_total_pages must be at least 1")
 
     # Setup output directory
     output_path = Path(output_dir)
@@ -213,7 +230,7 @@ async def crawl_site(
     if not resume or len(url_manager.queue) == 0:
         url_manager.add_url(start_url)
 
-    # Browser configuration - NON-HEADLESS for visibility by default
+    # Browser configuration
     browser_config = BrowserConfig(
         headless=headless, viewport_width=1920, viewport_height=1080, verbose=verbose
     )
@@ -235,21 +252,42 @@ async def crawl_site(
         "pages_failed": 0,
         "total_links_discovered": len(url_manager.discovered),
         "pages": previous_pages.copy(),
+        "complete_requested": complete,
+        "max_pages_per_chunk": max_pages,
+        "max_total_pages": max_total_pages,
     }
+    incomplete_reason = None
+    chunk_target = previous_count + max_pages
 
     async with AsyncWebCrawler(config=browser_config) as crawler:
         page_num = previous_count  # Start from previous count when resuming
 
         while True:
-            # Check limits
-            if page_num >= max_pages:
-                print(f"\nReached max pages limit ({max_pages})")
-                break
-
             # Get next URL
             url = url_manager.get_next()
             if url is None:
                 print("\nNo more URLs to crawl")
+                break
+
+            # Check limits after peeking the next URL so the queue remains resumable.
+            if max_total_pages is not None and page_num >= max_total_pages:
+                url_manager.queue.appendleft(url)
+                incomplete_reason = "max_total_pages"
+                print(f"\nReached hard max total pages limit ({max_total_pages})")
+                break
+
+            if page_num >= chunk_target:
+                url_manager.queue.appendleft(url)
+                if complete:
+                    print(
+                        f"\nReached max-pages chunk ({max_pages}); continuing because --complete is set"
+                    )
+                    write_index(index_path, stats, url_manager)
+                    chunk_target += max_pages
+                    continue
+
+                incomplete_reason = "max_pages"
+                print(f"\nReached max pages limit ({max_pages})")
                 break
 
             page_num += 1
@@ -349,12 +387,11 @@ async def crawl_site(
 
     # Finalize stats
     stats["end_time"] = datetime.now().isoformat()
-    stats["total_urls_discovered"] = len(url_manager.discovered)
-    stats["urls_in_queue_remaining"] = len(url_manager.queue)
+    stats["crawl_complete"] = len(url_manager.queue) == 0
+    stats["incomplete_reason"] = None if stats["crawl_complete"] else incomplete_reason
 
     # Save index file (already defined at top)
-    with open(index_path, "w", encoding="utf-8") as f:
-        json.dump({"stats": stats, "all_urls": url_manager.discovered}, f, indent=2)
+    write_index(index_path, stats, url_manager)
 
     print(f"\n{'=' * 60}")
     print(f"Crawl Complete!")
@@ -368,6 +405,7 @@ async def crawl_site(
     print(f"   Pages failed: {stats['pages_failed']}")
     print(f"   Total URLs discovered: {stats['total_urls_discovered']}")
     print(f"   URLs remaining in queue: {stats['urls_in_queue_remaining']}")
+    print(f"   Crawl complete: {stats['crawl_complete']}")
     print(f"   Output directory: {output_path}")
     print(f"   Index file: {index_path}")
     if stats["urls_in_queue_remaining"] > 0:
@@ -381,7 +419,7 @@ async def main():
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="Crawl an entire website and convert pages to markdown",
+        description="Crawl a bounded website path and convert pages to markdown",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -391,8 +429,11 @@ Examples:
     # With options
     python site_crawler.py https://opencode.ai/docs --max-pages 50 --delay 1.5
 
-    # Headless mode (no visible browser)
-    python site_crawler.py https://opencode.ai/docs --headless
+    # Visible browser for debugging (headless is default)
+    python site_crawler.py https://opencode.ai/docs --visible
+
+    # Continue max-pages chunks until the in-bound queue is empty
+    python site_crawler.py https://opencode.ai/docs --complete
 
     # Crawl entire domain (not just path)
     python site_crawler.py https://example.com --no-stay-within-path
@@ -426,7 +467,13 @@ Examples:
     parser.add_argument(
         "--headless",
         action="store_true",
-        help="Run browser in headless mode (default: visible)",
+        default=True,
+        help="Run browser in headless mode (default)",
+    )
+    parser.add_argument(
+        "--visible",
+        action="store_true",
+        help="Run with a visible browser for debugging",
     )
     parser.add_argument(
         "--no-stay-within-path",
@@ -440,6 +487,17 @@ Examples:
         help="Resume from previous crawl using site_index.json in output dir",
     )
     parser.add_argument(
+        "--complete",
+        action="store_true",
+        help="Keep continuing max-pages chunks until no in-bound URLs remain queued",
+    )
+    parser.add_argument(
+        "--max-total-pages",
+        type=int,
+        default=None,
+        help="Optional hard cap for --complete crawls",
+    )
+    parser.add_argument(
         "--quiet", "-q", action="store_true", help="Reduce output verbosity"
     )
 
@@ -451,9 +509,11 @@ Examples:
         max_pages=args.max_pages,
         delay=args.delay,
         stay_within_path=not args.no_stay_within_path,
-        headless=args.headless,
+        headless=not args.visible,
         verbose=not args.quiet,
         resume=args.resume,
+        complete=args.complete,
+        max_total_pages=args.max_total_pages,
     )
 
 

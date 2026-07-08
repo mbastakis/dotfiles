@@ -5,6 +5,9 @@
 ai-docs/
 specs/
 
+# Local scratch/inventory
+.local/
+
 # chezmoi runtime (never commit)
 key.txt
 

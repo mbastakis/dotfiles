@@ -23,8 +23,8 @@ font-feature = calt=1
 # ============================================================================
 # Window Management
 # ============================================================================
-window-padding-x = 5, 0
-window-padding-y = 10, 0
+# window-padding-x = 5, 0
+# window-padding-y = 10, 0
 # window-save-state = default
 
 # ============================================================================
@@ -78,6 +78,7 @@ keybind = cmd+r=text:\x01\x2c
 keybind = cmd+shift+r=text:\x01\x52
 keybind = cmd+z=text:\x01\x7a
 keybind = cmd+o=text:\x01\x6f
+keybind = cmd+shift+o=text:\x01\x4f
 keybind = cmd+g=text:\x01\x47
 
 # Ghostty OS-level window management

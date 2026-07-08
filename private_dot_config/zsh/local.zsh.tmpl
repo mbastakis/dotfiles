@@ -7,11 +7,13 @@
 
 # API keys from Bitwarden Secrets Manager
 export OPENROUTER_API_KEY='{{ (bitwardenSecrets "04781112-325c-468b-90dd-b3ec00d7123c").value | trim }}'
+export OPENCODE_API_KEY='{{ (bitwardenSecrets "91dd10f2-012b-4f77-b538-b47f001fade8").value | trim }}'
 
 # Supabase
 export SUPABASE_URL='{{ (bitwardenSecrets "f39ea7bf-477c-44bd-a804-b3ec00d712a7").value | trim }}'
 export SUPABASE_SERVICE_KEY='{{ (bitwardenSecrets "a8a6bdca-cf45-4af9-a42c-b3ec00d7130e").value | trim }}'
 
+export WCS_API_KEY='{{ (bitwardenSecrets "ef9028fd-9b61-4a1f-97e5-b47d0132d928").value | trim }}'
 {{- if or (eq .profile "dt-work") (eq .profile "work") }}
 # DT work-specific PATH additions and secrets
 export PATH="/Users/mbastakis/dev/work/scripts/:$PATH"

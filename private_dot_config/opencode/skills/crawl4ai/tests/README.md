@@ -4,24 +4,26 @@ This directory contains test scripts that verify the accuracy of all code exampl
 
 ## Test Files
 
-1. **test_basic_crawling.py** - Tests basic crawling setup with BrowserConfig and CrawlerRunConfig
-2. **test_markdown_generation.py** - Tests markdown generation, fit_markdown, and content filters
-3. **test_data_extraction.py** - Tests JSON/CSS extraction and LLM extraction strategies
-4. **test_advanced_patterns.py** - Tests session management, proxies, and batch crawling
+1. **executable_test_basic_crawling.py** - Tests basic crawling setup with BrowserConfig and CrawlerRunConfig
+2. **executable_test_markdown_generation.py** - Tests markdown generation, fit_markdown, and content filters
+3. **executable_test_data_extraction.py** - Tests JSON/CSS extraction and LLM extraction strategies
+4. **executable_test_advanced_patterns.py** - Tests session management, proxies, and batch crawling
+5. **test_site_crawler.py** - Tests URL boundaries, site crawl output, and headless crawling
 
 ## Running Tests
 
 ### Run all tests:
 ```bash
-python run_all_tests.py
+python3 executable_literal_run_all_tests.py
 ```
 
 ### Run individual tests:
 ```bash
-python test_basic_crawling.py
-python test_markdown_generation.py
-python test_data_extraction.py
-python test_advanced_patterns.py
+python3 executable_test_basic_crawling.py
+python3 executable_test_markdown_generation.py
+python3 executable_test_data_extraction.py
+python3 executable_test_advanced_patterns.py
+python3 test_site_crawler.py
 ```
 
 ## Requirements

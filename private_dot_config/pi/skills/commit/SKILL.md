@@ -1,52 +1,48 @@
 ---
 name: commit
-description: Create git commits with user approval. Use when the user asks to review, stage, and commit current repository changes.
-agent: commit
-subtask: true
+description: Commit current git repository changes through a review-plan-approval gate. Use when the user asks to commit current changes or split them into multiple git commits.
 metadata:
   requires_user_approval: true
   staging: explicit-files-only
 ---
 
-# Commit Changes
+# Commit
 
-You are tasked with creating git commits for the changes made during this session.
+Commit only reviewed, user-approved changes. Treat the commit as a ledger entry: every included path must be inspected, classified, and intentionally grouped before anything is staged.
 
 ## Process
 
-1. **Think about what changed:**
-   - Review the conversation history and understand what was accomplished.
-   - Run `git status` to see current changes.
-   - Run `git diff` to understand the modifications.
-   - Consider whether changes should be one commit or multiple logical commits.
+1. **Survey the repository.**
+   - Review the conversation for what was intentionally changed in this session.
+   - Run `git status --short`, `git diff --stat`, `git diff`, `git diff --cached`, and `git log --oneline -10`.
+   - Inspect untracked files before including them.
+   - Completion: every changed path, including already-staged content, is classified as `commit N`, `leave untouched`, or `ask user`.
 
-2. **Plan your commit(s):**
-   - Identify which files belong together.
-   - Draft clear, descriptive commit messages.
-   - Use imperative mood in commit messages.
-   - Focus on why the changes were made, not just what changed.
+2. **Design the commit set.**
+   - Prefer one commit unless the changes are independent enough to review or revert separately.
+   - Group files by cohesive change, not by file type.
+   - If a file contains mixed concerns, call that out and ask before attempting a split.
+   - Draft imperative commit messages that explain the change clearly; add a body only when the subject cannot carry the reason.
+   - Completion: each planned commit has an exact file list and message, and no included file contains unaccounted-for changes.
 
-3. **Present your plan to the user:**
-   - List the files you plan to add for each commit.
-   - Show the commit message(s) you'll use.
-   - Ask: "I plan to create [N] commit(s) with these changes. Shall I proceed?"
+3. **Pass the approval gate.**
+   - Present each planned commit with its message and exact files.
+   - List any changed files that will be left untouched.
+   - Mention already-staged changes and mixed-concern files explicitly.
+   - Ask: `I plan to create [N] commit(s) with this exact plan. Shall I proceed?`
+   - Completion: the user explicitly approves the exact plan. If the user changes the plan, revise it and ask again.
 
-4. **Execute only upon confirmation:**
-   - Use `git add` with specific files. Never use `git add -A`, `git add .`, or broad pathspecs.
-   - Create commits with your planned messages.
-   - Show the result with `git log --oneline -n [number]`.
+4. **Commit the approved files.**
+   - Stage only approved files with explicit pathspecs: `git add -- <path> ...`.
+   - Never use `git add -A`, `git add .`, broad directory pathspecs, or `--no-verify`.
+   - Before each commit, run `git diff --cached --stat` and `git diff --cached`; stop if the staged diff does not match the approved commit.
+   - Run `git commit` with the approved message.
+   - If a hook fails, inspect the failure. Fix it only when it is in scope; otherwise report the blocker.
+   - Completion: `git log --oneline -n [N]` shows the new commit(s), and `git status --short` shows only expected leftover changes.
 
-## Important
+## Commit Message Rules
 
-- **NEVER add co-author information or AI attribution.**
-- Commits should be authored solely by the user.
-- Do not include any "Generated with Claude", "Generated with AI", or similar messages.
+- Write as the user, with no AI attribution.
 - Do not add `Co-Authored-By` lines.
-- Write commit messages as if the user wrote them.
-
-## Remember
-
-- You have the full context of what was done in this session.
-- Group related changes together.
-- Keep commits focused and atomic when possible.
-- The user trusts your judgment — they asked you to commit.
+- Do not include `Generated with Claude`, `Generated with AI`, or similar text.
+- Keep subjects concise and imperative.
