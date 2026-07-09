@@ -116,3 +116,8 @@ mail:
         all_mail: "[Gmail]/All Mail"
       secrets:
         app_password_uuid: "c4f7c6a0-c996-4638-8c62-b412010fa51d"
+
+taskwarrior:
+  sync:
+    interval_minutes: 2
+    log_root: "~/.local/state/task/log"

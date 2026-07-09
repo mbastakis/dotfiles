@@ -1,5 +1,5 @@
 # Taskwarrior configuration
-# Managed by chezmoi — edit the source in ~/.local/share/chezmoi/private_dot_config/task/taskrc
+# Managed by chezmoi — edit the source in ~/.local/share/chezmoi/private_dot_config/task/taskrc.tmpl
 
 # Data storage — XDG compliant (set via TASKDATA env var in ~/.zshenv)
 # data.location is resolved from $TASKDATA when that env var is set; keeping
@@ -112,3 +112,8 @@ uda.linear_project.label=Linear Project
 # the column definitions above. To see the full set, use:
 #   task <id> info       # all fields incl. UDAs
 #   task +LINEAR list    # only Linear-origin tasks
+
+# TaskChampion sync — server on atlas, reached over Tailscale
+sync.server.url=https://tasks.mbastakis.com
+sync.server.client_id=24e1b420-97ae-4847-9fae-cf15c096706b
+sync.encryption_secret={{ (bitwardenSecrets "ad735d27-1aee-4f1d-a319-b48200ffed7b").value | trim }}

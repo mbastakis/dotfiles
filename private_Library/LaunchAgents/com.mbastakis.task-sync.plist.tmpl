@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.mbastakis.task-sync</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>{{ printf "%s/bin/task-sync" .chezmoi.homeDir }}</string>
+        <string>--quiet</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>StartInterval</key>
+    <integer>{{ mul .taskwarrior.sync.interval_minutes 60 }}</integer>
+
+    <key>StandardOutPath</key>
+    <string>{{ printf "%s/launchd-task-sync.out.log" (replace "~" .chezmoi.homeDir .taskwarrior.sync.log_root) }}</string>
+
+    <key>StandardErrorPath</key>
+    <string>{{ printf "%s/launchd-task-sync.err.log" (replace "~" .chezmoi.homeDir .taskwarrior.sync.log_root) }}</string>
+
+    <key>LimitLoadToSessionType</key>
+    <array>
+        <string>Aqua</string>
+    </array>
+</dict>
+</plist>

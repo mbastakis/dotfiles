@@ -1,0 +1,153 @@
+#!/bin/bash
+
+{{- $logRoot := replace "~" .chezmoi.homeDir .taskwarrior.sync.log_root }}
+
+set -euo pipefail
+
+quiet=false
+strict=false
+
+usage() {
+    cat <<'EOF'
+Usage: task-sync [--quiet] [--strict]
+
+Sync the local Taskwarrior replica with the configured TaskChampion server.
+
+Options:
+  --quiet     Suppress stdout output; keep logging to file
+  --strict    Return task sync's exit code instead of treating failures as warnings
+  -h, --help  Show this help message
+EOF
+}
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --quiet)
+            quiet=true
+            shift
+            ;;
+        --strict)
+            strict=true
+            shift
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        *)
+            echo "Error: unknown argument: $1" >&2
+            usage >&2
+            exit 1
+            ;;
+    esac
+done
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/bin:$HOME/.local/bin"
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+export TASKRC="${TASKRC:-$XDG_CONFIG_HOME/task/taskrc}"
+export TASKDATA="${TASKDATA:-$XDG_DATA_HOME/task}"
+
+log_root="{{ $logRoot }}"
+log_file="$log_root/task-sync.log"
+lock_dir="$XDG_STATE_HOME/task/task-sync.lock"
+lock_acquired=false
+
+mkdir -p "$log_root" "$XDG_STATE_HOME/task" "$TASKDATA"
+
+timestamp() {
+    date '+%Y-%m-%dT%H:%M:%S%z'
+}
+
+log_line() {
+    local level="$1"
+    local message="$2"
+    local line
+    line="$(timestamp) [${level}] ${message}"
+    printf '%s\n' "$line" >>"$log_file"
+    if [[ "$quiet" == "false" ]]; then
+        printf '%s\n' "$line"
+    fi
+}
+
+acquire_lock() {
+    if mkdir "$lock_dir" 2>/dev/null; then
+        printf '%s\n' "$$" >"$lock_dir/pid"
+        lock_acquired=true
+        return 0
+    fi
+
+    if [[ -f "$lock_dir/pid" ]]; then
+        local lock_pid
+        lock_pid="$(<"$lock_dir/pid")"
+        if [[ -n "$lock_pid" ]] && kill -0 "$lock_pid" 2>/dev/null; then
+            log_line "INFO" "Another task-sync process is running (pid ${lock_pid}); exiting."
+            return 1
+        fi
+
+        rm -rf "$lock_dir"
+        if mkdir "$lock_dir" 2>/dev/null; then
+            printf '%s\n' "$$" >"$lock_dir/pid"
+            lock_acquired=true
+            return 0
+        fi
+    fi
+
+    log_line "INFO" "Could not acquire sync lock; exiting."
+    return 1
+}
+
+# shellcheck disable=SC2329 # Invoked by trap.
+cleanup() {
+    if [[ "$lock_acquired" == "true" ]]; then
+        rm -rf "$lock_dir" >/dev/null 2>&1 || true
+        lock_acquired=false
+    fi
+}
+
+trap cleanup EXIT INT TERM
+
+if ! acquire_lock; then
+    exit 0
+fi
+
+if ! command -v task >/dev/null 2>&1; then
+    log_line "WARN" "Taskwarrior binary not found in PATH."
+    [[ "$strict" == "true" ]] && exit 1
+    exit 0
+fi
+
+if [[ ! -f "$TASKRC" ]]; then
+    log_line "WARN" "Missing Taskwarrior config: $TASKRC"
+    [[ "$strict" == "true" ]] && exit 1
+    exit 0
+fi
+
+log_line "INFO" "Running task sync"
+
+set +e
+sync_output="$(task rc.color=off sync 2>&1)"
+sync_rc=$?
+set -e
+
+if [[ -n "$sync_output" ]]; then
+    printf '%s\n' "$sync_output" >>"$log_file"
+    if [[ "$quiet" == "false" ]]; then
+        printf '%s\n' "$sync_output"
+    fi
+fi
+
+if [[ "$sync_rc" -eq 0 ]]; then
+    log_line "INFO" "Task sync completed."
+    exit 0
+fi
+
+log_line "WARN" "Task sync failed with exit code ${sync_rc}."
+
+if [[ "$strict" == "true" ]]; then
+    exit "$sync_rc"
+fi
+
+exit 0
