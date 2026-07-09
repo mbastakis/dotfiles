@@ -655,6 +655,6 @@
       "enabled": false,
     },
   },
-  "plugin": ["./plugins/tmux-session-state.js", "@mohak34/opencode-notifier@latest"],
+  "plugin": ["./plugins/tmux-session-state.js", "./plugins/clickable-notifier.js"],
   "instructions": [],
 }

@@ -1,8 +1,7 @@
 {
   "sound": true,
   "notification": true,
-  "notificationSystem": "osascript",
-  "suppressWhenFocused": false,
+  "notificationSystem": "terminal-notifier",
   "showProjectName": true,
   "showSessionTitle": false,
   "timeout": 5,

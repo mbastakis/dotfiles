@@ -1,0 +1,129 @@
+#!/bin/bash
+set -euo pipefail
+
+STATE_ROOT="${XDG_STATE_HOME:-$HOME/.local/state}/opencode/tmux-session-state"
+SESSION_DIR="$STATE_ROOT/sessions"
+
+session_id=""
+pane_id=""
+
+log_info() {
+    /usr/bin/logger -t opencode-focus-session "$*" 2>/dev/null || true
+}
+
+safe_name() {
+    printf '%s' "$1" | tr -c 'A-Za-z0-9_.%-' '_'
+}
+
+focus_ghostty() {
+    /usr/bin/open -a Ghostty >/dev/null 2>&1 || true
+}
+
+usage() {
+    cat >&2 <<EOF
+Usage: opencode-focus-session --session SESSION_ID [--pane TMUX_PANE]
+EOF
+}
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --session)
+            if [[ $# -lt 2 ]]; then
+                usage
+                exit 1
+            fi
+            session_id="${2:-}"
+            shift 2
+            ;;
+        --pane)
+            if [[ $# -lt 2 ]]; then
+                usage
+                exit 1
+            fi
+            pane_id="${2:-}"
+            shift 2
+            ;;
+        --help|-h)
+            usage
+            exit 0
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            log_info "Ignoring unknown argument: $1"
+            shift
+            ;;
+    esac
+done
+
+if ! command -v tmux >/dev/null 2>&1; then
+    log_info "tmux is not installed or not on PATH"
+    focus_ghostty
+    exit 0
+fi
+
+if [[ -z "$pane_id" && -n "$session_id" && -f "$SESSION_DIR/$(safe_name "$session_id").json" ]]; then
+    if command -v jq >/dev/null 2>&1; then
+        pane_id="$(jq -r '.tmuxPane // empty' "$SESSION_DIR/$(safe_name "$session_id").json" 2>/dev/null || true)"
+    fi
+fi
+
+if [[ -z "$pane_id" ]]; then
+    log_info "No tmux pane found for session ${session_id:-unknown}"
+    focus_ghostty
+    exit 0
+fi
+
+if ! tmux display-message -p -t "$pane_id" '#{pane_id}' >/dev/null 2>&1; then
+    log_info "tmux pane is no longer available: $pane_id"
+    focus_ghostty
+    exit 0
+fi
+
+window_id="$(tmux display-message -p -t "$pane_id" '#{window_id}')"
+tmux_session_id="$(tmux display-message -p -t "$pane_id" '#{session_id}')"
+
+choose_client() {
+    local target_session_id="$1"
+    local client_name client_session_id client_activity best_client="" best_activity="-1"
+    local fallback_client="" fallback_activity="-1"
+
+    while IFS=$'\t' read -r client_name client_session_id client_activity; do
+        [[ -z "$client_name" ]] && continue
+        [[ "$client_activity" =~ ^[0-9]+$ ]] || client_activity=0
+
+        if [[ "$client_activity" -gt "$fallback_activity" ]]; then
+            fallback_client="$client_name"
+            fallback_activity="$client_activity"
+        fi
+
+        if [[ "$client_session_id" == "$target_session_id" && "$client_activity" -gt "$best_activity" ]]; then
+            best_client="$client_name"
+            best_activity="$client_activity"
+        fi
+    done < <(tmux list-clients -F $'#{client_name}\t#{session_id}\t#{client_activity}' 2>/dev/null || true)
+
+    if [[ -n "$best_client" ]]; then
+        printf '%s' "$best_client"
+    else
+        printf '%s' "$fallback_client"
+    fi
+}
+
+client_id="$(choose_client "$tmux_session_id")"
+if [[ -z "$client_id" ]]; then
+    focus_ghostty
+    sleep 0.4
+    client_id="$(choose_client "$tmux_session_id")"
+fi
+
+tmux select-window -t "$window_id"
+tmux select-pane -t "$pane_id"
+
+if [[ -n "$client_id" ]]; then
+    tmux switch-client -c "$client_id" -t "$tmux_session_id" || true
+fi
+
+focus_ghostty
