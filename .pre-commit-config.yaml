@@ -4,9 +4,9 @@ repos:
     rev: v5.0.0
     hooks:
       - id: trailing-whitespace
-        exclude: '\.age$'
+        exclude: '(\.age$|^private_Documents/notes/dot_obsidian/)'
       - id: end-of-file-fixer
-        exclude: '\.age$'
+        exclude: '(\.age$|^private_Documents/notes/dot_obsidian/)'
       - id: check-yaml
         args: [--allow-multiple-documents]
         exclude: '(private_dot_config/nvim/test/|private_dot_config/nvim/test/helm|modify_)'

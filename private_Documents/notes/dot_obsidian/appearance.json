@@ -7,5 +7,6 @@
   "showViewHeader": true,
   "showRibbon": false,
   "translucency": true,
-  "enabledCssSnippets": []
+  "enabledCssSnippets": [],
+  "nativeMenus": true
 }

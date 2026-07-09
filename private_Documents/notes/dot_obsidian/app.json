@@ -13,5 +13,6 @@
     "downscalePercent": 100
   },
   "newFileLocation": "folder",
-  "newFileFolderPath": "0-Inbox"
+  "newFileFolderPath": "0-Inbox",
+  "settingsPopoutWindow": true
 }
