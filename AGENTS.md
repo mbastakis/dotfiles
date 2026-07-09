@@ -78,29 +78,28 @@ key.txt.age (in repo, passphrase-encrypted)
 
 ## Key Paths
 
-| Source (chezmoi)      | Target                              | Notes                        |
-| --------------------- | ----------------------------------- | ---------------------------- |
-| `.chezmoi.toml.tmpl`  | `~/.config/chezmoi/chezmoi.toml`    | Config, profile, encryption  |
-| `key.txt.age`         | _(ignored, source-only)_            | Passphrase-encrypted age key |
-| `bin/chezmoi-bws`     | _(ignored, source-only)_            | BWS token wrapper            |
-| `mise.toml`           | _(ignored, source-only)_            | Repo-local mise tools (go-task) |
-| `Taskfile.yml`        | _(ignored, source-only)_            | go-task runner for repo workflows |
-| `.pre-commit-config.yaml`, `.tflint.hcl`, `.terraform-docs.yml` | _(ignored, source-only)_ | Repo-local hooks and IaC quality tooling |
-| `infra/terraform/`    | _(ignored, source-only)_            | OpenTofu stacks for homeserver AWS foundation and TrueNAS automation |
-| `infra/truenas/`      | _(ignored, source-only)_            | TrueNAS catalog app declarations and API wrapper area |
-| `private_dot_agents/skills/` | `~/.agents/skills/`          | Shared harness-agnostic Agent Skills for OpenCode and Pi |
-| `private_dot_config/pi/` | `~/.config/pi/`              | Pi global config, extensions, keybindings, and Pi-specific skills |
-| `dev/personal/dev-tools/dot_mrconfig` | `~/dev/personal/dev-tools/.mrconfig` | Personal dev-tools workspace repos |
-| `literal_bin/`        | `~/bin/`                            | Shell utility scripts        |
-| `private_dot_ssh/`    | `~/.ssh/`                           | SSH keys (encrypted) and host aliases |
-| `private_dot_config/` | `~/.config/`                        | App configs                  |
-| `private_dot_config/abook/` | `~/.config/abook/`            | Abook config                 |
-| `private_dot_config/zsh/` | `~/.config/zsh/`                | Zsh config via `ZDOTDIR`     |
-| `private_dot_local/private_share/abook/` | `~/.local/share/abook/` | Abook data          |
-| `private_dot_local/private_share/colima/` | `~/.local/share/colima/` | Colima config + state |
-| `private_dot_local/private_share/timewarrior/` | `~/.local/share/timewarrior/` | Timewarrior cfg + theme (data/ ignored) |
-| `.chezmoiscripts/`    | _(lifecycle scripts, not deployed)_ | Before/after scripts         |
-| `.chezmoidata.yaml`   | _(template data)_                   | Catppuccin Mocha colors      |
+| Source (chezmoi)                                                | Target                               | Notes                                                                |
+| --------------------------------------------------------------- | ------------------------------------ | -------------------------------------------------------------------- |
+| `.chezmoi.toml.tmpl`                                            | `~/.config/chezmoi/chezmoi.toml`     | Config, profile, encryption                                          |
+| `key.txt.age`                                                   | _(ignored, source-only)_             | Passphrase-encrypted age key                                         |
+| `bin/chezmoi-bws`                                               | _(ignored, source-only)_             | BWS token wrapper                                                    |
+| `mise.toml`                                                     | _(ignored, source-only)_             | Repo-local mise tools (go-task)                                      |
+| `Taskfile.yml`                                                  | _(ignored, source-only)_             | go-task runner for repo workflows                                    |
+| `.pre-commit-config.yaml`, `.tflint.hcl`, `.terraform-docs.yml` | _(ignored, source-only)_             | Repo-local hooks and IaC quality tooling                             |
+| `infra/terraform/`                                              | _(ignored, source-only)_             | OpenTofu stacks for homeserver AWS foundation and TrueNAS automation |
+| `infra/truenas/`                                                | _(ignored, source-only)_             | TrueNAS catalog app declarations and API wrapper area                |
+| `private_dot_agents/skills/`                                    | `~/.agents/skills/`                  | Shared harness-agnostic Agent Skills for OpenCode and Pi             |
+| `private_dot_config/pi/`                                        | `~/.config/pi/`                      | Pi global config, extensions, keybindings, and Pi-specific skills    |
+| `dev/personal/dev-tools/dot_mrconfig`                           | `~/dev/personal/dev-tools/.mrconfig` | Personal dev-tools workspace repos                                   |
+| `literal_bin/`                                                  | `~/bin/`                             | Shell utility scripts                                                |
+| `private_dot_ssh/`                                              | `~/.ssh/`                            | SSH keys (encrypted) and host aliases                                |
+| `private_dot_config/`                                           | `~/.config/`                         | App configs                                                          |
+| `private_dot_config/abook/`                                     | `~/.config/abook/`                   | Abook config                                                         |
+| `private_dot_config/zsh/`                                       | `~/.config/zsh/`                     | Zsh config via `ZDOTDIR`                                             |
+| `private_dot_local/private_share/abook/`                        | `~/.local/share/abook/`              | Abook data                                                           |
+| `private_dot_local/private_share/colima/`                       | `~/.local/share/colima/`             | Colima config + state                                                |
+| `.chezmoiscripts/`                                              | _(lifecycle scripts, not deployed)_  | Before/after scripts                                                 |
+| `.chezmoidata.yaml`                                             | _(template data)_                    | Catppuccin Mocha colors                                              |
 
 ## .chezmoiignore
 
@@ -262,3 +261,9 @@ Source lives in `docs/`; served as a zero-build SPA via `docs/index.html`.
 | `mise.toml`, `Taskfile.yml`                                | `docs/components/config-overview.md`                                      |
 
 See `docs/maintenance.md` for the full update checklist.
+
+When using taskfile task tool run it using mise:
+
+```bash
+mise exec -- task <task>
+```

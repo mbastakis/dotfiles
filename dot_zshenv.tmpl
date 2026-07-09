@@ -90,10 +90,6 @@ export TF_PLUGIN_CACHE_DIR="$XDG_CACHE_HOME/terraform/plugins"
 export TASKRC="$XDG_CONFIG_HOME/task/taskrc"
 export TASKDATA="$XDG_DATA_HOME/task"
 
-# Timewarrior (XDG-compliant override of ~/.timewarrior/; single dir holds both
-# timewarrior.cfg and data/ — the cfg is chezmoi-managed, data/ is ignored).
-export TIMEWARRIORDB="$XDG_DATA_HOME/timewarrior"
-
 # Default programs
 export EDITOR="nvim"
 export VISUAL="nvim"
@@ -127,7 +123,6 @@ export LC_ALL="en_US.UTF-8"
 [[ ! -d "$MCP_REMOTE_CONFIG_DIR" ]] && mkdir -p "$MCP_REMOTE_CONFIG_DIR"
 [[ ! -d "$GOPATH" ]] && mkdir -p "$GOPATH"
 [[ ! -d "$TASKDATA" ]] && mkdir -p "$TASKDATA"
-[[ ! -d "$TIMEWARRIORDB" ]] && mkdir -p "$TIMEWARRIORDB"
 
 # Drop legacy tool paths inherited from older shells before re-adding XDG ones.
 path=(${path:#$HOME/.cargo/bin})

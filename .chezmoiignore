@@ -78,8 +78,6 @@ Cargo.lock
 .config/pi/pi-debug.log
 .local/share/go/
 .local/share/task/
-.local/share/timewarrior/backend.json
-.local/share/timewarrior/data/
 .local/state/atuin/logs/
 .local/state/mcp-auth/
 .local/state/vim/

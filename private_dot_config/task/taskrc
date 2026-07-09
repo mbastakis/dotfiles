@@ -8,9 +8,9 @@ data.location=~/.local/share/task
 
 # Files
 # hooks/ lives under ~/.config/task/ (chezmoi-managed) rather than the default
-# ~/.local/share/task/hooks so vendored hooks (e.g. on-modify.timewarrior) can
-# be deployed and versioned alongside the rest of the config. Task data
-# (taskchampion.sqlite3) still lives under $TASKDATA and is not tracked.
+# ~/.local/share/task/hooks so future hooks can be deployed and versioned
+# alongside the rest of the config. Task data (taskchampion.sqlite3) still
+# lives under $TASKDATA and is not tracked.
 hooks.location=~/.config/task/hooks
 
 # Behavior
