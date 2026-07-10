@@ -15,57 +15,6 @@
       "options": {
         "baseURL": "https://eu.api.openai.com/v1",
       },
-      "models": {
-        // Codex Spark: subscription-backed Codex model using the Spark quota bucket.
-        "gpt-5.3-codex-spark": {
-          "name": "GPT-5.3 Codex Spark",
-        },
-
-        // GPT-5.5: subscription-backed flagship model for higher-capability coding and reasoning.
-        "gpt-5.5": {
-          "name": "GPT-5.5",
-        },
-
-        // GPT-5.6: newest flagship subscription model with the largest context window.
-        "gpt-5.6": {
-          "name": "GPT-5.6",
-        },
-
-        // GPT-5.6 Fast: priority-tier GPT-5.6 for lower-latency work.
-        "gpt-5.6-fast": {
-          "name": "GPT-5.6 Fast",
-        },
-
-        // GPT-5.6 Luna: nano-family GPT-5.6 for lightweight, fast tasks.
-        "gpt-5.6-luna": {
-          "name": "GPT-5.6 Luna",
-        },
-
-        // GPT-5.6 Luna Fast: priority-tier Luna for the fastest lightweight tasks.
-        "gpt-5.6-luna-fast": {
-          "name": "GPT-5.6 Luna Fast",
-        },
-
-        // GPT-5.6 Sol: standard GPT-5.6 Sol variant for general coding and reasoning.
-        "gpt-5.6-sol": {
-          "name": "GPT-5.6 Sol",
-        },
-
-        // GPT-5.6 Sol Fast: priority-tier Sol for faster general coding and reasoning.
-        "gpt-5.6-sol-fast": {
-          "name": "GPT-5.6 Sol Fast",
-        },
-
-        // GPT-5.6 Terra: mini-family GPT-5.6 for balanced speed and capability.
-        "gpt-5.6-terra": {
-          "name": "GPT-5.6 Terra",
-        },
-
-        // GPT-5.6 Terra Fast: priority-tier Terra for fast balanced work.
-        "gpt-5.6-terra-fast": {
-          "name": "GPT-5.6 Terra Fast",
-        },
-      },
     },
     "openai-api": {
       "npm": "@ai-sdk/openai",
@@ -706,6 +655,9 @@
       "enabled": false,
     },
   },
-  "plugin": ["./plugins/tmux-session-state.js", "./plugins/clickable-notifier.js"],
+  "plugin": [
+    "./plugins/tmux-session-state.js",
+    "./plugins/clickable-notifier.js",
+  ],
   "instructions": [],
 }
