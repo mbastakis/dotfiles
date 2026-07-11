@@ -1,7 +1,8 @@
 #!/bin/bash
 # Install packages from Brewfile
 # Runs when Brewfile content changes
-# Hash: {{ include "private_dot_config/brew/Brewfile" | sha256sum }}
+# Brewfile hash: {{ include "private_dot_config/brew/Brewfile" | sha256sum }}
+# Trust file hash: {{ include "private_dot_config/homebrew/private_trust.json" | sha256sum }}
 
 {{- if ne .chezmoi.os "darwin" }}
 exit 0
@@ -10,6 +11,8 @@ exit 0
 set -euo pipefail
 
 BREWFILE_PATH="{{ .chezmoi.sourceDir }}/private_dot_config/brew/Brewfile"
+TRUST_FILE_PATH="{{ .chezmoi.sourceDir }}/private_dot_config/homebrew/private_trust.json"
+HOMEBREW_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/homebrew"
 
 echo "Installing packages from Brewfile..."
 
@@ -19,12 +22,17 @@ if ! command -v brew &>/dev/null; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
+# Before scripts run before chezmoi deploys managed files, so trust must be
+# staged explicitly before Homebrew reads third-party formulae from Brewfile.
+install -d -m 700 "$HOMEBREW_CONFIG_DIR"
+install -m 600 "$TRUST_FILE_PATH" "$HOMEBREW_CONFIG_DIR/trust.json"
+
 if [[ -t 0 && -t 1 ]]; then
     brew bundle --file="$BREWFILE_PATH"
 else
     echo "Non-interactive shell detected. Skipping Mac App Store installs during chezmoi apply."
     # Skip all MAS app IDs in Brewfile to avoid interactive App Store password prompts.
-    export HOMEBREW_BUNDLE_MAS_SKIP="${HOMEBREW_BUNDLE_MAS_SKIP:-937984704 1352778147 1452453066 1635403801 985367838 6740142714 1639306886}"
+    export HOMEBREW_BUNDLE_MAS_SKIP="${HOMEBREW_BUNDLE_MAS_SKIP:-937984704 1352778147 1452453066 1635403801 1639306886}"
     brew bundle --file="$BREWFILE_PATH"
     echo "To install Mac App Store apps later, run this in an interactive terminal:"
     echo "  brew bundle --file=\$HOME/.config/brew/Brewfile"

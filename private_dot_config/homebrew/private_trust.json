@@ -1,9 +1,12 @@
 {
   "trustedformulae": [
     "anomalyco/tap/opencode",
+    "charmbracelet/tap/crush",
     "dlvhdr/formulae/diffnav",
+    "libsql/sqld/sqld",
     "mbastakis/tap/aws-login",
-    "oven-sh/bun/bun"
+    "oven-sh/bun/bun",
+    "tursodatabase/tap/turso"
   ],
   "trustedcasks": [
     "nikitabobko/tap/aerospace"

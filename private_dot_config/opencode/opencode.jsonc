@@ -15,6 +15,26 @@
       "options": {
         "baseURL": "https://eu.api.openai.com/v1",
       },
+      "models": {
+        "gpt-5.6-terra": {
+          "variants": {
+            "max": {
+              "reasoningEffort": "max",
+              "reasoningSummary": "auto",
+              "include": ["reasoning.encrypted_content"],
+            },
+          },
+        },
+        "gpt-5.6-sol": {
+          "variants": {
+            "max": {
+              "reasoningEffort": "max",
+              "reasoningSummary": "auto",
+              "include": ["reasoning.encrypted_content"],
+            },
+          },
+        },
+      },
     },
     "openai-api": {
       "npm": "@ai-sdk/openai",

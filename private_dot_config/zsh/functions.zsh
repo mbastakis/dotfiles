@@ -108,7 +108,8 @@ ftext-widget() {
 # Update brew
 function brew_update() {
   brew update
-  brew upgrade
+  brew bundle --file="$HOME/.config/brew/Brewfile" --upgrade
+  brew upgrade --formula
   brew cleanup
   brew doctor
   brew missing

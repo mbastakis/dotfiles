@@ -6,6 +6,8 @@ import { basename, join } from "node:path";
 const CONFIG_PATH = join(homedir(), ".config", "opencode", "clickable-notifier.json");
 const FOCUS_HELPER = join(homedir(), "bin", "opencode-focus-session");
 const TMUX_PANE = process.env.TMUX_PANE || "";
+const sessionMeta = new Map();
+const activeSessions = new Set();
 
 const DEFAULT_CONFIG = {
   sound: true,
@@ -33,10 +35,23 @@ const DEFAULT_CONFIG = {
   },
 };
 
+function setSessionInfo(sessionInfo) {
+  if (!sessionInfo?.id) return;
+
+  sessionMeta.set(sessionInfo.id, {
+    parentID: sessionInfo.parentID || "",
+  });
+}
+
+function clearSessionInfo(sessionID) {
+  if (sessionID) {
+    sessionMeta.delete(sessionID);
+  }
+}
+
 const EVENT_BY_TYPE = {
   "permission.asked": "permission",
   "question.asked": "question",
-  "session.idle": "complete",
   "session.error": "error",
   "session.next.step.failed": "error",
 };
@@ -130,6 +145,26 @@ function notificationText(config, eventName, properties) {
   return { title, message };
 }
 
+async function isPrimarySession(client, directory, sessionID) {
+  if (!sessionID) return false;
+
+  let info = sessionMeta.get(sessionID);
+  if (!info) {
+    try {
+      const result = await client.session.get({
+        path: { id: sessionID },
+        query: { directory },
+      });
+      setSessionInfo(result.data);
+      info = sessionMeta.get(sessionID);
+    } catch {
+      return false;
+    }
+  }
+
+  return Boolean(info) && !info.parentID;
+}
+
 function focusCommand(sessionID) {
   const args = [FOCUS_HELPER];
   if (sessionID) args.push("--session", sessionID);
@@ -181,16 +216,39 @@ function notify(config, eventName, sessionID, properties) {
   notifyWithTerminalNotifier(config, sessionID, title, message);
 }
 
-export default async function () {
+export default async function ({ client, directory }) {
   const config = readConfig();
 
   return {
     event: async ({ event }) => {
+      const properties = event.properties || {};
+      const sessionID = properties.sessionID || properties.info?.id || "";
+
+      if (event.type === "session.created" || event.type === "session.updated") {
+        setSessionInfo(properties.info);
+      } else if (event.type === "session.deleted") {
+        clearSessionInfo(sessionID);
+        activeSessions.delete(sessionID);
+        return;
+      }
+
+      if (event.type === "session.status") {
+        const status = properties.status?.type;
+        if (status === "busy" || status === "retry") {
+          activeSessions.add(sessionID);
+          return;
+        }
+        if (status !== "idle" || !activeSessions.delete(sessionID)) return;
+
+        if (!(await isPrimarySession(client, directory, sessionID))) return;
+        notify(config, "complete", sessionID, properties);
+        return;
+      }
+
       const eventName = EVENT_BY_TYPE[event.type];
       if (!eventName) return;
 
-      const properties = event.properties || {};
-      const sessionID = properties.sessionID || properties.info?.id || "";
+      if (!(await isPrimarySession(client, directory, sessionID))) return;
       notify(config, eventName, sessionID, properties);
     },
   };
