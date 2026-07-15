@@ -55,9 +55,11 @@ Pre-push: `chezmoi apply --dry-run --force`.
    - Deploy files, directories, symlinks
 5. After scripts (alphabetical):
    03-setup                → bat cache, yazi plugins, carapace sync (run_once)
+   04-configure-tailscale-dns → disables Tailscale DNS on DT work Macs (run_after)
    05-ghostty-tmux         → installs LaunchAgent for tmux startup (run_onchange)
    06-ghostty-hide-shortcut → clears global Hide overrides, remaps Ghostty hide (run_once)
-   09-install-pi           → installs/updates Pi from official npm package (run_after)
+   09-install-pi           → installs Pi from official npm package (run_once)
+   10-opencode-remote      → reloads OpenCode/proxy agents, configures Tailscale Serve (run_onchange)
    macos-settings          → macOS defaults (run_once)
 ```
 
@@ -83,23 +85,25 @@ key.txt.age (in repo, passphrase-encrypted)
 | `.chezmoi.toml.tmpl`                                            | `~/.config/chezmoi/chezmoi.toml`     | Config, profile, encryption                                          |
 | `key.txt.age`                                                   | _(ignored, source-only)_             | Passphrase-encrypted age key                                         |
 | `bin/chezmoi-bws`                                               | _(ignored, source-only)_             | BWS token wrapper                                                    |
-| `mise.toml`                                                     | _(ignored, source-only)_             | Repo-local mise tools (go-task)                                      |
+| `mise.toml`                                                     | _(ignored, source-only)_             | Repo-local mise tools (Python, uv, go-task, and IaC tooling)          |
 | `Taskfile.yml`                                                  | _(ignored, source-only)_             | go-task runner for repo workflows                                    |
 | `.pre-commit-config.yaml`, `.tflint.hcl`, `.terraform-docs.yml` | _(ignored, source-only)_             | Repo-local hooks and IaC quality tooling                             |
-| `infra/terraform/`                                              | _(ignored, source-only)_             | OpenTofu stacks for homeserver AWS foundation and TrueNAS automation |
+| `infra/aws/`, `infra/truenas/tofu/`, `infra/identity/`          | _(ignored, source-only)_             | Domain-owned OpenTofu stacks and reusable modules                     |
 | `infra/truenas/`                                                | _(ignored, source-only)_             | TrueNAS catalog app declarations and API wrapper area                |
+| `infra/src/homeserver_iac/`, `infra/schemas/`, `infra/tests/`   | _(ignored, source-only)_             | Typed desired-state reconcilers, generated schemas, and fixture tests |
 | `private_dot_agents/skills/`                                    | `~/.agents/skills/`                  | Shared harness-agnostic Agent Skills for OpenCode and Pi             |
 | `private_dot_config/pi/`                                        | `~/.config/pi/`                      | Pi global config, extensions, keybindings, and Pi-specific skills    |
 | `dev/personal/dev-tools/dot_mrconfig`                           | `~/dev/personal/dev-tools/.mrconfig` | Personal dev-tools workspace repos                                   |
 | `literal_bin/`                                                  | `~/bin/`                             | Shell utility scripts                                                |
 | `private_dot_ssh/`                                              | `~/.ssh/`                            | SSH keys (encrypted) and host aliases                                |
 | `private_dot_config/`                                           | `~/.config/`                         | App configs                                                          |
+| `private_dot_config/oauth2-proxy/`                              | `~/.config/oauth2-proxy/`            | Authentik OIDC frontend for tailnet-only OpenCode mobile access       |
 | `private_dot_config/abook/`                                     | `~/.config/abook/`                   | Abook config                                                         |
 | `private_dot_config/zsh/`                                       | `~/.config/zsh/`                     | Zsh config via `ZDOTDIR`                                             |
 | `private_dot_local/private_share/abook/`                        | `~/.local/share/abook/`              | Abook data                                                           |
 | `private_dot_local/private_share/colima/`                       | `~/.local/share/colima/`             | Colima config + state                                                |
 | `.chezmoiscripts/`                                              | _(lifecycle scripts, not deployed)_  | Before/after scripts                                                 |
-| `.chezmoidata.yaml`                                             | _(template data)_                    | Catppuccin Mocha colors                                              |
+| `.chezmoidata.yaml`                                             | _(template data)_                    | Colors plus mail, Taskwarrior, and OpenCode host settings            |
 
 ## .chezmoiignore
 
@@ -121,6 +125,8 @@ Supports chezmoi template conditionals for OS-specific ignores.
 - Chezmoi `textconv` patterns match absolute target paths, not the relative paths displayed in `chezmoi diff` headers.
 - Kubeconfig and Colima files are bootstrap seeds after first creation; existing live files are preserved because `kubectl`, `aws`, `kind`, and Colima rewrite runtime state.
 - Any new repo-only directory (like `docs/`) must be added to `.chezmoiignore` or chezmoi will deploy it to `~/`. The ignore file uses target-state paths, so `docs/` not `literal_docs/`.
+- `infra:validate` must remain live-service-free. Typed reconciler plans belong in explicit domain tasks and must not become aggregate-validation dependencies.
+- Stable reconciler paths are typed Python shims. Superseded shell reconcilers and compatibility deployment aliases were removed in Phase 8.
 
 ## Shell Script Conventions
 

@@ -7,14 +7,23 @@
 #
 # Homeserver infrastructure tooling is pinned here as repo-local tooling:
 # OpenTofu for Terraform-compatible IaC, TFLint for HCL/provider linting,
-# terraform-docs for generated module docs, and pre-commit for hooks.
+# terraform-docs for generated module docs, Python and uv for the typed
+# homeserver CLI, pre-commit for hooks, and the jq, yq, ShellCheck, and yamllint
+# tools used by offline infrastructure validation.
 #
 # Trust: this directory is pre-trusted via MISE_TRUSTED_CONFIG_PATHS in
 # dot_zshenv.tmpl (resolves to $DOTFILES_PATH / chezmoi sourceDir).
 
 [tools]
 task = "3.50.0"
+node = "24.18.0"
+python = "3.13.14"
+uv = "0.11.28"
 opentofu = "1.12.3"
 tflint = "0.63.1"
 terraform-docs = "0.24.0"
 pre-commit = "4.6.0"
+jq = "1.8.2"
+yq = "4.53.3"
+shellcheck = "0.11.0"
+yamllint = "1.38.0"

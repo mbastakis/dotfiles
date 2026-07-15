@@ -9,13 +9,13 @@ Summary of notable config areas managed by chezmoi, with links to dedicated docs
 | Component | Source Path | Dedicated Doc | Description |
 |---|---|---|---|
 | **Neovim** | `private_dot_config/nvim/` | [nvim.md](nvim.md) | Editor with lazy.nvim, LSP, custom keymaps |
-| **OpenCode** | `private_dot_config/opencode/` | [opencode.md](opencode.md) | Primary AI CLI profile with agents, commands, and OpenCode-only skills |
+| **OpenCode** | `private_dot_config/opencode/`, `private_dot_config/oauth2-proxy/` | [opencode.md](opencode.md) | Shared AI session server with local attached TUIs and Authentik-protected, tailnet-only mobile PWA access |
 | **Pi** | `private_dot_config/pi/` | -- | Pi global config rooted at `~/.config/pi`, including settings, keybindings, extensions, prompt templates, and Pi-specific skills |
 | **Shared Agent Skills** | `private_dot_agents/skills/` | [opencode.md](opencode.md#skills) | Harness-agnostic skills loaded from `~/.agents/skills/` by OpenCode and Pi |
 | **Karabiner** | `private_dot_config/private_karabiner/` | [karabiner.md](karabiner.md) | Keyboard remapping (generated config) |
 | **Carapace** | `private_dot_config/carapace/` | [carapace.md](carapace.md) | Shell completion framework |
 | **Zsh** | `private_dot_config/zsh/`, `dot_zshenv.tmpl` | [zsh.md](zsh.md) | Shell bootstrap plus XDG-aware tool/runtime environment |
-| **SSH** | `private_dot_ssh/` | -- | Encrypted/private SSH keys plus host aliases; `truenas` and `192.168.1.74` use `~/.ssh/id_ed25519` |
+| **SSH** | `private_dot_ssh/`, `literal_bin/executable_homeserver-route` | -- | Encrypted/private SSH keys plus host aliases; Atlas and TrueNAS aliases verify the pinned LAN host key, prefer the local route, and fall back to Tailscale |
 | **Atuin** | `private_dot_config/private_atuin/private_config.toml` | -- | Shell history search, sync, and AI settings |
 | Terraform CLI | `private_dot_config/terraform/terraform.rc` | -- | Legacy Terraform CLI defaults (for example checkpoint suppression); homeserver IaC uses repo-local OpenTofu instead |
 | **NeoMutt** | `private_dot_config/neomutt/` | [email.md](email.md) | Terminal mail client config and custom mailbox bindings |
@@ -26,24 +26,98 @@ Summary of notable config areas managed by chezmoi, with links to dedicated docs
 | Colima | `private_dot_local/private_share/colima/` | -- | Container runtime seed; live VM config is preserved after creation |
 | Kubernetes | `private_dot_config/kube/` | -- | DT work kubeconfig seeds; live files are preserved after `kubectl`/`aws`/`kind` rewrites |
 | aws-login | `private_dot_config/aws-login/` | -- | Work and personal AWS profiles, AWS SSO bootstrap, and per-profile `KUBECONFIG` wiring |
-| Mise | `private_dot_config/mise/config.toml` (global) + `mise.toml` (repo root, source-only) | -- | Tool/version manager; repo-local pins `go-task`, OpenTofu, TFLint, terraform-docs, and pre-commit |
-| Taskfile | `Taskfile.yml` (repo root, source-only) | -- | go-task runner for chezmoi and homeserver IaC workflows, including OpenTofu backend bootstrap, DNS, Tailscale policy validation/apply, plan/apply, lint, and docs tasks |
+| Mise | `private_dot_config/mise/config.toml` (global) + `mise.toml` (repo root, source-only) | -- | Tool/version manager; repo-local pins Node, Python, uv, go-task, OpenTofu, TFLint, terraform-docs, pre-commit, jq, yq, ShellCheck, and yamllint |
+| Homeserver Python | `infra/pyproject.toml`, `infra/src/homeserver_iac/`, `infra/schemas/`, `infra/tests/` (source-only) | [homeserver-iac.md](../architecture/homeserver-iac.md#typed-desired-state) | Pydantic contracts plus typed BWS, TrueNAS, Backrest, and Syncthing reconcilers with secret-safe plans and fixture tests; invoked publicly through Task only |
+| Taskfile | `Taskfile.yml` + `infra/**/Taskfile.yml` (source-only) | -- | Thin root go-task interface with AWS, TrueNAS, identity, network, sync, Atlas, Sisyphus browser tests, typed desired-state, and aggregate validation tasks |
 | Ghostty | `private_dot_config/ghostty/` | -- | Terminal emulator |
 | tmux | `private_dot_config/tmux/` | -- | Terminal multiplexer |
 | Starship | `private_dot_config/starship.toml` | -- | Prompt theme |
 | Git | `private_dot_config/git/` | -- | Git config and work profile |
 | Bat | `private_dot_config/bat/` | -- | Cat replacement with syntax highlighting |
-| Taskwarrior | `private_dot_config/task/` | -- | CLI todo list manager, XDG paths, Linear UDAs, Timewarrior hook (data at `~/.local/share/task/`) |
-| Timewarrior | `private_dot_local/private_share/timewarrior/` | -- | CLI time tracker paired with Taskwarrior via `on-modify.timewarrior` hook |
+| Taskwarrior | `private_dot_config/task/` | -- | CLI todo list manager, XDG paths, Linear UDAs (data at `~/.local/share/task/`) |
 | Yazi | `private_dot_config/yazi/` | -- | Terminal file manager |
 | Lazygit | `private_dot_config/lazygit/` | -- | Git TUI |
-| Brew | `private_dot_config/brew/`, `private_dot_config/homebrew/` | -- | Homebrew Brewfile and package trust allowlist |
+| Brew | `private_dot_config/brew/`, `private_dot_config/homebrew/` | -- | Homebrew Brewfile, including OpenCode/oauth2-proxy runtime dependencies, and package trust allowlist |
 | Aerospace | `private_dot_config/aerospace/` | -- | macOS window manager (Darwin only) |
 | Finicky | `private_dot_config/finicky/` | -- | macOS browser routing (Darwin only) |
 | Raycast | `private_dot_config/raycast/` | -- | macOS launcher (partial, extensions ignored) |
 | glab CLI | `private_dot_config/glab-cli/` | -- | GitLab CLI config seed; live auth-bearing config is preserved (DT work profile only) |
 | Diffnav | `private_dot_config/diffnav/` | -- | Git diff TUI pager (file tree + delta rendering), invoked via `smart-diffnav` wrapper for TTY-aware behavior |
 | gh-dash | `private_dot_config/gh-dash/` | -- | GitHub dashboard TUI (`gh` extension, Catppuccin Mocha Mauve) |
+
+Repo-local pre-commit hygiene hooks skip `private_Documents/notes/dot_obsidian/` for whitespace and final-newline rewrites because Obsidian and its plugins own that JSON/manifest formatting at runtime.
+
+## Repository Workflows
+
+The root `Taskfile.yml` owns repository-level commands and includes Taskfiles
+next to the infrastructure they operate. Domain commands use `aws:*`,
+`truenas:*`, `identity:*`, `network:*`, `sync:*`, and `atlas:*`. Old deployment
+aliases were removed; `tf:*` now contains only cross-stack OpenTofu quality and
+state commands.
+
+Run the complete secret-free, live-service-free infrastructure gate from the
+repository root:
+
+```bash
+mise exec -- task infra:validate
+```
+
+After cloning or changing `infra/pyproject.toml`, install the committed Python
+lock once with `mise exec -- task infra:python:sync`. Normal validation uses uv
+in locked offline mode. Use `infra:desired:validate` for all versioned YAML
+contracts, `infra:python:validate` for the Python quality gate, and
+`infra:schemas:generate` only when a Pydantic contract intentionally changes.
+Live typed plans use `truenas:apps:plan`, `truenas:snapshots:plan`,
+`truenas:nfs:plan`, `truenas:smb:plan`, `truenas:backrest:plan`,
+`truenas:api-key:plan`, and `sync:plan:all`. Run
+`infra:status` to aggregate every live read-only domain check. Superseded shell
+reconcilers and rollback aliases have been removed.
+
+The migration-only `infra:photos:validate-export` task scans an Apple Photos
+export without changing it, checks content type, fully decodes each visual
+stream with FFmpeg, and writes a JSON report outside the export tree.
+`infra:photos:build-import-manifest` then joins validated media to explicit
+source snapshots and binds selected media and XMP sidecars to SHA-256 hashes.
+`infra:photos:plan-immich-metadata` reconciles the import manifest with official
+Immich CLI upload evidence and emits the read-only favorite, album, and stack
+API plan before any temporary API key is created. The separate
+`infra:photos:reconcile-immich-metadata` task performs the bounded live API
+comparison from that reviewed plan and only mutates when `APPLY=true` is passed;
+its stack verifier treats Immich `livePhotoVideoId` links as present Live Photo
+motion assets while still blocking unrelated stack differences.
+These are live-data operations and are intentionally excluded from
+`infra:validate`.
+
+The Tailscale whole-policy document is managed by the official provider in its
+own state through `network:policy:plan` and `network:policy:apply`. Those tasks
+inject the API credential from BWS and run the separate remote validator first;
+the pinned provider release does not yet perform remote validation during plan.
+
+Use `atlas:validate` for local playbook syntax checks, `atlas:*:plan` for
+Ansible check mode with diff output, and `atlas:*:apply` for convergence. Check
+mode is advisory because not every Ansible module can fully model a remote
+mutation without applying it. `atlas:taskboard:test` runs an isolated
+real-Taskwarrior HTTP mutation lifecycle and mocked Playwright UI regressions,
+while `atlas:taskboard:smoke:live` opens a read-only SSH tunnel to
+the deployed container. The live smoke runs automatically after
+`atlas:homeserver:apply`.
+
+Atlas homeserver convergence uses native Ansible file management and the
+`community.docker.docker_compose_v2` module. A focused local module updates the
+TrueNAS middleware user record for the backup SSH key because direct
+`authorized_keys` edits would bypass the appliance-owned user database.
+
+Before moving OpenTofu resources or stack source paths, run
+`mise exec -- task tf:state:baseline` and follow the
+[state migration runbook](../runbooks/opentofu-state-migrations.md). The live
+check verifies versioned state recovery points and provider lock metadata; it
+is intentionally excluded from the offline `infra:validate` gate.
+
+Run `mise exec -- task tf:test` after changing a reusable OpenTofu module. The
+task initializes each module test root against its committed provider lockfile
+and runs mock-provider tests without reading live infrastructure. Provider
+installation may require network access on a fresh workstation, so module tests
+remain separate from the strictly offline aggregate gate.
 
 ## Pi
 
@@ -78,11 +152,11 @@ Terminal multiplexer with Catppuccin theme and plugin ecosystem on the workstati
 - **Session picker:** `prefix + s` opens a `sesh` + `gum` popup helper (`~/bin/sesh-picker`)
 - **Session rename:** `prefix + R` opens a `gum` input popup (`~/bin/sesh-rename`); rejects duplicate session names
 - **OpenCode launch:** `prefix + o` splits the current pane and runs `~/bin/opencode-launch`, which preserves per-pane OpenCode session tracking across tmux restores.
-- **OpenCode picker:** `prefix + O` opens `~/bin/opencode-session-picker`, listing live OpenCode panes with session status from the local OpenCode plugin and jumping to the selected pane.
+- **OpenCode sidebar:** `prefix + O` toggles a 28-column Catppuccin-styled left sidebar. It opens immediately from a short-lived cache, refreshes asynchronously, and lists live OpenCode panes with color-coded status dots. Rows are mouse-clickable and jump to the exact tmux session, window, and pane. Opening focuses the sidebar; closing preserves the active app pane or returns to the pre-sidebar pane when necessary. Sidebars are created lazily as tmux windows are visited, hiding them reapplies each window's exact pre-sidebar layout, and closing a window's last application pane also closes its sidebar.
 - **Scrollback:** `PageUp`/`PageDown` move by half-pages in tmux copy-mode scrollback, but are forwarded to fullscreen pane applications using the alternate screen.
 - **URL opening:** double-clicking a URL in a pane opens it with the system browser via `~/bin/tmux-open-url-at-mouse`; non-URL double-clicks keep tmux's default word-copy behavior.
 - **Pane separators:** tmux uses shared separator cells rather than independent pane boxes; the config uses thin active blue/inactive gray separator styling and top pane labels to approximate boxed panes.
-- **Session persistence:** Resurrect auto-saves every 15 min (via Continuum) and on every client detach. Restore on server start is handled by a custom `~/bin/tmux-restore` script that validates the save file and falls back to recent backups when the latest save is corrupt. OpenCode panes are restored to their exact previous session via per-pane session ID tracking in `~/.local/state/opencode/tmux-panes/`.
+- **Session persistence:** Resurrect auto-saves every 15 min (via Continuum) and on every client detach. Restore on server start is handled by a custom `~/bin/tmux-restore` script that validates the save file and falls back to recent backups when the latest save is corrupt. OpenCode panes are restored to their exact previous session via per-pane session ID tracking in `~/.local/state/opencode/tmux-panes/`; an open OpenCode sidebar is also restored as part of the saved layout.
 - **Status line:** Top position, oasis-style mode indicator with per-mode colors/icons
 - **History:** 100,000 lines, mouse enabled, base-index 1
 
@@ -94,13 +168,13 @@ _Reference: `private_dot_config/tmux/tmux.conf:1`_
 
 Terminal file manager. `atlas` receives the shared config from `private_dot_config/yazi/` via Ansible, installs the upstream `yazi` `.deb` matching the workstation version, and runs `ya pkg install` against `package.toml` for plugins.
 
-_Reference: `private_dot_config/yazi/yazi.toml:1`, `infra/ansible/roles/terminal_comfort/tasks/main.yml:84`_
+_Reference: `private_dot_config/yazi/yazi.toml:1`, `infra/atlas/ansible/roles/terminal_comfort/tasks/main.yml:84`_
 
 ## Lazygit
 
 Git TUI with Catppuccin-style colors and `delta --dark --paging=never` as the pager. `atlas` receives the same `private_dot_config/lazygit/config.yml` via Ansible and installs Ubuntu's `git-delta` package so the pager command resolves to `delta`.
 
-_Reference: `private_dot_config/lazygit/config.yml:1`, `infra/ansible/roles/terminal_comfort/tasks/main.yml:76`_
+_Reference: `private_dot_config/lazygit/config.yml:1`, `infra/atlas/ansible/roles/terminal_comfort/tasks/main.yml:76`_
 
 ## sesh
 
@@ -110,7 +184,7 @@ Standalone tmux session manager used by the `prefix + s` popup helper.
 - **Defaults:** single-part session names (`dir_length = 1`), cache + strict mode enabled, config sessions listed before tmux sessions and zoxide entries
 - **Pinned sessions:** `main`, `dotfiles`, `notes`, and `ma-proj` (via work-only import)
 - **Startup layout:** new sessions start as a plain single-window tmux session by default
-- **Helper scripts:** `~/bin/sesh-picker` (fuzzy session picker), `~/bin/sesh-rename` (rename with duplicate-name guard), `~/bin/opencode-launch` (OpenCode launcher with tmux session resume), `~/bin/opencode-session-picker` (jump to live OpenCode panes)
+- **Helper scripts:** `~/bin/sesh-picker` (fuzzy session picker), `~/bin/sesh-rename` (rename with duplicate-name guard), `~/bin/opencode-launch` (OpenCode launcher with tmux session resume), `~/bin/opencode-session-picker` (live OpenCode pane data), `~/bin/opencode-session-sidebar` (mouse-aware sidebar UI), `~/bin/tmux-opencode-sidebar` (sidebar lifecycle and layout)
 
 _Reference: `private_dot_config/sesh/sesh.toml:1`_
 
@@ -130,7 +204,7 @@ _Reference: `private_dot_config/git/`_
 
 Homebrew Brewfile at `~/.config/brew/Brewfile`. Managed by the lifecycle script `02-install-packages` which runs `brew bundle` when the Brewfile content changes.
 
-Homebrew package trust is managed at `~/.config/homebrew/trust.json` using narrow formula- and cask-level allowlists for trusted third-party packages.
+Homebrew package trust is managed at `~/.config/homebrew/trust.json` using narrow formula- and cask-level allowlists for trusted third-party packages. The package lifecycle script stages this file before `brew bundle` because chezmoi before scripts run ahead of normal managed-file deployment.
 
 `aws-login` is installed from the private tap `mbastakis/tap` (formula `mbastakis/tap/aws-login`) instead of being compiled from dotfiles source.
 
@@ -138,12 +212,18 @@ _Reference: `private_dot_config/brew/Brewfile`, `private_dot_config/homebrew/pri
 
 ## Taskwarrior
 
-CLI todo list manager configured to be the primary project/task tracker (replacing Linear).
+CLI todo list manager and single source of truth for personal task management, syncing Mac and iPhone through a TaskChampion sync server on atlas.
 
-- **Config:** `~/.config/task/taskrc` (XDG override of default `~/.taskrc`, wired via `TASKRC`/`TASKDATA` env vars in `.zshenv`)
+- **Config:** `~/.config/task/taskrc` (chezmoi template rendering sync encryption secret from BWS; XDG override of default `~/.taskrc`, wired via `TASKRC`/`TASKDATA` env vars in `.zshenv`)
 - **Theme:** `~/.config/task/mocha.theme` — Catppuccin Mocha colors (included from `taskrc`). Since Taskwarrior does not support hex colors, the palette is mapped to the nearest xterm-256 indexes.
 - **Data:** `~/.local/share/task/taskchampion.sqlite3` (ignored by chezmoi)
 - **Default report:** `task` with no args runs `task next` (via `default.command=next`)
+- **TUI:** `taskwarrior-tui` (Rust, vim-like navigation, keyboard-first, daily driver for terminal triage)
+- **Sync:** TaskChampion sync server on atlas at `https://tasks.mbastakis.com` (Private Route53 + Traefik + Tailscale, no OIDC). The shared task-history client ID is hardcoded in `taskrc.tmpl` and allowlisted on atlas; the sync encryption secret is rendered from BWS.
+- **Board:** Sisyphus runs on atlas at `https://taskboard.mbastakis.com` as a write-capable Kanban projection over Taskwarrior. It uses its own local Taskwarrior replica, syncs through TaskChampion, maps columns to native Taskwarrior state (`+next`, active/start, `+waiting`, done) rather than storing separate board state, and is gated by Authentik forward-auth at Traefik. Deployment identifiers remain `taskboard`.
+- **Automation:** `~/bin/task-sync` runs `task sync` with a lock and logs to `~/.local/state/task/log/task-sync.log`; `~/Library/LaunchAgents/com.mbastakis.task-sync.plist` runs it at login and every 2 minutes.
+- **iOS:** Taskchamp (native TaskChampion replica, list/sort/capture/start/stop/done). Use the same shared client ID as Mac: `24e1b420-97ae-4847-9fae-cf15c096706b`.
+- **Timewarrior:** removed — recurring tasks are native Taskwarrior, time tracking had no sync story
 
 ### Linear UDAs
 
@@ -171,47 +251,7 @@ task linear_state:Todo +linear list   # only originally-Todo items
 
 Linear priorities are mapped onto Taskwarrior's H/M/L scale: `Urgent` and `High` both become `H`, `Medium` becomes `M`, `Low` becomes `L`, and `None` leaves priority empty. `Urgent` issues additionally gain a `+urgent` tag so they stay distinguishable. Linear labels are lowercased and carried through as Taskwarrior tags.
 
-### Timewarrior integration
-
-The `on-modify.timewarrior` hook (vendored at `private_dot_config/task/hooks/executable_on-modify.timewarrior`, deployed to `~/.config/task/hooks/on-modify.timewarrior` with `+x`) bridges start/stop events to Timewarrior. `taskrc` sets `hooks.location=~/.config/task/hooks` so the hook is picked up automatically. See the [Timewarrior section](#timewarrior) below.
-
-_Reference: `private_dot_config/task/taskrc`_
-
-## Timewarrior
-
-CLI time tracker paired with Taskwarrior. `task start N` auto-invokes `timew start` with the task's description, project, and tags; `task stop N` mirrors to `timew stop`.
-
-- **Config:** `~/.local/share/timewarrior/timewarrior.cfg` (Timewarrior insists on keeping config and data in the same directory; path is set via `TIMEWARRIORDB` in `.zshenv`)
-- **Theme:** `~/.local/share/timewarrior/mocha.theme` — Catppuccin Mocha colors imported from the main cfg, mirrors the Taskwarrior `mocha.theme` for visual consistency
-- **Data:** `~/.local/share/timewarrior/data/` (ignored by chezmoi)
-- **Bridge hook:** `~/.config/task/hooks/on-modify.timewarrior` (vendored from upstream `GothenburgBitFactory/timewarrior@stable`)
-
-### Working hours
-
-Exclusions are configured for Mon–Fri 09:00–18:00 with a 13:00–14:00 lunch window. Weekends are fully excluded. `timew day` / `timew week` / `timew month` charts default to `hours = working`, so non-work time stays out of the chart unless you explicitly request it.
-
-### Common commands
-
-```bash
-timew                 # current tracking status
-timew day             # today's intervals chart
-timew week            # this week's chart
-timew summary :week   # totals per tag this week
-timew continue        # resume the last stopped interval
-timew cancel          # abandon the active interval (no record)
-```
-
-### Taskwarrior bridge in practice
-
-```bash
-task add "Refactor auth middleware" project:api +backend
-task start 42         # timew start "Refactor auth middleware" api backend
-task stop 42          # timew stop
-task 42 modify +urgent
-                      # timew untag / retag with the new tag set
-```
-
-_Reference: `private_dot_local/private_share/timewarrior/timewarrior.cfg`_
+_Reference: `private_dot_config/task/taskrc.tmpl`, `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/`, [sync architecture spec](../../specs/taskwarrior-sync-implementation-plan.md)_
 
 ## References
 
@@ -219,6 +259,7 @@ _Reference: `private_dot_local/private_share/timewarrior/timewarrior.cfg`_
 - OpenCode README: `private_dot_config/opencode/README.md:1`
 - Homeserver IaC: `docs/architecture/homeserver-iac.md:1`
 - Email stack doc: `docs/components/email.md:1`
+- Taskwarrior sync architecture: `specs/taskwarrior-sync-implementation-plan.md:1`
 - mbsync template: `private_dot_config/isyncrc.tmpl:1`
 - Ghostty config: `private_dot_config/ghostty/config:1`
 - tmux config: `private_dot_config/tmux/tmux.conf:1`

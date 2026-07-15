@@ -1,0 +1,16 @@
+#!/bin/bash
+set -euo pipefail
+
+{{- if or (ne .chezmoi.os "darwin") (not .dtWork) }}
+exit 0
+{{- end }}
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+
+if ! command -v tailscale &>/dev/null; then
+    exit 0
+fi
+
+if ! tailscale set --accept-dns=false; then
+    echo "Warning: could not disable Tailscale DNS; start Tailscale and re-run chezmoi apply" >&2
+fi

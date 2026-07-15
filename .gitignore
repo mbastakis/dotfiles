@@ -22,6 +22,10 @@ node_modules/
 # Python
 __pycache__/
 *.pyc
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.venv/
 
 # Rust build artifacts (nvim test fixtures)
 private_dot_config/nvim/test/rust/target/

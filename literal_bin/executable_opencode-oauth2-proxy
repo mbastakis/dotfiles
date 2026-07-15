@@ -1,0 +1,17 @@
+#!/bin/bash
+set -euo pipefail
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+config="$HOME/.config/oauth2-proxy/oauth2-proxy.cfg"
+
+if ! command -v oauth2-proxy >/dev/null 2>&1; then
+    echo "Error: oauth2-proxy is not installed" >&2
+    exit 1
+fi
+
+if [[ ! -r "$config" ]]; then
+    echo "Error: oauth2-proxy config is not readable: $config" >&2
+    exit 1
+fi
+
+exec oauth2-proxy --config="$config"

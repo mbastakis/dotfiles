@@ -13,6 +13,10 @@ flowchart LR
   Z --> N[Neovim]
   Z --> M[Mail Stack\nNeoMutt + mbsync + msmtp + notmuch + abook]
   Z --> O[OpenCode CLI]
+  I[iPhone PWA] --> AT[code.mbastakis.com<br/>Atlas Traefik]
+  AT --> TS[Tailscale Serve]
+  TS --> A[oauth2-proxy + Authentik OIDC]
+  A --> O
   Z --> P[Pi CLI]
   C[chezmoi lifecycle] --> Z
   C --> N
@@ -52,9 +56,13 @@ Chezmoi translates source-state file names to target paths using naming conventi
 | `private_dot_local/private_share/abook/` | `~/.local/share/abook/` | Abook data |
 | `private_dot_local/private_share/colima/` | `~/.local/share/colima/` | Colima config and state |
 | `private_Library/LaunchAgents/com.mbastakis.mail-sync.plist.tmpl` | `~/Library/LaunchAgents/com.mbastakis.mail-sync.plist` | Mail sync scheduler |
+| `private_Library/LaunchAgents/com.mbastakis.task-sync.plist.tmpl` | `~/Library/LaunchAgents/com.mbastakis.task-sync.plist` | Taskwarrior sync scheduler |
+| `private_Library/LaunchAgents/com.mbastakis.opencode-*.plist.tmpl` | `~/Library/LaunchAgents/com.mbastakis.opencode-*.plist` | Shared OpenCode server and Authentik OIDC proxy on the designated Mac |
+| `private_dot_config/oauth2-proxy/private_oauth2-proxy.cfg.tmpl` | `~/.config/oauth2-proxy/oauth2-proxy.cfg` | Mode-`0600` OIDC reverse-proxy config rendered from BWS |
 | `literal_bin/executable_mail-*` | `~/bin/mail-*` | Mail helper scripts (`mail-sync`, `mail-open`) |
+| `literal_bin/executable_task-sync.tmpl` | `~/bin/task-sync` | Taskwarrior sync helper |
 | `.chezmoiscripts/` | _(lifecycle scripts)_ | Before/after scripts (e.g. package installs, LaunchAgent reload, Pi installer), not deployed |
-| `.chezmoidata.yaml` | _(template data)_ | Catppuccin Mocha color palette |
+| `.chezmoidata.yaml` | _(template data)_ | Catppuccin Mocha colors plus mail, Taskwarrior, and OpenCode host data |
 | `dot_zshenv.tmpl` | `~/.zshenv` | Zsh bootstrap (exports `ZDOTDIR`) |
 | `private_dot_config/zsh/` | `~/.config/zsh/` | Zsh entry point and module files |
 
@@ -87,6 +95,7 @@ The `.chezmoiignore` file uses **target-state paths** (not source-state names) a
 - **Obsidian vault generated files:** Plugin binaries (`main.js`, `manifest.json`, `styles.css`), themes, icons, and `workspace.json` under `Documents/notes/.obsidian/` are ignored — only settings JSONs and plugin `data.json` files are managed
 - **Profile-conditional:** DT work configs (glab, git work config, GitLab SSH keys) excluded when profile is not `dt-work`
 - **OS-conditional:** macOS-only configs (Aerospace, Karabiner, Finicky, Ghostty LaunchAgent, mail LaunchAgent) excluded on Linux
+- **Host-conditional:** OpenCode server, oauth2-proxy, and their LaunchAgents deploy only to the configured remote-control Mac
 
 _Reference: `.chezmoiignore:17`, `.chezmoiignore:30`, `.chezmoiignore:54`_
 
@@ -108,6 +117,8 @@ The config template (`.chezmoi.toml.tmpl`) determines the active profile at `che
 2. If unset, prompt interactively via `promptChoiceOnce`.
 3. Profile sets `.profile` and `.dtWork` template variables.
 4. These variables control conditional ignores, template rendering, and secret fetching.
+
+On macOS DT work profiles, the lifecycle also disables Tailscale DNS on every apply so Harmony SASE remains the system DNS authority while Tailscale continues to provide peer routes.
 
 _Reference: `.chezmoi.toml.tmpl:1`_
 

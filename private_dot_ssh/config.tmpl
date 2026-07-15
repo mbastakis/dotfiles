@@ -18,17 +18,39 @@ Host github.com github-personal
     IdentityFile ~/.ssh/github-personal
     IdentitiesOnly yes
 
-Host atlas
-    HostName 192.168.1.19
+Host atlas atlas-lan atlas-tailscale
     User mbastakis
     IdentityFile ~/.ssh/id_ed25519
     IdentitiesOnly yes
 
-Host truenas 192.168.1.74
-    HostName 192.168.1.74
+Host atlas
+    HostName 192.168.1.19
+    HostKeyAlias 192.168.1.19
+    ProxyCommand {{ .chezmoi.homeDir }}/bin/homeserver-route connect atlas %p
+
+Host atlas-lan
+    HostName 192.168.1.19
+
+Host atlas-tailscale
+    HostName 100.101.208.110
+    HostKeyAlias 192.168.1.19
+
+Host truenas truenas-lan truenas-tailscale
     User mbastakis
     IdentityFile ~/.ssh/id_ed25519
     IdentitiesOnly yes
+
+Host truenas
+    HostName 192.168.1.74
+    HostKeyAlias 192.168.1.74
+    ProxyCommand {{ .chezmoi.homeDir }}/bin/homeserver-route connect truenas %p
+
+Host truenas-lan 192.168.1.74
+    HostName 192.168.1.74
+
+Host truenas-tailscale
+    HostName 100.122.166.74
+    HostKeyAlias 192.168.1.74
 
 Host ssh.whocaressoftware.com
     HostName ssh.whocaressoftware.com

@@ -65,7 +65,8 @@ command = /bin/zsh -c "tmux new -A -s main"
 # Keybindings
 # ============================================================================
 
-# Tmux window/pane management (prefix = Ctrl+a = \x01)
+# Tmux window/pane management (prefix = Ctrl+a = \x01).
+# Cmd+Shift+O toggles the OpenCode session sidebar.
 keybind = cmd+t=text:\x01\x63
 keybind = cmd+w=text:\x01\x78
 keybind = cmd+d=text:\x01\x68

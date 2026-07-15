@@ -42,6 +42,9 @@ export _ZO_ECHO=1
 # OpenCode
 export OPENCODE_CONFIG="$HOME/.config/opencode/opencode.jsonc"
 export OPENCODE_CONFIG_DIR="$HOME/.config/opencode"
+{{- if eq .chezmoi.hostname .opencode.remote.host }}
+export OPENCODE_SERVER_URL="{{ .opencode.remote.server_url }}"
+{{- end }}
 
 # Pi coding agent
 # Pi's override variable points at the agent dir itself; keeping it at

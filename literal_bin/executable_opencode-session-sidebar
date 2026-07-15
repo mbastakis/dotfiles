@@ -1,0 +1,468 @@
+#!/usr/bin/env python3
+"""Mouse-aware tmux sidebar for live OpenCode sessions."""
+
+from __future__ import annotations
+
+import curses
+import os
+import subprocess
+import time
+import unicodedata
+from dataclasses import dataclass
+from pathlib import Path
+
+
+PICKER = Path.home() / "bin" / "opencode-session-picker"
+MANAGER = Path.home() / "bin" / "tmux-opencode-sidebar"
+CACHE = (
+    Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache"))
+    / "opencode"
+    / "session-sidebar.tsv"
+)
+REFRESH_SECONDS = 2.0
+REFRESH_TIMEOUT_SECONDS = 8.0
+ROW_START = 3
+STATUS_GLYPHS = {"🟠", "🟡", "🔴", "🟢", "⚫", "⚪"}
+
+
+@dataclass(frozen=True)
+class SessionRow:
+    pane_id: str
+    window_id: str
+    session_id: str
+    status: str
+    title: str
+
+
+@dataclass(frozen=True)
+class Palette:
+    base: int
+    header: int
+    muted: int
+    selected: int
+    status: dict[str, int]
+    status_selected: dict[str, int]
+
+
+def run_tmux(*args: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        ["tmux", *args],
+        capture_output=True,
+        check=False,
+        text=True,
+    )
+
+
+def mark_sidebar_pane() -> None:
+    pane_id = os.environ.get("TMUX_PANE", "")
+    if not pane_id:
+        return
+
+    run_tmux(
+        "set-option",
+        "-p",
+        "-t",
+        pane_id,
+        "@opencode_session_sidebar",
+        "1",
+        ";",
+        "set-option",
+        "-g",
+        "@opencode_session_sidebar_visible",
+        "1",
+    )
+
+
+def sidebar_is_visible() -> bool:
+    pane_id = os.environ.get("TMUX_PANE", "")
+    if not pane_id:
+        return True
+
+    result = run_tmux("display-message", "-p", "-t", pane_id, "#{window_id}")
+    if result.returncode != 0:
+        return False
+
+    window_id = result.stdout.strip()
+    clients = run_tmux("list-clients", "-F", "#{window_id}")
+    return window_id in clients.stdout.splitlines()
+
+
+def parse_rows(output: str) -> list[SessionRow]:
+    rows: list[SessionRow] = []
+    for line in output.splitlines():
+        parts = line.split("\t", 6)
+        if len(parts) != 7:
+            continue
+        _, _, pane_id, window_id, session_id, status, display = parts
+        title = display.strip()
+        if title and title[0] in STATUS_GLYPHS:
+            title = title[1:].lstrip()
+        rows.append(SessionRow(pane_id, window_id, session_id, status, title))
+    return rows
+
+
+def read_cache() -> list[SessionRow]:
+    try:
+        if time.time() - CACHE.stat().st_mtime > 300:
+            return []
+        return parse_rows(CACHE.read_text())
+    except OSError:
+        return []
+
+
+def write_cache(output: str) -> None:
+    temporary = CACHE.with_name(f"{CACHE.name}.{os.getpid()}.tmp")
+    try:
+        CACHE.parent.mkdir(parents=True, exist_ok=True)
+        temporary.write_text(output)
+        temporary.replace(CACHE)
+    except OSError:
+        try:
+            temporary.unlink()
+        except OSError:
+            pass
+
+
+def start_refresh() -> tuple[subprocess.Popen[str] | None, str]:
+    if not PICKER.is_file():
+        return None, f"Missing {PICKER}"
+    try:
+        return (
+            subprocess.Popen(
+                [str(PICKER), "--print-rows"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+            ),
+            "",
+        )
+    except OSError as exc:
+        return None, str(exc)
+
+
+def finish_refresh(process: subprocess.Popen[str]) -> tuple[list[SessionRow], str]:
+    output, stderr = process.communicate()
+    if process.returncode != 0:
+        return [], stderr.strip() or "Session refresh failed"
+    write_cache(output)
+    return parse_rows(output), ""
+
+
+def char_width(char: str) -> int:
+    if unicodedata.combining(char) or char in {"\ufe0e", "\ufe0f"}:
+        return 0
+    return 2 if unicodedata.east_asian_width(char) in {"F", "W"} else 1
+
+
+def clip(text: str, width: int) -> str:
+    result: list[str] = []
+    used = 0
+    for char in text:
+        next_width = char_width(char)
+        if used + next_width > width:
+            break
+        result.append(char)
+        used += next_width
+    return "".join(result)
+
+
+def ellipsize(text: str, width: int) -> str:
+    if sum(char_width(char) for char in text) <= width:
+        return text
+    return clip(text, max(0, width - 1)) + "…"
+
+
+def add_text(
+    screen: curses.window,
+    y: int,
+    x: int,
+    text: str,
+    attr: int = 0,
+) -> None:
+    height, width = screen.getmaxyx()
+    if y < 0 or y >= height or x < 0 or x >= width - 1:
+        return
+    try:
+        screen.addstr(y, x, clip(text, width - x - 1), attr)
+    except curses.error:
+        pass
+
+
+def setup_palette(screen: curses.window) -> Palette:
+    if not curses.has_colors() or curses.COLORS < 256:
+        return Palette(
+            base=curses.A_NORMAL,
+            header=curses.A_BOLD,
+            muted=curses.A_DIM,
+            selected=curses.A_BOLD,
+            status={},
+            status_selected={},
+        )
+
+    curses.start_color()
+    pairs = {
+        1: (189, 234),  # text / base
+        2: (183, 234),  # mauve / base
+        3: (146, 234),  # subtext / base
+        4: (189, 236),  # text / surface
+        5: (111, 234),  # blue / base
+        6: (216, 234),  # peach / base
+        7: (211, 234),  # red / base
+        8: (151, 234),  # green / base
+        9: (61, 234),  # overlay / base
+        10: (111, 236),  # blue / surface
+        11: (216, 236),  # peach / surface
+        12: (211, 236),  # red / surface
+        13: (151, 236),  # green / surface
+        14: (61, 236),  # overlay / surface
+    }
+    for pair, (foreground, background) in pairs.items():
+        curses.init_pair(pair, foreground, background)
+
+    screen.bkgd(" ", curses.color_pair(1))
+    return Palette(
+        base=curses.color_pair(1),
+        header=curses.color_pair(2) | curses.A_BOLD,
+        muted=curses.color_pair(3),
+        selected=curses.color_pair(4),
+        status={
+            "working": curses.color_pair(5),
+            "blocked": curses.color_pair(6),
+            "error": curses.color_pair(7),
+            "done": curses.color_pair(8),
+            "unknown": curses.color_pair(9),
+            "deleted": curses.color_pair(9),
+            "exited": curses.color_pair(9),
+        },
+        status_selected={
+            "working": curses.color_pair(10),
+            "blocked": curses.color_pair(11),
+            "error": curses.color_pair(12),
+            "done": curses.color_pair(13),
+            "unknown": curses.color_pair(14),
+            "deleted": curses.color_pair(14),
+            "exited": curses.color_pair(14),
+        },
+    )
+
+
+def draw(
+    screen: curses.window,
+    rows: list[SessionRow],
+    selected: int,
+    offset: int,
+    error: str,
+    palette: Palette,
+) -> int:
+    screen.erase()
+    height, width = screen.getmaxyx()
+    add_text(screen, 0, 1, "AGENT SESSIONS", palette.header)
+    count = str(len(rows))
+    add_text(screen, 0, max(1, width - len(count) - 2), count, palette.muted)
+    add_text(screen, 1, 1, "─" * max(0, width - 3), palette.muted)
+
+    visible_rows = max(0, height - ROW_START - 3)
+    if selected < offset:
+        offset = selected
+    elif selected >= offset + visible_rows:
+        offset = selected - visible_rows + 1
+    offset = max(0, min(offset, max(0, len(rows) - visible_rows)))
+
+    if rows:
+        for y, index in enumerate(
+            range(offset, min(len(rows), offset + visible_rows)), ROW_START
+        ):
+            row = rows[index]
+            is_selected = index == selected
+            background = palette.selected if is_selected else palette.base
+            status_colors = palette.status_selected if is_selected else palette.status
+            if is_selected:
+                add_text(screen, y, 0, " " * max(0, width - 1), background)
+                add_text(screen, y, 0, "›", palette.header)
+            add_text(
+                screen,
+                y,
+                2,
+                "●",
+                status_colors.get(row.status, background),
+            )
+            add_text(screen, y, 4, ellipsize(row.title, width - 5), background)
+    else:
+        message = error or "No running sessions"
+        add_text(screen, ROW_START, 1, message, palette.muted)
+
+    add_text(screen, height - 3, 1, "─" * max(0, width - 3), palette.muted)
+    add_text(screen, height - 2, 1, "j/k move · enter open", palette.muted)
+    add_text(screen, height - 1, 1, "click open · q/esc close", palette.muted)
+    screen.refresh()
+    return offset
+
+
+def active_client(window_id: str) -> str:
+    result = run_tmux(
+        "list-clients",
+        "-F",
+        "#{client_activity}\t#{client_name}\t#{window_id}",
+    )
+    candidates: list[tuple[int, str]] = []
+    for line in result.stdout.splitlines():
+        parts = line.split("\t", 2)
+        if len(parts) != 3 or parts[2] != window_id:
+            continue
+        try:
+            activity = int(parts[0])
+        except ValueError:
+            activity = 0
+        candidates.append((activity, parts[1]))
+    return max(candidates, default=(0, ""))[1]
+
+
+def focus(row: SessionRow) -> None:
+    pane_id = os.environ.get("TMUX_PANE", "")
+    current_window = ""
+    if pane_id:
+        current_window = run_tmux(
+            "display-message", "-p", "-t", pane_id, "#{window_id}"
+        ).stdout.strip()
+    client = active_client(current_window)
+
+    run_tmux("select-window", "-t", row.window_id)
+    run_tmux("select-pane", "-t", row.pane_id)
+    args = ["switch-client"]
+    if client:
+        args.extend(["-c", client])
+    args.extend(["-t", row.session_id])
+    run_tmux(*args)
+
+
+def hide_all() -> None:
+    if MANAGER.is_file():
+        run_tmux("run-shell", "-b", f"{MANAGER} hide")
+
+
+def tui(screen: curses.window) -> None:
+    try:
+        curses.curs_set(0)
+    except curses.error:
+        pass
+    curses.mouseinterval(0)
+    curses.mousemask(curses.ALL_MOUSE_EVENTS | getattr(curses, "REPORT_MOUSE_POSITION", 0))
+    screen.keypad(True)
+    screen.timeout(250)
+
+    palette = setup_palette(screen)
+    rows = read_cache()
+    selected = 0
+    offset = 0
+    error = "" if rows else "Loading sessions..."
+    last_refresh = 0.0
+    refresh_started = 0.0
+    refresh_process: subprocess.Popen[str] | None = None
+    needs_draw = True
+
+    click_mask = (
+        getattr(curses, "BUTTON1_RELEASED", 0)
+        | getattr(curses, "BUTTON1_CLICKED", 0)
+        | getattr(curses, "BUTTON1_DOUBLE_CLICKED", 0)
+    )
+
+    offset = draw(screen, rows, selected, offset, error, palette)
+    needs_draw = False
+
+    while True:
+        now = time.monotonic()
+        if refresh_process is not None and refresh_process.poll() is not None:
+            selected_pane = rows[selected].pane_id if rows and selected < len(rows) else ""
+            refreshed_rows, refresh_error = finish_refresh(refresh_process)
+            refresh_process = None
+            if refresh_error:
+                error = refresh_error
+            else:
+                rows = refreshed_rows
+                error = ""
+                if selected_pane:
+                    selected = next(
+                        (
+                            index
+                            for index, row in enumerate(rows)
+                            if row.pane_id == selected_pane
+                        ),
+                        min(selected, max(0, len(rows) - 1)),
+                    )
+                else:
+                    selected = min(selected, max(0, len(rows) - 1))
+            needs_draw = True
+        elif (
+            refresh_process is not None
+            and now - refresh_started >= REFRESH_TIMEOUT_SECONDS
+        ):
+            refresh_process.kill()
+            refresh_process.communicate()
+            refresh_process = None
+            error = "Session refresh timed out"
+            needs_draw = True
+
+        if (
+            refresh_process is None
+            and now - last_refresh >= REFRESH_SECONDS
+            and sidebar_is_visible()
+        ):
+            refresh_process, refresh_error = start_refresh()
+            refresh_started = now
+            last_refresh = now
+            if refresh_error:
+                error = refresh_error
+                needs_draw = True
+
+        if needs_draw:
+            offset = draw(
+                screen,
+                rows,
+                selected,
+                offset,
+                error,
+                palette,
+            )
+            needs_draw = False
+
+        key = screen.getch()
+        if key == -1:
+            continue
+        if key in (ord("q"), 27):
+            if refresh_process is not None:
+                refresh_process.terminate()
+            hide_all()
+            return
+        if key in (curses.KEY_UP, ord("k")) and rows:
+            selected = (selected - 1) % len(rows)
+            needs_draw = True
+        elif key in (curses.KEY_DOWN, ord("j")) and rows:
+            selected = (selected + 1) % len(rows)
+            needs_draw = True
+        elif key in (curses.KEY_ENTER, 10, 13) and rows:
+            focus(rows[selected])
+            needs_draw = True
+        elif key == ord("r"):
+            last_refresh = 0.0
+        elif key == curses.KEY_RESIZE:
+            needs_draw = True
+        elif key == curses.KEY_MOUSE:
+            try:
+                _, _, mouse_y, _, button_state = curses.getmouse()
+            except curses.error:
+                continue
+            index = offset + mouse_y - ROW_START
+            if 0 <= index < len(rows):
+                selected = index
+                needs_draw = True
+                if button_state & click_mask:
+                    focus(rows[selected])
+
+
+def main() -> None:
+    mark_sidebar_pane()
+    curses.wrapper(tui)
+
+
+if __name__ == "__main__":
+    main()

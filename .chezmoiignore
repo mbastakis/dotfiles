@@ -132,3 +132,12 @@ Documents/notes/.trash/
 Library/LaunchAgents/com.mbastakis.mail-sync.plist
 bin/switch-input-source
 {{- end }}
+
+{{- if ne .chezmoi.hostname .opencode.remote.host }}
+# OpenCode remote control runs only on its designated Mac.
+.config/oauth2-proxy/
+Library/LaunchAgents/com.mbastakis.opencode-server.plist
+Library/LaunchAgents/com.mbastakis.opencode-oauth2-proxy.plist
+bin/opencode-server
+bin/opencode-oauth2-proxy
+{{- end }}

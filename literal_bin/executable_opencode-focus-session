@@ -3,6 +3,7 @@ set -euo pipefail
 
 STATE_ROOT="${XDG_STATE_HOME:-$HOME/.local/state}/opencode/tmux-session-state"
 SESSION_DIR="$STATE_ROOT/sessions"
+PANE_DIR="$STATE_ROOT/panes"
 
 session_id=""
 pane_id=""
@@ -68,6 +69,26 @@ if [[ -z "$pane_id" && -n "$session_id" && -f "$SESSION_DIR/$(safe_name "$sessio
     if command -v jq >/dev/null 2>&1; then
         pane_id="$(jq -r '.tmuxPane // empty' "$SESSION_DIR/$(safe_name "$session_id").json" 2>/dev/null || true)"
     fi
+fi
+
+if [[ -z "$pane_id" && -n "$session_id" && -d "$PANE_DIR" && -x "$(command -v jq || true)" ]]; then
+    best_updated=0
+    for state_file in "$PANE_DIR"/*.json; do
+        [[ -f "$state_file" ]] || continue
+        state_session_id="$(jq -r '.sessionID // empty' "$state_file" 2>/dev/null || true)"
+        [[ "$state_session_id" == "$session_id" ]] || continue
+
+        candidate="$(jq -r '.tmuxPane // empty' "$state_file" 2>/dev/null || true)"
+        updated="$(jq -r '.lastUpdated // 0' "$state_file" 2>/dev/null || printf '0')"
+        [[ "$updated" =~ ^[0-9]+$ ]] || updated=0
+        [[ -n "$candidate" ]] || continue
+        tmux display-message -p -t "$candidate" '#{pane_id}' >/dev/null 2>&1 || continue
+
+        if [[ "$updated" -gt "$best_updated" ]]; then
+            pane_id="$candidate"
+            best_updated="$updated"
+        fi
+    done
 fi
 
 if [[ -z "$pane_id" ]]; then

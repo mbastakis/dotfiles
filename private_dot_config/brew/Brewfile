@@ -101,6 +101,7 @@ brew "node"
 brew "notmuch"
 brew "ollama"
 brew "anomalyco/tap/opencode"
+brew "oauth2_proxy"
 brew "openjdk"
 brew "opentofu"
 brew "p7zip"
@@ -173,7 +174,6 @@ cask "stats"
 cask "steam"
 cask "steermouse"
 cask "vivaldi"
-cask "whatsapp"
 
 # -----------------------------------------------------------------------------
 # Mac App Store Apps (via mas-cli)

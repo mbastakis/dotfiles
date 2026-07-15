@@ -102,6 +102,8 @@ export LC_ALL="en_US.UTF-8"
 
 {{- if eq .chezmoi.os "darwin" }}
 # Homebrew (macOS - Apple Silicon)
+export HOMEBREW_NO_ENV_HINTS=1
+export HOMEBREW_AUTO_UPDATE_SECS=86400
 [[ -d "/opt/homebrew/bin" ]] && PATH="/opt/homebrew/bin:$PATH"
 [[ -d "/opt/homebrew/sbin" ]] && PATH="/opt/homebrew/sbin:$PATH"
 {{- else if eq .chezmoi.os "linux" }}

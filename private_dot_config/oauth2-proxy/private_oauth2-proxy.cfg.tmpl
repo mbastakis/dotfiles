@@ -1,0 +1,45 @@
+http_address = "127.0.0.1:{{ .opencode.remote.proxy_port }}"
+reverse_proxy = true
+trusted_proxy_ips = ["127.0.0.1/32", "::1/128"]
+
+provider = "oidc"
+provider_display_name = "Authentik"
+oidc_issuer_url = "{{ .opencode.remote.oidc_issuer_url }}"
+client_id = "{{ .opencode.remote.oidc_client_id }}"
+client_secret = "{{ (bitwardenSecrets .opencode.remote.oidc_client_secret_id).value | trim }}"
+redirect_url = "{{ .opencode.remote.external_url }}/oauth2/callback"
+scope = "openid profile email groups"
+code_challenge_method = "S256"
+oidc_groups_claim = "groups"
+allowed_groups = ["{{ .opencode.remote.allowed_group }}"]
+email_domains = ["*"]
+insecure_oidc_allow_unverified_email = true
+insecure_oidc_skip_issuer_verification = false
+insecure_oidc_skip_nonce = false
+ssl_insecure_skip_verify = false
+
+upstreams = ["{{ .opencode.remote.server_url }}/"]
+proxy_websockets = true
+flush_interval = "100ms"
+pass_access_token = false
+pass_authorization_header = false
+pass_basic_auth = false
+pass_user_headers = false
+set_authorization_header = false
+set_xauthrequest = false
+
+cookie_name = "__Host-opencode"
+cookie_secret = "{{ (bitwardenSecrets .opencode.remote.cookie_secret_id).value | trim }}"
+cookie_secure = true
+cookie_httponly = true
+cookie_samesite = "lax"
+cookie_path = "/"
+cookie_expire = "168h"
+cookie_refresh = "9m"
+
+skip_provider_button = true
+skip_auth_preflight = false
+silence_ping_logging = true
+standard_logging = true
+auth_logging = true
+request_logging = false

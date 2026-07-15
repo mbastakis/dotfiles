@@ -31,7 +31,7 @@ Ubuntu Server 26.04's packaged Neovim 0.11 does not expose `vim.list.unique`, so
 
 When Neovim starts inside SSH, it switches the `+` and `*` clipboard providers to Neovim's built-in OSC52 provider. This keeps the shared `clipboard=unnamedplus` behavior while letting yanks from remote Neovim reach the workstation terminal clipboard through Ghostty/tmux.
 
-_Reference: `infra/ansible/roles/terminal_comfort/tasks/main.yml:67`, `private_dot_config/nvim/lua/config/options.lua:6`_
+_Reference: `infra/atlas/ansible/roles/terminal_comfort/tasks/main.yml:67`, `private_dot_config/nvim/lua/config/options.lua:6`_
 
 ## Core Configuration
 

@@ -61,7 +61,7 @@ The desired future state where atlas configuration after OS installation is appl
 _Avoid_: hand-managed server, snowflake configuration
 
 **Source-only Ansible automation**:
-The Ansible inventory, playbooks, roles, and helper scripts for personal servers live under `infra/ansible/` in this repository but are ignored by chezmoi so they are not deployed to `~/`. atlas is one managed host in that structure, not the whole automation namespace.
+The Ansible inventory, playbooks, roles, and helper scripts for personal servers live under `infra/atlas/ansible/` in this repository but are ignored by chezmoi so they are not deployed to `~/`. atlas is one managed host in that structure, not the whole automation namespace.
 _Avoid_: deployed dotfiles, target home directory state
 
 **Initial atlas configuration**:
@@ -97,8 +97,16 @@ The TrueNAS SCALE homeserver used primarily as the durable storage appliance for
 _Avoid_: general Docker host, atlas replacement
 
 **TrueNAS minimal apps**:
-The intentionally small app set that belongs on **truenas** because it directly serves storage workflows. The current target set is Tailscale, Syncthing, FileBrowser Quantum, and Backrest.
+The intentionally small app set that belongs on **truenas** because it directly serves storage workflows. The current target set is Tailscale, Syncthing, FileBrowser Quantum, Backrest, and Audiobookshelf. Audiobookshelf is storage-adjacent because its SQLite state and media library must remain on local storage.
 _Avoid_: full homelab stack, arbitrary app hosting
+
+**Audiobookshelf service**:
+The private mobile audiobook and ebook service hosted as a pinned TrueNAS community catalog app. Its SQLite database, metadata, and built-in backup archives use separate local app datasets; the durable book library uses a read-only host-path mount. A bounded API reconciler owns the BWS-backed root bootstrap, stable server/scanner settings, `/books` library and settings, backup policy, and native Authentik OIDC settings. Authentik auto-launch is the normal login path; local authentication remains available for reconciliation and break-glass recovery.
+_Avoid_: SQLite on NFS, writable media mount without an ingestion requirement, public internet exposure, claiming integrated ebook text-to-speech support
+
+**TrueNAS books dataset**:
+The durable `pool_4tb/homeserver/data/books` library for DRM-free audiobooks and ebooks consumed by Audiobookshelf. Related audio and EPUB files may share one item directory. Audiobookshelf mounts the dataset read-only; imports are an explicit operator workflow rather than application-owned mutation.
+_Avoid_: media inside an app-private ixVolume, database files mixed with books, DRM bypass, assuming Audiobookshelf modifies or converts ebooks
 
 **TrueNAS configuration as code**:
 The desired state where repeatable TrueNAS settings are managed from this repository through API-backed infrastructure code and version-controlled workload files, with TrueNAS config backups kept as a recovery layer rather than the primary source of truth.
@@ -137,8 +145,20 @@ A small source-controlled automation path that applies **TrueNAS catalog app** d
 _Avoid_: manual catalog clicks, untracked UI values, provider-blocked app management
 
 **TrueNAS app declaration**:
-A repository-owned YAML file under `infra/truenas/apps/` that declares one catalog app installation: app name, catalog app identifier, train, version policy, and non-secret values. The **TrueNAS app automation wrapper** applies these declarations idempotently and never treats app runtime data as disposable.
+A versioned repository-owned YAML file under `infra/truenas/apps/` that declares bounded ownership of one catalog app installation: stable app ID, catalog app identifier, train, version policy, non-secret values, and typed secret references. The **TrueNAS app automation wrapper** applies these declarations idempotently and never treats app runtime data as disposable.
 _Avoid_: screenshots as config, undocumented UI forms, secret-bearing app YAML
+
+**Versioned homeserver desired state**:
+A YAML contract for TrueNAS apps, periodic snapshots, Backrest policy, Syncthing, or secret metadata that declares `schema_version`, a bounded ownership scope, and stable resource IDs. Pydantic models and committed JSON Schemas validate these contracts offline before any reconciler contacts a live service.
+_Avoid_: unversioned YAML, implicit ownership, validation that requires a live API
+
+**Homeserver operation plan**:
+A secret-safe ordered list of create, update, explicit delete, stale, warning, and unchanged operations keyed by ownership scope and stable resource ID. It may identify changed fields and logical secret aliases but never includes before/after secret values; stale resources require a separate explicit prune/delete decision.
+_Avoid_: raw payload dumps, implicit deletion, secret-bearing plan output
+
+**Typed homeserver reconciler**:
+The Python read/normalize/compare/plan/apply implementation behind a Task command for BWS injection, TrueNAS snapshots/apps/API keys, Backrest, or Syncthing. It compares only bounded code-owned fields, preserves runtime-owned and unmanaged state, uses timeouts and structured failures, and retains the former shell implementation only as an explicit rollback path.
+_Avoid_: shell-owned API parsing, unconditional update scripts, deleting undeclared runtime objects
 
 **Pinned TrueNAS app version**:
 The explicit catalog app version committed in a **TrueNAS app declaration**. New app declarations may start from the catalog's current latest version, but the committed declaration pins that version so later upgrades are deliberate repository changes.
@@ -153,7 +173,7 @@ Bitwarden Secrets Manager is the canonical source for homeserver deployment secr
 _Avoid_: committed `.env` files, hand-maintained server-only secrets, duplicating the same secret in multiple stores
 
 **Homeserver secret alias**:
-A stable repository-visible logical name for a Bitwarden Secrets Manager secret. The repository may commit aliases, human-readable path-style BWS names, BWS IDs, and intended environment-variable wiring, but never secret values. Automation resolves aliases by BWS ID so code stays readable without relying on mutable names at runtime.
+A stable repository-visible logical name for a Bitwarden Secrets Manager secret. Typed `secret_ref` objects contain only this alias. The repository may commit aliases, human-readable path-style BWS names, BWS IDs, owner/lifecycle metadata, and intended environment-variable wiring, but never secret values. Automation resolves aliases by BWS ID so code stays readable without relying on mutable names at runtime.
 _Avoid_: inline raw UUIDs throughout templates, resolving production secrets only by mutable display name, committing secret values, duplicating one secret under many aliases
 
 **Homeserver secret helper**:
@@ -272,6 +292,30 @@ _Avoid_: promising per-OIDC-user filesystem isolation before it exists, treating
 The boundary where storage-adjacent services run on **truenas** against local datasets, while access and identity services run on **atlas** as the private entry layer. It avoids making **truenas** the general access-control host and avoids serving NAS data through fragile network mounts on **atlas**.
 _Avoid_: atlas-mounted NAS data as the app source of truth, truenas as the identity/control-plane host, splitting one storage workflow across unnecessary hosts
 
+**Immich compute/storage exception**:
+The service-placement exception where CPU-only Immich compute, Postgres, Valkey, generated media, and machine-learning cache run on **atlas**, while durable Immich media is stored in one fail-closed NFS-mounted **Immich media dataset** on **truenas**. A mount-bound systemd service must verify the real NFS source and repository-owned sentinel before Docker Compose starts. This is a narrow application-specific exception justified by Immich's supported NAS media model; it does not make network-mounted storage the default for atlas applications and never places Postgres or Valkey on NFS.
+_Avoid_: general atlas NAS mounts, Postgres on NFS, Immich as a TrueNAS catalog app, assuming unsupported GPU acceleration
+
+**Immich media dataset**:
+The durable TrueNAS dataset intended for Immich originals, library-managed media, profiles, sidecars, and logical database dumps. It is the only photo dataset exported to atlas, and the export must be host-restricted, map access to the TrueNAS apps identity, and fail closed when the real mount or repository-managed sentinel is absent.
+_Avoid_: exporting the parent photos dataset, generated thumbnails on TrueNAS, an optional or soft NFS mount, direct writes into Immich-managed directories outside supported import paths
+
+**Immich local runtime data**:
+The Immich state that remains on atlas's local `/home` HDD: Postgres, Valkey, thumbnails, encoded video, and machine-learning cache. Postgres and Valkey require local storage; thumbnails, encoded video, and models are regenerable and are intentionally excluded from S3 backup. The HDD and reduced performance are accepted explicitly rather than described as SSD-equivalent.
+_Avoid_: database on NFS, backing up regenerable media, describing atlas's rotating data disk as SSD
+
+**Immich server configuration**:
+The Ansible-rendered, read-only `IMMICH_CONFIG_FILE` that makes global Immich settings code-owned. It defines storage organization, database-dump policy, CPU-heavy job concurrency, software-transcoding limits, and native Authentik OIDC. Because it contains the BWS-injected OIDC client secret, the host file is mode `0600` and readable by the UID-1000 container user. Per-user records, OIDC links and roles after creation, storage labels, mobile permissions, and selected device albums remain runtime-owned.
+_Avoid_: changing locked global settings through the UI, managing mobile-device choices as server config, committing the OIDC secret or leaving its rendered file world-readable
+
+**Apple original archive**:
+The permanent TrueNAS archive of unmodified Apple media, XMP sidecars, migration manifests, checksums, and reports. It preserves source originals and known migration losses but is not registered as an Immich external library and is never exported to atlas through the Immich NFS share. A private, non-browsable SMB export may expose only this dataset to `mbastakis` during migration; that export is code-managed, maps writes to `apps:apps`, and is removed after migration and restore acceptance.
+_Avoid_: Apple Photos library package as the permanent archive, permanent migration SMB access, Immich external library, direct iCloud scraping, deleting iCloud before restore acceptance
+
+**Immich rendition-preserving import**:
+The manifest-selected media set uploaded from the Apple original archive into Immich. It retains every validated unmodified original and rendered edit, including separate Cinematic renditions and valid original/edited Live Photo pairs, while excluding AAE recipes, JSON reports, quarantined failures, and invalid media. A post-upload official API pass maps favorites and regular album membership from source UUIDs and tests grouping original/edit sets with the rendered edit as the primary Immich stack asset.
+_Avoid_: dropping originals or rendered edits to suppress duplicates, uploading the archive tree without validation, treating XMP rating as an Immich favorite, deriving albums from UUID folders
+
 **Atlas homeserver app stack**:
 The access and identity application layer on **atlas**, managed separately from base operating-system configuration. It is where private web ingress and central identity live, while user-owned NAS files remain on **truenas**.
 _Avoid_: bundling all app decisions into base provisioning, putting identity on truenas, storing NAS user files on atlas
@@ -333,8 +377,12 @@ The temporary `pool_4tb/backups/atlas/...` data that carried files from the old 
 _Avoid_: treating migration staging as disaster-recovery backup, keeping stale backup folders forever, building new architecture around temporary paths
 
 **Initial TrueNAS backup scope**:
-The first datasets that need off-NAS backup: Obsidian and personal/household files, sized for a practical low-cost S3 target under roughly $5/month with review around $10/month. App config datasets are not part of the initial off-NAS backup scope because the goal is to recreate app configuration from code; app runtime data can be added later only when it becomes user-owned or expensive to recreate. Large photo/media archives are future scope and should not be silently included in phase 1.
+The first datasets that need off-NAS backup: Obsidian and personal/household files, sized for a practical low-cost S3 target under roughly $5/month with review around $10/month. App config datasets are not normally part of the off-NAS scope because code recreates configuration. Audiobookshelf's small weekly application backup is an explicit exception because it contains user-owned listening/reading progress. Its book media is backed up monthly. The **Immich media dataset** and **Apple original archive** are a separately gated photo-backup expansion, not a silent extension of this initial scope.
 _Avoid_: backup everything blindly, backup code-recreatable state first, app cache backup, adding bulk photos without a new cost/scope decision
+
+**Photo backup expansion**:
+The separately approved extension of the existing `homeserver-s3` restic repository to the **Immich media dataset** and **Apple original archive** after source inventory, TrueNAS capacity, staging capacity, and projected S3 cost have been recorded and accepted. Shared-repository deduplication is useful but must not be assumed when evaluating the conservative cost gate.
+_Avoid_: treating the active restic repository as unlimited storage, relying on deduplication to pass the cost gate, backing up generated Immich data, starting migration before restore acceptance
 
 **TrueNAS backup runner**:
 The automation that runs on **truenas** to back up selected local datasets directly to S3 with restic. It reads local dataset host paths and avoids requiring atlas or a workstation to mount TrueNAS data just to perform NAS backups.
@@ -361,7 +409,7 @@ The cost-optimized S3 storage policy for the active restic repository. Objects m
 _Avoid_: lifecycle-to-Deep-Archive, async restore requirement, frequent full repository reads, S3 lifecycle deletion of restic objects, treating the phase-1 repo as an unlimited photo archive
 
 **Homeserver Terraform stack**:
-A separately initialized Terraform root module under `infra/terraform/` with its own S3 state key. `bootstrap` manages the shared OpenTofu S3 backend bucket, `dns` manages the Route53 hosted zone and homeserver service records, `aws-foundation` manages AWS backup bucket/IAM, `truenas` manages supported TrueNAS configuration, and `authentik` manages Authentik desired configuration after the service is reachable. Separate states keep backend, DNS, AWS foundation, TrueNAS, and identity changes independently applicable.
+A separately initialized OpenTofu root module under its operational domain with its own S3 state key. `infra/aws/stacks/bootstrap` manages the shared backend bucket, `infra/aws/stacks/dns` manages Route53, `infra/aws/stacks/foundation` manages AWS backup bucket/IAM, `infra/truenas/tofu` manages supported TrueNAS configuration, and `infra/identity/authentik/tofu` manages Authentik desired configuration after the service is reachable. Separate states keep backend, DNS, AWS foundation, TrueNAS, and identity changes independently applicable.
 _Avoid_: monolithic homeserver state, mixed DNS/AWS/NAS/identity blast radius, shared state key
 
 **OpenTofu homeserver workflow**:
@@ -391,6 +439,70 @@ _Avoid_: chat-only summary, temporary extraction, unsaved page read
 **Crawl boundary**:
 The explicit scope that defines completeness for a **crawl pipeline**, such as URLs under a start path, a requested whole same-domain crawl, a supplied URL list, or an adaptive query boundary. Exhaustiveness means every reachable page inside this boundary is crawled, skipped with reason, or failed with reason; it does not mean unbounded whole-web crawling.
 _Avoid_: absolute all pages, implicit whole domain, open-ended web crawl
+
+## Task Management
+
+**Taskwarrior task replica**:
+A local copy of the complete task database on each device (Mac, iPhone) that works offline and shares operations when it next syncs. All replicas are equal peers; none is the master. The Mac and iPhone each hold a full replica; the sync server holds only encrypted operation blobs.
+_Avoid_: client, slave, cache, thin client
+
+**TaskChampion sync server**:
+The official Rust sync backend for Taskwarrior 3.x, running as a Docker container on **atlas** behind Traefik. It stores opaque encrypted operation blobs in SQLite and cannot read task data. It is a **Homeserver infra surface** (Michail-only, no OIDC), not a household web app.
+_Avoid_: taskd, Taskserver, sync master, Authentik-gated task service
+
+**TaskChampion sync data**:
+The encrypted blobs stored by the **TaskChampion sync server** on atlas local disk as a single SQLite file. The server cannot decrypt them; only replicas holding the **sync encryption secret** can. It is small and already encrypted, making it cheap to back up without plaintext exposure.
+_Avoid_: task database, plaintext task store, NAS-mounted live sync data
+
+**Sync encryption secret**:
+The client-side AEAD encryption key for TaskChampion sync, set via `sync.encryption_secret` in `.taskrc` and shared by all replicas of one task database. The sync server never possesses it. It is a **Homeserver secret** sourced from Bitwarden Secrets Manager and rendered into `.taskrc` by a chezmoi template on the Mac and by Ansible on atlas. The iPhone receives it typed manually into Taskchamp.
+_Avoid_: client.key, taskd key, sync password, hardcoded encryption secret
+
+**Sync client ID**:
+A per-device UUID that identifies a replica to the **TaskChampion sync server**. It is not a secret — it is provisioning data hardcoded in the Mac chezmoi template and in atlas Ansible vars. After bootstrap, the server's `CLIENT_ID` allowlist locks access to the known UUIDs with `CREATE_CLIENTS=false`.
+_Avoid_: sync token, auth token, BWS-stored client ID
+
+**Task sync endpoint**:
+The Traefik-fronted TLS endpoint for the **TaskChampion sync server**, reached over **Tailscale private access** at a **Private Route53 service name** (e.g. `tasks.mbastakis.com`) with a real Let's Encrypt certificate via **Private TLS automation**. iOS requires a WebPKI-trusted cert; a Tailscale internal CA is not accepted by Taskchamp.
+_Avoid_: public task API, OIDC-gated sync endpoint, self-signed task cert
+
+**TaskChampion sync backup**:
+The backup layer for **TaskChampion sync data**: a scheduled copy of the SQLite file to a truenas dataset for fast local restore, plus restic to the **TrueNAS disaster-recovery backup** S3 bucket for off-NAS disaster recovery. Total sync-server loss is survivable by re-seeding from a replica.
+_Avoid_: NAS-mounted live sync data, sync server as the only durability layer
+
+**Task board column model**:
+The way Kanban columns map to Taskwarrior fields. The initial model is stock status + active: `todo` = pending and not started, `doing` = pending and started (`task start`), `done` = completed. This uses only core Taskwarrior fields, so every replica including iOS **Taskchamp** can fully participate. Richer column systems are future scope and may use UDAs or derived views, but are not the initial model.
+_Avoid_: separate board database, tags-as-columns, project-as-columns
+
+**Task view layer**:
+A visualization over **Taskwarrior task** data that renders different layouts from `task export` without creating a second task database. A Kanban board is one **task view layer**; an Eisenhower Matrix (quadrants derived from `priority` and `due`) is another. The view layer reads Taskwarrior fields and writes back through `task <uuid> modify`, so CLI, TUI, web, and iOS all share one source of truth. It is distinct from the **TaskChampion sync server**, which is transport, not presentation.
+_Avoid_: board app, separate task store, Kanban database, synced board state
+
+**Task web app**:
+The **task view layer** implementation: a thin web application on **atlas** that shells out to a headless `task` replica on atlas and serves board views (Kanban, future Eisenhower) through **Private web app ingress** behind **Central homeserver identity**. It is accessed from Mac and iOS browsers over **Tailscale private access** at a **Private Route53 service name**. It is not a sync endpoint and does not replace the native iOS client for list/sort/capture.
+_Avoid_: task API server, second task database, iOS Kanban app, board sync
+
+**taskwarrior-tui**:
+The Mac terminal task interface — an actively maintained Rust TUI that shells out to `task export` and writes back through `task modify`. It provides vim-like navigation, live filters, configurable keybindings, multi-selection, and Taskwarrior color integration. It is Taskwarrior 3.x / TaskChampion compatible and is the daily driver for terminal triage. It is not a **task view layer** and does not render Kanban.
+_Avoid_: vit, taskell, board TUI, task GUI
+
+**Atlas headless task replica**:
+A **Taskwarrior task replica** running on **atlas** without a TUI or interactive user. It exists so the **task web app** can shell out to `task export` and `task modify` server-side. It syncs with the **TaskChampion sync server** using the same **sync encryption secret** as the Mac and iPhone. It is the third replica in the system, not a daily driver. It should not run Taskwarrior hooks that are only meaningful on an interactive workstation.
+_Avoid_: atlas task master, atlas as primary task store, interactive atlas task session
+
+## Dashboard
+
+**Homepage dashboard**:
+A static dashboard application (gethomepage.dev) running on **atlas** as a Docker container in the **Atlas homeserver app stack**, behind **Private web app ingress** at a **Private Route53 service name** (`home.mbastakis.com`). It provides a link directory and status widgets for all homeserver services across atlas and truenas, including infra surfaces. It has no built-in authentication and relies solely on **Tailscale private access** for access control in phase 1; every linked service remains the auth boundary through its own credentials or OIDC. Its configuration is **Ansible-owned** and lives as templated YAML files in the atlas homeserver config directory.
+_Avoid_: Authentik-gated dashboard, public dashboard, household-facing portal, per-user conditional dashboard
+
+**Homepage config**:
+The Ansible-managed YAML configuration directory for the **Homepage dashboard** on atlas, containing `services.yaml`, `settings.yaml`, `bookmarks.yaml`, `widgets.yaml`, and a custom CSS file for Catppuccin Mocha theming. Widget secrets are injected through `HOMEPAGE_VAR_*` environment variables from a dedicated BWS target. The background image is downloaded locally by Ansible and served from the config volume, not from a remote URL.
+_Avoid_: Docker-label discovery config, committed secrets in YAML, chezmoi-managed dashboard config
+
+**TrueNAS API key automation**:
+The code-managed creation of a TrueNAS API key through a `null_resource` with a `local-exec` provisioner that calls `midclt call api_key.create` over the existing TrueNAS SSH bootstrap path. The returned key value is stored in BWS and consumed by the **Homepage dashboard** TrueNAS widget. The `deevus/truenas` Terraform provider does not expose an `api_key` resource, so the `null_resource` bridges the gap until native provider support exists. The implementation handles the generated key transiently in the provisioner and does not intentionally persist it in OpenTofu state; only the BWS project/key metadata and TrueNAS connection metadata are in state. The resource is `prevent_destroy` to avoid accidental key loss.
+_Avoid_: manual UI-only API key creation, committed API key in YAML, provider-blocked automation as an excuse for no code management
 
 ## Example Dialogue
 

@@ -20,13 +20,16 @@ flowchart TD
   D --> D3[Deploy files, dirs, symlinks]
 
   E --> E1[03 - setup tasks<br/>run_once]
-  E --> E2[05 - ghostty-tmux agent<br/>run_onchange]
-  E --> E3[06 - Ghostty Cmd+H override<br/>run_once]
-  E --> E4[07 - mail runtime dirs<br/>run_once]
-  E --> E5[07 - mail maildirs<br/>run_onchange]
-  E --> E6[08 - mail-sync LaunchAgent reload<br/>run_onchange]
-  E --> E7[09 - install/update Pi<br/>run_after]
-  E --> E8[macos-settings<br/>run_once]
+  E --> E2[04 - work Tailscale DNS<br/>run_after]
+  E --> E3[05 - ghostty-tmux agent<br/>run_onchange]
+  E --> E4[06 - Ghostty Cmd+H override<br/>run_once]
+  E --> E5[07 - mail runtime dirs<br/>run_once]
+  E --> E6[07 - mail maildirs<br/>run_onchange]
+  E --> E7[08 - mail-sync LaunchAgent reload<br/>run_onchange]
+  E --> E8[08 - task-sync LaunchAgent reload<br/>run_onchange]
+  E --> E9[09 - install Pi<br/>run_once]
+  E --> E10[10 - OpenCode server/proxy reload + Tailscale Serve<br/>run_onchange]
+  E --> E11[macos-settings<br/>run_once]
 ```
 
 _Reference: `AGENTS.md:42`_
@@ -49,7 +52,7 @@ _Reference: `.chezmoiscripts/run_once_before_01-install-bws.sh.tmpl:1`_
 
 ### 02 - Install Packages (`run_onchange`)
 
-Runs `brew bundle` from the Brewfile. Re-runs when Brewfile content hash changes. Self-bootstraps Homebrew if missing. Detects non-interactive shells and skips Mac App Store installs (avoids password prompts in headless sessions).
+Stages the formula-level Homebrew trust allowlist, then runs `brew bundle` from the Brewfile. Re-runs when either managed file changes. Self-bootstraps Homebrew if missing. Detects non-interactive shells and skips Mac App Store installs (avoids password prompts in headless sessions).
 
 _Reference: `.chezmoiscripts/run_onchange_before_02-install-packages.sh.tmpl:1`_
 
@@ -75,6 +78,14 @@ One-time post-deploy tasks:
 All operations use graceful degradation (`|| true`).
 
 _Reference: `.chezmoiscripts/run_once_after_03-setup.sh.tmpl:1`_
+
+### 04 - Work Tailscale DNS (`run_after`)
+
+On macOS DT work profiles, runs `tailscale set --accept-dns=false` after every apply. This leaves Harmony SASE or the local network as the system DNS authority while retaining Tailscale peer routes, avoiding DNS forwarding between the two VPN extensions. It does not start or stop either VPN; if the Tailscale CLI or backend is unavailable, the script leaves the apply successful and retries on the next apply.
+
+Client-side MagicDNS names are unavailable with this setting; Route53-backed `*.mbastakis.com` names and direct Tailscale IPs continue to work. When both VPNs need to be started, connect Tailscale first and Harmony second. If Tailscale cannot reconnect to its control plane while Harmony is active, disconnect Harmony briefly, bring Tailscale online, then reconnect Harmony.
+
+_Reference: `.chezmoiscripts/run_after_04-configure-tailscale-dns.sh.tmpl:1`_
 
 ### 05 - Ghostty-tmux LaunchAgent (`run_onchange`)
 
@@ -116,13 +127,27 @@ Reloads `com.mbastakis.mail-sync` LaunchAgent when plist template content or con
 
 _Reference: `.chezmoiscripts/run_onchange_after_08-mail-sync-launchagent.sh.tmpl:1`_
 
-### 09 - Install/Update Pi (`run_after`)
+### 08 - Taskwarrior Sync LaunchAgent Reload (`run_onchange`)
 
-Installs or updates the Pi coding agent from the official npm package `@earendil-works/pi-coding-agent@latest`. Runs after each apply so new npm `latest` releases are picked up automatically, but compares the installed package version first and exits without changes when Pi is current.
+Reloads `com.mbastakis.task-sync` LaunchAgent when the plist, wrapper script, or configured sync interval changes. Guards on plist existence and GUI domain availability, then uses `launchctl bootout` + `launchctl bootstrap`.
+
+_Reference: `.chezmoiscripts/run_onchange_after_08-task-sync-launchagent.sh.tmpl:1`_
+
+### 09 - Install Pi (`run_once`)
+
+Installs the Pi coding agent from the official npm package `@earendil-works/pi-coding-agent@latest` once during `chezmoi apply`. The script still checks whether the installed package is up to date before installing, but it runs only once by script type and does not re-run on subsequent applies.
+
+Use `npm install -g --ignore-scripts @earendil-works/pi-coding-agent@latest` manually whenever you want to upgrade Pi.
 
 The install uses `npm install -g --ignore-scripts` to match Pi's documented npm installation path and avoid npm lifecycle scripts. If npm or node are unavailable, or npm's registry cannot be reached, the script logs a warning and leaves the system unchanged.
 
-_Reference: `.chezmoiscripts/run_after_09-install-pi.sh.tmpl:1`_
+_Reference: `.chezmoiscripts/run_once_after_09-install-pi.sh.tmpl:1`_
+
+### 10 - OpenCode Remote Control (`run_onchange`)
+
+On the designated Mac only, reloads the OpenCode server and oauth2-proxy LaunchAgents, then persists a Tailscale Serve HTTPS route to the authenticated proxy on loopback port `4180`. Reloading waits for both the old launchd registration and process to finish before bootstrapping the same label, retries registration, and requires the OpenCode and oauth2-proxy health endpoints to pass. This prevents a rapid `bootout`/`bootstrap` race from leaving the proxy loaded without its backend. The Serve endpoint is the verified tailnet backend for Atlas's `code.mbastakis.com` route; the raw OpenCode backend remains loopback-only on port `4096`. Re-runs when either plist, wrapper, proxy template, external URL, or configured proxy port changes.
+
+_Reference: `.chezmoiscripts/run_onchange_after_10-opencode-remote.sh.tmpl:1`_
 
 ### macOS Settings (`run_once`)
 

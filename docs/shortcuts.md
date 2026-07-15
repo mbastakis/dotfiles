@@ -17,6 +17,28 @@ flowchart LR
 
 A keystroke passes through each layer in sequence. Karabiner processes physical key events first (home row mods, hyper key), Ghostty handles terminal-level bindings, tmux intercepts its prefix and pass-through sequences, zsh processes shell keybindings, and then app-level bindings apply in NeoMutt or Neovim.
 
+## Sisyphus (Web App Layer)
+
+Sisyphus shortcuts are ignored while typing in form fields. `Enter` opens the edit dialog when a task card has keyboard focus. The edit drawer intercepts `Escape` so unsaved changes receive the same discard confirmation as its close controls.
+
+| Key | Action | Source |
+| --- | --- | --- |
+| `N` | Focus quick-add task description | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
+| `/` | Open sidebar and focus search | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
+| `B` | Toggle sidebar | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
+| `S` | Sync now | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
+| `R` | Refresh board | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
+| `E` | Expand all columns | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
+| `C` | Collapse empty columns | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
+| `G` | Focus the first visible task card | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
+| `J` / `K`, `Down` / `Up` | Focus the next/previous card in a column | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
+| `H` / `L`, `Left` / `Right` | Focus a card in the previous/next visible column | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
+| `Shift-H` / `Shift-L`, `Shift-Left` / `Shift-Right` | Move the focused task one column | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
+| `1` through `5` | Move the focused task to Backlog, Ready, Doing, Waiting, or Done | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
+| `X` | Collapse or expand the focused card's column | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
+| `?` | Show/hide shortcuts panel | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
+| `Enter` | Edit focused card | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
+
 ## Karabiner (Keyboard Layer)
 
 ### Home Row Mods (GASC)
@@ -49,27 +71,27 @@ _Reference: `private_dot_config/private_karabiner/src/rules/15-hyper-navigation.
 | `Cmd+D`          | Split horizontal (`prefix`, `h`)     | `private_dot_config/ghostty/config:72`  |
 | `Cmd+Shift+D`    | Split vertical (`prefix`, `v`)       | `private_dot_config/ghostty/config:73`  |
 | `Cmd+P`          | Floax/floating window (`prefix`, `P`) | `private_dot_config/ghostty/config:74` |
-| `Cmd+S`          | Sesh session picker (`prefix`, `s`)  | `private_dot_config/ghostty/config:74`  |
-| `Cmd+H`          | Previous tmux window (`prefix`, `p`) | `private_dot_config/ghostty/config:75` |
-| `Cmd+L`          | Next tmux window (`prefix`, `n`)     | `private_dot_config/ghostty/config:76`  |
-| `Cmd+R`          | Rename tmux window (`prefix`, `,`)   | `private_dot_config/ghostty/config:77`  |
-| `Cmd+Shift+R`    | Rename tmux session (`prefix`, `R`)  | `private_dot_config/ghostty/config:78`  |
-| `Cmd+O`          | OpenCode split (`prefix`, `o`)       | `private_dot_config/ghostty/config:80`  |
-| `Cmd+Shift+O`    | OpenCode session picker (`prefix`, `O`) | `private_dot_config/ghostty/config:81` |
-| `Cmd+G`          | Lazygit popup (`prefix`, `G`)        | `private_dot_config/ghostty/config:82`  |
-| `Cmd+Shift+T`    | New Ghostty OS window                | `private_dot_config/ghostty/config:85`  |
-| `Cmd+Shift+W`    | Close Ghostty OS window              | `private_dot_config/ghostty/config:86`  |
-| `Cmd+Backspace`  | Delete to start of line (Ctrl+U)     | `private_dot_config/ghostty/config:89`  |
-| `Ctrl+Shift+T`   | Send `ESC[202~` to zsh               | `private_dot_config/ghostty/config:92`  |
-| `Ctrl+Tab`       | _(pass-through to tmux)_             | `private_dot_config/ghostty/config:95`  |
-| `Ctrl+Shift+Tab` | _(pass-through to tmux)_             | `private_dot_config/ghostty/config:96`  |
-| `Cmd+Left`       | Home (line start)                    | `private_dot_config/ghostty/config:99`  |
-| `Cmd+Right`      | End (line end)                       | `private_dot_config/ghostty/config:100` |
-| `Cmd+Shift+E`    | Write screen to file + open          | `private_dot_config/ghostty/config:103` |
-| `Shift+Enter`    | CSI 13;2u                            | `private_dot_config/ghostty/config:106` |
-| `Super+0`        | Reset font size                      | `private_dot_config/ghostty/config:109` |
-| `Super+Shift+]`  | Increase font size                   | `private_dot_config/ghostty/config:110` |
-| `Super+-`        | Decrease font size                   | `private_dot_config/ghostty/config:111` |
+| `Cmd+S`          | Sesh session picker (`prefix`, `s`)  | `private_dot_config/ghostty/config:75`  |
+| `Cmd+H`          | Previous tmux window (`prefix`, `p`) | `private_dot_config/ghostty/config:76` |
+| `Cmd+L`          | Next tmux window (`prefix`, `n`)     | `private_dot_config/ghostty/config:77`  |
+| `Cmd+R`          | Rename tmux window (`prefix`, `,`)   | `private_dot_config/ghostty/config:78`  |
+| `Cmd+Shift+R`    | Rename tmux session (`prefix`, `R`)  | `private_dot_config/ghostty/config:79`  |
+| `Cmd+O`          | OpenCode split (`prefix`, `o`)       | `private_dot_config/ghostty/config:81`  |
+| `Cmd+Shift+O`    | Toggle OpenCode session sidebar (`prefix`, `O`) | `private_dot_config/ghostty/config:82` |
+| `Cmd+G`          | Lazygit popup (`prefix`, `G`)        | `private_dot_config/ghostty/config:83`  |
+| `Cmd+Shift+T`    | New Ghostty OS window                | `private_dot_config/ghostty/config:86`  |
+| `Cmd+Shift+W`    | Close Ghostty OS window              | `private_dot_config/ghostty/config:87`  |
+| `Cmd+Backspace`  | Delete to start of line (Ctrl+U)     | `private_dot_config/ghostty/config:90`  |
+| `Ctrl+Shift+T`   | Send `ESC[202~` to zsh               | `private_dot_config/ghostty/config:93`  |
+| `Ctrl+Tab`       | _(pass-through to tmux)_             | `private_dot_config/ghostty/config:96`  |
+| `Ctrl+Shift+Tab` | _(pass-through to tmux)_             | `private_dot_config/ghostty/config:97`  |
+| `Cmd+Left`       | Home (line start)                    | `private_dot_config/ghostty/config:100` |
+| `Cmd+Right`      | End (line end)                       | `private_dot_config/ghostty/config:101` |
+| `Cmd+Shift+E`    | Write screen to file + open          | `private_dot_config/ghostty/config:104` |
+| `Shift+Enter`    | CSI 13;2u                            | `private_dot_config/ghostty/config:107` |
+| `Super+0`        | Reset font size                      | `private_dot_config/ghostty/config:110` |
+| `Super+Shift+]`  | Increase font size                   | `private_dot_config/ghostty/config:111` |
+| `Super+-`        | Decrease font size                   | `private_dot_config/ghostty/config:112` |
 
 Ghostty remaps `Hide Ghostty` to `Ctrl+Option+Cmd+H` via `.chezmoiscripts/run_once_after_06-ghostty-hide-shortcut.sh.tmpl` so `Cmd+H` reaches tmux navigation while other apps keep the macOS default hide shortcut.
 
@@ -85,7 +107,7 @@ Prefix: **`Ctrl-a`** everywhere. In a local tmux pane attached to remote tmux ov
 | `prefix + x`         | Kill pane (no confirm) | `private_dot_config/tmux/tmux.conf:27` |
 | `prefix + p`         | Previous window        | `private_dot_config/tmux/tmux.conf:28` |
 | `prefix + o`         | OpenCode split (auth-aware launcher)   | `private_dot_config/tmux/tmux.conf:32` |
-| `prefix + O`         | OpenCode session picker | `private_dot_config/tmux/tmux.conf:95` |
+| `prefix + O`         | Toggle OpenCode session sidebar | `private_dot_config/tmux/tmux.conf:95` |
 | `prefix + G`         | Lazygit popup (90% overlay) | `private_dot_config/tmux/tmux.conf:33` |
 | `Ctrl+Tab`           | Next window            | `private_dot_config/tmux/tmux.conf:11` |
 | `Ctrl+Shift+Tab`     | Previous window        | `private_dot_config/tmux/tmux.conf:12` |
@@ -95,6 +117,8 @@ Prefix: **`Ctrl-a`** everywhere. In a local tmux pane attached to remote tmux ov
 | `y` (copy mode)      | Copy selection   | `private_dot_config/tmux/tmux.conf:32` |
 | `Escape` (copy mode) | Cancel           | `private_dot_config/tmux/tmux.conf:29` |
 | Arrow keys           | Resize pane      | `private_dot_config/tmux/tmux.conf:38` |
+
+The OpenCode sidebar starts collapsed on a fresh tmux server. Opening it focuses the sidebar. While open, click a session row or select it with `j`/`k` and `Enter`; press `q` or `Escape` to hide it. Closing preserves the currently focused application pane, or returns to the pre-sidebar pane when the sidebar itself is still focused, while restoring the exact pre-sidebar layout. If the last application pane in a window closes, its sidebar closes too instead of remaining fullscreen.
 
 ### Harpoon (tmux-harpoon)
 
@@ -119,12 +143,13 @@ Prefix: **`Ctrl-a`** everywhere. In a local tmux pane attached to remote tmux ov
 | ------------ | --------------------------------------------- |
 | `prefix + s` | Session picker (sesh + gum popup)             |
 | `prefix + R` | Rename session (gum input popup)              |
+| `prefix + O` | Toggle the mouse-aware OpenCode session sidebar |
 
 ## Zsh (Shell Layer)
 
 atlas receives a server-safe subset of these Zsh bindings through Ansible, including `Ctrl+F`, `Ctrl+J`, `Ctrl+Shift+T`, `Ctrl+Z`, word movement, and Home/End. Workstation-only integrations such as Atuin, Zinit plugins, and macOS clipboard bindings are not deployed to atlas.
 
-_Atlas reference: `infra/ansible/roles/terminal_comfort/templates/keybindings.zsh.j2:1`_
+_Atlas reference: `infra/atlas/ansible/roles/terminal_comfort/templates/keybindings.zsh.j2:1`_
 
 ### Custom Widget Keybindings
 
@@ -150,8 +175,8 @@ _Atlas reference: `infra/ansible/roles/terminal_comfort/templates/keybindings.zs
 
 | Alias | Action | Source |
 | ----- | ------ | ------ |
-| `oc-sub` | OpenCode with subscription-backed `openai/gpt-5.5` | `private_dot_config/zsh/aliases.zsh:60` |
-| `oc-oauth` | OpenCode with OAuth subscription-backed `openai/gpt-5.5` | `private_dot_config/zsh/aliases.zsh:61` |
+| `oc-sub` | OpenCode with the shared configured default model | `private_dot_config/zsh/aliases.zsh:60` |
+| `oc-oauth` | OpenCode with the shared configured default model | `private_dot_config/zsh/aliases.zsh:61` |
 
 ### Word Movement
 

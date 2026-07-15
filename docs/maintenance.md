@@ -19,6 +19,7 @@ Update the corresponding doc when any of the following change:
 | Workspace `dot_mrconfig` modified | [mrconfig.md](workspaces/mrconfig.md) |
 | Repo-local `mise.toml`, `Taskfile.yml`, pre-commit, TFLint, terraform-docs, or homeserver IaC tooling modified | [config-overview.md](components/config-overview.md), [homeserver-iac.md](architecture/homeserver-iac.md) |
 | Custom keymap added/changed in any layer | [shortcuts.md](shortcuts.md) |
+| Homeserver operational procedure added/changed | Relevant doc in [runbooks/](runbooks/) |
 
 ## Review Order for Quick Updates
 

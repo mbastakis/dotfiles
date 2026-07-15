@@ -1,0 +1,239 @@
+#!/bin/bash
+set -euo pipefail
+
+SIDEBAR_BIN="${OPENCODE_SIDEBAR_BIN:-$HOME/bin/opencode-session-sidebar}"
+SIDEBAR_WIDTH="${OPENCODE_SIDEBAR_WIDTH:-28}"
+VISIBLE_OPTION="@opencode_session_sidebar_visible"
+PANE_OPTION="@opencode_session_sidebar"
+LAYOUT_OPTION="@opencode_session_sidebar_layout"
+FOCUS_OPTION="@opencode_session_sidebar_previous_pane"
+RESTORE_FOCUS_OPTION="@opencode_session_sidebar_restore_pane"
+LOCK_NAME="opencode-session-sidebar"
+
+usage() {
+    cat >&2 <<EOF
+Usage: tmux-opencode-sidebar {toggle|show|hide|ensure|status}
+EOF
+}
+
+is_visible() {
+    [[ "$(tmux show-options -gqv "$VISIBLE_OPTION")" == "1" ]]
+}
+
+sidebar_panes() {
+    local format pane_id window_id marker
+
+    format=$'#{pane_id}\t#{window_id}\t'"#{${PANE_OPTION}}"
+
+    while IFS=$'\t' read -r pane_id window_id marker; do
+        [[ "$marker" == "1" ]] && printf '%s\t%s\n' "$pane_id" "$window_id"
+    done < <(tmux list-panes -a -F "$format")
+}
+
+window_sidebar_pane() {
+    local window_id="$1" pane_id marker
+
+    while IFS=$'\t' read -r pane_id marker; do
+        if [[ "$marker" == "1" ]]; then
+            printf '%s' "$pane_id"
+            return 0
+        fi
+    done < <(tmux list-panes -t "$window_id" -F $'#{pane_id}\t'"#{${PANE_OPTION}}" 2>/dev/null || true)
+    return 1
+}
+
+ensure_window() {
+    local window_id="$1" window_width width pane_id previous_pane saved_layout layout_was_saved=false
+
+    tmux display-message -p -t "$window_id" '#{window_id}' >/dev/null 2>&1 || return 0
+    pane_id="$(window_sidebar_pane "$window_id" || true)"
+    [[ -n "$pane_id" ]] && return 0
+
+    window_width="$(tmux display-message -p -t "$window_id" '#{window_width}')"
+    [[ "$window_width" =~ ^[0-9]+$ ]] || return 0
+    [[ "$SIDEBAR_WIDTH" =~ ^[0-9]+$ ]] || SIDEBAR_WIDTH=28
+
+    width="$SIDEBAR_WIDTH"
+    if (( width > window_width - 40 )); then
+        width=$((window_width - 40))
+    fi
+    (( width >= 18 )) || return 0
+
+    saved_layout="$(tmux show-window-options -v -t "$window_id" "$LAYOUT_OPTION" 2>/dev/null || true)"
+    if [[ -z "$saved_layout" ]]; then
+        saved_layout="$(tmux display-message -p -t "$window_id" '#{window_layout}')"
+        tmux set-window-option -t "$window_id" "$LAYOUT_OPTION" "$saved_layout"
+        layout_was_saved=true
+    fi
+    previous_pane="$(tmux display-message -p -t "$window_id" '#{pane_id}')"
+    tmux set-window-option -t "$window_id" "$FOCUS_OPTION" "$previous_pane"
+
+    if ! pane_id="$(tmux split-window -d -b -f -h -l "$width" -P -F '#{pane_id}' -t "$window_id" "$SIDEBAR_BIN")"; then
+        [[ "$layout_was_saved" == true ]] && tmux set-window-option -qu -t "$window_id" "$LAYOUT_OPTION"
+        tmux set-window-option -qu -t "$window_id" "$FOCUS_OPTION"
+        return 0
+    fi
+    tmux set-option -p -t "$pane_id" "$PANE_OPTION" 1
+}
+
+ensure_target() {
+    local window_id="${1:-}"
+
+    [[ -x "$SIDEBAR_BIN" ]] || return 0
+    is_visible || return 0
+
+    if [[ -z "$window_id" ]]; then
+        window_id="$(tmux display-message -p '#{window_id}')"
+    fi
+    [[ -n "$window_id" ]] && ensure_window "$window_id"
+}
+
+show_sidebar() {
+    local pane_id window_id
+
+    if [[ ! -x "$SIDEBAR_BIN" ]]; then
+        tmux display-message "OpenCode sidebar is not installed"
+        exit 1
+    fi
+
+    tmux set-option -g "$VISIBLE_OPTION" 1
+    window_id="$(tmux display-message -p '#{window_id}')"
+    ensure_target "$window_id"
+    pane_id="$(window_sidebar_pane "$window_id" || true)"
+    [[ -n "$pane_id" ]] && tmux select-pane -t "$pane_id"
+    tmux display-message "OpenCode sidebar shown"
+}
+
+app_pane() {
+    local window_id="$1" pane_id marker
+
+    while IFS=$'\t' read -r pane_id marker; do
+        if [[ "$marker" != "1" ]]; then
+            printf '%s' "$pane_id"
+            return 0
+        fi
+    done < <(tmux list-panes -t "$window_id" -F $'#{pane_id}\t'"#{${PANE_OPTION}}" 2>/dev/null || true)
+    return 1
+}
+
+app_pane_count() {
+    local window_id="$1" marker count=0
+
+    while IFS= read -r marker; do
+        [[ "$marker" == "1" ]] || ((count += 1))
+    done < <(tmux list-panes -t "$window_id" -F "#{${PANE_OPTION}}" 2>/dev/null || true)
+    printf '%s' "$count"
+}
+
+pane_exists() {
+    local resolved
+
+    resolved="$(tmux display-message -p -t "$1" '#{pane_id}' 2>/dev/null || true)"
+    [[ -n "$resolved" ]]
+}
+
+restore_layouts() {
+    local format window_id layout restore_pane
+
+    format="#{window_id}|#{${LAYOUT_OPTION}}|#{${RESTORE_FOCUS_OPTION}}"
+    while IFS='|' read -r window_id layout restore_pane; do
+        [[ -n "$window_id" ]] || continue
+        if [[ -n "$layout" ]]; then
+            tmux select-layout -t "$window_id" "$layout" >/dev/null 2>&1 || true
+        fi
+        if [[ -n "$restore_pane" ]] && pane_exists "$restore_pane"; then
+            tmux select-pane -t "$restore_pane"
+        fi
+        tmux set-window-option -qu -t "$window_id" "$LAYOUT_OPTION"
+        tmux set-window-option -qu -t "$window_id" "$FOCUS_OPTION"
+        tmux set-window-option -qu -t "$window_id" "$RESTORE_FOCUS_OPTION"
+    done < <(tmux list-windows -a -F "$format" | sort -u)
+}
+
+hide_sidebar() {
+    local pane_id window_id active_pane previous_pane restore_pane
+
+    tmux set-option -g "$VISIBLE_OPTION" 0
+    while IFS=$'\t' read -r pane_id window_id; do
+        active_pane="$(tmux display-message -p -t "$window_id" '#{pane_id}')"
+        previous_pane="$(tmux show-window-options -v -t "$window_id" "$FOCUS_OPTION" 2>/dev/null || true)"
+        restore_pane="$active_pane"
+        if [[ "$active_pane" == "$pane_id" ]]; then
+            restore_pane="$previous_pane"
+            if [[ -z "$restore_pane" ]] || ! pane_exists "$restore_pane"; then
+                restore_pane="$(app_pane "$window_id" || true)"
+            fi
+        fi
+        tmux set-window-option -t "$window_id" "$RESTORE_FOCUS_OPTION" "$restore_pane"
+        [[ -n "$pane_id" ]] && tmux kill-pane -t "$pane_id" 2>/dev/null || true
+    done < <(sidebar_panes)
+    restore_layouts
+    tmux set-option -g "$VISIBLE_OPTION" 0
+    tmux display-message "OpenCode sidebar hidden"
+}
+
+handle_pane_closed() {
+    local sidebar_pane window_id app_count layout dimensions saved_app_count previous_pane fallback_pane
+
+    is_visible || return 0
+    while IFS=$'\t' read -r sidebar_pane window_id; do
+        app_count="$(app_pane_count "$window_id")"
+        if (( app_count == 0 )); then
+            tmux kill-pane -t "$sidebar_pane" 2>/dev/null || true
+            continue
+        fi
+
+        # Layout trees contain one dimension per leaf and branch: 2n - 1 for n panes.
+        layout="$(tmux show-window-options -v -t "$window_id" "$LAYOUT_OPTION" 2>/dev/null || true)"
+        if [[ -n "$layout" ]]; then
+            dimensions="${layout//[^x]/}"
+            saved_app_count=$(((${#dimensions} + 1) / 2))
+            if (( app_count != saved_app_count )); then
+                tmux set-window-option -qu -t "$window_id" "$LAYOUT_OPTION"
+            fi
+        fi
+
+        previous_pane="$(tmux show-window-options -v -t "$window_id" "$FOCUS_OPTION" 2>/dev/null || true)"
+        if [[ -n "$previous_pane" ]] && ! pane_exists "$previous_pane"; then
+            fallback_pane="$(app_pane "$window_id" || true)"
+            tmux set-window-option -t "$window_id" "$FOCUS_OPTION" "$fallback_pane"
+        fi
+    done < <(sidebar_panes)
+}
+
+tmux wait-for -L "$LOCK_NAME"
+trap 'tmux wait-for -U "$LOCK_NAME"' EXIT
+
+action="${1:-toggle}"
+case "$action" in
+    toggle)
+        if is_visible; then
+            hide_sidebar
+        else
+            show_sidebar
+        fi
+        ;;
+    show)
+        show_sidebar
+        ;;
+    hide)
+        hide_sidebar
+        ;;
+    ensure)
+        ensure_target "${2:-}"
+        ;;
+    pane-closed)
+        handle_pane_closed
+        ;;
+    status)
+        if is_visible; then
+            printf 'shown\n'
+        else
+            printf 'hidden\n'
+        fi
+        ;;
+    *)
+        usage
+        exit 2
+        ;;
+esac

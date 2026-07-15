@@ -8,7 +8,7 @@ Shell startup model, load order, module responsibilities, and integrations with 
 
 atlas does not run chezmoi or receive the full workstation Zsh stack. The Ansible `terminal_comfort` role installs Zsh and deploys a server-safe subset: XDG/ZDOTDIR bootstrap, history settings, basic aliases/functions, the `y` Yazi cwd wrapper, fzf configuration, `Ctrl-F` ftext search, `Ctrl-Z` zoxide selection, the Ghostty directory-picker sequence, zoxide, and Starship. It intentionally avoids Homebrew, Zinit, secrets, macOS-only selection widgets, and workstation app integrations.
 
-_Reference: `infra/ansible/roles/terminal_comfort/templates/.zshrc.j2:1`_
+_Reference: `infra/atlas/ansible/roles/terminal_comfort/templates/.zshrc.j2:1`_
 
 ## Startup Model
 
@@ -57,7 +57,7 @@ _Reference: `private_dot_config/zsh/dot_zshrc:8`_
 
 It intentionally avoids exporting editor-specific init variables like `VIMINIT` and explicitly clears inherited `VIMINIT`; Neovim checks `VIMINIT` before `~/.config/nvim/init.lua`, so leaking it through the shell environment breaks normal `nvim` startup, especially for headless runs.
 
-On macOS it also maps `XDG_RUNTIME_DIR` to `TMPDIR` and disables Apple Terminal shell-session files with `SHELL_SESSIONS_DISABLE=1`.
+On macOS it also maps `XDG_RUNTIME_DIR` to `TMPDIR`, disables Apple Terminal shell-session files with `SHELL_SESSIONS_DISABLE=1`, hides Homebrew environment hints with `HOMEBREW_NO_ENV_HINTS=1`, and keeps Homebrew auto-update enabled with a daily check interval via `HOMEBREW_AUTO_UPDATE_SECS=86400`.
 
 _Reference: `dot_zshenv.tmpl:1`_
 
@@ -77,9 +77,10 @@ Interactive-only environment variables. PATH/EDITOR/XDG are set in `~/.zshenv` (
 | `OPENCODE_EXPERIMENTAL_PLAN_MODE` | `true` |
 | `OPENCODE_EXPERIMENTAL_MARKDOWN` | `true` |
 | `OPENCODE_CONFIG_DIR` | `$HOME/.config/opencode` |
+| `OPENCODE_SERVER_URL` | `http://127.0.0.1:4096` on the designated shared-server Mac only |
 | `PI_CODING_AGENT_DIR` | `$HOME/.config/pi` |
 
-_Reference: `private_dot_config/zsh/exports.zsh:1`_
+_Reference: `private_dot_config/zsh/exports.zsh.tmpl:1`_
 
 `exports.zsh` creates the completion directories and prepends `ZSH_COMPLETION_DIR` to `fpath` before `plugins.zsh` runs `compinit`, so generated function files such as `_mise` can be discovered by zsh.
 
@@ -137,7 +138,7 @@ _Reference: `private_dot_config/zsh/tools.zsh:1`_
 | Navigation | `..` = `cd ..` |
 | Listing (eza) | `l`, `ls`, `ll`, `la`, `ld`, `lda`, `lgit` |
 | Shell | `reload`/`r` = `exec zsh`, `zsh-profile`, `zsh-time` |
-| Apps | `v`/`vi`/`vim` = `nvim`, `lg` = `lazygit`, `b` = `bat`, `oc` = `opencode-launch` (auth-aware), `oc-sub`/`oc-oauth` = OpenCode OAuth subscription model, `oca` = `opencode-launch` (auth-aware, auto-allow all), `occ` = `opencode-launch --continue`, `lssh` = `lazyssh` |
+| Apps | `v`/`vi`/`vim` = `nvim`, `lg` = `lazygit`, `b` = `bat`, `oc`/`oc-sub`/`oc-oauth`/`oca` = `opencode-launch`, `occ` = `opencode-launch --continue`, `lssh` = `lazyssh` |
 | Mail | `nm` = `neomutt`, `msync` = `mail-sync`, `ab` = `abook` with XDG config/data paths |
 | Tmux | `ta` = `tmux attach`, `td` = `tmux detach`, `tls` = `tmux ls` |
 | Kubernetes | `k` = `kubectl`, `ctx` = `kubectx`, `ns` = `kubens` |
@@ -155,7 +156,7 @@ _Reference: `private_dot_config/zsh/aliases.zsh:1`_
 | `y [args]` | Yazi file manager wrapper (changes cwd on exit) |
 | `ftext [query]` | Interactive ripgrep+fzf search; opens result in `$VISUAL` |
 | `ftext-widget` | ZLE widget for `Ctrl-F` keybinding (Tab inserts filename, Enter opens editor) |
-| `brew_update` | Full Homebrew maintenance cycle |
+| `brew_update` | Update Brewfile-managed packages and formula dependencies before cleanup and diagnostics |
 | `reset_internet` | Flush DNS, reset pf, bounce network interface |
 
 _Reference: `private_dot_config/zsh/functions.zsh:1`_

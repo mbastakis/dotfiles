@@ -1,0 +1,20 @@
+#!/bin/bash
+set -euo pipefail
+
+export PATH="$HOME/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export OPENCODE_CONFIG="$HOME/.config/opencode/opencode.jsonc"
+export OPENCODE_CONFIG_DIR="$HOME/.config/opencode"
+
+# launchd does not load interactive zsh configuration. Provider API keys are
+# rendered into this file by chezmoi and must be present in the server process.
+if [[ -f "$HOME/.config/zsh/local.zsh" ]]; then
+    # shellcheck disable=SC1091
+    source "$HOME/.config/zsh/local.zsh"
+fi
+
+if ! command -v opencode >/dev/null 2>&1; then
+    echo "Error: opencode is not installed" >&2
+    exit 1
+fi
+
+exec opencode serve --hostname 127.0.0.1 --port 4096

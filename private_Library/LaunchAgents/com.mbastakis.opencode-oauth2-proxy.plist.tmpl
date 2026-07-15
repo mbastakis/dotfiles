@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.mbastakis.opencode-oauth2-proxy</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>{{ printf "%s/bin/opencode-oauth2-proxy" .chezmoi.homeDir }}</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>ThrottleInterval</key>
+    <integer>10</integer>
+
+    <key>StandardOutPath</key>
+    <string>{{ printf "%s/Library/Logs/opencode-oauth2-proxy.log" .chezmoi.homeDir }}</string>
+
+    <key>StandardErrorPath</key>
+    <string>{{ printf "%s/Library/Logs/opencode-oauth2-proxy.error.log" .chezmoi.homeDir }}</string>
+
+    <key>LimitLoadToSessionType</key>
+    <array>
+        <string>Aqua</string>
+    </array>
+</dict>
+</plist>

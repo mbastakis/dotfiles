@@ -17,12 +17,19 @@ set -euo pipefail
 # ---------------------------------------------------------------------------
 
 STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/opencode/tmux-panes"
+PLUGIN_PANE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/opencode/tmux-session-state/panes"
+SERVER_URL="${OPENCODE_SERVER_URL:-}"
+SERVER_URL="${SERVER_URL%/}"
 
 # --- helpers ---------------------------------------------------------------
 
 sql_escape() {
     # Escape single quotes for safe SQL string interpolation.
     printf '%s' "$1" | sed "s/'/''/g"
+}
+
+safe_name() {
+    printf '%s' "$1" | tr -c 'A-Za-z0-9_.%-' '_'
 }
 
 pane_key() {
@@ -91,6 +98,59 @@ save_session_id() {
     fi
 }
 
+save_pane_state() {
+    local session_id="$1"
+    local pane_id="${TMUX_PANE:-}"
+    [[ -z "$session_id" || -z "$pane_id" ]] && return 0
+
+    local file
+    file="$PLUGIN_PANE_DIR/$(safe_name "$pane_id").json"
+    local tmp="${file}.$$.tmp"
+    local updated
+    updated="$(($(date +%s) * 1000))"
+
+    mkdir -p "$PLUGIN_PANE_DIR"
+    jq -n \
+        --arg sessionID "$session_id" \
+        --arg tmuxPane "$pane_id" \
+        --arg directory "$(pwd -P)" \
+        --argjson processID "$$" \
+        --argjson lastUpdated "$updated" \
+        '{
+            version: 1,
+            sessionID: $sessionID,
+            tmuxPane: $tmuxPane,
+            processID: $processID,
+            status: "unknown",
+            directory: $directory,
+            lastUpdated: $lastUpdated
+        }' > "$tmp"
+    mv "$tmp" "$file"
+}
+
+require_shared_server() {
+    if ! command -v curl >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1; then
+        echo "Error: curl and jq are required for the shared OpenCode server" >&2
+        exit 1
+    fi
+
+    if ! curl --fail --silent --show-error --max-time 2 "$SERVER_URL/global/health" >/dev/null; then
+        echo "Error: shared OpenCode server is unavailable at $SERVER_URL" >&2
+        exit 1
+    fi
+}
+
+create_session() {
+    local response
+    response="$(curl --fail --silent --show-error --max-time 10 \
+        --request POST \
+        --header "x-opencode-directory: $(pwd -P)" \
+        --header "Content-Type: application/json" \
+        --data '{}' \
+        "$SERVER_URL/session")"
+    jq -er '.id' <<< "$response"
+}
+
 # --- parse args ------------------------------------------------------------
 
 _pane_key="$(pane_key)"
@@ -99,17 +159,32 @@ _pane_key="$(pane_key)"
 # an explicit session (-s/--session).  Everything else is passed through.
 want_continue=false
 has_explicit_session=false
+explicit_session_id=""
+expect_session_id=false
 for arg in "$@"; do
+    if "$expect_session_id"; then
+        explicit_session_id="$arg"
+        expect_session_id=false
+        continue
+    fi
+
     case "$arg" in
         -c|--continue) want_continue=true ;;
-        -s|--session)  has_explicit_session=true ;;
+        -s|--session)
+            has_explicit_session=true
+            expect_session_id=true
+            ;;
+        --session=*)
+            has_explicit_session=true
+            explicit_session_id="${arg#--session=}"
+            ;;
     esac
 done
 
 # --- build launch args -----------------------------------------------------
 
 extra_args=()
-known_id=""
+known_id="$explicit_session_id"
 
 if "$want_continue" && ! "$has_explicit_session" && [[ -n "$_pane_key" ]]; then
     saved_id="$(load_session_id "$_pane_key")"
@@ -133,7 +208,24 @@ fi
 # --- run opencode ----------------------------------------------------------
 
 rc=0
-opencode "${extra_args[@]+"${extra_args[@]}"}" "$@" || rc=$?
+if [[ -n "$SERVER_URL" ]]; then
+    require_shared_server
+
+    if ! "$want_continue" && ! "$has_explicit_session"; then
+        known_id="$(create_session)"
+        extra_args=(-s "$known_id")
+    fi
+
+    if [[ -n "$known_id" ]]; then
+        save_session_id "$_pane_key" "$known_id"
+        save_pane_state "$known_id"
+    fi
+
+    opencode attach "$SERVER_URL" --dir "$(pwd -P)" \
+        "${extra_args[@]+"${extra_args[@]}"}" "$@" || rc=$?
+else
+    opencode "${extra_args[@]+"${extra_args[@]}"}" "$@" || rc=$?
+fi
 
 # --- persist session ID ----------------------------------------------------
 

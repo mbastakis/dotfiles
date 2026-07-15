@@ -1,6 +1,6 @@
 ---
 description: Export and analyze a previous OpenCode session by ID
-agent: scout
+agent: general
 subtask: true
 ---
 

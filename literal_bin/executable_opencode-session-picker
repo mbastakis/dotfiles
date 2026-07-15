@@ -270,18 +270,24 @@ build_rows() {
         target="$pane_id"
         display="$(format_display "$cols" "$status" "$status_text" "$session_name" "$window_index" "$pane_index" "$session_id" "$title" "$agent" "$directory")"
 
-        printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$(status_priority "$status")" "$updated" "$target" "$window_id" "$tmux_session_id" "$display"
+        printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$(status_priority "$status")" "$updated" "$target" "$window_id" "$tmux_session_id" "$status" "$display"
     done < <(tmux list-panes -a -F "$tmux_format")
 }
 
 main() {
     require_tool tmux
-    require_tool gum
     require_tool jq
     require_tool opencode
 
     local rows list selection status pane_id window_id tmux_session_id tmp_map display selected_index selected_row index cols gum_width
     rows="$(build_rows | sort -t $'\t' -k1,1n -k2,2nr)"
+
+    if [[ "${1:-}" == "--print-rows" ]]; then
+        printf '%s\n' "$rows"
+        exit 0
+    fi
+
+    require_tool gum
 
     if [[ -z "$rows" ]]; then
         tmux display-message "No running OpenCode panes found"
@@ -293,7 +299,7 @@ main() {
 
     list=""
     index=1
-    while IFS=$'\t' read -r _ _ pane_id window_id tmux_session_id display; do
+    while IFS=$'\t' read -r _ _ pane_id window_id tmux_session_id _ display; do
         printf '%s\t%s\t%s\t%s\n' "$index" "$pane_id" "$window_id" "$tmux_session_id" >>"$tmp_map"
         list+="$index $display"$'\n'
         index=$((index + 1))

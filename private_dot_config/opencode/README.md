@@ -27,9 +27,10 @@ The built-in OpenAI provider remains the default and uses OAuth subscription aut
 
 | Model ID | Purpose | Variants |
 | -------- | ------- | -------- |
-| `openai/gpt-5.5` | Default high-quality fallback, planning, broad research | OAuth provider defaults |
+| `openai/gpt-5.6-sol` | Default high-quality fallback, planning, broad research | OAuth provider defaults; optional `max` variant |
+| `openai/gpt-5.5` | Available subscription-backed alternate for explicit selection | OAuth provider defaults |
 | `openai/gpt-5.4-mini-fast` | Fast bounded tasks, exploration, titles, small model fallback | OAuth provider defaults |
-| `openai/gpt-5.4` | Source research, repo scouting, conversation compaction | OAuth provider defaults |
+| `openai/gpt-5.4` | Available higher-capacity alternate for explicit selection | OAuth provider defaults |
 | `opencode/*` | Selected free OpenCode Zen models via `https://opencode.ai/zen/v1` | Per-model Models.dev metadata |
 | `wcs/gpt` | GPT-5.5 through WCS ChatGPT OAuth | `none`, `low`, `medium`, `high`, `xhigh` reasoning effort |
 | `wcs/deepseek` | DeepSeek V4 Pro through WCS OpenCode Go | `high`, `max` reasoning effort |
@@ -47,8 +48,8 @@ The `-fast` suffix is an actual OAuth-provider model variant. It is used where l
 Shell aliases:
 
 ```bash
-oc-sub   # subscription: openai/gpt-5.5
-oc-oauth # subscription: openai/gpt-5.5
+oc-sub   # shared configured default
+oc-oauth # shared configured default
 ```
 
 Auth setup:
@@ -62,7 +63,7 @@ opencode auth login -p openai
 
 ## Plugins
 
-- `plugins/tmux-session-state.js` records OpenCode session lifecycle events into `~/.local/state/opencode/tmux-session-state/` so `~/bin/opencode-session-picker` can show live tmux panes as `working`, `blocked`, `done`, or `error`.
+- `plugins/tmux-session-state.js` records OpenCode session lifecycle events into `~/.local/state/opencode/tmux-session-state/`. `~/bin/opencode-session-picker` exposes the live pane list and status data to the collapsible tmux sidebar; selecting a row focuses the exact OpenCode pane.
 - `plugins/clickable-notifier.js` sends sound/desktop alerts for permissions, questions, completions, and errors from primary sessions only. On macOS it uses `terminal-notifier` so clicking an alert runs `~/bin/opencode-focus-session`, activates Ghostty, and selects the recorded tmux pane. Built-in TUI attention is disabled in `tui.json` so it does not emit separate `subagent_done` sounds.
 
 Restart OpenCode after changing plugin files or the `plugin` array; running panes keep the config loaded at process start.
@@ -87,14 +88,14 @@ Instructions for the command in markdown...
 
 - `commit.md` — Guided git commit (routes to `@commit`, subtask)
 - `crawl.md` — Crawl a URL with crawl4ai (routes to `@crawl`, subtask)
-- `research_codebase.md` — Document codebase through parallel research (`wcs/kimi`)
-- `create_plan.md` — Create detailed implementation plans (`@plan`, `openai/gpt-5.5`)
+- `research_codebase.md` — Document codebase through parallel `@explore` research
+- `create_plan.md` — Create detailed implementation plans (`@plan`, active/default model)
 - `learn.md` — Extract non-obvious learnings into AGENTS.md files (`openai/gpt-5.4-mini-fast`)
-- `session_analysis.md` — Export and analyze a previous OpenCode session (`@scout`, subtask)
+- `session_analysis.md` — Export and analyze a previous OpenCode session (`@general`, subtask)
 
 ## Custom Agents (Pattern B — Self-Contained .md)
 
-Each agent is a single `.md` file with YAML frontmatter containing all config (description, mode, model, temperature, tools, permissions) plus the prompt body:
+Each agent is a single `.md` file with YAML frontmatter containing its config (description, mode, optional model, temperature, tools, permissions) plus the prompt body:
 
 ```markdown
 ---
@@ -129,28 +130,28 @@ You are an agent that does X.
 
 Custom agent blocks are not needed in `opencode.jsonc` because agents are auto-discovered from the `agent/` directory.
 
-Built-in agents with explicit model overrides are configured in `opencode.jsonc`. `build` uses the global default model.
+Built-in agents with explicit model overrides are configured in `opencode.jsonc`. Unpinned Task subagents inherit the caller's exact model and variant.
 
-| Agent | Model | Purpose |
-| ----- | ----- | ------- |
-| `plan` | `openai/gpt-5.5` | Planning and no-edit reasoning |
-| `general` | `openai/gpt-5.5` | Broad subagent work |
+| Agent | Model Selection | Purpose |
+| ----- | --------------- | ------- |
+| `build` | Active/session model, then global default | Primary implementation agent |
+| `plan` | Active/session model, then global default | Planning and no-edit reasoning |
+| `general` | Inherits parent model and variant | Broad subagent work |
 | `explore` | `openai/gpt-5.4-mini-fast` | Fast repo exploration |
-| `scout` | `openai/gpt-5.4` | Manual broad reference/repo scouting |
 | `title` | `openai/gpt-5.4-mini-fast` | Session titles |
-| `summary` | `openai/gpt-5.4-mini-fast` | Lightweight summaries |
-| `compaction` | `openai/gpt-5.4` | Conversation compaction |
+| `summary` | No LLM call in OpenCode 1.17.19 | Snapshot and file-diff metadata |
+| `compaction` | Inherits triggering model and variant | Conversation compaction |
 
-Custom agents set their model in frontmatter:
+Custom agents either pin a bounded model or inherit the parent model and variant:
 
-| Agent | Model | Purpose |
-| ----- | ----- | ------- |
+| Agent | Model Selection | Purpose |
+| ----- | --------------- | ------- |
 | `commit` | `openai/gpt-5.4-mini-fast` | Git commit planning and execution |
 | `crawl` | `openai/gpt-5.4-mini-fast` | crawl4ai execution |
-| `librarian` | `openai/gpt-5.4` | External source/GitHub forensics with permalinks |
-| `web-researcher` | `openai/gpt-5.5` | Web documentation and synthesis |
+| `librarian` | Inherits parent model and variant | External source/GitHub forensics with permalinks |
+| `web-researcher` | Inherits parent model and variant | Web documentation and synthesis |
 
-Role split: `@scout` is user-invoked for broad reconnaissance, while `librarian` is for source-backed implementation and change-history answers.
+OpenCode removed its experimental Scout agent before 1.17.19. Use `explore` for local codebase reconnaissance, `librarian` for upstream implementation forensics, and `web-researcher` for documentation and comparisons.
 
 ## Permissions (v1.1.1+)
 

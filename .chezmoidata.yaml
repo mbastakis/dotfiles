@@ -121,3 +121,16 @@ taskwarrior:
   sync:
     interval_minutes: 2
     log_root: "~/.local/state/task/log"
+
+opencode:
+  remote:
+    host: T0020e0132
+    external_url: "https://code.mbastakis.com"
+    server_url: "http://127.0.0.1:4096"
+    server_port: 4096
+    proxy_port: 4180
+    oidc_issuer_url: "https://auth.mbastakis.com/application/o/opencode/"
+    oidc_client_id: opencode-mobile
+    allowed_group: opencode-users
+    oidc_client_secret_id: 3ec743d4-2730-4722-9f8d-b48601267e32
+    cookie_secret_id: ecaf6c2a-1044-4d47-a776-b48601267e58
