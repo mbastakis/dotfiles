@@ -14,6 +14,7 @@ from pathlib import Path
 
 PICKER = Path.home() / "bin" / "opencode-session-picker"
 MANAGER = Path.home() / "bin" / "tmux-opencode-sidebar"
+FOCUS_OPTION = "@opencode_session_sidebar_previous_pane"
 CACHE = (
     Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache"))
     / "opencode"
@@ -22,16 +23,60 @@ CACHE = (
 REFRESH_SECONDS = 2.0
 REFRESH_TIMEOUT_SECONDS = 8.0
 ROW_START = 3
-STATUS_GLYPHS = {"🟠", "🟡", "🔴", "🟢", "⚫", "⚪"}
+STATUS_GLYPHS = {
+    "",
+    "",
+    "",
+    "",
+    "",
+    "󰑓",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "🟠",
+    "🟡",
+    "🔴",
+    "🟢",
+    "⚫",
+    "⚪",
+}
+STATUS_ICONS = {
+    "working": "",
+    "blocked": "",
+    "error": "",
+    "done": "",
+    "unknown": "",
+    "exited": "",
+    "deleted": "",
+}
+STATUS_PRIORITY = {
+    "blocked": 1,
+    "error": 2,
+    "working": 3,
+    "done": 4,
+    "unknown": 5,
+    "exited": 6,
+    "deleted": 6,
+}
 
 
 @dataclass(frozen=True)
 class SessionRow:
     pane_id: str
     window_id: str
-    session_id: str
+    tmux_session_id: str
+    tmux_session_name: str
     status: str
     title: str
+
+
+@dataclass(frozen=True)
+class DisplayLine:
+    tmux_session_id: str
+    tmux_session_name: str
+    row_index: int | None = None
 
 
 @dataclass(frozen=True)
@@ -90,15 +135,92 @@ def sidebar_is_visible() -> bool:
 def parse_rows(output: str) -> list[SessionRow]:
     rows: list[SessionRow] = []
     for line in output.splitlines():
-        parts = line.split("\t", 6)
-        if len(parts) != 7:
+        parts = line.split("\t", 7)
+        if len(parts) == 7:
+            _, _, pane_id, window_id, tmux_session_id, status, display = parts
+            tmux_session_name = tmux_session_id
+        elif len(parts) == 8:
+            (
+                _,
+                _,
+                pane_id,
+                window_id,
+                tmux_session_id,
+                tmux_session_name,
+                status,
+                display,
+            ) = parts
+        else:
             continue
-        _, _, pane_id, window_id, session_id, status, display = parts
         title = display.strip()
         if title and title[0] in STATUS_GLYPHS:
             title = title[1:].lstrip()
-        rows.append(SessionRow(pane_id, window_id, session_id, status, title))
+        rows.append(
+            SessionRow(
+                pane_id,
+                window_id,
+                tmux_session_id,
+                tmux_session_name,
+                status,
+                title,
+            )
+        )
     return rows
+
+
+def current_tmux_session_id() -> str:
+    pane_id = os.environ.get("TMUX_PANE", "")
+    if not pane_id:
+        return ""
+    return run_tmux(
+        "display-message", "-p", "-t", pane_id, "#{session_id}"
+    ).stdout.strip()
+
+
+def focused_app_pane(previous_pane: str) -> str:
+    sidebar_pane = os.environ.get("TMUX_PANE", "")
+    if not sidebar_pane:
+        return previous_pane
+
+    window_id = run_tmux(
+        "display-message", "-p", "-t", sidebar_pane, "#{window_id}"
+    ).stdout.strip()
+    active_pane = run_tmux(
+        "display-message", "-p", "-t", window_id, "#{pane_id}"
+    ).stdout.strip()
+    if active_pane and active_pane != sidebar_pane:
+        return active_pane
+    if previous_pane:
+        return previous_pane
+
+    return run_tmux(
+        "show-window-options", "-v", "-t", window_id, FOCUS_OPTION
+    ).stdout.strip()
+
+
+def build_display_lines(rows: list[SessionRow]) -> list[DisplayLine]:
+    groups: dict[tuple[str, str], list[int]] = {}
+    for index, row in enumerate(rows):
+        key = (row.tmux_session_id, row.tmux_session_name)
+        groups.setdefault(key, []).append(index)
+
+    lines: list[DisplayLine] = []
+    ordered_groups = sorted(
+        groups.items(),
+        key=lambda item: item[0][1].casefold(),
+    )
+    for (session_id, session_name), row_indexes in ordered_groups:
+        lines.append(DisplayLine(session_id, session_name))
+        row_indexes.sort(key=lambda index: STATUS_PRIORITY.get(rows[index].status, 5))
+        lines.extend(
+            DisplayLine(session_id, session_name, row_index)
+            for row_index in row_indexes
+        )
+    return lines
+
+
+def display_row_order(lines: list[DisplayLine]) -> list[int]:
+    return [line.row_index for line in lines if line.row_index is not None]
 
 
 def read_cache() -> list[SessionRow]:
@@ -253,6 +375,8 @@ def draw(
     offset: int,
     error: str,
     palette: Palette,
+    current_session_id: str,
+    focused_pane: str,
 ) -> int:
     screen.erase()
     height, width = screen.getmaxyx()
@@ -261,32 +385,53 @@ def draw(
     add_text(screen, 0, max(1, width - len(count) - 2), count, palette.muted)
     add_text(screen, 1, 1, "─" * max(0, width - 3), palette.muted)
 
+    lines = build_display_lines(rows)
     visible_rows = max(0, height - ROW_START - 3)
-    if selected < offset:
-        offset = selected
-    elif selected >= offset + visible_rows:
-        offset = selected - visible_rows + 1
-    offset = max(0, min(offset, max(0, len(rows) - visible_rows)))
+    selected_line = next(
+        (
+            index
+            for index, line in enumerate(lines)
+            if line.row_index == selected
+        ),
+        0,
+    )
+    if selected_line < offset:
+        offset = selected_line
+    elif selected_line >= offset + visible_rows:
+        offset = selected_line - visible_rows + 1
+    offset = max(0, min(offset, max(0, len(lines) - visible_rows)))
 
     if rows:
-        for y, index in enumerate(
-            range(offset, min(len(rows), offset + visible_rows)), ROW_START
+        for y, line_index in enumerate(
+            range(offset, min(len(lines), offset + visible_rows)), ROW_START
         ):
-            row = rows[index]
-            is_selected = index == selected
+            line = lines[line_index]
+            if line.row_index is None:
+                label = f"  {line.tmux_session_name}"
+                attr = (
+                    palette.header
+                    if line.tmux_session_id == current_session_id
+                    else palette.muted | curses.A_BOLD
+                )
+                add_text(screen, y, 0, ellipsize(label, width - 1), attr)
+                continue
+
+            row = rows[line.row_index]
+            is_selected = line.row_index == selected
             background = palette.selected if is_selected else palette.base
             status_colors = palette.status_selected if is_selected else palette.status
             if is_selected:
                 add_text(screen, y, 0, " " * max(0, width - 1), background)
+            if row.pane_id == focused_pane:
                 add_text(screen, y, 0, "›", palette.header)
             add_text(
                 screen,
                 y,
-                2,
-                "●",
+                3,
+                STATUS_ICONS.get(row.status, ""),
                 status_colors.get(row.status, background),
             )
-            add_text(screen, y, 4, ellipsize(row.title, width - 5), background)
+            add_text(screen, y, 5, ellipsize(row.title, width - 6), background)
     else:
         message = error or "No running sessions"
         add_text(screen, ROW_START, 1, message, palette.muted)
@@ -331,7 +476,7 @@ def focus(row: SessionRow) -> None:
     args = ["switch-client"]
     if client:
         args.extend(["-c", client])
-    args.extend(["-t", row.session_id])
+    args.extend(["-t", row.tmux_session_id])
     run_tmux(*args)
 
 
@@ -352,7 +497,16 @@ def tui(screen: curses.window) -> None:
 
     palette = setup_palette(screen)
     rows = read_cache()
-    selected = 0
+    current_session_id = current_tmux_session_id()
+    focused_pane = focused_app_pane("")
+    selected = next(
+        (
+            index
+            for index, row in enumerate(rows)
+            if row.pane_id == focused_pane
+        ),
+        0,
+    )
     offset = 0
     error = "" if rows else "Loading sessions..."
     last_refresh = 0.0
@@ -366,11 +520,24 @@ def tui(screen: curses.window) -> None:
         | getattr(curses, "BUTTON1_DOUBLE_CLICKED", 0)
     )
 
-    offset = draw(screen, rows, selected, offset, error, palette)
+    offset = draw(
+        screen,
+        rows,
+        selected,
+        offset,
+        error,
+        palette,
+        current_session_id,
+        focused_pane,
+    )
     needs_draw = False
 
     while True:
         now = time.monotonic()
+        refreshed_focused_pane = focused_app_pane(focused_pane)
+        if refreshed_focused_pane != focused_pane:
+            focused_pane = refreshed_focused_pane
+            needs_draw = True
         if refresh_process is not None and refresh_process.poll() is not None:
             selected_pane = rows[selected].pane_id if rows and selected < len(rows) else ""
             refreshed_rows, refresh_error = finish_refresh(refresh_process)
@@ -379,6 +546,7 @@ def tui(screen: curses.window) -> None:
                 error = refresh_error
             else:
                 rows = refreshed_rows
+                current_session_id = current_tmux_session_id()
                 error = ""
                 if selected_pane:
                     selected = next(
@@ -422,6 +590,8 @@ def tui(screen: curses.window) -> None:
                 offset,
                 error,
                 palette,
+                current_session_id,
+                focused_pane,
             )
             needs_draw = False
 
@@ -434,10 +604,14 @@ def tui(screen: curses.window) -> None:
             hide_all()
             return
         if key in (curses.KEY_UP, ord("k")) and rows:
-            selected = (selected - 1) % len(rows)
+            row_order = display_row_order(build_display_lines(rows))
+            position = row_order.index(selected)
+            selected = row_order[(position - 1) % len(row_order)]
             needs_draw = True
         elif key in (curses.KEY_DOWN, ord("j")) and rows:
-            selected = (selected + 1) % len(rows)
+            row_order = display_row_order(build_display_lines(rows))
+            position = row_order.index(selected)
+            selected = row_order[(position + 1) % len(row_order)]
             needs_draw = True
         elif key in (curses.KEY_ENTER, 10, 13) and rows:
             focus(rows[selected])
@@ -451,9 +625,13 @@ def tui(screen: curses.window) -> None:
                 _, _, mouse_y, _, button_state = curses.getmouse()
             except curses.error:
                 continue
-            index = offset + mouse_y - ROW_START
-            if 0 <= index < len(rows):
-                selected = index
+            lines = build_display_lines(rows)
+            line_index = offset + mouse_y - ROW_START
+            if (
+                0 <= line_index < len(lines)
+                and lines[line_index].row_index is not None
+            ):
+                selected = lines[line_index].row_index
                 needs_draw = True
                 if button_state & click_mask:
                     focus(rows[selected])

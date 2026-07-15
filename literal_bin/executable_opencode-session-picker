@@ -52,8 +52,8 @@ session_info() {
 status_priority() {
     case "$1" in
         blocked) printf '1' ;;
-        working) printf '2' ;;
-        error) printf '3' ;;
+        error) printf '2' ;;
+        working) printf '3' ;;
         done) printf '4' ;;
         *) printf '5' ;;
     esac
@@ -146,12 +146,11 @@ compact_path() {
 
 status_icon() {
     case "$1" in
-        blocked) printf '🟠' ;;
-        working) printf '🟡' ;;
-        error) printf '🔴' ;;
-        done) printf '🟢' ;;
-        deleted | exited) printf '⚫' ;;
-        *) printf '⚪' ;;
+        blocked) printf '' ;;
+        working) printf '' ;;
+        error) printf '' ;;
+        done | deleted | exited) printf '' ;;
+        *) printf '' ;;
     esac
 }
 
@@ -270,7 +269,7 @@ build_rows() {
         target="$pane_id"
         display="$(format_display "$cols" "$status" "$status_text" "$session_name" "$window_index" "$pane_index" "$session_id" "$title" "$agent" "$directory")"
 
-        printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$(status_priority "$status")" "$updated" "$target" "$window_id" "$tmux_session_id" "$status" "$display"
+        printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$(status_priority "$status")" "$updated" "$target" "$window_id" "$tmux_session_id" "$session_name" "$status" "$display"
     done < <(tmux list-panes -a -F "$tmux_format")
 }
 
@@ -280,7 +279,7 @@ main() {
     require_tool opencode
 
     local rows list selection status pane_id window_id tmux_session_id tmp_map display selected_index selected_row index cols gum_width
-    rows="$(build_rows | sort -t $'\t' -k1,1n -k2,2nr)"
+    rows="$(build_rows | sort -t $'\t' -k6,6 -k1,1n -k2,2nr)"
 
     if [[ "${1:-}" == "--print-rows" ]]; then
         printf '%s\n' "$rows"
@@ -299,7 +298,7 @@ main() {
 
     list=""
     index=1
-    while IFS=$'\t' read -r _ _ pane_id window_id tmux_session_id _ display; do
+    while IFS=$'\t' read -r _ _ pane_id window_id tmux_session_id _ _ display; do
         printf '%s\t%s\t%s\t%s\n' "$index" "$pane_id" "$window_id" "$tmux_session_id" >>"$tmp_map"
         list+="$index $display"$'\n'
         index=$((index + 1))
