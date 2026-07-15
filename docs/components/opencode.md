@@ -12,7 +12,7 @@ Shared harness-agnostic skills are managed separately from `private_dot_agents/s
 ~/.config/opencode/
   opencode.jsonc          # Main config (model, global permissions)
   clickable-notifier.json # Notification plugin settings
-  tui.json                # TUI theme
+  tui.json                # TUI theme and attached-client plugins
   AGENTS.md               # Delegation guidance
   agent/                  # Self-contained agents (YAML frontmatter + prompt)
     commit.md
@@ -32,6 +32,8 @@ Shared harness-agnostic skills are managed separately from `private_dot_agents/s
   plugins/
     tmux-session-state.js # Local plugin that records tmux pane/session status
     clickable-notifier.js # Clickable macOS notifications back into tmux/Ghostty
+  tui-plugins/
+    tmux-current-session.js # Tracks the session displayed by each attached tmux pane
 ```
 
 _Reference: `private_dot_config/opencode/README.md:5`_
@@ -60,7 +62,7 @@ Authentik owns the confidential `opencode` OIDC provider and application. Its st
 
 The browser can type or browse server-side paths, create sessions with configured LLM providers, continue persisted sessions, use the terminal, and create Git-worktree Workspaces. OpenCode has no server-side directory allowlist, so successful authentication is equivalent to shell-level access as the macOS user. The phone receives no provider credentials; prompts and tools execute on the Mac.
 
-OpenCode sessions are server-owned. tmux panes and the phone are clients that may attach to the same session. `opencode-launch` pre-creates new server sessions, records their IDs against the current tmux pane, and runs `opencode attach`. Phone-created sessions legitimately have no tmux pane. The notification focus helper falls back to the client-owned pane map when the server plugin has no `TMUX_PANE`.
+OpenCode sessions are server-owned. tmux panes and the phone are clients that may attach to the same session. `opencode-launch` pre-creates new server sessions, records their IDs against the current tmux pane, and runs `opencode attach`. The attached-client `tui-plugins/tmux-current-session.js` plugin then updates that live mapping whenever the TUI creates or switches sessions, preventing the sidebar from retaining the launch session's stale title. On exit, the launcher persists the final ID for `occ` and tmux-resurrect, then removes the ephemeral live pane record. Phone-created sessions legitimately have no tmux pane. The notification focus helper falls back to the client-owned pane map when the server plugin has no `TMUX_PANE`.
 
 The PWA has install metadata and foreground browser notifications, but no service worker or Web Push. Completion and permission notifications therefore require the app to retain a live event stream. The Mac must remain awake, logged in, and connected to Tailscale.
 
@@ -84,7 +86,7 @@ The main config (`opencode.jsonc`) defines:
 
 Custom agent definitions live in `agent/*.md` as self-contained markdown files with YAML frontmatter (Pattern B). Larger Task agents omit `model` so they inherit the caller's model and variant; only bounded small jobs pin a model.
 
-The local `plugins/tmux-session-state.js` plugin listens to OpenCode session lifecycle events and writes per-session state under `~/.local/state/opencode/tmux-session-state/`. On the shared server it owns status metadata, while each `opencode-launch` client owns its tmux pane-to-session mapping. `~/bin/opencode-session-picker` combines those sources and exposes whether each attached OpenCode pane is `working`, `blocked`, `done`, or `error`. `~/bin/opencode-session-sidebar` renders cached rows immediately in a mouse-aware, Catppuccin-styled left tmux pane, keeps tmux session groups alphabetically sorted, and orders their OpenCode rows by state: attention (`blocked`, `error`), running (`working`), stopped (`done`), then inactive or unknown. State uses uniform Nerd Font icons with semantic colors: blue `` working, amber `` blocked, red `` error, green `` done, gray `` unknown, and gray `` exited or deleted. It marks the currently focused OpenCode pane with `›` and refreshes asynchronously. The highlighted row remains the keyboard or mouse selection, and `j`/`k` follow the visible grouped order. `~/bin/tmux-opencode-sidebar` creates sidebars lazily as windows are visited, restores each saved pre-sidebar layout when they are hidden, and closes a window's sidebar when its last application pane exits. Selecting a row jumps to its exact tmux session, window, and pane without changing the OpenCode TUI. `plugins/clickable-notifier.js` resolves the client-owned pane map for primary-session macOS notifications; phone-only sessions open Ghostty without selecting a pane. Built-in TUI attention is disabled so its separate `subagent_done` sound does not bypass that filter.
+The local `plugins/tmux-session-state.js` plugin listens to OpenCode session lifecycle events and writes per-session state under `~/.local/state/opencode/tmux-session-state/`. On the shared server it owns status metadata, while `opencode-launch` seeds each tmux pane-to-session mapping and the attached-client `tui-plugins/tmux-current-session.js` plugin keeps it synchronized with TUI navigation. Live pane records contain the owning process ID; picker refreshes prune records for dead processes, missing panes, and processes no longer attached to the pane's TTY. `opencode-focus-session` applies the same checks before focusing a notification target, preventing a recycled tmux pane ID from selecting an unrelated pane. `~/bin/opencode-session-picker` combines those sources and exposes whether each attached OpenCode pane is `working`, `blocked`, `done`, or `error`. `~/bin/opencode-session-sidebar` renders cached rows immediately in a mouse-aware, Catppuccin-styled left tmux pane, keeps tmux session groups alphabetically sorted, and orders their OpenCode rows by state: attention (`blocked`, `error`), running (`working`), stopped (`done`), then inactive or unknown. State uses uniform Nerd Font icons with semantic colors: blue `` working, amber `` blocked, red `` error, green `` done, gray `` unknown, and gray `` exited or deleted. It marks the currently focused OpenCode pane with `›` and refreshes asynchronously. The highlighted row remains the keyboard or mouse selection, and `j`/`k` follow the visible grouped order. `~/bin/tmux-opencode-sidebar` creates sidebars lazily as windows are visited, restores each saved pre-sidebar layout when they are hidden, closes a window's sidebar when its last application pane exits, and suppresses the sidebar in FloaX's dedicated popup session (`scratch` by default). Selecting a row jumps to its exact tmux session, window, and pane without changing the OpenCode TUI. `plugins/clickable-notifier.js` resolves the client-owned pane map for primary-session macOS notifications; phone-only sessions open Ghostty without selecting a pane. Built-in TUI attention is disabled so its separate `subagent_done` sound does not bypass that filter.
 
 _Reference: `private_dot_config/opencode/opencode.jsonc:1`_
 

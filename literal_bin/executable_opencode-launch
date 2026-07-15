@@ -9,8 +9,8 @@ set -euo pipefail
 #   opencode-launch -c       → resumes this pane's saved session     (occ / resurrect)
 #   opencode-launch -s <id>  → passed through as-is
 #
-# After every exit the active session ID is persisted so that a later
-# --continue (or tmux-resurrect restore) reopens the exact same session.
+# The attached TUI plugin keeps the pane mapping current as sessions change.
+# After exit that active ID is persisted so --continue reopens the same session.
 #
 # State dir: ~/.local/state/opencode/tmux-panes/
 # File key:  {tmux_session}/{window}/{pane}  →  opencode session ID
@@ -128,6 +128,22 @@ save_pane_state() {
     mv "$tmp" "$file"
 }
 
+current_pane_session_id() {
+    local pane_id="${TMUX_PANE:-}"
+    [[ -z "$pane_id" ]] && return 0
+
+    local file
+    file="$PLUGIN_PANE_DIR/$(safe_name "$pane_id").json"
+    [[ -f "$file" ]] && jq -r '.sessionID // empty' "$file" 2>/dev/null || true
+}
+
+remove_pane_state() {
+    local pane_id="${TMUX_PANE:-}"
+    [[ -z "$pane_id" ]] && return 0
+
+    rm -f "$PLUGIN_PANE_DIR/$(safe_name "$pane_id").json"
+}
+
 require_shared_server() {
     if ! command -v curl >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1; then
         echo "Error: curl and jq are required for the shared OpenCode server" >&2
@@ -229,6 +245,12 @@ fi
 
 # --- persist session ID ----------------------------------------------------
 
-save_session_id "$_pane_key" "$known_id"
+active_id="$known_id"
+if [[ -n "$SERVER_URL" ]]; then
+    mapped_id="$(current_pane_session_id)"
+    [[ -n "$mapped_id" ]] && active_id="$mapped_id"
+fi
+save_session_id "$_pane_key" "$active_id"
+remove_pane_state
 
 exit "$rc"

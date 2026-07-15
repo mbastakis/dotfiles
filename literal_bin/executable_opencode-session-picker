@@ -38,6 +38,32 @@ is_opencode_command() {
     return 1
 }
 
+process_belongs_to_pane() {
+    local pid="$1" pane_id="$2" process_tty pane_tty
+    is_live_pid "$pid" || return 1
+
+    process_tty="$(ps -p "$pid" -o tty= 2>/dev/null || true)"
+    process_tty="${process_tty//[[:space:]]/}"
+    pane_tty="$(tmux display-message -p -t "$pane_id" '#{pane_tty}' 2>/dev/null || true)"
+    pane_tty="${pane_tty##*/}"
+    [[ -n "$process_tty" && "$process_tty" == "$pane_tty" ]]
+}
+
+prune_pane_states() {
+    local state_file pane_id process_id
+    [[ -d "$PLUGIN_PANE_DIR" ]] || return 0
+
+    for state_file in "$PLUGIN_PANE_DIR"/*.json; do
+        [[ -f "$state_file" ]] || continue
+        pane_id="$(jq -r '.tmuxPane // empty' "$state_file" 2>/dev/null || true)"
+        process_id="$(jq -r '.processID // empty' "$state_file" 2>/dev/null || true)"
+
+        if [[ -z "$pane_id" ]] || ! process_belongs_to_pane "$process_id" "$pane_id"; then
+            rm -f "$state_file"
+        fi
+    done
+}
+
 session_info() {
     local session_id="$1"
     [[ -z "$session_id" ]] && return 0
@@ -277,6 +303,7 @@ main() {
     require_tool tmux
     require_tool jq
     require_tool opencode
+    prune_pane_states
 
     local rows list selection status pane_id window_id tmux_session_id tmp_map display selected_index selected_row index cols gum_width
     rows="$(build_rows | sort -t $'\t' -k6,6 -k1,1n -k2,2nr)"

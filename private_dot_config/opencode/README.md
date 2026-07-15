@@ -63,7 +63,7 @@ opencode auth login -p openai
 
 ## Plugins
 
-- `plugins/tmux-session-state.js` records OpenCode session lifecycle events into `~/.local/state/opencode/tmux-session-state/`. `~/bin/opencode-session-picker` exposes the live pane list and status data to the collapsible tmux sidebar; selecting a row focuses the exact OpenCode pane.
+- `plugins/tmux-session-state.js` records OpenCode session lifecycle events into `~/.local/state/opencode/tmux-session-state/`. The attached TUI plugin keeps live pane mappings synchronized, and the picker prunes mappings whose process is dead or no longer owns the pane TTY. `~/bin/opencode-session-picker` exposes the live pane list and status data to the collapsible tmux sidebar; selecting a row focuses the exact OpenCode pane.
 - `plugins/clickable-notifier.js` sends sound/desktop alerts for permissions, questions, completions, and errors from primary sessions only. On macOS it uses `terminal-notifier` so clicking an alert runs `~/bin/opencode-focus-session`, activates Ghostty, and selects the recorded tmux pane. Built-in TUI attention is disabled in `tui.json` so it does not emit separate `subagent_done` sounds.
 
 Restart OpenCode after changing plugin files or the `plugin` array; running panes keep the config loaded at process start.

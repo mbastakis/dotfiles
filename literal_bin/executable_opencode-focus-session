@@ -2,7 +2,6 @@
 set -euo pipefail
 
 STATE_ROOT="${XDG_STATE_HOME:-$HOME/.local/state}/opencode/tmux-session-state"
-SESSION_DIR="$STATE_ROOT/sessions"
 PANE_DIR="$STATE_ROOT/panes"
 
 session_id=""
@@ -14,6 +13,33 @@ log_info() {
 
 safe_name() {
     printf '%s' "$1" | tr -c 'A-Za-z0-9_.%-' '_'
+}
+
+is_live_pid() {
+    local pid="$1"
+    [[ "$pid" =~ ^[0-9]+$ ]] && kill -0 "$pid" 2>/dev/null
+}
+
+process_belongs_to_pane() {
+    local pid="$1" candidate="$2" process_tty pane_tty
+    is_live_pid "$pid" || return 1
+
+    process_tty="$(ps -p "$pid" -o tty= 2>/dev/null || true)"
+    process_tty="${process_tty//[[:space:]]/}"
+    pane_tty="$(tmux display-message -p -t "$candidate" '#{pane_tty}' 2>/dev/null || true)"
+    pane_tty="${pane_tty##*/}"
+    [[ -n "$process_tty" && "$process_tty" == "$pane_tty" ]]
+}
+
+pane_state_matches() {
+    local candidate="$1" expected_session_id="$2" state_file state_session_id process_id
+    state_file="$PANE_DIR/$(safe_name "$candidate").json"
+    [[ -f "$state_file" ]] || return 1
+
+    state_session_id="$(jq -r '.sessionID // empty' "$state_file" 2>/dev/null || true)"
+    process_id="$(jq -r '.processID // empty' "$state_file" 2>/dev/null || true)"
+    [[ "$state_session_id" == "$expected_session_id" ]] \
+        && process_belongs_to_pane "$process_id" "$candidate"
 }
 
 focus_ghostty() {
@@ -65,12 +91,6 @@ if ! command -v tmux >/dev/null 2>&1; then
     exit 0
 fi
 
-if [[ -z "$pane_id" && -n "$session_id" && -f "$SESSION_DIR/$(safe_name "$session_id").json" ]]; then
-    if command -v jq >/dev/null 2>&1; then
-        pane_id="$(jq -r '.tmuxPane // empty' "$SESSION_DIR/$(safe_name "$session_id").json" 2>/dev/null || true)"
-    fi
-fi
-
 if [[ -z "$pane_id" && -n "$session_id" && -d "$PANE_DIR" && -x "$(command -v jq || true)" ]]; then
     best_updated=0
     for state_file in "$PANE_DIR"/*.json; do
@@ -79,10 +99,11 @@ if [[ -z "$pane_id" && -n "$session_id" && -d "$PANE_DIR" && -x "$(command -v jq
         [[ "$state_session_id" == "$session_id" ]] || continue
 
         candidate="$(jq -r '.tmuxPane // empty' "$state_file" 2>/dev/null || true)"
+        process_id="$(jq -r '.processID // empty' "$state_file" 2>/dev/null || true)"
         updated="$(jq -r '.lastUpdated // 0' "$state_file" 2>/dev/null || printf '0')"
         [[ "$updated" =~ ^[0-9]+$ ]] || updated=0
         [[ -n "$candidate" ]] || continue
-        tmux display-message -p -t "$candidate" '#{pane_id}' >/dev/null 2>&1 || continue
+        process_belongs_to_pane "$process_id" "$candidate" || continue
 
         if [[ "$updated" -gt "$best_updated" ]]; then
             pane_id="$candidate"
@@ -97,7 +118,8 @@ if [[ -z "$pane_id" ]]; then
     exit 0
 fi
 
-if ! tmux display-message -p -t "$pane_id" '#{pane_id}' >/dev/null 2>&1; then
+if [[ -z "$session_id" ]] \
+    || ! pane_state_matches "$pane_id" "$session_id"; then
     log_info "tmux pane is no longer available: $pane_id"
     focus_ghostty
     exit 0

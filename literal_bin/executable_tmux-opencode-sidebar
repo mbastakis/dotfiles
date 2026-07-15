@@ -20,6 +20,20 @@ is_visible() {
     [[ "$(tmux show-options -gqv "$VISIBLE_OPTION")" == "1" ]]
 }
 
+is_floax_target() {
+    local target="${1:-}" floax_session target_session
+
+    floax_session="$(tmux show-environment -g FLOAX_SESSION_NAME 2>/dev/null || true)"
+    floax_session="${floax_session#FLOAX_SESSION_NAME=}"
+    floax_session="${floax_session:-scratch}"
+    if [[ -n "$target" ]]; then
+        target_session="$(tmux display-message -p -t "$target" '#{session_name}' 2>/dev/null || true)"
+    else
+        target_session="$(tmux display-message -p '#{session_name}' 2>/dev/null || true)"
+    fi
+    [[ "$target_session" == "$floax_session" ]]
+}
+
 sidebar_panes() {
     local format pane_id window_id marker
 
@@ -42,10 +56,33 @@ window_sidebar_pane() {
     return 1
 }
 
+remove_window_sidebar() {
+    local window_id="$1" pane_id active_pane previous_pane saved_layout
+
+    pane_id="$(window_sidebar_pane "$window_id" || true)"
+    [[ -n "$pane_id" ]] || return 0
+
+    active_pane="$(tmux display-message -p -t "$window_id" '#{pane_id}')"
+    previous_pane="$(tmux show-window-options -v -t "$window_id" "$FOCUS_OPTION" 2>/dev/null || true)"
+    saved_layout="$(tmux show-window-options -v -t "$window_id" "$LAYOUT_OPTION" 2>/dev/null || true)"
+    tmux kill-pane -t "$pane_id" 2>/dev/null || true
+    [[ -z "$saved_layout" ]] || tmux select-layout -t "$window_id" "$saved_layout" >/dev/null 2>&1 || true
+    if [[ "$active_pane" == "$pane_id" ]] && [[ -n "$previous_pane" ]] && pane_exists "$previous_pane"; then
+        tmux select-pane -t "$previous_pane"
+    fi
+    tmux set-window-option -qu -t "$window_id" "$LAYOUT_OPTION"
+    tmux set-window-option -qu -t "$window_id" "$FOCUS_OPTION"
+    tmux set-window-option -qu -t "$window_id" "$RESTORE_FOCUS_OPTION"
+}
+
 ensure_window() {
     local window_id="$1" window_width width pane_id previous_pane saved_layout layout_was_saved=false
 
     tmux display-message -p -t "$window_id" '#{window_id}' >/dev/null 2>&1 || return 0
+    if is_floax_target "$window_id"; then
+        remove_window_sidebar "$window_id"
+        return 0
+    fi
     pane_id="$(window_sidebar_pane "$window_id" || true)"
     [[ -n "$pane_id" ]] && return 0
 
@@ -207,6 +244,7 @@ trap 'tmux wait-for -U "$LOCK_NAME"' EXIT
 action="${1:-toggle}"
 case "$action" in
     toggle)
+        is_floax_target && exit 0
         if is_visible; then
             hide_sidebar
         else
@@ -214,6 +252,7 @@ case "$action" in
         fi
         ;;
     show)
+        is_floax_target && exit 0
         show_sidebar
         ;;
     hide)
