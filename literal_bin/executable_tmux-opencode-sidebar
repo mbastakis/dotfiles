@@ -9,6 +9,8 @@ LAYOUT_OPTION="@opencode_session_sidebar_layout"
 FOCUS_OPTION="@opencode_session_sidebar_previous_pane"
 RESTORE_FOCUS_OPTION="@opencode_session_sidebar_restore_pane"
 LOCK_NAME="opencode-session-sidebar"
+SAVE_LOCK_NAME="opencode-resurrect-save"
+PREFERENCE_FILE="${XDG_STATE_HOME:-$HOME/.local/state}/tmux/opencode-sidebar-visible"
 
 usage() {
     cat >&2 <<EOF
@@ -18,6 +20,15 @@ EOF
 
 is_visible() {
     [[ "$(tmux show-options -gqv "$VISIBLE_OPTION")" == "1" ]]
+}
+
+save_preference() {
+    mkdir -p "$(dirname "$PREFERENCE_FILE")"
+    printf '%s\n' "$1" > "$PREFERENCE_FILE"
+}
+
+ensure_preference() {
+    [[ -f "$PREFERENCE_FILE" ]] || save_preference "$(is_visible && printf 1 || printf 0)"
 }
 
 is_floax_target() {
@@ -126,6 +137,7 @@ ensure_target() {
 }
 
 show_sidebar() {
+    local persist="${1:-true}" focus="${2:-true}" quiet="${3:-false}"
     local pane_id window_id
 
     if [[ ! -x "$SIDEBAR_BIN" ]]; then
@@ -133,12 +145,13 @@ show_sidebar() {
         exit 1
     fi
 
+    [[ "$persist" == true ]] && save_preference 1
     tmux set-option -g "$VISIBLE_OPTION" 1
     window_id="$(tmux display-message -p '#{window_id}')"
     ensure_target "$window_id"
     pane_id="$(window_sidebar_pane "$window_id" || true)"
-    [[ -n "$pane_id" ]] && tmux select-pane -t "$pane_id"
-    tmux display-message "OpenCode sidebar shown"
+    [[ "$focus" == true && -n "$pane_id" ]] && tmux select-pane -t "$pane_id"
+    [[ "$quiet" == true ]] || tmux display-message "OpenCode sidebar shown"
 }
 
 app_pane() {
@@ -188,8 +201,10 @@ restore_layouts() {
 }
 
 hide_sidebar() {
+    local persist="${1:-true}" quiet="${2:-false}"
     local pane_id window_id active_pane previous_pane restore_pane
 
+    [[ "$persist" == true ]] && save_preference 0
     tmux set-option -g "$VISIBLE_OPTION" 0
     while IFS=$'\t' read -r pane_id window_id; do
         active_pane="$(tmux display-message -p -t "$window_id" '#{pane_id}')"
@@ -206,7 +221,21 @@ hide_sidebar() {
     done < <(sidebar_panes)
     restore_layouts
     tmux set-option -g "$VISIBLE_OPTION" 0
-    tmux display-message "OpenCode sidebar hidden"
+    [[ "$quiet" == true ]] || tmux display-message "OpenCode sidebar hidden"
+}
+
+restore_preference() {
+    local window_id
+
+    if [[ ! -f "$PREFERENCE_FILE" ]] || [[ "$(cat "$PREFERENCE_FILE")" != "1" ]]; then
+        tmux set-option -g "$VISIBLE_OPTION" 0
+        return 0
+    fi
+
+    tmux set-option -g "$VISIBLE_OPTION" 1
+    while IFS= read -r window_id; do
+        [[ -n "$window_id" ]] && ensure_window "$window_id"
+    done < <(tmux list-windows -a -F '#{window_id}' | sort -u)
 }
 
 handle_pane_closed() {
@@ -238,8 +267,18 @@ handle_pane_closed() {
     done < <(sidebar_panes)
 }
 
+release_locks() {
+    tmux wait-for -U "$LOCK_NAME"
+    if [[ "${OPENCODE_SIDEBAR_SAVE_LOCK_HELD:-0}" != "1" ]]; then
+        tmux wait-for -U "$SAVE_LOCK_NAME"
+    fi
+}
+
+if [[ "${OPENCODE_SIDEBAR_SAVE_LOCK_HELD:-0}" != "1" ]]; then
+    tmux wait-for -L "$SAVE_LOCK_NAME"
+fi
 tmux wait-for -L "$LOCK_NAME"
-trap 'tmux wait-for -U "$LOCK_NAME"' EXIT
+trap release_locks EXIT
 
 action="${1:-toggle}"
 case "$action" in
@@ -257,6 +296,13 @@ case "$action" in
         ;;
     hide)
         hide_sidebar
+        ;;
+    suspend)
+        ensure_preference
+        hide_sidebar false true
+        ;;
+    restore-preference)
+        restore_preference
         ;;
     ensure)
         ensure_target "${2:-}"

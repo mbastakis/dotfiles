@@ -43,11 +43,11 @@ pane_key() {
     fi
 }
 
-session_exists() {
+session_matches_directory() {
     local sid="$1"
     local count
     count="$(opencode db \
-        "SELECT COUNT(*) as c FROM session WHERE id = '$(sql_escape "$sid")'" \
+        "SELECT COUNT(*) as c FROM session WHERE id = '$(sql_escape "$sid")' AND directory = '$(sql_escape "$(pwd -P)")'" \
         --format json 2>/dev/null \
         | sed -n 's/.*"c"[[:space:]]*:[[:space:]]*\([0-9]*\).*/\1/p' \
         | head -1)" || true
@@ -62,7 +62,7 @@ load_session_id() {
     if [[ -f "$file" ]]; then
         local sid
         sid="$(cat "$file")"
-        if [[ -n "${sid:-}" ]] && session_exists "$sid"; then
+        if [[ -n "${sid:-}" ]] && session_matches_directory "$sid"; then
             printf '%s' "$sid"
         else
             rm -f "$file"   # stale — clean up

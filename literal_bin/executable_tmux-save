@@ -1,0 +1,136 @@
+#!/bin/bash
+set -euo pipefail
+
+SIDEBAR_MANAGER="${OPENCODE_SIDEBAR_MANAGER:-$HOME/bin/tmux-opencode-sidebar}"
+NATIVE_SAVE="${TMUX_RESURRECT_NATIVE_SAVE:-$HOME/.config/tmux/plugins/tmux-resurrect/scripts/save.sh}"
+PANE_STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/opencode/tmux-session-state/panes"
+SESSION_STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/opencode/tmux-panes"
+SAVE_LOCK="opencode-resurrect-save"
+SIDEBAR_PANE_OPTION="@opencode_session_sidebar"
+SYNC_MANIFEST="${TMPDIR:-/tmp}/tmux-opencode-save.$$.sessions"
+focused_sidebar_windows=""
+
+restore_sidebar() {
+    OPENCODE_SIDEBAR_SAVE_LOCK_HELD=1 "$SIDEBAR_MANAGER" restore-preference >/dev/null 2>&1 || true
+
+    local window_id pane_id
+    while IFS= read -r window_id; do
+        [[ -n "$window_id" ]] || continue
+        pane_id="$(tmux list-panes -t "$window_id" -F "#{?#{==:#{${SIDEBAR_PANE_OPTION}},1},#{pane_id},}" 2>/dev/null | sed -n '/./{p;q;}' || true)"
+        [[ -n "$pane_id" ]] && tmux select-pane -t "$pane_id" 2>/dev/null || true
+    done <<< "$focused_sidebar_windows"
+}
+
+cleanup() {
+    set +e
+    if [[ -x "$SIDEBAR_MANAGER" ]]; then
+        restore_sidebar
+    fi
+    rm -f "$SYNC_MANIFEST"
+    tmux wait-for -U "$SAVE_LOCK"
+}
+
+capture_sidebar_focus() {
+    local window_id marker active
+
+    while IFS=$'\t' read -r window_id marker active; do
+        [[ "$marker" == "1" && "$active" == "1" ]] && printf '%s\n' "$window_id"
+    done < <(tmux list-panes -a -F $'#{window_id}\t'"#{${SIDEBAR_PANE_OPTION}}"$'\t#{pane_active}')
+    return 0
+}
+
+sync_live_sessions() {
+    local file pane_id process_id session_id directory key target pane_tty process_tty pane_directory
+
+    : > "$SYNC_MANIFEST"
+    [[ -d "$PANE_STATE_DIR" ]] || return 0
+    shopt -s nullglob
+    for file in "$PANE_STATE_DIR"/*.json; do
+        pane_id="$(jq -r '.tmuxPane // empty' "$file" 2>/dev/null || true)"
+        process_id="$(jq -r '.processID // empty' "$file" 2>/dev/null || true)"
+        session_id="$(jq -r '.sessionID // empty' "$file" 2>/dev/null || true)"
+        directory="$(jq -r '.directory // empty' "$file" 2>/dev/null || true)"
+        [[ -n "$pane_id" && "$process_id" =~ ^[0-9]+$ && -n "$session_id" && -n "$directory" ]] || continue
+        kill -0 "$process_id" 2>/dev/null || continue
+
+        target="$(tmux display-message -p -t "$pane_id" '#{pane_id}' 2>/dev/null || true)"
+        [[ "$target" == "$pane_id" ]] || continue
+        pane_tty="$(tmux display-message -p -t "$pane_id" '#{pane_tty}' 2>/dev/null || true)"
+        process_tty="$(ps -p "$process_id" -o tty= 2>/dev/null | tr -d '[:space:]')"
+        [[ -n "$pane_tty" && "$pane_tty" == "/dev/$process_tty" ]] || continue
+        pane_directory="$(tmux display-message -p -t "$pane_id" '#{pane_current_path}' 2>/dev/null || true)"
+        [[ "$pane_directory" == "$directory" ]] || continue
+        key="$(tmux display-message -p -t "$pane_id" '#{session_name}/#{window_index}/#{pane_index}' 2>/dev/null || true)"
+        [[ -n "$key" ]] || continue
+
+        mkdir -p "$(dirname "$SESSION_STATE_DIR/$key")"
+        printf '%s\n' "$session_id" > "$SESSION_STATE_DIR/$key"
+        printf '%s\t%s\n' "$key" "$session_id" >> "$SYNC_MANIFEST"
+    done
+    return 0
+}
+
+pin_saved_sessions() {
+    local resurrect_dir last_link link_target save_file tmp line
+    local type session window window_active flags pane title directory pane_active command full_command session_id key manifest_key manifest_id
+
+    resurrect_dir="$(tmux show-option -gqv '@resurrect-dir' 2>/dev/null || true)"
+    resurrect_dir="${resurrect_dir:-${XDG_DATA_HOME:-$HOME/.local/share}/tmux/resurrect}"
+    resurrect_dir="${resurrect_dir/#\~/$HOME}"
+    last_link="$resurrect_dir/last"
+    [[ -L "$last_link" ]] || return 0
+    link_target="$(readlink "$last_link")"
+    if [[ "$link_target" == /* ]]; then
+        save_file="$link_target"
+    else
+        save_file="$resurrect_dir/$link_target"
+    fi
+    [[ -f "$save_file" ]] || return 0
+    tmp="${save_file}.$$.tmp"
+
+    while IFS= read -r line; do
+        IFS=$'\t' read -r type session window window_active flags pane title directory pane_active command full_command <<< "$line"
+        if [[ "$type" == "pane" && "$full_command" == *opencode-launch* ]]; then
+            key="$session/$window/$pane"
+            session_id=""
+            while IFS=$'\t' read -r manifest_key manifest_id; do
+                if [[ "$manifest_key" == "$key" ]]; then
+                    session_id="$manifest_id"
+                    break
+                fi
+            done < "$SYNC_MANIFEST"
+            if [[ -n "$session_id" ]]; then
+                full_command=":/bin/bash $HOME/bin/opencode-restore-session $session_id"
+            else
+                full_command=":/bin/bash $HOME/bin/opencode-launch --continue"
+            fi
+            printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
+                "$type" "$session" "$window" "$window_active" "$flags" "$pane" \
+                "$title" "$directory" "$pane_active" "$command" "$full_command"
+        else
+            printf '%s\n' "$line"
+        fi
+    done < "$save_file" > "$tmp"
+    mv "$tmp" "$save_file"
+    return 0
+}
+
+if [[ ! -x "$NATIVE_SAVE" ]]; then
+    echo "Error: tmux-resurrect save script not found: $NATIVE_SAVE" >&2
+    exit 1
+fi
+
+tmux wait-for -L "$SAVE_LOCK"
+trap cleanup EXIT
+: > "$SYNC_MANIFEST"
+
+if [[ -x "$SIDEBAR_MANAGER" ]]; then
+    focused_sidebar_windows="$(capture_sidebar_focus)"
+    OPENCODE_SIDEBAR_SAVE_LOCK_HELD=1 "$SIDEBAR_MANAGER" suspend
+fi
+
+# Sidebar removal renumbers application panes. Persist IDs against exactly the
+# coordinates that tmux-resurrect is about to save.
+command -v jq >/dev/null 2>&1 && sync_live_sessions
+"$NATIVE_SAVE" "$@"
+pin_saved_sessions

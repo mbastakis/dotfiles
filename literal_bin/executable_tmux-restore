@@ -14,6 +14,14 @@ MIN_LINES=3 # at least 1 pane + 1 window + 1 state line
 
 log() { tmux display-message "$*" 2>/dev/null || true; }
 
+restore_sidebar() {
+    if [[ -x "$HOME/bin/tmux-opencode-sidebar" ]]; then
+        "$HOME/bin/tmux-opencode-sidebar" restore-preference
+    fi
+}
+
+trap restore_sidebar EXIT
+
 # Only restore on a fresh tmux server (exactly 1 pane = the initial shell).
 pane_count="$(tmux list-panes -a 2>/dev/null | wc -l | tr -d ' ')"
 if [[ "$pane_count" -gt 1 ]]; then

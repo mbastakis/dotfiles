@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euo pipefail
+
+session_id="${1:-}"
+if [[ -z "$session_id" ]]; then
+    echo "Error: OpenCode session ID is required" >&2
+    exit 2
+fi
+
+exec "$HOME/bin/opencode-launch" --session "$session_id"
