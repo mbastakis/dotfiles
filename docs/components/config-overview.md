@@ -55,6 +55,24 @@ next to the infrastructure they operate. Domain commands use `aws:*`,
 aliases were removed; `tf:*` now contains only cross-stack OpenTofu quality and
 state commands.
 
+### Dependency automation
+
+Renovate is configured in the source-only `renovate.json`. Its native managers
+cover mise tools, pre-commit hooks, npm and uv lock files, Ansible Galaxy,
+OpenTofu providers and modules, Dockerfiles, and GitHub Actions. Narrow regex
+managers cover Atlas container variables, the shared Immich release, the K9s
+shell image, and Colima's K3s release without scanning unrelated chezmoi YAML.
+Major updates require Dependency Dashboard approval, updates run on Monday
+mornings, and automerge is disabled.
+
+The Brewfile remains intentionally outside Renovate: ordinary `brew` and `cask`
+entries do not contain versions, and versioned formula names such as
+`postgresql@17` require coordinated manual upgrades. OpenWrt release checksums,
+TrueNAS catalog app versions, Taskwarrior release checksums, and Yazi plugin
+hashes also remain manual until they have tested metadata sources. The pinned
+`.github/workflows/validate.yml` workflow installs the mise toolchain, verifies
+npm lock files, and runs `infra:validate` for every pull request.
+
 Run the complete secret-free, live-service-free infrastructure gate from the
 repository root:
 

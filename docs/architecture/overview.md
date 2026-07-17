@@ -42,7 +42,7 @@ Chezmoi translates source-state file names to target paths using naming conventi
 | `private_dot_agents/skills/` | `~/.agents/skills/` | Harness-agnostic Agent Skills loaded by OpenCode and Pi |
 | `private_dot_config/pi/` | `~/.config/pi/` | Pi global config, extensions, keybindings, prompt templates, and Pi-specific skills (`PI_CODING_AGENT_DIR=$HOME/.config/pi`) |
 | `.pre-commit-config.yaml`, `.tflint.hcl`, `.terraform-docs.yml` | _(source-only)_ | Repo-local quality gates for hooks, OpenTofu linting, and generated module docs |
-| `mise.toml`, `Taskfile.yml` | _(source-only)_ | Repo-local tool pins and task runner workflows |
+| `mise.toml`, `Taskfile.yml`, `renovate.json` | _(source-only)_ | Repo-local tool pins, task runner workflows, and dependency automation |
 | `literal_bin/` | `~/bin/` | Shell utility scripts |
 | `private_dot_ssh/` | `~/.ssh/` | SSH keys (encrypted) |
 | `private_dot_config/` | `~/.config/` | Application configs |
@@ -80,7 +80,7 @@ These paths exist in the repo but are never deployed to the target filesystem:
 | `bin/chezmoi-bws` | BWS helper (used during template rendering only) |
 | `CONTEXT.md` | Repository glossary for agent/user terminology |
 | `docs/` | This documentation tree |
-| `.pre-commit-config.yaml`, `.tflint.hcl`, `.terraform-docs.yml` | Repo-only tooling configuration |
+| `.pre-commit-config.yaml`, `.tflint.hcl`, `.terraform-docs.yml`, `renovate.json` | Repo-only tooling configuration |
 
 _Reference: `.chezmoiignore:11`_
 

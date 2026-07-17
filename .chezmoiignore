@@ -17,6 +17,7 @@ infra/
 # Repo-local tooling (go-task via mise, used inside this repo only)
 mise.toml
 Taskfile.yml
+renovate.json
 .pre-commit-config.yaml
 .tflint.hcl
 .terraform-docs.yml

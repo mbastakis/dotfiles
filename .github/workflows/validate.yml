@@ -1,0 +1,36 @@
+name: Validate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  repository:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Install repository tools
+        uses: jdx/mise-action@5228313ee0372e111a38da051671ca30fc5a96db # v3
+
+      - name: Install locked Python environment
+        run: uv sync --project infra --locked
+
+      - name: Verify npm lock files
+        run: |
+          npm --prefix private_dot_config/opencode ci --ignore-scripts
+          npm --prefix infra/atlas/tests/taskboard-browser ci --ignore-scripts
+
+      - name: Run offline infrastructure validation
+        run: task infra:validate
