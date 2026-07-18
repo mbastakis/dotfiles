@@ -1,6 +1,5 @@
 import json
 import os
-import shutil
 import socket
 import subprocess
 import sys
@@ -39,7 +38,7 @@ def taskwarrior_binary() -> str | None:
         os.environ.get("TASKBOARD_TASK_BIN"),
         "/opt/homebrew/bin/task",
         "/usr/local/bin/task",
-        shutil.which("task"),
+        "/usr/bin/task",
     ]
     for candidate in filter(None, candidates):
         if not Path(candidate).is_file():
