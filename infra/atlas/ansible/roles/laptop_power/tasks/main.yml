@@ -1,0 +1,33 @@
+---
+- name: Ensure systemd-logind drop-in directory exists
+  ansible.builtin.file:
+    path: /etc/systemd/logind.conf.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Ignore laptop lid and idle sleep actions
+  ansible.builtin.copy:
+    dest: /etc/systemd/logind.conf.d/10-atlas-always-on.conf
+    owner: root
+    group: root
+    mode: "0644"
+    content: |
+      [Login]
+      HandleLidSwitch=ignore
+      HandleLidSwitchExternalPower=ignore
+      HandleLidSwitchDocked=ignore
+      IdleAction=ignore
+  notify: Restart systemd-logind
+
+- name: Mask sleep targets
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    masked: true
+  loop:
+    - sleep.target
+    - suspend.target
+    - hibernate.target
+    - hybrid-sleep.target
+    - suspend-then-hibernate.target

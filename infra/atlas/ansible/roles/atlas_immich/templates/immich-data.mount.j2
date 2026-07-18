@@ -1,0 +1,12 @@
+[Unit]
+Description=Immich durable media from TrueNAS
+Wants=network-online.target
+After=network-online.target
+Before={{ atlas_immich_service_unit }}
+
+[Mount]
+What={{ atlas_immich_nfs_server }}:{{ atlas_immich_nfs_export }}
+Where={{ atlas_immich_media_mount }}
+Type=nfs4
+Options={{ atlas_immich_mount_options }}
+TimeoutSec=90

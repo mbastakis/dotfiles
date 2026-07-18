@@ -1,0 +1,25 @@
+http:
+  routers:
+    audiobookshelf:
+      rule: Host(`{{ atlas_homeserver_audiobookshelf_host }}`)
+      entryPoints:
+        - websecure
+      service: audiobookshelf
+      middlewares:
+        - audiobookshelf-root-redirect
+      tls:
+        certResolver: route53
+
+  middlewares:
+    audiobookshelf-root-redirect:
+      redirectRegex:
+        regex: "^https://([^/]+)/?$"
+        replacement: "https://${1}/audiobookshelf/"
+        permanent: true
+
+  services:
+    audiobookshelf:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "{{ atlas_homeserver_truenas_audiobookshelf_url }}"

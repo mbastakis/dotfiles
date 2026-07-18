@@ -1,0 +1,14 @@
+---
+atlas_tailscale_apt_suite: "{{ ansible_facts.distribution_release }}"
+atlas_tailscale_hostname: atlas
+atlas_tailscale_operator: "{{ atlas_admin_user }}"
+atlas_tailscale_accept_dns: false
+atlas_tailscale_accept_routes: false
+atlas_tailscale_advertise_routes: []
+atlas_tailscale_advertise_exit_node: false
+atlas_tailscale_advertise_tags:
+  - tag:homeserver-entry
+atlas_tailscale_ssh: false
+atlas_tailscale_shields_up: false
+atlas_tailscale_reconcile_running_node: true
+atlas_tailscale_authkey_file: /run/atlas-tailscale-authkey

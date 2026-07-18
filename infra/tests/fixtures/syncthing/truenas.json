@@ -1,0 +1,71 @@
+{
+  "options": {
+    "globalAnnounceEnabled": false,
+    "localAnnounceEnabled": true,
+    "natEnabled": false,
+    "relaysEnabled": true,
+    "listenAddresses": ["default"]
+  },
+  "devices": [
+    {
+      "deviceID": "R43WCNY-3RFNOKV-OSKFPR2-4RSPBGH-WMMVP5J-LUU3UKH-ULVVGOF-ZOOPEA3",
+      "name": "iphone",
+      "addresses": ["dynamic"],
+      "compression": "metadata",
+      "introducer": false,
+      "paused": false
+    },
+    {
+      "deviceID": "Z7NSJQL-LDIT7OY-WZWC6HV-7E77DKL-VEBQTQ6-5OWAIJA-XLTKMB2-CVDAYQE",
+      "name": "truenas",
+      "addresses": ["dynamic"],
+      "compression": "metadata",
+      "introducer": false,
+      "paused": false
+    },
+    {
+      "deviceID": "3L4YVPL-5K7HEZY-RFQ5PZ5-IQ65X2Y-XSL66SY-GRO3K54-6NHOK4T-OEYDGAP",
+      "name": "macbook",
+      "addresses": ["dynamic"],
+      "compression": "metadata",
+      "introducer": false,
+      "paused": false
+    }
+  ],
+  "folders": [
+    {
+      "id": "obsidian-michail",
+      "label": "Obsidian Michail",
+      "path": "/sync/obsidian-michail",
+      "type": "sendreceive",
+      "devices": [
+        {
+          "deviceID": "R43WCNY-3RFNOKV-OSKFPR2-4RSPBGH-WMMVP5J-LUU3UKH-ULVVGOF-ZOOPEA3",
+          "introducedBy": "",
+          "encryptionPassword": ""
+        },
+        {
+          "deviceID": "Z7NSJQL-LDIT7OY-WZWC6HV-7E77DKL-VEBQTQ6-5OWAIJA-XLTKMB2-CVDAYQE",
+          "introducedBy": "",
+          "encryptionPassword": ""
+        },
+        {
+          "deviceID": "3L4YVPL-5K7HEZY-RFQ5PZ5-IQ65X2Y-XSL66SY-GRO3K54-6NHOK4T-OEYDGAP",
+          "introducedBy": "",
+          "encryptionPassword": ""
+        }
+      ],
+      "rescanIntervalS": 3600,
+      "fsWatcherEnabled": true,
+      "fsWatcherDelayS": 10,
+      "versioning": {
+        "type": "staggered",
+        "params": {"cleanInterval": "3600", "maxAge": "2592000"},
+        "cleanupIntervalS": 3600,
+        "fsPath": ""
+      },
+      "paused": false
+    }
+  ],
+  "ignore_files": {"obsidian-michail": ""}
+}

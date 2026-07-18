@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1e1e2e">
+  <link rel="icon" type="image/png" href="/static/sisyphus.png">
+  <link rel="apple-touch-icon" href="/static/sisyphus.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="stylesheet" href="/static/styles.css">
+  <title>Sisyphus</title>
+</head>
+<body>
+  <svg class="icon-sprite" aria-hidden="true" focusable="false">
+    <symbol id="icon-filter" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v5l-4 2v-7L3 5z"/></symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16 16 4 4"/></symbol>
+    <symbol id="icon-folder" viewBox="0 0 24 24"><path d="M3 7h6l2 2h10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></symbol>
+    <symbol id="icon-tag" viewBox="0 0 24 24"><path d="M20 13 11 22 2 13V4h9l9 9z"/><circle cx="7.5" cy="9.5" r="1.5"/></symbol>
+    <symbol id="icon-flag" viewBox="0 0 24 24"><path d="M5 22V4h11l1 4-1 4H5"/></symbol>
+    <symbol id="icon-calendar" viewBox="0 0 24 24"><path d="M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2z"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/></symbol>
+    <symbol id="icon-clear" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/><path d="M10 11v5"/><path d="M14 11v5"/></symbol>
+    <symbol id="icon-sync" viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 1-14.8 6.9"/><path d="M3 12A9 9 0 0 1 17.8 5.1"/><path d="M7 19H3v-4"/><path d="M17 5h4v4"/></symbol>
+    <symbol id="icon-refresh" viewBox="0 0 24 24"><path d="M20 6v5h-5"/><path d="M4 18v-5h5"/><path d="M19 11a7 7 0 0 0-12.2-4"/><path d="M5 13a7 7 0 0 0 12.2 4"/></symbol>
+    <symbol id="icon-expand" viewBox="0 0 24 24"><path d="M8 3H3v5"/><path d="M16 3h5v5"/><path d="M8 21H3v-5"/><path d="M16 21h5v-5"/><path d="M3 3l7 7"/><path d="m21 3-7 7"/><path d="m3 21 7-7"/><path d="m21 21-7-7"/></symbol>
+    <symbol id="icon-collapse" viewBox="0 0 24 24"><path d="M10 3v7H3"/><path d="M14 3v7h7"/><path d="M10 21v-7H3"/><path d="M14 21v-7h7"/></symbol>
+    <symbol id="icon-plus" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></symbol>
+    <symbol id="icon-details" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M4 17h16"/><circle cx="9" cy="7" r="2"/><circle cx="15" cy="17" r="2"/></symbol>
+    <symbol id="icon-keyboard" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h.01"/><path d="M11 10h.01"/><path d="M15 10h.01"/><path d="M19 10h.01"/><path d="M7 14h.01"/><path d="M11 14h6"/></symbol>
+    <symbol id="icon-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+    <symbol id="icon-save" viewBox="0 0 24 24"><path d="M5 3h12l2 2v16H5V3z"/><path d="M8 3v6h8"/><path d="M8 17h8"/></symbol>
+    <symbol id="icon-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="icon-chevron-right" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+    <symbol id="icon-inbox" viewBox="0 0 24 24"><path d="M4 4h16l-2 10H6L4 4z"/><path d="M6 14v4h12v-4"/><path d="M9 18h6"/></symbol>
+    <symbol id="icon-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7L8 5z"/></symbol>
+    <symbol id="icon-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></symbol>
+    <symbol id="icon-pencil" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="m13 7 4 4"/></symbol>
+    <symbol id="icon-hash" viewBox="0 0 24 24"><path d="M9 3 7 21"/><path d="m17 3-2 18"/><path d="M4 9h17"/><path d="M3 15h17"/></symbol>
+    <symbol id="icon-zap" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 10-13h-7l1-7z"/></symbol>
+    <symbol id="icon-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/></symbol>
+  </svg>
+  <div class="app-shell">
+    <aside id="sidebar" class="sidebar" aria-label="Board filters">
+      <div class="sidebar-rail">
+        <a class="sidebar-brand" href="/" aria-label="Sisyphus home">
+          <img src="/static/sisyphus.png" alt="" class="sidebar-logo">
+        </a>
+        <button id="sidebarToggle" class="icon-button" type="button" aria-label="Toggle menu" aria-expanded="true">
+          <span class="hamburger" aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="sidebar-content">
+        <details class="menu-panel views-panel" open>
+          <summary><span class="summary-label"><svg class="icon" aria-hidden="true"><use href="#icon-target"></use></svg> Views</span></summary>
+          <div class="menu-body">
+            <label class="field">
+              <span>Focus view</span>
+              <select id="focusView">
+                <option value="">All tasks</option>
+                <option value="today">Today</option>
+                <option value="ready">Ready</option>
+                <option value="blocked">Blocked</option>
+                <option value="waiting">Waiting</option>
+                <option value="triage">Triage</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Sort cards</span>
+              <select id="sortMode">
+                <option value="due">Due date</option>
+                <option value="urgency">Urgency</option>
+                <option value="modified">Recently modified</option>
+                <option value="entry">Recently added</option>
+                <option value="description">Description</option>
+              </select>
+            </label>
+            <div class="compact-actions">
+              <button id="saveView" class="secondary-button" type="button">Save current</button>
+              <button id="deleteView" class="secondary-button destructive-button" type="button" hidden>Delete view</button>
+            </div>
+          </div>
+        </details>
+
+        <details class="menu-panel" open>
+          <summary><span class="summary-label"><svg class="icon" aria-hidden="true"><use href="#icon-filter"></use></svg> Filters</span></summary>
+          <div class="menu-body">
+            <label class="field">
+              <span><svg class="icon" aria-hidden="true"><use href="#icon-search"></use></svg> Search</span>
+              <input id="searchInput" type="search" autocomplete="off" placeholder="Description, tag, project">
+            </label>
+            <label class="field">
+              <span><svg class="icon" aria-hidden="true"><use href="#icon-folder"></use></svg> Project</span>
+              <select id="projectFilter">
+                <option value="">All projects</option>
+              </select>
+            </label>
+            <label class="field">
+              <span><svg class="icon" aria-hidden="true"><use href="#icon-tag"></use></svg> Tag</span>
+              <select id="tagFilter">
+                <option value="">All tags</option>
+              </select>
+            </label>
+            <label class="field">
+              <span><svg class="icon" aria-hidden="true"><use href="#icon-flag"></use></svg> Priority</span>
+              <select id="priorityFilter">
+                <option value="">All priorities</option>
+                <option value="H">High</option>
+                <option value="M">Medium</option>
+                <option value="L">Low</option>
+              </select>
+            </label>
+            <label class="field">
+              <span><svg class="icon" aria-hidden="true"><use href="#icon-target"></use></svg> Readiness</span>
+              <select id="readinessFilter">
+                <option value="">All readiness</option>
+                <option value="ready">Ready / actionable</option>
+                <option value="blocked">Blocked</option>
+                <option value="deferred">Deferred</option>
+              </select>
+            </label>
+            <label class="field">
+              <span><svg class="icon" aria-hidden="true"><use href="#icon-calendar"></use></svg> Due state</span>
+              <select id="dueFilter">
+                <option value="">All due states</option>
+                <option value="overdue">Overdue</option>
+                <option value="today">Today</option>
+                <option value="upcoming">Upcoming</option>
+                <option value="none">No due date</option>
+              </select>
+            </label>
+            <button id="clearFilters" class="secondary-button" type="button"><svg class="icon" aria-hidden="true"><use href="#icon-clear"></use></svg> Clear filters</button>
+          </div>
+        </details>
+
+        <details id="shortcutsPanel" class="menu-panel shortcuts-panel">
+          <summary><span class="summary-label"><svg class="icon" aria-hidden="true"><use href="#icon-keyboard"></use></svg> Shortcuts</span></summary>
+          <div class="menu-body shortcut-list">
+            <div class="shortcut-row"><kbd>N</kbd><span>New task</span></div>
+            <div class="shortcut-row"><kbd>/</kbd><span>Search</span></div>
+            <div class="shortcut-row"><kbd>B</kbd><span>Toggle sidebar</span></div>
+            <div class="shortcut-row"><kbd>S</kbd><span>Sync now</span></div>
+            <div class="shortcut-row"><kbd>R</kbd><span>Refresh board</span></div>
+            <div class="shortcut-row"><kbd>E</kbd><span>Expand columns</span></div>
+            <div class="shortcut-row"><kbd>C</kbd><span>Collapse empty</span></div>
+            <div class="shortcut-row"><kbd>G</kbd><span>Focus first card</span></div>
+            <div class="shortcut-row"><kbd>H / L</kbd><span>Move across columns</span></div>
+            <div class="shortcut-row"><kbd>J / K</kbd><span>Move within column</span></div>
+            <div class="shortcut-row"><kbd>Enter</kbd><span>Edit focused card</span></div>
+            <div class="shortcut-row"><kbd>1-5</kbd><span>Move focused card</span></div>
+            <div class="shortcut-row"><kbd>Shift + H / L</kbd><span>Move task one column</span></div>
+            <div class="shortcut-row"><kbd>X</kbd><span>Collapse focused column</span></div>
+            <div class="shortcut-row"><kbd>?</kbd><span>Show shortcuts</span></div>
+          </div>
+        </details>
+      </div>
+    </aside>
+    <button id="sidebarBackdrop" class="sidebar-backdrop" type="button" aria-label="Close menu"></button>
+
+    <div class="workspace">
+      <header class="topbar">
+        <div class="topbar-context">
+          <h1>Tasks</h1>
+          <section class="sync-card" aria-live="polite">
+            <span class="status-dot" aria-hidden="true"></span>
+            <div>
+              <p id="status" class="status-text">Loading Taskwarrior...</p>
+              <p id="boardStats" class="status-meta">No tasks loaded yet.</p>
+            </div>
+          </section>
+        </div>
+        <div class="topbar-actions">
+          <button id="syncButton" class="primary-button" type="button"><svg class="icon" aria-hidden="true"><use href="#icon-sync"></use></svg> Sync</button>
+          <button id="refreshButton" class="secondary-button" type="button" aria-label="Refresh board" title="Refresh board"><svg class="icon" aria-hidden="true"><use href="#icon-refresh"></use></svg></button>
+          <button id="expandColumns" class="secondary-button" type="button" aria-label="Expand columns" title="Expand columns"><svg class="icon" aria-hidden="true"><use href="#icon-expand"></use></svg></button>
+          <button id="collapseEmptyColumns" class="secondary-button" type="button" aria-label="Collapse empty columns" title="Collapse empty columns"><svg class="icon" aria-hidden="true"><use href="#icon-collapse"></use></svg></button>
+        </div>
+      </header>
+
+      <section class="quick-panel" aria-labelledby="quickAddTitle">
+        <h2 id="quickAddTitle" class="visually-hidden">Quick add</h2>
+        <form id="quickAdd" class="quick-add">
+          <label class="field description-field">
+            <span class="visually-hidden">Description</span>
+            <input id="newDescription" autocomplete="off" placeholder="Add a task..." required>
+          </label>
+          <label class="field">
+            <span class="visually-hidden">Column</span>
+            <select id="newColumn">
+              <option value="backlog">Backlog</option>
+              <option value="ready">Ready</option>
+              <option value="doing">Doing</option>
+              <option value="waiting">Waiting</option>
+            </select>
+          </label>
+          <details class="inline-details">
+            <summary><span class="summary-label"><svg class="icon" aria-hidden="true"><use href="#icon-details"></use></svg> Details</span></summary>
+            <div class="details-grid">
+              <label class="field">
+                <span>Project</span>
+                <input id="newProject" placeholder="personal.admin">
+              </label>
+              <label class="field">
+                <span>Tags</span>
+                <input id="newTags" placeholder="home, next-action">
+              </label>
+              <label class="field">
+                <span>Priority</span>
+                <select id="newPriority">
+                  <option value="">None</option>
+                  <option value="H">High</option>
+                  <option value="M">Medium</option>
+                  <option value="L">Low</option>
+                </select>
+              </label>
+              <div class="field">
+                <label for="newDue">Due</label>
+                <div class="date-control">
+                  <input id="newDue" type="date">
+                  <button class="date-picker-button" type="button" data-date-picker="newDue" aria-label="Choose due date" title="Choose due date"><svg class="icon" aria-hidden="true"><use href="#icon-calendar"></use></svg></button>
+                </div>
+              </div>
+            </div>
+          </details>
+          <button class="primary-button" type="submit"><svg class="icon" aria-hidden="true"><use href="#icon-plus"></use></svg> Add task</button>
+        </form>
+      </section>
+
+      <section id="bulkPanel" class="bulk-panel" aria-labelledby="bulkTitle">
+        <div class="bulk-heading">
+          <div class="bulk-title-row">
+            <h2 id="bulkTitle">Bulk triage</h2>
+            <span id="bulkCount" class="count">0 selected</span>
+          </div>
+          <div class="bulk-selection-actions">
+            <button id="selectVisible" class="secondary-button" type="button">Select visible</button>
+            <button id="clearSelection" class="secondary-button" type="button" hidden>Clear</button>
+          </div>
+        </div>
+        <form id="bulkForm" class="bulk-form" hidden>
+          <label class="field">
+            <span>Project <small>blank keeps current</small></span>
+            <input id="bulkProject" placeholder="personal.admin">
+          </label>
+          <label class="field">
+            <span>Tags <small>blank keeps current</small></span>
+            <input id="bulkTags" placeholder="home, next-action">
+          </label>
+          <label class="field">
+            <span>Priority</span>
+            <select id="bulkPriority">
+              <option value="__unchanged__">Keep current</option>
+              <option value="">Clear priority</option>
+              <option value="H">High</option>
+              <option value="M">Medium</option>
+              <option value="L">Low</option>
+            </select>
+          </label>
+          <div class="field bulk-due-field">
+            <label class="check-label" for="bulkDueEnabled"><input id="bulkDueEnabled" type="checkbox"> Apply due date</label>
+            <input id="bulkDue" type="date" disabled>
+          </div>
+          <label class="field">
+            <span>Column</span>
+            <select id="bulkColumn">
+              <option value="">Keep current</option>
+              <option value="backlog">Backlog</option>
+              <option value="ready">Ready</option>
+              <option value="doing">Doing</option>
+              <option value="waiting">Waiting</option>
+              <option value="done">Done</option>
+            </select>
+          </label>
+          <button class="primary-button" type="submit">Apply to selected</button>
+        </form>
+      </section>
+
+      <nav id="columnTabs" class="column-tabs" aria-label="Board columns"></nav>
+      <main id="board" class="board" aria-label="Task board"></main>
+      <p id="boardAnnouncements" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></p>
+    </div>
+  </div>
+
+  <dialog id="editDialog" class="edit-dialog" aria-labelledby="editDialogTitle" aria-describedby="editContext">
+    <form id="editForm" class="edit-form">
+      <input id="editUuid" type="hidden">
+      <header class="dialog-header">
+         <div>
+           <p class="eyebrow">Task details</p>
+            <h2 id="editDialogTitle">Inspect and update</h2>
+            <p id="editContext" class="dialog-context"></p>
+            <p id="editDirty" class="dialog-dirty" role="status" aria-live="polite" hidden>Unsaved changes</p>
+            <p id="editSync" class="dialog-sync" role="status" aria-live="polite" aria-atomic="true" hidden></p>
+         </div>
+        <button id="closeEdit" class="icon-button" type="button" aria-label="Close edit form"><svg class="icon" aria-hidden="true"><use href="#icon-x"></use></svg></button>
+      </header>
+
+      <section id="editConflict" class="conflict-banner" role="alert" hidden>
+        <strong>This task changed elsewhere.</strong>
+        <p>Review the remote changes before choosing which version to continue with.</p>
+        <ul id="editConflictFields"></ul>
+        <div class="conflict-actions">
+          <button id="reloadConflict" class="primary-button" type="button">Reload latest</button>
+          <button id="keepConflictEdits" class="secondary-button" type="button">Keep my edits</button>
+        </div>
+      </section>
+
+      <div class="form-layout">
+        <label class="field span-all">
+          <span>Description</span>
+          <textarea id="editDescription" rows="4" required></textarea>
+        </label>
+        <label class="field">
+          <span>Project</span>
+          <input id="editProject" placeholder="personal.admin">
+        </label>
+        <label class="field">
+          <span>Tags</span>
+          <input id="editTags" placeholder="comma separated">
+        </label>
+        <label class="field">
+          <span>Priority</span>
+          <select id="editPriority">
+            <option value="">None</option>
+            <option value="H">High</option>
+            <option value="M">Medium</option>
+            <option value="L">Low</option>
+          </select>
+        </label>
+        <div class="field">
+          <label for="editDue">Due</label>
+          <div class="date-control">
+            <input id="editDue" type="date">
+            <button class="date-picker-button" type="button" data-date-picker="editDue" aria-label="Choose due date" title="Choose due date"><svg class="icon" aria-hidden="true"><use href="#icon-calendar"></use></svg></button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="editWait">Wait until</label>
+          <div class="date-control">
+            <input id="editWait" type="date">
+            <button class="date-picker-button" type="button" data-date-picker="editWait" aria-label="Choose wait date" title="Choose wait date"><svg class="icon" aria-hidden="true"><use href="#icon-calendar"></use></svg></button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="editScheduled">Scheduled</label>
+          <div class="date-control">
+            <input id="editScheduled" type="date">
+            <button class="date-picker-button" type="button" data-date-picker="editScheduled" aria-label="Choose scheduled date" title="Choose scheduled date"><svg class="icon" aria-hidden="true"><use href="#icon-calendar"></use></svg></button>
+          </div>
+        </div>
+        <section class="dependency-picker span-all" aria-labelledby="dependencyTitle">
+          <div class="section-heading">
+            <span id="dependencyTitle">Depends on</span>
+            <span id="dependencyCount" class="count">0</span>
+          </div>
+          <div id="editDependencies" class="dependency-selection" aria-live="polite"></div>
+          <div class="field">
+            <label for="editDependencySearch">Add dependency</label>
+            <input id="editDependencySearch" type="search" role="combobox" aria-autocomplete="list" aria-controls="dependencyResults" aria-expanded="false" autocomplete="off" placeholder="Find or add a task">
+          </div>
+          <div id="dependencyResults" class="dependency-results" role="listbox" aria-label="Matching unfinished tasks" hidden></div>
+          <input id="editDepends" type="hidden">
+        </section>
+        <section class="dependent-tasks span-all" aria-labelledby="dependentTitle">
+          <div class="section-heading">
+            <span id="dependentTitle">This task blocks</span>
+            <span id="dependentCount" class="count">0</span>
+          </div>
+          <div id="editDependents" class="dependent-list"></div>
+        </section>
+        <section class="task-history span-all" aria-labelledby="annotationTitle">
+          <div class="section-heading">
+            <span id="annotationTitle">Annotations</span>
+            <span id="annotationCount" class="count">0</span>
+          </div>
+          <div id="editAnnotations" class="annotation-list"></div>
+          <label class="field">
+            <span>Add annotation</span>
+            <textarea id="editAnnotation" rows="3" placeholder="Record progress, a decision, or why this task is waiting"></textarea>
+          </label>
+        </section>
+        <section id="editNativeMeta" class="native-meta span-all" aria-label="Taskwarrior details"></section>
+      </div>
+
+      <footer class="dialog-actions">
+        <div class="dialog-task-actions">
+          <button id="editStart" class="secondary-button" type="button"><svg class="icon" aria-hidden="true"><use href="#icon-play"></use></svg> Start</button>
+          <button id="editStop" class="secondary-button" type="button"><svg class="icon" aria-hidden="true"><use href="#icon-target"></use></svg> Stop</button>
+          <button id="editComplete" class="secondary-button" type="button"><svg class="icon" aria-hidden="true"><use href="#icon-check"></use></svg> Complete</button>
+          <button id="editReopen" class="secondary-button" type="button"><svg class="icon" aria-hidden="true"><use href="#icon-inbox"></use></svg> Reopen</button>
+          <button id="editDelete" class="secondary-button destructive-button" type="button"><svg class="icon" aria-hidden="true"><use href="#icon-clear"></use></svg> Delete</button>
+        </div>
+        <div class="dialog-save-actions">
+          <button id="cancelEdit" class="secondary-button" type="button">Cancel</button>
+          <button class="primary-button" type="submit"><svg class="icon" aria-hidden="true"><use href="#icon-save"></use></svg> Save changes</button>
+        </div>
+      </footer>
+    </form>
+  </dialog>
+
+  <script src="/static/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+{
+  "$defs": {
+    "Ownership": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "const": "bounded",
+          "title": "Mode",
+          "type": "string"
+        },
+        "scope": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z][a-z0-9_-]*(?:\\.[a-z0-9][a-z0-9_-]*)+$",
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope",
+        "mode"
+      ],
+      "title": "Ownership",
+      "type": "object"
+    },
+    "RetiredSmbShare": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 80,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "RetiredSmbShare",
+      "type": "object"
+    },
+    "SmbService": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "running": {
+          "title": "Running",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "enabled",
+        "running"
+      ],
+      "title": "SmbService",
+      "type": "object"
+    },
+    "SmbShare": {
+      "additionalProperties": false,
+      "properties": {
+        "allowed_users": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Allowed Users",
+          "type": "array"
+        },
+        "browsable": {
+          "title": "Browsable",
+          "type": "boolean"
+        },
+        "comment": {
+          "maxLength": 120,
+          "title": "Comment",
+          "type": "string"
+        },
+        "enabled": {
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "force_group": {
+          "minLength": 1,
+          "title": "Force Group",
+          "type": "string"
+        },
+        "force_user": {
+          "minLength": 1,
+          "title": "Force User",
+          "type": "string"
+        },
+        "id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 80,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "path": {
+          "pattern": "^/[^\\x00]*$",
+          "title": "Path",
+          "type": "string"
+        },
+        "read_only": {
+          "title": "Read Only",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "path",
+        "comment",
+        "read_only",
+        "browsable",
+        "enabled",
+        "allowed_users",
+        "force_user",
+        "force_group"
+      ],
+      "title": "SmbShare",
+      "type": "object"
+    }
+  },
+  "$id": "urn:homeserver-iac:schema:truenas-smb",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "ownership": {
+      "$ref": "#/$defs/Ownership"
+    },
+    "retire_shares": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/RetiredSmbShare"
+      },
+      "title": "Retire Shares",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "service": {
+      "$ref": "#/$defs/SmbService"
+    },
+    "shares": {
+      "items": {
+        "$ref": "#/$defs/SmbShare"
+      },
+      "minItems": 1,
+      "title": "Shares",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "ownership",
+    "service",
+    "shares"
+  ],
+  "title": "SmbDesiredState",
+  "type": "object"
+}

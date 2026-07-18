@@ -1,0 +1,23 @@
+---
+- name: Apply the canonical OpenWrt contract
+  hosts: openwrt
+  gather_facts: false
+
+  pre_tasks:
+    - name: Load the canonical router contract
+      ansible.builtin.include_vars:
+        file: "{{ playbook_dir }}/../../network/openwrt/router.yaml"
+        name: openwrt_contract
+      tags: always
+
+  roles:
+    - role: community.openwrt.init
+      tags: always
+    - role: openwrt_contract
+      tags: always
+    - role: openwrt_protected
+    - role: openwrt_system
+    - role: openwrt_dhcp_dns
+      tags: dns
+    - role: openwrt_wireless
+    - role: openwrt_sqm

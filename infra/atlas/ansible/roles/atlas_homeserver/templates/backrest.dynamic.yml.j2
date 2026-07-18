@@ -1,0 +1,27 @@
+http:
+  routers:
+    backrest-authentik-outpost:
+      rule: Host(`{{ atlas_homeserver_backrest_host }}`) && PathPrefix(`/outpost.goauthentik.io/`)
+      entryPoints:
+        - websecure
+      priority: 100
+      service: authentik@file
+      tls:
+        certResolver: route53
+
+    backrest:
+      rule: Host(`{{ atlas_homeserver_backrest_host }}`)
+      entryPoints:
+        - websecure
+      middlewares:
+        - authentik-forward-auth@file
+      service: backrest
+      tls:
+        certResolver: route53
+
+  services:
+    backrest:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "{{ atlas_homeserver_truenas_backrest_url }}"

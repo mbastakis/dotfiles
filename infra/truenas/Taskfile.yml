@@ -1,0 +1,194 @@
+version: "3"
+
+tasks:
+  status:
+    desc: Plan all managed TrueNAS domains without applying changes
+    cmds:
+      - task: tofu:plan
+      - task: apps:plan
+      - task: audiobookshelf:plan
+      - task: snapshots:plan
+      - task: snapshots:photos:plan
+      - task: snapshots:audiobookshelf:plan
+      - task: snapshots:books:plan
+      - task: nfs:plan
+      - task: smb:plan
+      - task: backrest:plan
+      - task: maintenance:plan
+      - task: api-key:plan
+
+  tofu:init:
+    desc: Initialize the TrueNAS OpenTofu stack
+    dir: infra/truenas/tofu
+    cmds:
+      - task: ":aws:backend:check"
+      - |
+        aws-login exec mbastakis -- tofu init \
+          -input=false \
+          -reconfigure \
+          -backend-config="bucket={{.TF_STATE_BUCKET}}" \
+          -backend-config="key=homeserver/truenas/terraform.tfstate" \
+          -backend-config="region={{.TF_STATE_REGION}}" \
+          -backend-config="encrypt=true" \
+          -backend-config="use_lockfile=true"
+
+  tofu:plan:
+    desc: Plan the TrueNAS OpenTofu stack
+    dir: infra/truenas/tofu
+    cmds:
+      - task: tofu:init
+      - |
+        key_path="${TRUENAS_SSH_PRIVATE_KEY_PATH:-$HOME/.ssh/id_ed25519}"
+        if [[ ! -r "$key_path" ]]; then
+          printf '%s\n' "TrueNAS SSH private key is not readable: $key_path" >&2
+          printf '%s\n' "Set TRUENAS_SSH_PRIVATE_KEY_PATH to override the default." >&2
+          exit 1
+        fi
+        if [[ -z "${TF_VAR_truenas_connection_host:-}" ]]; then
+          export TF_VAR_truenas_connection_host="$("$HOME/bin/homeserver-route" resolve truenas)"
+        fi
+        export TF_VAR_truenas_ssh_private_key="$(< "$key_path")"
+        aws-login exec mbastakis -- tofu plan {{.CLI_ARGS}}
+
+  tofu:apply:
+    desc: Apply the TrueNAS OpenTofu stack
+    dir: infra/truenas/tofu
+    cmds:
+      - task: tofu:init
+      - |
+        key_path="${TRUENAS_SSH_PRIVATE_KEY_PATH:-$HOME/.ssh/id_ed25519}"
+        if [[ ! -r "$key_path" ]]; then
+          printf '%s\n' "TrueNAS SSH private key is not readable: $key_path" >&2
+          printf '%s\n' "Set TRUENAS_SSH_PRIVATE_KEY_PATH to override the default." >&2
+          exit 1
+        fi
+        if [[ -z "${TF_VAR_truenas_connection_host:-}" ]]; then
+          export TF_VAR_truenas_connection_host="$("$HOME/bin/homeserver-route" resolve truenas)"
+        fi
+        export TF_VAR_truenas_ssh_private_key="$(< "$key_path")"
+        aws-login exec mbastakis -- tofu apply {{.CLI_ARGS}}
+
+  bootstrap-ssh-key:
+    desc: Bootstrap TrueNAS key-based SSH access for OpenTofu
+    cmds:
+      - bash infra/truenas/bootstrap-ssh-key.sh {{.CLI_ARGS}}
+
+  apps:plan:
+    desc: Plan TrueNAS apps with the typed reconciler
+    cmds:
+      - bash infra/truenas/apps/manage-apps plan {{.CLI_ARGS}}
+
+  apps:apply:
+    desc: Apply TrueNAS apps with the typed reconciler
+    cmds:
+      - bash infra/truenas/apps/manage-apps apply {{.CLI_ARGS}}
+
+  audiobookshelf:validate:
+    desc: Validate Audiobookshelf API desired state locally
+    cmds:
+      - bash infra/truenas/audiobookshelf/manage-audiobookshelf validate {{.CLI_ARGS}}
+
+  audiobookshelf:plan:
+    desc: Plan Audiobookshelf bootstrap, server, library, backup, and OIDC settings
+    cmds:
+      - infra/secrets/homeserver-secrets exec truenas-audiobookshelf -- bash infra/truenas/audiobookshelf/manage-audiobookshelf plan {{.CLI_ARGS}}
+
+  audiobookshelf:apply:
+    desc: Apply Audiobookshelf bootstrap, server, library, backup, and OIDC settings
+    cmds:
+      - infra/secrets/homeserver-secrets exec truenas-audiobookshelf -- bash infra/truenas/audiobookshelf/manage-audiobookshelf apply {{.CLI_ARGS}}
+
+  snapshots:plan:
+    desc: Plan TrueNAS periodic snapshot tasks with the typed reconciler
+    cmds:
+      - bash infra/truenas/snapshots/manage-snapshots plan {{.CLI_ARGS}}
+
+  snapshots:apply:
+    desc: Apply TrueNAS periodic snapshot tasks with the typed reconciler
+    cmds:
+      - bash infra/truenas/snapshots/manage-snapshots apply {{.CLI_ARGS}}
+
+  snapshots:photos:plan:
+    desc: Plan photo dataset periodic snapshot tasks
+    cmds:
+      - bash infra/truenas/snapshots/manage-snapshots --config infra/truenas/snapshots/photo-snapshot-tasks.yaml plan {{.CLI_ARGS}}
+
+  snapshots:photos:apply:
+    desc: Apply photo dataset periodic snapshot tasks
+    cmds:
+      - bash infra/truenas/snapshots/manage-snapshots --config infra/truenas/snapshots/photo-snapshot-tasks.yaml apply {{.CLI_ARGS}}
+
+  snapshots:audiobookshelf:plan:
+    desc: Plan Audiobookshelf application-state periodic snapshot tasks
+    cmds:
+      - bash infra/truenas/snapshots/manage-snapshots --config infra/truenas/snapshots/audiobookshelf-snapshot-tasks.yaml plan {{.CLI_ARGS}}
+
+  snapshots:audiobookshelf:apply:
+    desc: Apply Audiobookshelf application-state periodic snapshot tasks
+    cmds:
+      - bash infra/truenas/snapshots/manage-snapshots --config infra/truenas/snapshots/audiobookshelf-snapshot-tasks.yaml apply {{.CLI_ARGS}}
+
+  snapshots:books:plan:
+    desc: Plan book library periodic snapshot tasks
+    cmds:
+      - bash infra/truenas/snapshots/manage-snapshots --config infra/truenas/snapshots/books-snapshot-tasks.yaml plan {{.CLI_ARGS}}
+
+  snapshots:books:apply:
+    desc: Apply book library periodic snapshot tasks
+    cmds:
+      - bash infra/truenas/snapshots/manage-snapshots --config infra/truenas/snapshots/books-snapshot-tasks.yaml apply {{.CLI_ARGS}}
+
+  nfs:plan:
+    desc: Plan bounded TrueNAS NFS exports
+    cmds:
+      - bash infra/truenas/shares/manage-nfs plan {{.CLI_ARGS}}
+
+  nfs:apply:
+    desc: Apply bounded TrueNAS NFS exports
+    cmds:
+      - bash infra/truenas/shares/manage-nfs apply {{.CLI_ARGS}}
+
+  smb:plan:
+    desc: Plan bounded TrueNAS SMB shares
+    cmds:
+      - bash infra/truenas/shares/manage-smb plan {{.CLI_ARGS}}
+
+  smb:apply:
+    desc: Apply bounded TrueNAS SMB shares
+    cmds:
+      - bash infra/truenas/shares/manage-smb apply {{.CLI_ARGS}}
+
+  backrest:validate:
+    desc: Validate the typed Backrest desired-state policy locally
+    cmds:
+      - bash infra/truenas/backrest/manage-backrest validate {{.CLI_ARGS}}
+
+  backrest:plan:
+    desc: Plan Backrest policy with the typed reconciler
+    cmds:
+      - infra/secrets/homeserver-secrets exec truenas-backrest -- bash infra/truenas/backrest/manage-backrest plan {{.CLI_ARGS}}
+
+  backrest:apply:
+    desc: Apply Backrest policy with the typed reconciler
+    cmds:
+      - infra/secrets/homeserver-secrets exec truenas-backrest -- bash infra/truenas/backrest/manage-backrest apply {{.CLI_ARGS}}
+
+  maintenance:plan:
+    desc: Plan TrueNAS scrub and SMART self-test schedules
+    cmds:
+      - bash infra/truenas/maintenance/manage-maintenance plan {{.CLI_ARGS}}
+
+  maintenance:apply:
+    desc: Apply TrueNAS maintenance schedules when the pool is ONLINE
+    cmds:
+      - bash infra/truenas/maintenance/manage-maintenance apply {{.CLI_ARGS}}
+
+  api-key:plan:
+    desc: Plan TrueNAS API-key publication to BWS
+    cmds:
+      - uv run --project infra --offline --locked python -m homeserver_iac api-key plan {{.CLI_ARGS}}
+
+  api-key:apply:
+    desc: Publish a newly created TrueNAS API key to BWS atomically
+    cmds:
+      - uv run --project infra --offline --locked python -m homeserver_iac api-key apply {{.CLI_ARGS}}

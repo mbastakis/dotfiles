@@ -27,10 +27,8 @@ jobs:
       - name: Install locked Python environment
         run: uv sync --project infra --locked
 
-      - name: Verify npm lock files
-        run: |
-          npm --prefix private_dot_config/opencode ci --ignore-scripts
-          npm --prefix infra/atlas/tests/taskboard-browser ci --ignore-scripts
+      - name: Verify taskboard browser lock file
+        run: npm --prefix infra/atlas/tests/taskboard-browser ci --ignore-scripts
 
       - name: Run offline infrastructure validation
         run: task infra:validate

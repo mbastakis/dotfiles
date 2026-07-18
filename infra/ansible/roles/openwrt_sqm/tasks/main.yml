@@ -1,0 +1,60 @@
+---
+- name: Ensure the managed SQM section exists
+  community.openwrt.uci:
+    command: set
+    key: sqm.wan
+    value: queue
+    autocommit: true
+  notify: Restart OpenWrt SQM
+
+- name: Converge SQM options
+  community.openwrt.uci:
+    command: set
+    key: "sqm.wan.{{ item.key }}"
+    value: "{{ item.value }}"
+    autocommit: true
+  loop:
+    - key: enabled
+      value: "{{ '1' if openwrt_contract.sqm.enabled else '0' }}"
+    - key: interface
+      value: pppoe-wan
+    - key: download
+      value: "{{ openwrt_contract.sqm.download_kbit }}"
+    - key: upload
+      value: "{{ openwrt_contract.sqm.upload_kbit }}"
+    - key: qdisc
+      value: "{{ openwrt_contract.sqm.qdisc }}"
+    - key: script
+      value: "{{ openwrt_contract.sqm.script }}"
+    - key: qdisc_advanced
+      value: "0"
+    - key: linklayer
+      value: "{{ openwrt_contract.sqm.link_layer }}"
+    - key: overhead
+      value: "{{ openwrt_contract.sqm.overhead }}"
+    - key: linklayer_advanced
+      value: "1"
+    - key: tcMPU
+      value: "{{ openwrt_contract.sqm.mpu }}"
+    - key: linklayer_adaptation_mechanism
+      value: default
+    - key: use_mq
+      value: "{{ '1' if openwrt_contract.sqm.multiqueue else '0' }}"
+    - key: debug_logging
+      value: "0"
+    - key: verbosity
+      value: "5"
+  loop_control:
+    label: "sqm.wan.{{ item.key }}"
+  notify: Restart OpenWrt SQM
+
+- name: Converge flow-offload policy
+  community.openwrt.uci:
+    command: set
+    key: "firewall.@defaults[0].{{ item }}"
+    value: "{{ '0' if not openwrt_contract.sqm.flow_offloading else '1' }}"
+    autocommit: true
+  loop:
+    - flow_offloading
+    - flow_offloading_hw
+  notify: Reload OpenWrt firewall

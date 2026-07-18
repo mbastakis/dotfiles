@@ -1,0 +1,97 @@
+# Managed by infra/truenas/apps/manage-apps.
+# Secret values are provided through environment variables, not this file.
+server:
+  baseURL: "/"
+  externalUrl: "https://files.mbastakis.com"
+  sources:
+    - path: "/srv/household"
+      name: "Household"
+      config:
+        denyByDefault: false
+        private: true
+        readOnly: false
+        disabled: false
+        defaultUserScope: "/"
+        defaultEnabled: true
+        createUserDir: false
+    - path: "/srv/users"
+      name: "Personal"
+      config:
+        denyByDefault: false
+        private: true
+        readOnly: false
+        disabled: false
+        defaultUserScope: "/"
+        defaultEnabled: true
+        createUserDir: true
+  filesystem:
+    createFilePermission: "664"
+    createDirectoryPermission: "775"
+  disableWebDAV: true
+
+auth:
+  tokenExpirationHours: 168
+  methods:
+    password:
+      enabled: false
+      signup: false
+      enforcedOtp: false
+    oidc:
+      enabled: true
+      adminGroup: "homeserver-files-admins"
+      userGroups:
+        - "homeserver-files-household"
+        - "homeserver-files-admins"
+      groupsClaim: "groups"
+      userIdentifier: "preferred_username"
+      disableVerifyTLS: false
+      issuerUrl: "https://auth.mbastakis.com/application/o/filebrowser-quantum/"
+      clientId: "homeserver-filebrowser-quantum"
+      scopes: "openid email profile"
+    proxy:
+      enabled: false
+    jwt:
+      enabled: false
+    ldap:
+      enabled: false
+    noauth: false
+  adminUsername: "admin"
+
+frontend:
+  name: "Homeserver Files"
+  disableDefaultLinks: true
+  oidcLoginButtonText: "Sign in with Authentik"
+
+userDefaults:
+  listing:
+    showHidden: false
+    quickDownload: true
+    deleteAfterArchive: false
+  preview:
+    image: true
+    video: true
+    audio: true
+    office: false
+  ui:
+    darkMode: true
+    locale: "en"
+  account:
+    permissions:
+      api: false
+      admin: false
+      modify: true
+      share: false
+      realtime: true
+      delete: true
+      create: true
+      download: true
+    lockPassword: true
+    disableSettings: false
+    loginMethod: "oidc"
+
+http:
+  trustedHeaders:
+    - "X-Forwarded-For"
+    - "X-Forwarded-Host"
+    - "X-Forwarded-Proto"
+  disableRateLimit: false

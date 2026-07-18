@@ -337,8 +337,36 @@ An administrator/debug interface for operating the homeserver rather than a hous
 _Avoid_: Route53 records for admin UIs, household access to infrastructure ports, treating backup/sync/admin UIs as family apps, claiming VLAN-level isolation before it exists
 
 **Trusted home LAN**:
-The phase-1 network assumption that devices on the local home network are not isolated by VLAN/firewall policy. Tailscale ACLs provide remote/private-network isolation, while local LAN access relies on application credentials and no public internet exposure.
-_Avoid_: assuming Tailscale ACLs restrict local Wi-Fi traffic, delaying phase 1 on VLAN design, giving guests permanent trusted LAN access without revisiting this assumption
+The flat `192.168.1.0/24` network for wired and main-Wi-Fi devices. The production OpenWrt router preserves it because the TL-SG108 is unmanaged; Tailscale ACLs provide remote isolation, while local access relies on application credentials and no public ingress. The separate Wi-Fi-only guest network is not trusted LAN.
+_Avoid_: assuming Tailscale ACLs restrict local traffic, claiming wired VLAN isolation, placing guests on the trusted LAN
+
+**OpenWrt router desired state**:
+The single human-edited contract for the production Cudy WR3000E hardware 1.0/R53 using stock-layout OpenWrt. It owns pinned firmware/package intent and stable network policy while leaving leases, WAN addresses/prefixes, counters, keys/certificates, calibration, and boot state runtime-owned; executors and verification consume this contract rather than restating its policy.
+_Avoid_: competing policy in executor variables, whole-device raw-UCI replacement, `ubootmod`, LuCI as a second owner, treating source readiness as live convergence
+
+**OpenWrt management image**:
+The pinned stock-layout firmware image that provides the required packages, administrator public key, and minimal capability for protected configuration. It contains neither site-specific network policy nor secrets; direct-wired bootstrap applies the **OpenWrt router desired state** after first boot.
+_Avoid_: secret-bearing firmware, golden configuration image, post-WAN package bootstrap
+
+**OpenWrt managed set**:
+An exact collection of OpenWrt resources with stable identities inside a bounded ownership scope. Removing a resource from the owning contract removes it from the router, while board-generated, package-owned, runtime-owned, and unrelated resources remain untouched.
+_Avoid_: permanent absent-state tombstones, whole-file replacement, pruning outside the declared ownership scope
+
+**Wi-Fi-only guest network**:
+The accepted isolated `192.168.30.0/24` OpenWrt network terminating directly on both Cudy radios. It requires AP isolation plus bridge-port isolation, Internet access, and fail-closed separation from trusted LAN, router administration, and other guests over IPv4 and IPv6. The unmanaged TL-SG108 carries no guest VLAN.
+_Avoid_: guest SSID on trusted bridge, AP isolation alone, claiming guest acceptance from Internet access alone
+
+**Protected OpenWrt apply**:
+A direct-wired, stage-scoped UCI transaction with an encrypted pre-stage bundle, rpcd timed rollback, external health checks, and same-session confirmation. Its timer and snapshots are process-lifetime only: reboot, power loss, or rpcd/ubus restart can remove rollback protection after files changed, so it never replaces Speedport, TFTP, or UART recovery.
+_Avoid_: firmware rollback, power-safe transaction, reboot-to-rollback, retrying an ambiguous apply
+
+**Reachability-critical OpenWrt change**:
+An OpenWrt change whose partial failure can remove direct management access or working WAN connectivity. Firmware, bootstrap, LAN, WAN, firewall, and SSH policy are reachability-critical and require a **Protected OpenWrt apply**.
+_Avoid_: treating every UCI change as equally dangerous, applying connectivity changes without rollback protection
+
+**Routine OpenWrt convergence**:
+A bounded idempotent OpenWrt change whose partial failure cannot remove direct management access or WAN connectivity. It does not require the transaction guarantees of a **Protected OpenWrt apply**.
+_Avoid_: unbounded configuration replacement, using routine convergence for reachability-critical changes
 
 **TrueNAS Obsidian dataset**:
 The planned dedicated dataset for the Obsidian vault synced through Syncthing, separate from generic personal files so snapshot, sync, and restore behavior can be tuned independently. It may be declared before the vault contents are migrated, but the actual Obsidian data migration happens later.

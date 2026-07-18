@@ -8,15 +8,15 @@ Taskwarrior remains the source of truth. Sisyphus is a view/controller over a lo
 
 | Board column | Taskwarrior state |
 |---|---|
-| Backlog | `status:pending` without `+next`, active `start`, `+waiting`, or dependencies |
+| Backlog | `status:pending` without `+next`, active `start`, `+waiting`, or an unfinished dependency |
 | Ready | `status:pending +next` |
 | Doing | active tasks started with `task <uuid> start` |
-| Waiting | `+waiting`, native waiting state, or dependencies |
+| Waiting | `+waiting`, native waiting state, or a pending/waiting dependency |
 | Done | recently completed tasks |
 
 Drag/drop and card buttons run normal Taskwarrior commands. There is no separate board-state database.
 
-Selecting a card opens a task detail drawer. In addition to description, project, tags, priority, and due date, the drawer exposes native Taskwarrior annotations, `wait`, `scheduled`, and `depends` fields. Date fields accept keyboard entry or open the browser's calendar from their calendar button. Dependencies use a searchable picker over unfinished board tasks while storing stable Taskwarrior UUIDs. After selection, the matching search result remains visible as an Added task card with View and Remove actions instead of disappearing from the picker. A query without an exact match can create a new Backlog task in the current project and attach it atomically; attachment failure removes the new task. Existing dependencies that are outside the displayed task window remain visible and removable by UUID. Dependency and dependent names link to their task when it is in the displayed window. Recurrence and parent metadata are shown read-only so recurring internals are not accidentally changed.
+Selecting a card opens a task detail drawer. In addition to description, project, tags, priority, and due date, the drawer exposes native Taskwarrior annotations, `wait`, `scheduled`, and `depends` fields. Date fields accept keyboard entry or open the browser's calendar from their calendar button. Dependencies use a searchable picker over unfinished board tasks while storing stable Taskwarrior UUIDs. After selection, the matching search result remains visible as an Added task card with View and Remove actions instead of disappearing from the picker. A query without an exact match can create a new Backlog task in the current project and attach it atomically; attachment failure removes the new task. Direct UUID lookup enriches dependencies outside the recent Done window: pending and waiting tasks block, completed and deleted tasks resolve, and dangling UUIDs remain visible as Missing without blocking work. Dependency and dependent names link to their task when it is in the displayed window. Recurrence and parent metadata are shown read-only so recurring internals are not accidentally changed.
 
 Cards default to decision-critical context: project, priority, due or deferred state, unresolved blockers, and the first user tag. Compact relationship lines name the first unfinished prerequisite and the first task that a card blocks; counts indicate additional relationships, while the drawer retains the complete dependency detail. Triage exposes all secondary card metadata, while Blocked and Waiting expose additional relationship context. Unresolved dependencies give the whole card a blocked treatment. Search includes annotations, dependency and dependent names, UUIDs, and task dates in addition to the visible description, project, tags, and identifiers.
 

@@ -1,0 +1,25 @@
+---
+- name: Disable cloud-init network regeneration
+  ansible.builtin.copy:
+    dest: /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
+    owner: root
+    group: root
+    mode: "0644"
+    content: |
+      network: {config: disabled}
+
+- name: Configure wired DHCP with netplan
+  ansible.builtin.copy:
+    dest: /etc/netplan/50-atlas-dhcp.yaml
+    owner: root
+    group: root
+    mode: "0600"
+    content: |
+      network:
+        version: 2
+        ethernets:
+          {{ atlas_wired_interface }}:
+            dhcp4: true
+            dhcp6: true
+            optional: true
+  notify: Apply netplan

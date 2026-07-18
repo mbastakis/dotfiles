@@ -1,0 +1,55 @@
+# yaml-language-server: $schema=../../../schemas/truenas-app.schema.json
+schema_version: 1
+ownership:
+  scope: truenas.catalog_apps
+  mode: bounded
+
+app_name: tailscale
+catalog_app: tailscale
+train: community
+version: "1.4.10"
+
+# Secret value required at apply time. The Tailscale preauth key value lives in BWS;
+# this declaration references only the committed logical alias.
+secret_values:
+  - path: tailscale.auth_key
+    secret_ref:
+      alias: tailscale_truenas_auth_key
+    env: TS_AUTHKEY
+
+path_permissions:
+  - path: /mnt/pool_4tb/homeserver/apps/tailscale/state
+    owner: 568
+    group: 568
+    mode: "0770"
+    enforce_existing: false
+
+values:
+  TZ: Europe/Athens
+  tailscale:
+    hostname: truenas
+    auth_once: true
+    reset: false
+    accept_dns: false
+    userspace: false
+    accept_routes: false
+    advertise_exit_node: false
+    advertise_routes: []
+    extra_args: []
+    tailscaled_args: []
+    additional_envs: []
+  network:
+    host_network: true
+    networks: []
+  storage:
+    state:
+      type: host_path
+      host_path_config:
+        acl_enable: false
+        path: /mnt/pool_4tb/homeserver/apps/tailscale/state
+    additional_storage: []
+  labels: []
+  resources:
+    limits:
+      cpus: 1
+      memory: 512

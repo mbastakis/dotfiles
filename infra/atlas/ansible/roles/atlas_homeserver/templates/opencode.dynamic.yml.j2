@@ -1,0 +1,21 @@
+http:
+  routers:
+    opencode:
+      rule: Host(`{{ atlas_homeserver_opencode_host }}`)
+      entryPoints:
+        - websecure
+      service: opencode
+      tls:
+        certResolver: route53
+
+  services:
+    opencode:
+      loadBalancer:
+        passHostHeader: true
+        serversTransport: opencode-tailnet
+        servers:
+          - url: "{{ atlas_homeserver_opencode_upstream_url }}"
+
+  serversTransports:
+    opencode-tailnet:
+      serverName: "{{ atlas_homeserver_opencode_upstream_server_name }}"

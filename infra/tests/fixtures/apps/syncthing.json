@@ -1,0 +1,61 @@
+{
+  "apps": [
+    {
+      "name": "syncthing",
+      "state": "RUNNING",
+      "version": "1.3.11",
+      "config": {
+        "TZ": "Europe/Athens",
+        "ix_context": {
+          "app_name": "syncthing",
+          "operation": "UPDATE",
+          "scale_version": "TrueNAS-25.04.2.6"
+        },
+        "labels": [],
+        "network": {
+          "certificate_id": null,
+          "dns_opts": [],
+          "host_network": true,
+          "networks": [],
+          "web_port": {"bind_mode": "published", "host_ips": [], "port_number": 8384}
+        },
+        "resources": {"limits": {"cpus": 1, "memory": 1024}},
+        "run_as": {"group": 568, "user": 568},
+        "storage": {
+          "additional_storage": [
+            {
+              "host_path_config": {
+                "acl_enable": false,
+                "path": "/mnt/pool_4tb/homeserver/data/obsidian/michail"
+              },
+              "mount_path": "/sync/obsidian-michail",
+              "read_only": false,
+              "type": "host_path"
+            }
+          ],
+          "config": {
+            "host_path_config": {
+              "acl_enable": false,
+              "path": "/mnt/pool_4tb/homeserver/apps/syncthing/config"
+            },
+            "type": "host_path"
+          }
+        },
+        "syncthing": {"additional_envs": []}
+      }
+    }
+  ],
+  "path_permissions": {
+    "/mnt/pool_4tb/homeserver/apps/syncthing/config": {
+      "owner": 568,
+      "group": 568,
+      "mode": "0770"
+    },
+    "/mnt/pool_4tb/homeserver/data/obsidian/michail": {
+      "owner": 568,
+      "group": 568,
+      "mode": "0770"
+    }
+  },
+  "managed_files": {}
+}
