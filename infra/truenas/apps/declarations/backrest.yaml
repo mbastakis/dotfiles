@@ -1,0 +1,117 @@
+# yaml-language-server: $schema=../../../schemas/truenas-app.schema.json
+schema_version: 1
+ownership:
+  scope: truenas.catalog_apps
+  mode: bounded
+
+app_name: backrest
+catalog_app: backrest
+train: community
+version: "1.1.10"
+
+secret_envs:
+  - path: backrest.additional_envs
+    name: RESTIC_PASSWORD
+    secret_ref:
+      alias: backrest_restic_repo_password
+  - path: backrest.additional_envs
+    name: AWS_ACCESS_KEY_ID
+    secret_ref:
+      alias: backrest_aws_access_key_id
+  - path: backrest.additional_envs
+    name: AWS_SECRET_ACCESS_KEY
+    secret_ref:
+      alias: backrest_aws_secret_access_key
+
+path_permissions:
+  - path: /mnt/pool_4tb/homeserver/apps/backrest/data
+    owner: 568
+    group: 568
+    mode: "0770"
+  - path: /mnt/pool_4tb/homeserver/apps/backrest/config
+    owner: 568
+    group: 568
+    mode: "0770"
+  - path: /mnt/pool_4tb/homeserver/apps/backrest/cache
+    owner: 568
+    group: 568
+    mode: "0770"
+
+values:
+  TZ: Europe/Athens
+  backrest:
+    additional_envs: []
+  run_as:
+    user: 568
+    group: 568
+  network:
+    web_port:
+      bind_mode: published
+      port_number: 30329
+      host_ips: []
+    host_network: false
+    networks: []
+  storage:
+    data:
+      type: host_path
+      host_path_config:
+        acl_enable: false
+        path: /mnt/pool_4tb/homeserver/apps/backrest/data
+    config:
+      type: host_path
+      host_path_config:
+        acl_enable: false
+        path: /mnt/pool_4tb/homeserver/apps/backrest/config
+    cache:
+      type: host_path
+      host_path_config:
+        acl_enable: false
+        path: /mnt/pool_4tb/homeserver/apps/backrest/cache
+    additional_storage:
+      - type: host_path
+        read_only: true
+        mount_path: /source/obsidian
+        host_path_config:
+          acl_enable: false
+          path: /mnt/pool_4tb/homeserver/data/obsidian
+      - type: host_path
+        read_only: true
+        mount_path: /source/files
+        host_path_config:
+          acl_enable: false
+          path: /mnt/pool_4tb/homeserver/data/files
+      - type: host_path
+        read_only: true
+        mount_path: /source/taskchampion-sync-backup
+        host_path_config:
+          acl_enable: false
+          path: /mnt/pool_4tb/homeserver/data/taskchampion-sync-backup
+      - type: host_path
+        read_only: true
+        mount_path: /source/immich
+        host_path_config:
+          acl_enable: false
+          path: /mnt/pool_4tb/homeserver/data/photos/immich
+      - type: host_path
+        read_only: true
+        mount_path: /source/apple-originals
+        host_path_config:
+          acl_enable: false
+          path: /mnt/pool_4tb/homeserver/data/photos/apple-originals
+      - type: host_path
+        read_only: true
+        mount_path: /source/audiobookshelf-backups
+        host_path_config:
+          acl_enable: false
+          path: /mnt/pool_4tb/homeserver/apps/audiobookshelf/backups
+      - type: host_path
+        read_only: true
+        mount_path: /source/books
+        host_path_config:
+          acl_enable: false
+          path: /mnt/pool_4tb/homeserver/data/books
+  labels: []
+  resources:
+    limits:
+      cpus: 1
+      memory: 1024

@@ -1,0 +1,16 @@
+---
+- name: Converge reachability-critical OpenWrt capabilities
+  ansible.builtin.command:
+    argv:
+      - "{{ ansible_playbook_python }}"
+      - -m
+      - homeserver_iac
+      - openwrt
+      - apply
+      - --stage
+      - all
+    chdir: "{{ playbook_dir }}/../.."
+  delegate_to: localhost
+  run_once: true
+  register: openwrt_protected_apply
+  changed_when: "'applied 0 protected OpenWrt transactions' not in openwrt_protected_apply.stdout"

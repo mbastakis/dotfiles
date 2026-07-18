@@ -1,0 +1,10 @@
+---
+- name: Restart OpenWrt SQM
+  community.openwrt.service:
+    name: sqm
+    state: restarted
+
+- name: Reload OpenWrt firewall
+  community.openwrt.service:
+    name: firewall
+    state: reloaded

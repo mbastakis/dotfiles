@@ -79,13 +79,24 @@ All operations use graceful degradation (`|| true`).
 
 _Reference: `.chezmoiscripts/run_once_after_03-setup.sh.tmpl:1`_
 
-### 04 - Work Tailscale DNS (`run_after`)
+### 04 - Work Network Policy (`run_after`)
 
 On macOS DT work profiles, runs `tailscale set --accept-dns=false` after every apply. This leaves Harmony SASE or the local network as the system DNS authority while retaining Tailscale peer routes, avoiding DNS forwarding between the two VPN extensions. It does not start or stop either VPN; if the Tailscale CLI or backend is unavailable, the script leaves the apply successful and retries on the next apply.
 
 Client-side MagicDNS names are unavailable with this setting; Route53-backed `*.mbastakis.com` names and direct Tailscale IPs continue to work. When both VPNs need to be started, connect Tailscale first and Harmony second. If Tailscale cannot reconnect to its control plane while Harmony is active, disconnect Harmony briefly, bring Tailscale online, then reconnect Harmony.
 
-_Reference: `.chezmoiscripts/run_after_04-configure-tailscale-dns.sh.tmpl:1`_
+The same profile disables the HTTP and HTTPS proxy states on the `AX88179A`
+Ethernet service after every apply. Harmony SASE remains available through its
+active tunnel, while a stale local listener at `127.0.0.1:8888` cannot block
+Ethernet browser traffic. The stored proxy server and port are preserved. To
+restore the managed proxy path, enable both states explicitly:
+
+```bash
+networksetup -setwebproxystate AX88179A on
+networksetup -setsecurewebproxystate AX88179A on
+```
+
+_References: `.chezmoiscripts/run_after_04-configure-tailscale-dns.sh.tmpl:1`, `.chezmoiscripts/run_after_04-disable-work-ethernet-proxy.sh.tmpl:1`_
 
 ### 05 - Ghostty-tmux LaunchAgent (`run_onchange`)
 

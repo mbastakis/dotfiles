@@ -1,0 +1,13 @@
+---
+- name: Deploy Immich on atlas
+  hosts: atlas
+  become: true
+  gather_facts: true
+
+  pre_tasks:
+    - name: Require Docker CLI before deploying Immich
+      ansible.builtin.command: docker --version
+      changed_when: false
+
+  roles:
+    - role: atlas_immich

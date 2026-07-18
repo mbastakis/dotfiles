@@ -1,0 +1,182 @@
+version: "3"
+
+vars:
+  TASKBOARD_BROWSER_DIR: "{{.TASKFILE_DIR}}/tests/taskboard-browser"
+
+tasks:
+  ansible:sync:
+    desc: Install locked Atlas Ansible collections
+    dir: "{{.TASKFILE_DIR}}/ansible"
+    cmds:
+      - ansible-galaxy collection install --force -r requirements.yml -p .collections
+    status:
+      - test -f .collections/ansible_collections/community/docker/MANIFEST.json
+
+  validate:
+    desc: Run syntax checks for all Atlas playbooks
+    dir: "{{.TASKFILE_DIR}}/ansible"
+    deps:
+      - ansible:sync
+    cmds:
+      - ansible-playbook playbooks/atlas-bootstrap.yml --syntax-check
+      - ansible-playbook playbooks/atlas-base.yml --syntax-check
+      - ansible-playbook playbooks/atlas-tailscale.yml --syntax-check
+      - ansible-playbook playbooks/atlas-homeserver.yml --syntax-check
+      - ansible-playbook playbooks/atlas-immich.yml --syntax-check
+
+  status:
+    desc: Check all managed Atlas configuration without applying changes
+    cmds:
+      - task: base:plan
+      - task: tailscale:plan
+      - task: homeserver:plan
+      - task: immich:plan
+      - task: pihole:verify
+
+  bootstrap:
+    desc: Bootstrap Atlas for Ansible management
+    dir: "{{.TASKFILE_DIR}}/ansible"
+    cmds:
+      - ansible-playbook playbooks/atlas-bootstrap.yml --ask-pass {{.CLI_ARGS}}
+
+  base:plan:
+    desc: Check Atlas base system configuration
+    dir: "{{.TASKFILE_DIR}}/ansible"
+    cmds:
+      - ansible-playbook playbooks/atlas-base.yml --check --diff {{.CLI_ARGS}}
+
+  base:apply:
+    desc: Apply Atlas base system configuration
+    dir: "{{.TASKFILE_DIR}}/ansible"
+    cmds:
+      - ansible-playbook playbooks/atlas-base.yml {{.CLI_ARGS}}
+
+  tailscale:plan:
+    desc: Check Atlas Tailscale configuration
+    dir: "{{.TASKFILE_DIR}}/ansible"
+    cmds:
+      - ../../secrets/homeserver-secrets exec atlas-tailscale -- ansible-playbook playbooks/atlas-tailscale.yml --check --diff {{.CLI_ARGS}}
+
+  tailscale:apply:
+    desc: Apply Atlas Tailscale configuration
+    dir: "{{.TASKFILE_DIR}}/ansible"
+    cmds:
+      - ../../secrets/homeserver-secrets exec atlas-tailscale -- ansible-playbook playbooks/atlas-tailscale.yml {{.CLI_ARGS}}
+
+  homeserver:plan:
+    desc: Check Atlas homeserver workloads
+    dir: "{{.TASKFILE_DIR}}/ansible"
+    deps:
+      - ansible:sync
+    cmds:
+      - ../../secrets/homeserver-secrets exec atlas-homeserver -- ansible-playbook playbooks/atlas-homeserver.yml --check --diff {{.CLI_ARGS}}
+
+  homeserver:apply:
+    desc: Apply Atlas homeserver workloads
+    dir: "{{.TASKFILE_DIR}}/ansible"
+    deps:
+      - ansible:sync
+    cmds:
+      - ../../secrets/homeserver-secrets exec atlas-homeserver -- ansible-playbook playbooks/atlas-homeserver.yml {{.CLI_ARGS}}
+      - task: taskboard:smoke:live
+
+  ntfy:plan:
+    desc: Check only the isolated Atlas ntfy deployment
+    dir: "{{.TASKFILE_DIR}}/ansible"
+    deps:
+      - ansible:sync
+    cmds:
+      - ../../secrets/homeserver-secrets exec atlas-homeserver -- ansible-playbook playbooks/atlas-homeserver.yml --check --diff --tags ntfy {{.CLI_ARGS}}
+
+  ntfy:apply:
+    desc: Apply only the isolated Atlas ntfy deployment
+    dir: "{{.TASKFILE_DIR}}/ansible"
+    deps:
+      - ansible:sync
+    cmds:
+      - ../../secrets/homeserver-secrets exec atlas-homeserver -- ansible-playbook playbooks/atlas-homeserver.yml --tags ntfy {{.CLI_ARGS}}
+
+  pihole:plan:
+    desc: Check only the Atlas Pi-hole deployment
+    dir: "{{.TASKFILE_DIR}}/ansible"
+    deps:
+      - ansible:sync
+    cmds:
+      - ansible-playbook playbooks/atlas-homeserver.yml --check --diff --tags pihole {{.CLI_ARGS}}
+
+  pihole:apply:
+    desc: Deploy only the Atlas Pi-hole service and Traefik route
+    dir: "{{.TASKFILE_DIR}}/ansible"
+    deps:
+      - ansible:sync
+    cmds:
+      - ansible-playbook playbooks/atlas-homeserver.yml --tags pihole {{.CLI_ARGS}}
+      - task: pihole:verify
+
+  pihole:verify:
+    desc: Verify Pi-hole container, DNS, blocking, and private web routing
+    cmds:
+      - |
+        for attempt in $(seq 1 18); do
+          if ssh atlas "sudo docker inspect homeserver-pihole-1" |
+            jq -e '.[0].State.Health.Status == "healthy"' >/dev/null; then
+            exit 0
+          fi
+          sleep 5
+        done
+        exit 1
+      - dig +short +time=2 +tries=1 @192.168.1.19 example.com A | rg -q '^[0-9]+\.'
+      - dig +tcp +short +time=2 +tries=1 @192.168.1.19 pi.hole A | rg -q '^[0-9]+\.'
+      - >-
+        dig +time=2 +tries=1 @192.168.1.19 cloudflare-dns.com A |
+        rg -q 'status: NOERROR'
+      - >-
+        dig +time=2 +tries=1 @192.168.1.19 dnssec-failed.org A |
+        rg -q 'status: SERVFAIL'
+      - dig +short +time=2 +tries=1 @192.168.1.1 doubleclick.net A | rg -qx '0.0.0.0'
+      - curl -sS -o /dev/null -w '%{http_code}\n' https://pihole.mbastakis.com/admin/ | rg -q '^(200|302)$'
+
+  audiobookshelf:plan:
+    desc: Check only the Atlas Audiobookshelf Traefik route
+    dir: "{{.TASKFILE_DIR}}/ansible"
+    cmds:
+      - ansible-playbook playbooks/atlas-homeserver.yml --check --diff --tags audiobookshelf {{.CLI_ARGS}}
+
+  audiobookshelf:apply:
+    desc: Apply only the Atlas Audiobookshelf Traefik route
+    dir: "{{.TASKFILE_DIR}}/ansible"
+    cmds:
+      - ansible-playbook playbooks/atlas-homeserver.yml --tags audiobookshelf {{.CLI_ARGS}}
+
+  taskboard:browser:sync:
+    desc: Install locked Sisyphus browser-test dependencies
+    cmds:
+      - npm --prefix "{{.TASKBOARD_BROWSER_DIR}}" ci
+      - npm --prefix "{{.TASKBOARD_BROWSER_DIR}}" exec -- playwright install chromium
+
+  taskboard:test:
+    desc: Run Sisyphus integration and mocked browser regressions
+    deps:
+      - taskboard:browser:sync
+    cmds:
+      - uv run --project "{{.TASKFILE_DIR}}/.." --offline --locked pytest "{{.TASKFILE_DIR}}/../tests/test_taskboard_integration.py"
+      - npm --prefix "{{.TASKBOARD_BROWSER_DIR}}" test
+
+  taskboard:smoke:live:
+    desc: Run the read-only Sisyphus smoke test against Atlas
+    deps:
+      - taskboard:browser:sync
+    cmds:
+      - '"{{.TASKBOARD_BROWSER_DIR}}/live-smoke.sh"'
+
+  immich:plan:
+    desc: Check the dedicated Atlas Immich deployment
+    dir: "{{.TASKFILE_DIR}}/ansible"
+    cmds:
+      - ../../secrets/homeserver-secrets exec atlas-immich -- ansible-playbook playbooks/atlas-immich.yml --check --diff {{.CLI_ARGS}}
+
+  immich:apply:
+    desc: Apply the dedicated Atlas Immich deployment
+    dir: "{{.TASKFILE_DIR}}/ansible"
+    cmds:
+      - ../../secrets/homeserver-secrets exec atlas-immich -- ansible-playbook playbooks/atlas-immich.yml {{.CLI_ARGS}}

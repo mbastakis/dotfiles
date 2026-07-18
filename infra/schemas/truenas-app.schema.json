@@ -1,0 +1,294 @@
+{
+  "$defs": {
+    "ManagedFile": {
+      "additionalProperties": false,
+      "properties": {
+        "content_mode": {
+          "default": "exact",
+          "enum": [
+            "exact",
+            "yaml-subset"
+          ],
+          "title": "Content Mode",
+          "type": "string"
+        },
+        "destination": {
+          "pattern": "^/[^\\x00]*$",
+          "title": "Destination",
+          "type": "string"
+        },
+        "dir_mode": {
+          "pattern": "^0[0-7]{3}$",
+          "title": "Dir Mode",
+          "type": "string"
+        },
+        "group": {
+          "minimum": 0,
+          "title": "Group",
+          "type": "integer"
+        },
+        "mode": {
+          "pattern": "^0[0-7]{3}$",
+          "title": "Mode",
+          "type": "string"
+        },
+        "owner": {
+          "minimum": 0,
+          "title": "Owner",
+          "type": "integer"
+        },
+        "source": {
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source",
+        "destination",
+        "owner",
+        "group",
+        "mode",
+        "dir_mode"
+      ],
+      "title": "ManagedFile",
+      "type": "object"
+    },
+    "Ownership": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "const": "bounded",
+          "title": "Mode",
+          "type": "string"
+        },
+        "scope": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z][a-z0-9_-]*(?:\\.[a-z0-9][a-z0-9_-]*)+$",
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope",
+        "mode"
+      ],
+      "title": "Ownership",
+      "type": "object"
+    },
+    "PathPermission": {
+      "additionalProperties": false,
+      "properties": {
+        "enforce_existing": {
+          "default": true,
+          "title": "Enforce Existing",
+          "type": "boolean"
+        },
+        "group": {
+          "minimum": 0,
+          "title": "Group",
+          "type": "integer"
+        },
+        "mode": {
+          "pattern": "^0[0-7]{3}$",
+          "title": "Mode",
+          "type": "string"
+        },
+        "owner": {
+          "minimum": 0,
+          "title": "Owner",
+          "type": "integer"
+        },
+        "path": {
+          "pattern": "^/[^\\x00]*$",
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "owner",
+        "group",
+        "mode"
+      ],
+      "title": "PathPermission",
+      "type": "object"
+    },
+    "SecretEnvironmentBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "env": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Z][A-Za-z0-9_]*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Env"
+        },
+        "name": {
+          "pattern": "^[A-Z][A-Za-z0-9_]*$",
+          "title": "Name",
+          "type": "string"
+        },
+        "path": {
+          "pattern": "^[a-zA-Z0-9_-]+(?:\\.[a-zA-Z0-9_-]+)*$",
+          "title": "Path",
+          "type": "string"
+        },
+        "secret_ref": {
+          "$ref": "#/$defs/SecretRef"
+        }
+      },
+      "required": [
+        "path",
+        "name",
+        "secret_ref"
+      ],
+      "title": "SecretEnvironmentBinding",
+      "type": "object"
+    },
+    "SecretRef": {
+      "additionalProperties": false,
+      "description": "A logical reference only; secret material is deliberately not representable.",
+      "properties": {
+        "alias": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Alias",
+          "type": "string"
+        }
+      },
+      "required": [
+        "alias"
+      ],
+      "title": "SecretRef",
+      "type": "object"
+    },
+    "SecretValueBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "env": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Z][A-Za-z0-9_]*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Env"
+        },
+        "path": {
+          "pattern": "^[a-zA-Z0-9_-]+(?:\\.[a-zA-Z0-9_-]+)*$",
+          "title": "Path",
+          "type": "string"
+        },
+        "secret_ref": {
+          "$ref": "#/$defs/SecretRef"
+        }
+      },
+      "required": [
+        "path",
+        "secret_ref"
+      ],
+      "title": "SecretValueBinding",
+      "type": "object"
+    }
+  },
+  "$id": "urn:homeserver-iac:schema:truenas-app",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "app_name": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[a-z0-9][a-z0-9._-]*$",
+      "title": "App Name",
+      "type": "string"
+    },
+    "catalog_app": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[a-z0-9][a-z0-9._-]*$",
+      "title": "Catalog App",
+      "type": "string"
+    },
+    "managed_files": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ManagedFile"
+      },
+      "title": "Managed Files",
+      "type": "array"
+    },
+    "ownership": {
+      "$ref": "#/$defs/Ownership"
+    },
+    "path_permissions": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/PathPermission"
+      },
+      "title": "Path Permissions",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "secret_envs": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/SecretEnvironmentBinding"
+      },
+      "title": "Secret Envs",
+      "type": "array"
+    },
+    "secret_values": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/SecretValueBinding"
+      },
+      "title": "Secret Values",
+      "type": "array"
+    },
+    "train": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[a-z0-9][a-z0-9._-]*$",
+      "title": "Train",
+      "type": "string"
+    },
+    "values": {
+      "additionalProperties": true,
+      "title": "Values",
+      "type": "object"
+    },
+    "version": {
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "ownership",
+    "app_name",
+    "catalog_app",
+    "train",
+    "version",
+    "values"
+  ],
+  "title": "TrueNASAppDesiredState",
+  "type": "object"
+}

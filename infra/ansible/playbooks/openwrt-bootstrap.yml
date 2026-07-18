@@ -1,0 +1,17 @@
+---
+- name: Complete routine configuration after protected OpenWrt bootstrap
+  hosts: openwrt
+  gather_facts: false
+
+  pre_tasks:
+    - name: Load the canonical router contract
+      ansible.builtin.include_vars:
+        file: "{{ playbook_dir }}/../../network/openwrt/router.yaml"
+        name: openwrt_contract
+
+  roles:
+    - role: community.openwrt.init
+    - role: openwrt_contract
+    - role: openwrt_system
+    - role: openwrt_dhcp_dns
+    - role: openwrt_wireless

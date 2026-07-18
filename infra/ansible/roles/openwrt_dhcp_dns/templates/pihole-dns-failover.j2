@@ -1,0 +1,77 @@
+#!/bin/sh
+set -eu
+
+primary={{ openwrt_contract.dns.upstreams[0] | quote }}
+fallbacks={{ openwrt_contract.dns.upstreams[1:] | join(' ') | quote }}
+probe_name=pi.hole
+probe_timeout=2
+check_interval=5
+failure_threshold=3
+recovery_threshold=2
+
+check_primary() {
+    nslookup "$probe_name" "$primary" >/dev/null 2>&1 &
+    query_pid=$!
+    (
+        sleep "$probe_timeout"
+        kill "$query_pid" 2>/dev/null || true
+    ) &
+    timer_pid=$!
+
+    if wait "$query_pid"; then
+        result=0
+    else
+        result=1
+    fi
+    kill "$timer_pid" 2>/dev/null || true
+    wait "$timer_pid" 2>/dev/null || true
+    return "$result"
+}
+
+set_servers() {
+    next_mode=$1
+    shift
+    uci -q delete dhcp.@dnsmasq[0].server || true
+    for server in "$@"; do
+        uci add_list dhcp.@dnsmasq[0].server="$server"
+    done
+    uci commit dhcp
+    /etc/init.d/dnsmasq restart
+    logger -t pihole-dns-failover "switched DNS upstream mode to $next_mode"
+}
+
+current_servers=$(uci -q get dhcp.@dnsmasq[0].server || true)
+case " $current_servers " in
+    *" $primary "*) mode=pihole ;;
+    *) mode=fallback ;;
+esac
+failures=0
+successes=0
+
+while true; do
+    if check_primary; then
+        failures=0
+        successes=$((successes + 1))
+        if [ "$mode" = fallback ] && [ "$successes" -ge "$recovery_threshold" ]; then
+            mode=pihole
+        fi
+    else
+        successes=0
+        failures=$((failures + 1))
+        if [ "$mode" = pihole ] && [ "$failures" -ge "$failure_threshold" ]; then
+            mode=fallback
+        fi
+    fi
+
+    if [ "$mode" = pihole ]; then
+        next_servers="$primary $fallbacks"
+    else
+        next_servers=$fallbacks
+    fi
+    current_servers=$(uci -q get dhcp.@dnsmasq[0].server || true)
+    if [ "$current_servers" != "$next_servers" ]; then
+        # Word splitting is intentional: UCI stores each resolver as a list item.
+        set_servers "$mode" $next_servers
+    fi
+    sleep "$check_interval"
+done

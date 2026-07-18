@@ -1,0 +1,26 @@
+{
+  "service": {
+    "id": 4,
+    "service": "cifs",
+    "enable": true,
+    "state": "RUNNING"
+  },
+  "shares": [
+    {
+      "id": 8,
+      "purpose": "NO_PRESET",
+      "path": "/mnt/pool_4tb/homeserver/data/photos/apple-originals",
+      "name": "apple-originals",
+      "comment": "Temporary private Apple Photos migration archive",
+      "ro": false,
+      "browsable": false,
+      "guestok": false,
+      "acl": false,
+      "shadowcopy": false,
+      "streams": true,
+      "auxsmbconf": "valid users = mbastakis\nforce user = apps\nforce group = apps\ncreate mask = 0660\ndirectory mask = 0770",
+      "enabled": true,
+      "locked": false
+    }
+  ]
+}

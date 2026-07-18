@@ -1,0 +1,16 @@
+http:
+  routers:
+    ntfy:
+      rule: Host(`{{ atlas_homeserver_ntfy_host }}`)
+      entryPoints:
+        - websecure
+      service: ntfy
+      tls:
+        certResolver: route53
+
+  services:
+    ntfy:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "http://ntfy:{{ atlas_homeserver_ntfy_port }}"

@@ -1,0 +1,22 @@
+{
+  "service": {
+    "id": 9,
+    "service": "nfs",
+    "enable": true,
+    "state": "RUNNING"
+  },
+  "shares": [
+    {
+      "id": 7,
+      "path": "/mnt/pool_4tb/homeserver/data/photos/immich",
+      "hosts": ["192.168.1.19"],
+      "networks": [],
+      "ro": false,
+      "enabled": true,
+      "mapall_user": "apps",
+      "mapall_group": "apps",
+      "locked": false,
+      "comment": "runtime-owned"
+    }
+  ]
+}

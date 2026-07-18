@@ -1,0 +1,5 @@
+{
+  "create-me": {"enabled": true},
+  "same": {"enabled": true},
+  "update-me": {"enabled": true, "password": "desired-secret"}
+}

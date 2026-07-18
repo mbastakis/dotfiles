@@ -1,0 +1,254 @@
+{
+  "$defs": {
+    "Ownership": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "const": "bounded",
+          "title": "Mode",
+          "type": "string"
+        },
+        "scope": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z][a-z0-9_-]*(?:\\.[a-z0-9][a-z0-9_-]*)+$",
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope",
+        "mode"
+      ],
+      "title": "Ownership",
+      "type": "object"
+    },
+    "ScrubPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "maxLength": 200,
+          "title": "Description",
+          "type": "string"
+        },
+        "enabled": {
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "schedule": {
+          "$ref": "#/$defs/ScrubSchedule"
+        },
+        "threshold": {
+          "minimum": 1,
+          "title": "Threshold",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "threshold",
+        "description",
+        "enabled",
+        "schedule"
+      ],
+      "title": "ScrubPolicy",
+      "type": "object"
+    },
+    "ScrubSchedule": {
+      "additionalProperties": false,
+      "properties": {
+        "dom": {
+          "minLength": 1,
+          "title": "Dom",
+          "type": "string"
+        },
+        "dow": {
+          "minLength": 1,
+          "title": "Dow",
+          "type": "string"
+        },
+        "hour": {
+          "minLength": 1,
+          "title": "Hour",
+          "type": "string"
+        },
+        "minute": {
+          "minLength": 1,
+          "title": "Minute",
+          "type": "string"
+        },
+        "month": {
+          "minLength": 1,
+          "title": "Month",
+          "type": "string"
+        }
+      },
+      "required": [
+        "minute",
+        "hour",
+        "dom",
+        "month",
+        "dow"
+      ],
+      "title": "ScrubSchedule",
+      "type": "object"
+    },
+    "SmartSelfTest": {
+      "additionalProperties": false,
+      "properties": {
+        "all_disks": {
+          "const": true,
+          "title": "All Disks",
+          "type": "boolean"
+        },
+        "desc": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Desc",
+          "type": "string"
+        },
+        "disks": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 0,
+          "title": "Disks",
+          "type": "array"
+        },
+        "id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "schedule": {
+          "$ref": "#/$defs/SmartTestSchedule"
+        },
+        "type": {
+          "enum": [
+            "SHORT",
+            "LONG"
+          ],
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "desc",
+        "all_disks",
+        "disks",
+        "schedule"
+      ],
+      "title": "SmartSelfTest",
+      "type": "object"
+    },
+    "SmartTestSchedule": {
+      "additionalProperties": false,
+      "properties": {
+        "dom": {
+          "minLength": 1,
+          "title": "Dom",
+          "type": "string"
+        },
+        "dow": {
+          "minLength": 1,
+          "title": "Dow",
+          "type": "string"
+        },
+        "hour": {
+          "minLength": 1,
+          "title": "Hour",
+          "type": "string"
+        },
+        "month": {
+          "minLength": 1,
+          "title": "Month",
+          "type": "string"
+        }
+      },
+      "required": [
+        "hour",
+        "dom",
+        "month",
+        "dow"
+      ],
+      "title": "SmartTestSchedule",
+      "type": "object"
+    },
+    "SmartdService": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "const": true,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "running": {
+          "const": true,
+          "title": "Running",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "enabled",
+        "running"
+      ],
+      "title": "SmartdService",
+      "type": "object"
+    }
+  },
+  "$id": "urn:homeserver-iac:schema:truenas-maintenance",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "ownership": {
+      "$ref": "#/$defs/Ownership"
+    },
+    "pool": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[a-z0-9][a-z0-9._-]*$",
+      "title": "Pool",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "scrub": {
+      "$ref": "#/$defs/ScrubPolicy"
+    },
+    "smart_tests": {
+      "items": {
+        "$ref": "#/$defs/SmartSelfTest"
+      },
+      "minItems": 1,
+      "title": "Smart Tests",
+      "type": "array"
+    },
+    "smartd": {
+      "$ref": "#/$defs/SmartdService"
+    }
+  },
+  "required": [
+    "schema_version",
+    "ownership",
+    "pool",
+    "scrub",
+    "smartd",
+    "smart_tests"
+  ],
+  "title": "MaintenanceDesiredState",
+  "type": "object"
+}

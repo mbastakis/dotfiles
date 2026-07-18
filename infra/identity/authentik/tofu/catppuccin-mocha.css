@@ -1,0 +1,91 @@
+:root,
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  --ctp-rosewater: #f5e0dc;
+  --ctp-red: #f38ba8;
+  --ctp-peach: #fab387;
+  --ctp-yellow: #f9e2af;
+  --ctp-green: #a6e3a1;
+  --ctp-blue: #89b4fa;
+  --ctp-lavender: #b4befe;
+  --ctp-mauve: #cba6f7;
+  --ctp-text: #cdd6f4;
+  --ctp-subtext-0: #a6adc8;
+  --ctp-subtext-1: #bac2de;
+  --ctp-surface-0: #313244;
+  --ctp-surface-1: #45475a;
+  --ctp-surface-2: #585b70;
+  --ctp-base: #1e1e2e;
+  --ctp-mantle: #181825;
+  --ctp-crust: #11111b;
+
+  --ak-accent: var(--ctp-mauve);
+  --ak-dark-background: var(--ctp-crust);
+  --ak-dark-background-light: var(--ctp-mantle);
+  --ak-dark-background-lighter: var(--ctp-surface-0);
+  --ak-dark-foreground: var(--ctp-text);
+  --ak-global--background-color: var(--ctp-crust);
+  --ak-global--BackgroundColorContrast--100: var(--ctp-text);
+  --ak-c-login__main--BackgroundColor: var(--ctp-base);
+  --ak-c-login__main--Color: var(--ctp-text);
+  --ak-c-login__footer--Color: var(--ctp-subtext-0);
+
+  --pf-global--BackgroundColor--100: var(--ctp-base);
+  --pf-global--BackgroundColor--150: var(--ctp-mantle);
+  --pf-global--BackgroundColor--200: var(--ctp-mantle);
+  --pf-global--BackgroundColor--300: var(--ctp-surface-0);
+  --pf-global--BackgroundColor--light-100: var(--ctp-base);
+  --pf-global--BackgroundColor--dark-100: var(--ctp-base);
+  --pf-global--BorderColor--100: var(--ctp-surface-1);
+  --pf-global--BorderColor--200: var(--ctp-surface-0);
+  --pf-global--Color--100: var(--ctp-text);
+  --pf-global--Color--200: var(--ctp-subtext-0);
+  --pf-global--Color--light-100: var(--ctp-text);
+  --pf-global--Color--light-200: var(--ctp-subtext-0);
+  --pf-global--Color--dark-100: var(--ctp-text);
+  --pf-global--Color--dark-200: var(--ctp-subtext-0);
+  --pf-global--primary-color--100: var(--ctp-blue);
+  --pf-global--primary-color--200: var(--ctp-lavender);
+  --pf-global--primary-color--300: var(--ctp-lavender);
+  --pf-global--primary-color--light-100: var(--ctp-blue);
+  --pf-global--primary-color--dark-100: var(--ctp-blue);
+  --pf-global--active-color--100: var(--ctp-blue);
+  --pf-global--link--Color: var(--ctp-blue);
+  --pf-global--link--Color--hover: var(--ctp-lavender);
+  --pf-global--link--Color--visited: var(--ctp-mauve);
+  --pf-global--link--Color--light: var(--ctp-blue);
+  --pf-global--link--Color--dark: var(--ctp-blue);
+  --pf-global--info-color--100: var(--ctp-blue);
+  --pf-global--success-color--100: var(--ctp-green);
+  --pf-global--warning-color--100: var(--ctp-yellow);
+  --pf-global--danger-color--100: var(--ctp-red);
+  --pf-global--icon--Color--light: var(--ctp-subtext-0);
+  --pf-global--icon--Color--dark: var(--ctp-subtext-0);
+
+  --pf-c-button--m-primary--BackgroundColor: var(--ctp-blue);
+  --pf-c-button--m-primary--Color: var(--ctp-crust);
+  --pf-c-button--m-primary--hover--BackgroundColor: var(--ctp-lavender);
+  --pf-c-button--m-primary--hover--Color: var(--ctp-crust);
+}
+
+ak-flow-executor::part(main) {
+  border: 1px solid var(--ctp-surface-1);
+  border-radius: 1rem;
+  box-shadow: 0 1.5rem 4rem rgb(17 17 27 / 45%);
+}
+
+ak-flow-executor::part(branding),
+ak-interface-user::part(brand) {
+  filter: drop-shadow(0 0.75rem 1.5rem rgb(17 17 27 / 45%));
+}
+
+ak-interface-user::part(background-wrapper) {
+  background: linear-gradient(145deg, var(--ctp-crust), var(--ctp-mantle));
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  ak-flow-executor::part(main) {
+    box-shadow: 0 0 0 1px var(--ctp-surface-1);
+  }
+}

@@ -1,0 +1,586 @@
+---
+- name: Require non-secret homeserver settings
+  ansible.builtin.assert:
+    that:
+      - atlas_homeserver_acme_email | length > 0
+      - atlas_homeserver_auth_host | length > 0
+      - atlas_homeserver_files_host | length > 0
+      - atlas_homeserver_tasks_host | length > 0
+      - atlas_homeserver_taskboard_host | length > 0
+      - atlas_homeserver_taskboard_sync_client_id | length > 0
+      - atlas_homeserver_home_host | length > 0
+      - atlas_homeserver_glances_widget_url | length > 0
+      - atlas_homeserver_backrest_host | length > 0
+      - atlas_homeserver_audiobookshelf_host | length > 0
+      - atlas_homeserver_opencode_host | length > 0
+      - atlas_homeserver_ntfy_host | length > 0
+      - atlas_homeserver_pihole_host | length > 0
+      - atlas_lan_ipv4 | length > 0
+      - atlas_homeserver_truenas_filebrowser_url | length > 0
+      - atlas_homeserver_truenas_url | length > 0
+      - atlas_homeserver_syncthing_url | length > 0
+      - atlas_homeserver_backrest_url | length > 0
+      - atlas_homeserver_truenas_backrest_url | length > 0
+      - atlas_homeserver_truenas_audiobookshelf_url | length > 0
+      - atlas_homeserver_opencode_upstream_url | length > 0
+      - atlas_homeserver_opencode_upstream_server_name | length > 0
+      - atlas_homeserver_truenas_backup_host | length > 0
+    fail_msg: >-
+      Set atlas homeserver hostnames before running atlas-homeserver.yml.
+
+- name: Require homeserver secret environment variables
+  ansible.builtin.assert:
+    that:
+      - lookup('env', item) | length > 0
+    fail_msg: >-
+      Missing required environment variable {{ item }}. Run through
+      infra/secrets/homeserver-secrets exec atlas-homeserver -- ansible-playbook ...
+  loop:
+    - AUTHENTIK_SECRET_KEY
+    - PG_PASS
+    - AUTHENTIK_BOOTSTRAP_PASSWORD
+    - AUTHENTIK_BOOTSTRAP_TOKEN
+    - AWS_ACCESS_KEY_ID
+    - AWS_SECRET_ACCESS_KEY
+    - HOMEPAGE_VAR_TRUENAS_API_KEY
+    - HOMEPAGE_VAR_TAILSCALE_API_KEY
+    - HOMEPAGE_VAR_BACKREST_PASSWORD
+    - TASK_SYNC_ENCRYPTION_SECRET
+    - NTFY_MICHAIL_PASSWORD_HASH
+    - NTFY_OPENCODE_PASSWORD_HASH
+    - NTFY_OPENCODE_TOKEN
+  no_log: true
+
+- name: Require approved TrueNAS backup SSH host keys
+  ansible.builtin.assert:
+    that:
+      - atlas_homeserver_truenas_backup_ssh_host_keys is sequence
+      - atlas_homeserver_truenas_backup_ssh_host_keys is not string
+      - atlas_homeserver_truenas_backup_ssh_host_keys | length > 0
+    fail_msg: >-
+      Set atlas_homeserver_truenas_backup_ssh_host_keys in
+      inventories/home/host_vars/atlas.yml to one or more independently verified
+      TrueNAS Ed25519 public host keys ("ssh-ed25519 AAAA...").
+  tags: phase7_native
+
+- name: Validate approved TrueNAS backup SSH host keys
+  ansible.builtin.assert:
+    that:
+      - item is match('^ssh-ed25519 [A-Za-z0-9+/]+={0,3}$')
+    fail_msg: >-
+      Every atlas_homeserver_truenas_backup_ssh_host_keys entry must contain only
+      an Ed25519 public host key ("ssh-ed25519 AAAA...").
+  loop: "{{ atlas_homeserver_truenas_backup_ssh_host_keys }}"
+  tags: phase7_native
+
+- name: Create homeserver stack directories
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: "{{ item.mode }}"
+  loop:
+    - path: "{{ atlas_homeserver_root }}"
+      mode: "0755"
+    - path: "{{ atlas_homeserver_root }}/env"
+      mode: "0700"
+    - path: "{{ atlas_homeserver_root }}/traefik"
+      mode: "0755"
+    - path: "{{ atlas_homeserver_root }}/traefik/acme"
+      mode: "0700"
+    - path: "{{ atlas_homeserver_root }}/traefik/dynamic"
+      mode: "0755"
+    - path: "{{ atlas_homeserver_root }}/authentik"
+      mode: "0755"
+    - path: "{{ atlas_homeserver_root }}/authentik/media"
+      mode: "0755"
+    - path: "{{ atlas_homeserver_root }}/authentik/custom-templates"
+      mode: "0755"
+    - path: "{{ atlas_homeserver_root }}/postgres"
+      owner: "70"
+      group: "70"
+      mode: "0700"
+    - path: "{{ atlas_homeserver_root }}/redis"
+      owner: "999"
+      group: "1000"
+      mode: "0700"
+    - path: "{{ atlas_homeserver_root }}/taskchampion-sync"
+      mode: "0755"
+    - path: "{{ atlas_homeserver_root }}/taskchampion-sync/data"
+      owner: "1092"
+      group: "100"
+      mode: "0755"
+    - path: "{{ atlas_homeserver_root }}/taskboard"
+      mode: "0755"
+    - path: "{{ atlas_homeserver_root }}/taskboard/app"
+      mode: "0755"
+    - path: "{{ atlas_homeserver_root }}/taskboard/config"
+      owner: "1000"
+      group: "1000"
+      mode: "0700"
+    - path: "{{ atlas_homeserver_root }}/taskboard/data"
+      owner: "1000"
+      group: "1000"
+      mode: "0700"
+    - path: "{{ atlas_homeserver_root }}/homepage"
+      mode: "0755"
+    - path: "{{ atlas_homeserver_root }}/homepage/config"
+      mode: "0755"
+    - path: "{{ atlas_homeserver_root }}/homepage/images"
+      mode: "0755"
+    - path: "{{ atlas_homeserver_root }}/ntfy"
+      owner: "1000"
+      group: "1000"
+      mode: "0700"
+    - path: "{{ atlas_homeserver_root }}/ntfy/config"
+      owner: "1000"
+      group: "1000"
+      mode: "0700"
+    - path: "{{ atlas_homeserver_root }}/ntfy/data"
+      owner: "1000"
+      group: "1000"
+      mode: "0700"
+  tags: ntfy
+
+- name: Create Pi-hole directories
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "0755"
+  loop:
+    - path: "{{ atlas_homeserver_root }}"
+      owner: root
+      group: root
+    - path: "{{ atlas_homeserver_root }}/traefik"
+      owner: root
+      group: root
+    - path: "{{ atlas_homeserver_root }}/traefik/dynamic"
+      owner: root
+      group: root
+    - path: "{{ atlas_homeserver_root }}/pihole"
+      owner: root
+      group: root
+    - path: "{{ atlas_homeserver_root }}/pihole/etc-pihole"
+      owner: "1000"
+      group: "1000"
+  tags: pihole
+
+- name: Ensure the shared homeserver Docker network exists
+  community.docker.docker_network:
+    name: homeserver
+    state: present
+  tags:
+    - ntfy
+    - phase7_native
+    - pihole
+
+- name: Derive TrueNAS backup SSH host
+  ansible.builtin.set_fact:
+    atlas_homeserver_truenas_backup_ssh_host: "{{ atlas_homeserver_truenas_backup_host | regex_replace('^.*@', '') }}"
+    atlas_homeserver_truenas_backup_ssh_user: "{{ atlas_homeserver_truenas_backup_host.split('@')[0] if '@' in atlas_homeserver_truenas_backup_host else atlas_admin_user }}"
+    atlas_homeserver_truenas_backup_target_path: "{{ atlas_homeserver_truenas_taskchampion_backup_path }}"
+  tags: phase7_native
+
+- name: Ensure atlas admin SSH directory exists
+  ansible.builtin.file:
+    path: "/home/{{ atlas_admin_user }}/.ssh"
+    state: directory
+    owner: "{{ atlas_admin_user }}"
+    group: "{{ atlas_admin_user }}"
+    mode: "0700"
+  tags: phase7_native
+
+- name: Ensure atlas admin SSH key exists for TrueNAS backups
+  ansible.builtin.command:
+    cmd: ssh-keygen -t ed25519 -N "" -C atlas-taskchampion-backup -f /home/{{ atlas_admin_user }}/.ssh/id_ed25519
+    creates: "/home/{{ atlas_admin_user }}/.ssh/id_ed25519"
+  become: true
+  become_user: "{{ atlas_admin_user }}"
+  tags: phase7_native
+
+- name: Read atlas admin SSH public key for TrueNAS backups
+  ansible.builtin.slurp:
+    src: "/home/{{ atlas_admin_user }}/.ssh/id_ed25519.pub"
+  register: atlas_homeserver_truenas_backup_public_key
+  tags: phase7_native
+
+- name: Install approved TrueNAS backup SSH host keys for atlas admin
+  ansible.builtin.template:
+    src: truenas-backup-known-hosts.j2
+    path: "/home/{{ atlas_admin_user }}/.ssh/known_hosts"
+    owner: "{{ atlas_admin_user }}"
+    group: "{{ atlas_admin_user }}"
+    mode: "0600"
+  tags: phase7_native
+
+- name: Authorize atlas backup SSH key on TrueNAS
+  truenas_user_ssh_key:
+    username: "{{ hostvars[inventory_hostname].atlas_homeserver_truenas_backup_ssh_user }}"
+    public_key: "{{ hostvars[inventory_hostname].atlas_homeserver_truenas_backup_public_key.content | b64decode | trim }}"
+  become: true
+  delegate_to: "{{ hostvars[inventory_hostname].atlas_homeserver_truenas_backup_ssh_host }}"
+  vars:
+    ansible_user: "{{ hostvars[inventory_hostname].atlas_homeserver_truenas_backup_ssh_user }}"
+  tags: phase7_native
+
+- name: Ensure TrueNAS TaskChampion backup path permissions
+  ansible.builtin.file:
+    path: "{{ hostvars[inventory_hostname].atlas_homeserver_truenas_backup_target_path }}"
+    state: directory
+    owner: "{{ hostvars[inventory_hostname].atlas_homeserver_truenas_backup_ssh_user }}"
+    group: "{{ hostvars[inventory_hostname].atlas_homeserver_truenas_backup_ssh_user }}"
+    mode: "0755"
+  become: true
+  delegate_to: "{{ hostvars[inventory_hostname].atlas_homeserver_truenas_backup_ssh_host }}"
+  vars:
+    ansible_user: "{{ hostvars[inventory_hostname].atlas_homeserver_truenas_backup_ssh_user }}"
+  tags: phase7_native
+
+- name: Create Traefik ACME storage file
+  ansible.builtin.file:
+    path: "{{ atlas_homeserver_root }}/traefik/acme/acme.json"
+    state: touch
+    owner: root
+    group: root
+    mode: "0600"
+    modification_time: preserve
+    access_time: preserve
+
+- name: Render Authentik secret environment
+  ansible.builtin.template:
+    src: authentik.env.j2
+    dest: "{{ atlas_homeserver_root }}/env/authentik.env"
+    owner: root
+    group: root
+    mode: "0600"
+  no_log: true
+
+- name: Render Traefik secret environment
+  ansible.builtin.template:
+    src: traefik.env.j2
+    dest: "{{ atlas_homeserver_root }}/env/traefik.env"
+    owner: root
+    group: root
+    mode: "0600"
+  no_log: true
+
+- name: Render Homepage secret environment
+  ansible.builtin.template:
+    src: homepage.env.j2
+    dest: "{{ atlas_homeserver_root }}/env/homepage.env"
+    owner: root
+    group: root
+    mode: "0600"
+  no_log: true
+
+- name: Render Taskboard secret environment
+  ansible.builtin.template:
+    src: taskboard.env.j2
+    dest: "{{ atlas_homeserver_root }}/env/taskboard.env"
+    owner: root
+    group: root
+    mode: "0600"
+  no_log: true
+
+- name: Render ntfy server configuration
+  ansible.builtin.template:
+    src: ntfy-server.yml.j2
+    dest: "{{ atlas_homeserver_root }}/ntfy/config/server.yml"
+    owner: "1000"
+    group: "1000"
+    mode: "0600"
+  no_log: true
+  tags: ntfy
+
+- name: Copy Taskboard app source
+  ansible.builtin.copy:
+    src: taskboard/
+    dest: "{{ atlas_homeserver_root }}/taskboard/app/"
+    owner: root
+    group: root
+    mode: preserve
+  register: atlas_homeserver_taskboard_source
+
+- name: Download Homepage background image
+  ansible.builtin.get_url:
+    url: "{{ atlas_homeserver_homepage_background_url }}"
+    dest: "{{ atlas_homeserver_root }}/homepage/images/background.jpg"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Copy Homepage image assets
+  ansible.builtin.copy:
+    src: "homepage/{{ item }}"
+    dest: "{{ atlas_homeserver_root }}/homepage/images/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - hyperion.png
+    - sisyphus.png
+
+- name: Render Traefik Authentik dynamic route
+  ansible.builtin.template:
+    src: authentik.dynamic.yml.j2
+    dest: "{{ atlas_homeserver_root }}/traefik/dynamic/authentik.yml"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Render Traefik FileBrowser dynamic route
+  ansible.builtin.template:
+    src: filebrowser.dynamic.yml.j2
+    dest: "{{ atlas_homeserver_root }}/traefik/dynamic/filebrowser.yml"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Render Traefik TaskChampion dynamic route
+  ansible.builtin.template:
+    src: taskchampion.dynamic.yml.j2
+    dest: "{{ atlas_homeserver_root }}/traefik/dynamic/taskchampion.yml"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Render Traefik Taskboard dynamic route
+  ansible.builtin.template:
+    src: taskboard.dynamic.yml.j2
+    dest: "{{ atlas_homeserver_root }}/traefik/dynamic/taskboard.yml"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Render Traefik Homepage dynamic route
+  ansible.builtin.template:
+    src: homepage.dynamic.yml.j2
+    dest: "{{ atlas_homeserver_root }}/traefik/dynamic/homepage.yml"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Render Traefik OpenCode dynamic route
+  ansible.builtin.template:
+    src: opencode.dynamic.yml.j2
+    dest: "{{ atlas_homeserver_root }}/traefik/dynamic/opencode.yml"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Render Traefik ntfy dynamic route
+  ansible.builtin.template:
+    src: ntfy.dynamic.yml.j2
+    dest: "{{ atlas_homeserver_root }}/traefik/dynamic/ntfy.yml"
+    owner: root
+    group: root
+    mode: "0644"
+  tags: ntfy
+
+- name: Render Traefik Pi-hole dynamic route
+  ansible.builtin.template:
+    src: pihole.dynamic.yml.j2
+    dest: "{{ atlas_homeserver_root }}/traefik/dynamic/pihole.yml"
+    owner: root
+    group: root
+    mode: "0644"
+  tags: pihole
+
+- name: Inspect the live Homepage services configuration
+  ansible.builtin.stat:
+    path: "{{ atlas_homeserver_root }}/homepage/config/services.yaml"
+  register: atlas_homeserver_pihole_homepage_config
+  tags: pihole
+
+- name: Add Pi-hole to the live Homepage services
+  ansible.builtin.blockinfile:
+    path: "{{ atlas_homeserver_root }}/homepage/config/services.yaml"
+    insertbefore: '^    - Traefik:$'
+    marker: '    # {mark} ANSIBLE MANAGED PIHOLE'
+    block: |4
+            - Pi-hole:
+                icon: pi-hole.png
+                href: https://{{ atlas_homeserver_pihole_host }}/admin/
+                description: Network-wide DNS filtering
+                siteMonitor: http://pihole:{{ atlas_homeserver_pihole_web_port }}/admin/
+                widget:
+                  type: pihole
+                  url: http://pihole:{{ atlas_homeserver_pihole_web_port }}
+                  version: 6
+                  fields: ["queries", "blocked", "blocked_percent", "gravity"]
+  register: atlas_homeserver_pihole_homepage
+  when: atlas_homeserver_pihole_homepage_config.stat.exists
+  tags: pihole
+
+- name: Revalidate Homepage after Pi-hole changes
+  ansible.builtin.uri:
+    url: "https://{{ atlas_homeserver_home_host }}/api/revalidate"
+    method: GET
+    status_code: 200
+  register: atlas_homeserver_pihole_revalidate
+  until: (atlas_homeserver_pihole_revalidate.status | default(0)) == 200
+  retries: 5
+  delay: 2
+  changed_when: true
+  when:
+    - atlas_homeserver_pihole_homepage.changed
+    - not ansible_check_mode
+  tags: pihole
+
+- name: Render Traefik Backrest dynamic route
+  ansible.builtin.template:
+    src: backrest.dynamic.yml.j2
+    dest: "{{ atlas_homeserver_root }}/traefik/dynamic/backrest.yml"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Render Traefik Audiobookshelf dynamic route
+  ansible.builtin.template:
+    src: audiobookshelf.dynamic.yml.j2
+    dest: "{{ atlas_homeserver_root }}/traefik/dynamic/audiobookshelf.yml"
+    owner: root
+    group: root
+    mode: "0644"
+  tags: audiobookshelf
+
+- name: Render Traefik dashboard dynamic route
+  ansible.builtin.template:
+    src: traefik.dynamic.yml.j2
+    dest: "{{ atlas_homeserver_root }}/traefik/dynamic/traefik.yml"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Render Homepage config files
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ atlas_homeserver_root }}/homepage/config/{{ item.dest }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - src: services.yaml.j2
+      dest: services.yaml
+    - src: settings.yaml.j2
+      dest: settings.yaml
+    - src: bookmarks.yaml.j2
+      dest: bookmarks.yaml
+    - src: widgets.yaml.j2
+      dest: widgets.yaml
+    - src: kubernetes.yaml.j2
+      dest: kubernetes.yaml
+    - src: docker.yaml.j2
+      dest: docker.yaml
+    - src: proxmox.yaml.j2
+      dest: proxmox.yaml
+    - src: custom.css.j2
+      dest: custom.css
+    - src: custom.js.j2
+      dest: custom.js
+  register: atlas_homeserver_homepage_config
+
+- name: Render homeserver Docker Compose file
+  ansible.builtin.template:
+    src: compose.yml.j2
+    dest: "{{ atlas_homeserver_root }}/compose.yml"
+    owner: root
+    group: root
+    mode: "0644"
+  tags: phase7_native
+
+- name: Render isolated ntfy Docker Compose file
+  ansible.builtin.template:
+    src: ntfy-compose.yml.j2
+    dest: "{{ atlas_homeserver_root }}/ntfy/compose.yml"
+    owner: root
+    group: root
+    mode: "0644"
+  tags: ntfy
+
+- name: Start isolated ntfy service
+  community.docker.docker_compose_v2:
+    project_src: "{{ atlas_homeserver_root }}/ntfy"
+    files:
+      - compose.yml
+    state: present
+  when: not ansible_check_mode
+  tags: ntfy
+
+- name: Render isolated Pi-hole Docker Compose file
+  ansible.builtin.template:
+    src: pihole.compose.yml.j2
+    dest: "{{ atlas_homeserver_root }}/pihole.compose.yml"
+    owner: root
+    group: root
+    mode: "0644"
+  tags: pihole
+
+- name: Start isolated Pi-hole service
+  community.docker.docker_compose_v2:
+    project_src: "{{ atlas_homeserver_root }}"
+    project_name: homeserver
+    files:
+      - pihole.compose.yml
+    services:
+      - pihole
+    state: present
+  when: not ansible_check_mode
+  tags: pihole
+
+- name: Start homeserver Docker Compose stack
+  community.docker.docker_compose_v2:
+    project_src: "{{ atlas_homeserver_root }}"
+    files:
+      - compose.yml
+    state: present
+    build: >-
+      {{ (atlas_homeserver_taskboard_source.changed | default(false))
+         | ternary('always', 'policy') }}
+  tags: phase7_native
+
+- name: Revalidate Homepage after config changes
+  ansible.builtin.uri:
+    url: "https://{{ atlas_homeserver_home_host }}/api/revalidate"
+    method: GET
+    status_code: 200
+  register: atlas_homeserver_homepage_revalidate
+  until: (atlas_homeserver_homepage_revalidate.status | default(0)) == 200
+  retries: 5
+  delay: 2
+  changed_when: true
+  when: atlas_homeserver_homepage_config.changed
+
+- name: Render TaskChampion backup script
+  ansible.builtin.template:
+    src: taskchampion-backup.sh.j2
+    dest: "{{ atlas_homeserver_root }}/taskchampion-backup.sh"
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Render TaskChampion backup systemd service
+  ansible.builtin.template:
+    src: taskchampion-backup.service.j2
+    dest: /etc/systemd/system/taskchampion-backup.service
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Render TaskChampion backup systemd timer
+  ansible.builtin.template:
+    src: taskchampion-backup.timer.j2
+    dest: /etc/systemd/system/taskchampion-backup.timer
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Enable TaskChampion backup timer
+  ansible.builtin.systemd:
+    name: taskchampion-backup.timer
+    state: started
+    enabled: true
+    daemon_reload: true

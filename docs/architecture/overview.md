@@ -17,6 +17,8 @@ flowchart LR
   AT --> TS[Tailscale Serve]
   TS --> A[oauth2-proxy + Authentik OIDC]
   A --> O
+  O --> PN[push.mbastakis.com<br/>ntfy on Atlas]
+  PN --> IP[iPhone ntfy app]
   Z --> P[Pi CLI]
   C[chezmoi lifecycle] --> Z
   C --> N
@@ -29,6 +31,30 @@ flowchart LR
 ```
 
 Input flows from the physical keyboard through Karabiner (home row mods, hyper key), into Ghostty (terminal keybindings), then into tmux (prefix commands) or directly to zsh (shell keybindings). From zsh, input reaches Neovim, OpenCode, Pi, and NeoMutt. Chezmoi manages configuration for all layers, including the mail stack and its launchd automation.
+
+## Production Network Topology
+
+```mermaid
+flowchart LR
+  I[Internet] --> ONT[ONT]
+  ONT --> R[Cudy WR3000E v1<br/>OpenWrt 25.12.5<br/>PPPoE VLAN 835]
+  R --> S[TL-SG108<br/>trusted 192.168.1.0/24]
+  S --> AT[atlas .19]
+  AT --> PH[Pi-hole DNS filtering]
+  R -->|primary DNS upstream| PH
+  R -. atlas outage fallback .-> CD[Cloudflare DNS]
+  S --> TN[TrueNAS .74]
+  S --> MAC[Mac / wired clients]
+  R --> MW[Main Wi-Fi<br/>trusted LAN]
+  R --> GW[Guest Wi-Fi<br/>isolated 192.168.30.0/24]
+  SP[Speedport Plus 2<br/>powered-off rollback] -. physical rollback .-> ONT
+```
+
+The Cudy is the accepted production router. It provides native IPv4/IPv6,
+trusted and guest Wi-Fi, fail-closed WAN policy, and CAKE SQM. The trusted LAN
+remains flat because the TL-SG108 is unmanaged; guest isolation terminates on
+the Cudy radios and bridge. The configured Speedport remains offline and
+unchanged through the observation window.
 
 ## Source-to-Target Mapping
 
@@ -118,7 +144,11 @@ The config template (`.chezmoi.toml.tmpl`) determines the active profile at `che
 3. Profile sets `.profile` and `.dtWork` template variables.
 4. These variables control conditional ignores, template rendering, and secret fetching.
 
-On macOS DT work profiles, the lifecycle also disables Tailscale DNS on every apply so Harmony SASE remains the system DNS authority while Tailscale continues to provide peer routes.
+On macOS DT work profiles, the lifecycle disables Tailscale DNS on every apply
+so Harmony SASE remains the system DNS authority while Tailscale continues to
+provide peer routes. It also disables HTTP and HTTPS proxy states on the
+`AX88179A` Ethernet service, preventing a stale `127.0.0.1:8888` listener from
+blocking browser traffic while leaving Harmony's active tunnel available.
 
 _Reference: `.chezmoi.toml.tmpl:1`_
 

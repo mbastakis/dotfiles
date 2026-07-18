@@ -1,0 +1,20 @@
+---
+- name: Converge {{ openwrt_radio.band }} radio options
+  community.openwrt.uci:
+    command: set
+    key: >-
+      wireless.{{ openwrt_radios_by_band[openwrt_radio.band] }}.{{ item.key }}
+    value: "{{ item.value }}"
+    autocommit: true
+  loop:
+    - key: country
+      value: "{{ openwrt_contract.wireless.country }}"
+    - key: channel
+      value: "{{ openwrt_radio.channel }}"
+    - key: htmode
+      value: "HE{{ openwrt_radio.width }}"
+    - key: disabled
+      value: "0"
+  loop_control:
+    label: "{{ item.key }}"
+  notify: Reload OpenWrt Wi-Fi
