@@ -1,0 +1,16 @@
+{
+  "name": "Sisyphus",
+  "short_name": "Sisyphus",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1e1e2e",
+  "theme_color": "#1e1e2e",
+  "icons": [
+    {
+      "src": "/static/sisyphus.png",
+      "type": "image/png",
+      "sizes": "1024x1024",
+      "purpose": "any maskable"
+    }
+  ]
+}

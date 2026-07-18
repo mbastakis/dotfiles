@@ -1,0 +1,19 @@
+---
+- name: Configure atlas Tailscale tailnet enrollment
+  hosts: atlas
+  become: true
+  gather_facts: true
+
+  pre_tasks:
+    - name: Require Ubuntu Server 26.04 or newer
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.distribution == "Ubuntu"
+          - >-
+            ansible_facts.distribution_version is version('26.04', '>=')
+        fail_msg: >-
+          atlas must be freshly installed with Ubuntu Server 26.04 LTS or
+          newer before this playbook runs.
+
+  roles:
+    - role: atlas_tailscale

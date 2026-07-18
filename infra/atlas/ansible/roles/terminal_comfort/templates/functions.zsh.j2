@@ -1,0 +1,92 @@
+# Managed by Ansible: terminal_comfort
+
+extract() {
+  if [[ ! -f "$1" ]]; then
+    print -r -- "'$1' is not a valid file"
+    return 1
+  fi
+
+  case "$1" in
+    *.tar.bz2) tar xjf "$1" ;;
+    *.tar.gz) tar xzf "$1" ;;
+    *.bz2) bunzip2 "$1" ;;
+    *.gz) gunzip "$1" ;;
+    *.tar) tar xf "$1" ;;
+    *.tbz2) tar xjf "$1" ;;
+    *.tgz) tar xzf "$1" ;;
+    *.zip) unzip "$1" ;;
+    *.Z) uncompress "$1" ;;
+    *.7z) 7z x "$1" ;;
+    *) print -r -- "'$1' cannot be extracted via extract()" ;;
+  esac
+}
+
+take() {
+  mkdir -p "$1" && cd "$1" || return
+}
+
+y() {
+  local tmp cwd
+
+  tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+  yazi "$@" --cwd-file="$tmp"
+  IFS= read -r -d '' cwd <"$tmp"
+  [[ -n "$cwd" && "$cwd" != "$PWD" ]] && cd -- "$cwd"
+  rm -f -- "$tmp"
+}
+
+ftext() {
+  local selected file line
+
+  if ! command -v rg &>/dev/null || ! command -v fzf &>/dev/null; then
+    print -r -- "ftext requires rg and fzf"
+    return 1
+  fi
+
+  selected=$(rg --color=always --line-number --no-heading --smart-case "${*:-}" 2>/dev/null | fzf --ansi)
+  [[ -z "$selected" ]] && return 0
+
+  file="${selected%%:*}"
+  line="${${selected#*:}%%:*}"
+  "${VISUAL:-nvim}" "+${line}" "$file"
+}
+
+ftext-widget() {
+  local original_buffer="$BUFFER"
+  local original_cursor="$CURSOR"
+  local result key selected file line
+
+  if ! command -v rg &>/dev/null || ! command -v fzf &>/dev/null; then
+    zle reset-prompt
+    return 0
+  fi
+
+  result=$(rg --color=always --line-number --no-heading --smart-case "" 2>/dev/null |
+    fzf --ansi "${_ftext_fzf_opts[@]}" --expect=tab)
+
+  key="${result%%$'\n'*}"
+  selected="${result##*$'\n'}"
+
+  if [[ -n "$selected" ]]; then
+    local file_len
+    file="${selected%%:*}"
+    line="${${selected#*:}%%:*}"
+
+    if [[ "$key" == "tab" ]]; then
+      BUFFER="${original_buffer:0:$original_cursor}${file}${original_buffer:$original_cursor}"
+      file_len="$(printf %s "$file" | wc -c | tr -d ' ')"
+      CURSOR=$((original_cursor + file_len))
+      zle reset-prompt
+    else
+      BUFFER=""
+      zle reset-prompt
+      zle -I
+      "${VISUAL:-nvim}" "+${line}" "$file"
+      zle reset-prompt
+    fi
+  else
+    BUFFER="$original_buffer"
+    CURSOR="$original_cursor"
+    zle reset-prompt
+  fi
+}

@@ -1,0 +1,165 @@
+# yaml-language-server: $schema=../../schemas/backrest.schema.json
+# Code-owned Backrest repository and plan policy.
+#
+# Consumed by manage-backrest. Secrets are environment-variable placeholders
+# resolved inside the Backrest app container from BWS-injected env vars.
+schema_version: 1
+ownership:
+  scope: truenas.backrest_policy
+  mode: bounded
+
+secret_refs:
+  - path: repository.password
+    env: RESTIC_PASSWORD
+    secret_ref:
+      alias: backrest_restic_repo_password
+  - path: repository.env
+    env: AWS_ACCESS_KEY_ID
+    secret_ref:
+      alias: backrest_aws_access_key_id
+  - path: repository.env
+    env: AWS_SECRET_ACCESS_KEY
+    secret_ref:
+      alias: backrest_aws_secret_access_key
+
+repository:
+  id: homeserver-s3
+  uri: s3:s3.eu-central-1.amazonaws.com/mbastakis-homeserver-restic-backups/truenas
+  password: ""
+  # Restic rates are KiB/s. 6000 KiB/s is about 49.2 Mb/s, leaving at least
+  # half of the 100 Mb/s internet upload capacity for interactive traffic.
+  flags:
+    - --limit-upload=6000
+  env:
+    - RESTIC_PASSWORD=${RESTIC_PASSWORD}
+    - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+    - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+  autoUnlock: true
+  prunePolicy:
+    schedule:
+      cron: "0 5 1 1,4,7,10 *"
+      clock: CLOCK_LOCAL
+    maxUnusedPercent: 10
+  checkPolicy:
+    schedule:
+      cron: "0 6 2 * *"
+      clock: CLOCK_LOCAL
+    structureOnly: true
+
+# Clear legacy fields from the live repo config. A repo-level forgetPolicy would
+# override per-plan retention; leaving it unset makes Backrest run per-plan
+# forget after successful backups while quarterly prune remains repo-level.
+repositoryClearFields:
+  - forgetPolicy
+
+plans:
+  - id: homeserver-files-daily
+    repo: homeserver-s3
+    paths:
+      - /source/files
+    schedule:
+      cron: "15 1 * * *"
+      clock: CLOCK_LOCAL
+    retention:
+      policyTimeBucketed:
+        daily: 14
+        weekly: 8
+        monthly: 24
+        yearly: 5
+    skipIfUnchanged: true
+
+  - id: homeserver-obsidian-daily
+    repo: homeserver-s3
+    paths:
+      - /source/obsidian
+    schedule:
+      cron: "15 2 * * *"
+      clock: CLOCK_LOCAL
+    retention:
+      policyTimeBucketed:
+        daily: 30
+        weekly: 8
+        monthly: 24
+        yearly: 5
+    skipIfUnchanged: true
+
+  # Immich writes a native PostgreSQL dump into /data/backups at 02:00. The
+  # TrueNAS dataset contains that dump and durable media; derived Atlas-local
+  # thumbnails, transcodes, and caches are intentionally excluded.
+  - id: homeserver-immich-daily
+    repo: homeserver-s3
+    paths:
+      - /source/immich
+    schedule:
+      cron: "30 2 * * *"
+      clock: CLOCK_LOCAL
+    retention:
+      policyTimeBucketed:
+        daily: 14
+        weekly: 8
+        monthly: 24
+        yearly: 5
+    skipIfUnchanged: true
+
+  - id: homeserver-apple-originals-daily
+    repo: homeserver-s3
+    paths:
+      - /source/apple-originals
+    schedule:
+      cron: "0 3 * * *"
+      clock: CLOCK_LOCAL
+    retention:
+      policyTimeBucketed:
+        daily: 14
+        weekly: 8
+        monthly: 24
+        yearly: 5
+    skipIfUnchanged: true
+
+  - id: homeserver-taskchampion-daily
+    repo: homeserver-s3
+    paths:
+      - /source/taskchampion-sync-backup
+    schedule:
+      cron: "30 4 * * *"
+      clock: CLOCK_LOCAL
+    retention:
+      policyTimeBucketed:
+        daily: 14
+        weekly: 8
+        monthly: 12
+        yearly: 3
+    skipIfUnchanged: true
+
+  - id: homeserver-audiobookshelf-weekly
+    repo: homeserver-s3
+    paths:
+      - /source/audiobookshelf-backups
+    schedule:
+      cron: "30 3 * * 0"
+      clock: CLOCK_LOCAL
+    retention:
+      policyTimeBucketed:
+        daily: 0
+        weekly: 8
+        monthly: 12
+        yearly: 0
+    skipIfUnchanged: true
+
+  - id: homeserver-books-monthly
+    repo: homeserver-s3
+    paths:
+      - /source/books
+    schedule:
+      cron: "30 4 1 * *"
+      clock: CLOCK_LOCAL
+    retention:
+      policyTimeBucketed:
+        daily: 0
+        weekly: 0
+        monthly: 6
+        yearly: 3
+    skipIfUnchanged: true
+
+retirePlans:
+  - homeserver-files-obsidian-weekly

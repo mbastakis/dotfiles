@@ -1,0 +1,34 @@
+# yaml-language-server: $schema=../../schemas/truenas-snapshots.schema.json
+# Application-state recovery points after Audiobookshelf's built-in backup.
+schema_version: 1
+ownership:
+  scope: truenas.periodic_snapshots
+  mode: bounded
+
+dataset: "pool_4tb/homeserver/apps/audiobookshelf"
+recursive: true
+
+tasks:
+  - id: "weekly"
+    name: "weekly"
+    lifetime_value: 8
+    lifetime_unit: "WEEK"
+    naming_schema: "auto-%Y-%m-%d_%H-%M_weekly"
+    schedule:
+      minute: "0"
+      hour: "3"
+      dom: "*"
+      month: "*"
+      dow: "0"
+
+  - id: "monthly"
+    name: "monthly"
+    lifetime_value: 12
+    lifetime_unit: "MONTH"
+    naming_schema: "auto-%Y-%m-%d_%H-%M_monthly"
+    schedule:
+      minute: "15"
+      hour: "3"
+      dom: "1"
+      month: "*"
+      dow: "*"

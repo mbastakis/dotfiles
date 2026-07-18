@@ -1,0 +1,16 @@
+http:
+  routers:
+    authentik:
+      rule: Host(`{{ atlas_homeserver_auth_host }}`)
+      entryPoints:
+        - websecure
+      service: authentik
+      tls:
+        certResolver: route53
+
+  services:
+    authentik:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "http://authentik-server:9000"

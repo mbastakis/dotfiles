@@ -1,0 +1,33 @@
+---
+- name: Inspect the production OpenWrt router
+  hosts: openwrt
+  gather_facts: false
+
+  pre_tasks:
+    - name: Load the canonical router contract
+      ansible.builtin.include_vars:
+        file: "{{ playbook_dir }}/../../network/openwrt/router.yaml"
+        name: openwrt_contract
+
+  roles:
+    - role: community.openwrt.init
+
+  tasks:
+    - name: Gather redacted OpenWrt facts
+      community.openwrt.setup:
+
+    - name: Require the contracted router identity
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.openwrt_board.board_name == openwrt_contract.device.board_name
+          - >-
+            ansible_facts.openwrt_board.release.version ==
+            openwrt_contract.firmware.version
+        fail_msg: >-
+          Refusing to manage a router that does not match the canonical hardware
+          and firmware contract.
+
+    - name: Require the Pi-hole DNS failover watchdog
+      community.openwrt.command:
+        cmd: /etc/init.d/pihole-dns-failover status
+      changed_when: false

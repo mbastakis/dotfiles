@@ -1,0 +1,4 @@
+---
+collections:
+  - name: community.openwrt
+    version: "==1.6.0"

@@ -1,0 +1,61 @@
+---
+- name: Gather redacted OpenWrt facts
+  community.openwrt.setup:
+
+- name: Require the contracted router identity and ownership
+  ansible.builtin.assert:
+    that:
+      - openwrt_contract.schema_version == 1
+      - openwrt_contract.ownership.scope == "network.openwrt"
+      - openwrt_contract.ownership.mode == "bounded"
+      - ansible_facts.openwrt_board.board_name == openwrt_contract.device.board_name
+      - >-
+        ansible_facts.openwrt_board.release.version ==
+        openwrt_contract.firmware.version
+      - openwrt_contract.networks.trusted.address.endswith('/24')
+      - openwrt_contract.networks.guest.address.endswith('/24')
+      - >-
+        openwrt_contract.networks.trusted.address !=
+        openwrt_contract.networks.guest.address
+      - openwrt_contract.security.upnp == false
+      - openwrt_contract.security.nat_pmp == false
+      - openwrt_contract.security.dmz == false
+      - openwrt_contract.security.wan_management == false
+      - openwrt_contract.security.port_forwards | length == 0
+      - openwrt_contract.security.tailscale == false
+    fail_msg: >-
+      Refusing routine convergence because the canonical router contract or live
+      router identity violates the accepted ownership and safety boundary.
+
+- name: Derive routine network values from the contract
+  ansible.builtin.set_fact:
+    openwrt_trusted_ip: "{{ openwrt_contract.networks.trusted.address.split('/')[0] }}"
+    openwrt_trusted_dhcp_start: >-
+      {{ openwrt_contract.networks.trusted.dhcp_start.split('.')[-1] }}
+    openwrt_trusted_dhcp_limit: >-
+      {{
+        openwrt_contract.networks.trusted.dhcp_end.split('.')[-1] | int
+        - openwrt_contract.networks.trusted.dhcp_start.split('.')[-1] | int
+        + 1
+      }}
+
+- name: Resolve routine secret aliases from the injected environment
+  ansible.builtin.set_fact:
+    openwrt_routine_secrets:
+      main_ssid: >-
+        {{ lookup('env', openwrt_contract.wireless.main.ssid.secret_ref.alias | upper) }}
+      main_psk: >-
+        {{ lookup('env', openwrt_contract.wireless.main.psk.secret_ref.alias | upper) }}
+  no_log: true
+
+- name: Require valid injected Wi-Fi secrets
+  ansible.builtin.assert:
+    that:
+      - (openwrt_routine_secrets.main_ssid.encode('utf-8') | length) >= 1
+      - (openwrt_routine_secrets.main_ssid.encode('utf-8') | length) <= 32
+      - openwrt_routine_secrets.main_ssid is match('^[^\x00\r\n]+$')
+      - >-
+        (openwrt_routine_secrets.main_psk is match('^[ -~]{8,63}$')) or
+        (openwrt_routine_secrets.main_psk is match('^[0-9A-Fa-f]{64}$'))
+    fail_msg: Required OpenWrt Wi-Fi secrets are absent or invalid.
+  no_log: true

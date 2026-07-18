@@ -1,0 +1,27 @@
+http:
+  routers:
+    pihole-authentik-outpost:
+      rule: Host(`{{ atlas_homeserver_pihole_host }}`) && PathPrefix(`/outpost.goauthentik.io/`)
+      entryPoints:
+        - websecure
+      priority: 100
+      service: authentik@file
+      tls:
+        certResolver: route53
+
+    pihole:
+      rule: Host(`{{ atlas_homeserver_pihole_host }}`)
+      entryPoints:
+        - websecure
+      middlewares:
+        - authentik-forward-auth@file
+      service: pihole
+      tls:
+        certResolver: route53
+
+  services:
+    pihole:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "http://pihole:{{ atlas_homeserver_pihole_web_port }}"

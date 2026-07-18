@@ -1,0 +1,5 @@
+{
+  "identity": {"board_ids": ["R53"], "board_name": "cudy,wr3000e-v1", "model": "Cudy WR3000E v1", "profile": "cudy_wr3000e-v1", "release": "25.12.5", "target": "mediatek/filogic"},
+  "packages": ["base-files", "dnsmasq", "dropbear", "firewall4", "kmod-ifb", "kmod-mt7915e", "kmod-mt7981-firmware", "kmod-sched-cake", "luci-app-sqm", "luci-ssl", "mt7981-wo-firmware", "odhcp6c", "odhcpd-ipv6only", "ppp", "ppp-mod-pppoe", "rpcd", "sqm-scripts", "tc-tiny", "ubus", "uci", "ucode", "ucode-mod-ubus", "uhttpd"],
+  "resources": {}, "firewall": {"redirects": [{"src": "wan", "dest_port": 443}]}, "listeners": [], "services": {}, "runtime": {"radio_bands": ["2g", "5g"], "sqm": {"enabled": false, "enabled_queues": 0}}
+}

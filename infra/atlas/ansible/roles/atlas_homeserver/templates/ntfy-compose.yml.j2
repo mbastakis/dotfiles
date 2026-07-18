@@ -1,0 +1,34 @@
+---
+name: ntfy
+
+networks:
+  homeserver:
+    external: true
+    name: homeserver
+
+services:
+  ntfy:
+    image: {{ atlas_homeserver_ntfy_image }}
+    restart: unless-stopped
+    init: true
+    command: serve
+    user: "1000:1000"
+    volumes:
+      - {{ atlas_homeserver_root }}/ntfy/config/server.yml:/etc/ntfy/server.yml:ro
+      - {{ atlas_homeserver_root }}/ntfy/data:/var/lib/ntfy
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          wget -q --tries=1 http://127.0.0.1:{{ atlas_homeserver_ntfy_port }}/v1/health -O - |
+          grep -Eo '"healthy"[[:space:]]*:[[:space:]]*true' || exit 1
+      start_period: 20s
+      interval: 30s
+      retries: 3
+      timeout: 5s
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    networks:
+      - homeserver
