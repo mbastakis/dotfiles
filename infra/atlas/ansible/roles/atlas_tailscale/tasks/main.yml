@@ -1,0 +1,147 @@
+---
+- name: Install Tailscale repository prerequisites
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - curl
+      - gnupg
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Ensure apt keyring directory exists
+  ansible.builtin.file:
+    path: /usr/share/keyrings
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Install Tailscale apt signing key
+  ansible.builtin.get_url:
+    url: "https://pkgs.tailscale.com/stable/ubuntu/{{ atlas_tailscale_apt_suite }}.noarmor.gpg"
+    dest: /usr/share/keyrings/tailscale-archive-keyring.gpg
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Configure Tailscale apt repository
+  ansible.builtin.deb822_repository:
+    name: tailscale
+    types:
+      - deb
+    uris:
+      - https://pkgs.tailscale.com/stable/ubuntu
+    suites:
+      - "{{ atlas_tailscale_apt_suite }}"
+    components:
+      - main
+    signed_by: /usr/share/keyrings/tailscale-archive-keyring.gpg
+    state: present
+
+- name: Install Tailscale package
+  ansible.builtin.apt:
+    name: tailscale
+    state: present
+    update_cache: true
+
+- name: Ensure tailscaled is enabled and running
+  ansible.builtin.service:
+    name: tailscaled
+    state: started
+    enabled: true
+
+- name: Build desired Tailscale up arguments
+  ansible.builtin.set_fact:
+    atlas_tailscale_up_args: >-
+      {{
+        [
+          'tailscale',
+          'up',
+          '--reset',
+          '--hostname=' ~ atlas_tailscale_hostname,
+          '--operator=' ~ atlas_tailscale_operator,
+          '--accept-dns=' ~ (atlas_tailscale_accept_dns | ternary('true', 'false')),
+          '--accept-routes=' ~ (atlas_tailscale_accept_routes | ternary('true', 'false')),
+          '--advertise-routes=' ~ (atlas_tailscale_advertise_routes | join(',')),
+          '--advertise-exit-node=' ~ (atlas_tailscale_advertise_exit_node | ternary('true', 'false')),
+          '--exit-node=',
+          '--ssh=' ~ (atlas_tailscale_ssh | ternary('true', 'false')),
+          '--shields-up=' ~ (atlas_tailscale_shields_up | ternary('true', 'false')),
+          '--timeout=30s'
+        ]
+        + (
+          (atlas_tailscale_advertise_tags | length > 0)
+          | ternary(['--advertise-tags=' ~ (atlas_tailscale_advertise_tags | join(','))], [])
+        )
+      }}
+
+- name: Read Tailscale status
+  ansible.builtin.command: tailscale status --json
+  register: atlas_tailscale_status
+  changed_when: false
+  failed_when: false
+
+- name: Capture Tailscale backend state
+  ansible.builtin.set_fact:
+    atlas_tailscale_backend_state: "{{ (atlas_tailscale_status.stdout | from_json).BackendState | default('Unknown') }}"
+  when:
+    - atlas_tailscale_status.rc == 0
+    - atlas_tailscale_status.stdout is search('^\\s*\\{')
+
+- name: Default Tailscale backend state when status is unavailable
+  ansible.builtin.set_fact:
+    atlas_tailscale_backend_state: Unknown
+  when: atlas_tailscale_backend_state is not defined
+
+- name: Require Tailscale auth key before first enrollment
+  ansible.builtin.assert:
+    that:
+      - lookup('env', 'TS_AUTHKEY') | length > 0
+    fail_msg: >-
+      TS_AUTHKEY is required because atlas is not yet logged into Tailscale.
+      Run this playbook through infra/secrets/homeserver-secrets exec atlas-tailscale.
+  when: atlas_tailscale_backend_state != "Running"
+  no_log: true
+
+- name: Enroll atlas into Tailscale
+  when: atlas_tailscale_backend_state != "Running"
+  no_log: true
+  block:
+    - name: Write temporary Tailscale auth key file
+      ansible.builtin.copy:
+        dest: "{{ atlas_tailscale_authkey_file }}"
+        owner: root
+        group: root
+        mode: "0600"
+        content: "{{ lookup('env', 'TS_AUTHKEY') }}\n"
+
+    - name: Run initial tailscale up with auth key file
+      ansible.builtin.command:
+        argv: "{{ atlas_tailscale_up_args + ['--auth-key=file:' ~ atlas_tailscale_authkey_file] }}"
+      changed_when: true
+  always:
+    - name: Remove temporary Tailscale auth key file
+      ansible.builtin.file:
+        path: "{{ atlas_tailscale_authkey_file }}"
+        state: absent
+      no_log: true
+
+- name: Reconcile Tailscale settings for an already-enrolled atlas node
+  ansible.builtin.command:
+    argv: "{{ atlas_tailscale_up_args }}"
+  changed_when: false
+  when:
+    - atlas_tailscale_backend_state == "Running"
+    - atlas_tailscale_reconcile_running_node | bool
+
+- name: Read atlas Tailscale IPv4
+  ansible.builtin.command: tailscale ip -4
+  register: atlas_tailscale_ipv4
+  changed_when: false
+  failed_when: false
+
+- name: Show atlas Tailscale IPv4
+  ansible.builtin.debug:
+    msg: "atlas Tailscale IPv4: {{ atlas_tailscale_ipv4.stdout }}"
+  when: atlas_tailscale_ipv4.stdout | length > 0

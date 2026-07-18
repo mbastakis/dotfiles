@@ -1,0 +1,16 @@
+http:
+  routers:
+    filebrowser-quantum:
+      rule: Host(`{{ atlas_homeserver_files_host }}`)
+      entryPoints:
+        - websecure
+      service: filebrowser-quantum
+      tls:
+        certResolver: route53
+
+  services:
+    filebrowser-quantum:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "{{ atlas_homeserver_truenas_filebrowser_url }}"

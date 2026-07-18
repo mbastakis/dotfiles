@@ -1,0 +1,16 @@
+http:
+  routers:
+    taskchampion-sync:
+      rule: Host(`{{ atlas_homeserver_tasks_host }}`)
+      entryPoints:
+        - websecure
+      service: taskchampion-sync
+      tls:
+        certResolver: route53
+
+  services:
+    taskchampion-sync:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "http://taskchampion-sync:8080"

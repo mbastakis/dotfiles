@@ -1,0 +1,24 @@
+- file: truenas/apps/declarations/backrest.yaml
+  path: [schema_version]
+  value: 2
+  error: schema_version
+- file: truenas/snapshots/snapshot-tasks.yaml
+  path: [tasks, 0, lifetime_value]
+  value: 0
+  error: tasks.0.lifetime_value
+- file: truenas/shares/nfs-shares.yaml
+  path: [shares, 0, hosts]
+  value: []
+  error: hosts or networks must restrict the NFS export
+- file: truenas/backrest/backrest-plans.yaml
+  path: [repository, uri]
+  value: ""
+  error: repository.uri
+- file: sync/syncthing/config.yaml
+  path: [folders, 0, id]
+  value: Invalid ID
+  error: folders.0.id
+- file: secrets/homeserver.bws.yaml
+  path: [project, id]
+  value: not-a-uuid
+  error: project.id

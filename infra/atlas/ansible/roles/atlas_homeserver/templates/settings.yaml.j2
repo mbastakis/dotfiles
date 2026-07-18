@@ -1,0 +1,51 @@
+---
+title: Hyperion
+description: Private home cloud
+startUrl: https://{{ atlas_homeserver_home_host }}
+favicon: /images/hyperion.png
+theme: dark
+color: zinc
+headerStyle: clean
+iconStyle: theme
+statusStyle: dot
+target: _blank
+useEqualHeights: false
+fullWidth: true
+maxGroupColumns: 4
+maxBookmarkGroupColumns: 4
+cardBlur: sm
+disableIndexing: true
+hideVersion: true
+
+background:
+  image: /images/background.jpg
+  saturate: 100
+  brightness: 75
+  opacity: 70
+
+quicklaunch:
+  searchDescriptions: true
+  mobileButtonPosition: bottom-left
+
+layout:
+  - Applications:
+      icon: mdi-apps
+      style: row
+      columns: 4
+      useEqualHeights: true
+  - Data & Protection:
+      icon: mdi-database-lock
+      style: row
+      columns: 3
+  - Platform Services:
+      icon: mdi-server
+      style: row
+      columns: 3
+  - Network & Edge:
+      icon: mdi-lan
+      style: row
+      columns: 4
+  - External:
+      icon: mdi-open-in-new
+      style: row
+      columns: 2

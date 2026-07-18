@@ -1,0 +1,45 @@
+http:
+  routers:
+    taskboard-healthz:
+      rule: Host(`{{ atlas_homeserver_taskboard_host }}`) && Path(`/healthz`)
+      entryPoints:
+        - websecure
+      priority: 100
+      service: taskboard
+      tls:
+        certResolver: route53
+
+    taskboard-authentik-outpost:
+      rule: Host(`{{ atlas_homeserver_taskboard_host }}`) && PathPrefix(`/outpost.goauthentik.io/`)
+      entryPoints:
+        - websecure
+      priority: 100
+      service: authentik@file
+      tls:
+        certResolver: route53
+
+    taskboard-public-assets:
+      rule: Host(`{{ atlas_homeserver_taskboard_host }}`) && (Path(`/manifest.json`) || Path(`/static/sisyphus.png`))
+      entryPoints:
+        - websecure
+      priority: 100
+      service: taskboard
+      tls:
+        certResolver: route53
+
+    taskboard:
+      rule: Host(`{{ atlas_homeserver_taskboard_host }}`)
+      entryPoints:
+        - websecure
+      middlewares:
+        - authentik-forward-auth@file
+      service: taskboard
+      tls:
+        certResolver: route53
+
+  services:
+    taskboard:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "http://taskboard:{{ atlas_homeserver_taskboard_port }}"

@@ -1,0 +1,34 @@
+---
+- name: Configure atlas base host
+  hosts: atlas
+  become: true
+  gather_facts: true
+
+  pre_tasks:
+    - name: Require Ubuntu Server 26.04 or newer
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.distribution == "Ubuntu"
+          - >-
+            ansible_facts.distribution_version is version('26.04', '>=')
+        fail_msg: >-
+          atlas must be freshly installed with Ubuntu Server 26.04 LTS or
+          newer before this playbook runs.
+
+    - name: Require at least one admin SSH key
+      ansible.builtin.assert:
+        that:
+          - atlas_admin_authorized_keys | length > 0
+          - >-
+            atlas_admin_authorized_keys | reject('equalto', '') | list |
+            length == atlas_admin_authorized_keys | length
+        fail_msg: >-
+          Set atlas_admin_authorized_keys before running the atlas base
+          playbook.
+
+  roles:
+    - role: base_access
+    - role: network_dhcp
+    - role: laptop_power
+    - role: docker_cli
+    - role: terminal_comfort

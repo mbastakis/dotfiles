@@ -1,0 +1,46 @@
+# yaml-language-server: $schema=../../schemas/truenas-snapshots.schema.json
+# ZFS periodic snapshots for both durable photo datasets.
+schema_version: 1
+ownership:
+  scope: truenas.periodic_snapshots
+  mode: bounded
+
+dataset: "pool_4tb/homeserver/data/photos"
+recursive: true
+
+tasks:
+  - id: "hourly"
+    name: "hourly"
+    lifetime_value: 24
+    lifetime_unit: "HOUR"
+    naming_schema: "auto-%Y-%m-%d_%H-%M"
+    schedule:
+      minute: "0"
+      hour: "*"
+      dom: "*"
+      month: "*"
+      dow: "*"
+
+  - id: "daily"
+    name: "daily"
+    lifetime_value: 14
+    lifetime_unit: "DAY"
+    naming_schema: "auto-%Y-%m-%d_%H-%M_daily"
+    schedule:
+      minute: "0"
+      hour: "0"
+      dom: "*"
+      month: "*"
+      dow: "*"
+
+  - id: "weekly"
+    name: "weekly"
+    lifetime_value: 8
+    lifetime_unit: "WEEK"
+    naming_schema: "auto-%Y-%m-%d_%H-%M_weekly"
+    schedule:
+      minute: "0"
+      hour: "0"
+      dom: "*"
+      month: "*"
+      dow: "0"

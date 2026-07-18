@@ -1,0 +1,60 @@
+{
+  "backup": {
+    "database": {
+      "enabled": true,
+      "cronExpression": {{ atlas_immich_backup_cron | to_json }},
+      "keepLastAmount": {{ atlas_immich_backup_keep_last }}
+    }
+  },
+  "ffmpeg": {
+    "accel": "disabled",
+    "accelDecode": false,
+    "threads": {{ atlas_immich_transcode_threads }}
+  },
+  "job": {
+    "faceDetection": {
+      "concurrency": {{ atlas_immich_job_concurrency }}
+    },
+    "ocr": {
+      "concurrency": {{ atlas_immich_job_concurrency }}
+    },
+    "smartSearch": {
+      "concurrency": {{ atlas_immich_job_concurrency }}
+    },
+    "thumbnailGeneration": {
+      "concurrency": {{ atlas_immich_job_concurrency }}
+    },
+    "videoConversion": {
+      "concurrency": {{ atlas_immich_job_concurrency }}
+    }
+  },
+  "oauth": {
+    "enabled": true,
+    "issuerUrl": {{ atlas_immich_oidc_issuer_url | to_json }},
+    "clientId": {{ atlas_immich_oidc_client_id | to_json }},
+    "clientSecret": {{ lookup('env', 'IMMICH_OIDC_CLIENT_SECRET') | to_json }},
+    "scope": "openid email profile immich",
+    "signingAlgorithm": "RS256",
+    "profileSigningAlgorithm": "none",
+    "tokenEndpointAuthMethod": "client_secret_post",
+    "autoRegister": true,
+    "autoLaunch": false,
+    "buttonText": "Login with Authentik",
+    "mobileOverrideEnabled": false,
+    "mobileRedirectUri": "",
+    "endSessionEndpoint": "",
+    "timeout": 30000,
+    "storageLabelClaim": "preferred_username",
+    "roleClaim": "immich_role",
+    "storageQuotaClaim": "immich_quota",
+    "defaultStorageQuota": null
+  },
+  "passwordLogin": {
+    "enabled": true
+  },
+  "storageTemplate": {
+    "enabled": true,
+    "hashVerificationEnabled": true,
+    "template": "{% raw %}{{y}}/{{y}}-{{MM}}-{{dd}}/{{filename}}{% endraw %}"
+  }
+}

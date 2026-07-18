@@ -19,6 +19,7 @@ Component-based documentation for the chezmoi-managed dotfiles in this repositor
 - [0004: TrueNAS API key via null_resource](adr/0004-truenas-api-key-via-null-resource.md)
 - [0005: Immich on atlas with TrueNAS storage](adr/0005-run-immich-on-atlas-with-truenas-storage.md)
 - [0006: Domain-first homeserver IaC operated through Task](adr/0006-domain-first-homeserver-iac.md)
+- [0007: Manage OpenWrt from one contract with risk-tiered convergence](adr/0007-manage-openwrt-router-as-typed-desired-state.md)
 
 ## Components
 
@@ -39,11 +40,15 @@ Component-based documentation for the chezmoi-managed dotfiles in this repositor
 - [Restore from ZFS Snapshot](runbooks/restore-from-zfs-snapshot.md) -- local quick rollback
 - [OpenTofu State Migrations](runbooks/opentofu-state-migrations.md) -- state baselines, moved blocks, and rollback
 - [Homeserver Secret Rotation](runbooks/homeserver-secret-rotation.md) -- BWS inventory and credential rotation procedures
+- [ntfy Notifications](runbooks/ntfy.md) -- private push delivery, iPhone setup, and operations
+- [Pi-hole DNS Filtering](runbooks/pihole.md) -- filtered DNS with router-managed outage fallback
 - [Sisyphus](runbooks/taskboard.md) -- Taskwarrior Kanban board operations
 - [Break-Glass Access](runbooks/break-glass-access.md) -- Authentik/OIDC outage recovery
 - [Apple Photos to Immich Migration](runbooks/apple-photos-immich-migration.md) -- archive, pilot, metadata, validation, and resume gates
 - [Audiobookshelf](runbooks/audiobookshelf.md) -- deployment, mobile setup, storage, backups, and restore
-- [Router UPnP Disable](runbooks/router-upnp-disable.md) -- router hardening
+- [Legacy Speedport UPnP](runbooks/router-upnp-disable.md) -- rollback-router hardening retained through observation
+- [OpenWrt Router Cutover](runbooks/openwrt-router-cutover.md) -- accepted production topology, staged cutover, rollback, and observation gates
+- [OpenWrt Router Recovery](runbooks/openwrt-router-recovery.md) -- protected rollback limits, Speedport fallback, TFTP, UART, and clean rebuild
 
 ## Workspaces
 

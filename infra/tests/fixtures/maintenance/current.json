@@ -1,0 +1,62 @@
+{
+  "pools": [
+    {
+      "id": 1,
+      "name": "pool_4tb",
+      "status": "ONLINE"
+    }
+  ],
+  "scrubs": [
+    {
+      "id": 1,
+      "pool": 1,
+      "pool_name": "pool_4tb",
+      "threshold": 35,
+      "description": "Code-managed five-week pool scrub",
+      "schedule": {
+        "minute": "00",
+        "hour": "06",
+        "dom": "*",
+        "month": "*",
+        "dow": "7"
+      },
+      "enabled": true
+    }
+  ],
+  "services": [
+    {
+      "id": 18,
+      "service": "smartd",
+      "enable": true,
+      "state": "RUNNING"
+    }
+  ],
+  "smart_tests": [
+    {
+      "id": 10,
+      "type": "SHORT",
+      "desc": "Weekly all-disk short test",
+      "all_disks": true,
+      "disks": [],
+      "schedule": {
+        "hour": "06",
+        "dom": "*",
+        "month": "*",
+        "dow": "2"
+      }
+    },
+    {
+      "id": 11,
+      "type": "LONG",
+      "desc": "Monthly all-disk extended test",
+      "all_disks": true,
+      "disks": [],
+      "schedule": {
+        "hour": "06",
+        "dom": "1-7",
+        "month": "*",
+        "dow": "5"
+      }
+    }
+  ]
+}

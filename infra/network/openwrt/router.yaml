@@ -1,0 +1,150 @@
+# yaml-language-server: $schema=../../schemas/openwrt.schema.json
+schema_version: 1
+ownership:
+  scope: network.openwrt
+  mode: bounded
+device:
+  vendor: Cudy
+  model: WR3000E
+  hardware_version: "1.0"
+  board_name: cudy,wr3000e-v1
+  compatible_board_ids: [R53]
+firmware:
+  version: 25.12.5
+  target: mediatek
+  subtarget: filogic
+  profile: cudy_wr3000e-v1
+  imagebuilder:
+    filename: openwrt-imagebuilder-25.12.5-mediatek-filogic.Linux-x86_64.tar.zst
+    url: https://downloads.openwrt.org/releases/25.12.5/targets/mediatek/filogic/openwrt-imagebuilder-25.12.5-mediatek-filogic.Linux-x86_64.tar.zst
+    sha256: 7fb6cf626582ebcbfb46974da48c1eae577213f38879eaf6b1d982041e843461
+  packages:
+    add: [luci-ssl, luci-app-sqm, sqm-scripts, rpcd, ucode, ucode-mod-ubus]
+    forbidden: [tailscale, miniupnpd, luci-app-upnp]
+  public_key_path: private_dot_ssh/id_ed25519.pub
+system:
+  hostname: router
+  timezone: EET-2EEST,M3.5.0/3,M10.5.0/4
+  zonename: Europe/Athens
+wan:
+  physical_device: wan
+  vlan_id: 835
+  protocol: pppoe
+  username:
+    secret_ref:
+      alias: openwrt_pppoe_username
+  password:
+    secret_ref:
+      alias: openwrt_pppoe_password
+  peer_dns: true
+  ipv6: true
+  dhcpv6:
+    request_address: try
+    request_prefix: auto
+networks:
+  trusted:
+    interface: lan
+    address: 192.168.1.1/24
+    dhcp_start: 192.168.1.100
+    dhcp_end: 192.168.1.249
+    lease_time: 12h
+    domain: home
+    ipv6_assignment: 64
+    ipv6_hint: "0"
+  guest:
+    interface: guest
+    address: 192.168.30.1/24
+    dhcp_start: 192.168.30.100
+    dhcp_end: 192.168.30.249
+    lease_time: 12h
+    ipv6_assignment: 64
+    ipv6_hint: "1"
+  ula_prefix: fd84:778b:9ef1::/48
+dns:
+  upstreams: [192.168.1.19, 1.1.1.1, 1.0.0.1]
+  strict_order: true
+  ignore_wan_resolvers: true
+reservations:
+  - id: atlas
+    hostname: atlas
+    mac: 50:46:5d:38:5a:a1
+    address: 192.168.1.19
+  - id: truenas
+    hostname: truenas
+    mac: 10:fe:ed:04:14:22
+    address: 192.168.1.74
+wireless:
+  country: GR
+  fast_transition: false
+  wps: false
+  radios:
+    # Fixed non-overlapping/non-DFS channels selected by the Phase 0 survey.
+    - id: main-2g
+      band: 2g
+      channel: 11
+      width: 20
+    - id: main-5g
+      band: 5g
+      channel: 36
+      width: 80
+  main:
+    enabled: true
+    isolate_clients: false
+    isolate_bridge_ports: false
+    ssid:
+      secret_ref:
+        alias: openwrt_main_wifi_ssid
+    psk:
+      secret_ref:
+        alias: openwrt_main_wifi_psk
+    encryption: psk2+ccmp
+  guest:
+    ssid:
+      secret_ref:
+        alias: openwrt_guest_wifi_ssid
+    psk:
+      secret_ref:
+        alias: openwrt_guest_wifi_psk
+    encryption: psk2+ccmp
+    isolate_clients: true
+    isolate_bridge_ports: true
+management:
+  public_key_path: private_dot_ssh/id_ed25519.pub
+  root_password:
+    secret_ref:
+      alias: openwrt_root_password
+  ssh_password_auth: false
+  luci_https_only: true
+  allowed_networks: [trusted]
+security:
+  upnp: false
+  nat_pmp: false
+  dmz: false
+  wan_management: false
+  port_forwards: []
+  tailscale: false
+  dns_rebind_allow_domains:
+    - auth.mbastakis.com
+    - code.mbastakis.com
+    - files.mbastakis.com
+    - tasks.mbastakis.com
+    - taskboard.mbastakis.com
+    - home.mbastakis.com
+    - traefik.mbastakis.com
+    - backrest.mbastakis.com
+    - photos.mbastakis.com
+    - audiobooks.mbastakis.com
+    - push.mbastakis.com
+    - pihole.mbastakis.com
+sqm:
+  enabled: true
+  interface_from_wan_l3_device: true
+  download_kbit: 87890
+  upload_kbit: 8790
+  qdisc: cake
+  script: piece_of_cake.qos
+  link_layer: ethernet
+  overhead: 50
+  mpu: 84
+  multiqueue: false
+  flow_offloading: false

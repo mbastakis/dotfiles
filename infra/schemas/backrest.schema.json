@@ -1,0 +1,347 @@
+{
+  "$defs": {
+    "BackrestCheckPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "schedule": {
+          "$ref": "#/$defs/BackrestSchedule"
+        },
+        "structureOnly": {
+          "title": "Structureonly",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "schedule",
+        "structureOnly"
+      ],
+      "title": "BackrestCheckPolicy",
+      "type": "object"
+    },
+    "BackrestPlan": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "paths": {
+          "items": {
+            "pattern": "^/[^\\x00]*$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Paths",
+          "type": "array"
+        },
+        "repo": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Repo",
+          "type": "string"
+        },
+        "retention": {
+          "$ref": "#/$defs/BackrestRetention"
+        },
+        "schedule": {
+          "$ref": "#/$defs/BackrestSchedule"
+        },
+        "skipIfUnchanged": {
+          "title": "Skipifunchanged",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "repo",
+        "paths",
+        "schedule",
+        "retention",
+        "skipIfUnchanged"
+      ],
+      "title": "BackrestPlan",
+      "type": "object"
+    },
+    "BackrestPrunePolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "maxUnusedPercent": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Maxunusedpercent",
+          "type": "integer"
+        },
+        "schedule": {
+          "$ref": "#/$defs/BackrestSchedule"
+        }
+      },
+      "required": [
+        "schedule",
+        "maxUnusedPercent"
+      ],
+      "title": "BackrestPrunePolicy",
+      "type": "object"
+    },
+    "BackrestRepository": {
+      "additionalProperties": false,
+      "properties": {
+        "autoUnlock": {
+          "title": "Autounlock",
+          "type": "boolean"
+        },
+        "checkPolicy": {
+          "$ref": "#/$defs/BackrestCheckPolicy"
+        },
+        "env": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Env",
+          "type": "array"
+        },
+        "flags": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 1,
+          "minItems": 1,
+          "title": "Flags",
+          "type": "array"
+        },
+        "id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "password": {
+          "const": "",
+          "title": "Password",
+          "type": "string"
+        },
+        "prunePolicy": {
+          "$ref": "#/$defs/BackrestPrunePolicy"
+        },
+        "uri": {
+          "minLength": 1,
+          "title": "Uri",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "uri",
+        "password",
+        "flags",
+        "env",
+        "autoUnlock",
+        "prunePolicy",
+        "checkPolicy"
+      ],
+      "title": "BackrestRepository",
+      "type": "object"
+    },
+    "BackrestRetention": {
+      "additionalProperties": false,
+      "properties": {
+        "policyTimeBucketed": {
+          "$ref": "#/$defs/BackrestTimeBucketedRetention"
+        }
+      },
+      "required": [
+        "policyTimeBucketed"
+      ],
+      "title": "BackrestRetention",
+      "type": "object"
+    },
+    "BackrestSchedule": {
+      "additionalProperties": false,
+      "properties": {
+        "clock": {
+          "enum": [
+            "CLOCK_LOCAL",
+            "CLOCK_UTC"
+          ],
+          "title": "Clock",
+          "type": "string"
+        },
+        "cron": {
+          "minLength": 1,
+          "title": "Cron",
+          "type": "string"
+        }
+      },
+      "required": [
+        "cron",
+        "clock"
+      ],
+      "title": "BackrestSchedule",
+      "type": "object"
+    },
+    "BackrestSecretBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "env": {
+          "pattern": "^[A-Z][A-Za-z0-9_]*$",
+          "title": "Env",
+          "type": "string"
+        },
+        "path": {
+          "pattern": "^[a-zA-Z0-9_-]+(?:\\.[a-zA-Z0-9_-]+)*$",
+          "title": "Path",
+          "type": "string"
+        },
+        "secret_ref": {
+          "$ref": "#/$defs/SecretRef"
+        }
+      },
+      "required": [
+        "path",
+        "env",
+        "secret_ref"
+      ],
+      "title": "BackrestSecretBinding",
+      "type": "object"
+    },
+    "BackrestTimeBucketedRetention": {
+      "additionalProperties": false,
+      "properties": {
+        "daily": {
+          "minimum": 0,
+          "title": "Daily",
+          "type": "integer"
+        },
+        "monthly": {
+          "minimum": 0,
+          "title": "Monthly",
+          "type": "integer"
+        },
+        "weekly": {
+          "minimum": 0,
+          "title": "Weekly",
+          "type": "integer"
+        },
+        "yearly": {
+          "minimum": 0,
+          "title": "Yearly",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "daily",
+        "weekly",
+        "monthly",
+        "yearly"
+      ],
+      "title": "BackrestTimeBucketedRetention",
+      "type": "object"
+    },
+    "Ownership": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "const": "bounded",
+          "title": "Mode",
+          "type": "string"
+        },
+        "scope": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z][a-z0-9_-]*(?:\\.[a-z0-9][a-z0-9_-]*)+$",
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope",
+        "mode"
+      ],
+      "title": "Ownership",
+      "type": "object"
+    },
+    "SecretRef": {
+      "additionalProperties": false,
+      "description": "A logical reference only; secret material is deliberately not representable.",
+      "properties": {
+        "alias": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Alias",
+          "type": "string"
+        }
+      },
+      "required": [
+        "alias"
+      ],
+      "title": "SecretRef",
+      "type": "object"
+    }
+  },
+  "$id": "urn:homeserver-iac:schema:backrest",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "ownership": {
+      "$ref": "#/$defs/Ownership"
+    },
+    "plans": {
+      "items": {
+        "$ref": "#/$defs/BackrestPlan"
+      },
+      "minItems": 1,
+      "title": "Plans",
+      "type": "array"
+    },
+    "repository": {
+      "$ref": "#/$defs/BackrestRepository"
+    },
+    "repositoryClearFields": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Repositoryclearfields",
+      "type": "array"
+    },
+    "retirePlans": {
+      "default": [],
+      "items": {
+        "maxLength": 128,
+        "minLength": 1,
+        "pattern": "^[a-z0-9][a-z0-9._-]*$",
+        "type": "string"
+      },
+      "title": "Retireplans",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "secret_refs": {
+      "items": {
+        "$ref": "#/$defs/BackrestSecretBinding"
+      },
+      "minItems": 1,
+      "title": "Secret Refs",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "ownership",
+    "repository",
+    "secret_refs",
+    "plans"
+  ],
+  "title": "BackrestDesiredState",
+  "type": "object"
+}

@@ -1,0 +1,73 @@
+# Managed by Ansible: terminal_comfort
+
+FZF_COLORS="\
+--color=bg+:#313244,bg:#1E1E2E,spinner:#F5E0DC,hl:#F38BA8 \
+--color=fg:#CDD6F4,header:#F38BA8,info:#CBA6F7,pointer:#F5E0DC \
+--color=marker:#B4BEFE,fg+:#CDD6F4,prompt:#CBA6F7,hl+:#F38BA8 \
+--color=selected-bg:#45475A \
+--color=border:#6C7086,label:#CDD6F4"
+
+FZF_UI="\
+--border=rounded \
+--padding=0,1 \
+--prompt=' ' \
+--pointer='→' \
+--marker=' ' \
+--cycle \
+--scrollbar='│'"
+
+export FZF_DEFAULT_OPTS="\
+$FZF_COLORS \
+$FZF_UI \
+--height=~40 \
+--layout=reverse \
+--info='inline: ' \
+--multi"
+
+export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --no-ignore-vcs \
+  --exclude .git \
+  --exclude node_modules \
+  --exclude .venv \
+  --exclude __pycache__ \
+  --exclude .cache \
+  --exclude dist \
+  --exclude build \
+  --exclude target'
+
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_T_OPTS="\
+--border-label=' Select file ' \
+--preview='bat -n --color=always --line-range :500 {}' \
+--preview-window='right,50%,border-left'"
+
+export FZF_CTRL_SHIFT_T_COMMAND='fd --type d --strip-cwd-prefix --hidden --follow --no-ignore-vcs \
+  --exclude .git \
+  --exclude node_modules \
+  --exclude .venv \
+  --exclude __pycache__ \
+  --exclude .cache \
+  --exclude dist \
+  --exclude build \
+  --exclude target'
+export FZF_CTRL_SHIFT_T_OPTS="\
+--border-label=' Select directory ' \
+--preview='eza --icons --color=always --group-directories-first --git {} 2>/dev/null || ls -la {}' \
+--preview-window='right,50%,border-left'"
+
+export FZF_ALT_C_COMMAND=""
+
+export _ZO_FZF_OPTS="\
+$FZF_DEFAULT_OPTS \
+--height=~20 \
+--no-sort \
+--border-label=' Jump to directory ' \
+--preview='eza --icons --color=always --group-directories-first --git {2..} 2>/dev/null || ls -la {2..}' \
+--preview-window='bottom,6,border-top'"
+
+_ftext_fzf_opts=(
+  --layout=default
+  --border-label=' Search in files '
+  --delimiter=:
+  --preview='bat --color=always {1} --highlight-line {2} 2>/dev/null'
+  --preview-window='up,70%,border-bottom,+{2}+3/3,~3'
+)

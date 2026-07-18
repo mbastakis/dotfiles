@@ -1,0 +1,11 @@
+---
+- name: Reload systemd for Immich
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when: not ansible_check_mode
+
+- name: Restart Immich
+  ansible.builtin.systemd:
+    name: "{{ atlas_immich_service_unit }}"
+    state: restarted
+  when: not ansible_check_mode

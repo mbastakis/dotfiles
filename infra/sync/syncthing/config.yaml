@@ -1,0 +1,50 @@
+# yaml-language-server: $schema=../../schemas/syncthing.schema.json
+# Syncthing folder and device configuration for the homeserver Obsidian sync.
+#
+# This file is consumed by configure-syncthing --host truenas|mac.
+# Device IDs are cryptographic keys generated at first run — they are NOT
+# secrets but are runtime-determined. After first deploy, paste them here
+# so the configuration is reproducible.
+schema_version: 2
+ownership:
+  scope: sync.syncthing
+  mode: bounded
+
+truenas:
+  device_id: "Z7NSJQL-LDIT7OY-WZWC6HV-7E77DKL-VEBQTQ6-5OWAIJA-XLTKMB2-CVDAYQE"
+  name: "truenas"
+  # Tailscale first, LAN fallback
+  addresses:
+    - "tcp://100.122.166.74:22000"
+    - "tcp://192.168.1.74:22000"
+  api_url: "http://192.168.1.74:8384"
+
+mac:
+  device_id: "3L4YVPL-5K7HEZY-RFQ5PZ5-IQ65X2Y-XSL66SY-GRO3K54-6NHOK4T-OEYDGAP"
+  name: "macbook"
+  addresses: ["dynamic"]
+  api_url: "http://127.0.0.1:8384"
+
+# Folder definitions — code-owned, reproducible.
+# Paths are container-internal for truenas, local filesystem for mac.
+folders:
+  - id: "obsidian-michail"
+    label: "Obsidian Michail"
+    truenas_path: "/sync/obsidian-michail"
+    truenas_host_path: "/mnt/pool_4tb/homeserver/data/obsidian/michail"
+    mac_path: "/Users/mbastakis/Documents/notes"
+    type: "sendreceive"
+    versioning:
+      type: "staggered"
+      params:
+        cleanInterval: "3600"
+        maxAge: "2592000"
+
+# Syncthing options for Tailscale-only operation.
+# Global discovery and relay are disabled because Peers connect over Tailscale.
+# Local discovery stays on for LAN convenience.
+options:
+  globalAnnounceEnabled: false
+  localAnnounceEnabled: true
+  natEnabled: false
+  relaysEnabled: false

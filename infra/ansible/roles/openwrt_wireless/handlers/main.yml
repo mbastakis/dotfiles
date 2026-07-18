@@ -1,0 +1,4 @@
+---
+- name: Reload OpenWrt Wi-Fi
+  community.openwrt.command:
+    cmd: /sbin/wifi reload

@@ -1,0 +1,218 @@
+{
+  "$defs": {
+    "Ownership": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "const": "bounded",
+          "title": "Mode",
+          "type": "string"
+        },
+        "scope": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z][a-z0-9_-]*(?:\\.[a-z0-9][a-z0-9_-]*)+$",
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope",
+        "mode"
+      ],
+      "title": "Ownership",
+      "type": "object"
+    },
+    "SyncthingDevice": {
+      "additionalProperties": false,
+      "properties": {
+        "addresses": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Addresses",
+          "type": "array"
+        },
+        "api_url": {
+          "pattern": "^https?://",
+          "title": "Api Url",
+          "type": "string"
+        },
+        "device_id": {
+          "pattern": "^(?:[A-Z0-9]{7}-){7}[A-Z0-9]{7}$",
+          "title": "Device Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "device_id",
+        "name",
+        "addresses",
+        "api_url"
+      ],
+      "title": "SyncthingDevice",
+      "type": "object"
+    },
+    "SyncthingFolder": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "mac_path": {
+          "pattern": "^/[^\\x00]*$",
+          "title": "Mac Path",
+          "type": "string"
+        },
+        "truenas_host_path": {
+          "pattern": "^/[^\\x00]*$",
+          "title": "Truenas Host Path",
+          "type": "string"
+        },
+        "truenas_path": {
+          "pattern": "^/[^\\x00]*$",
+          "title": "Truenas Path",
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "sendreceive",
+            "sendonly",
+            "receiveonly"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "versioning": {
+          "$ref": "#/$defs/SyncthingVersioning"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "truenas_path",
+        "truenas_host_path",
+        "mac_path",
+        "type",
+        "versioning"
+      ],
+      "title": "SyncthingFolder",
+      "type": "object"
+    },
+    "SyncthingOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "globalAnnounceEnabled": {
+          "title": "Globalannounceenabled",
+          "type": "boolean"
+        },
+        "localAnnounceEnabled": {
+          "title": "Localannounceenabled",
+          "type": "boolean"
+        },
+        "natEnabled": {
+          "title": "Natenabled",
+          "type": "boolean"
+        },
+        "relaysEnabled": {
+          "title": "Relaysenabled",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "globalAnnounceEnabled",
+        "localAnnounceEnabled",
+        "natEnabled",
+        "relaysEnabled"
+      ],
+      "title": "SyncthingOptions",
+      "type": "object"
+    },
+    "SyncthingVersioning": {
+      "additionalProperties": false,
+      "properties": {
+        "params": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Params",
+          "type": "object"
+        },
+        "type": {
+          "enum": [
+            "",
+            "simple",
+            "staggered",
+            "trashcan",
+            "external"
+          ],
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "SyncthingVersioning",
+      "type": "object"
+    }
+  },
+  "$id": "urn:homeserver-iac:schema:syncthing",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "folders": {
+      "items": {
+        "$ref": "#/$defs/SyncthingFolder"
+      },
+      "minItems": 1,
+      "title": "Folders",
+      "type": "array"
+    },
+    "mac": {
+      "$ref": "#/$defs/SyncthingDevice"
+    },
+    "options": {
+      "$ref": "#/$defs/SyncthingOptions"
+    },
+    "ownership": {
+      "$ref": "#/$defs/Ownership"
+    },
+    "schema_version": {
+      "const": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "truenas": {
+      "$ref": "#/$defs/SyncthingDevice"
+    }
+  },
+  "required": [
+    "schema_version",
+    "ownership",
+    "truenas",
+    "mac",
+    "folders",
+    "options"
+  ],
+  "title": "SyncthingDesiredState",
+  "type": "object"
+}

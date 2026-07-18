@@ -1,0 +1,125 @@
+---
+atlas_admin_user: mbastakis
+atlas_admin_shell: /usr/bin/zsh
+atlas_wired_interface: enp3s0
+atlas_lan_ipv4: 192.168.1.19
+atlas_lan_ipv4_reservation_verified: true
+atlas_nvidia_gpu_model: NVIDIA GeForce GT 650M (GK107M)
+atlas_nvidia_gpu_pci_id: "10de:0fd1"
+atlas_nvidia_compute_capability: "3.0"
+atlas_nvidia_immich_supported: false
+atlas_immich_processing_mode: cpu
+atlas_immich_runtime_root: /home/mbastakis/.local/share/immich
+atlas_immich_runtime_storage: hdd
+atlas_immich_memory_gib: 6.7
+atlas_immich_swap_gib: 4
+atlas_immich_local_storage_accepted: true
+atlas_immich_preconditions_accepted: true
+atlas_immich_host: photos.mbastakis.com
+atlas_immich_nfs_server: 192.168.1.74
+atlas_immich_nfs_export: /mnt/pool_4tb/homeserver/data/photos/immich
+atlas_immich_sentinel_content: managed by infra/truenas/tofu
+# Add independently verified TrueNAS Ed25519 public host keys as "ssh-ed25519 AAAA...".
+# Multiple entries permit an explicit rotation overlap.
+atlas_homeserver_truenas_backup_ssh_host_keys:
+  - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMwBuh2v8x9K5xcjoxUQLI7l6Aq1emJ5qoRZIp4wnTQa
+atlas_tailscale_hostname: atlas
+atlas_tailscale_advertise_tags:
+  - tag:homeserver-entry
+atlas_tailscale_accept_dns: false
+atlas_tailscale_accept_routes: false
+atlas_tailscale_advertise_routes: []
+atlas_tailscale_advertise_exit_node: false
+atlas_tailscale_ssh: false
+ansible_become_exe: /usr/bin/sudo.ws
+ansible_become_flags: "-H -S"
+
+atlas_admin_authorized_keys:
+  - "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_ed25519.pub') }}"
+
+atlas_base_packages:
+  - ca-certificates
+  - curl
+  - git
+  - gnupg
+  - nfs-common
+  - openssh-server
+  - python3
+  - python3-apt
+  - rsync
+  - sudo
+  - zsh
+
+atlas_docker_packages:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+  - docker-buildx-plugin
+  - docker-compose-plugin
+
+atlas_terminal_packages:
+  - bat
+  - build-essential
+  - cargo
+  - eza
+  - ffmpeg
+  - fd-find
+  - file
+  - fzf
+  - git-delta
+  - golang-go
+  - glow
+  - imagemagick
+  - lazygit
+  - libimage-exiftool-perl
+  - libssl-dev
+  - mediainfo
+  - neovim
+  - nix-bin
+  - nodejs
+  - npm
+  - pkg-config
+  - poppler-utils
+  - python3-pynvim
+  - python3-pip
+  - python3-venv
+  - ripgrep
+  - starship
+  - tmux
+  - tree-sitter-cli
+  - unzip
+  - zoxide
+
+atlas_nvim_treesitter_parsers:
+  - bash
+  - c
+  - comment
+  - css
+  - diff
+  - dockerfile
+  - go
+  - gomod
+  - gosum
+  - gotmpl
+  - hcl
+  - html
+  - javascript
+  - json
+  - kdl
+  - lua
+  - luadoc
+  - markdown
+  - markdown_inline
+  - nix
+  - python
+  - query
+  - rust
+  - scss
+  - terraform
+  - toml
+  - tsx
+  - typescript
+  - vim
+  - vimdoc
+  - yaml
+  - zig

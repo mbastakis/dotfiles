@@ -1,0 +1,13 @@
+---
+- name: Configure atlas homeserver application stack
+  hosts: atlas
+  become: true
+  gather_facts: true
+
+  pre_tasks:
+    - name: Require Docker CLI before deploying homeserver stack
+      ansible.builtin.command: docker --version
+      changed_when: false
+
+  roles:
+    - role: atlas_homeserver

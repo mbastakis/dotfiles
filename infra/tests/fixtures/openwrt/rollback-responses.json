@@ -1,0 +1,7 @@
+{
+  "success": {"returncode": 0, "stdout": {"ok": true}},
+  "timeout": {"returncode": 124, "stdout": null},
+  "wrong_sid": {"returncode": 0, "stdout": {"ok": false, "error_code": 4}},
+  "no_data": {"returncode": 0, "stdout": null},
+  "ambiguous_ssh_termination": {"returncode": 255, "stdout": null}
+}
