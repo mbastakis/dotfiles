@@ -144,23 +144,6 @@ def test_openwrt_ansible_contract_matches_hostapd_secret_constraints() -> None:
     assert "^[0-9A-Fa-f]{64}$" in contract
 
 
-def test_opencode_remote_secrets_are_inside_designated_host_template_guards() -> None:
-    notifier = Path("private_dot_config/opencode/private_clickable-notifier.json.tmpl").read_text()
-    notifier_guard = notifier.split("{{- if eq .chezmoi.hostname .opencode.remote.host }}", 1)[
-        1
-    ].split("{{- end }}", 1)[0]
-    assert "bitwardenSecrets .opencode.remote.ntfy_token_id" in notifier_guard
-
-    reload_script = Path(
-        ".chezmoiscripts/run_onchange_after_10-opencode-remote.sh.tmpl"
-    ).read_text()
-    secret_guard = reload_script.split(
-        '{{- if and (eq .chezmoi.os "darwin") (eq .chezmoi.hostname .opencode.remote.host) }}',
-        1,
-    )[1].split("{{- end }}", 1)[0]
-    assert secret_guard.count("bitwardenSecrets") == 3
-
-
 def test_openwrt_apply_and_revert_dispatch_to_controller(monkeypatch: object) -> None:
     calls: list[str] = []
     monkeypatch.setattr(

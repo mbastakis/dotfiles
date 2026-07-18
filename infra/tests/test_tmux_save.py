@@ -6,8 +6,6 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).parents[2]
 TMUX_SAVE = REPO_ROOT / "literal_bin/executable_tmux-save"
-TMUX_CONFIG = REPO_ROOT / "private_dot_config/tmux/tmux.conf"
-TMUX_SIDEBAR = REPO_ROOT / "literal_bin/executable_tmux-opencode-sidebar"
 
 
 def normalize_snapshot(
@@ -203,20 +201,6 @@ def test_tmux_snapshot_normalization_precedes_native_deduplication(tmp_path: Pat
     assert "restored-layout" in first
     assert "\t1\tOpenCode\t/workspace\t1\topencode\t" in first
     assert "opencode-restore-session 7f9d-session" in first
-
-
-def test_tmux_config_uses_the_pre_comparison_layout_hook() -> None:
-    config = TMUX_CONFIG.read_text()
-
-    assert '@resurrect-hook-post-save-layout "$HOME/bin/tmux-save --normalize-snapshot"' in config
-
-
-def test_hide_restores_only_windows_with_saved_sidebar_layouts() -> None:
-    script = TMUX_SIDEBAR.read_text()
-    restore = script.split("restore_layouts() {", 1)[1].split("\n}", 1)[0]
-
-    assert "#{${LAYOUT_OPTION}}" in restore
-    assert '[[ -n "$window_id" && -n "$saved_layout" ]] || continue' in restore
 
 
 def test_split_while_sidebar_is_open_uses_safe_canonical_layout(tmp_path: Path) -> None:

@@ -42,6 +42,8 @@ def taskwarrior_binary() -> str | None:
         shutil.which("task"),
     ]
     for candidate in filter(None, candidates):
+        if not Path(candidate).is_file():
+            continue
         result = subprocess.run(
             [candidate, "--version"], capture_output=True, text=True, check=False
         )
