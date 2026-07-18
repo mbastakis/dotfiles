@@ -1,0 +1,158 @@
+version: "3"
+
+tasks:
+  openwrt:ansible:sync:
+    internal: true
+    desc: Install the pinned OpenWrt Ansible collection locally
+    dir: infra/ansible
+    sources:
+      - requirements.yml
+    generates:
+      - .collections/ansible_collections/community/openwrt/MANIFEST.json
+    cmds:
+      - uv run --project .. --locked ansible-galaxy collection install -r requirements.yml -p .collections
+
+  status:
+    desc: Validate and plan all network policy without applying changes
+    cmds:
+      - task: policy:plan
+      - task: openwrt:status
+
+  openwrt:firmware:build:
+    desc: Build the pinned WR3000E v1 stock-layout OpenWrt image
+    cmds:
+      - uv run --project infra --offline --locked python -m homeserver_iac openwrt firmware build {{.CLI_ARGS}}
+
+  openwrt:firmware:verify:
+    desc: Verify a local OpenWrt image and manifest without network access
+    cmds:
+      - uv run --project infra --offline --locked python -m homeserver_iac openwrt firmware verify {{.CLI_ARGS}}
+
+  openwrt:validate:
+    desc: Validate OpenWrt Ansible playbooks without contacting the router
+    deps: [openwrt:ansible:sync]
+    dir: infra/ansible
+    cmds:
+      - uv run --project .. --offline --locked ansible-playbook playbooks/openwrt-bootstrap.yml --syntax-check
+      - uv run --project .. --offline --locked ansible-playbook playbooks/openwrt-converge.yml --syntax-check
+      - uv run --project .. --offline --locked ansible-playbook playbooks/openwrt-apply.yml --syntax-check
+      - uv run --project .. --offline --locked ansible-playbook playbooks/openwrt-status.yml --syntax-check
+
+  openwrt:bootstrap:
+    desc: Bootstrap a directly wired management image and apply routine configuration
+    deps: [openwrt:ansible:sync]
+    dir: infra/ansible
+    cmds:
+      - ../secrets/homeserver-secrets exec openwrt-router -- uv run --project .. --offline --locked python -m homeserver_iac openwrt bootstrap {{.CLI_ARGS}}
+      - '{{if eq .CLI_ARGS ""}}../secrets/homeserver-secrets exec openwrt-router -- uv run --project .. --locked ansible-playbook playbooks/openwrt-bootstrap.yml{{else}}true{{end}}'
+
+  openwrt:plan:
+    desc: Plan protected and routine OpenWrt convergence
+    deps: [openwrt:ansible:sync]
+    cmds:
+      - |
+        {{if contains "--state-fixture" .CLI_ARGS}}
+        uv run --project infra --offline --locked python -m homeserver_iac openwrt plan {{.CLI_ARGS}}
+        {{else}}
+        set +e
+        infra/secrets/homeserver-secrets exec openwrt-router -- uv run --project infra --offline --locked python -m homeserver_iac openwrt plan --stage all
+        protected_status=$?
+        set -e
+        if [ "$protected_status" -ne 0 ] && [ "$protected_status" -ne 2 ]; then
+          exit "$protected_status"
+        fi
+        ANSIBLE_CONFIG=infra/ansible/ansible.cfg infra/secrets/homeserver-secrets exec openwrt-router -- uv run --project infra --locked ansible-playbook infra/ansible/playbooks/openwrt-converge.yml --check --diff {{.CLI_ARGS}}
+        exit "$protected_status"
+        {{end}}
+
+  openwrt:apply:
+    desc: Apply the canonical OpenWrt contract through Ansible
+    deps: [openwrt:ansible:sync]
+    dir: infra/ansible
+    cmds:
+      - ../secrets/homeserver-secrets exec openwrt-router -- uv run --project .. --locked ansible-playbook playbooks/openwrt-apply.yml {{.CLI_ARGS}}
+
+  openwrt:dns:plan:
+    desc: Check only routine OpenWrt DNS and DHCP configuration
+    deps: [openwrt:ansible:sync]
+    dir: infra/ansible
+    cmds:
+      - ../secrets/homeserver-secrets exec openwrt-router -- uv run --project .. --locked ansible-playbook playbooks/openwrt-apply.yml --check --diff --tags dns {{.CLI_ARGS}}
+
+  openwrt:dns:apply:
+    desc: Apply only routine OpenWrt DNS and DHCP configuration
+    deps: [openwrt:ansible:sync]
+    dir: infra/ansible
+    cmds:
+      - ../secrets/homeserver-secrets exec openwrt-router -- uv run --project .. --locked ansible-playbook playbooks/openwrt-apply.yml --tags dns {{.CLI_ARGS}}
+
+  openwrt:recover:
+    desc: Recover or revert one protected OpenWrt transaction
+    cmds:
+      - infra/secrets/homeserver-secrets exec openwrt-router -- uv run --project infra --offline --locked python -m homeserver_iac openwrt apply {{.CLI_ARGS}}
+
+  openwrt:status:
+    desc: Report Ansible facts and OpenWrt runtime health
+    deps: [openwrt:ansible:sync]
+    dir: infra/ansible
+    cmds:
+      - uv run --project .. --locked ansible-playbook playbooks/openwrt-status.yml
+      - uv run --project .. --offline --locked python -m homeserver_iac openwrt status {{.CLI_ARGS}}
+
+  openwrt:backup:
+    desc: Stream-encrypt an OpenWrt configuration or recovery backup
+    cmds:
+      - uv run --project infra --offline --locked python -m homeserver_iac openwrt backup {{.CLI_ARGS}}
+
+  openwrt:upgrade:
+    desc: Verify and install a config-preserving OpenWrt upgrade
+    cmds:
+      - infra/secrets/homeserver-secrets exec openwrt-router -- uv run --project infra --offline --locked python -m homeserver_iac openwrt upgrade {{.CLI_ARGS}}
+
+  openwrt:clean-rebuild:
+    desc: Backup and clean-flash the verified OpenWrt image over direct wired SSH
+    cmds:
+      - uv run --project infra --offline --locked python -m homeserver_iac openwrt clean-rebuild {{.CLI_ARGS}}
+
+  policy:init:
+    desc: Initialize the Tailscale policy OpenTofu stack
+    dir: infra/network/tailscale/tofu
+    cmds:
+      - task: ":aws:backend:check"
+      - |
+        aws-login exec mbastakis -- tofu init \
+          -input=false \
+          -reconfigure \
+          -backend-config="bucket={{.TF_STATE_BUCKET}}" \
+          -backend-config="key=homeserver/tailscale/terraform.tfstate" \
+          -backend-config="region={{.TF_STATE_REGION}}" \
+          -backend-config="encrypt=true" \
+          -backend-config="use_lockfile=true"
+
+  policy:import:
+    desc: Import the existing whole-tailnet policy into OpenTofu state
+    dir: infra/network/tailscale/tofu
+    cmds:
+      - task: policy:init
+      - ../../../secrets/homeserver-secrets exec tailscale-policy -- tofu import tailscale_acl.homeserver acl
+
+  policy:validate:
+    desc: Validate the homeserver Tailscale policy through the Tailscale API
+    cmds:
+      - infra/secrets/homeserver-secrets exec tailscale-policy -- bash infra/network/tailscale/manage-policy validate {{.CLI_ARGS}}
+
+  policy:plan:
+    desc: Validate and plan the Tailscale policy with OpenTofu
+    dir: infra/network/tailscale/tofu
+    cmds:
+      - task: policy:init
+      - ../../../secrets/homeserver-secrets exec tailscale-policy -- bash ../manage-policy validate
+      - aws-login exec mbastakis -- ../../../secrets/homeserver-secrets exec tailscale-policy -- tofu plan {{.CLI_ARGS}}
+
+  policy:apply:
+    desc: Validate and apply the Tailscale policy with OpenTofu
+    dir: infra/network/tailscale/tofu
+    cmds:
+      - task: policy:init
+      - ../../../secrets/homeserver-secrets exec tailscale-policy -- bash ../manage-policy validate
+      - aws-login exec mbastakis -- ../../../secrets/homeserver-secrets exec tailscale-policy -- tofu apply {{.CLI_ARGS}}

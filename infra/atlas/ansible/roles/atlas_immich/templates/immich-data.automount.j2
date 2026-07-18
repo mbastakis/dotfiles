@@ -1,0 +1,10 @@
+[Unit]
+Description=Automount Immich durable media from TrueNAS
+Before={{ atlas_immich_service_unit }}
+
+[Automount]
+Where={{ atlas_immich_media_mount }}
+TimeoutIdleSec=0
+
+[Install]
+WantedBy=multi-user.target

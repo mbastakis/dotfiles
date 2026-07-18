@@ -28,11 +28,12 @@ The authoritative personal manifest is `apple-originals/manifests/source-persona
 
 The private `apple-originals` SMB share exists only for migration. It authenticates `mbastakis`, maps writes to `apps:apps`, and must be retired after export, reconciliation, backup, and restore acceptance.
 
-The `homeserver-apple-originals-daily` Backrest plan is temporarily retired
-while the archive is changing. This avoids backup/export contention and
-incomplete migration snapshots; it does not delete existing restic snapshots.
-Restore the plan after full export, Immich reconciliation, and restore
-acceptance. The independent `homeserver-immich-daily` plan remains active.
+The `homeserver-apple-originals-daily` and `homeserver-immich-daily` Backrest
+plans are declared again after full export and metadata reconciliation. Keep
+iPhone backup paused until the plans are applied, Immich has written a current
+native database dump, and baseline snapshots plus a restore check pass. The
+Immich plan captures durable media and `/data/backups`; derived Atlas-local
+thumbnails, transcodes, and caches are regenerated after restore.
 
 ## Pilot Evidence
 
@@ -71,7 +72,7 @@ Immich retains every validated original and rendered media rendition:
 | Unedited Live Photo | Original still and paired motion file | Both components plus sidecars |
 | Edited Live Photo | Original pair and edited pair when both are valid | Original and edited components, AAE, and sidecars |
 
-The original/edited duplication is intentional preservation, not a migration error. A generated import manifest still controls the upload so invalid media, AAE recipes, JSON reports, and unrelated files cannot become assets. The API metadata pass can use Immich stacks as a presentation layer for each adjusted source record, with the rendered edit as primary and the original still accessible. The official `@immich/cli@3.0.2` remains the upload client, with conservative concurrency and no `--delete`, `--delete-duplicates`, or `--skip-hash` options.
+The original/edited duplication is intentional preservation, not a migration error. A generated import manifest still controls the upload so invalid media, AAE recipes, JSON reports, and unrelated files cannot become assets. The API metadata pass can use Immich stacks as a presentation layer for each adjusted source record, with the rendered edit as primary and the original still accessible. When Immich deduplicates the original and edit to one asset ID, no stack is needed or created. Source records that share a deduplicated Immich asset are coalesced into one connected stack because an Immich asset cannot belong to multiple stacks; the edited primary from the lexicographically first source UUID is selected deterministically. An existing pilot stack may retain additional pilot-original components when it has the planned primary and contains every canonical planned asset; a stack missing any planned asset remains blocked. The official `@immich/cli@3.0.2` remains the upload client, with conservative concurrency and no `--delete`, `--delete-duplicates`, or `--skip-hash` options.
 
 ## Metadata API Pass
 
@@ -93,8 +94,12 @@ environment variable. It can read current favorite state through
 `GET /api/assets/{id}` and current stacks through
 `GET /api/stacks?primaryAssetId=...` before any mutation. Immich v3.0.2 album
 reads do not expose album asset IDs, so album membership cannot be proven
-unchanged from a read-only API call; the dry run reports album membership as an
-idempotent re-apply action instead of claiming read-verified convergence.
+unchanged from a read-only API call. Immich also filters hidden assets from
+stack membership responses, so an empty stack response is accepted only when
+its primary matches and every planned member is explicitly covered by the
+reviewed hidden-visibility action; the report records that verification limit.
+The dry run reports album membership as an idempotent re-apply action instead
+of claiming read-verified convergence.
 
 The pilot live reconcile set the planned favorites, created/re-applied the three
 planned albums, and converged all four edited-primary stacks. For edited Live
@@ -213,10 +218,13 @@ The validator treats only known image/video extensions as media candidates,
 sniffs XML and binary plist content before invoking external tools, requires
 `file(1)` to report the expected image/video MIME class, and performs a full
 visual-stream decode with `ffmpeg -xerror`. Its deterministic JSON report lists
-every candidate, failure reason, and source UUID requiring isolated retry. A
-zero exit status means a non-empty candidate set passed; an empty export or any
-validation failure returns exit status 3. The task never belongs in
-`infra:validate` because it reads mounted migration data and requires FFmpeg.
+every candidate, its SHA-256, failure reason, and source UUID requiring isolated
+retry. A version 2 checkpoint re-hashes current media before reusing a result;
+opening a version 1 checkpoint adds the digest column in place and revalidates
+its unbound rows. A zero exit status means a non-empty candidate set passed; an
+empty export or any validation failure returns exit status 3. The task never
+belongs in `infra:validate` because it reads mounted migration data and requires
+FFmpeg.
 
 The repaired pilot run passed all 17 candidates with no retry UUIDs. Its report
 is `/Volumes/apple-originals/reports/pilot-media-validation-2026-07-12.json`
@@ -239,9 +247,14 @@ The builder fails closed for invalid validation evidence, missing or duplicate
 source UUIDs, unavailable media, incomplete source metadata, or an edited
 rendition whose source is not adjusted. It includes only validated media,
 classifies original and edited image/video renditions, records adjacent XMP
-sidecars without treating them as media assets, and binds the validation
-report, source manifests, media, and XMP sidecars to SHA-256 hashes. AAE, JSON,
-quarantine, and unrelated files never enter the candidate set.
+sidecars without treating them as media assets, and re-hashes every media file
+against the digest in the version 2 validation report before binding the
+validation report, source manifests, media, and XMP sidecars to SHA-256 hashes.
+Version 1 reports remain readable as diagnostic evidence but produce only an
+invalid, empty manifest. Version 1 import manifests and metadata plans are also
+refused by downstream authorization boundaries; regenerate validation,
+manifest, and plan artifacts before any API apply. AAE, JSON, quarantine, and
+unrelated files never enter the candidate set.
 
 The personal source snapshot was written at 04:13. The edited Live Photo
 `2E3AF75F-D9A9-4C59-9599-61C54543EF49` was taken at 04:19 for the pilot, so the

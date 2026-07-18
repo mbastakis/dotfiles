@@ -1,0 +1,110 @@
+#!/bin/bash
+set -euo pipefail
+
+HOMESERVER_ROOT="{{ atlas_homeserver_root }}"
+SOURCE="$HOMESERVER_ROOT/taskchampion-sync/data/taskchampion-sync-server.sqlite3"
+DEST_HOST="{{ atlas_homeserver_truenas_backup_host }}"
+DEST_PATH="{{ atlas_homeserver_truenas_taskchampion_backup_path }}"
+RUN_AS_USER="{{ atlas_admin_user }}"
+SERVICE="taskchampion-sync"
+LOCK_FILE="/run/lock/taskchampion-backup.lock"
+TMP=""
+FINAL_NAME=""
+REMOTE_TMP_NAME=""
+SSH_KEY="/home/$RUN_AS_USER/.ssh/id_ed25519"
+KNOWN_HOSTS="/home/$RUN_AS_USER/.ssh/known_hosts"
+SSH_OPTS=(-o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UpdateHostKeys=no -o UserKnownHostsFile="$KNOWN_HOSTS" -i "$SSH_KEY")
+RSYNC_SSH="ssh -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UpdateHostKeys=no -o UserKnownHostsFile=$KNOWN_HOSTS -i $SSH_KEY"
+COMPOSE=(docker compose --project-directory "$HOMESERVER_ROOT" --file "$HOMESERVER_ROOT/compose.yml")
+SERVICE_STOPPED=0
+REMOTE_TMP_CREATED=0
+
+cleanup() {
+    local rc=$?
+    trap - EXIT
+
+    if (( SERVICE_STOPPED )); then
+        if ! "${COMPOSE[@]}" start "$SERVICE"; then
+            echo "Failed to restart $SERVICE during cleanup" >&2
+            rc=1
+        fi
+    fi
+
+    if (( REMOTE_TMP_CREATED )); then
+        # shellcheck disable=SC2029
+        runuser -u "$RUN_AS_USER" -- ssh "${SSH_OPTS[@]}" "$DEST_HOST" \
+            "rm -f -- \"$DEST_PATH/$REMOTE_TMP_NAME\"" || true
+    fi
+
+    if [[ -n "$TMP" ]]; then
+        rm -f "$TMP"
+    fi
+    exit "$rc"
+}
+trap cleanup EXIT
+
+exec 9>"$LOCK_FILE"
+flock 9
+
+TIMESTAMP="$(date -u +%Y%m%dT%H%M%SZ)"
+TMP="$(mktemp "/tmp/taskchampion-sync-${TIMESTAMP}.XXXXXX.sqlite3")"
+FINAL_NAME="taskchampion-sync-$TIMESTAMP.sqlite3"
+REMOTE_TMP_NAME=".$FINAL_NAME.uploading.$$"
+
+if [[ ! "$DEST_HOST" =~ ^[A-Za-z0-9._@:-]+$ ]] ||
+   [[ ! "$DEST_PATH" =~ ^/[A-Za-z0-9._/-]+$ ]]; then
+    echo "Unsafe TaskChampion backup destination" >&2
+    exit 1
+fi
+
+if [[ ! -f "$SOURCE" ]]; then
+    echo "Source SQLite file not found: $SOURCE" >&2
+    exit 1
+fi
+
+if [[ -z "$("${COMPOSE[@]}" ps --status running --quiet "$SERVICE")" ]]; then
+    echo "$SERVICE is not running; refusing to alter its state" >&2
+    exit 1
+fi
+
+SERVICE_STOPPED=1
+"${COMPOSE[@]}" stop --timeout 30 "$SERVICE"
+
+python3 - "$SOURCE" "$TMP" <<'PY'
+import sqlite3
+import sys
+
+source_path, backup_path = sys.argv[1:]
+with sqlite3.connect(f"file:{source_path}?mode=ro", uri=True) as source:
+    with sqlite3.connect(backup_path) as backup:
+        source.backup(backup)
+        result = backup.execute("PRAGMA quick_check").fetchall()
+
+if result != [("ok",)]:
+    raise SystemExit(f"TaskChampion backup integrity check failed: {result!r}")
+PY
+
+chown "$RUN_AS_USER:$RUN_AS_USER" "$TMP"
+chmod 0644 "$TMP"
+
+"${COMPOSE[@]}" start "$SERVICE"
+SERVICE_STOPPED=0
+
+# shellcheck disable=SC2029
+runuser -u "$RUN_AS_USER" -- ssh "${SSH_OPTS[@]}" "$DEST_HOST" "mkdir -p \"$DEST_PATH\""
+REMOTE_TMP_CREATED=1
+runuser -u "$RUN_AS_USER" -- rsync -av --chmod=F644 --timeout=60 \
+    --protect-args \
+    -e "$RSYNC_SSH" \
+    "$TMP" "$DEST_HOST:$DEST_PATH/$REMOTE_TMP_NAME"
+
+# shellcheck disable=SC2029
+runuser -u "$RUN_AS_USER" -- ssh "${SSH_OPTS[@]}" "$DEST_HOST" \
+    "test ! -e \"$DEST_PATH/$FINAL_NAME\" && mv -- \"$DEST_PATH/$REMOTE_TMP_NAME\" \"$DEST_PATH/$FINAL_NAME\""
+REMOTE_TMP_CREATED=0
+
+# shellcheck disable=SC2029
+runuser -u "$RUN_AS_USER" -- ssh "${SSH_OPTS[@]}" "$DEST_HOST" \
+    "find \"$DEST_PATH\" -maxdepth 1 -type f -name 'taskchampion-sync-*.sqlite3' -printf '%T@ %p\\n' | sort -rn | tail -n +8 | cut -d' ' -f2- | while IFS= read -r stale; do rm -f -- \"\$stale\"; done"
+
+echo "Backup complete: $FINAL_NAME"

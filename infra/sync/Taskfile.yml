@@ -1,0 +1,39 @@
+version: "3"
+
+tasks:
+  status:
+    desc: Plan all managed synchronization peers without applying changes
+    cmds:
+      - task: plan:all
+
+  configure:mac:
+    desc: Apply workstation Syncthing with the typed reconciler
+    cmds:
+      - bash infra/sync/syncthing/configure-syncthing --host mac {{.CLI_ARGS}}
+
+  configure:truenas:
+    desc: Apply TrueNAS Syncthing with the typed reconciler
+    cmds:
+      - bash infra/sync/syncthing/configure-syncthing --host truenas {{.CLI_ARGS}}
+
+  configure:all:
+    desc: Configure Syncthing on the workstation and TrueNAS
+    cmds:
+      - task: configure:mac
+      - task: configure:truenas
+
+  plan:mac:
+    desc: Plan workstation Syncthing with the typed reconciler
+    cmds:
+      - bash infra/sync/syncthing/configure-syncthing plan --host mac {{.CLI_ARGS}}
+
+  plan:truenas:
+    desc: Plan TrueNAS Syncthing with the typed reconciler
+    cmds:
+      - bash infra/sync/syncthing/configure-syncthing plan --host truenas {{.CLI_ARGS}}
+
+  plan:all:
+    desc: Plan Syncthing on the workstation and TrueNAS
+    cmds:
+      - task: plan:mac
+      - task: plan:truenas

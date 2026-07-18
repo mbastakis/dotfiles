@@ -1,0 +1,64 @@
+---
+- name: Install base access packages
+  ansible.builtin.apt:
+    name: "{{ atlas_base_packages }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+  tags:
+    - base-packages
+
+- name: Ensure docker group exists
+  ansible.builtin.group:
+    name: docker
+    state: present
+
+- name: Ensure atlas admin user exists
+  ansible.builtin.user:
+    name: "{{ atlas_admin_user }}"
+    groups:
+      - sudo
+      - docker
+    append: true
+    shell: "{{ atlas_admin_shell | default('/bin/bash') }}"
+    create_home: true
+
+- name: Configure passwordless sudo for atlas admin
+  ansible.builtin.copy:
+    dest: /etc/sudoers.d/20-atlas-admin-nopasswd
+    owner: root
+    group: root
+    mode: "0440"
+    content: |
+      {{ atlas_admin_user }} ALL=(ALL) NOPASSWD:ALL
+    validate: /usr/sbin/visudo.ws -cf %s
+
+- name: Ensure atlas admin SSH directory exists
+  ansible.builtin.file:
+    path: "/home/{{ atlas_admin_user }}/.ssh"
+    state: directory
+    owner: "{{ atlas_admin_user }}"
+    group: "{{ atlas_admin_user }}"
+    mode: "0700"
+
+- name: Install atlas admin SSH keys
+  ansible.builtin.copy:
+    dest: "/home/{{ atlas_admin_user }}/.ssh/authorized_keys"
+    owner: "{{ atlas_admin_user }}"
+    group: "{{ atlas_admin_user }}"
+    mode: "0600"
+    content: |
+      {{ atlas_admin_authorized_keys | join('\n') }}
+
+- name: Configure key-only SSH access
+  ansible.builtin.copy:
+    dest: /etc/ssh/sshd_config.d/20-ansible-key-only.conf
+    owner: root
+    group: root
+    mode: "0644"
+    content: |
+      PasswordAuthentication no
+      KbdInteractiveAuthentication no
+      PubkeyAuthentication yes
+      PermitRootLogin no
+  notify: Restart ssh

@@ -20,6 +20,23 @@ Update the corresponding doc when any of the following change:
 | Repo-local `mise.toml`, `Taskfile.yml`, Renovate, GitHub Actions, pre-commit, TFLint, terraform-docs, or homeserver IaC tooling modified | [config-overview.md](components/config-overview.md), [homeserver-iac.md](architecture/homeserver-iac.md) |
 | Custom keymap added/changed in any layer | [shortcuts.md](shortcuts.md) |
 | Homeserver operational procedure added/changed | Relevant doc in [runbooks/](runbooks/) |
+| OpenWrt contract, firmware lock/packages, reconciler stage, Task surface, or ownership changed | [homeserver-iac.md](architecture/homeserver-iac.md), [homeserver-ownership.md](architecture/homeserver-ownership.md), [ADR-0007](adr/0007-manage-openwrt-router-as-typed-desired-state.md), and both OpenWrt runbooks |
+| OpenWrt physical cutover accepted or rolled back | [overview.md](architecture/overview.md), [OpenWrt cutover](runbooks/openwrt-router-cutover.md), `CONTEXT.md`, README/sidebar, and Speedport runbook retirement decision |
+
+## OpenWrt Release Review
+
+For each proposed OpenWrt release, review WR3000E v1/R53 support and open issues,
+stock-layout profile continuity, release/Image Builder checksums, builder digest,
+package intent, resolved manifest, helper/public-key overlay, and forbidden-image
+checks. Build and verify locally, run offline validation, then use a wired
+maintenance window with an encrypted config backup, remote hash verification,
+`sysupgrade -T`, and config-preserving sysupgrade without force. Reconcile and
+run status after boot. Major releases require a separate clean-migration review;
+do not use unattended upgrades or `owut` as another owner.
+
+Do not mark physical phases complete from documentation or fixture tests. Record
+operator evidence for board identity, MTD backups, rollback test, staged
+acceptance, TFTP/UART readiness, and the seven-day observation window first.
 
 ## Review Order for Quick Updates
 

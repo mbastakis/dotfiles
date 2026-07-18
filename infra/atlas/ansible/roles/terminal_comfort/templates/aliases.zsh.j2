@@ -1,0 +1,33 @@
+# Managed by Ansible: terminal_comfort
+
+alias ..="cd .."
+alias reload="exec zsh"
+alias r="reload"
+
+if command -v eza &>/dev/null; then
+  alias l="eza --color=always --icons=always --no-user"
+  alias ls="eza --color=always --no-user"
+  alias ll="eza --long --color=always --icons=always --no-user"
+  alias la="eza --long --color=always --icons=always --no-user --all"
+  alias ld="eza --long --color=always --no-user --no-permissions --no-filesize --no-time --no-git --group-directories-first --tree"
+else
+  alias l="ls -CF"
+  alias ll="ls -alF"
+  alias la="ls -A"
+fi
+
+alias v="nvim"
+alias vi="nvim"
+alias vim="nvim"
+alias lg="lazygit"
+alias python="python3"
+
+if command -v bat &>/dev/null; then
+  alias b="bat --paging=always --color=always --style=plain --line-range=1:1000 --decorations=always"
+elif command -v batcat &>/dev/null; then
+  alias b="batcat --paging=always --color=always --style=plain --line-range=1:1000 --decorations=always"
+fi
+
+alias ta="tmux attach"
+alias td="tmux detach"
+alias tls="tmux ls"

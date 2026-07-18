@@ -1,0 +1,130 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+POLICY_FILE="${TAILSCALE_POLICY_FILE:-$SCRIPT_DIR/policy.hujson}"
+TAILNET="${TAILSCALE_TAILNET:--}"
+API_BASE="https://api.tailscale.com/api/v2/tailnet/$TAILNET"
+TEMP_DIRS=()
+
+cleanup_temp_dirs() {
+    local dir
+    [[ ${#TEMP_DIRS[@]} -gt 0 ]] || return 0
+    for dir in "${TEMP_DIRS[@]}"; do
+        rm -rf "$dir"
+    done
+}
+trap cleanup_temp_dirs EXIT
+
+log_info() {
+    printf '\033[34mInfo:\033[0m %s\n' "$*" >&2
+}
+
+log_error() {
+    printf '\033[31mError:\033[0m %s\n' "$*" >&2
+}
+
+usage() {
+    cat >&2 <<EOF
+Usage:
+  infra/network/tailscale/manage-policy validate [policy-file]
+
+Requires TAILSCALE_API_KEY in the environment. The API key is written only to a
+root-readable temporary curl config and is never printed.
+EOF
+}
+
+require_tools() {
+    local missing=()
+    for tool in curl jq; do
+        if ! command -v "$tool" &>/dev/null; then
+            missing+=("$tool")
+        fi
+    done
+    if [[ ${#missing[@]} -gt 0 ]]; then
+        log_error "Missing required tools: ${missing[*]}"
+        exit 1
+    fi
+}
+
+require_api_key() {
+    if [[ -z "${TAILSCALE_API_KEY:-}" ]]; then
+        log_error "TAILSCALE_API_KEY is required"
+        exit 1
+    fi
+}
+
+api_post_policy() {
+    local path="$1"
+    local policy_file="$2"
+    local expected_a="$3"
+    local expected_b="$4"
+    local workdir curl_config response http_code message
+
+    workdir="$(mktemp -d)"
+    chmod 700 "$workdir"
+    curl_config="$workdir/curl.conf"
+    response="$workdir/response.json"
+
+    TEMP_DIRS+=("$workdir")
+
+    cat >"$curl_config" <<EOF
+user = "$TAILSCALE_API_KEY:"
+silent
+show-error
+EOF
+    chmod 600 "$curl_config"
+
+    if ! http_code="$(curl -K "$curl_config" \
+        -o "$response" \
+        -w '%{http_code}' \
+        -X POST \
+        -H 'Content-Type: application/hujson' \
+        --data-binary "@$policy_file" \
+        "$API_BASE/$path")"; then
+        rm -rf "$workdir"
+        log_error "Tailscale policy request failed before receiving an HTTP response"
+        return 1
+    fi
+
+    if [[ "$http_code" != "$expected_a" && "$http_code" != "$expected_b" ]]; then
+        message="$(jq -r '.message // .error // empty' "$response" 2>/dev/null || true)"
+        if [[ -n "$message" ]]; then
+            log_error "Tailscale policy request failed (HTTP $http_code): $message"
+        else
+            log_error "Tailscale policy request failed (HTTP $http_code); response body suppressed"
+        fi
+        rm -rf "$workdir"
+        return 1
+    fi
+    rm -rf "$workdir"
+}
+
+validate_policy() {
+    local policy_file="$1"
+    if [[ ! -r "$policy_file" ]]; then
+        log_error "Policy file is not readable: $policy_file"
+        exit 1
+    fi
+    api_post_policy "acl/validate" "$policy_file" "200" "204"
+    log_info "Tailscale policy validated: $policy_file"
+}
+
+main() {
+    require_tools
+
+    local command="${1:-}"
+    case "$command" in
+        validate)
+            shift
+            require_api_key
+            validate_policy "${1:-$POLICY_FILE}"
+            ;;
+        *)
+            usage
+            exit 1
+            ;;
+    esac
+}
+
+main "$@"

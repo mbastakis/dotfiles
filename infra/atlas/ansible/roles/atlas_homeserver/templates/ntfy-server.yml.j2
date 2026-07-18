@@ -1,0 +1,31 @@
+base-url: "https://{{ atlas_homeserver_ntfy_host }}"
+listen-http: ":{{ atlas_homeserver_ntfy_port }}"
+
+cache-file: /var/lib/ntfy/cache.db
+cache-duration: 12h
+auth-file: /var/lib/ntfy/user.db
+auth-default-access: deny-all
+auth-access-cache: true
+
+auth-users:
+  - {{ ('michail:' ~ lookup('env', 'NTFY_MICHAIL_PASSWORD_HASH') ~ ':user') | to_json }}
+  - {{ ('opencode:' ~ lookup('env', 'NTFY_OPENCODE_PASSWORD_HASH') ~ ':user') | to_json }}
+auth-access:
+  - "michail:*:read-only"
+  - "opencode:opencode:write-only"
+auth-tokens:
+  - {{ ('opencode:' ~ lookup('env', 'NTFY_OPENCODE_TOKEN') ~ ':OpenCode publisher') | to_json }}
+
+behind-proxy: true
+proxy-forwarded-header: X-Forwarded-For
+
+enable-login: true
+enable-signup: false
+require-login: true
+upstream-base-url: https://ntfy.sh
+
+message-size-limit: 4k
+visitor-message-daily-limit: 1000
+web-root: /
+log-level: info
+log-format: json
