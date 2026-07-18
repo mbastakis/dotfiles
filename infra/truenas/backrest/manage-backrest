@@ -1,0 +1,40 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+
+run_reconciler() {
+    uv run --project "$REPO_ROOT/infra" --offline --locked \
+        python -m homeserver_iac backrest "$@"
+}
+
+if [[ "${1:-}" == "validate" ]] || \
+    [[ -n "${BACKREST_URL:-}" ]] || \
+    [[ "$("$HOME/bin/homeserver-route" resolve truenas)" == "192.168.1.74" ]]; then
+    run_reconciler "$@"
+    exit $?
+fi
+
+command -v python3 &>/dev/null || {
+    echo "Remote Backrest access requires python3 to allocate a tunnel port" >&2
+    exit 1
+}
+
+control_dir="$(mktemp -d)"
+control_path="$control_dir/ssh-control"
+local_port="$(python3 -c 'import socket; s = socket.socket(); s.bind(("127.0.0.1", 0)); print(s.getsockname()[1]); s.close()')"
+
+cleanup() {
+    ssh -S "$control_path" -O exit atlas &>/dev/null || true
+    rm -rf "$control_dir"
+}
+trap cleanup EXIT
+
+ssh -M -S "$control_path" -fN \
+    -o ExitOnForwardFailure=yes \
+    -L "127.0.0.1:${local_port}:192.168.1.74:30329" \
+    atlas
+
+export BACKREST_URL="http://127.0.0.1:${local_port}"
+run_reconciler "$@"

@@ -1,0 +1,5 @@
+---
+openwrt_install_recommended_packages: false
+openwrt_ssh_transfer_method: piped
+openwrt_wait_for_connection: true
+openwrt_wait_for_connection_timeout: 600

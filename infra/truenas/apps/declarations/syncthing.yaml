@@ -1,0 +1,53 @@
+# yaml-language-server: $schema=../../../schemas/truenas-app.schema.json
+schema_version: 1
+ownership:
+  scope: truenas.catalog_apps
+  mode: bounded
+
+app_name: syncthing
+catalog_app: syncthing
+train: stable
+version: "1.3.10"
+
+path_permissions:
+  - path: /mnt/pool_4tb/homeserver/apps/syncthing/config
+    owner: 568
+    group: 568
+    mode: "0770"
+  - path: /mnt/pool_4tb/homeserver/data/obsidian/michail
+    owner: 568
+    group: 568
+    mode: "0770"
+
+values:
+  TZ: Europe/Athens
+  syncthing:
+    additional_envs: []
+  run_as:
+    user: 568
+    group: 568
+  network:
+    web_port:
+      bind_mode: published
+      port_number: 8384
+      host_ips: []
+    host_network: true
+    networks: []
+  storage:
+    config:
+      type: host_path
+      host_path_config:
+        acl_enable: false
+        path: /mnt/pool_4tb/homeserver/apps/syncthing/config
+    additional_storage:
+      - type: host_path
+        read_only: false
+        mount_path: /sync/obsidian-michail
+        host_path_config:
+          acl_enable: false
+          path: /mnt/pool_4tb/homeserver/data/obsidian/michail
+  labels: []
+  resources:
+    limits:
+      cpus: 1
+      memory: 1024

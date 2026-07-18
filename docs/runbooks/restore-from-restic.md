@@ -56,6 +56,47 @@ Current plans:
 | Apple originals | `homeserver-apple-originals-daily` | `/source/apple-originals` |
 | TaskChampion sync backup | `homeserver-taskchampion-daily` | `/source/taskchampion-sync-backup` |
 
+### Immich restore safety
+
+An Immich snapshot is application-restorable only when it includes a native
+PostgreSQL dump under `/source/immich/backups`. The daily Backrest plan runs at
+02:30 after Immich's 02:00 dump and captures durable media plus retained dumps.
+It intentionally does not include Atlas-local thumbnails, encoded videos,
+caches, Valkey data, or live PostgreSQL files.
+
+Restore Immich into an isolated path first. Verify the selected snapshot has a
+recent database dump, stop the Immich Compose project, restore the media
+dataset, restore PostgreSQL from that dump using the matching Immich version,
+then start Immich and let it regenerate derived media. Never restore a live
+PostgreSQL data directory from the file-level snapshot. The expected RPO is one
+day; run a manual plan backup after a large import when that exposure is too
+high.
+
+### TaskChampion restore safety
+
+TaskChampion files in the repository are standalone, integrity-checked SQLite
+backups rather than copies of a live database. Before selecting one for recovery,
+restore it to a temporary path and verify it again:
+
+```bash
+python3 - /tmp/restic-restore/source/taskchampion-sync-backup/taskchampion-sync-<timestamp>.sqlite3 <<'PY'
+import sqlite3
+import sys
+
+with sqlite3.connect(f"file:{sys.argv[1]}?mode=ro", uri=True) as database:
+    result = database.execute("PRAGMA quick_check").fetchall()
+if result != [("ok",)]:
+    raise SystemExit(f"integrity check failed: {result!r}")
+print("ok")
+PY
+```
+
+Do not copy a restored database over the live Atlas file while
+`taskchampion-sync` is running. Stop only that Compose service, preserve the
+current database under a separate name, install the verified restore, and start
+the service immediately. Do not prune either the TrueNAS backup directory or
+restic snapshots as part of a restore investigation.
+
 ## Option B: Restore with restic CLI
 
 Use this when TrueNAS is down or you prefer CLI control.

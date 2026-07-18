@@ -1,0 +1,503 @@
+{
+  "$defs": {
+    "AudiobookshelfBackupPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "backupsToKeep": {
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Backupstokeep",
+          "type": "integer"
+        },
+        "maxBackupSize": {
+          "minimum": 0,
+          "title": "Maxbackupsize",
+          "type": "integer"
+        },
+        "schedule": {
+          "minLength": 1,
+          "title": "Schedule",
+          "type": "string"
+        }
+      },
+      "required": [
+        "schedule",
+        "backupsToKeep",
+        "maxBackupSize"
+      ],
+      "title": "AudiobookshelfBackupPolicy",
+      "type": "object"
+    },
+    "AudiobookshelfLibrary": {
+      "additionalProperties": false,
+      "properties": {
+        "folder": {
+          "pattern": "^/[^\\x00]*$",
+          "title": "Folder",
+          "type": "string"
+        },
+        "mediaType": {
+          "const": "book",
+          "title": "Mediatype",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "provider": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Provider",
+          "type": "string"
+        },
+        "settings": {
+          "$ref": "#/$defs/AudiobookshelfLibrarySettings"
+        }
+      },
+      "required": [
+        "name",
+        "mediaType",
+        "folder",
+        "provider",
+        "settings"
+      ],
+      "title": "AudiobookshelfLibrary",
+      "type": "object"
+    },
+    "AudiobookshelfLibrarySettings": {
+      "additionalProperties": false,
+      "properties": {
+        "audiobooksOnly": {
+          "title": "Audiobooksonly",
+          "type": "boolean"
+        },
+        "autoScanCronExpression": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Autoscancronexpression"
+        },
+        "coverAspectRatio": {
+          "enum": [
+            0,
+            1
+          ],
+          "title": "Coveraspectratio",
+          "type": "integer"
+        },
+        "disableWatcher": {
+          "title": "Disablewatcher",
+          "type": "boolean"
+        },
+        "epubsAllowScriptedContent": {
+          "title": "Epubsallowscriptedcontent",
+          "type": "boolean"
+        },
+        "hideSingleBookSeries": {
+          "title": "Hidesinglebookseries",
+          "type": "boolean"
+        },
+        "markAsFinishedPercentComplete": {
+          "anyOf": [
+            {
+              "maximum": 100,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Markasfinishedpercentcomplete"
+        },
+        "markAsFinishedTimeRemaining": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Markasfinishedtimeremaining"
+        },
+        "metadataPrecedence": {
+          "items": {
+            "enum": [
+              "folderStructure",
+              "audioMetatags",
+              "nfoFile",
+              "txtFiles",
+              "opfFile",
+              "absMetadata"
+            ],
+            "type": "string"
+          },
+          "maxItems": 6,
+          "minItems": 6,
+          "title": "Metadataprecedence",
+          "type": "array"
+        },
+        "onlyShowLaterBooksInContinueSeries": {
+          "title": "Onlyshowlaterbooksincontinueseries",
+          "type": "boolean"
+        },
+        "skipMatchingMediaWithAsin": {
+          "title": "Skipmatchingmediawithasin",
+          "type": "boolean"
+        },
+        "skipMatchingMediaWithIsbn": {
+          "title": "Skipmatchingmediawithisbn",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "coverAspectRatio",
+        "disableWatcher",
+        "autoScanCronExpression",
+        "skipMatchingMediaWithAsin",
+        "skipMatchingMediaWithIsbn",
+        "audiobooksOnly",
+        "epubsAllowScriptedContent",
+        "hideSingleBookSeries",
+        "onlyShowLaterBooksInContinueSeries",
+        "metadataPrecedence",
+        "markAsFinishedPercentComplete",
+        "markAsFinishedTimeRemaining"
+      ],
+      "title": "AudiobookshelfLibrarySettings",
+      "type": "object"
+    },
+    "AudiobookshelfOpenID": {
+      "additionalProperties": false,
+      "properties": {
+        "activeAuthMethods": {
+          "items": {
+            "enum": [
+              "local",
+              "openid"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Activeauthmethods",
+          "type": "array"
+        },
+        "autoLaunch": {
+          "title": "Autolaunch",
+          "type": "boolean"
+        },
+        "autoRegister": {
+          "title": "Autoregister",
+          "type": "boolean"
+        },
+        "buttonText": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Buttontext",
+          "type": "string"
+        },
+        "clientId": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Clientid",
+          "type": "string"
+        },
+        "clientSecret": {
+          "$ref": "#/$defs/SecretRef"
+        },
+        "groupClaim": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Groupclaim",
+          "type": "string"
+        },
+        "issuerUrl": {
+          "pattern": "^https://",
+          "title": "Issuerurl",
+          "type": "string"
+        },
+        "matchExistingBy": {
+          "enum": [
+            "username",
+            "email"
+          ],
+          "title": "Matchexistingby",
+          "type": "string"
+        },
+        "mobileRedirectUris": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Mobileredirecturis",
+          "type": "array"
+        },
+        "redirectSubfolder": {
+          "pattern": "^/[^\\x00]*$",
+          "title": "Redirectsubfolder",
+          "type": "string"
+        },
+        "signingAlgorithm": {
+          "const": "RS256",
+          "title": "Signingalgorithm",
+          "type": "string"
+        }
+      },
+      "required": [
+        "issuerUrl",
+        "clientId",
+        "clientSecret",
+        "signingAlgorithm",
+        "buttonText",
+        "autoLaunch",
+        "autoRegister",
+        "matchExistingBy",
+        "mobileRedirectUris",
+        "groupClaim",
+        "redirectSubfolder",
+        "activeAuthMethods"
+      ],
+      "title": "AudiobookshelfOpenID",
+      "type": "object"
+    },
+    "AudiobookshelfRootUser": {
+      "additionalProperties": false,
+      "properties": {
+        "password": {
+          "$ref": "#/$defs/SecretRef"
+        },
+        "username": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Username",
+          "type": "string"
+        }
+      },
+      "required": [
+        "username",
+        "password"
+      ],
+      "title": "AudiobookshelfRootUser",
+      "type": "object"
+    },
+    "AudiobookshelfServerSettings": {
+      "additionalProperties": false,
+      "properties": {
+        "allowIframe": {
+          "title": "Allowiframe",
+          "type": "boolean"
+        },
+        "allowedOrigins": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Allowedorigins",
+          "type": "array"
+        },
+        "bookshelfView": {
+          "enum": [
+            0,
+            1
+          ],
+          "title": "Bookshelfview",
+          "type": "integer"
+        },
+        "chromecastEnabled": {
+          "title": "Chromecastenabled",
+          "type": "boolean"
+        },
+        "dateFormat": {
+          "maxLength": 32,
+          "minLength": 1,
+          "title": "Dateformat",
+          "type": "string"
+        },
+        "homeBookshelfView": {
+          "enum": [
+            0,
+            1
+          ],
+          "title": "Homebookshelfview",
+          "type": "integer"
+        },
+        "language": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Language",
+          "type": "string"
+        },
+        "scannerCoverProvider": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Scannercoverprovider",
+          "type": "string"
+        },
+        "scannerDisableWatcher": {
+          "title": "Scannerdisablewatcher",
+          "type": "boolean"
+        },
+        "scannerFindCovers": {
+          "title": "Scannerfindcovers",
+          "type": "boolean"
+        },
+        "scannerParseSubtitle": {
+          "title": "Scannerparsesubtitle",
+          "type": "boolean"
+        },
+        "scannerPreferMatchedMetadata": {
+          "title": "Scannerprefermatchedmetadata",
+          "type": "boolean"
+        },
+        "sortingIgnorePrefix": {
+          "title": "Sortingignoreprefix",
+          "type": "boolean"
+        },
+        "sortingPrefixes": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Sortingprefixes",
+          "type": "array"
+        },
+        "storeCoverWithItem": {
+          "title": "Storecoverwithitem",
+          "type": "boolean"
+        },
+        "storeMetadataWithItem": {
+          "title": "Storemetadatawithitem",
+          "type": "boolean"
+        },
+        "timeFormat": {
+          "maxLength": 32,
+          "minLength": 1,
+          "title": "Timeformat",
+          "type": "string"
+        }
+      },
+      "required": [
+        "storeCoverWithItem",
+        "storeMetadataWithItem",
+        "sortingIgnorePrefix",
+        "sortingPrefixes",
+        "scannerParseSubtitle",
+        "scannerFindCovers",
+        "scannerCoverProvider",
+        "scannerPreferMatchedMetadata",
+        "scannerDisableWatcher",
+        "chromecastEnabled",
+        "allowIframe",
+        "homeBookshelfView",
+        "bookshelfView",
+        "dateFormat",
+        "timeFormat",
+        "language",
+        "allowedOrigins"
+      ],
+      "title": "AudiobookshelfServerSettings",
+      "type": "object"
+    },
+    "Ownership": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "const": "bounded",
+          "title": "Mode",
+          "type": "string"
+        },
+        "scope": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z][a-z0-9_-]*(?:\\.[a-z0-9][a-z0-9_-]*)+$",
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope",
+        "mode"
+      ],
+      "title": "Ownership",
+      "type": "object"
+    },
+    "SecretRef": {
+      "additionalProperties": false,
+      "description": "A logical reference only; secret material is deliberately not representable.",
+      "properties": {
+        "alias": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Alias",
+          "type": "string"
+        }
+      },
+      "required": [
+        "alias"
+      ],
+      "title": "SecretRef",
+      "type": "object"
+    }
+  },
+  "$id": "urn:homeserver-iac:schema:audiobookshelf",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "apiUrl": {
+      "pattern": "^https?://",
+      "title": "Apiurl",
+      "type": "string"
+    },
+    "backup": {
+      "$ref": "#/$defs/AudiobookshelfBackupPolicy"
+    },
+    "library": {
+      "$ref": "#/$defs/AudiobookshelfLibrary"
+    },
+    "openid": {
+      "$ref": "#/$defs/AudiobookshelfOpenID"
+    },
+    "ownership": {
+      "$ref": "#/$defs/Ownership"
+    },
+    "rootUser": {
+      "$ref": "#/$defs/AudiobookshelfRootUser"
+    },
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "serverSettings": {
+      "$ref": "#/$defs/AudiobookshelfServerSettings"
+    }
+  },
+  "required": [
+    "schema_version",
+    "ownership",
+    "apiUrl",
+    "rootUser",
+    "library",
+    "serverSettings",
+    "backup",
+    "openid"
+  ],
+  "title": "AudiobookshelfDesiredState",
+  "type": "object"
+}

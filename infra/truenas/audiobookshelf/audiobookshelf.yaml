@@ -1,0 +1,77 @@
+# yaml-language-server: $schema=../../schemas/audiobookshelf.schema.json
+schema_version: 1
+ownership:
+  scope: truenas.audiobookshelf_config
+  mode: bounded
+
+apiUrl: http://192.168.1.74:30378
+rootUser:
+  username: michail
+  password:
+    alias: audiobookshelf_root_password
+library:
+  name: Books
+  mediaType: book
+  folder: /books
+  provider: google
+  settings:
+    coverAspectRatio: 0
+    disableWatcher: false
+    autoScanCronExpression: null
+    skipMatchingMediaWithAsin: false
+    skipMatchingMediaWithIsbn: false
+    audiobooksOnly: false
+    epubsAllowScriptedContent: false
+    hideSingleBookSeries: false
+    onlyShowLaterBooksInContinueSeries: false
+    metadataPrecedence:
+      - folderStructure
+      - audioMetatags
+      - nfoFile
+      - txtFiles
+      - opfFile
+      - absMetadata
+    markAsFinishedPercentComplete: null
+    markAsFinishedTimeRemaining: 10
+serverSettings:
+  storeCoverWithItem: false
+  storeMetadataWithItem: false
+  sortingIgnorePrefix: true
+  sortingPrefixes:
+    - the
+    - a
+    - an
+  scannerParseSubtitle: true
+  scannerFindCovers: false
+  scannerCoverProvider: google
+  scannerPreferMatchedMetadata: false
+  scannerDisableWatcher: false
+  chromecastEnabled: false
+  allowIframe: false
+  homeBookshelfView: 1
+  bookshelfView: 1
+  dateFormat: dd/MM/yyyy
+  timeFormat: HH:mm
+  language: en-us
+  allowedOrigins: []
+backup:
+  schedule: "0 2 * * 0"
+  backupsToKeep: 8
+  maxBackupSize: 1
+openid:
+  issuerUrl: https://auth.mbastakis.com/application/o/audiobookshelf/
+  clientId: homeserver-audiobookshelf
+  clientSecret:
+    alias: audiobookshelf_oidc_client_secret
+  signingAlgorithm: RS256
+  buttonText: Sign in with Authentik
+  autoLaunch: true
+  autoRegister: true
+  matchExistingBy: username
+  mobileRedirectUris:
+    - audiobookshelf://oauth
+  groupClaim: audiobookshelf
+  redirectSubfolder: /audiobookshelf
+  activeAuthMethods:
+    - local
+    - openid

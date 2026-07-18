@@ -1,0 +1,6 @@
+{
+  "delete-me": {"enabled": true},
+  "same": {"enabled": true},
+  "stale-me": {"enabled": true},
+  "update-me": {"enabled": false, "password": "current-secret"}
+}

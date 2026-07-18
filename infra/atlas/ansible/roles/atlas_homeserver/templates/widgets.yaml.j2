@@ -1,0 +1,32 @@
+---
+- logo:
+    icon: /images/hyperion.png
+
+- greeting:
+    text_size: 2xl
+    text: Hyperion
+
+- search:
+    provider: google
+    target: _blank
+
+- datetime:
+    text_size: xl
+    locale: en-GB
+    format:
+      weekday: short
+      day: numeric
+      month: short
+      hour: numeric
+      minute: numeric
+      hourCycle: h23
+
+- openmeteo:
+    label: Athens
+    latitude: 37.9838
+    longitude: 23.7275
+    timezone: Europe/Athens
+    units: metric
+    cache: 10
+    format:
+      maximumFractionDigits: 1

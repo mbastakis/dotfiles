@@ -1,0 +1,104 @@
+#!/bin/bash
+set -euo pipefail
+
+usage() {
+    cat >&2 <<EOF
+Usage: homeserver-route resolve HOST
+       homeserver-route connect HOST PORT
+
+HOST must be atlas or truenas. Set HOMESERVER_ROUTE_FORCE to lan or tailscale
+to bypass automatic LAN detection.
+EOF
+}
+
+if [[ $# -lt 2 ]]; then
+    usage
+    exit 2
+fi
+
+action="$1"
+host="$2"
+
+case "$host" in
+    atlas)
+        lan_address="192.168.1.19"
+        tailscale_address="100.101.208.110"
+        expected_fingerprint="SHA256:13t5A53HjVywh5/awNnF9Cgvd914IE9aLpk8TmoCA1w"
+        ;;
+    truenas)
+        lan_address="192.168.1.74"
+        tailscale_address="100.122.166.74"
+        expected_fingerprint="SHA256:o7dm9AWeacwz6UxLCVyLtUREg0GzOL9EJsnrAUsrP/g"
+        ;;
+    *)
+        echo "Unknown homeserver host: $host" >&2
+        usage
+        exit 2
+        ;;
+esac
+
+lan_host_key_matches() {
+    local key_line fingerprint_line actual_fingerprint
+
+    command -v ssh-keyscan &>/dev/null || return 1
+    command -v ssh-keygen &>/dev/null || return 1
+
+    while IFS= read -r key_line; do
+        [[ -n "$key_line" ]] || continue
+        fingerprint_line="$(printf '%s\n' "$key_line" | ssh-keygen -lf - -E sha256 2>/dev/null)" || continue
+        read -r _ actual_fingerprint _ <<<"$fingerprint_line"
+        if [[ "$actual_fingerprint" == "$expected_fingerprint" ]]; then
+            return 0
+        fi
+    done < <(ssh-keyscan -T 1 -t ed25519 "$lan_address" 2>/dev/null || true)
+
+    return 1
+}
+
+resolve_address() {
+    case "${HOMESERVER_ROUTE_FORCE:-}" in
+        lan)
+            printf '%s\n' "$lan_address"
+            ;;
+        tailscale)
+            printf '%s\n' "$tailscale_address"
+            ;;
+        "")
+            if lan_host_key_matches; then
+                printf '%s\n' "$lan_address"
+            else
+                printf '%s\n' "$tailscale_address"
+            fi
+            ;;
+        *)
+            echo "HOMESERVER_ROUTE_FORCE must be lan or tailscale" >&2
+            exit 2
+            ;;
+    esac
+}
+
+case "$action" in
+    resolve)
+        if [[ $# -ne 2 ]]; then
+            usage
+            exit 2
+        fi
+        resolve_address
+        ;;
+    connect)
+        if [[ $# -ne 3 || ! "$3" =~ ^[0-9]+$ ]]; then
+            usage
+            exit 2
+        fi
+        command -v nc &>/dev/null || {
+            echo "homeserver-route requires nc for ProxyCommand connections" >&2
+            exit 1
+        }
+        exec nc "$(resolve_address)" "$3"
+        ;;
+    *)
+        echo "Unknown homeserver-route action: $action" >&2
+        usage
+        exit 2
+        ;;
+esac

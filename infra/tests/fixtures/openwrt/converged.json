@@ -1,0 +1,23 @@
+{
+  "identity": {"board_ids": ["R53"], "board_name": "cudy,wr3000e-v1", "model": "Cudy WR3000E v1", "profile": "cudy_wr3000e-v1", "release": "25.12.5", "target": "mediatek/filogic"},
+  "packages": ["base-files", "dnsmasq", "dropbear", "firewall4", "kmod-ifb", "kmod-mt7915e", "kmod-mt7981-firmware", "kmod-sched-cake", "luci-app-sqm", "luci-ssl", "mt7981-wo-firmware", "odhcp6c", "odhcpd-ipv6only", "ppp", "ppp-mod-pppoe", "rpcd", "sqm-scripts", "tc-tiny", "ubus", "uci", "ucode", "ucode-mod-ubus", "uhttpd"],
+  "resources": {
+    "management": {"allowed_networks": ["trusted"], "luci_https_only": true, "public_key_path": "private_dot_ssh/id_ed25519.pub", "root_password": {"secret_ref": "openwrt_root_password"}, "ssh_password_auth": false},
+    "network-global": {"ula_prefix": "fd84:778b:9ef1::/48"},
+    "network-guest": {"address": "192.168.30.1/24", "dhcp_end": "192.168.30.249", "dhcp_start": "192.168.30.100", "interface": "guest", "ipv6_assignment": 64, "ipv6_hint": "1", "lease_time": "12h"},
+    "network-trusted": {"address": "192.168.1.1/24", "dhcp_end": "192.168.1.249", "dhcp_start": "192.168.1.100", "domain": "home", "interface": "lan", "ipv6_assignment": 64, "ipv6_hint": "0", "lease_time": "12h"},
+    "reservation-atlas": {"address": "192.168.1.19", "hostname": "atlas", "id": "atlas", "mac": "50:46:5d:38:5a:a1"},
+    "reservation-truenas": {"address": "192.168.1.74", "hostname": "truenas", "id": "truenas", "mac": "10:fe:ed:04:14:22"},
+    "security": {"dmz": false, "dns_rebind_allow_domains": ["auth.mbastakis.com", "code.mbastakis.com", "files.mbastakis.com", "tasks.mbastakis.com", "taskboard.mbastakis.com", "home.mbastakis.com", "traefik.mbastakis.com", "backrest.mbastakis.com", "photos.mbastakis.com", "audiobooks.mbastakis.com", "push.mbastakis.com", "pihole.mbastakis.com"], "nat_pmp": false, "port_forwards": [], "tailscale": false, "upnp": false, "wan_management": false},
+    "sqm": {"download_kbit": 87890, "enabled": true, "flow_offloading": false, "interface_from_wan_l3_device": true, "link_layer": "ethernet", "mpu": 84, "multiqueue": false, "overhead": 50, "qdisc": "cake", "script": "piece_of_cake.qos", "upload_kbit": 8790},
+    "system": {"hostname": "router", "timezone": "EET-2EEST,M3.5.0/3,M10.5.0/4", "zonename": "Europe/Athens"},
+    "wan": {"dhcpv6": {"request_address": "try", "request_prefix": "auto"}, "ipv6": true, "password": {"secret_ref": "openwrt_pppoe_password"}, "peer_dns": true, "physical_device": "wan", "protocol": "pppoe", "username": {"secret_ref": "openwrt_pppoe_username"}, "vlan_id": 835},
+    "wireless-guest": {"encryption": "psk2+ccmp", "isolate_bridge_ports": true, "isolate_clients": true, "psk": {"secret_ref": "openwrt_guest_wifi_psk"}, "ssid": {"secret_ref": "openwrt_guest_wifi_ssid"}},
+    "wireless-main": {"enabled": true, "encryption": "psk2+ccmp", "isolate_bridge_ports": false, "isolate_clients": false, "psk": {"secret_ref": "openwrt_main_wifi_psk"}, "ssid": {"secret_ref": "openwrt_main_wifi_ssid"}},
+    "wireless-settings": {"country": "GR", "fast_transition": false, "radios": [{"band": "2g", "channel": 11, "id": "main-2g", "width": 20}, {"band": "5g", "channel": 36, "id": "main-5g", "width": 80}], "wps": false}
+  },
+  "firewall": {"dmz": false, "redirects": [], "wan_management": false},
+  "listeners": [{"network": "trusted", "port": 22, "service": "dropbear"}],
+  "services": {"nat_pmp": false, "tailscale": false, "upnp": false},
+  "runtime": {"radio_bands": ["2g", "5g"], "sqm": {"device": "pppoe-wan", "enabled": true, "enabled_queues": 1, "flow_offloading": false, "flow_offloading_hw": false}}
+}

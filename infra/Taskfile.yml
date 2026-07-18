@@ -1,0 +1,326 @@
+version: "3"
+
+tasks:
+  task-surface:
+    desc: Verify the final public Task command surface
+    cmds:
+      - |
+        set -euo pipefail
+        required_tasks=(
+          brew:dump
+          default
+          docs:serve
+          infra:validate
+          lint
+          tf:docs
+          tf:fmt
+          tf:fmt:check
+          tf:state:baseline
+          tf:test
+          tf:tflint
+          tf:validate
+          truenas:apps:apply
+          truenas:apps:plan
+          truenas:audiobookshelf:apply
+          truenas:audiobookshelf:plan
+          truenas:audiobookshelf:validate
+          truenas:backrest:apply
+          truenas:backrest:plan
+          truenas:backrest:validate
+          truenas:maintenance:apply
+          truenas:maintenance:plan
+          truenas:bootstrap-ssh-key
+          truenas:snapshots:apply
+          truenas:snapshots:plan
+          truenas:snapshots:photos:apply
+          truenas:snapshots:photos:plan
+          truenas:snapshots:audiobookshelf:apply
+          truenas:snapshots:audiobookshelf:plan
+          truenas:snapshots:books:apply
+          truenas:snapshots:books:plan
+          truenas:nfs:apply
+          truenas:nfs:plan
+          truenas:smb:apply
+          truenas:smb:plan
+          update
+          aws:backend:check
+          aws:bootstrap-state
+          aws:bootstrap:apply
+          aws:bootstrap:init
+          aws:bootstrap:plan
+          aws:dns:apply
+          aws:dns:init
+          aws:dns:plan
+          aws:foundation:apply
+          aws:foundation:init
+          aws:foundation:plan
+          aws:status
+          identity:authentik:apply
+          identity:authentik:init
+          identity:authentik:plan
+          identity:status
+          network:policy:apply
+          network:policy:import
+          network:policy:init
+          network:policy:plan
+          network:policy:validate
+          network:openwrt:apply
+          network:openwrt:backup
+          network:openwrt:bootstrap
+          network:openwrt:clean-rebuild
+          network:openwrt:dns:apply
+          network:openwrt:dns:plan
+          network:openwrt:firmware:build
+          network:openwrt:firmware:verify
+          network:openwrt:plan
+          network:openwrt:recover
+          network:openwrt:status
+          network:openwrt:upgrade
+          network:openwrt:validate
+          network:status
+          sync:configure:all
+          sync:configure:mac
+          sync:configure:truenas
+          sync:plan:all
+          sync:plan:mac
+          sync:plan:truenas
+          sync:status
+          atlas:base:apply
+          atlas:base:plan
+          atlas:homeserver:apply
+          atlas:homeserver:plan
+          atlas:pihole:apply
+          atlas:pihole:plan
+          atlas:pihole:verify
+          atlas:status
+          atlas:tailscale:apply
+          atlas:tailscale:plan
+          atlas:validate
+          atlas:audiobookshelf:apply
+          atlas:audiobookshelf:plan
+          atlas:immich:apply
+          atlas:immich:plan
+          atlas:ntfy:apply
+          atlas:ntfy:plan
+          atlas:taskboard:smoke:live
+          atlas:taskboard:test
+          truenas:api-key:apply
+          truenas:api-key:plan
+          truenas:status
+          truenas:tofu:apply
+          truenas:tofu:init
+          truenas:tofu:plan
+          infra:desired:validate
+          infra:python:format
+          infra:python:format:check
+          infra:python:lint
+          infra:python:sync
+          infra:python:test
+          infra:python:typecheck
+          infra:python:validate
+          infra:photos:build-import-manifest
+          infra:photos:plan-immich-metadata
+          infra:photos:reconcile-immich-metadata
+          infra:photos:validate-export
+          infra:schemas:check
+          infra:schemas:generate
+          infra:secrets:list-secrets
+          infra:secrets:list-targets
+          infra:status
+        )
+        available_tasks="$(task --list --json | jq -r '.tasks[].name')"
+        for task_name in "${required_tasks[@]}"; do
+          if ! grep -Fxq "$task_name" <<<"$available_tasks"; then
+            printf 'Missing public task: %s\n' "$task_name" >&2
+            exit 1
+          fi
+        done
+
+  shell:syntax:
+    desc: Check infrastructure Bash syntax
+    cmds:
+      - |
+        bash -n \
+          literal_bin/executable_tmux-save \
+          literal_bin/executable_homeserver-route \
+          infra/atlas/tests/taskboard-browser/live-smoke.sh \
+          infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/entrypoint.sh \
+          infra/secrets/homeserver-secrets \
+          infra/sync/syncthing/configure-syncthing \
+          infra/network/tailscale/manage-policy \
+          infra/aws/stacks/bootstrap/create-state-backend.sh \
+          infra/truenas/apps/manage-apps \
+          infra/truenas/backrest/manage-backrest \
+          infra/truenas/maintenance/manage-maintenance \
+          infra/truenas/audiobookshelf/manage-audiobookshelf \
+          infra/truenas/bootstrap-ssh-key.sh \
+          infra/truenas/snapshots/manage-snapshots \
+          infra/truenas/shares/manage-nfs \
+          infra/truenas/shares/manage-smb
+
+  shell:lint:
+    desc: Run ShellCheck for infrastructure Bash
+    cmds:
+      - |
+        shellcheck -x -e SC1091 \
+          literal_bin/executable_tmux-save \
+          literal_bin/executable_homeserver-route \
+          infra/atlas/tests/taskboard-browser/live-smoke.sh \
+          infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/entrypoint.sh \
+          infra/secrets/homeserver-secrets \
+          infra/sync/syncthing/configure-syncthing \
+          infra/network/tailscale/manage-policy \
+          infra/aws/stacks/bootstrap/create-state-backend.sh \
+          infra/truenas/apps/manage-apps \
+          infra/truenas/backrest/manage-backrest \
+          infra/truenas/maintenance/manage-maintenance \
+          infra/truenas/audiobookshelf/manage-audiobookshelf \
+          infra/truenas/bootstrap-ssh-key.sh \
+          infra/truenas/snapshots/manage-snapshots \
+          infra/truenas/shares/manage-nfs \
+          infra/truenas/shares/manage-smb
+
+  yaml:lint:
+    desc: Lint infrastructure YAML
+    cmds:
+      - >-
+        yamllint
+        -d '{"extends":"relaxed","ignore":"infra/.venv/**\ninfra/ansible/.collections/**\ninfra/atlas/ansible/.collections/**\ninfra/atlas/tests/taskboard-browser/node_modules/**"}'
+        infra
+
+  python:sync:
+    desc: Install the locked homeserver Python environment
+    cmds:
+      - uv sync --project infra --locked
+
+  python:format:
+    desc: Format the homeserver Python package and tests
+    cmds:
+      - uv run --project infra --offline --locked ruff format infra/src infra/tests
+
+  python:format:check:
+    desc: Check homeserver Python formatting
+    cmds:
+      - uv run --project infra --offline --locked ruff format --check infra/src infra/tests
+
+  python:lint:
+    desc: Lint the homeserver Python package and tests
+    cmds:
+      - uv run --project infra --offline --locked ruff check infra/src infra/tests
+
+  python:typecheck:
+    desc: Type-check the homeserver Python package
+    cmds:
+      - uv run --project infra --offline --locked mypy infra/src
+
+  python:test:
+    desc: Run homeserver Python unit tests without live APIs
+    cmds:
+      - uv run --project infra --offline --locked pytest infra/tests
+
+  photos:validate-export:
+    desc: Validate Apple Photos export media and emit retry UUIDs
+    requires:
+      vars: [EXPORT_ROOT, REPORT]
+    cmds:
+      - >-
+        uv run --project infra --offline --locked python -m homeserver_iac
+        photos validate-export "{{.EXPORT_ROOT}}" --report "{{.REPORT}}"
+        --workers "{{.WORKERS | default "1"}}"
+        {{if .CHECKPOINT}}--checkpoint "{{.CHECKPOINT}}"{{end}}
+        {{if .FFMPEG_HWACCEL}}--ffmpeg-hwaccel "{{.FFMPEG_HWACCEL}}"{{end}}
+
+  photos:build-import-manifest:
+    desc: Build a checksum-bound manifest from validated Apple Photos media
+    requires:
+      vars: [VALIDATION_REPORT, SOURCE_MANIFESTS, OUTPUT]
+    cmds:
+      - >-
+        uv run --project infra --offline --locked python -m homeserver_iac
+        photos build-import-manifest "{{.VALIDATION_REPORT}}"
+        {{range (splitList "," .SOURCE_MANIFESTS)}}--source-manifest "{{.}}" {{end}}
+        --output "{{.OUTPUT}}"
+
+  photos:plan-immich-metadata:
+    desc: Plan the Immich API metadata post-pass from upload evidence
+    requires:
+      vars: [IMPORT_MANIFEST, UPLOAD_RESULTS, OUTPUT]
+    cmds:
+      - >-
+        uv run --project infra --offline --locked python -m homeserver_iac
+        photos plan-immich-metadata "{{.IMPORT_MANIFEST}}"
+        --upload-results "{{.UPLOAD_RESULTS}}"
+        --output "{{.OUTPUT}}"
+        --hidden-policy "{{.HIDDEN_POLICY | default "block"}}"
+
+  photos:reconcile-immich-metadata:
+    desc: Compare or apply the Immich API metadata post-pass from a reviewed plan
+    requires:
+      vars: [METADATA_PLAN, OUTPUT]
+    cmds:
+      - >-
+        uv run --project infra --offline --locked python -m homeserver_iac
+        photos reconcile-immich-metadata "{{.METADATA_PLAN}}"
+        --api-url "{{.IMMICH_API_URL | default "https://photos.mbastakis.com"}}"
+        --api-key-env "{{.IMMICH_API_KEY_ENV | default "IMMICH_API_KEY"}}"
+        --output "{{.OUTPUT}}"
+        {{if eq (.APPLY | default "false") "true"}}--apply{{end}}
+
+  schemas:generate:
+    desc: Generate committed homeserver desired-state JSON Schemas
+    cmds:
+      - uv run --project infra --offline --locked python -m homeserver_iac schema generate
+
+  schemas:check:
+    desc: Verify committed homeserver JSON Schemas are current
+    cmds:
+      - uv run --project infra --offline --locked python -m homeserver_iac schema check
+
+  desired:validate:
+    desc: Validate all versioned homeserver desired-state files
+    cmds:
+      - uv run --project infra --offline --locked python -m homeserver_iac desired validate
+
+  secrets:list-targets:
+    desc: List typed homeserver secret injection targets
+    cmds:
+      - uv run --project infra --offline --locked python -m homeserver_iac secrets list-targets
+
+  secrets:list-secrets:
+    desc: List homeserver secret aliases and metadata without values
+    cmds:
+      - uv run --project infra --offline --locked python -m homeserver_iac secrets list-secrets
+
+  status:
+    desc: Run every live read-only domain status task
+    cmds:
+      - task: ":aws:status"
+      - task: ":truenas:status"
+      - task: ":identity:status"
+      - task: ":network:status"
+      - task: ":sync:status"
+      - task: ":atlas:status"
+
+  python:validate:
+    desc: Run all offline homeserver Python validation
+    cmds:
+      - task: python:format:check
+      - task: python:lint
+      - task: python:typecheck
+      - task: python:test
+      - task: schemas:check
+      - task: desired:validate
+
+  validate:
+    desc: Run offline infrastructure validation
+    cmds:
+      - task: task-surface
+      - task: ":tf:fmt:check"
+      - task: ":atlas:validate"
+      - task: ":network:openwrt:validate"
+      - task: ":truenas:backrest:validate"
+      - task: ":truenas:audiobookshelf:validate"
+      - task: python:validate
+      - task: shell:syntax
+      - task: shell:lint
+      - task: yaml:lint

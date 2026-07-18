@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=../../schemas/truenas-nfs.schema.json
+# Bounded TrueNAS NFS exports required by homeserver applications.
+schema_version: 1
+ownership:
+  scope: truenas.nfs_shares
+  mode: bounded
+
+service:
+  enabled: true
+  running: true
+
+shares:
+  - id: immich-media
+    path: /mnt/pool_4tb/homeserver/data/photos/immich
+    hosts:
+      - 192.168.1.19
+    networks: []
+    read_only: false
+    enabled: true
+    mapall_user: apps
+    mapall_group: apps
+
+retire_shares: []

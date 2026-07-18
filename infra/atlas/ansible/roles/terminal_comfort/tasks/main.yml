@@ -1,0 +1,329 @@
+---
+- name: Install terminal comfort packages
+  ansible.builtin.apt:
+    name: "{{ atlas_terminal_packages }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Ensure atlas admin config directories exist
+  ansible.builtin.file:
+    path: "/home/{{ atlas_admin_user }}/{{ item }}"
+    state: directory
+    owner: "{{ atlas_admin_user }}"
+    group: "{{ atlas_admin_user }}"
+    mode: "0755"
+  loop:
+    - .config
+    - .config/lazygit
+    - .config/zsh
+    - .config/nvim
+    - .config/tmux
+    - .config/yazi
+    - .local
+    - .local/bin
+    - .local/state
+    - .local/state/zsh
+    - .cache
+    - .cache/zsh
+
+- name: Deploy atlas zsh environment
+  ansible.builtin.template:
+    src: zshenv.j2
+    dest: "/home/{{ atlas_admin_user }}/.zshenv"
+    owner: "{{ atlas_admin_user }}"
+    group: "{{ atlas_admin_user }}"
+    mode: "0644"
+
+- name: Deploy atlas zsh configuration
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/home/{{ atlas_admin_user }}/.config/zsh/{{ item }}"
+    owner: "{{ atlas_admin_user }}"
+    group: "{{ atlas_admin_user }}"
+    mode: "0644"
+  loop:
+    - .zshrc
+    - aliases.zsh
+    - fzf.zsh
+    - functions.zsh
+    - keybindings.zsh
+
+- name: Ensure atlas local zsh override exists
+  ansible.builtin.copy:
+    dest: "/home/{{ atlas_admin_user }}/.config/zsh/local.zsh"
+    owner: "{{ atlas_admin_user }}"
+    group: "{{ atlas_admin_user }}"
+    mode: "0644"
+    force: false
+    content: |
+      # Machine-local zsh overrides for atlas.
+
+- name: Deploy Starship prompt configuration
+  ansible.builtin.template:
+    src: starship.toml.j2
+    dest: "/home/{{ atlas_admin_user }}/.config/starship.toml"
+    owner: "{{ atlas_admin_user }}"
+    group: "{{ atlas_admin_user }}"
+    mode: "0644"
+
+- name: Deploy shared tmux configuration
+  ansible.builtin.copy:
+    src: "{{ atlas_tmux_config_source_dir }}/tmux.conf"
+    dest: "/home/{{ atlas_admin_user }}/.config/tmux/tmux.conf"
+    owner: "{{ atlas_admin_user }}"
+    group: "{{ atlas_admin_user }}"
+    mode: "0644"
+  register: atlas_tmux_config
+
+- name: Check for running atlas tmux server
+  ansible.builtin.command:
+    argv:
+      - tmux
+      - has-session
+  become: true
+  become_user: "{{ atlas_admin_user }}"
+  environment:
+    HOME: "/home/{{ atlas_admin_user }}"
+  register: atlas_tmux_has_session
+  failed_when: false
+  changed_when: false
+  when: atlas_tmux_config.changed
+
+- name: Reload running atlas tmux server
+  ansible.builtin.command:
+    argv:
+      - tmux
+      - source-file
+      - "/home/{{ atlas_admin_user }}/.config/tmux/tmux.conf"
+  become: true
+  become_user: "{{ atlas_admin_user }}"
+  environment:
+    HOME: "/home/{{ atlas_admin_user }}"
+  when:
+    - atlas_tmux_config.changed
+    - atlas_tmux_has_session.rc | default(1) == 0
+
+- name: Deploy shared lazygit configuration
+  ansible.builtin.copy:
+    src: "{{ atlas_lazygit_config_source_dir }}/config.yml"
+    dest: "/home/{{ atlas_admin_user }}/.config/lazygit/config.yml"
+    owner: "{{ atlas_admin_user }}"
+    group: "{{ atlas_admin_user }}"
+    mode: "0644"
+
+- name: Deploy shared yazi configuration
+  ansible.builtin.copy:
+    src: "{{ atlas_yazi_config_source_dir }}/"
+    dest: "/home/{{ atlas_admin_user }}/.config/yazi/"
+    owner: "{{ atlas_admin_user }}"
+    group: "{{ atlas_admin_user }}"
+    mode: preserve
+
+- name: Download upstream yazi deb package
+  ansible.builtin.get_url:
+    url: "{{ atlas_yazi_deb_url }}"
+    dest: >-
+      /home/{{ atlas_admin_user }}/.cache/yazi-{{ atlas_yazi_version }}.deb
+    checksum: "{{ atlas_yazi_deb_checksum }}"
+    owner: "{{ atlas_admin_user }}"
+    group: "{{ atlas_admin_user }}"
+    mode: "0644"
+
+- name: Install upstream yazi deb package
+  ansible.builtin.apt:
+    deb: >-
+      /home/{{ atlas_admin_user }}/.cache/yazi-{{ atlas_yazi_version }}.deb
+
+- name: Remove obsolete Cargo yazi binaries
+  ansible.builtin.file:
+    path: "/home/{{ atlas_admin_user }}/.local/bin/{{ item }}"
+    state: absent
+  loop:
+    - ya
+    - yazi
+    - yazi-build
+
+- name: Remove obsolete Cargo yazi build directories
+  ansible.builtin.file:
+    path: "/home/{{ atlas_admin_user }}/.cache/cargo-target/{{ item }}"
+    state: absent
+  loop:
+    - yazi-build
+    - yazi-fm
+    - yazi-cli
+
+- name: Find stale Cargo install temp directories
+  ansible.builtin.find:
+    paths: /tmp
+    patterns: cargo-install*
+    file_type: directory
+  register: atlas_cargo_install_tmp_dirs
+
+- name: Remove stale Cargo install temp directories from tmpfs
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ atlas_cargo_install_tmp_dirs.files }}"
+
+- name: Install yazi plugins from package.toml
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/ya
+      - pkg
+      - install
+  args:
+    chdir: "/home/{{ atlas_admin_user }}/.config/yazi"
+  become: true
+  become_user: "{{ atlas_admin_user }}"
+  environment:
+    HOME: "/home/{{ atlas_admin_user }}"
+    USER: "{{ atlas_admin_user }}"
+    XDG_CONFIG_HOME: "/home/{{ atlas_admin_user }}/.config"
+    XDG_DATA_HOME: "/home/{{ atlas_admin_user }}/.local/share"
+  changed_when: false
+
+- name: Remove old managed Neovim config directories before exact copy
+  ansible.builtin.file:
+    path: "/home/{{ atlas_admin_user }}/.config/nvim/{{ item }}"
+    state: absent
+  loop:
+    - after
+    - lua
+
+- name: Deploy Neovim config directories
+  ansible.builtin.copy:
+    src: "{{ atlas_nvim_config_source_dir }}/{{ item }}/"
+    dest: "/home/{{ atlas_admin_user }}/.config/nvim/{{ item }}/"
+    owner: "{{ atlas_admin_user }}"
+    group: "{{ atlas_admin_user }}"
+    mode: preserve
+  loop:
+    - after
+    - lua
+
+- name: Deploy Neovim config files
+  ansible.builtin.copy:
+    src: "{{ atlas_nvim_config_source_dir }}/{{ item.src }}"
+    dest: "/home/{{ atlas_admin_user }}/.config/nvim/{{ item.dest }}"
+    owner: "{{ atlas_admin_user }}"
+    group: "{{ atlas_admin_user }}"
+    mode: "0644"
+  loop:
+    - src: init.lua
+      dest: init.lua
+    - src: selene.toml
+      dest: selene.toml
+    - src: dot_luarc.json
+      dest: .luarc.json
+    - src: dot_stylua.toml
+      dest: .stylua.toml
+
+- name: Install missing Neovim plugins
+  ansible.builtin.command:
+    argv:
+      - nvim
+      - --headless
+      - +Lazy! install
+      - +qa
+  become: true
+  become_user: "{{ atlas_admin_user }}"
+  environment:
+    HOME: "/home/{{ atlas_admin_user }}"
+    USER: "{{ atlas_admin_user }}"
+    XDG_CACHE_HOME: "/home/{{ atlas_admin_user }}/.cache"
+    XDG_CONFIG_HOME: "/home/{{ atlas_admin_user }}/.config"
+    XDG_DATA_HOME: "/home/{{ atlas_admin_user }}/.local/share"
+    XDG_STATE_HOME: "/home/{{ atlas_admin_user }}/.local/state"
+  changed_when: false
+
+- name: Install missing Neovim Tree-sitter parsers
+  ansible.builtin.command:
+    argv:
+      - nvim
+      - --headless
+      - >-
+        +lua require('nvim-treesitter').install({
+        {{ atlas_nvim_treesitter_parsers | map('to_json') | join(', ') }}
+        }, { summary = true }):wait(300000)
+      - +qa
+  become: true
+  become_user: "{{ atlas_admin_user }}"
+  environment:
+    HOME: "/home/{{ atlas_admin_user }}"
+    USER: "{{ atlas_admin_user }}"
+    XDG_CACHE_HOME: "/home/{{ atlas_admin_user }}/.cache"
+    XDG_CONFIG_HOME: "/home/{{ atlas_admin_user }}/.config"
+    XDG_DATA_HOME: "/home/{{ atlas_admin_user }}/.local/share"
+    XDG_STATE_HOME: "/home/{{ atlas_admin_user }}/.local/state"
+  changed_when: false
+
+- name: Install missing Neovim Mason tools
+  ansible.builtin.command:
+    argv:
+      - nvim
+      - --headless
+      - +MasonToolsInstallSync
+      - +qa
+  become: true
+  become_user: "{{ atlas_admin_user }}"
+  environment:
+    HOME: "/home/{{ atlas_admin_user }}"
+    USER: "{{ atlas_admin_user }}"
+    XDG_CACHE_HOME: "/home/{{ atlas_admin_user }}/.cache"
+    XDG_CONFIG_HOME: "/home/{{ atlas_admin_user }}/.config"
+    XDG_DATA_HOME: "/home/{{ atlas_admin_user }}/.local/share"
+    XDG_STATE_HOME: "/home/{{ atlas_admin_user }}/.local/state"
+  changed_when: false
+
+- name: Install missing Neovim Mason LSP servers
+  ansible.builtin.command:
+    argv:
+      - nvim
+      - --headless
+      - >-
+        +MasonInstall lua-language-server typescript-language-server
+        html-lsp css-lsp json-lsp bash-language-server eslint-lsp
+        pyright gopls terraform-ls rust-analyzer taplo nil gitlab-ci-ls
+        dockerfile-language-server docker-compose-language-service
+        yaml-language-server ansible-language-server helm-ls zls
+      - +sleep 120
+      - +qa
+  become: true
+  become_user: "{{ atlas_admin_user }}"
+  environment:
+    HOME: "/home/{{ atlas_admin_user }}"
+    USER: "{{ atlas_admin_user }}"
+    XDG_CACHE_HOME: "/home/{{ atlas_admin_user }}/.cache"
+    XDG_CONFIG_HOME: "/home/{{ atlas_admin_user }}/.config"
+    XDG_DATA_HOME: "/home/{{ atlas_admin_user }}/.local/share"
+    XDG_STATE_HOME: "/home/{{ atlas_admin_user }}/.local/state"
+  changed_when: false
+
+- name: Check Ubuntu bat binary name
+  ansible.builtin.stat:
+    path: /usr/bin/batcat
+  register: atlas_batcat
+
+- name: Provide bat alias binary for scripts and shell aliases
+  ansible.builtin.file:
+    src: /usr/bin/batcat
+    dest: "/home/{{ atlas_admin_user }}/.local/bin/bat"
+    state: link
+    owner: "{{ atlas_admin_user }}"
+    group: "{{ atlas_admin_user }}"
+  when: atlas_batcat.stat.exists
+
+- name: Check Ubuntu fd binary name
+  ansible.builtin.stat:
+    path: /usr/bin/fdfind
+  register: atlas_fdfind
+
+- name: Provide fd alias binary for scripts and shell aliases
+  ansible.builtin.file:
+    src: /usr/bin/fdfind
+    dest: "/home/{{ atlas_admin_user }}/.local/bin/fd"
+    state: link
+    owner: "{{ atlas_admin_user }}"
+    group: "{{ atlas_admin_user }}"
+  when: atlas_fdfind.stat.exists
