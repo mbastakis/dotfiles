@@ -1,0 +1,195 @@
+version: "3"
+
+tasks:
+  state:baseline:
+    desc: Verify versioned remote states and record provider lock metadata
+    cmds:
+      - |
+        set -euo pipefail
+        expected_bucket="mbastakis-homeserver-opentofu-state"
+        expected_region="eu-central-1"
+        if [[ "{{.TF_STATE_BUCKET}}" != "$expected_bucket" ]] ||
+          [[ "{{.TF_STATE_REGION}}" != "$expected_region" ]]; then
+          printf '%s\n' \
+            "OpenTofu backend identity differs from the migration baseline." >&2
+          exit 1
+        fi
+      - task: ":aws:backend:check"
+      - |
+        set -euo pipefail
+        fixed_bucket="mbastakis-homeserver-opentofu-state"
+        fixed_region="eu-central-1"
+
+        versioning_status="$(aws-login exec mbastakis -- \
+          aws s3api get-bucket-versioning \
+          --bucket "$fixed_bucket" \
+          --region "$fixed_region" \
+          --query Status \
+          --output text)"
+        if [[ "$versioning_status" != "Enabled" ]]; then
+          printf 'S3 state versioning is not enabled: %s\n' \
+            "$versioning_status" >&2
+          exit 1
+        fi
+
+        state_keys=(
+          homeserver/bootstrap/terraform.tfstate
+          homeserver/dns/terraform.tfstate
+          homeserver/aws-foundation/terraform.tfstate
+          homeserver/truenas/terraform.tfstate
+          homeserver/authentik/terraform.tfstate
+          homeserver/tailscale/terraform.tfstate
+        )
+
+        printf 'Remote state baseline (%s, %s):\n' \
+          "$fixed_bucket" "$fixed_region"
+        for key in "${state_keys[@]}"; do
+          versions_json="$(aws-login exec mbastakis -- \
+            aws s3api list-object-versions \
+            --bucket "$fixed_bucket" \
+            --prefix "$key" \
+            --region "$fixed_region" \
+            --output json)"
+          latest="$(jq -c --arg key "$key" \
+            '[
+              .Versions[]?
+              | select(.Key == $key and .IsLatest)
+            ] | first // empty' \
+            <<<"$versions_json")"
+          if [[ -z "$latest" ]]; then
+            printf 'Missing current version for state key: %s\n' "$key" >&2
+            exit 1
+          fi
+
+          version_id="$(jq -r '.VersionId' <<<"$latest")"
+          last_modified="$(jq -r '.LastModified' <<<"$latest")"
+          prior_count="$(jq -r --arg key "$key" \
+            '[
+              .Versions[]?
+              | select(.Key == $key and (.IsLatest | not))
+            ] | length' \
+            <<<"$versions_json")"
+          printf '  %s\n' "$key"
+          printf '    current: %s (%s)\n' "$version_id" "$last_modified"
+          printf '    prior versions: %s\n' "$prior_count"
+        done
+
+        lockfiles=(
+          infra/aws/stacks/bootstrap/.terraform.lock.hcl
+          infra/aws/stacks/dns/.terraform.lock.hcl
+          infra/aws/stacks/foundation/.terraform.lock.hcl
+          infra/truenas/tofu/.terraform.lock.hcl
+          infra/identity/authentik/tofu/.terraform.lock.hcl
+          infra/network/tailscale/tofu/.terraform.lock.hcl
+        )
+
+        printf 'Provider lock baseline:\n'
+        for lockfile in "${lockfiles[@]}"; do
+          if [[ ! -f "$lockfile" ]]; then
+            printf 'Missing provider lockfile: %s\n' "$lockfile" >&2
+            exit 1
+          fi
+          checksum="$(shasum -a 256 "$lockfile" | cut -d ' ' -f 1)"
+          printf '  %s\n' "$lockfile"
+          printf '    sha256: %s\n' "$checksum"
+          awk '
+            /^provider "/ {
+              provider = $2
+              gsub(/"/, "", provider)
+            }
+            /^  version/ {
+              version = $3
+              gsub(/"/, "", version)
+              printf "    %s: %s\n", provider, version
+            }
+          ' "$lockfile"
+        done
+
+  fmt:
+    desc: Format all OpenTofu files
+    cmds:
+      - tofu fmt -recursive infra/aws
+      - tofu fmt -recursive infra/truenas/tofu
+      - tofu fmt -recursive infra/identity/authentik
+      - tofu fmt -recursive infra/network/tailscale/tofu
+
+  fmt:check:
+    desc: Check formatting for all OpenTofu files
+    cmds:
+      - tofu fmt -recursive -check -diff infra/aws
+      - tofu fmt -recursive -check -diff infra/truenas/tofu
+      - tofu fmt -recursive -check -diff infra/identity/authentik
+      - tofu fmt -recursive -check -diff infra/network/tailscale/tofu
+
+  test:
+    desc: Initialize and test reusable OpenTofu modules with mock providers
+    cmds:
+      - |
+        set -euo pipefail
+        tf_data_root="$(mktemp -d)"
+        trap 'rm -rf "$tf_data_root"' EXIT
+
+        modules=(
+          infra/aws/modules/hardened-s3-bucket
+          infra/aws/modules/iam-user
+          infra/identity/authentik/modules/forward-auth-app
+        )
+        for module in "${modules[@]}"; do
+          module_name="$(basename "$module")"
+          export TF_DATA_DIR="$tf_data_root/$module_name"
+          tofu -chdir="$module" init \
+            -backend=false \
+            -input=false \
+            -lockfile=readonly
+          tofu -chdir="$module" test {{.CLI_ARGS}}
+        done
+
+  validate:
+    desc: Validate homeserver OpenTofu stacks without configuring the remote backend
+    cmds:
+      - |
+        set -euo pipefail
+        tf_data_root="$(mktemp -d)"
+        trap 'rm -rf "$tf_data_root"' EXIT
+
+        stacks=(
+          infra/aws/stacks/bootstrap
+          infra/aws/stacks/dns
+          infra/aws/stacks/foundation
+          infra/truenas/tofu
+          infra/identity/authentik/tofu
+          infra/network/tailscale/tofu
+        )
+        for stack in "${stacks[@]}"; do
+          stack_name="${stack//\//_}"
+          export TF_DATA_DIR="$tf_data_root/$stack_name"
+          tofu -chdir="$stack" init -backend=false -reconfigure -input=false
+          tofu -chdir="$stack" validate
+        done
+
+  tflint:
+    desc: Run TFLint for homeserver OpenTofu stacks
+    cmds:
+      - |
+        tflint --init --config="${PWD}/.tflint.hcl"
+        stacks=(
+          infra/aws/stacks/bootstrap
+          infra/aws/stacks/dns
+          infra/aws/stacks/foundation
+          infra/truenas/tofu
+          infra/identity/authentik/tofu
+          infra/network/tailscale/tofu
+        )
+        for stack in "${stacks[@]}"; do
+          tflint --chdir="$stack" --config="${PWD}/.tflint.hcl"
+        done
+
+  docs:
+    desc: Regenerate terraform-docs output for homeserver OpenTofu stacks
+    cmds:
+      - terraform-docs --config .terraform-docs.yml infra/aws/stacks/bootstrap
+      - terraform-docs --config .terraform-docs.yml infra/aws/stacks/dns
+      - terraform-docs --config .terraform-docs.yml infra/aws/stacks/foundation
+      - terraform-docs --config .terraform-docs.yml infra/truenas/tofu
+      - terraform-docs --config .terraform-docs.yml infra/identity/authentik/tofu
+      - terraform-docs --config .terraform-docs.yml infra/network/tailscale/tofu

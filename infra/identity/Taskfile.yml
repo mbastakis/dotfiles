@@ -1,0 +1,34 @@
+version: "3"
+
+tasks:
+  status:
+    desc: Plan all identity configuration without applying changes
+    cmds:
+      - task: authentik:plan
+
+  authentik:init:
+    desc: Initialize the Authentik OpenTofu stack
+    dir: infra/identity/authentik/tofu
+    cmds:
+      - task: ":aws:backend:check"
+      - |
+        aws-login exec mbastakis -- tofu init \
+          -input=false \
+          -reconfigure \
+          -backend-config="bucket={{.TF_STATE_BUCKET}}" \
+          -backend-config="key=homeserver/authentik/terraform.tfstate" \
+          -backend-config="region={{.TF_STATE_REGION}}" \
+          -backend-config="encrypt=true" \
+          -backend-config="use_lockfile=true"
+
+  authentik:plan:
+    desc: Plan the Authentik OpenTofu stack
+    cmds:
+      - task: authentik:init
+      - aws-login exec mbastakis -- infra/secrets/homeserver-secrets exec terraform-authentik -- tofu -chdir=infra/identity/authentik/tofu plan {{.CLI_ARGS}}
+
+  authentik:apply:
+    desc: Apply the Authentik OpenTofu stack
+    cmds:
+      - task: authentik:init
+      - aws-login exec mbastakis -- infra/secrets/homeserver-secrets exec terraform-authentik -- tofu -chdir=infra/identity/authentik/tofu apply {{.CLI_ARGS}}

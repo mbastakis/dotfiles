@@ -1,0 +1,245 @@
+---
+- name: Require accepted Immich architecture
+  ansible.builtin.assert:
+    that:
+      - atlas_immich_preconditions_accepted | bool
+      - atlas_immich_local_storage_accepted | bool
+      - atlas_immich_processing_mode == 'cpu'
+      - not (atlas_nvidia_immich_supported | bool)
+      - atlas_lan_ipv4_reservation_verified | bool
+      - atlas_lan_ipv4 == '192.168.1.19'
+      - atlas_immich_runtime_root is match('^/home/')
+      - atlas_immich_nfs_server | length > 0
+      - atlas_immich_nfs_export | length > 0
+      - atlas_immich_sentinel_content | length > 0
+      - atlas_immich_host | length > 0
+    fail_msg: >-
+      Atlas Immich requires the accepted CPU/HDD architecture, reserved LAN
+      identity, local runtime root, and bounded TrueNAS export from ADR-0005.
+
+- name: Require Immich secrets
+  ansible.builtin.assert:
+    that:
+      - lookup('env', 'IMMICH_DB_PASSWORD') | length > 0
+      - lookup('env', 'IMMICH_OIDC_CLIENT_SECRET') | length > 0
+    fail_msg: >-
+      Missing IMMICH_DB_PASSWORD or IMMICH_OIDC_CLIENT_SECRET. Run through
+      infra/secrets/homeserver-secrets exec atlas-immich -- ansible-playbook ...
+  no_log: true
+
+- name: Create Immich project and local runtime directories
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  loop:
+    - path: "{{ atlas_immich_project_root }}"
+      owner: root
+      group: root
+      mode: "0755"
+    - path: "{{ atlas_immich_runtime_root }}"
+      owner: "{{ atlas_admin_user }}"
+      group: "{{ atlas_admin_user }}"
+      mode: "0750"
+    - path: "{{ atlas_immich_runtime_root }}/postgres"
+      owner: "999"
+      group: "999"
+      mode: "0700"
+    - path: "{{ atlas_immich_runtime_root }}/valkey"
+      owner: "999"
+      group: "999"
+      mode: "0700"
+    - path: "{{ atlas_immich_runtime_root }}/thumbs"
+      owner: "1000"
+      group: "1000"
+      mode: "0750"
+    - path: "{{ atlas_immich_runtime_root }}/encoded-video"
+      owner: "1000"
+      group: "1000"
+      mode: "0750"
+    - path: "{{ atlas_immich_runtime_root }}/model-cache"
+      owner: "1000"
+      group: "1000"
+      mode: "0750"
+    - path: "{{ atlas_immich_runtime_root }}/ml-cache"
+      owner: "1000"
+      group: "1000"
+      mode: "0750"
+    - path: "{{ atlas_immich_runtime_root }}/ml-config"
+      owner: "1000"
+      group: "1000"
+      mode: "0750"
+
+- name: Ensure the Immich media mountpoint exists
+  ansible.builtin.file:
+    path: "{{ atlas_immich_media_mount }}"
+    state: directory
+
+- name: Render Immich NFS mount unit
+  ansible.builtin.template:
+    src: immich-data.mount.j2
+    dest: "/etc/systemd/system/{{ atlas_immich_mount_unit }}"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Reload systemd for Immich
+
+- name: Render Immich NFS automount unit
+  ansible.builtin.template:
+    src: immich-data.automount.j2
+    dest: "/etc/systemd/system/{{ atlas_immich_automount_unit }}"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Reload systemd for Immich
+
+- name: Enable Immich NFS automount
+  ansible.builtin.systemd:
+    name: "{{ atlas_immich_automount_unit }}"
+    enabled: true
+    state: started
+    daemon_reload: true
+  when: not ansible_check_mode
+
+- name: Trigger the Immich NFS automount
+  ansible.builtin.stat:
+    path: "{{ atlas_immich_media_mount }}/.immich-storage"
+  register: atlas_immich_sentinel
+  check_mode: false
+  when: not ansible_check_mode
+
+- name: Verify the Immich media path is a real mount
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/mountpoint
+      - --quiet
+      - "{{ atlas_immich_media_mount }}"
+  changed_when: false
+  check_mode: false
+  when: not ansible_check_mode
+
+- name: Read the Immich mount source
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/findmnt
+      - --noheadings
+      - --raw
+      - --output
+      - SOURCE
+      - --types
+      - nfs4
+      - --target
+      - "{{ atlas_immich_media_mount }}"
+  register: atlas_immich_mount_source
+  changed_when: false
+  check_mode: false
+  when: not ansible_check_mode
+
+- name: Read the Immich storage sentinel
+  ansible.builtin.slurp:
+    src: "{{ atlas_immich_media_mount }}/.immich-storage"
+  register: atlas_immich_sentinel_value
+  when: not ansible_check_mode
+
+- name: Require the expected TrueNAS export and sentinel
+  ansible.builtin.assert:
+    that:
+      - atlas_immich_sentinel.stat.isreg | default(false)
+      - atlas_immich_mount_source.stdout | trim == atlas_immich_nfs_server ~ ':' ~ atlas_immich_nfs_export
+      - atlas_immich_sentinel_value.content | b64decode | trim == atlas_immich_sentinel_content
+    fail_msg: >-
+      Refusing to deploy Immich because the mounted NFS source or storage
+      sentinel does not match the code-owned TrueNAS dataset.
+  when: not ansible_check_mode
+
+- name: Verify the shared homeserver Docker network exists
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/docker
+      - network
+      - inspect
+      - "{{ atlas_immich_external_network }}"
+  changed_when: false
+  check_mode: false
+
+- name: Verify the Traefik dynamic configuration directory exists
+  ansible.builtin.stat:
+    path: "{{ atlas_immich_traefik_dynamic_dir }}"
+  register: atlas_immich_traefik_dir
+  check_mode: false
+
+- name: Require the existing Traefik deployment
+  ansible.builtin.assert:
+    that:
+      - atlas_immich_traefik_dir.stat.isdir | default(false)
+    fail_msg: >-
+      Apply atlas:homeserver before Immich so its external Docker network and
+      Traefik file-provider directory exist.
+
+- name: Enable memory overcommit for Valkey background saves
+  ansible.posix.sysctl:
+    name: vm.overcommit_memory
+    value: "1"
+    state: present
+    sysctl_file: /etc/sysctl.d/99-immich-valkey.conf
+    reload: true
+  notify: Restart Immich
+
+- name: Render Immich server configuration
+  ansible.builtin.template:
+    src: immich.json.j2
+    dest: "{{ atlas_immich_config_host_path }}"
+    owner: "{{ atlas_admin_user }}"
+    group: "{{ atlas_admin_user }}"
+    mode: "0600"
+    validate: /usr/bin/python3 -m json.tool %s
+  no_log: true
+  notify: Restart Immich
+
+- name: Render Immich secret environment
+  ansible.builtin.template:
+    src: immich.env.j2
+    dest: "{{ atlas_immich_project_root }}/.env"
+    owner: root
+    group: root
+    mode: "0600"
+  no_log: true
+  notify: Restart Immich
+
+- name: Render Immich Docker Compose file
+  ansible.builtin.template:
+    src: compose.yml.j2
+    dest: "{{ atlas_immich_project_root }}/compose.yml"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart Immich
+
+- name: Render Immich Traefik route
+  ansible.builtin.template:
+    src: immich.dynamic.yml.j2
+    dest: "{{ atlas_immich_traefik_dynamic_dir }}/immich.yml"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Render Immich systemd service
+  ansible.builtin.template:
+    src: immich.service.j2
+    dest: "/etc/systemd/system/{{ atlas_immich_service_unit }}"
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - Reload systemd for Immich
+    - Restart Immich
+
+- name: Enable and start Immich
+  ansible.builtin.systemd:
+    name: "{{ atlas_immich_service_unit }}"
+    enabled: true
+    state: started
+    daemon_reload: true
+  when: not ansible_check_mode

@@ -1,0 +1,77 @@
+# yaml-language-server: $schema=../../../schemas/truenas-app.schema.json
+schema_version: 1
+ownership:
+  scope: truenas.catalog_apps
+  mode: bounded
+
+app_name: audiobookshelf
+catalog_app: audiobookshelf
+train: community
+version: "1.6.11"
+
+path_permissions:
+  - path: /mnt/pool_4tb/homeserver/apps/audiobookshelf/config
+    owner: 568
+    group: 568
+    mode: "0770"
+  - path: /mnt/pool_4tb/homeserver/apps/audiobookshelf/metadata
+    owner: 568
+    group: 568
+    mode: "0770"
+  - path: /mnt/pool_4tb/homeserver/apps/audiobookshelf/backups
+    owner: 568
+    group: 568
+    mode: "0770"
+  - path: /mnt/pool_4tb/homeserver/data/books
+    owner: 568
+    group: 568
+    mode: "0770"
+
+values:
+  TZ: Europe/Athens
+  audiobookshelf:
+    additional_envs:
+      - name: BACKUP_PATH
+        value: /backups
+  run_as:
+    user: 568
+    group: 568
+  network:
+    web_port:
+      bind_mode: published
+      port_number: 30378
+      host_ips: []
+    opds_port:
+      bind_mode: ""
+      port_number: 30256
+      host_ips: []
+    networks: []
+  storage:
+    config:
+      type: host_path
+      host_path_config:
+        acl_enable: false
+        path: /mnt/pool_4tb/homeserver/apps/audiobookshelf/config
+    metadata:
+      type: host_path
+      host_path_config:
+        acl_enable: false
+        path: /mnt/pool_4tb/homeserver/apps/audiobookshelf/metadata
+    additional_storage:
+      - type: host_path
+        read_only: false
+        mount_path: /backups
+        host_path_config:
+          acl_enable: false
+          path: /mnt/pool_4tb/homeserver/apps/audiobookshelf/backups
+      - type: host_path
+        read_only: true
+        mount_path: /books
+        host_path_config:
+          acl_enable: false
+          path: /mnt/pool_4tb/homeserver/data/books
+  labels: []
+  resources:
+    limits:
+      cpus: 2
+      memory: 4096

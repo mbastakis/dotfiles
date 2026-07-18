@@ -1,0 +1,96 @@
+{
+  "repos": [
+    {
+      "id": "homeserver-s3",
+      "uri": "s3:s3.eu-central-1.amazonaws.com/mbastakis-homeserver-restic-backups/truenas",
+      "guid": "fd3a5cc9a6e3d6b23a7be6f567d3647c56764eb81d2d680bea553193d49d1d9e",
+      "flags": ["--limit-upload=6000"],
+      "env": [
+        "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}",
+        "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}",
+        "RESTIC_PASSWORD=${RESTIC_PASSWORD}"
+      ],
+      "prunePolicy": {
+        "schedule": {"cron": "0 5 1 1,4,7,10 *", "clock": "CLOCK_LOCAL"},
+        "maxUnusedPercent": 10
+      },
+      "checkPolicy": {
+        "schedule": {"cron": "0 6 2 * *", "clock": "CLOCK_LOCAL"},
+        "structureOnly": true
+      },
+      "autoUnlock": true
+    }
+  ],
+  "plans": [
+    {
+      "id": "homeserver-files-daily",
+      "repo": "homeserver-s3",
+      "paths": ["/source/files"],
+      "schedule": {"cron": "15 1 * * *", "clock": "CLOCK_LOCAL"},
+      "retention": {
+        "policyTimeBucketed": {"daily": 14, "weekly": 8, "monthly": 24, "yearly": 5}
+      },
+      "skipIfUnchanged": true
+    },
+    {
+      "id": "homeserver-obsidian-daily",
+      "repo": "homeserver-s3",
+      "paths": ["/source/obsidian"],
+      "schedule": {"cron": "15 2 * * *", "clock": "CLOCK_LOCAL"},
+      "retention": {
+        "policyTimeBucketed": {"daily": 30, "weekly": 8, "monthly": 24, "yearly": 5}
+      },
+      "skipIfUnchanged": true
+    },
+    {
+      "id": "homeserver-immich-daily",
+      "repo": "homeserver-s3",
+      "paths": ["/source/immich"],
+      "schedule": {"cron": "30 2 * * *", "clock": "CLOCK_LOCAL"},
+      "retention": {
+        "policyTimeBucketed": {"daily": 14, "weekly": 8, "monthly": 24, "yearly": 5}
+      },
+      "skipIfUnchanged": true
+    },
+    {
+      "id": "homeserver-apple-originals-daily",
+      "repo": "homeserver-s3",
+      "paths": ["/source/apple-originals"],
+      "schedule": {"cron": "0 3 * * *", "clock": "CLOCK_LOCAL"},
+      "retention": {
+        "policyTimeBucketed": {"daily": 14, "weekly": 8, "monthly": 24, "yearly": 5}
+      },
+      "skipIfUnchanged": true
+    },
+    {
+      "id": "homeserver-taskchampion-daily",
+      "repo": "homeserver-s3",
+      "paths": ["/source/taskchampion-sync-backup"],
+      "schedule": {"cron": "30 4 * * *", "clock": "CLOCK_LOCAL"},
+      "retention": {
+        "policyTimeBucketed": {"daily": 14, "weekly": 8, "monthly": 12, "yearly": 3}
+      },
+      "skipIfUnchanged": true
+    },
+    {
+      "id": "homeserver-audiobookshelf-weekly",
+      "repo": "homeserver-s3",
+      "paths": ["/source/audiobookshelf-backups"],
+      "schedule": {"cron": "30 3 * * 0", "clock": "CLOCK_LOCAL"},
+      "retention": {
+        "policyTimeBucketed": {"weekly": 8, "monthly": 12}
+      },
+      "skipIfUnchanged": true
+    },
+    {
+      "id": "homeserver-books-monthly",
+      "repo": "homeserver-s3",
+      "paths": ["/source/books"],
+      "schedule": {"cron": "30 4 1 * *", "clock": "CLOCK_LOCAL"},
+      "retention": {
+        "policyTimeBucketed": {"monthly": 6, "yearly": 3}
+      },
+      "skipIfUnchanged": true
+    }
+  ]
+}

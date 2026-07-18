@@ -1,0 +1,77 @@
+---
+name: immich
+
+services:
+  immich-server:
+    image: {{ atlas_immich_server_image }}:${IMMICH_VERSION}
+    user: "1000:1000"
+    restart: "no"
+    env_file:
+      - .env
+    volumes:
+      - ${UPLOAD_LOCATION}:/data
+      - {{ atlas_immich_config_host_path }}:{{ atlas_immich_config_container_path }}:ro
+      - {{ atlas_immich_runtime_root }}/thumbs:/data/thumbs
+      - {{ atlas_immich_runtime_root }}/encoded-video:/data/encoded-video
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      redis:
+        condition: service_healthy
+      database:
+        condition: service_healthy
+    networks:
+      - default
+      - homeserver
+
+  immich-machine-learning:
+    image: {{ atlas_immich_machine_learning_image }}:${IMMICH_VERSION}
+    user: "1000:1000"
+    restart: "no"
+    environment:
+      TZ: ${TZ}
+      MACHINE_LEARNING_WORKERS: "{{ atlas_immich_ml_workers }}"
+      MACHINE_LEARNING_REQUEST_THREADS: "{{ atlas_immich_ml_request_threads }}"
+      MACHINE_LEARNING_MODEL_TTL: "{{ atlas_immich_ml_model_ttl }}"
+    volumes:
+      - {{ atlas_immich_runtime_root }}/model-cache:/cache
+      - {{ atlas_immich_runtime_root }}/ml-cache:/.cache
+      - {{ atlas_immich_runtime_root }}/ml-config:/.config
+    networks:
+      - default
+
+  redis:
+    image: {{ atlas_immich_valkey_image }}
+    restart: "no"
+    volumes:
+      - {{ atlas_immich_runtime_root }}/valkey:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping || exit 1"]
+      interval: 30s
+      timeout: 3s
+      retries: 5
+    networks:
+      default:
+        aliases:
+          - immich-valkey
+
+  database:
+    image: {{ atlas_immich_postgres_image }}
+    restart: "no"
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: ${DB_DATABASE_NAME}
+      POSTGRES_INITDB_ARGS: --data-checksums
+      DB_STORAGE_TYPE: ${DB_STORAGE_TYPE}
+    volumes:
+      - ${DB_DATA_LOCATION}:/var/lib/postgresql/data
+    shm_size: 128mb
+    networks:
+      - default
+
+networks:
+  default:
+    name: immich
+  homeserver:
+    name: {{ atlas_immich_external_network }}
+    external: true

@@ -1,0 +1,113 @@
+---
+- name: Converge trusted DNS and DHCP options
+  community.openwrt.uci:
+    command: set
+    key: "{{ item.key }}"
+    value: "{{ item.value }}"
+    autocommit: true
+  loop:
+    - key: dhcp.@dnsmasq[0].domain
+      value: "{{ openwrt_contract.networks.trusted.domain }}"
+    - key: dhcp.@dnsmasq[0].local
+      value: "/{{ openwrt_contract.networks.trusted.domain }}/"
+    - key: dhcp.@dnsmasq[0].authoritative
+      value: "1"
+    - key: dhcp.@dnsmasq[0].rebind_protection
+      value: "1"
+    - key: dhcp.@dnsmasq[0].server
+      value: "{{ openwrt_contract.dns.upstreams }}"
+    - key: dhcp.@dnsmasq[0].strictorder
+      value: "{{ '1' if openwrt_contract.dns.strict_order else '0' }}"
+    - key: dhcp.@dnsmasq[0].noresolv
+      value: "{{ '1' if openwrt_contract.dns.ignore_wan_resolvers else '0' }}"
+    - key: dhcp.lan.start
+      value: "{{ openwrt_trusted_dhcp_start }}"
+    - key: dhcp.lan.limit
+      value: "{{ openwrt_trusted_dhcp_limit }}"
+    - key: dhcp.lan.leasetime
+      value: "{{ openwrt_contract.networks.trusted.lease_time }}"
+  loop_control:
+    label: "{{ item.key }}"
+  notify: Restart OpenWrt DNS
+
+- name: Converge exact DNS rebind exceptions
+  community.openwrt.uci:
+    command: set
+    key: dhcp.@dnsmasq[0].rebind_domain
+    value: "{{ openwrt_contract.security.dns_rebind_allow_domains }}"
+    autocommit: true
+  notify: Restart OpenWrt DNS
+
+- name: Converge static reservations
+  community.openwrt.uci:
+    command: section
+    config: dhcp
+    type: host
+    name: "hs_base_host_{{ item.id }}"
+    set_find: false
+    replace: true
+    keep_keys: []
+    value:
+      name: "{{ item.hostname }}"
+      mac: "{{ item.mac }}"
+      ip: "{{ item.address }}"
+      dns: "1"
+    autocommit: true
+  loop: "{{ openwrt_contract.reservations }}"
+  loop_control:
+    label: "{{ item.id }}"
+  notify: Restart OpenWrt DNS
+
+- name: Enumerate DHCP sections for bounded pruning
+  community.openwrt.command:
+    cmd: uci -q show dhcp
+  register: openwrt_dhcp_show
+  check_mode: false
+  changed_when: false
+
+- name: Derive stale managed reservations
+  ansible.builtin.set_fact:
+    openwrt_stale_reservations: >-
+      {{
+        openwrt_dhcp_show.stdout
+        | regex_findall('(?m)^dhcp\\.(hs_base_host_[A-Za-z0-9_]+)=host$')
+        | difference(
+            openwrt_contract.reservations
+            | map(attribute='id')
+            | map('regex_replace', '^(.*)$', 'hs_base_host_\\1')
+            | list
+          )
+      }}
+
+- name: Prune stale managed reservations
+  community.openwrt.uci:
+    command: absent
+    key: "dhcp.{{ item }}"
+    autocommit: true
+  loop: "{{ openwrt_stale_reservations }}"
+  notify: Restart OpenWrt DNS
+
+- name: Render Pi-hole DNS failover watchdog
+  community.openwrt.template:
+    src: pihole-dns-failover.j2
+    dest: /usr/libexec/pihole-dns-failover
+    owner: root
+    group: root
+    mode: "0755"
+  notify: Restart Pi-hole DNS failover
+
+- name: Render Pi-hole DNS failover service
+  community.openwrt.template:
+    src: pihole-dns-failover.init.j2
+    dest: /etc/init.d/pihole-dns-failover
+    owner: root
+    group: root
+    mode: "0755"
+  notify: Restart Pi-hole DNS failover
+
+- name: Enable Pi-hole DNS failover watchdog
+  community.openwrt.service:
+    name: pihole-dns-failover
+    enabled: true
+    state: started
+  when: not ansible_check_mode

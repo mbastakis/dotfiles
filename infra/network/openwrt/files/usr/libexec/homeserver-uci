@@ -1,0 +1,503 @@
+#!/usr/bin/ucode
+'use strict';
+
+import { connect } from 'ubus';
+import * as fs from 'fs';
+
+const MAX_REQUEST = 65536;
+const UBUS_STATUS_NOT_FOUND = 4;
+const LOCK_PATH = '/var/run/homeserver-uci.lock';
+const CONFIG = /^[A-Za-z0-9_][A-Za-z0-9_-]{0,63}$/;
+const NAME = /^[A-Za-z0-9_][A-Za-z0-9_-]{0,63}$/;
+const SECTION = /^([A-Za-z0-9_][A-Za-z0-9_-]{0,63}|@[A-Za-z0-9_][A-Za-z0-9_-]{0,63}\[-?[0-9]+\])$/;
+const SID = /^[A-Za-z0-9_-]{1,128}$/;
+const CONTROLLER = /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$/;
+const STAGES = [ 'bootstrap-sanitize', 'base', 'wan', 'main-wifi', 'guest', 'ipv6', 'sqm' ];
+const CONFIGS = [ 'system', 'network', 'dhcp', 'firewall', 'wireless', 'dropbear', 'uhttpd', 'sqm' ];
+const CALLS = {
+    session: [ 'create', 'grant', 'destroy' ],
+    uci: [ 'add', 'set', 'delete', 'rename', 'order', 'changes', 'apply', 'confirm', 'rollback' ],
+    homeserver: [ 'snapshot', 'compare', 'root-password-status', 'lock-acquire', 'lock-release', 'lock-status', 'lock-clear-stale' ],
+};
+
+// Snapshot values are default-deny. These are the only value-bearing paths
+// allowed to cross the helper boundary.
+const READABLE = [
+    /^system\.[]A-Za-z0-9_@[-]+\.(hostname|timezone|zonename)$/,
+    /^network\.[]A-Za-z0-9_@[-]+\.(name|device|proto|ipaddr|netmask|vid|ifname|type|reqaddress|reqprefix|ip6assign|ip6hint|peerdns|ipv6|ula_prefix)$/,
+    /^dhcp\.[]A-Za-z0-9_@[-]+\.(interface|start|limit|leasetime|domain|local|authoritative|rebind_protection|ra|dhcpv6|ndp|name|mac|ip)$/,
+    /^firewall\.[]A-Za-z0-9_@[-]+\.(name|src|dest|proto|family|target|input|output|forward|masq|mtu_fix|network|synflood_protect|flow_offloading|flow_offloading_hw|src_port|dest_port|icmp_type|limit)$/,
+    /^wireless\.[]A-Za-z0-9_@[-]+\.(type|band|channel|htmode|country|disabled|mode|network|encryption|isolate|bridge_isolate|device|wps_pushbutton|ieee80211r)$/,
+    /^dropbear\.[]A-Za-z0-9_@[-]+\.(Interface|PasswordAuth|RootPasswordAuth|Port)$/,
+    /^uhttpd\.[]A-Za-z0-9_@[-]+\.(listen_http|listen_https|redirect_https)$/,
+    /^sqm\.[]A-Za-z0-9_@[-]+\.(enabled|interface|download|upload|qdisc|script|qdisc_advanced|linklayer|overhead|linklayer_advanced|tcMPU|linklayer_adaptation_mechanism|use_mq|debug_logging|verbosity)$/,
+];
+const SENSITIVE = [
+    /^network\.[]A-Za-z0-9_@[-]+\.(username|password)$/,
+    /^wireless\.[]A-Za-z0-9_@[-]+\.(ssid|key)$/,
+];
+
+function fail(code) {
+    printf('%J\n', { ok: false, error: code });
+    exit(1);
+}
+
+function matches(value, pattern) {
+    return type(value) == 'string' && length(value) > 0 && match(value, pattern);
+}
+
+function valid_config(value) {
+    return matches(value, CONFIG) && index(CONFIGS, value) >= 0;
+}
+
+function valid_name(value) {
+    return matches(value, NAME);
+}
+
+function valid_section(value) {
+    return matches(value, SECTION);
+}
+
+function valid_sid(value) {
+    return matches(value, SID);
+}
+
+function exact_keys(value, allowed, required, code) {
+    if (type(value) != 'object') fail(code);
+    for (let key in value)
+        if (index(allowed, key) < 0) fail(code);
+    for (let key in required)
+        if (value[key] == null) fail(code);
+}
+
+function valid_uci_value(value, allow_null) {
+    if (value == null) return allow_null;
+    if (type(value) == 'string') return true;
+    if (type(value) != 'array') return false;
+    for (let item in value)
+        if (type(item) != 'string') return false;
+    return true;
+}
+
+function equal_uci_value(actual, wanted) {
+    if (type(actual) != type(wanted)) return false;
+    if (type(wanted) == 'string') return actual == wanted;
+    if (type(wanted) != 'array' || length(actual) != length(wanted)) return false;
+    for (let index = 0; index < length(wanted); index++)
+        if (actual[index] != wanted[index]) return false;
+    return true;
+}
+
+function validate_values(values) {
+    if (type(values) != 'object') fail(24);
+    for (let option, value in values)
+        if (!valid_name(option) || !valid_uci_value(value, false)) fail(24);
+}
+
+function validate_path(path) {
+    if (type(path) != 'string') return null;
+    let parts = split(path, '.');
+    if (length(parts) != 3 || !valid_config(parts[0]) ||
+        !valid_section(parts[1]) || !valid_name(parts[2])) return null;
+    return parts;
+}
+
+function valid_expected_value(path, value) {
+    let parts = validate_path(path);
+    if (!parts) return false;
+    if (parts[2] == '_anonymous') return type(value) == 'bool';
+    if (parts[2] == '_index') return type(value) == 'int' && value >= 0;
+    if (parts[2] == '_name' || parts[2] == '_type') return valid_name(value);
+    if (parts[2] == '_section_absent') return value == null;
+    return valid_uci_value(value, true);
+}
+
+function validate_arguments(object, method, args) {
+    if (object == 'session' && method == 'create') {
+        exact_keys(args, [ 'timeout' ], [ 'timeout' ], 12);
+        if (type(args.timeout) != 'int' || args.timeout < 1 || args.timeout > 3600) fail(13);
+    }
+    else if (object == 'session' && method == 'grant') {
+        exact_keys(args, [ 'ubus_rpc_session', 'scope', 'objects' ],
+            [ 'ubus_rpc_session', 'scope', 'objects' ], 12);
+        if (!valid_sid(args.ubus_rpc_session) || args.scope != 'uci' ||
+            type(args.objects) != 'array' || length(args.objects) == 0) fail(14);
+        let seen = {};
+        for (let config in args.objects) {
+            if (!valid_config(config) || seen[config]) fail(14);
+            seen[config] = true;
+        }
+    }
+    else if (object == 'session' && method == 'destroy') {
+        exact_keys(args, [ 'ubus_rpc_session' ], [ 'ubus_rpc_session' ], 12);
+        if (!valid_sid(args.ubus_rpc_session)) fail(15);
+    }
+    else if (object == 'uci' && method == 'add') {
+        exact_keys(args, [ 'ubus_rpc_session', 'config', 'type', 'name', 'values' ],
+            [ 'ubus_rpc_session', 'config', 'type' ], 12);
+        if (!valid_sid(args.ubus_rpc_session) || !valid_config(args.config) ||
+            !valid_name(args.type) || (args.name != null && !valid_name(args.name))) fail(16);
+        if (args.values != null) validate_values(args.values);
+    }
+    else if (object == 'uci' && method == 'set') {
+        exact_keys(args, [ 'ubus_rpc_session', 'config', 'section', 'values' ],
+            [ 'ubus_rpc_session', 'config', 'section', 'values' ], 12);
+        if (!valid_sid(args.ubus_rpc_session) || !valid_config(args.config) ||
+            !valid_section(args.section)) fail(17);
+        validate_values(args.values);
+    }
+    else if (object == 'uci' && method == 'delete') {
+        exact_keys(args, [ 'ubus_rpc_session', 'config', 'section', 'option' ],
+            [ 'ubus_rpc_session', 'config', 'section' ], 12);
+        if (!valid_sid(args.ubus_rpc_session) || !valid_config(args.config) ||
+            !valid_section(args.section) || (args.option != null && !valid_name(args.option))) fail(18);
+    }
+    else if (object == 'uci' && method == 'rename') {
+        exact_keys(args, [ 'ubus_rpc_session', 'config', 'section', 'name' ],
+            [ 'ubus_rpc_session', 'config', 'section', 'name' ], 12);
+        if (!valid_sid(args.ubus_rpc_session) || !valid_config(args.config) ||
+            !valid_section(args.section) || !valid_name(args.name)) fail(19);
+    }
+    else if (object == 'uci' && method == 'order') {
+        exact_keys(args, [ 'ubus_rpc_session', 'config', 'sections' ],
+            [ 'ubus_rpc_session', 'config', 'sections' ], 12);
+        if (!valid_sid(args.ubus_rpc_session) || !valid_config(args.config) ||
+            type(args.sections) != 'array' || length(args.sections) == 0) fail(20);
+        let seen = {};
+        for (let section in args.sections) {
+            if (!valid_section(section) || seen[section]) fail(20);
+            seen[section] = true;
+        }
+    }
+    else if (object == 'uci' && method == 'changes') {
+        exact_keys(args, [ 'ubus_rpc_session', 'config' ], [ 'ubus_rpc_session' ], 12);
+        if (!valid_sid(args.ubus_rpc_session) ||
+            (args.config != null && !valid_config(args.config))) fail(21);
+    }
+    else if (object == 'uci' && method == 'apply') {
+        exact_keys(args, [ 'ubus_rpc_session', 'rollback', 'timeout' ],
+            [ 'ubus_rpc_session', 'rollback', 'timeout' ], 12);
+        if (!valid_sid(args.ubus_rpc_session) || type(args.rollback) != 'bool' ||
+            !args.rollback ||
+            type(args.timeout) != 'int' || args.timeout < 30 || args.timeout > 900) fail(22);
+    }
+    else if (object == 'uci' && (method == 'confirm' || method == 'rollback')) {
+        exact_keys(args, [ 'ubus_rpc_session' ], [ 'ubus_rpc_session' ], 12);
+        if (!valid_sid(args.ubus_rpc_session)) fail(23);
+    }
+    else if (object == 'homeserver' && method == 'snapshot') {
+        exact_keys(args, [ 'ubus_rpc_session', 'configs' ],
+            [ 'configs' ], 12);
+        if ((args.ubus_rpc_session != null && !valid_sid(args.ubus_rpc_session)) ||
+            type(args.configs) != 'array' ||
+            length(args.configs) == 0) fail(25);
+        let seen = {};
+        for (let config in args.configs) {
+            if (!valid_config(config) || seen[config]) fail(25);
+            seen[config] = true;
+        }
+    }
+    else if (object == 'homeserver' && method == 'compare') {
+        exact_keys(args, [ 'ubus_rpc_session', 'expected' ],
+            [ 'expected' ], 12);
+        if ((args.ubus_rpc_session != null && !valid_sid(args.ubus_rpc_session)) ||
+            type(args.expected) != 'object') fail(26);
+        for (let path, wanted in args.expected)
+            if (!valid_expected_value(path, wanted)) fail(26);
+    }
+    else if (object == 'homeserver' && method == 'lock-acquire') {
+        exact_keys(args, [ 'controller', 'pid', 'stage' ],
+            [ 'controller', 'pid', 'stage' ], 12);
+        if (!matches(args.controller, CONTROLLER) || type(args.pid) != 'int' ||
+            args.pid < 1 || args.pid > 2147483647 || index(STAGES, args.stage) < 0) fail(27);
+    }
+    else if (object == 'homeserver' && method == 'lock-release') {
+        exact_keys(args, [ 'controller', 'sid' ], [ 'controller', 'sid' ], 12);
+        if (!matches(args.controller, CONTROLLER) ||
+            !(args.sid == 'none' || valid_sid(args.sid))) fail(28);
+    }
+    else if (object == 'homeserver' &&
+        (method == 'lock-status' || method == 'lock-clear-stale' ||
+         method == 'root-password-status')) {
+        exact_keys(args, [], [], 12);
+    }
+    else fail(29);
+}
+
+function safe_path(path) {
+    for (let pattern in READABLE)
+        if (match(path, pattern)) return true;
+    return false;
+}
+
+function sensitive_path(path) {
+    for (let pattern in SENSITIVE)
+        if (match(path, pattern)) return true;
+    return false;
+}
+
+function filtered_snapshot(raw) {
+    let result = {};
+    for (let config, sections in raw) {
+        if (!valid_config(config) || type(sections) != 'object') fail(30);
+        for (let section, values in sections) {
+            if (!valid_section(section) || type(values) != 'object') fail(30);
+            for (let option, value in values) {
+                // Structural metadata is required to normalize anonymous sections.
+                // Give it an unambiguous safe path instead of returning a four-part
+                // path containing the rpcd leading dot.
+                if (index([ '.anonymous', '.type', '.name', '.index' ], option) >= 0) {
+                    let metadata = '_' + substr(option, 1);
+                    let metadata_path = config + '.' + section + '.' + metadata;
+                    if (type(value) == 'string' || type(value) == 'int' ||
+                        type(value) == 'bool') result[metadata_path] = value;
+                    else fail(30);
+                    continue;
+                }
+                if (!valid_name(option)) fail(30);
+                let path = config + '.' + section + '.' + option;
+                if (sensitive_path(path)) result[path] = { present: true };
+                else if (safe_path(path) && valid_uci_value(value, false)) result[path] = value;
+                else result[path] = { present: true, withheld: true };
+            }
+        }
+    }
+    return result;
+}
+
+function read_lock() {
+    let content = fs.readfile(LOCK_PATH);
+    if (content == null) return null;
+    let lock = json(content);
+    if (type(lock) != 'object' || !matches(lock.controller, CONTROLLER) ||
+        type(lock.pid) != 'int' || index(STAGES, lock.stage) < 0 ||
+        type(lock.started) != 'int' ||
+        (lock.sid != null && !valid_sid(lock.sid))) fail(31);
+    return lock;
+}
+
+function write_lock(lock, exclusive) {
+    let handle = fs.open(LOCK_PATH, exclusive ? 'wx' : 'w', 384);
+    if (!handle) return false;
+    handle.write(sprintf('%J', lock));
+    handle.close();
+    return true;
+}
+
+function bind_lock_sid(sid) {
+    let lock = read_lock();
+    // Read-only callers may create a session without taking the apply lock.
+    if (lock == null) return;
+    if (lock.sid != null) fail(32);
+    lock.sid = sid;
+    if (!write_lock(lock, false)) fail(32);
+}
+
+function checked_ubus_call(ubus, object, method, args, allow_not_found) {
+    let response = ubus.call(object, method, args);
+    let error = ubus.error(true);
+    if (error != null && !(allow_not_found && error == UBUS_STATUS_NOT_FOUND)) fail(11);
+    return response;
+}
+
+function changed_paths(response) {
+    let paths = [];
+    let seen = {};
+    let changes_by_config = response.changes || {};
+    if (type(changes_by_config) != 'object') fail(33);
+    for (let config, changes in changes_by_config) {
+        if (!valid_config(config) || type(changes) != 'array') fail(33);
+        for (let change in changes) {
+            if (type(change) != 'array' || length(change) < 2 ||
+                type(change[0]) != 'string' || !valid_section(change[1])) fail(33);
+            let path = config + '.' + change[1];
+            if (index([ 'set', 'list-add', 'list-del' ], change[0]) >= 0) {
+                if (length(change) < 3 || !valid_name(change[2])) fail(33);
+                path += '.' + change[2];
+            }
+            else if (change[0] == 'remove' && length(change) > 2) {
+                if (!valid_name(change[2])) fail(33);
+                path += '.' + change[2];
+            }
+            else if (index([ 'add', 'remove', 'rename', 'order', 'reorder' ], change[0]) < 0)
+                fail(33);
+            if (!seen[path]) {
+                push(paths, path);
+                seen[path] = true;
+            }
+        }
+    }
+    return paths;
+}
+
+function main() {
+    let stream = fs.open('/dev/stdin', 'r');
+    if (!stream) fail(1);
+    let input = stream.read(MAX_REQUEST + 1);
+    if (type(input) != 'string' || length(input) == 0 || length(input) > MAX_REQUEST) fail(1);
+
+    let request = json(input);
+    exact_keys(request, [ 'object', 'method', 'arguments' ],
+        [ 'object', 'method', 'arguments' ], 2);
+    let object = request.object;
+    let method = request.method;
+    if (type(object) != 'string' || type(method) != 'string' ||
+        !CALLS[object] || index(CALLS[object], method) < 0) fail(3);
+    validate_arguments(object, method, request.arguments);
+    let args = request.arguments;
+
+    if (object == 'homeserver' && method == 'lock-status') {
+        printf('%J\n', { ok: true, present: read_lock() != null });
+        return;
+    }
+    if (object == 'homeserver' && method == 'root-password-status') {
+        let shadow = fs.readfile('/etc/shadow');
+        if (type(shadow) != 'string') fail(38);
+        let password_set = false;
+        for (let line in split(shadow, '\n')) {
+            let fields = split(line, ':');
+            if (fields[0] == 'root' && type(fields[1]) == 'string') {
+                password_set = length(fields[1]) > 0 &&
+                    substr(fields[1], 0, 1) != '!' && substr(fields[1], 0, 1) != '*';
+            }
+        }
+        printf('%J\n', { ok: true, password_set: password_set });
+        return;
+    }
+    if (object == 'homeserver' && method == 'lock-clear-stale') {
+        let lock = read_lock();
+        if (lock == null || time() - lock.started < 3660) {
+            printf('%J\n', { ok: true, cleared: false });
+            return;
+        }
+        // Every helper-created session is capped at 3600 seconds. Beyond this
+        // age, neither its rpcd session nor rollback snapshot can still exist.
+        if (!fs.unlink(LOCK_PATH)) fail(35);
+        printf('%J\n', { ok: true, cleared: true });
+        return;
+    }
+    if (object == 'homeserver' && method == 'lock-acquire') {
+        // Existing or malformed locks are never removed automatically. There is
+        // no libubus API that proves both controller liveness and rpcd apply state.
+        let acquired = write_lock({
+            controller: args.controller,
+            pid: args.pid,
+            sid: null,
+            stage: args.stage,
+            started: time(),
+        }, true);
+        printf('%J\n', { ok: true, acquired: acquired });
+        return;
+    }
+    if (object == 'homeserver' && method == 'lock-release') {
+        let lock = read_lock();
+        if (lock == null) {
+            printf('%J\n', { ok: true, released: false });
+            return;
+        }
+        if (lock.controller != args.controller ||
+            (lock.sid == null ? args.sid != 'none' : lock.sid != args.sid)) fail(34);
+        if (!fs.unlink(LOCK_PATH)) fail(35);
+        printf('%J\n', { ok: true, released: true });
+        return;
+    }
+
+    let ubus = connect();
+    if (!ubus) fail(5);
+
+    if (object == 'homeserver' && method == 'snapshot') {
+        let snapshot = {};
+        for (let config in args.configs) {
+            let request = { config: config };
+            if (args.ubus_rpc_session != null)
+                request.ubus_rpc_session = args.ubus_rpc_session;
+            let response = checked_ubus_call(ubus, 'uci', 'get', request);
+            if (type(response) != 'object' || type(response.values) != 'object') fail(36);
+            snapshot[config] = response.values;
+        }
+        printf('%J\n', { ok: true, values: filtered_snapshot(snapshot) });
+        return;
+    }
+    if (object == 'homeserver' && method == 'compare') {
+        let fields = {};
+        let mismatches = [];
+        for (let path, wanted in args.expected) {
+            let parts = validate_path(path);
+            let metadata = null;
+            if (parts[2] == '_anonymous') metadata = '.anonymous';
+            else if (parts[2] == '_index') metadata = '.index';
+            else if (parts[2] == '_name') metadata = '.name';
+            else if (parts[2] == '_type') metadata = '.type';
+            let query = {
+                config: parts[0],
+                section: parts[1],
+            };
+            if (args.ubus_rpc_session != null)
+                query.ubus_rpc_session = args.ubus_rpc_session;
+            if (metadata == null) {
+                if (parts[2] != '_section_absent') query.option = parts[2];
+                else if (wanted != null) fail(26);
+            }
+            let response = checked_ubus_call(ubus, 'uci', 'get', query, true);
+            let actual = null;
+            if (type(response) == 'object') {
+                if (metadata == null) actual = response.value;
+                else if (type(response.values) == 'object') actual = response.values[metadata];
+            }
+            let present = parts[2] == '_section_absent'
+                ? type(response) == 'object' && type(response.values) == 'object'
+                : actual != null;
+            let equal = wanted == null ? !present : present &&
+                (metadata == null ? equal_uci_value(actual, wanted) : actual == wanted);
+            fields[path] = { present: present, match: equal };
+            if (!equal) push(mismatches, path);
+        }
+        printf('%J\n', {
+            ok: true,
+            match: length(mismatches) == 0,
+            fields: fields,
+            mismatches: mismatches,
+        });
+        return;
+    }
+
+    // rpcd expects [scope, object] tuples. The external envelope accepts only
+    // allowlisted UCI package names and cannot grant wildcard access.
+    if (object == 'session' && method == 'grant') {
+        let grants = [];
+        for (let config in args.objects) {
+            push(grants, [ config, 'read' ]);
+            push(grants, [ config, 'write' ]);
+        }
+        args.objects = grants;
+    }
+    let response = checked_ubus_call(ubus, object, method, args);
+
+    // Mutation responses expose only the generated section identifier needed
+    // to restore anonymous sections; values remain inside rpcd.
+    let output = { ok: true };
+    if (object == 'session' && method == 'create') {
+        if (type(response) != 'object') fail(11);
+        if (!valid_sid(response.ubus_rpc_session)) fail(37);
+        bind_lock_sid(response.ubus_rpc_session);
+        output.sid = response.ubus_rpc_session;
+    }
+    else if (object == 'uci' && method == 'add') {
+        if (type(response) != 'object' || !valid_section(response.section)) fail(11);
+        output.section = response.section;
+    }
+    else if (object == 'uci' && method == 'changes') {
+        if (type(response) != 'object') fail(11);
+        output.paths = changed_paths(response);
+    }
+    printf('%J\n', output);
+}
+
+try {
+    main();
+}
+catch (error) {
+    // Never serialize exception text: parser and libubus errors may contain
+    // attacker-controlled or secret-bearing request/response fragments.
+    fail(99);
+}

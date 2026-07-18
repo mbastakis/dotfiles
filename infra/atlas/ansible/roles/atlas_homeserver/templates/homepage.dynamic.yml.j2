@@ -1,0 +1,16 @@
+http:
+  routers:
+    homepage:
+      rule: Host(`{{ atlas_homeserver_home_host }}`)
+      entryPoints:
+        - websecure
+      service: homepage
+      tls:
+        certResolver: route53
+
+  services:
+    homepage:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "http://homepage:3000"

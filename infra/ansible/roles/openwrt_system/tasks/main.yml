@@ -1,0 +1,16 @@
+---
+- name: Converge routine system options
+  community.openwrt.uci:
+    command: set
+    key: "system.@system[0].{{ item.key }}"
+    value: "{{ item.value }}"
+    autocommit: true
+  loop:
+    - key: hostname
+      value: "{{ openwrt_contract.system.hostname }}"
+    - key: timezone
+      value: "{{ openwrt_contract.system.timezone }}"
+    - key: zonename
+      value: "{{ openwrt_contract.system.zonename }}"
+  loop_control:
+    label: "system.{{ item.key }}"

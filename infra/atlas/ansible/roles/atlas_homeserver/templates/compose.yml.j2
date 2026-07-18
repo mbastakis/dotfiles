@@ -1,0 +1,206 @@
+---
+name: homeserver
+
+networks:
+  homeserver:
+    name: homeserver
+
+services:
+  traefik:
+    image: {{ atlas_homeserver_traefik_image }}
+    restart: unless-stopped
+    env_file:
+      - {{ atlas_homeserver_root }}/env/traefik.env
+    command:
+      - --api.dashboard=true
+      - --api.insecure=true
+      - --log.level=INFO
+      - --providers.file.directory=/etc/traefik/dynamic
+      - --providers.file.watch=true
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.websecure.transport.respondingtimeouts.readtimeout={{ atlas_homeserver_websecure_read_timeout }}
+      - --entrypoints.websecure.transport.respondingtimeouts.idletimeout={{ atlas_homeserver_websecure_idle_timeout }}
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --certificatesresolvers.route53.acme.email={{ atlas_homeserver_acme_email }}
+      - --certificatesresolvers.route53.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.route53.acme.dnschallenge.provider=route53
+      - --certificatesresolvers.route53.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53
+      - --certificatesresolvers.route53.acme.dnschallenge.propagation.disableanschecks=true
+      - --certificatesresolvers.route53.acme.dnschallenge.delaybeforecheck=0
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - {{ atlas_homeserver_root }}/traefik/acme:/letsencrypt
+      - {{ atlas_homeserver_root }}/traefik/dynamic:/etc/traefik/dynamic:ro
+    networks:
+      - homeserver
+
+  homepage:
+    image: {{ atlas_homeserver_homepage_image }}
+    restart: unless-stopped
+    env_file:
+      - {{ atlas_homeserver_root }}/env/homepage.env
+    environment:
+      HOMEPAGE_ALLOWED_HOSTS: {{ atlas_homeserver_home_host }}
+      LOG_TARGETS: stdout
+      NODE_TLS_REJECT_UNAUTHORIZED: "0"
+      PUID: "1000"
+      PGID: "1000"
+    volumes:
+      - {{ atlas_homeserver_root }}/homepage/config:/app/config:ro
+      - {{ atlas_homeserver_root }}/homepage/images:/app/public/images:ro
+    networks:
+      - homeserver
+
+  glances:
+    image: {{ atlas_homeserver_glances_image }}
+    restart: unless-stopped
+    pid: host
+    environment:
+      GLANCES_OPT: "-w"
+      TZ: {{ atlas_homeserver_timezone }}
+    volumes:
+      - /dev:/dev:ro
+      - /etc/os-release:/etc/os-release:ro
+      - /sys:/sys:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - homeserver
+
+  postgres:
+    image: {{ atlas_homeserver_postgres_image }}
+    restart: unless-stopped
+    env_file:
+      - {{ atlas_homeserver_root }}/env/authentik.env
+    volumes:
+      - {{ atlas_homeserver_root }}/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d authentik -U authentik"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 5s
+    networks:
+      - homeserver
+
+  redis:
+    image: {{ atlas_homeserver_redis_image }}
+    restart: unless-stopped
+    command: redis-server --save 60 1 --loglevel warning
+    volumes:
+      - {{ atlas_homeserver_root }}/redis:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 3s
+    networks:
+      - homeserver
+
+  taskchampion-sync:
+    image: {{ atlas_homeserver_taskchampion_image }}
+    restart: unless-stopped
+    environment:
+      LISTEN: "0.0.0.0:8080"
+      DATA_DIR: "/var/lib/taskchampion-sync-server/data"
+      CREATE_CLIENTS: "{{ atlas_homeserver_taskchampion_create_clients }}"
+{% if atlas_homeserver_taskchampion_client_ids | default('', true) | length > 0 %}
+      CLIENT_ID: "{{ atlas_homeserver_taskchampion_client_ids }}"
+{% endif %}
+      RUST_LOG: "info"
+    volumes:
+      - {{ atlas_homeserver_root }}/taskchampion-sync/data:/var/lib/taskchampion-sync-server/data
+    networks:
+      - homeserver
+
+  pihole:
+    image: {{ atlas_homeserver_pihole_image }}
+    restart: unless-stopped
+    environment:
+      TZ: {{ atlas_homeserver_timezone }}
+      FTLCONF_dns_upstreams: "1.1.1.1;1.0.0.1"
+      FTLCONF_dns_listeningMode: ALL
+      FTLCONF_dns_dnssec: "true"
+      FTLCONF_dns_rateLimit_count: "{{ atlas_homeserver_pihole_rate_limit_count }}"
+      FTLCONF_dns_rateLimit_interval: "60"
+      FTLCONF_database_maxDBdays: "{{ atlas_homeserver_pihole_history_days }}"
+      FTLCONF_webserver_api_password: ""
+      FTLCONF_webserver_port: "{{ atlas_homeserver_pihole_web_port }}"
+      FTLCONF_dhcp_active: "false"
+      FTLCONF_ntp_ipv4_active: "false"
+      FTLCONF_ntp_ipv6_active: "false"
+      FTLCONF_ntp_sync_active: "false"
+    ports:
+      - "{{ atlas_lan_ipv4 }}:53:53/tcp"
+      - "{{ atlas_lan_ipv4 }}:53:53/udp"
+    volumes:
+      - {{ atlas_homeserver_root }}/pihole/etc-pihole:/etc/pihole
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - NET_RAW
+    networks:
+      - homeserver
+
+  taskboard:
+    image: homeserver-taskboard:local
+    build:
+      context: {{ atlas_homeserver_root }}/taskboard/app
+      args:
+        TASK_VERSION: "{{ atlas_homeserver_taskboard_task_version }}"
+        TASK_SHA256: "{{ atlas_homeserver_taskboard_task_sha256 }}"
+    restart: unless-stopped
+    env_file:
+      - {{ atlas_homeserver_root }}/env/taskboard.env
+    volumes:
+      - {{ atlas_homeserver_root }}/taskboard/config:/config
+      - {{ atlas_homeserver_root }}/taskboard/data:/data
+    depends_on:
+      - taskchampion-sync
+    networks:
+      - homeserver
+
+  authentik-server:
+    image: {{ atlas_homeserver_authentik_image }}
+    restart: unless-stopped
+    command: server
+    env_file:
+      - {{ atlas_homeserver_root }}/env/authentik.env
+    environment:
+      TZ: {{ atlas_homeserver_timezone }}
+      AUTHENTIK_LISTEN__HTTP: 0.0.0.0:9000
+    volumes:
+      - {{ atlas_homeserver_root }}/authentik/media:/media
+      - {{ atlas_homeserver_root }}/authentik/custom-templates:/templates
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - homeserver
+
+  authentik-worker:
+    image: {{ atlas_homeserver_authentik_image }}
+    restart: unless-stopped
+    command: worker
+    env_file:
+      - {{ atlas_homeserver_root }}/env/authentik.env
+    environment:
+      TZ: {{ atlas_homeserver_timezone }}
+    user: root
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - {{ atlas_homeserver_root }}/authentik/media:/media
+      - {{ atlas_homeserver_root }}/authentik/custom-templates:/templates
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - homeserver

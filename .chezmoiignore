@@ -13,6 +13,8 @@ docs/
 ai-docs/
 specs/
 infra/
+.local/openwrt/
+.task/
 
 # Repo-local tooling (go-task via mise, used inside this repo only)
 mise.toml

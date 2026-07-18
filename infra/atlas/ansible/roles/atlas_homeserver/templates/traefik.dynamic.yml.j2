@@ -1,0 +1,39 @@
+http:
+  routers:
+    traefik-dashboard:
+      rule: Host(`{{ atlas_homeserver_traefik_host }}`)
+      entryPoints:
+        - websecure
+      middlewares:
+        - authentik-forward-auth
+      service: api@internal
+      tls:
+        certResolver: route53
+
+    traefik-authentik-outpost:
+      rule: Host(`{{ atlas_homeserver_traefik_host }}`) && PathPrefix(`/outpost.goauthentik.io/`)
+      entryPoints:
+        - websecure
+      priority: 100
+      service: authentik@file
+      tls:
+        certResolver: route53
+
+  middlewares:
+    authentik-forward-auth:
+      forwardAuth:
+        address: http://authentik-server:9000/outpost.goauthentik.io/auth/traefik
+        trustForwardHeader: true
+        authResponseHeaders:
+          - X-authentik-username
+          - X-authentik-groups
+          - X-authentik-entitlements
+          - X-authentik-email
+          - X-authentik-name
+          - X-authentik-uid
+          - X-authentik-jwt
+          - X-authentik-meta-jwks
+          - X-authentik-meta-outpost
+          - X-authentik-meta-provider
+          - X-authentik-meta-app
+          - X-authentik-meta-version

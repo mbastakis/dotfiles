@@ -60,7 +60,7 @@
     {
       "description": "Keep Python aligned with the homeserver project constraint",
       "matchManagers": ["mise"],
-      "matchPackageNames": ["python"],
+      "matchPackageNames": ["python/cpython"],
       "allowedVersions": "<3.14"
     }
   ],

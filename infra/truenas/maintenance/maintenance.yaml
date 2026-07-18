@@ -1,0 +1,50 @@
+# yaml-language-server: $schema=../../schemas/truenas-maintenance.schema.json
+# Disk-maintenance policy. Apply only while the pool is ONLINE; the reconciler
+# blocks apply while a pool is degraded so an incident cannot schedule more I/O.
+schema_version: 1
+ownership:
+  scope: truenas.disk_maintenance
+  mode: bounded
+
+pool: pool_4tb
+
+smartd:
+  enabled: true
+  running: true
+
+# TrueNAS checks weekly but starts a scrub only after the 35-day threshold.
+# Sunday 06:00 keeps it clear of the overnight backup window.
+scrub:
+  id: pool-4tb-scrub
+  threshold: 35
+  description: Code-managed five-week pool scrub
+  enabled: true
+  schedule:
+    minute: "00"
+    hour: "06"
+    dom: "*"
+    month: "*"
+    dow: "7"
+
+smart_tests:
+  - id: all-disks-short
+    type: SHORT
+    desc: Weekly all-disk short test
+    all_disks: true
+    disks: []
+    schedule:
+      hour: "06"
+      dom: "*"
+      month: "*"
+      dow: "2"
+
+  - id: all-disks-long
+    type: LONG
+    desc: Monthly all-disk extended test
+    all_disks: true
+    disks: []
+    schedule:
+      hour: "06"
+      dom: "1-7"
+      month: "*"
+      dow: "5"

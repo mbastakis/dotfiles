@@ -1,0 +1,170 @@
+{
+  "$defs": {
+    "NfsService": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "running": {
+          "title": "Running",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "enabled",
+        "running"
+      ],
+      "title": "NfsService",
+      "type": "object"
+    },
+    "NfsShare": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "hosts": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Hosts",
+          "type": "array"
+        },
+        "id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "mapall_group": {
+          "minLength": 1,
+          "title": "Mapall Group",
+          "type": "string"
+        },
+        "mapall_user": {
+          "minLength": 1,
+          "title": "Mapall User",
+          "type": "string"
+        },
+        "networks": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Networks",
+          "type": "array"
+        },
+        "path": {
+          "pattern": "^/[^\\x00]*$",
+          "title": "Path",
+          "type": "string"
+        },
+        "read_only": {
+          "title": "Read Only",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "path",
+        "read_only",
+        "enabled",
+        "mapall_user",
+        "mapall_group"
+      ],
+      "title": "NfsShare",
+      "type": "object"
+    },
+    "Ownership": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "const": "bounded",
+          "title": "Mode",
+          "type": "string"
+        },
+        "scope": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z][a-z0-9_-]*(?:\\.[a-z0-9][a-z0-9_-]*)+$",
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope",
+        "mode"
+      ],
+      "title": "Ownership",
+      "type": "object"
+    },
+    "RetiredNfsShare": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "path": {
+          "pattern": "^/[^\\x00]*$",
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "path"
+      ],
+      "title": "RetiredNfsShare",
+      "type": "object"
+    }
+  },
+  "$id": "urn:homeserver-iac:schema:truenas-nfs",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "ownership": {
+      "$ref": "#/$defs/Ownership"
+    },
+    "retire_shares": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/RetiredNfsShare"
+      },
+      "title": "Retire Shares",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "service": {
+      "$ref": "#/$defs/NfsService"
+    },
+    "shares": {
+      "items": {
+        "$ref": "#/$defs/NfsShare"
+      },
+      "minItems": 1,
+      "title": "Shares",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "ownership",
+    "service",
+    "shares"
+  ],
+  "title": "NfsDesiredState",
+  "type": "object"
+}

@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=../../schemas/truenas-snapshots.schema.json
+# Low-frequency local recovery points for the mostly static book library.
+schema_version: 1
+ownership:
+  scope: truenas.periodic_snapshots
+  mode: bounded
+
+dataset: "pool_4tb/homeserver/data/books"
+recursive: true
+
+tasks:
+  - id: "monthly"
+    name: "monthly"
+    lifetime_value: 12
+    lifetime_unit: "MONTH"
+    naming_schema: "auto-%Y-%m-%d_%H-%M_monthly"
+    schedule:
+      minute: "0"
+      hour: "4"
+      dom: "1"
+      month: "*"
+      dow: "*"

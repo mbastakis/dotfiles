@@ -13,6 +13,7 @@
   - [0004: TrueNAS API key via null_resource](adr/0004-truenas-api-key-via-null-resource.md)
   - [0005: Immich on atlas](adr/0005-run-immich-on-atlas-with-truenas-storage.md)
   - [0006: Domain-first homeserver IaC](adr/0006-domain-first-homeserver-iac.md)
+  - [0007: OpenWrt risk-tiered convergence](adr/0007-manage-openwrt-router-as-typed-desired-state.md)
 
 - **Components**
   - [Zsh](components/zsh.md)
@@ -31,11 +32,15 @@
   - [Restore from ZFS Snapshot](runbooks/restore-from-zfs-snapshot.md)
   - [OpenTofu State Migrations](runbooks/opentofu-state-migrations.md)
   - [Homeserver Secret Rotation](runbooks/homeserver-secret-rotation.md)
+  - [ntfy Notifications](runbooks/ntfy.md)
+  - [Pi-hole DNS Filtering](runbooks/pihole.md)
   - [Sisyphus](runbooks/taskboard.md)
   - [Break-Glass Access](runbooks/break-glass-access.md)
   - [Apple Photos to Immich](runbooks/apple-photos-immich-migration.md)
   - [Audiobookshelf](runbooks/audiobookshelf.md)
-  - [Router UPnP Disable](runbooks/router-upnp-disable.md)
+  - [Legacy Speedport UPnP](runbooks/router-upnp-disable.md)
+  - [OpenWrt Router Cutover](runbooks/openwrt-router-cutover.md)
+  - [OpenWrt Router Recovery](runbooks/openwrt-router-recovery.md)
 
 - **Workspaces**
   - [mrconfig](workspaces/mrconfig.md)

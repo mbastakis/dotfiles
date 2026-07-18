@@ -1,0 +1,152 @@
+---
+- Applications:
+    - FileBrowser Quantum:
+        icon: filebrowser.png
+        href: https://{{ atlas_homeserver_files_host }}
+        description: Shared household files
+        siteMonitor: {{ atlas_homeserver_truenas_filebrowser_url }}
+
+    - Immich:
+        icon: immich.png
+        href: https://{{ atlas_immich_host }}
+        description: Private photos and videos
+        siteMonitor: http://immich-server:2283/api/server/ping
+
+    - Audiobookshelf:
+        icon: audiobookshelf.png
+        href: https://{{ atlas_homeserver_audiobookshelf_host }}/audiobookshelf/
+        description: Audiobooks and ebooks
+        siteMonitor: {{ atlas_homeserver_truenas_audiobookshelf_url }}/healthcheck
+
+    - Sisyphus:
+        icon: /images/sisyphus.png
+        href: https://{{ atlas_homeserver_taskboard_host }}
+        description: Taskwarrior board
+        siteMonitor: http://taskboard:{{ atlas_homeserver_taskboard_port }}/healthz
+
+    - OpenCode:
+        icon: opencode.png
+        href: https://{{ atlas_homeserver_opencode_host }}
+        description: Remote AI coding sessions
+
+    - ntfy:
+        icon: ntfy.png
+        href: https://{{ atlas_homeserver_ntfy_host }}
+        description: Private push notifications
+        siteMonitor: http://ntfy:{{ atlas_homeserver_ntfy_port }}/v1/health
+
+- Data & Protection:
+    - TrueNAS:
+        icon: truenas.png
+        href: {{ atlas_homeserver_truenas_url }}
+        description: Storage pools and appliance health
+        widget:
+          type: truenas
+          url: {{ atlas_homeserver_truenas_widget_url }}
+          version: 2
+          key: "{{ '{{HOMEPAGE_VAR_TRUENAS_API_KEY}}' }}"
+          enablePools: true
+          nasType: scale
+
+    - Syncthing:
+        icon: syncthing.png
+        href: {{ atlas_homeserver_syncthing_url }}
+        description: Obsidian and device replication
+        siteMonitor: {{ atlas_homeserver_syncthing_widget_url }}/rest/noauth/health
+
+    - Backrest:
+        icon: mdi-backup-restore
+        href: https://{{ atlas_homeserver_backrest_host }}
+        description: Restic backup plans and history
+        widget:
+          type: backrest
+          url: {{ atlas_homeserver_backrest_widget_url }}
+          username: admin
+          password: "{{ '{{HOMEPAGE_VAR_BACKREST_PASSWORD}}' }}"
+          fields:
+            - num_success_latest
+            - num_failure_latest
+            - num_plans
+            - bytes_added_30
+
+- Platform Services:
+    - Atlas:
+        icon: mdi-server-network
+        description: Application host health
+        widget:
+          type: customapi
+          url: {{ atlas_homeserver_glances_widget_url }}/api/4/all
+          display: list
+          refreshInterval: 5000
+          mappings:
+            - field: cpu.total
+              label: CPU
+              format: percent
+            - field: mem.percent
+              label: RAM
+              format: percent
+              additionalField:
+                field: mem.used
+                format: bytes
+                suffix: used
+            - field: gpu.0.proc
+              label: GPU
+              format: percent
+
+    - Authentik:
+        icon: authentik.png
+        href: https://{{ atlas_homeserver_auth_host }}
+        description: Identity and access management
+        siteMonitor: http://authentik-server:9000/-/health/live/
+
+    - TaskChampion:
+        icon: mdi-checkbox-marked-circle-auto-outline
+        description: Encrypted Taskwarrior synchronization
+        siteMonitor: http://taskchampion-sync:8080
+
+- Network & Edge:
+    # BEGIN ANSIBLE MANAGED PIHOLE
+    - Pi-hole:
+        icon: pi-hole.png
+        href: https://{{ atlas_homeserver_pihole_host }}/admin/
+        description: Network-wide DNS filtering
+        siteMonitor: http://pihole:{{ atlas_homeserver_pihole_web_port }}/admin/
+        widget:
+          type: pihole
+          url: http://pihole:{{ atlas_homeserver_pihole_web_port }}
+          version: 6
+          fields: ["queries", "blocked", "blocked_percent", "gravity"]
+    # END ANSIBLE MANAGED PIHOLE
+    - Traefik:
+        icon: traefik.png
+        href: https://{{ atlas_homeserver_traefik_host }}/dashboard/
+        description: Private routing and TLS
+        widget:
+          type: traefik
+          url: http://traefik:8080
+
+    - Tailscale Atlas:
+        icon: si-tailscale
+        href: {{ atlas_homeserver_tailscale_admin_url }}
+        description: Application host tailnet node
+        widget:
+          type: tailscale
+          deviceid: {{ atlas_homeserver_tailscale_atlas_device_id }}
+          key: "{{ '{{HOMEPAGE_VAR_TAILSCALE_API_KEY}}' }}"
+          fields: ["address", "last_seen"]
+
+    - Tailscale TrueNAS:
+        icon: si-tailscale
+        href: {{ atlas_homeserver_tailscale_admin_url }}
+        description: Storage host tailnet node
+        widget:
+          type: tailscale
+          deviceid: {{ atlas_homeserver_tailscale_truenas_device_id }}
+          key: "{{ '{{HOMEPAGE_VAR_TAILSCALE_API_KEY}}' }}"
+          fields: ["address", "last_seen"]
+
+    - OpenWrt Router:
+        icon: mdi-router-wireless
+        href: https://192.168.1.1
+        description: Cudy WR3000E gateway administration
+        siteMonitor: https://192.168.1.1

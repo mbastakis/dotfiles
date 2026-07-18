@@ -1,0 +1,117 @@
+---
+- name: Enumerate wireless radios
+  community.openwrt.uci:
+    command: find_all
+    config: wireless
+    type: wifi-device
+  register: openwrt_radio_sections
+
+- name: Read wireless radio bands
+  community.openwrt.uci:
+    command: get
+    key: "wireless.{{ item }}.band"
+  loop: "{{ openwrt_radio_sections.result_list }}"
+  register: openwrt_radio_bands
+
+- name: Read stable wireless radio section names
+  community.openwrt.command:
+    cmd: "uci -q show wireless.{{ item }}"
+  loop: "{{ openwrt_radio_sections.result_list }}"
+  register: openwrt_radio_definitions
+  check_mode: false
+  changed_when: false
+
+- name: Build the live band-to-radio map
+  ansible.builtin.set_fact:
+    openwrt_radios_by_band: >-
+      {{
+        openwrt_radios_by_band | default({})
+        | combine(
+            {
+              openwrt_radio_bands.results[item].result:
+                openwrt_radio_definitions.results[item].stdout_lines[0]
+                .split('.')[1].split('=')[0]
+            }
+          )
+      }}
+  loop: "{{ range(0, openwrt_radio_bands.results | length) | list }}"
+  loop_control:
+    label: "{{ openwrt_radio_bands.results[item].result }}"
+
+- name: Require exactly the contracted radio bands
+  ansible.builtin.assert:
+    that:
+      - openwrt_radios_by_band.keys() | sort == ['2g', '5g']
+      - openwrt_contract.wireless.radios | map(attribute='band') | sort == ['2g', '5g']
+    fail_msg: Refusing to configure an ambiguous OpenWrt radio layout.
+
+- name: Converge each contracted radio
+  ansible.builtin.include_tasks: radio.yml
+  loop: "{{ openwrt_contract.wireless.radios }}"
+  loop_control:
+    loop_var: openwrt_radio
+    label: "{{ openwrt_radio.band }}"
+
+- name: Converge trusted Wi-Fi interfaces
+  community.openwrt.uci:
+    command: section
+    config: wireless
+    type: wifi-iface
+    name: "hs_main_wifi_{{ item.band }}"
+    set_find: false
+    replace: false
+    value:
+      device: "{{ openwrt_radios_by_band[item.band] }}"
+      mode: ap
+      network: lan
+      ssid: "{{ openwrt_routine_secrets.main_ssid }}"
+      encryption: "{{ openwrt_contract.wireless.main.encryption }}"
+      key: "{{ openwrt_routine_secrets.main_psk }}"
+      disabled: >-
+        {{ openwrt_contract.wireless.main.enabled | ternary('0', '1') }}
+      isolate: >-
+        {{ openwrt_contract.wireless.main.isolate_clients | ternary('1', '0') }}
+      bridge_isolate: >-
+        {{ openwrt_contract.wireless.main.isolate_bridge_ports | ternary('1', '0') }}
+      wps_pushbutton: >-
+        {{ openwrt_contract.wireless.wps | ternary('1', '0') }}
+      ieee80211r: >-
+        {{ openwrt_contract.wireless.fast_transition | ternary('1', '0') }}
+    autocommit: true
+  loop: "{{ openwrt_contract.wireless.radios }}"
+  loop_control:
+    label: "main {{ item.band }}"
+  no_log: true
+  diff: false
+  notify: Reload OpenWrt Wi-Fi
+
+- name: Enumerate wireless sections for bounded pruning
+  community.openwrt.command:
+    cmd: uci -q show wireless
+  register: openwrt_wireless_show
+  check_mode: false
+  changed_when: false
+  no_log: true
+
+- name: Derive stale managed Wi-Fi interfaces
+  ansible.builtin.set_fact:
+    openwrt_stale_wifi: >-
+      {{
+        openwrt_wireless_show.stdout
+        | regex_findall('(?m)^wireless\\.(hs_main_wifi_[A-Za-z0-9_]+)=wifi-iface$')
+        | difference(
+            openwrt_contract.wireless.radios
+            | map(attribute='band')
+            | map('regex_replace', '^(.*)$', 'hs_main_wifi_\\1')
+            | list
+          )
+      }}
+  no_log: true
+
+- name: Prune stale managed Wi-Fi interfaces
+  community.openwrt.uci:
+    command: absent
+    key: "wireless.{{ item }}"
+    autocommit: true
+  loop: "{{ openwrt_stale_wifi }}"
+  notify: Reload OpenWrt Wi-Fi
