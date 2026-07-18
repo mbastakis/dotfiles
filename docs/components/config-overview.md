@@ -72,7 +72,7 @@ entries do not contain versions, and versioned formula names such as
 TrueNAS catalog app versions, Taskwarrior release checksums, and Yazi plugin
 hashes also remain manual until they have tested metadata sources. The pinned
 `.github/workflows/validate.yml` workflow installs the mise toolchain, verifies
-npm lock files, and runs `infra:validate` for every pull request.
+the Taskboard browser npm lock file, and runs `infra:validate` for every pull request.
 
 Run the complete secret-free, live-service-free infrastructure gate from the
 repository root:
@@ -86,6 +86,8 @@ lock once with `mise exec -- task infra:python:sync`. Normal validation uses uv
 in locked offline mode. Use `infra:desired:validate` for all versioned YAML
 contracts, `infra:python:validate` for the Python quality gate, and
 `infra:schemas:generate` only when a Pydantic contract intentionally changes.
+The aggregate also runs Atlas and OpenWrt Ansible syntax checks, with each task
+owning installation of its pinned local collection.
 YAML lint covers authored infrastructure while excluding generated `.venv` and
 Ansible `.collections` dependency trees and browser-test `node_modules`.
 Live typed plans use `truenas:apps:plan`, `truenas:snapshots:plan`,
