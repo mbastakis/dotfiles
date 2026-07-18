@@ -1,0 +1,33 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+mode="apply"
+args=()
+
+if [[ "${1:-}" == "plan" || "${1:-}" == "apply" ]]; then
+    mode="$1"
+    shift
+fi
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --dry-run)
+            mode="plan"
+            shift
+            ;;
+        *)
+            args+=("$1")
+            shift
+            ;;
+    esac
+done
+
+if [[ " ${args[*]} " == *" --host truenas "* ]]; then
+    truenas_address="$("$HOME/bin/homeserver-route" resolve truenas)"
+    export SYNCTHING_TRUENAS_API_URL="${SYNCTHING_TRUENAS_API_URL:-http://${truenas_address}:8384}"
+fi
+
+exec uv run --project "$REPO_ROOT/infra" --offline --locked \
+    python -m homeserver_iac syncthing "$mode" "${args[@]}"

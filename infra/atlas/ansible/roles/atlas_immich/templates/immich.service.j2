@@ -1,0 +1,20 @@
+[Unit]
+Description=Immich Docker Compose stack
+Requires=docker.service {{ atlas_immich_mount_unit }}
+After=docker.service {{ atlas_immich_mount_unit }}
+BindsTo={{ atlas_immich_mount_unit }}
+
+[Service]
+Type=simple
+WorkingDirectory={{ atlas_immich_project_root }}
+ExecStartPre=/usr/bin/mountpoint --quiet {{ atlas_immich_media_mount }}
+ExecStartPre=/usr/bin/grep --fixed-strings --line-regexp --quiet "{{ atlas_immich_sentinel_content }}" {{ atlas_immich_media_mount }}/.immich-storage
+ExecStart=/usr/bin/docker compose --project-name immich --file compose.yml up --remove-orphans --abort-on-container-exit
+ExecStop=/usr/bin/docker compose --project-name immich --file compose.yml down --timeout 120
+Restart=always
+RestartSec=10
+TimeoutStartSec=0
+TimeoutStopSec=180
+
+[Install]
+WantedBy=multi-user.target

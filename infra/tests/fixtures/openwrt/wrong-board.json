@@ -1,0 +1,4 @@
+{
+  "identity": {"board_ids": ["R53"], "board_name": "cudy,wr3000-v1", "model": "Cudy WR3000 v1", "profile": "cudy_wr3000-v1", "release": "25.12.5", "target": "mediatek/filogic"},
+  "packages": [], "resources": {}, "firewall": {}, "listeners": [], "services": {}, "runtime": {}
+}

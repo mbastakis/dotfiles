@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=../../schemas/truenas-smb.schema.json
+# Temporary private write path for the bounded Apple Photos migration.
+schema_version: 1
+ownership:
+  scope: truenas.smb_shares
+  mode: bounded
+
+service:
+  enabled: true
+  running: true
+
+shares:
+  - id: apple-originals-migration
+    name: apple-originals
+    path: /mnt/pool_4tb/homeserver/data/photos/apple-originals
+    comment: Temporary private Apple Photos migration archive
+    read_only: false
+    browsable: false
+    enabled: true
+    allowed_users:
+      - mbastakis
+    force_user: apps
+    force_group: apps
+
+retire_shares: []

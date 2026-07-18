@@ -1,0 +1,89 @@
+# yaml-language-server: $schema=../../../schemas/truenas-app.schema.json
+schema_version: 1
+ownership:
+  scope: truenas.catalog_apps
+  mode: bounded
+
+app_name: filebrowser-quantum
+catalog_app: filebrowser-quantum
+train: community
+version: "1.1.20"
+
+managed_files:
+  - source: templates/filebrowser-quantum/config.yaml
+    destination: /mnt/pool_4tb/homeserver/apps/filebrowser-quantum/config/config.yaml
+    owner: 568
+    group: 568
+    mode: "0640"
+    dir_mode: "0750"
+    content_mode: yaml-subset
+
+secret_values:
+  - path: filebrowser.admin_password
+    secret_ref:
+      alias: filebrowser_quantum_admin_password
+    env: FILEBROWSER_ADMIN_PASSWORD
+
+secret_envs:
+  - path: filebrowser.additional_envs
+    name: FILEBROWSER_OIDC_CLIENT_SECRET
+    secret_ref:
+      alias: filebrowser_quantum_oidc_client_secret
+  - path: filebrowser.additional_envs
+    name: FILEBROWSER_JWT_TOKEN_SECRET
+    secret_ref:
+      alias: filebrowser_quantum_jwt_token_secret
+
+path_permissions:
+  - path: /mnt/pool_4tb/homeserver/apps/filebrowser-quantum/config
+    owner: 568
+    group: 568
+    mode: "0750"
+  - path: /mnt/pool_4tb/homeserver/data/files/household
+    owner: 568
+    group: 568
+    mode: "0770"
+  - path: /mnt/pool_4tb/homeserver/data/files/users
+    owner: 568
+    group: 568
+    mode: "0770"
+
+values:
+  filebrowser:
+    additional_envs:
+      - name: FILEBROWSER_OIDC_CLIENT_ID
+        value: homeserver-filebrowser-quantum
+  run_as:
+    user: 568
+    group: 568
+  network:
+    web_port:
+      bind_mode: published
+      port_number: 30334
+      host_ips: []
+    host_network: true
+    networks: []
+  storage:
+    config:
+      type: host_path
+      host_path_config:
+        acl_enable: false
+        path: /mnt/pool_4tb/homeserver/apps/filebrowser-quantum/config
+    additional_storage:
+      - type: host_path
+        read_only: false
+        mount_path: /srv/household
+        host_path_config:
+          acl_enable: false
+          path: /mnt/pool_4tb/homeserver/data/files/household
+      - type: host_path
+        read_only: false
+        mount_path: /srv/users
+        host_path_config:
+          acl_enable: false
+          path: /mnt/pool_4tb/homeserver/data/files/users
+  labels: []
+  resources:
+    limits:
+      cpus: 1
+      memory: 1024

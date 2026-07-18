@@ -1,0 +1,157 @@
+{
+  "$defs": {
+    "Ownership": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "const": "bounded",
+          "title": "Mode",
+          "type": "string"
+        },
+        "scope": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z][a-z0-9_-]*(?:\\.[a-z0-9][a-z0-9_-]*)+$",
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope",
+        "mode"
+      ],
+      "title": "Ownership",
+      "type": "object"
+    },
+    "SnapshotSchedule": {
+      "additionalProperties": false,
+      "properties": {
+        "dom": {
+          "minLength": 1,
+          "title": "Dom",
+          "type": "string"
+        },
+        "dow": {
+          "minLength": 1,
+          "title": "Dow",
+          "type": "string"
+        },
+        "hour": {
+          "minLength": 1,
+          "title": "Hour",
+          "type": "string"
+        },
+        "minute": {
+          "minLength": 1,
+          "title": "Minute",
+          "type": "string"
+        },
+        "month": {
+          "minLength": 1,
+          "title": "Month",
+          "type": "string"
+        }
+      },
+      "required": [
+        "minute",
+        "hour",
+        "dom",
+        "month",
+        "dow"
+      ],
+      "title": "SnapshotSchedule",
+      "type": "object"
+    },
+    "SnapshotTask": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "lifetime_unit": {
+          "enum": [
+            "HOUR",
+            "DAY",
+            "WEEK",
+            "MONTH",
+            "YEAR"
+          ],
+          "title": "Lifetime Unit",
+          "type": "string"
+        },
+        "lifetime_value": {
+          "exclusiveMinimum": 0,
+          "title": "Lifetime Value",
+          "type": "integer"
+        },
+        "name": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "naming_schema": {
+          "minLength": 1,
+          "title": "Naming Schema",
+          "type": "string"
+        },
+        "schedule": {
+          "$ref": "#/$defs/SnapshotSchedule"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "lifetime_value",
+        "lifetime_unit",
+        "naming_schema",
+        "schedule"
+      ],
+      "title": "SnapshotTask",
+      "type": "object"
+    }
+  },
+  "$id": "urn:homeserver-iac:schema:truenas-snapshots",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "dataset": {
+      "pattern": "^[^/]+/.+$",
+      "title": "Dataset",
+      "type": "string"
+    },
+    "ownership": {
+      "$ref": "#/$defs/Ownership"
+    },
+    "recursive": {
+      "title": "Recursive",
+      "type": "boolean"
+    },
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "tasks": {
+      "items": {
+        "$ref": "#/$defs/SnapshotTask"
+      },
+      "minItems": 1,
+      "title": "Tasks",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "ownership",
+    "dataset",
+    "recursive",
+    "tasks"
+  ],
+  "title": "SnapshotDesiredState",
+  "type": "object"
+}

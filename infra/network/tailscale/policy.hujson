@@ -1,0 +1,189 @@
+// Tailscale tailnet policy for homeserver phase 1.
+// Apply with: mise exec -- task network:policy:apply
+//
+// Default-deny ACL model: only the rules below are accepted.
+// Personal (non-tagged) devices keep general tailnet connectivity through
+// the autogroup:member rule; tagged homeserver nodes are restricted to the
+// access classes defined in specs/homeserver-target-architecture.md §6.
+//
+// Port map (tag:homeserver-storage is host_network so all ports are on the
+// truenas Tailscale IP):
+//   22      SSH
+//   443     TrueNAS admin UI / Traefik HTTPS on atlas / OpenCode Serve on Mac
+//   8384    Syncthing admin UI
+//   22000   Syncthing sync protocol
+//   30329   Backrest backend for atlas Traefik only
+//   30334   FileBrowser Quantum port
+{
+  "groups": {
+    "group:homeserver-admins": [
+      "mbastakis@gmail.com",
+    ],
+    "group:homeserver-household": [
+      "mbastakis@gmail.com",
+      "xarast07@gmail.com",
+    ],
+    "group:obsidian-sync": [
+      "mbastakis@gmail.com",
+    ],
+  },
+
+  "hosts": {
+    "opencode-host": "100.84.191.7",
+  },
+
+  "tagOwners": {
+    "tag:homeserver-entry": [
+      "autogroup:admin",
+    ],
+    "tag:homeserver-storage": [
+      "autogroup:admin",
+    ],
+  },
+
+  "acls": [
+    // General tailnet connectivity for personal (non-tagged) devices.
+    // autogroup:member excludes tagged devices, so this does not grant
+    // access to atlas or truenas homeserver surfaces.
+    {
+      "action": "accept",
+      "src": ["autogroup:member"],
+      "dst": ["autogroup:member:*"],
+    },
+
+    // Admin access — atlas (tag:homeserver-entry): SSH + Traefik HTTPS.
+    // Per spec §6: allow group:homeserver-admins -> tag:homeserver-entry:22,443
+    {
+      "action": "accept",
+      "src": ["group:homeserver-admins"],
+      "dst": ["tag:homeserver-entry:22,443"],
+    },
+
+    // Admin access — truenas (tag:homeserver-storage):
+    //   443    TrueNAS admin UI
+    //   22     SSH
+    //   8384   Syncthing admin UI
+    //   30334  FileBrowser Quantum port
+    // Backrest is intentionally omitted here; use the Authentik-protected
+    // route through atlas instead of the raw app port.
+    // Per spec §6: allow group:homeserver-admins -> tag:homeserver-storage:*
+    {
+      "action": "accept",
+      "src": ["group:homeserver-admins"],
+      "dst": ["tag:homeserver-storage:22,443,8384,30334"],
+    },
+
+    // Private web ingress: Traefik on atlas proxies to
+    // FileBrowser Quantum and Backrest on truenas.
+    // Per spec §6: allow tag:homeserver-entry -> tag:homeserver-storage:app-ports
+    {
+      "action": "accept",
+      "src": ["tag:homeserver-entry"],
+      "dst": ["tag:homeserver-storage:30329,30334"],
+    },
+
+    // OpenCode ingress: Traefik on atlas reaches only the authenticated
+    // Tailscale Serve frontend on Michail's Mac. The OpenCode and oauth2-proxy
+    // loopback ports are not exposed to the tailnet.
+    {
+      "action": "accept",
+      "src": ["tag:homeserver-entry"],
+      "dst": ["opencode-host:443"],
+    },
+
+    // OIDC backchannel: FileBrowser Quantum on truenas needs to reach
+    // Authentik on atlas (port 443) to verify the OIDC provider at startup
+    // and during login flows. This is a server-to-server call, not user
+    // traffic.
+    {
+      "action": "accept",
+      "src": ["tag:homeserver-storage"],
+      "dst": ["tag:homeserver-entry:443"],
+    },
+
+    // Household web access: app users reach Traefik HTTPS on atlas only.
+    // Non-admin household users are denied access to all infra surfaces by
+    // default (no accept rule covers tag:homeserver-storage for them).
+    // Per spec §6: allow group:homeserver-household -> tag:homeserver-entry:443
+    {
+      "action": "accept",
+      "src": ["group:homeserver-household"],
+      "dst": ["tag:homeserver-entry:443"],
+    },
+
+    // Obsidian sync exception: approved Michail sync devices reach
+    // Syncthing sync port (22000) on truenas only.
+    // Per spec §6: allow group:obsidian-sync -> tag:homeserver-storage:sync-port
+    {
+      "action": "accept",
+      "src": ["group:obsidian-sync"],
+      "dst": ["tag:homeserver-storage:22000"],
+    },
+  ],
+
+  "ssh": [
+    {
+      // Tailscale SSH: users may SSH to their own non-tagged devices.
+      // Tagged homeserver nodes have Tailscale SSH disabled (Ansible +
+      // TrueNAS app config), so this does not expose infra surfaces.
+      "action": "check",
+      "src": ["autogroup:member"],
+      "dst": ["autogroup:self"],
+      "users": ["autogroup:nonroot", "root"],
+    },
+  ],
+
+  "tests": [
+    // Michail (admin) can reach atlas SSH and HTTPS.
+    {
+      "src": "mbastakis@gmail.com",
+      "accept": ["tag:homeserver-entry:22", "tag:homeserver-entry:443"],
+    },
+    // Michail (admin) can reach truenas admin/app surfaces except the
+    // raw Backrest port, which is proxied through Authentik on atlas.
+    {
+      "src": "mbastakis@gmail.com",
+      "accept": [
+        "tag:homeserver-storage:22",
+        "tag:homeserver-storage:443",
+        "tag:homeserver-storage:8384",
+        "tag:homeserver-storage:30334",
+      ],
+      "deny": ["tag:homeserver-storage:30329"],
+    },
+    // Michail (obsidian-sync) can reach Syncthing sync port.
+    {
+      "src": "mbastakis@gmail.com",
+      "accept": ["tag:homeserver-storage:22000"],
+    },
+    // Chara (household) can reach atlas HTTPS only.
+    {
+      "src": "xarast07@gmail.com",
+      "accept": ["tag:homeserver-entry:443"],
+    },
+    // Chara (household) cannot reach atlas SSH.
+    {
+      "src": "xarast07@gmail.com",
+      "deny": ["tag:homeserver-entry:22"],
+    },
+    // Chara (household) cannot reach any truenas infra surface,
+    // including Syncthing sync.
+    {
+      "src": "xarast07@gmail.com",
+      "deny": [
+        "tag:homeserver-storage:22",
+        "tag:homeserver-storage:443",
+        "tag:homeserver-storage:8384",
+        "tag:homeserver-storage:30334",
+        "tag:homeserver-storage:30329",
+        "tag:homeserver-storage:22000",
+      ],
+    },
+    // Atlas can reach only the OpenCode host's authenticated Serve endpoint.
+    {
+      "src": "100.101.208.110",
+      "accept": ["opencode-host:443"],
+      "deny": ["opencode-host:4096", "opencode-host:4180"],
+    },
+  ],
+}

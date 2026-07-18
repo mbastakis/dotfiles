@@ -1,0 +1,13 @@
+{
+  "api_keys": [
+    {
+      "id": 1,
+      "name": "homepage-dashboard",
+      "username": "mbastakis",
+      "revoked": false
+    }
+  ],
+  "bws_ids_by_key": {
+    "homeserver/truenas/api-keys/homepage": "35e303f1-b598-43e8-947d-b483008d7689"
+  }
+}

@@ -1,0 +1,895 @@
+{
+  "$defs": {
+    "GuestNetwork": {
+      "additionalProperties": false,
+      "properties": {
+        "address": {
+          "title": "Address",
+          "type": "string"
+        },
+        "dhcp_end": {
+          "title": "Dhcp End",
+          "type": "string"
+        },
+        "dhcp_start": {
+          "title": "Dhcp Start",
+          "type": "string"
+        },
+        "interface": {
+          "const": "guest",
+          "title": "Interface",
+          "type": "string"
+        },
+        "ipv6_assignment": {
+          "const": 64,
+          "title": "Ipv6 Assignment",
+          "type": "integer"
+        },
+        "ipv6_hint": {
+          "const": "1",
+          "title": "Ipv6 Hint",
+          "type": "string"
+        },
+        "lease_time": {
+          "const": "12h",
+          "title": "Lease Time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "interface",
+        "address",
+        "dhcp_start",
+        "dhcp_end",
+        "lease_time",
+        "ipv6_assignment",
+        "ipv6_hint"
+      ],
+      "title": "GuestNetwork",
+      "type": "object"
+    },
+    "GuestWirelessNetwork": {
+      "additionalProperties": false,
+      "properties": {
+        "encryption": {
+          "const": "psk2+ccmp",
+          "title": "Encryption",
+          "type": "string"
+        },
+        "isolate_bridge_ports": {
+          "const": true,
+          "title": "Isolate Bridge Ports",
+          "type": "boolean"
+        },
+        "isolate_clients": {
+          "const": true,
+          "title": "Isolate Clients",
+          "type": "boolean"
+        },
+        "psk": {
+          "$ref": "#/$defs/SecretValue"
+        },
+        "ssid": {
+          "$ref": "#/$defs/SecretValue"
+        }
+      },
+      "required": [
+        "ssid",
+        "psk",
+        "encryption",
+        "isolate_clients",
+        "isolate_bridge_ports"
+      ],
+      "title": "GuestWirelessNetwork",
+      "type": "object"
+    },
+    "MainWirelessNetwork": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "const": true,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "encryption": {
+          "const": "psk2+ccmp",
+          "title": "Encryption",
+          "type": "string"
+        },
+        "isolate_bridge_ports": {
+          "const": false,
+          "title": "Isolate Bridge Ports",
+          "type": "boolean"
+        },
+        "isolate_clients": {
+          "const": false,
+          "title": "Isolate Clients",
+          "type": "boolean"
+        },
+        "psk": {
+          "$ref": "#/$defs/SecretValue"
+        },
+        "ssid": {
+          "$ref": "#/$defs/SecretValue"
+        }
+      },
+      "required": [
+        "ssid",
+        "psk",
+        "encryption",
+        "enabled",
+        "isolate_clients",
+        "isolate_bridge_ports"
+      ],
+      "title": "MainWirelessNetwork",
+      "type": "object"
+    },
+    "OpenWrtDevice": {
+      "additionalProperties": false,
+      "properties": {
+        "board_name": {
+          "const": "cudy,wr3000e-v1",
+          "title": "Board Name",
+          "type": "string"
+        },
+        "compatible_board_ids": {
+          "maxItems": 1,
+          "minItems": 1,
+          "prefixItems": [
+            {
+              "const": "R53",
+              "type": "string"
+            }
+          ],
+          "title": "Compatible Board Ids",
+          "type": "array"
+        },
+        "hardware_version": {
+          "const": "1.0",
+          "title": "Hardware Version",
+          "type": "string"
+        },
+        "model": {
+          "const": "WR3000E",
+          "title": "Model",
+          "type": "string"
+        },
+        "vendor": {
+          "const": "Cudy",
+          "title": "Vendor",
+          "type": "string"
+        }
+      },
+      "required": [
+        "vendor",
+        "model",
+        "hardware_version",
+        "board_name",
+        "compatible_board_ids"
+      ],
+      "title": "OpenWrtDevice",
+      "type": "object"
+    },
+    "OpenWrtDhcpV6": {
+      "additionalProperties": false,
+      "properties": {
+        "request_address": {
+          "const": "try",
+          "title": "Request Address",
+          "type": "string"
+        },
+        "request_prefix": {
+          "const": "auto",
+          "title": "Request Prefix",
+          "type": "string"
+        }
+      },
+      "required": [
+        "request_address",
+        "request_prefix"
+      ],
+      "title": "OpenWrtDhcpV6",
+      "type": "object"
+    },
+    "OpenWrtDns": {
+      "additionalProperties": false,
+      "properties": {
+        "ignore_wan_resolvers": {
+          "const": true,
+          "title": "Ignore Wan Resolvers",
+          "type": "boolean"
+        },
+        "strict_order": {
+          "const": true,
+          "title": "Strict Order",
+          "type": "boolean"
+        },
+        "upstreams": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "title": "Upstreams",
+          "type": "array"
+        }
+      },
+      "required": [
+        "upstreams",
+        "strict_order",
+        "ignore_wan_resolvers"
+      ],
+      "title": "OpenWrtDns",
+      "type": "object"
+    },
+    "OpenWrtFirmware": {
+      "additionalProperties": false,
+      "properties": {
+        "imagebuilder": {
+          "$ref": "#/$defs/OpenWrtImageBuilder"
+        },
+        "packages": {
+          "$ref": "#/$defs/OpenWrtPackagePolicy"
+        },
+        "profile": {
+          "const": "cudy_wr3000e-v1",
+          "title": "Profile",
+          "type": "string"
+        },
+        "public_key_path": {
+          "const": "private_dot_ssh/id_ed25519.pub",
+          "title": "Public Key Path",
+          "type": "string"
+        },
+        "subtarget": {
+          "const": "filogic",
+          "title": "Subtarget",
+          "type": "string"
+        },
+        "target": {
+          "const": "mediatek",
+          "title": "Target",
+          "type": "string"
+        },
+        "version": {
+          "const": "25.12.5",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "version",
+        "target",
+        "subtarget",
+        "profile",
+        "imagebuilder",
+        "packages",
+        "public_key_path"
+      ],
+      "title": "OpenWrtFirmware",
+      "type": "object"
+    },
+    "OpenWrtImageBuilder": {
+      "additionalProperties": false,
+      "properties": {
+        "filename": {
+          "const": "openwrt-imagebuilder-25.12.5-mediatek-filogic.Linux-x86_64.tar.zst",
+          "title": "Filename",
+          "type": "string"
+        },
+        "sha256": {
+          "const": "7fb6cf626582ebcbfb46974da48c1eae577213f38879eaf6b1d982041e843461",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "url": {
+          "const": "https://downloads.openwrt.org/releases/25.12.5/targets/mediatek/filogic/openwrt-imagebuilder-25.12.5-mediatek-filogic.Linux-x86_64.tar.zst",
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "filename",
+        "url",
+        "sha256"
+      ],
+      "title": "OpenWrtImageBuilder",
+      "type": "object"
+    },
+    "OpenWrtManagement": {
+      "additionalProperties": false,
+      "properties": {
+        "allowed_networks": {
+          "maxItems": 1,
+          "minItems": 1,
+          "prefixItems": [
+            {
+              "const": "trusted",
+              "type": "string"
+            }
+          ],
+          "title": "Allowed Networks",
+          "type": "array"
+        },
+        "luci_https_only": {
+          "const": true,
+          "title": "Luci Https Only",
+          "type": "boolean"
+        },
+        "public_key_path": {
+          "const": "private_dot_ssh/id_ed25519.pub",
+          "title": "Public Key Path",
+          "type": "string"
+        },
+        "root_password": {
+          "$ref": "#/$defs/SecretValue"
+        },
+        "ssh_password_auth": {
+          "const": false,
+          "title": "Ssh Password Auth",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "public_key_path",
+        "root_password",
+        "ssh_password_auth",
+        "luci_https_only",
+        "allowed_networks"
+      ],
+      "title": "OpenWrtManagement",
+      "type": "object"
+    },
+    "OpenWrtNetworks": {
+      "additionalProperties": false,
+      "properties": {
+        "guest": {
+          "$ref": "#/$defs/GuestNetwork"
+        },
+        "trusted": {
+          "$ref": "#/$defs/TrustedNetwork"
+        },
+        "ula_prefix": {
+          "title": "Ula Prefix",
+          "type": "string"
+        }
+      },
+      "required": [
+        "trusted",
+        "guest",
+        "ula_prefix"
+      ],
+      "title": "OpenWrtNetworks",
+      "type": "object"
+    },
+    "OpenWrtPackagePolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "add": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Add",
+          "type": "array"
+        },
+        "forbidden": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Forbidden",
+          "type": "array"
+        }
+      },
+      "required": [
+        "add",
+        "forbidden"
+      ],
+      "title": "OpenWrtPackagePolicy",
+      "type": "object"
+    },
+    "OpenWrtRadio": {
+      "additionalProperties": false,
+      "properties": {
+        "band": {
+          "enum": [
+            "2g",
+            "5g"
+          ],
+          "title": "Band",
+          "type": "string"
+        },
+        "channel": {
+          "title": "Channel",
+          "type": "integer"
+        },
+        "id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "width": {
+          "title": "Width",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "band",
+        "channel",
+        "width"
+      ],
+      "title": "OpenWrtRadio",
+      "type": "object"
+    },
+    "OpenWrtReservation": {
+      "additionalProperties": false,
+      "properties": {
+        "address": {
+          "title": "Address",
+          "type": "string"
+        },
+        "hostname": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Hostname",
+          "type": "string"
+        },
+        "id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "mac": {
+          "pattern": "^[0-9a-f]{2}(?::[0-9a-f]{2}){5}$",
+          "title": "Mac",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "hostname",
+        "mac",
+        "address"
+      ],
+      "title": "OpenWrtReservation",
+      "type": "object"
+    },
+    "OpenWrtSecurity": {
+      "additionalProperties": false,
+      "properties": {
+        "dmz": {
+          "const": false,
+          "title": "Dmz",
+          "type": "boolean"
+        },
+        "dns_rebind_allow_domains": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 12,
+          "minItems": 12,
+          "title": "Dns Rebind Allow Domains",
+          "type": "array"
+        },
+        "nat_pmp": {
+          "const": false,
+          "title": "Nat Pmp",
+          "type": "boolean"
+        },
+        "port_forwards": {
+          "default": [],
+          "maxItems": 0,
+          "minItems": 0,
+          "title": "Port Forwards",
+          "type": "array"
+        },
+        "tailscale": {
+          "const": false,
+          "title": "Tailscale",
+          "type": "boolean"
+        },
+        "upnp": {
+          "const": false,
+          "title": "Upnp",
+          "type": "boolean"
+        },
+        "wan_management": {
+          "const": false,
+          "title": "Wan Management",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "upnp",
+        "nat_pmp",
+        "dmz",
+        "wan_management",
+        "tailscale",
+        "dns_rebind_allow_domains"
+      ],
+      "title": "OpenWrtSecurity",
+      "type": "object"
+    },
+    "OpenWrtSqm": {
+      "additionalProperties": false,
+      "properties": {
+        "download_kbit": {
+          "const": 87890,
+          "title": "Download Kbit",
+          "type": "integer"
+        },
+        "enabled": {
+          "const": true,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "flow_offloading": {
+          "const": false,
+          "title": "Flow Offloading",
+          "type": "boolean"
+        },
+        "interface_from_wan_l3_device": {
+          "const": true,
+          "title": "Interface From Wan L3 Device",
+          "type": "boolean"
+        },
+        "link_layer": {
+          "const": "ethernet",
+          "title": "Link Layer",
+          "type": "string"
+        },
+        "mpu": {
+          "const": 84,
+          "title": "Mpu",
+          "type": "integer"
+        },
+        "multiqueue": {
+          "const": false,
+          "title": "Multiqueue",
+          "type": "boolean"
+        },
+        "overhead": {
+          "const": 50,
+          "title": "Overhead",
+          "type": "integer"
+        },
+        "qdisc": {
+          "const": "cake",
+          "title": "Qdisc",
+          "type": "string"
+        },
+        "script": {
+          "const": "piece_of_cake.qos",
+          "title": "Script",
+          "type": "string"
+        },
+        "upload_kbit": {
+          "const": 8790,
+          "title": "Upload Kbit",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "enabled",
+        "interface_from_wan_l3_device",
+        "download_kbit",
+        "upload_kbit",
+        "qdisc",
+        "script",
+        "link_layer",
+        "overhead",
+        "mpu",
+        "multiqueue",
+        "flow_offloading"
+      ],
+      "title": "OpenWrtSqm",
+      "type": "object"
+    },
+    "OpenWrtSystem": {
+      "additionalProperties": false,
+      "properties": {
+        "hostname": {
+          "const": "router",
+          "title": "Hostname",
+          "type": "string"
+        },
+        "timezone": {
+          "const": "EET-2EEST,M3.5.0/3,M10.5.0/4",
+          "title": "Timezone",
+          "type": "string"
+        },
+        "zonename": {
+          "const": "Europe/Athens",
+          "title": "Zonename",
+          "type": "string"
+        }
+      },
+      "required": [
+        "hostname",
+        "timezone",
+        "zonename"
+      ],
+      "title": "OpenWrtSystem",
+      "type": "object"
+    },
+    "OpenWrtWan": {
+      "additionalProperties": false,
+      "properties": {
+        "dhcpv6": {
+          "$ref": "#/$defs/OpenWrtDhcpV6"
+        },
+        "ipv6": {
+          "const": true,
+          "title": "Ipv6",
+          "type": "boolean"
+        },
+        "password": {
+          "$ref": "#/$defs/SecretValue"
+        },
+        "peer_dns": {
+          "const": true,
+          "title": "Peer Dns",
+          "type": "boolean"
+        },
+        "physical_device": {
+          "const": "wan",
+          "title": "Physical Device",
+          "type": "string"
+        },
+        "protocol": {
+          "const": "pppoe",
+          "title": "Protocol",
+          "type": "string"
+        },
+        "username": {
+          "$ref": "#/$defs/SecretValue"
+        },
+        "vlan_id": {
+          "const": 835,
+          "title": "Vlan Id",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "physical_device",
+        "vlan_id",
+        "protocol",
+        "username",
+        "password",
+        "peer_dns",
+        "ipv6",
+        "dhcpv6"
+      ],
+      "title": "OpenWrtWan",
+      "type": "object"
+    },
+    "OpenWrtWireless": {
+      "additionalProperties": false,
+      "properties": {
+        "country": {
+          "const": "GR",
+          "title": "Country",
+          "type": "string"
+        },
+        "fast_transition": {
+          "const": false,
+          "title": "Fast Transition",
+          "type": "boolean"
+        },
+        "guest": {
+          "$ref": "#/$defs/GuestWirelessNetwork"
+        },
+        "main": {
+          "$ref": "#/$defs/MainWirelessNetwork"
+        },
+        "radios": {
+          "items": {
+            "$ref": "#/$defs/OpenWrtRadio"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "title": "Radios",
+          "type": "array"
+        },
+        "wps": {
+          "const": false,
+          "title": "Wps",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "country",
+        "fast_transition",
+        "wps",
+        "radios",
+        "main",
+        "guest"
+      ],
+      "title": "OpenWrtWireless",
+      "type": "object"
+    },
+    "Ownership": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "const": "bounded",
+          "title": "Mode",
+          "type": "string"
+        },
+        "scope": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z][a-z0-9_-]*(?:\\.[a-z0-9][a-z0-9_-]*)+$",
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope",
+        "mode"
+      ],
+      "title": "Ownership",
+      "type": "object"
+    },
+    "SecretRef": {
+      "additionalProperties": false,
+      "description": "A logical reference only; secret material is deliberately not representable.",
+      "properties": {
+        "alias": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Alias",
+          "type": "string"
+        }
+      },
+      "required": [
+        "alias"
+      ],
+      "title": "SecretRef",
+      "type": "object"
+    },
+    "SecretValue": {
+      "additionalProperties": false,
+      "properties": {
+        "secret_ref": {
+          "$ref": "#/$defs/SecretRef"
+        }
+      },
+      "required": [
+        "secret_ref"
+      ],
+      "title": "SecretValue",
+      "type": "object"
+    },
+    "TrustedNetwork": {
+      "additionalProperties": false,
+      "properties": {
+        "address": {
+          "title": "Address",
+          "type": "string"
+        },
+        "dhcp_end": {
+          "title": "Dhcp End",
+          "type": "string"
+        },
+        "dhcp_start": {
+          "title": "Dhcp Start",
+          "type": "string"
+        },
+        "domain": {
+          "const": "home",
+          "title": "Domain",
+          "type": "string"
+        },
+        "interface": {
+          "const": "lan",
+          "title": "Interface",
+          "type": "string"
+        },
+        "ipv6_assignment": {
+          "const": 64,
+          "title": "Ipv6 Assignment",
+          "type": "integer"
+        },
+        "ipv6_hint": {
+          "const": "0",
+          "title": "Ipv6 Hint",
+          "type": "string"
+        },
+        "lease_time": {
+          "const": "12h",
+          "title": "Lease Time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "interface",
+        "address",
+        "dhcp_start",
+        "dhcp_end",
+        "lease_time",
+        "domain",
+        "ipv6_assignment",
+        "ipv6_hint"
+      ],
+      "title": "TrustedNetwork",
+      "type": "object"
+    }
+  },
+  "$id": "urn:homeserver-iac:schema:openwrt",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "device": {
+      "$ref": "#/$defs/OpenWrtDevice"
+    },
+    "dns": {
+      "$ref": "#/$defs/OpenWrtDns"
+    },
+    "firmware": {
+      "$ref": "#/$defs/OpenWrtFirmware"
+    },
+    "management": {
+      "$ref": "#/$defs/OpenWrtManagement"
+    },
+    "networks": {
+      "$ref": "#/$defs/OpenWrtNetworks"
+    },
+    "ownership": {
+      "$ref": "#/$defs/Ownership"
+    },
+    "reservations": {
+      "items": {
+        "$ref": "#/$defs/OpenWrtReservation"
+      },
+      "minItems": 2,
+      "title": "Reservations",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "security": {
+      "$ref": "#/$defs/OpenWrtSecurity"
+    },
+    "sqm": {
+      "$ref": "#/$defs/OpenWrtSqm"
+    },
+    "system": {
+      "$ref": "#/$defs/OpenWrtSystem"
+    },
+    "wan": {
+      "$ref": "#/$defs/OpenWrtWan"
+    },
+    "wireless": {
+      "$ref": "#/$defs/OpenWrtWireless"
+    }
+  },
+  "required": [
+    "schema_version",
+    "ownership",
+    "device",
+    "firmware",
+    "system",
+    "wan",
+    "networks",
+    "dns",
+    "reservations",
+    "wireless",
+    "management",
+    "security",
+    "sqm"
+  ],
+  "title": "OpenWrtDesiredState",
+  "type": "object"
+}

@@ -1,0 +1,16 @@
+http:
+  routers:
+    immich:
+      rule: Host(`{{ atlas_immich_host }}`)
+      entryPoints:
+        - websecure
+      service: immich
+      tls:
+        certResolver: route53
+
+  services:
+    immich:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: http://immich-server:2283

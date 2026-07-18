@@ -1,5 +1,9 @@
 # Router Hardening: Disable UPnP
 
+> **Legacy rollback-router procedure.** The Cudy OpenWrt production policy has
+> UPnP disabled declaratively. Retain this Speedport procedure only through the
+> observation window and while the Speedport remains the physical rollback path.
+
 The Speedport Plus 2 router supports UPnP, which allows LAN devices to
 automatically request port forwards. This is a security risk because any
 compromised LAN device can open services to the public internet without

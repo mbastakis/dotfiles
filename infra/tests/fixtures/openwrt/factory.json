@@ -1,0 +1,25 @@
+{
+  "identity": {"board_ids": ["R53"], "board_name": "cudy,wr3000e-v1", "model": "Cudy WR3000E v1", "profile": "cudy_wr3000e-v1", "release": "25.12.5", "target": "mediatek/filogic"},
+  "packages": ["base-files", "dnsmasq", "dropbear", "firewall4", "kmod-ifb", "kmod-mt7915e", "kmod-mt7981-firmware", "kmod-sched-cake", "luci-app-sqm", "luci-ssl", "mt7981-wo-firmware", "odhcp6c", "odhcpd-ipv6only", "ppp", "ppp-mod-pppoe", "rpcd", "sqm-scripts", "tc-tiny", "ubus", "uci", "ucode", "ucode-mod-ubus", "uhttpd"],
+  "uci": {
+    "network.lan._type": "interface",
+    "network.lan.proto": "static",
+    "network.lan.device": "br-lan",
+    "network.lan.ipaddr": ["192.168.1.1/24"],
+    "network.wan._type": "interface",
+    "network.wan.device": "wan",
+    "network.wan.proto": "dhcp",
+    "network.wan6._type": "interface",
+    "network.wan6.device": "wan",
+    "network.wan6.proto": "dhcpv6",
+    "wireless.radio0._type": "wifi-device",
+    "wireless.radio0.band": "2g",
+    "wireless.radio1._type": "wifi-device",
+    "wireless.radio1.band": "5g",
+    "wireless.default_radio0._type": "wifi-iface",
+    "wireless.default_radio0.disabled": "1",
+    "wireless.default_radio1._type": "wifi-iface",
+    "wireless.default_radio1.disabled": "1"
+  },
+  "resources": {}, "firewall": {"dmz": false, "includes": [], "redirects": [], "wan_management": false}, "listeners": [], "services": {"nat_pmp": false, "tailscale": false, "upnp": false}, "runtime": {"bootstrap-sanitize": {"default_wan": true, "default_wan6": true, "wireless": false}, "radio_bands": ["2g", "5g"], "sqm": {"enabled": false, "enabled_queues": 0}}
+}
