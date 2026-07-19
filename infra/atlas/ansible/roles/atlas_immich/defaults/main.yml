@@ -8,7 +8,7 @@ atlas_immich_automount_unit: opt-homeserver-immich-data.automount
 atlas_immich_service_unit: immich.service
 atlas_immich_external_network: homeserver
 atlas_immich_traefik_dynamic_dir: /opt/homeserver/traefik/dynamic
-atlas_immich_version: v3.0.2
+atlas_immich_version: v3.0.3
 atlas_immich_server_image: ghcr.io/immich-app/immich-server
 atlas_immich_machine_learning_image: ghcr.io/immich-app/immich-machine-learning
 atlas_immich_valkey_image: >-
