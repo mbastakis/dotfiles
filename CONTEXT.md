@@ -4,6 +4,10 @@ This context defines the language used for personal infrastructure managed from 
 
 ## Language
 
+**Persistent workstation configuration**:
+Durable user- or machine-wide configuration on the personal workstation that must be represented in the chezmoi source before the live target changes. Project-local files, homeserver configuration, credentials, caches, generated artifacts, and runtime-owned state are outside this boundary.
+_Avoid_: global configuration, live-only dotfile edit, project configuration
+
 **atlas**:
 A persistent personal server running on a home laptop that currently hosts stateful applications. Its data is valuable; its current application setup is not.
 _Avoid_: disposable host, workstation, laptop profile
