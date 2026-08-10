@@ -109,6 +109,7 @@ Prefix: **`Ctrl-a`** everywhere. In a local tmux pane attached to remote tmux ov
 | `prefix + o`         | OpenCode split (auth-aware launcher)   | `private_dot_config/tmux/tmux.conf:32` |
 | `prefix + O`         | Toggle OpenCode session sidebar | `private_dot_config/tmux/tmux.conf:95` |
 | `prefix + G`         | Lazygit popup (90% overlay) | `private_dot_config/tmux/tmux.conf:33` |
+| `prefix + ,`         | Rename window (gum input popup) | `private_dot_config/tmux/tmux.conf:98` |
 | `Ctrl+Tab`           | Next window            | `private_dot_config/tmux/tmux.conf:11` |
 | `Ctrl+Shift+Tab`     | Previous window        | `private_dot_config/tmux/tmux.conf:12` |
 | `PageUp` / `PageDown` | Half-page tmux scrollback in shell; forwarded to fullscreen pane apps | `private_dot_config/tmux/tmux.conf:35-38` |

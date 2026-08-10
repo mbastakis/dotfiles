@@ -6,14 +6,27 @@ if ! command -v gum >/dev/null 2>&1; then
     exit 1
 fi
 
-current="$(tmux display-message -p '#S')"
+target="${1:-session}"
+
+case "$target" in
+    session)
+        current="$(tmux display-message -p '#S')"
+        ;;
+    window)
+        current="$(tmux display-message -p '#W')"
+        ;;
+    *)
+        tmux display-message "Unknown rename target: $target"
+        exit 1
+        ;;
+esac
 
 set +e
 new_name="$(gum input \
     --value "$current" \
-    --placeholder 'New session name' \
+    --placeholder "New $target name" \
     --prompt 'rename> ' \
-    --header "Rename session: $current" \
+    --header "Rename $target: $current" \
     --width 40 \
     --char-limit 80)"
 status=$?
@@ -27,10 +40,14 @@ if [[ "$new_name" == "$current" ]]; then
     exit 0
 fi
 
-# The "=" prefix forces tmux to match the exact session name (not a prefix).
-if tmux has-session -t "=$new_name" 2>/dev/null; then
-    tmux display-message "Session '$new_name' already exists"
-    exit 1
-fi
+if [[ "$target" == "session" ]]; then
+    # The "=" prefix forces tmux to match the exact session name (not a prefix).
+    if tmux has-session -t "=$new_name" 2>/dev/null; then
+        tmux display-message "Session '$new_name' already exists"
+        exit 1
+    fi
 
-tmux rename-session "$new_name"
+    tmux rename-session "$new_name"
+else
+    tmux rename-window "$new_name"
+fi
