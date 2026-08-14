@@ -51,7 +51,7 @@ mail:
         trash: "[Gmail]/Trash"
         all_mail: "[Gmail]/All Mail"
       secrets:
-        app_password_uuid: "f8e9dcba-97e9-4540-b485-b41200c252a6"
+        app_password_uuid: "02d60bf9-6bd4-4c0f-84b7-b49e00a2663c"
     - id: bastakismike
       enabled: true
       order: 2
@@ -67,7 +67,7 @@ mail:
         trash: "[Gmail]/Trash"
         all_mail: "[Gmail]/All Mail"
       secrets:
-        app_password_uuid: "cc93e481-dc9d-4fd9-b79a-b4120109877d"
+        app_password_uuid: "7bd658de-5512-4a8d-8c0e-b49e00a266be"
     - id: whocaressoftware
       enabled: true
       order: 3
@@ -83,7 +83,7 @@ mail:
         trash: "[Gmail]/Trash"
         all_mail: "[Gmail]/All Mail"
       secrets:
-        app_password_uuid: "58cc7b8e-0e19-4d7e-aa3f-b412010b66db"
+        app_password_uuid: "ec483e14-7cbf-4d37-b443-b49e00a26733"
     - id: mbastakis1911
       enabled: true
       order: 4
@@ -99,7 +99,7 @@ mail:
         trash: "[Gmail]/Trash"
         all_mail: "[Gmail]/All Mail"
       secrets:
-        app_password_uuid: "60a5c78d-d63f-4b1b-9aba-b412010d0af7"
+        app_password_uuid: "42301237-d02e-4704-8434-b49e00a267a7"
     - id: mbastakisgames
       enabled: true
       order: 5
@@ -115,7 +115,7 @@ mail:
         trash: "[Gmail]/Trash"
         all_mail: "[Gmail]/All Mail"
       secrets:
-        app_password_uuid: "c4f7c6a0-c996-4638-8c62-b412010fa51d"
+        app_password_uuid: "eea6c0f4-010d-4a3b-bf24-b49e00a2681a"
 
 taskwarrior:
   sync:
@@ -129,8 +129,9 @@ opencode:
     server_url: "http://127.0.0.1:4096"
     server_port: 4096
     proxy_port: 4180
+    pwa_push_port: 4190
     oidc_issuer_url: "https://auth.mbastakis.com/application/o/opencode/"
     oidc_client_id: opencode-mobile
     allowed_group: opencode-users
-    oidc_client_secret_id: 3ec743d4-2730-4722-9f8d-b48601267e32
-    cookie_secret_id: ecaf6c2a-1044-4d47-a776-b48601267e58
+    oidc_client_secret_id: e933b77c-80b7-44d9-b84d-b49e00a283a1
+    cookie_secret_id: 731b9b0a-c77f-4f8d-b883-b49e00a28442
