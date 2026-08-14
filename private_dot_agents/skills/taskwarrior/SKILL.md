@@ -28,6 +28,27 @@ For triage or reranking, produce a compact table before writing:
 
 Taskwarrior urgency is derived, not editable. Rerank by changing explicit fields: `priority`, `due`, `wait`, `scheduled`, project, tags such as `+next`, or dependencies.
 
+## Board Contract
+
+Treat the Kanban columns as a commitment workflow, not four equivalent task categories:
+
+| Column | Meaning | Taskwarrior state |
+|---|---|---|
+| Backlog | An idea or possible task worth retaining, but not prioritized or committed for the current week. | Pending, not active, without `+next`, `+waiting`, or an unfinished dependency |
+| Ready | Prioritized work committed for the current week and available to start. Keep this list intentionally small and realistic. | Pending with `+next`, not active or blocked |
+| Doing | Work currently being executed. | Started with `task <uuid> start` |
+| Waiting | Work that was being pursued but cannot progress because it is blocked by a person, event, prerequisite, or external condition. Record the blocker. | `+waiting`, native waiting state, or an unfinished dependency |
+
+Apply these transitions consistently:
+
+- New ideas and unprioritized tasks enter Backlog by default; do not add `+next` merely because a task is actionable.
+- Promote Backlog to Ready with `+next` only when the user prioritizes it for the current week.
+- Move Ready to Doing with `task <uuid> start`; keep `+next` so stopping an unblocked task returns it to Ready.
+- Move Doing to Waiting when blocked: stop it, preserve `+next`, add `+waiting` or the blocking dependency, and annotate what is blocking progress and the next follow-up when known.
+- When a blocker clears, remove the waiting state and return the task to Ready; start it only when work actually resumes.
+- During weekly planning, remove `+next` from unfinished tasks that are no longer a current-week commitment so they return to Backlog.
+- Use `wait:` for work intentionally hidden until a future date. Do not use the Waiting column for ordinary deferral, lack of priority, or someday/maybe ideas.
+
 ## Identity
 
 Taskwarrior UUIDs are stable. Numeric task IDs are temporary UI handles that can change between reads.
