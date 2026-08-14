@@ -4,7 +4,6 @@ description: >-
   documentation archival, saving reference material, or when /crawl command
   is invoked.
 mode: subagent
-model: openai/gpt-5.4-mini-fast
 temperature: 0.1
 tools:
   glob: false

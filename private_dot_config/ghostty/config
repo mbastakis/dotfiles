@@ -66,7 +66,7 @@ command = /bin/zsh -c "tmux new -A -s main"
 # ============================================================================
 
 # Tmux window/pane management (prefix = Ctrl+a = \x01).
-# Cmd+Shift+O toggles the OpenCode session sidebar.
+# Cmd+B toggles the OpenCode session sidebar; Cmd+O toggles its focus.
 keybind = cmd+t=text:\x01\x63
 keybind = cmd+w=text:\x01\x78
 keybind = cmd+d=text:\x01\x68
@@ -78,8 +78,8 @@ keybind = cmd+l=text:\x01\x6e
 keybind = cmd+r=text:\x01\x2c
 keybind = cmd+shift+r=text:\x01\x52
 keybind = cmd+z=text:\x01\x7a
+keybind = cmd+b=text:\x01\x62
 keybind = cmd+o=text:\x01\x6f
-keybind = cmd+shift+o=text:\x01\x4f
 keybind = cmd+g=text:\x01\x47
 
 # Ghostty OS-level window management

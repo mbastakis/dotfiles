@@ -23,16 +23,12 @@ Custom commands, agents, and skills for OpenCode AI assistant.
 
 ## Providers
 
-The built-in OpenAI provider remains the default and uses OAuth subscription auth from `opencode auth login -p openai`. API-key backed `openai-api`, direct OpenCode Zen (`opencode`), and WCS (`wcs`) providers are also allowlisted for explicit model selection. WCS is the private WhoCaresSoftware gateway at `https://ai.whocaressoftware.com/v1`; the live gateway currently exposes the short aliases `gpt`, `deepseek`, `glm`, `kimi`, `qwen`, and `minimax`.
+WCS routes all configured GPT and lightweight model requests through the private WhoCaresSoftware gateway at `https://ai.whocaressoftware.com/v1`. Direct OpenAI OAuth and API-key providers are not configured or enabled. Direct OpenCode Zen (`opencode`) remains allowlisted for explicit free-model selection. The live WCS gateway currently exposes the short aliases `gpt`, `deepseek`, `glm`, `kimi`, `qwen`, and `minimax`.
 
 | Model ID | Purpose | Variants |
 | -------- | ------- | -------- |
-| `openai/gpt-5.6-sol` | Default high-quality fallback, planning, broad research | OAuth provider defaults; optional `max` variant |
-| `openai/gpt-5.5` | Available subscription-backed alternate for explicit selection | OAuth provider defaults |
-| `openai/gpt-5.4-mini-fast` | Fast bounded tasks, exploration, titles, small model fallback | OAuth provider defaults |
-| `openai/gpt-5.4` | Available higher-capacity alternate for explicit selection | OAuth provider defaults |
 | `opencode/*` | Selected free OpenCode Zen models via `https://opencode.ai/zen/v1` | Per-model Models.dev metadata |
-| `wcs/gpt` | GPT-5.5 through WCS ChatGPT OAuth | `none`, `low`, `medium`, `high`, `xhigh` reasoning effort |
+| `wcs/gpt` | Default GPT-5.6 Sol through WCS ChatGPT OAuth | `none`, `low`, `medium`, `high`, `xhigh`, `max` reasoning effort |
 | `wcs/deepseek` | DeepSeek V4 Pro through WCS OpenCode Go | `high`, `max` reasoning effort |
 | `wcs/glm` | GLM-5.2 through WCS OpenCode Go | `high`, `max` reasoning effort |
 | `wcs/kimi` | Kimi K2.7 Code through WCS OpenCode Go | none; Models.dev lists no reasoning options |
@@ -52,21 +48,43 @@ oc-sub   # shared configured default
 oc-oauth # shared configured default
 ```
 
-Auth setup:
+`enabled_providers` is set to `["opencode", "selfhosted", "wcs"]`.
 
-```bash
-opencode auth login -p openai
-# choose ChatGPT Plus/Pro for subscription auth
-```
+The `selfhosted` provider reaches the V100 model server directly at
+`192.168.179.112:8080` through the `Hendriks Machine dgx1` WireGuard tunnel.
+It exposes `selfhosted/qwen3-coder-next`, `selfhosted/glm-4.7-flash`, and
+`selfhosted/minimax-m2.7`; only the model currently selected on the server is
+available at a time. The API key
+comes from `SELFHOSTED_LLM_API_KEY`, rendered into `~/.config/zsh/local.zsh` so
+the launchd-managed OpenCode server receives it as well as interactive shells.
 
-`enabled_providers` is set to `["openai", "openai-api", "opencode", "wcs"]`.
+Qwen3 Coder Next is officially non-thinking. GLM 4.7 Flash exposes `off`,
+`thinking-8k`, `thinking`, and `preserved` variants. Models.dev documents a
+native thinking toggle; `thinking-8k` is an explicit llama.cpp token cap rather
+than a model-native effort level, while `preserved` retains prior reasoning for
+multi-turn agent work. MiniMax M2.7 is the strongest local coding-agent model;
+it runs at 32K context and retains interleaved reasoning for tool-driven turns.
 
 ## Plugins
 
-- `plugins/tmux-session-state.js` records OpenCode session lifecycle events into `~/.local/state/opencode/tmux-session-state/`. The attached TUI plugin keeps live pane mappings synchronized, and the picker prunes mappings whose process is dead or no longer owns the pane TTY. `~/bin/opencode-session-picker` exposes the live pane list and status data to the collapsible tmux sidebar; selecting a row focuses the exact OpenCode pane.
-- `plugins/clickable-notifier.js` sends sound/desktop alerts for permissions, questions, completions, and errors from primary sessions only. On macOS it uses `terminal-notifier` so clicking an alert runs `~/bin/opencode-focus-session`, activates Ghostty, and selects the recorded tmux pane. Built-in TUI attention is disabled in `tui.json` so it does not emit separate `subagent_done` sounds.
+- `plugins/tmux-session-state.js` records OpenCode session lifecycle events into `~/.local/state/opencode/tmux-session-state/`. The TUI plugin publishes its current session by client PID and, when applicable, tmux pane. The picker prunes dead clients and pane mappings that no longer own their TTY. `~/bin/opencode-session-picker` exposes attached panes plus live non-tmux TUI sessions to the collapsible sidebar. Each session uses a two-line Nerd Font status, summary, and model block; selecting an attached row focuses its pane, while an unopened row creates a window in the matching tmux session. Questions and permission requests from subagents mark their top-level session as blocked so the visible sidebar row requests attention.
+- `plugins/clickable-notifier.js` sends sound/desktop alerts for primary-session events and promotes subagent questions and permission requests to their top-level session. Each alert names the state, project, OpenCode task title, and exact tmux target. Questions show the question, permission alerts show the requested patterns, errors show the failure message, and completions include a shortened version of the latest assistant response. On macOS it uses `terminal-notifier` so clicking an alert runs `~/bin/opencode-focus-session`, activates Ghostty, and selects the recorded tmux pane. On the remote host it publishes the same structured content through the local PWA Web Push companion with a direct session route. Built-in TUI attention is disabled in `tui.json` so it does not emit separate `subagent_done` sounds.
+- `plugins/descendant-skills.js` exposes descendant `.opencode/{skill,skills}` and `.agents/{skill,skills}` roots through the opened project's native `.opencode/skills/.descendant-skills/` tree and also adds them to its configured skill paths. The native projection works around OpenCode 1.18.15's plugin/skill initialization race without making the skills global. It scans only below the project root, stays on the same filesystem, does not follow directory symlinks, and prunes version-control, dependency, cache, and build trees. The plugin owns only symlinks inside `.descendant-skills`; other entries are left untouched. New descendant skills become visible after the project instance is reopened; OpenCode retains its native duplicate-name handling.
 
 Restart OpenCode after changing plugin files or the `plugin` array; running panes keep the config loaded at process start.
+
+The designated host exposes `opencode-serverctl` for managing the shared backend, PWA push, and oauth2-proxy LaunchAgents:
+
+```bash
+opencode-serverctl status          # all services and HTTP health
+opencode-serverctl restart server  # backend only
+opencode-serverctl restart pwa     # PWA push only
+opencode-serverctl disable         # persistently disable both services
+opencode-serverctl enable          # enable, start, and health-check both
+opencode-serverctl logs proxy      # follow proxy stdout and stderr
+```
+
+`start` and `stop` only change the current launchd login session. `enable` and `disable` also update launchd's persistent disabled state. Commands default to `all`; use `server`, `pwa`, or `proxy` to target one component.
 
 ## Custom Commands
 
@@ -90,7 +108,7 @@ Instructions for the command in markdown...
 - `crawl.md` — Crawl a URL with crawl4ai (routes to `@crawl`, subtask)
 - `research_codebase.md` — Document codebase through parallel `@explore` research
 - `create_plan.md` — Create detailed implementation plans (`@plan`, active/default model)
-- `learn.md` — Extract non-obvious learnings into AGENTS.md files (`openai/gpt-5.4-mini-fast`)
+- `learn.md` — Extract non-obvious learnings into AGENTS.md files (inherits the active model and variant)
 - `session_analysis.md` — Export and analyze a previous OpenCode session (`@general`, subtask)
 
 ## Custom Agents (Pattern B — Self-Contained .md)
@@ -130,24 +148,24 @@ You are an agent that does X.
 
 Custom agent blocks are not needed in `opencode.jsonc` because agents are auto-discovered from the `agent/` directory.
 
-Built-in agents with explicit model overrides are configured in `opencode.jsonc`. Unpinned Task subagents inherit the caller's exact model and variant.
+The title agent is pinned in `opencode.jsonc`; all other agents inherit the active model and variant.
 
 | Agent | Model Selection | Purpose |
 | ----- | --------------- | ------- |
 | `build` | Active/session model, then global default | Primary implementation agent |
 | `plan` | Active/session model, then global default | Planning and no-edit reasoning |
 | `general` | Inherits parent model and variant | Broad subagent work |
-| `explore` | `openai/gpt-5.4-mini-fast` | Fast repo exploration |
-| `title` | `openai/gpt-5.4-mini-fast` | Session titles |
+| `explore` | `wcs/gpt-5.5` (`none`) | Fast repo exploration without reasoning overhead |
+| `title` | `opencode/big-pickle` | Session titles using the free OpenCode Zen model |
 | `summary` | No LLM call in OpenCode 1.17.19 | Snapshot and file-diff metadata |
 | `compaction` | Inherits triggering model and variant | Conversation compaction |
 
-Custom agents either pin a bounded model or inherit the parent model and variant:
+Custom agents inherit the parent model and variant:
 
 | Agent | Model Selection | Purpose |
 | ----- | --------------- | ------- |
-| `commit` | `openai/gpt-5.4-mini-fast` | Git commit planning and execution |
-| `crawl` | `openai/gpt-5.4-mini-fast` | crawl4ai execution |
+| `commit` | Inherits parent model and variant | Git commit planning and execution |
+| `crawl` | Inherits parent model and variant | crawl4ai execution |
 | `librarian` | Inherits parent model and variant | External source/GitHub forensics with permalinks |
 | `web-researcher` | Inherits parent model and variant | Web documentation and synthesis |
 

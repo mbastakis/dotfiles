@@ -1,0 +1,36 @@
+{
+  "sound": true,
+  "notification": true,
+  "notificationSystem": "terminal-notifier",
+  "showProjectName": true,
+  "summaryLength": 240,
+  "timeout": 5,
+{{- if eq .chezmoi.hostname .opencode.remote.host }}
+  "webPush": {
+    "enabled": true,
+    "helper": {{ printf "%s/.config/opencode/pwa-push/server.js" .chezmoi.homeDir | quote }},
+    "externalUrl": {{ .opencode.remote.external_url | quote }}
+  },
+{{- end }}
+  "events": {
+    "permission": { "sound": true, "notification": true, "push": true },
+    "complete": { "sound": true, "notification": true, "push": true },
+    "error": { "sound": true, "notification": true, "push": true },
+    "question": { "sound": true, "notification": true, "push": true },
+    "user_cancelled": { "sound": false, "notification": false, "push": false }
+  },
+  "sounds": {
+    "permission": "/System/Library/Sounds/Glass.aiff",
+    "complete": "/System/Library/Sounds/Bottle.aiff",
+    "error": "/System/Library/Sounds/Funk.aiff",
+    "question": "/System/Library/Sounds/Hero.aiff",
+    "user_cancelled": null
+  },
+  "volumes": {
+    "permission": 0.5,
+    "complete": 0.6,
+    "error": 0.7,
+    "question": 0.5,
+    "user_cancelled": 0.3
+  }
+}

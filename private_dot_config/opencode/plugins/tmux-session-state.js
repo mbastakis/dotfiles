@@ -100,6 +100,24 @@ function statusPatch(status, event, statusText) {
   };
 }
 
+function primarySessionID(sessionID) {
+  const visited = new Set();
+  let currentID = sessionID;
+
+  while (currentID && !visited.has(currentID)) {
+    visited.add(currentID);
+    const current = sessions.get(currentID) || readJSON(sessionPath(currentID));
+    if (!current.parentID) return currentID;
+    currentID = current.parentID;
+  }
+
+  return sessionID;
+}
+
+function writeAttentionSession(sessionID, patch) {
+  writeSession(primarySessionID(sessionID), patch);
+}
+
 export default async function () {
   mkdirSync(sessionDir, { recursive: true });
   mkdirSync(paneDir, { recursive: true });
@@ -140,17 +158,17 @@ export default async function () {
           return;
 
         case "permission.asked":
-          writeSession(sessionID, statusPatch("blocked", event, "permission"));
+          writeAttentionSession(sessionID, statusPatch("blocked", event, "permission"));
           return;
 
         case "question.asked":
-          writeSession(sessionID, statusPatch("blocked", event, "question"));
+          writeAttentionSession(sessionID, statusPatch("blocked", event, "question"));
           return;
 
         case "permission.replied":
         case "question.replied":
         case "question.rejected":
-          writeSession(sessionID, statusPatch("working", event, "resuming"));
+          writeAttentionSession(sessionID, statusPatch("working", event, "resuming"));
           return;
 
         case "session.error": {
