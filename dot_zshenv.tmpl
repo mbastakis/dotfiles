@@ -79,12 +79,13 @@ export GOPATH="$XDG_DATA_HOME/go"
 export GOBIN="$HOME/bin"
 
 # Mise - pre-trust the chezmoi source dir so repo-local mise.toml activates
-# without prompting (applies to ~/.local/share/chezmoi and any nested configs)
+# without prompting (applies to the current source directory and nested configs)
 export MISE_TRUSTED_CONFIG_PATHS="$DOTFILES_PATH"
 
 # Terraform
 export TF_CLI_CONFIG_FILE="$XDG_CONFIG_HOME/terraform/terraform.rc"
 export TF_PLUGIN_CACHE_DIR="$XDG_CACHE_HOME/terraform/plugins"
+[[ -d "$TF_PLUGIN_CACHE_DIR" ]] || mkdir -p "$TF_PLUGIN_CACHE_DIR"
 
 # Taskwarrior (XDG-compliant override of ~/.taskrc and ~/.task/)
 export TASKRC="$XDG_CONFIG_HOME/task/taskrc"

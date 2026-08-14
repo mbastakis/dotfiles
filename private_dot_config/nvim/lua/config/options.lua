@@ -118,8 +118,8 @@ vim.filetype.add({
     -- chezmoi.vim handles .tmpl files inside the chezmoi source directory
     -- by stripping prefixes and setting the base filetype automatically
     [".*%.tmpl"] = function(path)
-      local chezmoi_source = vim.fn.expand("~/.local/share/chezmoi")
-      if not path:find(chezmoi_source, 1, true) then
+      local chezmoi_source = vim.env.DOTFILES_PATH
+      if not chezmoi_source or not path:find(chezmoi_source, 1, true) then
         return "gotmpl"
       end
     end,
