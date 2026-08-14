@@ -1,0 +1,11 @@
+# Source Code
+[WCS-Server]
+checkout = git clone git@github.com:WhoCaresSoftware/WCS-Server.git wcs-server
+
+# Infra
+[infra/terraform-oci-vcn]
+checkout = git clone git@github.com:WhoCaresSoftware/terraform-oci-vcn.git terraform-oci-vcn
+[infra/terraform-oci-flex-instance]
+checkout = git clone git@github.com:WhoCaresSoftware/terraform-oci-flex-instance.git terraform-oci-flex-instance
+[infra/terraform-oci-iam-team]
+checkout = git clone git@github.com:WhoCaresSoftware/terraform-oci-iam-team.git terraform-oci-iam-team
