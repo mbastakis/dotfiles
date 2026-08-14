@@ -1,0 +1,5 @@
+# Personal repositories
+[dotfiles]
+checkout = git clone git@github.com:mbastakis/dotfiles.git
+[kavouki]
+checkout = git clone git@github.com:mbastakis/kavouki.git

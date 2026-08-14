@@ -45,24 +45,6 @@ repos:
   # Pre-push: validate chezmoi dry-run
   - repo: local
     hooks:
-      - id: tofu-fmt
-        name: OpenTofu fmt
-        entry: mise exec -- task tf:fmt:check
-        language: system
-        pass_filenames: false
-        files: '^infra/(aws|identity|network|truenas)/.*\.tf$'
-      - id: tflint
-        name: TFLint
-        entry: mise exec -- task tf:tflint
-        language: system
-        pass_filenames: false
-        files: '^infra/(aws|identity|network|truenas)/.*\.tf$'
-      - id: terraform-docs
-        name: terraform-docs
-        entry: mise exec -- task tf:docs
-        language: system
-        pass_filenames: false
-        files: '^(infra/(aws|identity|network|truenas)/.*\.tf|\.terraform-docs\.yml)$'
       - id: chezmoi-dry-run
         name: chezmoi dry-run
         entry: chezmoi apply --dry-run --force

@@ -6,7 +6,7 @@
 # hash-server-wrapper: {{ include "literal_bin/executable_opencode-server" | sha256sum }}
 # hash-proxy-wrapper: {{ include "literal_bin/executable_opencode-oauth2-proxy" | sha256sum }}
 # hash-proxy-config: {{ include "private_dot_config/oauth2-proxy/private_oauth2-proxy.cfg.tmpl" | sha256sum }}
-# hash-opencode-config: {{ include "private_dot_config/opencode/opencode.jsonc" | sha256sum }}
+# hash-opencode-config: {{ include "private_dot_config/opencode/private_opencode.jsonc" | sha256sum }}
 # hash-oidc-secret: {{ (bitwardenSecrets .opencode.remote.oidc_client_secret_id).value | sha256sum }}
 # hash-cookie-secret: {{ (bitwardenSecrets .opencode.remote.cookie_secret_id).value | sha256sum }}
 # external-url: {{ .opencode.remote.external_url }}

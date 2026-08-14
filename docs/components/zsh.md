@@ -4,12 +4,6 @@ Shell startup model, load order, module responsibilities, and integrations with 
 
 **Source:** `dot_zshenv.tmpl` -> `~/.zshenv`, `private_dot_config/zsh/` -> `~/.config/zsh/`
 
-## atlas Deployment
-
-atlas does not run chezmoi or receive the full workstation Zsh stack. The Ansible `terminal_comfort` role installs Zsh and deploys a server-safe subset: XDG/ZDOTDIR bootstrap, history settings, basic aliases/functions, the `y` Yazi cwd wrapper, fzf configuration, `Ctrl-F` ftext search, `Ctrl-Z` zoxide selection, the Ghostty directory-picker sequence, zoxide, and Starship. It intentionally avoids Homebrew, Zinit, secrets, macOS-only selection widgets, and workstation app integrations.
-
-_Reference: `infra/atlas/ansible/roles/terminal_comfort/templates/.zshrc.j2:1`_
-
 ## Startup Model
 
 ```mermaid

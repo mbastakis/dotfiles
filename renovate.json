@@ -10,19 +10,14 @@
   "labels": ["dependencies"],
   "automerge": false,
   "enabledManagers": [
-    "ansible-galaxy",
     "custom.regex",
     "dockerfile",
     "github-actions",
     "mise",
     "npm",
-    "pep621",
-    "pre-commit",
-    "terraform"
+    "pre-commit"
   ],
   "ignorePaths": [
-    "**/.terraform/**",
-    "**/.venv/**",
     "**/node_modules/**"
   ],
   "packageRules": [
@@ -30,17 +25,6 @@
       "description": "Require approval for major upgrades",
       "matchUpdateTypes": ["major"],
       "dependencyDashboardApproval": true
-    },
-    {
-      "description": "Use the OpenTofu registry for providers and modules",
-      "matchDatasources": ["terraform-module", "terraform-provider"],
-      "registryUrls": ["https://registry.opentofu.org"]
-    },
-    {
-      "description": "Do not interpret OpenTofu compatibility constraints as Terraform releases",
-      "matchManagers": ["terraform"],
-      "matchDepTypes": ["required_version"],
-      "enabled": false
     },
     {
       "description": "Group GitHub Actions updates",
@@ -56,40 +40,9 @@
       "description": "Group repository-local tool updates",
       "matchManagers": ["mise"],
       "groupName": "repository tooling"
-    },
-    {
-      "description": "Keep Python aligned with the homeserver project constraint",
-      "matchManagers": ["mise"],
-      "matchPackageNames": ["python/cpython"],
-      "allowedVersions": "<3.14"
     }
   ],
   "customManagers": [
-    {
-      "customType": "regex",
-      "description": "Update container images stored in Atlas Ansible defaults",
-      "managerFilePatterns": [
-        "/^infra\\/atlas\\/ansible\\/roles\\/(?:atlas_homeserver|atlas_immich)\\/defaults\\/main\\.yml$/"
-      ],
-      "matchStrings": [
-        "(?:^|\\n)[a-z0-9_]+_image:\\s+(?<depName>[^\\s:@]+(?:/[^\\s:@]+)*):(?<currentValue>[^\\s@]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?",
-        "(?:^|\\n)[a-z0-9_]+_image:\\s+>-\\s+(?<depName>[^\\s:@]+(?:/[^\\s:@]+)*):(?<currentValue>[^\\s@]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?"
-      ],
-      "datasourceTemplate": "docker",
-      "versioningTemplate": "docker"
-    },
-    {
-      "customType": "regex",
-      "description": "Update the shared Immich container release",
-      "managerFilePatterns": [
-        "/^infra\\/atlas\\/ansible\\/roles\\/atlas_immich\\/defaults\\/main\\.yml$/"
-      ],
-      "matchStrings": [
-        "atlas_immich_version:\\s+(?<currentValue>[^\\s]+)\\s+atlas_immich_server_image:\\s+(?<depName>[^\\s]+)"
-      ],
-      "datasourceTemplate": "docker",
-      "versioningTemplate": "docker"
-    },
     {
       "customType": "regex",
       "description": "Update the K9s shell pod image",

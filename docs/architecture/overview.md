@@ -32,29 +32,11 @@ flowchart LR
 
 Input flows from the physical keyboard through Karabiner (home row mods, hyper key), into Ghostty (terminal keybindings), then into tmux (prefix commands) or directly to zsh (shell keybindings). From zsh, input reaches Neovim, OpenCode, Pi, and NeoMutt. Chezmoi manages configuration for all layers, including the mail stack and its launchd automation.
 
-## Production Network Topology
+## External Infrastructure
 
-```mermaid
-flowchart LR
-  I[Internet] --> ONT[ONT]
-  ONT --> R[Cudy WR3000E v1<br/>OpenWrt 25.12.5<br/>PPPoE VLAN 835]
-  R --> S[TL-SG108<br/>trusted 192.168.1.0/24]
-  S --> AT[atlas .19]
-  AT --> PH[Pi-hole DNS filtering]
-  R -->|primary DNS upstream| PH
-  R -. atlas outage fallback .-> CD[Cloudflare DNS]
-  S --> TN[TrueNAS .74]
-  S --> MAC[Mac / wired clients]
-  R --> MW[Main Wi-Fi<br/>trusted LAN]
-  R --> GW[Guest Wi-Fi<br/>isolated 192.168.30.0/24]
-  SP[Speedport Plus 2<br/>powered-off rollback] -. physical rollback .-> ONT
-```
-
-The Cudy is the accepted production router. It provides native IPv4/IPv6,
-trusted and guest Wi-Fi, fail-closed WAN policy, and CAKE SQM. The trusted LAN
-remains flat because the TL-SG108 is unmanaged; guest isolation terminates on
-the Cudy radios and bridge. The configured Speedport remains offline and
-unchanged through the observation window.
+The workstation keeps only client-facing SSH aliases, keys, and route selection.
+The authoritative network topology, router policy, remote host configuration,
+and recovery runbooks live in the sibling Kavouki repository.
 
 ## Source-to-Target Mapping
 
@@ -67,7 +49,7 @@ Chezmoi translates source-state file names to target paths using naming conventi
 | `bin/chezmoi-bws` | _(source-only)_ | BWS token wrapper script |
 | `private_dot_agents/skills/` | `~/.agents/skills/` | Harness-agnostic Agent Skills loaded by OpenCode and Pi |
 | `private_dot_config/pi/` | `~/.config/pi/` | Pi global config, extensions, keybindings, prompt templates, and Pi-specific skills (`PI_CODING_AGENT_DIR=$HOME/.config/pi`) |
-| `.pre-commit-config.yaml`, `.tflint.hcl`, `.terraform-docs.yml` | _(source-only)_ | Repo-local quality gates for hooks, OpenTofu linting, and generated module docs |
+| `.pre-commit-config.yaml` | _(source-only)_ | Repo-local quality gates for dotfiles hooks |
 | `mise.toml`, `Taskfile.yml`, `renovate.json` | _(source-only)_ | Repo-local tool pins, task runner workflows, and dependency automation |
 | `literal_bin/` | `~/bin/` | Shell utility scripts |
 | `private_dot_ssh/` | `~/.ssh/` | SSH keys (encrypted) |
@@ -102,11 +84,10 @@ These paths exist in the repo but are never deployed to the target filesystem:
 |---|---|
 | `ai-docs/` | Crawled documentation for AI agents |
 | `code-portable-data/` | VS Code portable data |
-| `infra/` | Source-only infrastructure automation, including Ansible, OpenTofu, and TrueNAS app declarations |
 | `bin/chezmoi-bws` | BWS helper (used during template rendering only) |
 | `CONTEXT.md` | Repository glossary for agent/user terminology |
 | `docs/` | This documentation tree |
-| `.pre-commit-config.yaml`, `.tflint.hcl`, `.terraform-docs.yml`, `renovate.json` | Repo-only tooling configuration |
+| `.pre-commit-config.yaml`, `renovate.json` | Repo-only tooling configuration |
 
 _Reference: `.chezmoiignore:11`_
 
@@ -117,7 +98,6 @@ The `.chezmoiignore` file uses **target-state paths** (not source-state names) a
 - **Build artifacts:** `node_modules/`, `target/`, `__pycache__/`, lock files
 - **Caches:** `.cache/`, `.config/carapace/.versions`, `lazy-lock.json`, yazi plugins
 - **Runtime state:** `.kube/`, `glab-cli/recover/`, `.config/pi/powerline-footer/`, `.config/pi/vibes/`, `.obsidian/`, `.DS_Store`
-- **Infrastructure artifacts:** OpenTofu state, plan files, `.terraform/`, and secret variable files are ignored by Git and never committed
 - **Obsidian vault generated files:** Plugin binaries (`main.js`, `manifest.json`, `styles.css`), themes, icons, and `workspace.json` under `Documents/notes/.obsidian/` are ignored — only settings JSONs and plugin `data.json` files are managed
 - **Profile-conditional:** DT work configs (glab, git work config, GitLab SSH keys) excluded when profile is not `dt-work`
 - **OS-conditional:** macOS-only configs (Aerospace, Karabiner, Finicky, Ghostty LaunchAgent, mail LaunchAgent) excluded on Linux

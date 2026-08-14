@@ -17,28 +17,6 @@ flowchart LR
 
 A keystroke passes through each layer in sequence. Karabiner processes physical key events first (home row mods, hyper key), Ghostty handles terminal-level bindings, tmux intercepts its prefix and pass-through sequences, zsh processes shell keybindings, and then app-level bindings apply in NeoMutt or Neovim.
 
-## Sisyphus (Web App Layer)
-
-Sisyphus shortcuts are ignored while typing in form fields. `Enter` opens the edit dialog when a task card has keyboard focus. The edit drawer intercepts `Escape` so unsaved changes receive the same discard confirmation as its close controls.
-
-| Key | Action | Source |
-| --- | --- | --- |
-| `N` | Focus quick-add task description | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
-| `/` | Open sidebar and focus search | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
-| `B` | Toggle sidebar | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
-| `S` | Sync now | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
-| `R` | Refresh board | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
-| `E` | Expand all columns | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
-| `C` | Collapse empty columns | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
-| `G` | Focus the first visible task card | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
-| `J` / `K`, `Down` / `Up` | Focus the next/previous card in a column | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
-| `H` / `L`, `Left` / `Right` | Focus a card in the previous/next visible column | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
-| `Shift-H` / `Shift-L`, `Shift-Left` / `Shift-Right` | Move the focused task one column | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
-| `1` through `5` | Move the focused task to Backlog, Ready, Doing, Waiting, or Done | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
-| `X` | Collapse or expand the focused card's column | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
-| `?` | Show/hide shortcuts panel | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
-| `Enter` | Edit focused card | `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/static/app.js` |
-
 ## Karabiner (Keyboard Layer)
 
 ### Home Row Mods (GASC)
@@ -148,9 +126,7 @@ The OpenCode sidebar starts collapsed on a fresh tmux server. Opening it focuses
 
 ## Zsh (Shell Layer)
 
-atlas receives a server-safe subset of these Zsh bindings through Ansible, including `Ctrl+F`, `Ctrl+J`, `Ctrl+Shift+T`, `Ctrl+Z`, word movement, and Home/End. Workstation-only integrations such as Atuin, Zinit plugins, and macOS clipboard bindings are not deployed to atlas.
-
-_Atlas reference: `infra/atlas/ansible/roles/terminal_comfort/templates/keybindings.zsh.j2:1`_
+These bindings describe the workstation configuration. Server-side terminal configuration is owned by Kavouki.
 
 ### Custom Widget Keybindings
 

@@ -6,36 +6,6 @@
 
 version: "3"
 
-vars:
-  TF_STATE_BUCKET: mbastakis-homeserver-opentofu-state
-  TF_STATE_REGION: eu-central-1
-
-includes:
-  infra:
-    taskfile: ./infra/Taskfile.yml
-    dir: .
-  tf:
-    taskfile: ./infra/tofu.Taskfile.yml
-    dir: .
-  aws:
-    taskfile: ./infra/aws/Taskfile.yml
-    dir: .
-  atlas:
-    taskfile: ./infra/atlas/Taskfile.yml
-    dir: .
-  truenas:
-    taskfile: ./infra/truenas/Taskfile.yml
-    dir: .
-  identity:
-    taskfile: ./infra/identity/Taskfile.yml
-    dir: .
-  network:
-    taskfile: ./infra/network/Taskfile.yml
-    dir: .
-  sync:
-    taskfile: ./infra/sync/Taskfile.yml
-    dir: .
-
 tasks:
   default:
     desc: List available tasks
@@ -54,6 +24,11 @@ tasks:
       - pre-commit run --all-files
       - pre-commit run shellcheck --all-files
       - pre-commit run gitleaks --all-files
+
+  test:
+    desc: Run workstation behavior tests
+    cmds:
+      - uvx --from pytest pytest tests
 
   brew:dump:
     desc: Refresh Brewfile from currently installed formulas/casks

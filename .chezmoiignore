@@ -12,7 +12,6 @@ docs/
 # Source-only directories (kept in repo, not deployed by chezmoi)
 ai-docs/
 specs/
-infra/
 .local/openwrt/
 .task/
 
@@ -21,8 +20,6 @@ mise.toml
 Taskfile.yml
 renovate.json
 .pre-commit-config.yaml
-.tflint.hcl
-.terraform-docs.yml
 
 # Age encryption key (decrypted by run_onchange_before script)
 key.txt.age

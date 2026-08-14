@@ -52,6 +52,41 @@ Host truenas-tailscale
     HostName 100.122.166.74
     HostKeyAlias 192.168.1.74
 
+Host atlas-via-openwrt
+    HostName 192.168.1.19
+    HostKeyAlias 192.168.1.19
+    User mbastakis
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
+    ProxyJump openwrt-tailscale
+    ForwardAgent no
+
+Host truenas-via-openwrt
+    HostName 192.168.1.74
+    HostKeyAlias 192.168.1.74
+    User mbastakis
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
+    ProxyJump openwrt-tailscale
+    ForwardAgent no
+
+Host openwrt openwrt-tailscale
+    HostName 100.99.174.123
+    Port 2222
+
+Host openwrt-lan 192.168.1.1
+    HostName 192.168.1.1
+
+Host openwrt openwrt-lan openwrt-tailscale 192.168.1.1
+    HostKeyAlias 192.168.1.1
+    User root
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
+    UserKnownHostsFile {{ .chezmoi.homeDir }}/dev/personal/workspaces/home-workspace/kavouki/.local/openwrt/known_hosts
+    StrictHostKeyChecking yes
+    UpdateHostKeys no
+    ForwardAgent no
+
 Host ssh.whocaressoftware.com
     HostName ssh.whocaressoftware.com
     IdentityFile ~/.ssh/id_ed25519

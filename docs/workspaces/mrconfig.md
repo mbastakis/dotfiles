@@ -11,6 +11,9 @@ dev/
   personal/
     dev-tools/
       dot_mrconfig        # aws-login + homebrew-tap repos
+    workspaces/
+      home-workspace/
+        dot_mrconfig      # dotfiles + kavouki repos
     whocares/
       dot_mrconfig        # Simple static checkouts
   work/
@@ -20,7 +23,7 @@ dev/
         dot_mrconfig      # Static + dynamic repo discovery
 ```
 
-Each workspace has a `dot_mrconfig` that gets deployed by chezmoi to `~/.mrconfig` (or included from it).
+Each workspace has a `dot_mrconfig` that gets deployed by chezmoi to the corresponding target workspace. The home workspace keeps dotfiles and Kavouki as sibling checkouts.
 
 ## mrconfig Format
 
@@ -116,4 +119,5 @@ _Reference: `dev/work/workspaces/magenta-apprentice/AGENTS.md:1`_
 - Work mrconfig: `dev/work/workspaces/magenta-apprentice/dot_mrconfig:1`
 - Work AGENTS: `dev/work/workspaces/magenta-apprentice/AGENTS.md:1`
 - Personal mrconfig: `dev/personal/whocares/dot_mrconfig:1`
+- Home workspace mrconfig: `dev/personal/workspaces/home-workspace/dot_mrconfig:1`
 - Personal dev-tools mrconfig: `dev/personal/dev-tools/dot_mrconfig:1`

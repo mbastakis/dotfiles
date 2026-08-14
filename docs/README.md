@@ -8,18 +8,8 @@ Component-based documentation for the chezmoi-managed dotfiles in this repositor
 
 - [System Overview](architecture/overview.md) -- source-to-target mapping, component boundaries, deployment scope
 - [Chezmoi Lifecycle](architecture/chezmoi-lifecycle.md) -- apply order, encryption, templates, and secrets flow
-- [Homeserver IaC](architecture/homeserver-iac.md) -- OpenTofu, TrueNAS, catalog apps, and backup architecture
-- [Homeserver Ownership](architecture/homeserver-ownership.md) -- desired-state and runtime-state ownership matrix
 
-## Decisions
-
-- [0001: Rebuild atlas with clean Ubuntu and Ansible](adr/0001-rebuild-atlas-with-clean-ubuntu-and-ansible.md)
-- [0002: Manage TrueNAS with OpenTofu and API app automation](adr/0002-manage-truenas-with-opentofu-and-api-app-automation.md)
-- [0003: Taskwarrior 3.x with TaskChampion sync on atlas](adr/0003-taskwarrior-3x-with-taskchampion-sync-on-atlas.md)
-- [0004: TrueNAS API key via null_resource](adr/0004-truenas-api-key-via-null-resource.md)
-- [0005: Immich on atlas with TrueNAS storage](adr/0005-run-immich-on-atlas-with-truenas-storage.md)
-- [0006: Domain-first homeserver IaC operated through Task](adr/0006-domain-first-homeserver-iac.md)
-- [0007: Manage OpenWrt from one contract with risk-tiered convergence](adr/0007-manage-openwrt-router-as-typed-desired-state.md)
+External homeserver infrastructure, architecture decisions, and runbooks live in the sibling [`kavouki`](https://github.com/mbastakis/kavouki) repository.
 
 ## Components
 
@@ -30,25 +20,6 @@ Component-based documentation for the chezmoi-managed dotfiles in this repositor
 - [OpenCode](components/opencode.md) -- config model, MCP setup, agents, and custom commands
 - [Carapace](components/carapace.md) -- completion registry, spec types, bridge model, and sync workflow
 - [Karabiner](components/karabiner.md) -- generated build pipeline, home row mods, and rule organization
-
-## Runbooks
-
-- [Add Household User](runbooks/add-household-user.md) -- Tailscale + Authentik + FileBrowser onboarding
-- [Add Guest User](runbooks/add-guest-user.md) -- limited FileBrowser-only access
-- [Add Obsidian Device](runbooks/add-obsidian-device.md) -- Syncthing peer enrollment
-- [Restore from Restic](runbooks/restore-from-restic.md) -- off-NAS S3 disaster recovery
-- [Restore from ZFS Snapshot](runbooks/restore-from-zfs-snapshot.md) -- local quick rollback
-- [OpenTofu State Migrations](runbooks/opentofu-state-migrations.md) -- state baselines, moved blocks, and rollback
-- [Homeserver Secret Rotation](runbooks/homeserver-secret-rotation.md) -- BWS inventory and credential rotation procedures
-- [ntfy Notifications](runbooks/ntfy.md) -- private push delivery, iPhone setup, and operations
-- [Pi-hole DNS Filtering](runbooks/pihole.md) -- filtered DNS with router-managed outage fallback
-- [Sisyphus](runbooks/taskboard.md) -- Taskwarrior Kanban board operations
-- [Break-Glass Access](runbooks/break-glass-access.md) -- Authentik/OIDC outage recovery
-- [Apple Photos to Immich Migration](runbooks/apple-photos-immich-migration.md) -- archive, pilot, metadata, validation, and resume gates
-- [Audiobookshelf](runbooks/audiobookshelf.md) -- deployment, mobile setup, storage, backups, and restore
-- [Legacy Speedport UPnP](runbooks/router-upnp-disable.md) -- rollback-router hardening retained through observation
-- [OpenWrt Router Cutover](runbooks/openwrt-router-cutover.md) -- accepted production topology, staged cutover, rollback, and observation gates
-- [OpenWrt Router Recovery](runbooks/openwrt-router-recovery.md) -- protected rollback limits, Speedport fallback, TFTP, UART, and clean rebuild
 
 ## Workspaces
 

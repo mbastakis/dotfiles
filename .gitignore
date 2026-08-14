@@ -28,9 +28,6 @@ __pycache__/
 .ruff_cache/
 .venv/
 
-# Ansible
-infra/**/.collections/
-
 # Rust build artifacts (nvim test fixtures)
 private_dot_config/nvim/test/rust/target/
 
@@ -57,15 +54,3 @@ private_dot_config/pi/agent/bin/
 private_dot_config/pi/agent/git/
 private_dot_config/pi/agent/npm/
 private_dot_config/pi/agent/*-debug.log
-
-# OpenTofu / Terraform
-**/.terraform/
-.tflint.d/
-**/backend.generated.tf
-*.tfstate
-*.tfstate.*
-*.tfplan
-*.tfvars
-*.tfvars.json
-crash.log
-crash.*.log

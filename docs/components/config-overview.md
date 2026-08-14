@@ -15,9 +15,9 @@ Summary of notable config areas managed by chezmoi, with links to dedicated docs
 | **Karabiner** | `private_dot_config/private_karabiner/` | [karabiner.md](karabiner.md) | Keyboard remapping (generated config) |
 | **Carapace** | `private_dot_config/carapace/` | [carapace.md](carapace.md) | Shell completion framework |
 | **Zsh** | `private_dot_config/zsh/`, `dot_zshenv.tmpl` | [zsh.md](zsh.md) | Shell bootstrap plus XDG-aware tool/runtime environment |
-| **SSH** | `private_dot_ssh/`, `literal_bin/executable_homeserver-route` | -- | Encrypted/private SSH keys plus host aliases; `wgeasy` uses the managed personal key and forwards its remote admin UI to local port `51821`; `openwrt` targets the LAN-only router as root using the controller's confirmed host-key pin, while Atlas and TrueNAS verify pinned LAN host keys, prefer the local route, and fall back to Tailscale |
+| **SSH** | `private_dot_ssh/`, `literal_bin/executable_homeserver-route` | -- | Encrypted/private SSH keys plus host aliases; OpenWrt client aliases keep strict host verification against Kavouki-owned runtime state, while Atlas and TrueNAS aliases remain workstation clients |
 | **Atuin** | `private_dot_config/private_atuin/private_config.toml` | -- | Shell history search, sync, and AI settings |
-| Terraform CLI | `private_dot_config/terraform/terraform.rc` | -- | Legacy Terraform CLI defaults (for example checkpoint suppression); homeserver IaC uses repo-local OpenTofu instead |
+| Terraform CLI | `private_dot_config/terraform/terraform.rc` | -- | Local Terraform/OpenTofu CLI defaults, including checkpoint suppression and plugin caching |
 | **NeoMutt** | `private_dot_config/neomutt/` | [email.md](email.md) | Terminal mail client config and custom mailbox bindings |
 | **notmuch** | `private_dot_config/notmuch/default/` | [email.md](email.md) | Mail index/search config and tagging hook |
 | **msmtp** | `private_dot_config/msmtp/private_config.tmpl` | [email.md](email.md) | SMTP account config rendered from Bitwarden secrets |
@@ -26,10 +26,8 @@ Summary of notable config areas managed by chezmoi, with links to dedicated docs
 | Colima | `private_dot_local/private_share/colima/` | -- | Container runtime seed; live VM config is preserved after creation |
 | Kubernetes | `private_dot_config/kube/` | -- | DT work kubeconfig seeds; live files are preserved after `kubectl`/`aws`/`kind` rewrites |
 | aws-login | `private_dot_config/aws-login/` | -- | Work and personal AWS profiles, AWS SSO bootstrap, and per-profile `KUBECONFIG` wiring |
-| Mise | `private_dot_config/mise/config.toml` (global) + `mise.toml` (repo root, source-only) | -- | Tool/version manager; repo-local pins Node, Python, uv, go-task, OpenTofu, TFLint, terraform-docs, pre-commit, jq, yq, ShellCheck, and yamllint |
-| Homeserver Python | `infra/pyproject.toml`, `infra/src/homeserver_iac/`, `infra/schemas/`, `infra/tests/` (source-only) | [homeserver-iac.md](../architecture/homeserver-iac.md#typed-desired-state) | Typed BWS, TrueNAS, Backrest, and Syncthing reconcilers plus the narrow protected OpenWrt transaction/firmware extension; invoked publicly through Task only |
-| Homeserver Ansible | `infra/ansible/`, `infra/atlas/ansible/` (source-only) | [homeserver-iac.md](../architecture/homeserver-iac.md) | Pinned Ansible automation for Atlas and routine OpenWrt convergence; OpenWrt uses `community.openwrt` without installing Python on the router |
-| Taskfile | `Taskfile.yml` + `infra/**/Taskfile.yml` (source-only) | -- | Thin root go-task interface with AWS, TrueNAS, identity, network, sync, Atlas, Sisyphus browser tests, typed desired-state, and aggregate validation tasks |
+| Mise | `private_dot_config/mise/config.toml` (global) + `mise.toml` (repo root, source-only) | -- | Tool/version manager; repo-local pins Node, go-task, pre-commit, ShellCheck, and yamllint |
+| Taskfile | `Taskfile.yml` (source-only) | -- | Dotfiles update, lint, workstation tests, Brewfile refresh, and documentation tasks |
 | Ghostty | `private_dot_config/ghostty/` | -- | Terminal emulator |
 | tmux | `private_dot_config/tmux/` | -- | Terminal multiplexer |
 | Starship | `private_dot_config/starship.toml` | -- | Prompt theme |
@@ -50,97 +48,18 @@ Repo-local pre-commit hygiene hooks skip `private_Documents/notes/dot_obsidian/`
 
 ## Repository Workflows
 
-The root `Taskfile.yml` owns repository-level commands and includes Taskfiles
-next to the infrastructure they operate. Domain commands use `aws:*`,
-`truenas:*`, `identity:*`, `network:*`, `sync:*`, and `atlas:*`. Old deployment
-aliases were removed; `tf:*` now contains only cross-stack OpenTofu quality and
-state commands.
+The root `Taskfile.yml` owns workstation configuration workflows: update, lint,
+allowlisted cache cleanup, Brewfile refresh, and local docs serving.
+
+External infrastructure workflows and their toolchain live in the sibling
+Kavouki repository.
 
 ### Dependency automation
 
-Renovate is configured in the source-only `renovate.json`. Its native managers
-cover mise tools, pre-commit hooks, npm and uv lock files, Ansible Galaxy,
-OpenTofu providers and modules, Dockerfiles, and GitHub Actions. Narrow regex
-managers cover Atlas container variables, the shared Immich release, the K9s
-shell image, and Colima's K3s release without scanning unrelated chezmoi YAML.
-Major updates require Dependency Dashboard approval, updates run on Monday
-mornings, and automerge is disabled.
-
-The Brewfile remains intentionally outside Renovate: ordinary `brew` and `cask`
-entries do not contain versions, and versioned formula names such as
-`postgresql@17` require coordinated manual upgrades. OpenWrt release checksums,
-TrueNAS catalog app versions, Taskwarrior release checksums, and Yazi plugin
-hashes also remain manual until they have tested metadata sources. The pinned
-`.github/workflows/validate.yml` workflow installs the mise toolchain, verifies
-the Taskboard browser npm lock file, and runs `infra:validate` for every pull request.
-
-Run the complete secret-free, live-service-free infrastructure gate from the
-repository root:
-
-```bash
-mise exec -- task infra:validate
-```
-
-After cloning or changing `infra/pyproject.toml`, install the committed Python
-lock once with `mise exec -- task infra:python:sync`. Normal validation uses uv
-in locked offline mode. Use `infra:desired:validate` for all versioned YAML
-contracts, `infra:python:validate` for the Python quality gate, and
-`infra:schemas:generate` only when a Pydantic contract intentionally changes.
-The aggregate also runs Atlas and OpenWrt Ansible syntax checks, with each task
-owning installation of its pinned local collection.
-YAML lint covers authored infrastructure while excluding generated `.venv` and
-Ansible `.collections` dependency trees and browser-test `node_modules`.
-Live typed plans use `truenas:apps:plan`, `truenas:snapshots:plan`,
-`truenas:nfs:plan`, `truenas:smb:plan`, `truenas:backrest:plan`,
-`truenas:api-key:plan`, and `sync:plan:all`. Run
-`infra:status` to aggregate every live read-only domain check. Superseded shell
-reconcilers and rollback aliases have been removed.
-
-The migration-only `infra:photos:validate-export` task scans an Apple Photos
-export without changing it, checks content type, fully decodes each visual
-stream with FFmpeg, and writes a JSON report outside the export tree.
-`infra:photos:build-import-manifest` then joins validated media to explicit
-source snapshots and binds selected media and XMP sidecars to SHA-256 hashes.
-`infra:photos:plan-immich-metadata` reconciles the import manifest with official
-Immich CLI upload evidence and emits the read-only favorite, album, and stack
-API plan before any temporary API key is created. The separate
-`infra:photos:reconcile-immich-metadata` task performs the bounded live API
-comparison from that reviewed plan and only mutates when `APPLY=true` is passed;
-its stack verifier treats Immich `livePhotoVideoId` links as present Live Photo
-motion assets while still blocking unrelated stack differences.
-These are live-data operations and are intentionally excluded from
-`infra:validate`.
-
-The Tailscale whole-policy document is managed by the official provider in its
-own state through `network:policy:plan` and `network:policy:apply`. Those tasks
-inject the API credential from BWS and run the separate remote validator first;
-the pinned provider release does not yet perform remote validation during plan.
-
-Use `atlas:validate` for local playbook syntax checks, `atlas:*:plan` for
-Ansible check mode with diff output, and `atlas:*:apply` for convergence. Check
-mode is advisory because not every Ansible module can fully model a remote
-mutation without applying it. `atlas:taskboard:test` runs an isolated
-real-Taskwarrior HTTP mutation lifecycle and mocked Playwright UI regressions,
-while `atlas:taskboard:smoke:live` opens a read-only SSH tunnel to
-the deployed container. The live smoke runs automatically after
-`atlas:homeserver:apply`.
-
-Atlas homeserver convergence uses native Ansible file management and the
-`community.docker.docker_compose_v2` module. A focused local module updates the
-TrueNAS middleware user record for the backup SSH key because direct
-`authorized_keys` edits would bypass the appliance-owned user database.
-
-Before moving OpenTofu resources or stack source paths, run
-`mise exec -- task tf:state:baseline` and follow the
-[state migration runbook](../runbooks/opentofu-state-migrations.md). The live
-check verifies versioned state recovery points and provider lock metadata; it
-is intentionally excluded from the offline `infra:validate` gate.
-
-Run `mise exec -- task tf:test` after changing a reusable OpenTofu module. The
-task initializes each module test root against its committed provider lockfile
-and runs mock-provider tests without reading live infrastructure. Provider
-installation may require network access on a fresh workstation, so module tests
-remain separate from the strictly offline aggregate gate.
+Renovate is configured in the source-only `renovate.json` for workstation-owned
+dependencies such as mise tools, pre-commit hooks, npm packages, GitHub Actions,
+the K9s shell image, and Colima's K3s release. Major updates require Dependency
+Dashboard approval, updates run on Monday mornings, and automerge is disabled.
 
 ## Pi
 
@@ -166,12 +85,12 @@ _Reference: `private_dot_config/ghostty/config:1`_
 
 ## tmux
 
-Terminal multiplexer with Catppuccin theme and plugin ecosystem on the workstation, and the same shared config in a server-safe mode on SSH hosts such as `atlas`.
+Terminal multiplexer with Catppuccin theme and plugin ecosystem on the workstation.
 
-- **Prefix:** `Ctrl-a` everywhere. In nested SSH tmux sessions, use `Ctrl-a a` to forward one prefix to the remote tmux, then press the remote command key.
+- **Prefix:** `Ctrl-a`. In nested SSH tmux sessions, use `Ctrl-a a` to forward one prefix to the remote tmux, then press the remote command key.
 - **Plugins (TPM):** vim-tmux-navigator, catppuccin, tmux-yank, tmux-resurrect, tmux-continuum, tmux-floax, tmux-harpoon
 - **Server mode:** SSH sessions skip TPM startup, Mac-only helper scripts, and the workstation status line while keeping the core pane/window/copy-mode behavior.
-- **Clipboard:** tmux allows OSC52 clipboard forwarding so yanks from remote Neovim can reach the workstation terminal clipboard. The atlas Ansible role reloads a running tmux server when the shared tmux config changes so existing sessions pick up `set-clipboard on` and passthrough settings.
+- **Clipboard:** tmux allows OSC52 clipboard forwarding so yanks from remote Neovim can reach the workstation terminal clipboard. Server-side terminal configuration is owned by Kavouki.
 - **Session picker:** `prefix + s` opens a `sesh` + `gum` popup helper (`~/bin/sesh-picker`)
 - **Window rename:** `prefix + ,` opens a `gum` input popup instead of drawing the prompt over the status line
 - **Session rename:** `prefix + R` opens a `gum` input popup (`~/bin/sesh-rename`); rejects duplicate session names
@@ -189,15 +108,15 @@ _Reference: `private_dot_config/tmux/tmux.conf:1`_
 
 ## Yazi
 
-Terminal file manager. `atlas` receives the shared config from `private_dot_config/yazi/` via Ansible, installs the upstream `yazi` `.deb` matching the workstation version, and runs `ya pkg install` against `package.toml` for plugins.
+Terminal file manager configured for the workstation. Server-side Yazi configuration is independently owned by Kavouki.
 
-_Reference: `private_dot_config/yazi/yazi.toml:1`, `infra/atlas/ansible/roles/terminal_comfort/tasks/main.yml:84`_
+_Reference: `private_dot_config/yazi/yazi.toml:1`_
 
 ## Lazygit
 
-Git TUI with Catppuccin-style colors and `delta --dark --paging=never` as the pager. `atlas` receives the same `private_dot_config/lazygit/config.yml` via Ansible and installs Ubuntu's `git-delta` package so the pager command resolves to `delta`.
+Git TUI with Catppuccin-style colors and `delta --dark --paging=never` as the pager. Server-side Lazygit configuration is independently owned by Kavouki.
 
-_Reference: `private_dot_config/lazygit/config.yml:1`, `infra/atlas/ansible/roles/terminal_comfort/tasks/main.yml:76`_
+_Reference: `private_dot_config/lazygit/config.yml:1`_
 
 ## sesh
 
@@ -246,7 +165,6 @@ CLI todo list manager and single source of truth for personal task management, s
 - **Board:** Sisyphus runs on atlas at `https://taskboard.mbastakis.com` as a write-capable Kanban projection over Taskwarrior. It uses its own local Taskwarrior replica, syncs through TaskChampion, maps columns to native Taskwarrior state (`+next`, active/start, `+waiting`, done) rather than storing separate board state, and is gated by Authentik forward-auth at Traefik. Deployment identifiers remain `taskboard`.
 - **Automation:** `~/bin/task-sync` runs `task sync` with a lock and logs to `~/.local/state/task/log/task-sync.log`; `~/Library/LaunchAgents/com.mbastakis.task-sync.plist` runs it at login and every 2 minutes.
 - **iOS:** Taskchamp (native TaskChampion replica, list/sort/capture/start/stop/done). Use the same shared client ID as Mac: `24e1b420-97ae-4847-9fae-cf15c096706b`.
-- **Timewarrior:** removed — recurring tasks are native Taskwarrior, time tracking had no sync story
 
 ### Linear UDAs
 
@@ -274,15 +192,13 @@ task linear_state:Todo +linear list   # only originally-Todo items
 
 Linear priorities are mapped onto Taskwarrior's H/M/L scale: `Urgent` and `High` both become `H`, `Medium` becomes `M`, `Low` becomes `L`, and `None` leaves priority empty. `Urgent` issues additionally gain a `+urgent` tag so they stay distinguishable. Linear labels are lowercased and carried through as Taskwarrior tags.
 
-_Reference: `private_dot_config/task/taskrc.tmpl`, `infra/atlas/ansible/roles/atlas_homeserver/files/taskboard/`, [sync architecture spec](../../specs/taskwarrior-sync-implementation-plan.md)_
+_Reference: `private_dot_config/task/taskrc.tmpl`_
 
 ## References
 
 - Neovim AGENTS: `private_dot_config/nvim/AGENTS.md:1`
 - OpenCode README: `private_dot_config/opencode/README.md:1`
-- Homeserver IaC: `docs/architecture/homeserver-iac.md:1`
 - Email stack doc: `docs/components/email.md:1`
-- Taskwarrior sync architecture: `specs/taskwarrior-sync-implementation-plan.md:1`
 - mbsync template: `private_dot_config/isyncrc.tmpl:1`
 - Ghostty config: `private_dot_config/ghostty/config:1`
 - tmux config: `private_dot_config/tmux/tmux.conf:1`

@@ -4,31 +4,22 @@ on:
   pull_request:
   push:
     branches: [main]
-  workflow_dispatch:
 
 permissions:
   contents: read
 
-concurrency:
-  group: validate-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  repository:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
+  validate:
+    runs-on: macos-latest
     steps:
-      - name: Check out repository
+      - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
-      - name: Install repository tools
-        uses: jdx/mise-action@dad1bfd3df957f44999b559dd69dc1671cb4e9ea # v4
+      - name: Install mise
+        uses: jdx/mise-action@c8f9c7c36eddd2bfb5335aa41b44f53bf2b0fe9d # v3
 
-      - name: Install locked Python environment
-        run: uv sync --project infra --locked
+      - name: Run lint
+        run: mise exec -- task lint
 
-      - name: Verify taskboard browser lock file
-        run: npm --prefix infra/atlas/tests/taskboard-browser ci --ignore-scripts
-
-      - name: Run offline infrastructure validation
-        run: task infra:validate
+      - name: Run workstation tests
+        run: mise exec -- task test

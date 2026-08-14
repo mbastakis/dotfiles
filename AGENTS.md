@@ -36,8 +36,7 @@ pre-commit run gitleaks     # Secrets detection only
 ```
 
 Hooks: shellcheck (`-x -e SC1091`), gitleaks, yamllint (relaxed), trailing-whitespace,
-end-of-file-fixer, check-yaml/toml/json, detect-private-key (excludes `.age`), large files (500KB),
-OpenTofu fmt, TFLint, and terraform-docs.
+end-of-file-fixer, check-yaml/toml/json, detect-private-key (excludes `.age`), and large files (500KB).
 Pre-push: `chezmoi apply --dry-run --force`.
 
 ## Apply Order
@@ -85,12 +84,9 @@ key.txt.age (in repo, passphrase-encrypted)
 | `.chezmoi.toml.tmpl`                                            | `~/.config/chezmoi/chezmoi.toml`     | Config, profile, encryption                                          |
 | `key.txt.age`                                                   | _(ignored, source-only)_             | Passphrase-encrypted age key                                         |
 | `bin/chezmoi-bws`                                               | _(ignored, source-only)_             | BWS token wrapper                                                    |
-| `mise.toml`                                                     | _(ignored, source-only)_             | Repo-local mise tools (Python, uv, go-task, and IaC tooling)          |
-| `Taskfile.yml`                                                  | _(ignored, source-only)_             | go-task runner for repo workflows                                    |
-| `.pre-commit-config.yaml`, `.tflint.hcl`, `.terraform-docs.yml` | _(ignored, source-only)_             | Repo-local hooks and IaC quality tooling                             |
-| `infra/aws/`, `infra/truenas/tofu/`, `infra/identity/`          | _(ignored, source-only)_             | Domain-owned OpenTofu stacks and reusable modules                     |
-| `infra/truenas/`                                                | _(ignored, source-only)_             | TrueNAS catalog app declarations and API wrapper area                |
-| `infra/src/homeserver_iac/`, `infra/schemas/`, `infra/tests/`   | _(ignored, source-only)_             | Typed desired-state reconcilers, generated schemas, and fixture tests |
+| `mise.toml`                                                     | _(ignored, source-only)_             | Repo-local Node, go-task, pre-commit, ShellCheck, yamllint, and uv tools |
+| `Taskfile.yml`                                                  | _(ignored, source-only)_             | go-task runner for dotfiles workflows                                |
+| `.pre-commit-config.yaml`                                       | _(ignored, source-only)_             | Repo-local hooks                                                     |
 | `private_dot_agents/skills/`                                    | `~/.agents/skills/`                  | Shared harness-agnostic Agent Skills for OpenCode and Pi             |
 | `private_dot_config/pi/`                                        | `~/.config/pi/`                      | Pi global config, extensions, keybindings, and Pi-specific skills    |
 | `dev/personal/dev-tools/dot_mrconfig`                           | `~/dev/personal/dev-tools/.mrconfig` | Personal dev-tools workspace repos                                   |
@@ -125,8 +121,7 @@ Supports chezmoi template conditionals for OS-specific ignores.
 - Chezmoi `textconv` patterns match absolute target paths, not the relative paths displayed in `chezmoi diff` headers.
 - Kubeconfig and Colima files are bootstrap seeds after first creation; existing live files are preserved because `kubectl`, `aws`, `kind`, and Colima rewrite runtime state.
 - Any new repo-only directory (like `docs/`) must be added to `.chezmoiignore` or chezmoi will deploy it to `~/`. The ignore file uses target-state paths, so `docs/` not `literal_docs/`.
-- `infra:validate` must remain live-service-free. Typed reconciler plans belong in explicit domain tasks and must not become aggregate-validation dependencies.
-- Stable reconciler paths are typed Python shims. Superseded shell reconcilers and compatibility deployment aliases were removed in Phase 8.
+- External infrastructure automation belongs in the sibling Kavouki repository, not this chezmoi source.
 
 ## Shell Script Conventions
 
