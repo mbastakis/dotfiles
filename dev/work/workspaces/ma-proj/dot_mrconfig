@@ -309,3 +309,10 @@ checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/iac/m
 
 [infrastructure/iac/modules/postgres]
 checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/iac/modules/postgres.git' 'postgres'
+
+# =============================================================================
+# Infrastructure - selfhosted LLMs
+# =============================================================================
+
+[infrastructure/selfhosted-llms]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/selfhosted-llms.git' 'selfhosted-llms'

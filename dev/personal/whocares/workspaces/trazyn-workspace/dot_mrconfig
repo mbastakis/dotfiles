@@ -1,0 +1,3 @@
+# Personal repositories
+[trazyn]
+checkout = git clone git@github.com:WhoCaresSoftware/trazyn.git trazyn
