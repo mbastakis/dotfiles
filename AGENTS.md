@@ -54,7 +54,7 @@ Pre-push: `chezmoi apply --dry-run --force`.
    - Deploy files, directories, symlinks
 5. After scripts (alphabetical):
    03-setup                → bat cache, yazi plugins, carapace sync (run_once)
-   04-configure-tailscale-dns → disables Tailscale DNS on DT work Macs (run_after)
+   04-bootstrap-work-network → initializes DT work network policy (run_once)
    05-ghostty-tmux         → installs LaunchAgent for tmux startup (run_onchange)
    06-ghostty-hide-shortcut → clears global Hide overrides, remaps Ghostty hide (run_once)
    09-install-pi           → installs Pi from official npm package (run_once)
@@ -84,7 +84,7 @@ key.txt.age (in repo, passphrase-encrypted)
 | `.chezmoi.toml.tmpl`                                            | `~/.config/chezmoi/chezmoi.toml`     | Config, profile, encryption                                          |
 | `key.txt.age`                                                   | _(ignored, source-only)_             | Passphrase-encrypted age key                                         |
 | `bin/chezmoi-bws`                                               | _(ignored, source-only)_             | BWS token wrapper                                                    |
-| `mise.toml`                                                     | _(ignored, source-only)_             | Repo-local Node, go-task, pre-commit, ShellCheck, yamllint, and uv tools |
+| `mise.toml`                                                     | _(ignored, source-only)_             | Repo-local Node, go-task, pre-commit, ShellCheck, and yamllint tools  |
 | `Taskfile.yml`                                                  | _(ignored, source-only)_             | go-task runner for dotfiles workflows                                |
 | `.pre-commit-config.yaml`                                       | _(ignored, source-only)_             | Repo-local hooks                                                     |
 | `private_dot_agents/skills/`                                    | `~/.agents/skills/`                  | Shared harness-agnostic Agent Skills for OpenCode and Pi             |
@@ -235,8 +235,8 @@ Build system only — `karabiner.json` is generated, never edit directly.
 Only `karabiner.json` is deployed to target; `build.sh` and `src/` stay in source.
 
 ```bash
-# Rebuild from chezmoi source dir:
-cd ~/.local/share/chezmoi/private_dot_config/private_karabiner && ./build.sh
+# Rebuild from any directory:
+"$(chezmoi source-path)"/private_dot_config/private_karabiner/build.sh
 ```
 
 ## Documentation (`docs/`)

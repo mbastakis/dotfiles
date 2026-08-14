@@ -87,8 +87,21 @@ Host openwrt openwrt-lan openwrt-tailscale 192.168.1.1
     UpdateHostKeys no
     ForwardAgent no
 
+Host wgeasy
+    HostName 80.158.36.147
+    User linux
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
+    LocalForward 51821 127.0.0.1:51821
+
 Host ssh.whocaressoftware.com
     HostName ssh.whocaressoftware.com
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
+
+Host octoprint
+    HostName octoprint.local
+    User kav
     IdentityFile ~/.ssh/id_ed25519
     IdentitiesOnly yes
 

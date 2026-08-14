@@ -11,8 +11,6 @@ docs/
 
 # Source-only directories (kept in repo, not deployed by chezmoi)
 ai-docs/
-specs/
-.local/openwrt/
 .task/
 
 # Repo-local tooling (go-task via mise, used inside this repo only)
@@ -45,6 +43,7 @@ __pycache__/
 .ruff_cache/
 bun.lock
 package-lock.json
+!.config/opencode/pwa-push/package-lock.json
 Cargo.lock
 
 # Nix (removed)
@@ -63,6 +62,7 @@ Cargo.lock
 .config/nvim/lazy-lock.json
 .config/opencode/package.json
 .config/opencode/bun.lock
+.config/opencode/pwa-push/node_modules/
 .config/opencode/skills/*-workspace/
 .config/pi/context-snapshot*.local.*
 .config/pi/auth.json
@@ -138,6 +138,9 @@ bin/switch-input-source
 .config/oauth2-proxy/
 Library/LaunchAgents/com.mbastakis.opencode-server.plist
 Library/LaunchAgents/com.mbastakis.opencode-oauth2-proxy.plist
+Library/LaunchAgents/com.mbastakis.opencode-pwa-push.plist
 bin/opencode-server
 bin/opencode-oauth2-proxy
+bin/opencode-pwa-push
+.config/opencode/pwa-push/
 {{- end }}
