@@ -9,3 +9,7 @@ checkout = git clone git@github.com:WhoCaresSoftware/terraform-oci-vcn.git terra
 checkout = git clone git@github.com:WhoCaresSoftware/terraform-oci-flex-instance.git terraform-oci-flex-instance
 [infra/terraform-oci-iam-team]
 checkout = git clone git@github.com:WhoCaresSoftware/terraform-oci-iam-team.git terraform-oci-iam-team
+[infra/terraform-cloudflare-dns-record-set]
+checkout = git clone git@github.com:WhoCaresSoftware/terraform-cloudflare-dns-record-set.git terraform-cloudflare-dns-record-set
+[infra/terraform-oci-object-storage-bucket]
+checkout = git clone git@github.com:WhoCaresSoftware/terraform-oci-object-storage-bucket.git terraform-oci-object-storage-bucket
