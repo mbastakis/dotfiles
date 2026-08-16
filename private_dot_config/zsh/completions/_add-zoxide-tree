@@ -1,0 +1,10 @@
+#compdef add-zoxide-tree
+
+_add-zoxide-tree() {
+  _arguments -s \
+    '(-h --help)'{-h,--help}'[show help]' \
+    '(-v --verbose)'{-v,--verbose}'[show each directory as it is added]' \
+    '--all[include all directories, not only Git projects]' \
+    '--max-depth[limit recursion depth]:depth:(1 2 3 4 5)' \
+    '1:directory:_directories'
+}

@@ -7,9 +7,10 @@ Modular zsh config lives at `~/.config/zsh/`, sourced by `~/.config/zsh/.zshrc`.
 
 | File                            | Purpose                              |
 | ------------------------------- | ------------------------------------ |
-| `exports.zsh`                   | Environment variables (PAGER, LESS)  |
+| `exports.zsh`                   | Interactive variables and secrets    |
 | `plugins.zsh`                   | Zinit plugin manager, compinit       |
-| `completions.zsh`               | Tool-specific completions            |
+| `completions.zsh`               | Native and generated completions      |
+| `completions/_*`                | Repo-owned native Zsh definitions     |
 | `tools.zsh`                     | atuin, zoxide, starship              |
 | `aliases.zsh`                   | Command shortcuts                    |
 | `functions.zsh`                 | Custom shell functions               |
@@ -18,14 +19,13 @@ Modular zsh config lives at `~/.config/zsh/`, sourced by `~/.config/zsh/.zshrc`.
 | `keybindings.zsh`               | Ctrl-F, Ctrl-G, Alt-C bindings       |
 | `direnv.zsh`                    | Direnv hook                          |
 | `shift-select-enhancements.zsh` | Clipboard integration for selections |
-| `local.zsh`                     | Rendered from chezmoi template       |
 
 ## Load Order (Critical)
 
 Files sourced in this order (defined in `.zshrc`):
 
 ```
-exports → plugins → completions → tools → aliases → functions → fzf → fzf-tab → keybindings → direnv → local
+exports → plugins → completions → tools → aliases → functions → fzf → fzf-tab → keybindings
 ```
 
 Dependencies:
@@ -70,8 +70,9 @@ bindkey '^X' widget_name
 | Aliases           | `aliases.zsh`     | Simple command shortcuts       |
 | Functions         | `functions.zsh`   | Complex multi-line logic       |
 | Tool integrations | `tools.zsh`       | `eval "$(tool init zsh)"`      |
+| Completions       | `completions/_*`  | Native `_arguments` definitions |
 | Keybindings       | `keybindings.zsh` | ZLE widgets + bindkey          |
-| Machine-specific  | `local.zsh`       | API keys, local PATH overrides |
+| Environment       | `exports.zsh`     | API keys, interactive variables, profile PATH |
 
 ## Zsh Shell Types and File Loading
 
@@ -90,7 +91,7 @@ Background processes (launchd, cron, opencode subprocesses) spawn non-interactiv
 - All zsh config lives in `~/.config/zsh/` via `ZDOTDIR`. The chezmoi source is `private_dot_config/zsh/`.
 - **Background process PATH**: Homebrew (`/opt/homebrew/bin`) must be in `dot_zshenv.tmpl` for launchd services to find brew-installed binaries
 - `shift-select-enhancements.zsh` loaded via zinit atload hook, not directly sourced
-- `local.zsh` is generated from `private_dot_config/zsh/local.zsh.tmpl` and can be overwritten by `chezmoi apply`; edit the template, not `~/.config/zsh/local.zsh`
+- `exports.zsh` is generated from `private_dot_config/zsh/exports.zsh.tmpl`; it contains both interactive exports and BWS-rendered secrets
 
 ## Startup Performance
 
@@ -106,4 +107,4 @@ fi
 source "$_cache"
 ```
 
-Used for: `brew shellenv`, `carapace _carapace zsh`. The `-nt` (newer than) operator invalidates cache when binary updates.
+Used for: `brew shellenv`, `opencode completion`, `sesh completion zsh`, and other generated completion scripts. The `-nt` (newer than) operator invalidates cache when a binary updates.

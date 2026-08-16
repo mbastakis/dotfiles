@@ -54,9 +54,5 @@ source "$ZDOTDIR/fzf.zsh"
 source "$ZDOTDIR/fzf-tab.zsh"
 source "$ZDOTDIR/keybindings.zsh"
 
-# Local configuration (machine-specific, secrets) - loaded last to override
-[[ -f "$ZDOTDIR/local.zsh" ]] || touch "$ZDOTDIR/local.zsh"
-source "$ZDOTDIR/local.zsh"
-
 # Output profiling results
 [[ -n "$ZSHRC_PROFILE" ]] && zprof

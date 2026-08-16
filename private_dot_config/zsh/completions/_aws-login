@@ -1,0 +1,130 @@
+#compdef aws-login aws-login-exec
+
+_aws_login_profiles() {
+  local line profile type
+  local -a profiles allowed_types
+
+  allowed_types=("$@")
+  if (( ${#allowed_types} )); then
+    while IFS= read -r line; do
+      if [[ "$line" =~ '^[[:space:]]+([^[:space:]]+).*\(([^()]*)\)[[:space:]]*$' ]]; then
+        profile="${match[1]}"
+        type="${match[2]}"
+        (( ${allowed_types[(Ie)$type]} )) && profiles+=("$profile")
+      fi
+    done < <(command aws-login --list 2>&1)
+  else
+    profiles=("${(@f)$(command aws-login --list-profiles 2>/dev/null)}")
+  fi
+
+  (( ${#profiles} )) && _describe 'AWS profile' profiles
+}
+
+_aws_login_skills() {
+  local command_index=${words[(I)skills]}
+  local -a actions targets
+
+  actions=(
+    'install:install agent skill definitions'
+    'uninstall:remove installed skill definitions'
+    'path:show where skills are installed'
+  )
+  targets=(
+    'agents:shared agent skills directory'
+    'opencode:OpenCode skills directory'
+    'claude:Claude skills directory'
+    'all:all supported locations'
+  )
+
+  if (( CURRENT == command_index + 1 )); then
+    _describe 'action' actions
+  elif (( CURRENT > command_index + 1 )) && [[ "${words[command_index + 1]}" == install || "${words[command_index + 1]}" == uninstall ]]; then
+    _describe 'target' targets
+  fi
+}
+
+_aws_login_complete_command() {
+  local separator=${words[(I)--]}
+  (( separator && CURRENT > separator )) || return 1
+
+  words=("${(@)words[$((separator + 1)),-1]}")
+  (( CURRENT -= separator ))
+  _normal
+}
+
+_aws_login_command() {
+  local context state state_descr line
+  local -a commands profiles
+
+  commands=(
+    'init:output shell integration script'
+    'exec:run a command with AWS credentials'
+    'login:start interactive CloudShepherd or AWS SSO login'
+    'accounts:list CloudShepherd accounts and roles'
+    'skills:manage agent skill definitions'
+  )
+  profiles=("${(@f)$(command aws-login --list-profiles 2>/dev/null)}")
+
+  _arguments -C -s \
+    '(-h --help)'{-h,--help}'[show help]' \
+    '(-v --verbose)'{-v,--verbose}'[show detailed output]' \
+    '--debug[show debug diagnostics]' \
+    '--version[show version]' \
+    '--list[show available profiles]' \
+    '--list-profiles[list profile names]' \
+    '--status[show current session status]' \
+    '--auth-status[check whether a profile is authenticated]:AWS profile:_aws_login_profiles' \
+    '--clear[unset AWS environment variables]' \
+    '--all[authenticate all profiles]' \
+    '--no-cache[ignore cached credentials]' \
+    '1:subcommand or profile:->first' \
+    '*::argument:->arguments'
+
+  case "$state" in
+    first)
+      _alternative \
+        'commands:subcommand:_describe subcommand commands' \
+        'profiles:AWS profile:_describe "AWS profile" profiles'
+      ;;
+    arguments)
+      case "${line[1]}" in
+        init)
+          _values 'shell' zsh
+          ;;
+        exec)
+          if _aws_login_complete_command; then
+            return
+          elif (( CURRENT == ${words[(I)exec]} + 1 )); then
+            _aws_login_profiles
+          else
+            _values 'separator' --
+          fi
+          ;;
+        login)
+          _aws_login_profiles cloudshepherd sso
+          ;;
+        accounts)
+          _aws_login_profiles cloudshepherd
+          ;;
+        skills)
+          _aws_login_skills
+          ;;
+      esac
+      ;;
+  esac
+}
+
+_aws-login() {
+  if [[ "$service" == aws-login-exec ]]; then
+    _aws_login_complete_command && return
+    _arguments -s \
+      '(-h --help)'{-h,--help}'[show help]' \
+      '(-v --verbose)'{-v,--verbose}'[show detailed output]' \
+      '--debug[show debug diagnostics]' \
+      '--no-cache[ignore cached credentials]' \
+      '1:AWS profile:_aws_login_profiles' \
+      '*:separator:(--)'
+  else
+    _aws_login_command
+  fi
+}

@@ -21,7 +21,7 @@ if [[ -f "${HOME}/.local/share/zinit/zinit.git/zinit.zsh" ]]; then
     # Load fzf-tab for interactive completion menu (must load before compinit)
     zinit light Aloxaf/fzf-tab
 
-    # Initialize completions (carapace must be loaded AFTER this - see .zshrc)
+    # Initialize completions before tool-specific registrations in completions.zsh.
     # Cache compinit - only rebuild dump file once per day for faster startup
     # Glob qualifier: N=no error if no match, .=regular file, mh+24=modified >24h ago
     if (( ${+_comps} )); then

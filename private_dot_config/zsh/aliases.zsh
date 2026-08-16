@@ -58,6 +58,7 @@ alias tls="tmux ls"
 # Opencode
 alias oc="opencode-launch"
 alias occ="opencode-launch --continue"
+alias ocserve="opencode-server"
 
 # Lazyssh
 alias lssh="lazyssh"

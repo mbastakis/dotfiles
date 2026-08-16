@@ -40,7 +40,7 @@ repos:
     hooks:
       - id: yamllint
         args: [-d, relaxed]
-        exclude: '(private_dot_config/nvim/test/|private_dot_config/k9s/|private_dot_config/carapace/specs/|modify_)'
+        exclude: '(private_dot_config/nvim/test/|private_dot_config/k9s/|modify_)'
 
   # Pre-push: validate chezmoi dry-run
   - repo: local
