@@ -30,6 +30,7 @@ chezmoi forget FILE        # Stop managing a file
 ### Pre-commit hooks
 
 ```bash
+mise exec -- task check     # Run repository validation hooks and tests
 pre-commit run --all-files  # Run all hooks
 pre-commit run shellcheck   # Shellcheck only
 pre-commit run gitleaks     # Secrets detection only
@@ -45,21 +46,24 @@ Pre-push: `chezmoi apply --dry-run --force`.
 1. Read source + destination state
 2. Compute target state (templates, encrypted files)
 3. Before scripts (alphabetical):
-   00-decrypt-private-key  → key.txt.age → ~/.config/chezmoi/key.txt (passphrase, once)
-   01-install-bws          → installs bws CLI (run_once)
-   02-install-packages     → brew bundle from Brewfile (run_onchange)
+   00-decrypt-private-key  → atomically installs the age identity when key.txt.age changes
+   01-install-bws          → installs the pinned bws CLI version (run_onchange)
+   02-install-packages     → stages Homebrew trust and runs brew bundle (run_onchange)
 4. File operations (alphabetical by target):
    - Decrypt encrypted_ files (age identity, no prompt)
-   - Render .tmpl templates (bitwardenSecrets → chezmoi-bws → bws CLI)
+   - Render .tmpl templates (bitwardenSecrets → bws CLI using BWS_ACCESS_TOKEN)
    - Deploy files, directories, symlinks
 5. After scripts (alphabetical):
-   03-setup                → bat cache, yazi plugins, carapace sync (run_once)
-   04-bootstrap-work-network → initializes DT work network policy (run_once)
-   05-ghostty-tmux         → installs LaunchAgent for tmux startup (run_onchange)
-   06-ghostty-hide-shortcut → clears global Hide overrides, remaps Ghostty hide (run_once)
-   09-install-pi           → installs Pi from official npm package (run_once)
-   10-opencode-remote      → reloads OpenCode/proxy agents, configures Tailscale Serve (run_onchange)
-   macos-settings          → macOS defaults (run_once)
+   03-bat-cache            → rebuilds the bat theme cache (run_onchange)
+   03-yazi-packages        → installs declared Yazi packages (run_onchange)
+   04-install-gh-extensions → installs pinned gh extensions (run_onchange)
+   06-ghostty-hide-shortcut → removes exact legacy overrides and remaps Ghostty hide (run_once)
+   07-mail-runtime-dirs    → creates shared and per-account mail directories (run_onchange)
+   08-mail-sync-launchagent → validates and reloads mail sync (run_onchange)
+   08-task-sync-launchagent → validates and reloads Taskwarrior sync (run_onchange)
+   10-opencode-remote      → invokes the unified OpenCode server reconciler (run_onchange)
+   macos-app-settings      → optional application defaults (run_once)
+   macos-settings          → core macOS defaults (run_once)
 ```
 
 ## Encryption
@@ -73,8 +77,8 @@ key.txt.age (in repo, passphrase-encrypted)
     ↓ used by chezmoi builtin age (no further prompts)
     ├── ~/.ssh/id_ed25519
     ├── ~/.supermaven/config.json
-    └── ~/.local/share/bws/token → chezmoi-bws → Bitwarden Secrets Manager
-                                      └── API keys rendered into ~/.config/zsh/local.zsh
+    └── ~/.local/share/bws/token → BWS_ACCESS_TOKEN exported by ~/.zshenv
+                                      └── bws renders API keys into ~/.config/zsh/exports.zsh
 ```
 
 ## Key Paths
@@ -83,12 +87,10 @@ key.txt.age (in repo, passphrase-encrypted)
 | --------------------------------------------------------------- | ------------------------------------ | -------------------------------------------------------------------- |
 | `.chezmoi.toml.tmpl`                                            | `~/.config/chezmoi/chezmoi.toml`     | Config, profile, encryption                                          |
 | `key.txt.age`                                                   | _(ignored, source-only)_             | Passphrase-encrypted age key                                         |
-| `bin/chezmoi-bws`                                               | _(ignored, source-only)_             | BWS token wrapper                                                    |
 | `mise.toml`                                                     | _(ignored, source-only)_             | Repo-local Node, go-task, pre-commit, ShellCheck, and yamllint tools  |
 | `Taskfile.yml`                                                  | _(ignored, source-only)_             | go-task runner for dotfiles workflows                                |
 | `.pre-commit-config.yaml`                                       | _(ignored, source-only)_             | Repo-local hooks                                                     |
-| `private_dot_agents/skills/`                                    | `~/.agents/skills/`                  | Shared harness-agnostic Agent Skills for OpenCode and Pi             |
-| `private_dot_config/pi/`                                        | `~/.config/pi/`                      | Pi global config, extensions, keybindings, and Pi-specific skills    |
+| `private_dot_agents/skills/`                                    | `~/.agents/skills/`                  | Shared harness-agnostic Agent Skills for OpenCode                    |
 | `dev/personal/dev-tools/dot_mrconfig`                           | `~/dev/personal/dev-tools/.mrconfig` | Personal dev-tools workspace repos                                   |
 | `literal_bin/`                                                  | `~/bin/`                             | Shell utility scripts                                                |
 | `private_dot_ssh/`                                              | `~/.ssh/`                            | SSH keys (encrypted) and host aliases                                |
@@ -175,13 +177,15 @@ fi
 
 ## Chezmoi Template Conventions
 
-### OS guards (every .chezmoiscripts/\*.tmpl)
+### OS guards (macOS-specific .chezmoiscripts/\*.tmpl)
 
 ```
 {{- if ne .chezmoi.os "darwin" }}
 exit 0
 {{- end }}
 ```
+
+The age identity bootstrap is intentionally platform-neutral because encrypted targets may be rendered on any supported OS.
 
 ### Change detection (run_onchange scripts)
 
@@ -222,7 +226,7 @@ Always use `{{-` and `-}}` to trim surrounding whitespace in template tags.
 `dot_zshenv.tmpl` still renders to `~/.zshenv`; interactive/login zsh config lives in `private_dot_config/zsh/` and is loaded via `ZDOTDIR=~/.config/zsh`.
 
 Load order: exports → plugins → completions → tools → aliases → functions →
-fzf → fzf-tab → keybindings → direnv → local
+fzf → fzf-tab → keybindings
 
 - Conditional sourcing: `[[ -f "$file" ]] && source "$file"`
 - Tool init: `command -v tool &>/dev/null && eval "$(tool init zsh)"`
@@ -254,7 +258,6 @@ Source lives in `docs/`; served as a zero-build SPA via `docs/index.html`.
 | `private_dot_config/zsh/`, `dot_zshenv.tmpl`               | `docs/components/zsh.md`                                                  |
 | `private_dot_config/nvim/`                                 | `docs/components/nvim.md`                                                 |
 | `private_dot_config/opencode/`                             | `docs/components/opencode.md`                                             |
-| `private_dot_config/carapace/`                             | `docs/components/carapace.md`                                             |
 | `private_dot_config/private_karabiner/`                    | `docs/components/karabiner.md`                                            |
 | Any custom keymap/keybinding change                        | `docs/shortcuts.md`                                                       |
 | New `private_dot_config/` component                        | `docs/components/config-overview.md`                                      |

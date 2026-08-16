@@ -13,6 +13,9 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_STATE_HOME="$HOME/.local/state"
 
+# BWS authenticates from the age-decrypted bootstrap token when available.
+[[ -r "$XDG_DATA_HOME/bws/token" ]] && export BWS_ACCESS_TOKEN="$(<"$XDG_DATA_HOME/bws/token")"
+
 # Neovim checks VIMINIT before init.lua, so scrub inherited values here.
 unset VIMINIT
 

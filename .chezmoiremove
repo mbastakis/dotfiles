@@ -1,12 +1,9 @@
-# XDG migration cleanup - legacy managed target paths
-.zshrc
-.zsh
-.abook
-.colima
-.docker
-.gnupg
-.npm
-.zsh_history
+# Replaced commands
+bin/opencode-serverctl
+bin/opencode-pwa-push
+bin/opencode-oauth2-proxy
+bin/opencode-remote
+.local/libexec/opencode-remote
 
-# Removed LaunchAgents
-Library/LaunchAgents/com.mbastakis.ghostty-tmux.plist
+# Secrets moved into the managed interactive exports file
+.config/zsh/local.zsh

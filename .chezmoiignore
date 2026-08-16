@@ -22,9 +22,6 @@ renovate.json
 # Age encryption key (decrypted by run_onchange_before script)
 key.txt.age
 
-# Keep repo helper scripts out of target ~/bin
-bin/chezmoi-bws
-
 # Build artifacts and generated files
 node_modules/
 **/node_modules/**
@@ -55,7 +52,6 @@ Cargo.lock
 .config/zsh/.zcompdump
 .config/zsh/.zcompdump-*
 .config/aws-login/cache/**
-.config/carapace/.versions
 .config/glab-cli/recover/**
 .kube/
 .config/navi/navi.log
@@ -64,18 +60,6 @@ Cargo.lock
 .config/opencode/bun.lock
 .config/opencode/pwa-push/node_modules/
 .config/opencode/skills/*-workspace/
-.config/pi/context-snapshot*.local.*
-.config/pi/auth.json
-.config/pi/oauth.json
-.config/pi/trust.json
-.config/pi/sessions/**
-.config/pi/git/**
-.config/pi/npm/**
-.config/pi/tools/**
-.config/pi/bin/**
-.config/pi/powerline-footer/**
-.config/pi/vibes/**
-.config/pi/pi-debug.log
 .local/share/go/
 .local/share/task/
 .local/state/atuin/logs/
@@ -130,6 +114,7 @@ Documents/notes/.trash/
 .config/karabiner/
 .config/finicky/
 Library/LaunchAgents/com.mbastakis.mail-sync.plist
+Library/LaunchAgents/com.mbastakis.task-sync.plist
 bin/switch-input-source
 {{- end }}
 
@@ -140,7 +125,6 @@ Library/LaunchAgents/com.mbastakis.opencode-server.plist
 Library/LaunchAgents/com.mbastakis.opencode-oauth2-proxy.plist
 Library/LaunchAgents/com.mbastakis.opencode-pwa-push.plist
 bin/opencode-server
-bin/opencode-oauth2-proxy
-bin/opencode-pwa-push
+.local/libexec/opencode-server/
 .config/opencode/pwa-push/
 {{- end }}
