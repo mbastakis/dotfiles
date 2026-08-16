@@ -30,19 +30,19 @@ shell:*.{sh,bash,zsh,fish}
 # === IGNORE PATTERNS ===
 
 # Version control
---glob=!.git/**
---glob=!.jj/**
+--glob=!**/.git/**
+--glob=!**/.jj/**
 
 # Package managers / dependencies
 --glob=!**/node_modules/**
 --glob=!**/.venv/**
 --glob=!**/__pycache__/**
---glob=!.cache/**
---glob=!.npm/**
---glob=!.pnpm/**
---glob=!.yarn/**
+--glob=!**/.cache/**
+--glob=!**/.npm/**
+--glob=!**/.pnpm/**
+--glob=!**/.yarn/**
 --glob=!**/vendor/**
---glob=!.bundle/**
+--glob=!**/.bundle/**
 
 # Build outputs
 --glob=!**/dist/**
@@ -64,7 +64,7 @@ shell:*.{sh,bash,zsh,fish}
 # OS files
 --glob=!**/.DS_Store
 --glob=!**/*.pyc
---glob=!.Trash/**
+--glob=!**/.Trash/**
 
 # Lock files (large, rarely useful to search)
 --glob=!*.lock
