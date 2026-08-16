@@ -1,6 +1,6 @@
 # go-task runner for the chezmoi dotfiles repo.
 # Source-only: excluded from chezmoi apply via .chezmoiignore.
-# Invoked as `task <name>` (go-task, installed via mise; see mise.toml).
+# Invoked as `mise exec -- task <name>` (go-task; see mise.toml).
 # Outside this repo, `task` resolves to Taskwarrior (brew).
 # Docs: https://taskfile.dev/
 
@@ -8,34 +8,31 @@ version: "3"
 
 tasks:
   default:
-    desc: List available tasks
+    desc: List repository workflows
     cmds:
-      - task --list
+      - task --list --sort=none
     silent: true
 
-  update:
-    desc: git pull + chezmoi apply
-    cmds:
-      - chezmoi update
-
-  lint:
-    desc: Run all lint checks on the whole tree
+  check:
+    desc: Run the full repository validation suite
+    preconditions:
+      - sh: command -v pre-commit
+        msg: "pre-commit not found; run: mise install"
     cmds:
       - pre-commit run --all-files
-      - pre-commit run shellcheck --all-files
-      - pre-commit run gitleaks --all-files
 
-  test:
-    desc: Run workstation behavior tests
-    cmds:
-      - uvx --from pytest pytest tests
-
-  brew:dump:
-    desc: Refresh Brewfile from currently installed formulas/casks
+  brewfile:refresh:
+    desc: Rewrite the source Brewfile from installed packages
+    preconditions:
+      - sh: command -v brew
+        msg: "Homebrew not found; install it from https://brew.sh"
     cmds:
       - brew bundle dump --force --file=private_dot_config/brew/Brewfile
 
   docs:serve:
-    desc: Serve the docsify documentation locally on http://localhost:3000
+    desc: Serve the documentation on http://localhost:3000
+    preconditions:
+      - sh: command -v npx
+        msg: "npx not found; run: mise install"
     cmds:
-      - npx docsify-cli serve docs
+      - npx --yes docsify-cli serve docs
