@@ -22,10 +22,6 @@ brew "as-tree"
 brew "atuin"
 # Official Amazon AWS command-line interface
 brew "awscli"
-# CLI to audit posture and evaluate compromise blast radius
-brew "bagel"
-# Powerful expense tracker that lives in your terminal
-brew "bagels"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
 # Open-source, cross-platform JavaScript runtime environment
