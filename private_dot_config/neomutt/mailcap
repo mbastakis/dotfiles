@@ -1,5 +1,4 @@
 text/plain; cat %s; copiousoutput
 text/html; w3m -I %{charset} -T text/html %s; copiousoutput
-application/pdf; mail-open %s
-image/*; mail-view-image %s; needsterminal
-application/*; mail-open %s
+image/*; /usr/bin/open %s
+application/*; /usr/bin/open %s

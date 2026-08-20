@@ -1,4 +1,5 @@
 #!/bin/bash
+# Ensure shared and per-account mail runtime directories exist.
 
 {{- if ne .chezmoi.os "darwin" }}
 exit 0
@@ -12,8 +13,6 @@ set -euo pipefail
 {{- $logRoot := replace "~" .chezmoi.homeDir .mail.defaults.log_root }}
 {{- $automationHookRoot := replace "~" .chezmoi.homeDir .mail.defaults.automation_hook_root }}
 
-echo "Creating mail runtime directories..."
-
 mkdir -p \
     "{{ $mailRoot }}" \
     "{{ $notmuchDatabase }}" \
@@ -24,4 +23,13 @@ mkdir -p \
     "$HOME/.local/share/abook" \
     "{{ $automationHookRoot }}"
 
-echo "Mail runtime directory setup complete."
+{{- range .mail.accounts }}
+{{- if .enabled }}
+mkdir -p \
+    "{{ printf "%s/%s" $mailRoot .id }}" \
+    "{{ printf "%s/%s/%s/cur" $mailRoot .id .folders.inbox }}" \
+    "{{ printf "%s/%s/%s/new" $mailRoot .id .folders.inbox }}" \
+    "{{ printf "%s/%s/%s/tmp" $mailRoot .id .folders.inbox }}"
+
+{{- end }}
+{{- end }}

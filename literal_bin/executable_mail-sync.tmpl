@@ -39,6 +39,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --account=*)
             account="${1#*=}"
+            if [[ -z "$account" ]]; then
+                echo "Error: --account requires a value" >&2
+                exit 1
+            fi
             shift
             ;;
         --quiet)
@@ -91,13 +95,33 @@ log_line() {
 
 run_cmd() {
     local description="$1"
-    shift
+    local failure_level="$2"
+    local rc
+    shift 2
 
     log_line "INFO" "$description"
+    set +e
     if [[ "$quiet" == "true" ]]; then
         "$@" >>"$log_file" 2>&1
+        rc=$?
     else
         "$@" 2>&1 | tee -a "$log_file"
+        rc=${PIPESTATUS[0]}
+    fi
+    set -e
+
+    if (( rc != 0 )); then
+        log_line "$failure_level" "${description} failed with exit code ${rc}."
+        return "$rc"
+    fi
+}
+
+require_command() {
+    local command_name="$1"
+
+    if ! command -v "$command_name" &>/dev/null; then
+        log_line "ERROR" "Required command not found: $command_name"
+        return 1
     fi
 }
 
@@ -152,6 +176,9 @@ if [[ ! -f "$NOTMUCH_CONFIG" ]]; then
     exit 1
 fi
 
+require_command mbsync
+require_command notmuch
+
 mbsync_cmd=(mbsync -c "$mbsync_config")
 if [[ "$dry_run" == "true" ]]; then
     mbsync_cmd+=(--dry-run)
@@ -162,24 +189,20 @@ else
     mbsync_cmd+=(-a)
 fi
 
-run_cmd "Running mbsync" "${mbsync_cmd[@]}"
+run_cmd "Running mbsync" "ERROR" "${mbsync_cmd[@]}"
 
 if [[ "$dry_run" == "true" ]]; then
     log_line "INFO" "Dry-run mode enabled; skipping notmuch new and post-sync hooks."
     exit 0
 fi
 
-run_cmd "Running notmuch new" notmuch new
+run_cmd "Running notmuch new" "ERROR" notmuch new
 
 if [[ -d "$hooks_dir" ]]; then
     shopt -s nullglob
     for hook in "$hooks_dir"/*; do
         [[ -f "$hook" && -x "$hook" ]] || continue
-        if run_cmd "Running post-sync hook: $hook" "$hook"; then
-            :
-        else
-            log_line "WARN" "Post-sync hook failed: $hook"
-        fi
+        run_cmd "Running post-sync hook: $hook" "WARN" "$hook" || true
     done
     shopt -u nullglob
 fi
