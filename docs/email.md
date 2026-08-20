@@ -26,7 +26,7 @@ Keybindings are documented in [shortcuts.md](shortcuts.md#neomutt) — not here.
 
 1. Enable 2-Step Verification for each Gmail account and create one app password per account (not blocked by Advanced Protection or org policy).
 2. Store each app password as a Bitwarden secret; record its UUID in `.chezmoidata.yaml` under `mail.accounts[].secrets.app_password_uuid`.
-3. Ensure BWS auth works: `bws` CLI is installed by `.chezmoiscripts/run_onchange_before_01-install-bws.sh.tmpl`, and `BWS_ACCESS_TOKEN` is exported from `~/.local/share/bws/token` (see `dot_zshenv.tmpl`).
+3. Ensure BWS auth works: `bws` CLI is installed by `.chezmoiscripts/run_onchange_before_01-install-bws.sh`, and `BWS_ACCESS_TOKEN` is exported from `~/.local/share/bws/token` (see `dot_zshenv.tmpl`).
 4. In Gmail web settings, keep IMAP enabled and the required folders visible (`INBOX`, `[Gmail]/Sent Mail`, `[Gmail]/Drafts`, `[Gmail]/Spam`, `[Gmail]/Trash`).
 5. Apply and validate:
 

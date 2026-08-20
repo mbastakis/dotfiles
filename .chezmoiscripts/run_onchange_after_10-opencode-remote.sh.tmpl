@@ -5,7 +5,7 @@
 # skills on its own; this script only handles what lives outside the service:
 # provider credentials in the service environment, the two LaunchAgents, and
 # stack convergence via opencode-server.
-{{- if or (ne .chezmoi.os "darwin") (ne .chezmoi.hostname .opencode.remote.host) }}
+{{- if ne .chezmoi.hostname .opencode.remote.host }}
 exit 0
 {{- else }}
 # hash-launch-agents: {{ includeTemplate "private_Library/LaunchAgents/com.mbastakis.opencode-server.plist.tmpl" . | sha256sum }} {{ includeTemplate "private_Library/LaunchAgents/com.mbastakis.opencode-oauth2-proxy.plist.tmpl" . | sha256sum }}

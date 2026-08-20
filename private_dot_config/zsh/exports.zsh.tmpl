@@ -2,7 +2,6 @@
 # exports.zsh - Environment variables and rendered secrets for interactive use
 # (PATH, EDITOR, XDG, etc. are in ~/.zshenv for all shell types)
 
-{{- if eq .chezmoi.os "darwin" }}
 # API keys from Bitwarden Secrets Manager
 export OPENROUTER_API_KEY='{{ (bitwardenSecrets "3b14fed8-dfa9-4617-92b9-b49e00a25e2b").value | trim }}'
 export OPENCODE_API_KEY='{{ (bitwardenSecrets "9ec9dc0f-7f8e-4e81-afed-b49e00a25e97").value | trim }}'
@@ -25,8 +24,6 @@ export GITLAB_TOKEN='{{ (bitwardenSecrets "1d6d9f0f-ac45-405a-a3b4-b49e00a265bb"
 export GITLAB_ACCESS_TOKEN='{{ (bitwardenSecrets "1d6d9f0f-ac45-405a-a3b4-b49e00a265bb").value | trim }}'
 export GITLAB_USERNAME="michail.bastakis"
 export GITLAB_HOST="gitlab.devops.telekom.de"
-{{- end }}
-
 {{- end }}
 
 # Pager — disable rich pagers in agent/non-TTY contexts.

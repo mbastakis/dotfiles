@@ -4,10 +4,8 @@ set -euo pipefail
 get_default_cache_dir() {
     if [[ -n "${XDG_CACHE_HOME:-}" ]]; then
         printf "%s\n" "$XDG_CACHE_HOME"
-    elif [[ "$(uname)" == "Darwin" ]]; then
-        printf "%s\n" "$HOME/Library/Caches"
     else
-        printf "%s\n" "$HOME/.cache"
+        printf "%s\n" "$HOME/Library/Caches"
     fi
 }
 

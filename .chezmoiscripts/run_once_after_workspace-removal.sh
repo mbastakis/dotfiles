@@ -1,10 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-{{- if ne .chezmoi.os "darwin" }}
-exit 0
-{{- end }}
-
 launchctl bootout "gui/$(id -u)/com.mbastakis.workspace" >/dev/null 2>&1 || true
 rm -rf \
     "$HOME/.local/state/workspace" \

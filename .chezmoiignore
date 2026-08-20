@@ -103,16 +103,6 @@ Documents/notes/.trash/
 .ssh/gitlab-telekom.pub
 {{- end }}
 
-{{- if ne .chezmoi.os "darwin" }}
-# macOS-only configs (skip on Linux)
-.config/aerospace/
-.config/karabiner/
-.config/finicky/
-Library/LaunchAgents/com.mbastakis.mail-sync.plist
-Library/LaunchAgents/com.mbastakis.task-sync.plist
-bin/switch-input-source
-{{- end }}
-
 {{- if ne .chezmoi.hostname .opencode.remote.host }}
 # OpenCode remote control runs only on its designated Mac.
 .config/oauth2-proxy/

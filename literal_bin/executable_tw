@@ -6,7 +6,7 @@
 
 set -euo pipefail
 
-for prefix in /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew; do
+for prefix in /opt/homebrew /usr/local; do
     candidate="$prefix/opt/task/bin/task"
     if [[ -x "$candidate" ]]; then
         exec "$candidate" "$@"

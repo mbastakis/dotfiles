@@ -19,10 +19,8 @@ export XDG_STATE_HOME="$HOME/.local/state"
 # Neovim checks VIMINIT before init.lua, so scrub inherited values here.
 unset VIMINIT
 
-{{- if eq .chezmoi.os "darwin" }}
 # macOS provides a per-user runtime directory via TMPDIR.
 [[ -n "${TMPDIR:-}" ]] && export XDG_RUNTIME_DIR="${TMPDIR%/}"
-{{- end }}
 
 # Zsh config directory (zsh reads .zshrc/.zprofile from here instead of $HOME)
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
@@ -103,18 +101,13 @@ export LC_ALL="en_US.UTF-8"
 
 ## PATH configuration
 
-{{- if eq .chezmoi.os "darwin" }}
-# Homebrew (macOS - Apple Silicon)
+# Homebrew (Apple Silicon)
 export HOMEBREW_NO_ENV_HINTS=1
 export HOMEBREW_AUTO_UPDATE_SECS=86400
 [[ -d "/opt/homebrew/bin" ]] && PATH="/opt/homebrew/bin:$PATH"
 [[ -d "/opt/homebrew/sbin" ]] && PATH="/opt/homebrew/sbin:$PATH"
 # OpenCode v2 beta installs outside Homebrew
 [[ -d "$HOME/.opencode/bin" ]] && PATH="$HOME/.opencode/bin:$PATH"
-{{- else if eq .chezmoi.os "linux" }}
-# Linuxbrew (if present)
-[[ -d "/home/linuxbrew/.linuxbrew/bin" ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-{{- end }}
 
 # Ensure user-level bin directories exist
 [[ ! -d "$HOME/bin" ]] && mkdir -p "$HOME/bin"
@@ -145,8 +138,7 @@ path=(${path:#$HOME/.bun/bin})
 # Bun (BUN_INSTALL set above in tool home directories)
 [[ -d "$BUN_INSTALL/bin" ]] && PATH="$BUN_INSTALL/bin:$PATH"
 
-{{- if eq .chezmoi.os "darwin" }}
-# PostgreSQL (macOS)
+# PostgreSQL
 if [[ -d "/opt/homebrew/opt/postgresql@17/bin" ]]; then
   PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
   export LDFLAGS="-L/opt/homebrew/opt/postgresql@17/lib"
@@ -155,7 +147,6 @@ fi
 
 # Obsidian CLI (official, requires Obsidian 1.12+)
 [[ -d "/Applications/Obsidian.app/Contents/MacOS" ]] && PATH="$PATH:/Applications/Obsidian.app/Contents/MacOS"
-{{- end }}
 
 ## Programming language settings
 

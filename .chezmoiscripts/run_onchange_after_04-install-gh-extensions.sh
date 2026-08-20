@@ -2,10 +2,6 @@
 # Install the pinned gh-dash extension.
 # gh-dash version: v4.25.2
 
-{{- if ne .chezmoi.os "darwin" }}
-exit 0
-{{- end }}
-
 set -euo pipefail
 
 EXTENSION="dlvhdr/gh-dash"

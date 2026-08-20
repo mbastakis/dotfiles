@@ -83,12 +83,12 @@ On DT work machines, if Tailscale, Harmony, macOS, or an operator flips DNS or p
 
 ## Ignored Artifacts
 
-`.chezmoiignore` matches **target-state paths** (`.config/foo`, never `private_dot_config/foo`) and is rendered as a template. The non-obvious entries:
+`.chezmoiignore` matches **target-state paths** (`.config/foo`, never `private_dot_config/foo`) and is rendered as a template. This repository intentionally targets macOS only, so OS-specific template guards and fallback branches are unnecessary. The non-obvious entries:
 
 - Any repo-only directory (`docs/`, `ai-docs/`, `tests/`) must be listed or chezmoi deploys it into `~/`.
 - Obsidian: only volatile state (`workspace.json`, caches, auto-downloaded plugin code) is ignored — settings JSONs and plugin `data.json` files stay managed.
 - Karabiner: the build system (`build.sh`, `src/`) stays source-only; only the generated `karabiner.json` deploys.
-- Conditional blocks scope DT work configs by profile, macOS-only configs by OS, and the OpenCode backend/oauth2-proxy stack by hostname; the remote stack deploys only to the designated Mac.
+- Conditional blocks scope DT work configs by profile and the OpenCode backend/oauth2-proxy stack by hostname; the remote stack deploys only to the designated Mac.
 
 ## Operational Notes
 
@@ -96,5 +96,4 @@ On DT work machines, if Tailscale, Harmony, macOS, or an operator flips DNS or p
 - Step `10` pushes provider credentials into the opencode2 service environment, reloads the LaunchAgents, and converges the stack. The service hot-reloads config/agents/commands/skills; `opencode2 service restart` is only needed for binary updates, and clients reconnect and resume their sessions afterward.
 - A missing data key in a `.chezmoiignore` template conditional breaks unrelated commands (`add`, `status`, `apply`) — keep templates compatible with existing keys until `chezmoi init` has run everywhere.
 - Use `chezmoi apply --dry-run --force` for non-interactive validation; without `--force`, changed files trigger TTY prompts that fail headless.
-- macOS-only lifecycle scripts start with an early Darwin guard; the age identity bootstrap is the deliberate platform-neutral exception, since encrypted targets render on any OS.
 - Source location is not assumed: templates resolve the checkout through `.chezmoi.sourceDir`, persisted as `sourceDir` in the rendered config.

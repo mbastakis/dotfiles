@@ -108,8 +108,6 @@ Uses **target-state paths** (not source-state):
 - Correct: `.config/foo/bar`
 - Wrong: `private_dot_config/foo/bar`
 
-Supports chezmoi template conditionals for OS-specific ignores.
-
 ### Operational Gotchas
 
 - `.chezmoiignore` is rendered as a template for many commands (`add`, `status`, `apply`); missing data keys in conditions can break unrelated commands.
@@ -166,27 +164,7 @@ while [[ $# -gt 0 ]]; do
 done
 ```
 
-### Cross-platform
-
-```bash
-if [[ "$(uname)" == "Darwin" ]]; then
-    # macOS-specific
-else
-    # Linux-specific
-fi
-```
-
 ## Chezmoi Template Conventions
-
-### OS guards (macOS-specific .chezmoiscripts/\*.tmpl)
-
-```
-{{- if ne .chezmoi.os "darwin" }}
-exit 0
-{{- end }}
-```
-
-The age identity bootstrap is intentionally platform-neutral because encrypted targets may be rendered on any supported OS.
 
 ### Change detection (run_onchange scripts)
 
@@ -198,7 +176,6 @@ The age identity bootstrap is intentionally platform-neutral because encrypted t
 
 | Function                            | Purpose                                |
 | ----------------------------------- | -------------------------------------- |
-| `{{ .chezmoi.os }}`                 | OS detection (`darwin`/`linux`)        |
 | `{{ .chezmoi.sourceDir }}`          | Chezmoi source directory path          |
 | `{{ .profile }}`                    | `personal` or `dt-work`                |
 | `{{ .dtWork }}`                     | Toggle DT work-only config             |
