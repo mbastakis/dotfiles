@@ -1,33 +1,61 @@
 ---
-description: >-
-  Research web content — documentation, tutorials, best practices,
-  comparisons, and URL discovery. Use for conceptual questions, "how do I
-  do X?", and technology comparisons. Does NOT perform upstream source
-  forensics — use librarian for that.
+description: "Research web content \u2014 documentation, tutorials, best practices, comparisons, and URL discovery. Use for conceptual questions, \"how do I do X?\", and technology comparisons. Does NOT perform upstream source forensics \u2014 use librarian for that."
 mode: subagent
-temperature: 0.5
-tools:
-  write: false
-  patch: false
-  glob: false
-  grep: false
-permission:
-  bash:
-    "*": deny
-    "uvx*": allow
-    "python*": allow
-    "cat*": allow
-    "head*": allow
-    "tail*": allow
-    "ls*": allow
-    "grep*": allow
-    "sort*": allow
-    "uniq*": allow
-    "wc*": allow
-  skill: allow
-  webfetch: allow
-  edit: deny
-  external_directory: allow
+request:
+  body:
+    temperature: 0.5
+permissions:
+  - action: "edit"
+    resource: "*"
+    effect: deny
+  - action: "glob"
+    resource: "*"
+    effect: deny
+  - action: "grep"
+    resource: "*"
+    effect: deny
+  - action: "shell"
+    resource: "*"
+    effect: deny
+  - action: "shell"
+    resource: "uvx*"
+    effect: allow
+  - action: "shell"
+    resource: "python*"
+    effect: allow
+  - action: "shell"
+    resource: "cat*"
+    effect: allow
+  - action: "shell"
+    resource: "head*"
+    effect: allow
+  - action: "shell"
+    resource: "tail*"
+    effect: allow
+  - action: "shell"
+    resource: "ls*"
+    effect: allow
+  - action: "shell"
+    resource: "grep*"
+    effect: allow
+  - action: "shell"
+    resource: "sort*"
+    effect: allow
+  - action: "shell"
+    resource: "uniq*"
+    effect: allow
+  - action: "shell"
+    resource: "wc*"
+    effect: allow
+  - action: "skill"
+    resource: "*"
+    effect: allow
+  - action: "webfetch"
+    resource: "*"
+    effect: allow
+  - action: "external_directory"
+    resource: "*"
+    effect: allow
 ---
 
 You are a web research specialist for documentation, tutorials, best practices, and comparisons.

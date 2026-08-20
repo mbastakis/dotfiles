@@ -129,11 +129,7 @@ opencode:
     server:
       scheme: http
       host: 127.0.0.1
-      port: 4096
-    pwa_push:
-      scheme: http
-      host: 127.0.0.1
-      port: 4190
+      port: 4097
     oauth2_proxy:
       scheme: http
       host: 127.0.0.1

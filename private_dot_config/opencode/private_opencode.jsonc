@@ -1,1907 +1,2931 @@
+// OpenCode v2 native configuration (migrated from v1 syntax 2026-08-20).
+//
+// - Written in native v2 syntax: `providers`/`permissions` array/`mcp.servers`/
+//   `agents`. The v1 escape-hatch binary can NO longer read this file
+//   (git history has the last v1-syntax version).
+// - permissions: ordered rules, LAST matching rule wins - broad allow first,
+//   destructive-operation asks after. v2 `*` crosses spaces, so single rules
+//   like "kubectl* apply*" replace the v1 "kubectl apply*" + "kubectl * apply*"
+//   pairs; a pattern ending in " *" also matches the bare command.
+// - experimental.policies replaces v1 enabled_providers.
+// - API keys stay {env:VAR} placeholders; the service resolves them from
+//   `opencode2 service set env` values (chezmoi step 10).
+// - Terminal client settings (theme, tabs, keybinds) live in cli.json.
 {
   "$schema": "https://opencode.ai/config.json",
-  // Route all configured LLM use through WCS (ai.whocaressoftware.com).
   "model": "wcs/gpt",
-  "small_model": "opencode/big-pickle",
-  "autoshare": false,
+  "username": "mbastakis",
   "share": "manual",
   "autoupdate": true,
-  "enabled_providers": [
-    "opencode",
-    "selfhosted",
-    "openai",
-    "wcs",
-    "wcs-alt",
-    "wcs-dev",
+  "experimental": {
+    "policies": [
+      {
+        "action": "provider.use",
+        "resource": "*",
+        "effect": "deny"
+      },
+      {
+        "action": "provider.use",
+        "resource": "opencode",
+        "effect": "allow"
+      },
+      {
+        "action": "provider.use",
+        "resource": "selfhosted",
+        "effect": "allow"
+      },
+      {
+        "action": "provider.use",
+        "resource": "openai",
+        "effect": "allow"
+      },
+      {
+        "action": "provider.use",
+        "resource": "wcs",
+        "effect": "allow"
+      },
+      {
+        "action": "provider.use",
+        "resource": "wcs-alt",
+        "effect": "allow"
+      },
+      {
+        "action": "provider.use",
+        "resource": "wcs-dev",
+        "effect": "allow"
+      }
+    ]
+  },
+  "references": {
+    "dotfiles": {
+      "path": "~/dev/personal/workspaces/home-workspace/dotfiles/dotfiles_main",
+      "description": "Chezmoi dotfiles source: workstation config, docs, scripts. Read here for how this machine is set up; edit only via the dotfiles skill workflow."
+    },
+    "notes": {
+      "path": "~/Documents/notes/notes_main",
+      "description": "Personal PARA notes vault (projects, areas, resources, archive, daily notes)."
+    }
+  },
+  "agents": {
+    "title": {
+      "model": "opencode/big-pickle"
+    }
+  },
+  "permissions": [
+    {
+      "action": "edit",
+      "resource": "*",
+      "effect": "allow"
+    },
+    {
+      "action": "external_directory",
+      "resource": "*",
+      "effect": "allow"
+    },
+    {
+      "action": "shell",
+      "resource": "*",
+      "effect": "allow"
+    },
+    {
+      "action": "shell",
+      "resource": "rm *",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "rmdir *",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "chmod *",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "chown *",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "sudo *",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "su *",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "git* push*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "git* reset*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "git* clean*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "git* rm*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "git* rebase*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "kubectl* apply*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "aws-login exec * -- kubectl* apply*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "kubectl* create*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "aws-login exec * -- kubectl* create*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "kubectl* delete*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "aws-login exec * -- kubectl* delete*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "kubectl* replace*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "aws-login exec * -- kubectl* replace*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "kubectl* patch*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "aws-login exec * -- kubectl* patch*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "kubectl* scale*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "aws-login exec * -- kubectl* scale*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "kubectl* set*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "aws-login exec * -- kubectl* set*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "kubectl* rollout restart*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "aws-login exec * -- kubectl* rollout restart*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "kubectl* rollout undo*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "aws-login exec * -- kubectl* rollout undo*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "kubectl* drain*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "aws-login exec * -- kubectl* drain*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "kubectl* cordon*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "aws-login exec * -- kubectl* cordon*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "kubectl* uncordon*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "aws-login exec * -- kubectl* uncordon*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "kubectl* taint*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "aws-login exec * -- kubectl* taint*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "kubectl* annotate*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "aws-login exec * -- kubectl* annotate*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "kubectl* label*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "aws-login exec * -- kubectl* label*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "kubectl* edit*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "aws-login exec * -- kubectl* edit*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "helm* install*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "aws-login exec * -- helm* install*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "helm* upgrade*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "aws-login exec * -- helm* upgrade*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "helm* uninstall*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "aws-login exec * -- helm* uninstall*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "helm* delete*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "aws-login exec * -- helm* delete*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "helm* rollback*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "aws-login exec * -- helm* rollback*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "terraform* apply*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "terraform* destroy*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "terraform* state*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "terraform* import*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "tofu* apply*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "tofu* destroy*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "tofu* state*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "tofu* import*",
+      "effect": "ask"
+    }
   ],
-  "provider": {
+  "mcp": {
+    "servers": {
+      "pocketsmith": {
+        "type": "remote",
+        "url": "https://mcp.pocketsmith.com/mcp",
+        "disabled": true
+      },
+      "telecontext": {
+        "type": "remote",
+        "url": "https://telecontext.trap.ng.telekom.net/mcp",
+        "disabled": true
+      }
+    }
+  },
+  "providers": {
     "wcs": {
       "name": "WCS",
-      "api": "openai",
-      "env": ["WCS_API_KEY"],
-      "options": {
+      "env": [
+        "WCS_API_KEY"
+      ],
+      "package": "aisdk:@ai-sdk/openai-compatible",
+      "settings": {
         "baseURL": "https://ai.whocaressoftware.com/v1",
+        "apiKey": "{env:WCS_API_KEY}"
       },
       "models": {
         "gpt": {
-          "name": "GPT-5.6 Sol",
+          "modelID": "gpt",
           "family": "gpt-sol",
-          "release_date": "2026-07-09",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": false,
-          "tool_call": true,
+          "name": "GPT-5.6 Sol",
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "reasoningEffort": "none"
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "reasoningEffort": "medium"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "reasoningEffort": "xhigh"
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
           "limit": {
             "context": 1050000,
             "input": 922000,
-            "output": 128000,
-          },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "reasoningEffort": "none",
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "reasoningEffort": "low",
-            },
-            "medium": {
-              "reasoningEffort": "medium",
-            },
-            "high": {
-              "reasoningEffort": "high",
-            },
-            "xhigh": {
-              "reasoningEffort": "xhigh",
-            },
-            "max": {
-              "reasoningEffort": "max",
-            },
-          },
-          "status": "active",
-          "id": "gpt",
+            "output": 128000
+          }
         },
         "gpt-5.6-terra": {
-          "name": "GPT-5.6 Terra",
+          "modelID": "gpt-5.6-terra",
           "family": "gpt-terra",
-          "release_date": "2026-07-09",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": false,
-          "tool_call": true,
+          "name": "GPT-5.6 Terra",
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "reasoningEffort": "none"
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "reasoningEffort": "medium"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "reasoningEffort": "xhigh"
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
           "limit": {
             "context": 1050000,
             "input": 922000,
-            "output": 128000,
-          },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "reasoningEffort": "none",
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "reasoningEffort": "low",
-            },
-            "medium": {
-              "reasoningEffort": "medium",
-            },
-            "high": {
-              "reasoningEffort": "high",
-            },
-            "xhigh": {
-              "reasoningEffort": "xhigh",
-            },
-            "max": {
-              "reasoningEffort": "max",
-            },
-          },
-          "status": "active",
-          "id": "gpt-5.6-terra",
+            "output": 128000
+          }
         },
         "gpt-5.6-luna": {
-          "name": "GPT-5.6 Luna",
+          "modelID": "gpt-5.6-luna",
           "family": "gpt-luna",
-          "release_date": "2026-07-09",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": false,
-          "tool_call": true,
+          "name": "GPT-5.6 Luna",
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "reasoningEffort": "none"
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "reasoningEffort": "medium"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "reasoningEffort": "xhigh"
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
           "limit": {
             "context": 1050000,
             "input": 922000,
-            "output": 128000,
-          },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "reasoningEffort": "none",
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "reasoningEffort": "low",
-            },
-            "medium": {
-              "reasoningEffort": "medium",
-            },
-            "high": {
-              "reasoningEffort": "high",
-            },
-            "xhigh": {
-              "reasoningEffort": "xhigh",
-            },
-            "max": {
-              "reasoningEffort": "max",
-            },
-          },
-          "status": "active",
-          "id": "gpt-5.6-luna",
+            "output": 128000
+          }
         },
         "gpt-5.5": {
-          "name": "GPT-5.5",
+          "modelID": "gpt-5.5",
           "family": "gpt",
-          "release_date": "2026-04-23",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": false,
-          "tool_call": true,
+          "name": "GPT-5.5",
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "reasoningEffort": "none"
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "reasoningEffort": "medium"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "reasoningEffort": "xhigh"
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "disabled": true
+              }
+            }
+          ],
           "limit": {
             "context": 1050000,
             "input": 922000,
-            "output": 128000,
-          },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "reasoningEffort": "none",
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "reasoningEffort": "low",
-            },
-            "medium": {
-              "reasoningEffort": "medium",
-            },
-            "high": {
-              "reasoningEffort": "high",
-            },
-            "xhigh": {
-              "reasoningEffort": "xhigh",
-            },
-            "max": {
-              "disabled": true,
-            },
-          },
-          "status": "active",
-          "id": "gpt-5.5",
+            "output": 128000
+          }
         },
         "deepseek": {
-          "name": "DeepSeek V4 Pro",
+          "modelID": "deepseek",
           "family": "deepseek-thinking",
-          "release_date": "2026-04-24",
-          "attachment": false,
-          "reasoning": true,
-          "temperature": true,
-          "tool_call": true,
-          "interleaved": {
-            "field": "reasoning_content",
+          "name": "DeepSeek V4 Pro",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
           },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
           "limit": {
             "context": 1000000,
-            "output": 384000,
-          },
-          "modalities": {
-            "input": ["text"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "disabled": true,
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "disabled": true,
-            },
-            "medium": {
-              "disabled": true,
-            },
-            "high": {
-              "reasoningEffort": "high",
-            },
-            "xhigh": {
-              "disabled": true,
-            },
-            "max": {
-              "reasoningEffort": "max",
-            },
-          },
-          "status": "active",
-          "id": "deepseek",
+            "output": 384000
+          }
         },
         "glm": {
-          "name": "GLM 5.2",
+          "modelID": "glm",
           "family": "glm",
-          "release_date": "2026-06-13",
-          "attachment": false,
-          "reasoning": true,
-          "temperature": true,
-          "tool_call": true,
-          "interleaved": {
-            "field": "reasoning_content",
+          "name": "GLM 5.2",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
           },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
           "limit": {
             "context": 1000000,
-            "output": 131072,
-          },
-          "modalities": {
-            "input": ["text"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "disabled": true,
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "disabled": true,
-            },
-            "medium": {
-              "disabled": true,
-            },
-            "high": {
-              "reasoningEffort": "high",
-            },
-            "xhigh": {
-              "disabled": true,
-            },
-            "max": {
-              "reasoningEffort": "max",
-            },
-          },
-          "status": "active",
-          "id": "glm",
+            "output": 131072
+          }
         },
         "kimik3": {
-          "name": "Kimi K3",
+          "modelID": "kimik3",
           "family": "kimi-k3",
-          "release_date": "2026-07-16",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": false,
-          "tool_call": true,
-          "interleaved": {
-            "field": "reasoning_content",
+          "name": "Kimi K3",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
           },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image",
+              "video"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
           "limit": {
             "context": 1048576,
-            "output": 131072,
-          },
-          "modalities": {
-            "input": ["text", "image", "video"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "disabled": true,
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "disabled": true,
-            },
-            "medium": {
-              "disabled": true,
-            },
-            "high": {
-              "disabled": true,
-            },
-            "xhigh": {
-              "disabled": true,
-            },
-            "max": {
-              "reasoningEffort": "max",
-            },
-          },
-          "status": "active",
-          "id": "kimik3",
+            "output": 131072
+          }
         },
         "kimi2.7": {
-          "name": "Kimi K2.7 Code",
+          "modelID": "kimi2.7",
           "family": "kimi-k2",
-          "release_date": "2026-06-12",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": false,
-          "tool_call": true,
-          "interleaved": {
-            "field": "reasoning_content",
+          "name": "Kimi K2.7 Code",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
           },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image",
+              "video"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "disabled": true
+              }
+            }
+          ],
           "limit": {
             "context": 262144,
-            "output": 262144,
-          },
-          "modalities": {
-            "input": ["text", "image", "video"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "disabled": true,
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "disabled": true,
-            },
-            "medium": {
-              "disabled": true,
-            },
-            "high": {
-              "disabled": true,
-            },
-            "xhigh": {
-              "disabled": true,
-            },
-            "max": {
-              "disabled": true,
-            },
-          },
-          "status": "active",
-          "id": "kimi2.7",
+            "output": 262144
+          }
         },
         "kimi2.6": {
-          "name": "Kimi K2.6",
+          "modelID": "kimi2.6",
           "family": "kimi-k2",
-          "release_date": "2026-04-21",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": true,
-          "tool_call": true,
-          "interleaved": {
-            "field": "reasoning_content",
+          "name": "Kimi K2.6",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
           },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image",
+              "video"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "disabled": true
+              }
+            }
+          ],
           "limit": {
             "context": 262144,
-            "output": 65536,
-          },
-          "modalities": {
-            "input": ["text", "image", "video"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "disabled": true,
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "disabled": true,
-            },
-            "medium": {
-              "disabled": true,
-            },
-            "high": {
-              "disabled": true,
-            },
-            "xhigh": {
-              "disabled": true,
-            },
-            "max": {
-              "disabled": true,
-            },
-          },
-          "status": "active",
-          "id": "kimi2.6",
+            "output": 65536
+          }
         },
         "qwen": {
-          "name": "Qwen3.7 Max",
+          "modelID": "qwen",
           "family": "qwen3.7-max",
-          "release_date": "2026-05-21",
-          "attachment": false,
-          "reasoning": true,
-          "temperature": true,
-          "tool_call": true,
+          "name": "Qwen3.7 Max",
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "disabled": true
+              }
+            }
+          ],
           "limit": {
             "context": 1000000,
-            "output": 65536,
-          },
-          "modalities": {
-            "input": ["text"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "disabled": true,
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "disabled": true,
-            },
-            "medium": {
-              "disabled": true,
-            },
-            "high": {
-              "disabled": true,
-            },
-            "xhigh": {
-              "disabled": true,
-            },
-            "max": {
-              "disabled": true,
-            },
-          },
-          "status": "active",
-          "id": "qwen",
+            "output": 65536
+          }
         },
         "minimax": {
-          "name": "MiniMax M3",
+          "modelID": "minimax",
           "family": "minimax-m3",
-          "release_date": "2026-05-31",
-          "attachment": false,
-          "reasoning": true,
-          "temperature": true,
-          "tool_call": true,
+          "name": "MiniMax M3",
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image",
+              "video"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "disabled": true
+              }
+            }
+          ],
           "limit": {
             "context": 1000000,
-            "output": 131072,
-          },
-          "modalities": {
-            "input": ["text", "image", "video"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "disabled": true,
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "disabled": true,
-            },
-            "medium": {
-              "disabled": true,
-            },
-            "high": {
-              "disabled": true,
-            },
-            "xhigh": {
-              "disabled": true,
-            },
-            "max": {
-              "disabled": true,
-            },
-          },
-          "status": "active",
-          "id": "minimax",
-        },
-      },
+            "output": 131072
+          }
+        }
+      }
     },
     "wcs-alt": {
       "name": "WCS Alternative",
-      "api": "openai",
-      "env": ["WCS_API_KEY"],
-      "options": {
+      "env": [
+        "WCS_API_KEY"
+      ],
+      "package": "aisdk:@ai-sdk/openai-compatible",
+      "settings": {
         "baseURL": "https://ai.whocaressoftware.com/alternative/v1",
+        "apiKey": "{env:WCS_API_KEY}"
       },
       "models": {
         "gpt": {
-          "name": "GPT-5.6 Sol",
+          "modelID": "gpt",
           "family": "gpt-sol",
-          "release_date": "2026-07-09",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": false,
-          "tool_call": true,
+          "name": "GPT-5.6 Sol",
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "reasoningEffort": "none"
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "reasoningEffort": "medium"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "reasoningEffort": "xhigh"
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
           "limit": {
             "context": 1050000,
             "input": 922000,
-            "output": 128000,
-          },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "reasoningEffort": "none",
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "reasoningEffort": "low",
-            },
-            "medium": {
-              "reasoningEffort": "medium",
-            },
-            "high": {
-              "reasoningEffort": "high",
-            },
-            "xhigh": {
-              "reasoningEffort": "xhigh",
-            },
-            "max": {
-              "reasoningEffort": "max",
-            },
-          },
-          "status": "active",
-          "id": "gpt",
+            "output": 128000
+          }
         },
         "gpt-5.6-terra": {
-          "name": "GPT-5.6 Terra",
+          "modelID": "gpt-5.6-terra",
           "family": "gpt-terra",
-          "release_date": "2026-07-09",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": false,
-          "tool_call": true,
+          "name": "GPT-5.6 Terra",
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "reasoningEffort": "none"
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "reasoningEffort": "medium"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "reasoningEffort": "xhigh"
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
           "limit": {
             "context": 1050000,
             "input": 922000,
-            "output": 128000,
-          },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "reasoningEffort": "none",
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "reasoningEffort": "low",
-            },
-            "medium": {
-              "reasoningEffort": "medium",
-            },
-            "high": {
-              "reasoningEffort": "high",
-            },
-            "xhigh": {
-              "reasoningEffort": "xhigh",
-            },
-            "max": {
-              "reasoningEffort": "max",
-            },
-          },
-          "status": "active",
-          "id": "gpt-5.6-terra",
+            "output": 128000
+          }
         },
         "gpt-5.6-luna": {
-          "name": "GPT-5.6 Luna",
+          "modelID": "gpt-5.6-luna",
           "family": "gpt-luna",
-          "release_date": "2026-07-09",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": false,
-          "tool_call": true,
+          "name": "GPT-5.6 Luna",
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "reasoningEffort": "none"
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "reasoningEffort": "medium"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "reasoningEffort": "xhigh"
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
           "limit": {
             "context": 1050000,
             "input": 922000,
-            "output": 128000,
-          },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "reasoningEffort": "none",
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "reasoningEffort": "low",
-            },
-            "medium": {
-              "reasoningEffort": "medium",
-            },
-            "high": {
-              "reasoningEffort": "high",
-            },
-            "xhigh": {
-              "reasoningEffort": "xhigh",
-            },
-            "max": {
-              "reasoningEffort": "max",
-            },
-          },
-          "status": "active",
-          "id": "gpt-5.6-luna",
+            "output": 128000
+          }
         },
         "gpt-5.5": {
-          "name": "GPT-5.5",
+          "modelID": "gpt-5.5",
           "family": "gpt",
-          "release_date": "2026-04-23",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": false,
-          "tool_call": true,
+          "name": "GPT-5.5",
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "reasoningEffort": "none"
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "reasoningEffort": "medium"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "reasoningEffort": "xhigh"
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "disabled": true
+              }
+            }
+          ],
           "limit": {
             "context": 1050000,
             "input": 922000,
-            "output": 128000,
-          },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "reasoningEffort": "none",
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "reasoningEffort": "low",
-            },
-            "medium": {
-              "reasoningEffort": "medium",
-            },
-            "high": {
-              "reasoningEffort": "high",
-            },
-            "xhigh": {
-              "reasoningEffort": "xhigh",
-            },
-            "max": {
-              "disabled": true,
-            },
-          },
-          "status": "active",
-          "id": "gpt-5.5",
+            "output": 128000
+          }
         },
         "deepseek": {
-          "name": "DeepSeek V4 Pro",
+          "modelID": "deepseek",
           "family": "deepseek-thinking",
-          "release_date": "2026-04-24",
-          "attachment": false,
-          "reasoning": true,
-          "temperature": true,
-          "tool_call": true,
-          "interleaved": {
-            "field": "reasoning_content",
+          "name": "DeepSeek V4 Pro",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
           },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
           "limit": {
             "context": 1000000,
-            "output": 384000,
-          },
-          "modalities": {
-            "input": ["text"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "disabled": true,
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "disabled": true,
-            },
-            "medium": {
-              "disabled": true,
-            },
-            "high": {
-              "reasoningEffort": "high",
-            },
-            "xhigh": {
-              "disabled": true,
-            },
-            "max": {
-              "reasoningEffort": "max",
-            },
-          },
-          "status": "active",
-          "id": "deepseek",
+            "output": 384000
+          }
         },
         "glm": {
-          "name": "GLM 5.2",
+          "modelID": "glm",
           "family": "glm",
-          "release_date": "2026-06-13",
-          "attachment": false,
-          "reasoning": true,
-          "temperature": true,
-          "tool_call": true,
-          "interleaved": {
-            "field": "reasoning_content",
+          "name": "GLM 5.2",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
           },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
           "limit": {
             "context": 1000000,
-            "output": 131072,
-          },
-          "modalities": {
-            "input": ["text"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "disabled": true,
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "disabled": true,
-            },
-            "medium": {
-              "disabled": true,
-            },
-            "high": {
-              "reasoningEffort": "high",
-            },
-            "xhigh": {
-              "disabled": true,
-            },
-            "max": {
-              "reasoningEffort": "max",
-            },
-          },
-          "status": "active",
-          "id": "glm",
+            "output": 131072
+          }
         },
         "kimik3": {
-          "name": "Kimi K3",
+          "modelID": "kimik3",
           "family": "kimi-k3",
-          "release_date": "2026-07-16",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": false,
-          "tool_call": true,
-          "interleaved": {
-            "field": "reasoning_content",
+          "name": "Kimi K3",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
           },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image",
+              "video"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
           "limit": {
             "context": 1048576,
-            "output": 131072,
-          },
-          "modalities": {
-            "input": ["text", "image", "video"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "disabled": true,
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "disabled": true,
-            },
-            "medium": {
-              "disabled": true,
-            },
-            "high": {
-              "disabled": true,
-            },
-            "xhigh": {
-              "disabled": true,
-            },
-            "max": {
-              "reasoningEffort": "max",
-            },
-          },
-          "status": "active",
-          "id": "kimik3",
+            "output": 131072
+          }
         },
         "kimi2.7": {
-          "name": "Kimi K2.7 Code",
+          "modelID": "kimi2.7",
           "family": "kimi-k2",
-          "release_date": "2026-06-12",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": false,
-          "tool_call": true,
-          "interleaved": {
-            "field": "reasoning_content",
+          "name": "Kimi K2.7 Code",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
           },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image",
+              "video"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "disabled": true
+              }
+            }
+          ],
           "limit": {
             "context": 262144,
-            "output": 262144,
-          },
-          "modalities": {
-            "input": ["text", "image", "video"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "disabled": true,
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "disabled": true,
-            },
-            "medium": {
-              "disabled": true,
-            },
-            "high": {
-              "disabled": true,
-            },
-            "xhigh": {
-              "disabled": true,
-            },
-            "max": {
-              "disabled": true,
-            },
-          },
-          "status": "active",
-          "id": "kimi2.7",
+            "output": 262144
+          }
         },
         "kimi2.6": {
-          "name": "Kimi K2.6",
+          "modelID": "kimi2.6",
           "family": "kimi-k2",
-          "release_date": "2026-04-21",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": true,
-          "tool_call": true,
-          "interleaved": {
-            "field": "reasoning_content",
+          "name": "Kimi K2.6",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
           },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image",
+              "video"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "disabled": true
+              }
+            }
+          ],
           "limit": {
             "context": 262144,
-            "output": 65536,
-          },
-          "modalities": {
-            "input": ["text", "image", "video"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "disabled": true,
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "disabled": true,
-            },
-            "medium": {
-              "disabled": true,
-            },
-            "high": {
-              "disabled": true,
-            },
-            "xhigh": {
-              "disabled": true,
-            },
-            "max": {
-              "disabled": true,
-            },
-          },
-          "status": "active",
-          "id": "kimi2.6",
+            "output": 65536
+          }
         },
         "qwen": {
-          "name": "Qwen3.7 Max",
+          "modelID": "qwen",
           "family": "qwen3.7-max",
-          "release_date": "2026-05-21",
-          "attachment": false,
-          "reasoning": true,
-          "temperature": true,
-          "tool_call": true,
+          "name": "Qwen3.7 Max",
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "disabled": true
+              }
+            }
+          ],
           "limit": {
             "context": 1000000,
-            "output": 65536,
-          },
-          "modalities": {
-            "input": ["text"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "disabled": true,
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "disabled": true,
-            },
-            "medium": {
-              "disabled": true,
-            },
-            "high": {
-              "disabled": true,
-            },
-            "xhigh": {
-              "disabled": true,
-            },
-            "max": {
-              "disabled": true,
-            },
-          },
-          "status": "active",
-          "id": "qwen",
+            "output": 65536
+          }
         },
         "minimax": {
-          "name": "MiniMax M3",
+          "modelID": "minimax",
           "family": "minimax-m3",
-          "release_date": "2026-05-31",
-          "attachment": false,
-          "reasoning": true,
-          "temperature": true,
-          "tool_call": true,
+          "name": "MiniMax M3",
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image",
+              "video"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "disabled": true
+              }
+            }
+          ],
           "limit": {
             "context": 1000000,
-            "output": 131072,
-          },
-          "modalities": {
-            "input": ["text", "image", "video"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "disabled": true,
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "disabled": true,
-            },
-            "medium": {
-              "disabled": true,
-            },
-            "high": {
-              "disabled": true,
-            },
-            "xhigh": {
-              "disabled": true,
-            },
-            "max": {
-              "disabled": true,
-            },
-          },
-          "status": "active",
-          "id": "minimax",
-        },
-      },
+            "output": 131072
+          }
+        }
+      }
     },
     "wcs-dev": {
       "name": "WCS Development",
-      "api": "openai",
-      "env": ["WCS_DEV_API_KEY"],
-      "options": {
+      "env": [
+        "WCS_DEV_API_KEY"
+      ],
+      "package": "aisdk:@ai-sdk/openai-compatible",
+      "settings": {
         "baseURL": "https://dev-ai.whocaressoftware.com/v1",
+        "apiKey": "{env:WCS_DEV_API_KEY}"
       },
       "models": {
         "gpt": {
-          "name": "GPT-5.6 Sol",
+          "modelID": "gpt",
           "family": "gpt-sol",
-          "release_date": "2026-07-09",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": false,
-          "tool_call": true,
+          "name": "GPT-5.6 Sol",
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "reasoningEffort": "none"
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "reasoningEffort": "medium"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "reasoningEffort": "xhigh"
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
           "limit": {
             "context": 1050000,
             "input": 922000,
-            "output": 128000,
-          },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "reasoningEffort": "none",
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "reasoningEffort": "low",
-            },
-            "medium": {
-              "reasoningEffort": "medium",
-            },
-            "high": {
-              "reasoningEffort": "high",
-            },
-            "xhigh": {
-              "reasoningEffort": "xhigh",
-            },
-            "max": {
-              "reasoningEffort": "max",
-            },
-          },
-          "status": "active",
-          "id": "gpt",
+            "output": 128000
+          }
         },
         "gpt-5.6-terra": {
-          "name": "GPT-5.6 Terra",
+          "modelID": "gpt-5.6-terra",
           "family": "gpt-terra",
-          "release_date": "2026-07-09",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": false,
-          "tool_call": true,
+          "name": "GPT-5.6 Terra",
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "reasoningEffort": "none"
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "reasoningEffort": "medium"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "reasoningEffort": "xhigh"
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
           "limit": {
             "context": 1050000,
             "input": 922000,
-            "output": 128000,
-          },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "reasoningEffort": "none",
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "reasoningEffort": "low",
-            },
-            "medium": {
-              "reasoningEffort": "medium",
-            },
-            "high": {
-              "reasoningEffort": "high",
-            },
-            "xhigh": {
-              "reasoningEffort": "xhigh",
-            },
-            "max": {
-              "reasoningEffort": "max",
-            },
-          },
-          "status": "active",
-          "id": "gpt-5.6-terra",
+            "output": 128000
+          }
         },
         "gpt-5.6-luna": {
-          "name": "GPT-5.6 Luna",
+          "modelID": "gpt-5.6-luna",
           "family": "gpt-luna",
-          "release_date": "2026-07-09",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": false,
-          "tool_call": true,
+          "name": "GPT-5.6 Luna",
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "reasoningEffort": "none"
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "reasoningEffort": "medium"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "reasoningEffort": "xhigh"
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
           "limit": {
             "context": 1050000,
             "input": 922000,
-            "output": 128000,
-          },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "reasoningEffort": "none",
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "reasoningEffort": "low",
-            },
-            "medium": {
-              "reasoningEffort": "medium",
-            },
-            "high": {
-              "reasoningEffort": "high",
-            },
-            "xhigh": {
-              "reasoningEffort": "xhigh",
-            },
-            "max": {
-              "reasoningEffort": "max",
-            },
-          },
-          "status": "active",
-          "id": "gpt-5.6-luna",
+            "output": 128000
+          }
         },
         "gpt-5.5": {
-          "name": "GPT-5.5",
+          "modelID": "gpt-5.5",
           "family": "gpt",
-          "release_date": "2026-04-23",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": false,
-          "tool_call": true,
+          "name": "GPT-5.5",
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "reasoningEffort": "none"
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "reasoningEffort": "medium"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "reasoningEffort": "xhigh"
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "disabled": true
+              }
+            }
+          ],
           "limit": {
             "context": 1050000,
             "input": 922000,
-            "output": 128000,
-          },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "reasoningEffort": "none",
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "reasoningEffort": "low",
-            },
-            "medium": {
-              "reasoningEffort": "medium",
-            },
-            "high": {
-              "reasoningEffort": "high",
-            },
-            "xhigh": {
-              "reasoningEffort": "xhigh",
-            },
-            "max": {
-              "disabled": true,
-            },
-          },
-          "status": "active",
-          "id": "gpt-5.5",
+            "output": 128000
+          }
         },
         "deepseek": {
-          "name": "DeepSeek V4 Pro",
+          "modelID": "deepseek",
           "family": "deepseek-thinking",
-          "release_date": "2026-04-24",
-          "attachment": false,
-          "reasoning": true,
-          "temperature": true,
-          "tool_call": true,
-          "interleaved": {
-            "field": "reasoning_content",
+          "name": "DeepSeek V4 Pro",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
           },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
           "limit": {
             "context": 1000000,
-            "output": 384000,
-          },
-          "modalities": {
-            "input": ["text"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "disabled": true,
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "disabled": true,
-            },
-            "medium": {
-              "disabled": true,
-            },
-            "high": {
-              "reasoningEffort": "high",
-            },
-            "xhigh": {
-              "disabled": true,
-            },
-            "max": {
-              "reasoningEffort": "max",
-            },
-          },
-          "status": "active",
-          "id": "deepseek",
+            "output": 384000
+          }
         },
         "glm": {
-          "name": "GLM 5.2",
+          "modelID": "glm",
           "family": "glm",
-          "release_date": "2026-06-13",
-          "attachment": false,
-          "reasoning": true,
-          "temperature": true,
-          "tool_call": true,
-          "interleaved": {
-            "field": "reasoning_content",
+          "name": "GLM 5.2",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
           },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
           "limit": {
             "context": 1000000,
-            "output": 131072,
-          },
-          "modalities": {
-            "input": ["text"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "disabled": true,
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "disabled": true,
-            },
-            "medium": {
-              "disabled": true,
-            },
-            "high": {
-              "reasoningEffort": "high",
-            },
-            "xhigh": {
-              "disabled": true,
-            },
-            "max": {
-              "reasoningEffort": "max",
-            },
-          },
-          "status": "active",
-          "id": "glm",
+            "output": 131072
+          }
         },
         "kimik3": {
-          "name": "Kimi K3",
+          "modelID": "kimik3",
           "family": "kimi-k3",
-          "release_date": "2026-07-16",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": false,
-          "tool_call": true,
-          "interleaved": {
-            "field": "reasoning_content",
+          "name": "Kimi K3",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
           },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image",
+              "video"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
           "limit": {
             "context": 1048576,
-            "output": 131072,
-          },
-          "modalities": {
-            "input": ["text", "image", "video"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "disabled": true,
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "disabled": true,
-            },
-            "medium": {
-              "disabled": true,
-            },
-            "high": {
-              "disabled": true,
-            },
-            "xhigh": {
-              "disabled": true,
-            },
-            "max": {
-              "reasoningEffort": "max",
-            },
-          },
-          "status": "active",
-          "id": "kimik3",
+            "output": 131072
+          }
         },
         "kimi2.7": {
-          "name": "Kimi K2.7 Code",
+          "modelID": "kimi2.7",
           "family": "kimi-k2",
-          "release_date": "2026-06-12",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": false,
-          "tool_call": true,
-          "interleaved": {
-            "field": "reasoning_content",
+          "name": "Kimi K2.7 Code",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
           },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image",
+              "video"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "disabled": true
+              }
+            }
+          ],
           "limit": {
             "context": 262144,
-            "output": 262144,
-          },
-          "modalities": {
-            "input": ["text", "image", "video"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "disabled": true,
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "disabled": true,
-            },
-            "medium": {
-              "disabled": true,
-            },
-            "high": {
-              "disabled": true,
-            },
-            "xhigh": {
-              "disabled": true,
-            },
-            "max": {
-              "disabled": true,
-            },
-          },
-          "status": "active",
-          "id": "kimi2.7",
+            "output": 262144
+          }
         },
         "kimi2.6": {
-          "name": "Kimi K2.6",
+          "modelID": "kimi2.6",
           "family": "kimi-k2",
-          "release_date": "2026-04-21",
-          "attachment": true,
-          "reasoning": true,
-          "temperature": true,
-          "tool_call": true,
-          "interleaved": {
-            "field": "reasoning_content",
+          "name": "Kimi K2.6",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
           },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image",
+              "video"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "disabled": true
+              }
+            }
+          ],
           "limit": {
             "context": 262144,
-            "output": 65536,
-          },
-          "modalities": {
-            "input": ["text", "image", "video"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "disabled": true,
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "disabled": true,
-            },
-            "medium": {
-              "disabled": true,
-            },
-            "high": {
-              "disabled": true,
-            },
-            "xhigh": {
-              "disabled": true,
-            },
-            "max": {
-              "disabled": true,
-            },
-          },
-          "status": "active",
-          "id": "kimi2.6",
+            "output": 65536
+          }
         },
         "qwen": {
-          "name": "Qwen3.7 Max",
+          "modelID": "qwen",
           "family": "qwen3.7-max",
-          "release_date": "2026-05-21",
-          "attachment": false,
-          "reasoning": true,
-          "temperature": true,
-          "tool_call": true,
+          "name": "Qwen3.7 Max",
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "disabled": true
+              }
+            }
+          ],
           "limit": {
             "context": 1000000,
-            "output": 65536,
-          },
-          "modalities": {
-            "input": ["text"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "disabled": true,
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "disabled": true,
-            },
-            "medium": {
-              "disabled": true,
-            },
-            "high": {
-              "disabled": true,
-            },
-            "xhigh": {
-              "disabled": true,
-            },
-            "max": {
-              "disabled": true,
-            },
-          },
-          "status": "active",
-          "id": "qwen",
+            "output": 65536
+          }
         },
         "minimax": {
-          "name": "MiniMax M3",
+          "modelID": "minimax",
           "family": "minimax-m3",
-          "release_date": "2026-05-31",
-          "attachment": false,
-          "reasoning": true,
-          "temperature": true,
-          "tool_call": true,
+          "name": "MiniMax M3",
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image",
+              "video"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "disabled": true
+              }
+            }
+          ],
           "limit": {
             "context": 1000000,
-            "output": 131072,
-          },
-          "modalities": {
-            "input": ["text", "image", "video"],
-            "output": ["text"],
-          },
-          "variants": {
-            "none": {
-              "disabled": true,
-            },
-            "minimal": {
-              "disabled": true,
-            },
-            "low": {
-              "disabled": true,
-            },
-            "medium": {
-              "disabled": true,
-            },
-            "high": {
-              "disabled": true,
-            },
-            "xhigh": {
-              "disabled": true,
-            },
-            "max": {
-              "disabled": true,
-            },
-          },
-          "status": "active",
-          "id": "minimax",
-        },
-      },
+            "output": 131072
+          }
+        }
+      }
     },
     "selfhosted": {
-      "npm": "@ai-sdk/openai-compatible",
       "name": "Self-hosted coding models",
-      "options": {
+      "package": "aisdk:@ai-sdk/openai-compatible",
+      "settings": {
         "baseURL": "http://192.168.179.112:8080/v1",
         "apiKey": "{env:SELFHOSTED_LLM_API_KEY}",
-        "timeout": false,
+        "timeout": false
       },
       "models": {
         "qwen3-coder-next": {
-          "name": "Qwen3 Coder Next 80B-A3B Q6_K",
           "family": "qwen3-coder",
-          "reasoning": false,
-          "temperature": true,
-          "tool_call": true,
+          "name": "Qwen3 Coder Next 80B-A3B Q6_K",
+          "capabilities": {
+            "tools": true,
+            "input": [],
+            "output": []
+          },
           "limit": {
             "context": 65536,
-            "output": 16384,
-          },
+            "output": 16384
+          }
         },
         "glm-4.7-flash": {
-          "name": "GLM 4.7 Flash 30B-A3B Q6_K",
           "family": "glm",
-          "reasoning": true,
-          "temperature": true,
-          "tool_call": true,
-          "interleaved": {
-            "field": "reasoning_content",
+          "name": "GLM 4.7 Flash 30B-A3B Q6_K",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
           },
+          "capabilities": {
+            "tools": true,
+            "input": [],
+            "output": []
+          },
+          "variants": [
+            {
+              "id": "off",
+              "settings": {
+                "chat_template_kwargs": {
+                  "enable_thinking": false
+                },
+                "reasoning_format": "deepseek"
+              }
+            },
+            {
+              "id": "thinking-8k",
+              "settings": {
+                "chat_template_kwargs": {
+                  "enable_thinking": true
+                },
+                "reasoning_format": "deepseek",
+                "reasoning_budget_tokens": 8192
+              }
+            },
+            {
+              "id": "thinking",
+              "settings": {
+                "chat_template_kwargs": {
+                  "enable_thinking": true
+                },
+                "reasoning_format": "deepseek",
+                "reasoning_budget_tokens": -1
+              }
+            },
+            {
+              "id": "preserved",
+              "settings": {
+                "chat_template_kwargs": {
+                  "enable_thinking": true,
+                  "clear_thinking": false
+                },
+                "reasoning_format": "deepseek",
+                "reasoning_budget_tokens": -1
+              }
+            }
+          ],
           "limit": {
             "context": 65536,
-            "output": 16384,
-          },
-          "variants": {
-            "off": {
-              "chat_template_kwargs": {
-                "enable_thinking": false,
-              },
-              "reasoning_format": "deepseek",
-            },
-            "thinking-8k": {
-              "chat_template_kwargs": {
-                "enable_thinking": true,
-              },
-              "reasoning_format": "deepseek",
-              "reasoning_budget_tokens": 8192,
-            },
-            "thinking": {
-              "chat_template_kwargs": {
-                "enable_thinking": true,
-              },
-              "reasoning_format": "deepseek",
-              "reasoning_budget_tokens": -1,
-            },
-            "preserved": {
-              "chat_template_kwargs": {
-                "enable_thinking": true,
-                "clear_thinking": false,
-              },
-              "reasoning_format": "deepseek",
-              "reasoning_budget_tokens": -1,
-            },
-          },
+            "output": 16384
+          }
         },
         "minimax-m2.7": {
-          "name": "MiniMax M2.7 229B-A10B UD-Q3_K_M",
           "family": "minimax-m2",
-          "reasoning": true,
-          "temperature": true,
-          "tool_call": true,
-          "interleaved": {
-            "field": "reasoning_content",
+          "name": "MiniMax M2.7 229B-A10B UD-Q3_K_M",
+          "compatibility": {
+            "reasoningField": "reasoning_content"
+          },
+          "capabilities": {
+            "tools": true,
+            "input": [],
+            "output": []
           },
           "limit": {
             "context": 32768,
-            "output": 16384,
-          },
-        },
+            "output": 16384
+          }
+        }
       },
+      "env": [
+        "SELFHOSTED_LLM_API_KEY"
+      ]
     },
     "opencode": {
-      "npm": "@ai-sdk/openai-compatible",
       "name": "OpenCode Zen",
-      "options": {
+      "package": "aisdk:@ai-sdk/openai-compatible",
+      "settings": {
         "baseURL": "https://opencode.ai/zen/v1",
-        "apiKey": "{env:OPENCODE_API_KEY}",
+        "apiKey": "{env:OPENCODE_API_KEY}"
       },
       "models": {
         "big-pickle": {
           "name": "Big Pickle",
           "limit": {
             "context": 200000,
-            "output": 32000,
-          },
+            "output": 32000
+          }
         },
         "deepseek-v4-flash-free": {
           "name": "DeepSeek V4 Flash Free",
+          "variants": [
+            {
+              "id": "off",
+              "settings": {
+                "thinking": {
+                  "type": "disabled"
+                }
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
           "limit": {
             "context": 200000,
-            "output": 128000,
-          },
-          "variants": {
-            "off": {
-              "thinking": {
-                "type": "disabled",
-              },
-            },
-            "high": {
-              "reasoningEffort": "high",
-            },
-            "max": {
-              "reasoningEffort": "max",
-            },
-          },
+            "output": 128000
+          }
         },
         "glm-5-free": {
           "name": "GLM-5 Free",
+          "variants": [
+            {
+              "id": "off",
+              "settings": {
+                "thinking": {
+                  "type": "disabled"
+                }
+              }
+            },
+            {
+              "id": "on",
+              "settings": {
+                "thinking": {
+                  "type": "enabled"
+                }
+              }
+            }
+          ],
           "limit": {
             "context": 204800,
-            "output": 131072,
-          },
-          "variants": {
-            "off": {
-              "thinking": {
-                "type": "disabled",
-              },
-            },
-            "on": {
-              "thinking": {
-                "type": "enabled",
-              },
-            },
-          },
+            "output": 131072
+          }
         },
         "grok-code": {
           "name": "Grok Code Fast 1",
           "limit": {
             "context": 256000,
-            "output": 256000,
-          },
+            "output": 256000
+          }
         },
         "hy3-preview-free": {
           "name": "Hy3 preview Free",
           "limit": {
             "context": 256000,
-            "output": 64000,
-          },
+            "output": 64000
+          }
         },
         "kimi-k2.5-free": {
           "name": "Kimi K2.5 Free",
+          "variants": [
+            {
+              "id": "off",
+              "settings": {
+                "thinking": {
+                  "type": "disabled"
+                }
+              }
+            },
+            {
+              "id": "on",
+              "settings": {
+                "thinking": {
+                  "type": "enabled"
+                }
+              }
+            }
+          ],
           "limit": {
             "context": 262144,
-            "output": 262144,
-          },
-          "variants": {
-            "off": {
-              "thinking": {
-                "type": "disabled",
-              },
-            },
-            "on": {
-              "thinking": {
-                "type": "enabled",
-              },
-            },
-          },
+            "output": 262144
+          }
         },
         "ling-2.6-flash-free": {
           "name": "Ling 2.6 Flash Free",
           "limit": {
             "context": 262100,
-            "output": 32800,
-          },
+            "output": 32800
+          }
         },
         "mimo-v2.5-free": {
           "name": "MiMo V2.5 Free",
           "limit": {
             "context": 200000,
-            "output": 32000,
-          },
+            "output": 32000
+          }
         },
         "minimax-m3-free": {
           "name": "MiniMax-M3 Free",
+          "variants": [
+            {
+              "id": "off",
+              "settings": {
+                "thinking": {
+                  "type": "disabled"
+                }
+              }
+            },
+            {
+              "id": "on",
+              "settings": {
+                "thinking": {
+                  "type": "enabled"
+                }
+              }
+            }
+          ],
           "limit": {
             "context": 200000,
-            "output": 32000,
-          },
-          "variants": {
-            "off": {
-              "thinking": {
-                "type": "disabled",
-              },
-            },
-            "on": {
-              "thinking": {
-                "type": "enabled",
-              },
-            },
-          },
+            "output": 32000
+          }
         },
         "nemotron-3-ultra-free": {
           "name": "Nemotron 3 Ultra Free",
           "limit": {
             "context": 1000000,
-            "output": 128000,
-          },
+            "output": 128000
+          }
         },
         "north-mini-code-free": {
           "name": "North Mini Code Free",
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "reasoningEffort": "none"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            }
+          ],
           "limit": {
             "context": 256000,
-            "output": 64000,
-          },
-          "variants": {
-            "none": {
-              "reasoningEffort": "none",
-            },
-            "high": {
-              "reasoningEffort": "high",
-            },
-          },
+            "output": 64000
+          }
         },
         "qwen3.6-plus-free": {
           "name": "Qwen3.6 Plus Free",
+          "variants": [
+            {
+              "id": "off",
+              "settings": {
+                "thinking": {
+                  "type": "disabled"
+                }
+              }
+            },
+            {
+              "id": "on",
+              "settings": {
+                "thinking": {
+                  "type": "enabled"
+                }
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "thinking": {
+                  "type": "enabled",
+                  "budgetTokens": 81920
+                }
+              }
+            }
+          ],
           "limit": {
             "context": 262144,
-            "output": 65536,
-          },
-          "variants": {
-            "off": {
-              "thinking": {
-                "type": "disabled",
-              },
-            },
-            "on": {
-              "thinking": {
-                "type": "enabled",
-              },
-            },
-            "max": {
-              "thinking": {
-                "type": "enabled",
-                "budgetTokens": 81920,
-              },
-            },
-          },
+            "output": 65536
+          }
         },
         "ring-2.6-1t-free": {
           "name": "Ring 2.6 1T Free",
           "limit": {
             "context": 262000,
-            "output": 66000,
-          },
+            "output": 66000
+          }
         },
         "trinity-large-preview-free": {
           "name": "Trinity Large Preview",
           "limit": {
             "context": 131072,
-            "output": 131072,
-          },
-        },
+            "output": 131072
+          }
+        }
       },
-    },
-  },
-  "agent": {
-    "title": {
-      "model": "opencode/big-pickle",
-    },
-  },
-  "permission": {
-    "edit": "allow",
-    "external_directory": "allow",
-    "bash": {
-      // IMPORTANT: Broad allow must stay first - last matching rule wins.
-      "*": "allow",
-      // Destructive filesystem operations.
-      "rm*": "ask",
-      "rmdir*": "ask",
-      "chmod*": "ask",
-      "chown*": "ask",
-      "sudo": "ask",
-      "sudo *": "ask",
-      "su": "ask",
-      "su *": "ask",
-      // Git history/remote modification.
-      "git push*": "ask",
-      "git * push*": "ask",
-      "git reset*": "ask",
-      "git * reset*": "ask",
-      "git clean*": "ask",
-      "git * clean*": "ask",
-      "git rm*": "ask",
-      "git * rm*": "ask",
-      "git rebase*": "ask",
-      "git * rebase*": "ask",
-      // Kubernetes and infrastructure mutation.
-      "kubectl apply*": "ask",
-      "kubectl * apply*": "ask",
-      "kubectl create*": "ask",
-      "kubectl * create*": "ask",
-      "kubectl delete*": "ask",
-      "kubectl * delete*": "ask",
-      "kubectl replace*": "ask",
-      "kubectl * replace*": "ask",
-      "kubectl patch*": "ask",
-      "kubectl * patch*": "ask",
-      "kubectl scale*": "ask",
-      "kubectl * scale*": "ask",
-      "kubectl set*": "ask",
-      "kubectl * set*": "ask",
-      "kubectl rollout restart*": "ask",
-      "kubectl * rollout restart*": "ask",
-      "kubectl rollout undo*": "ask",
-      "kubectl * rollout undo*": "ask",
-      "kubectl drain*": "ask",
-      "kubectl * drain*": "ask",
-      "kubectl cordon*": "ask",
-      "kubectl * cordon*": "ask",
-      "kubectl uncordon*": "ask",
-      "kubectl * uncordon*": "ask",
-      "kubectl taint*": "ask",
-      "kubectl * taint*": "ask",
-      "kubectl annotate*": "ask",
-      "kubectl * annotate*": "ask",
-      "kubectl label*": "ask",
-      "kubectl * label*": "ask",
-      "kubectl edit*": "ask",
-      "kubectl * edit*": "ask",
-      "aws-login exec * -- kubectl apply*": "ask",
-      "aws-login exec * -- kubectl * apply*": "ask",
-      "aws-login exec * -- kubectl create*": "ask",
-      "aws-login exec * -- kubectl * create*": "ask",
-      "aws-login exec * -- kubectl delete*": "ask",
-      "aws-login exec * -- kubectl * delete*": "ask",
-      "aws-login exec * -- kubectl replace*": "ask",
-      "aws-login exec * -- kubectl * replace*": "ask",
-      "aws-login exec * -- kubectl patch*": "ask",
-      "aws-login exec * -- kubectl * patch*": "ask",
-      "aws-login exec * -- kubectl scale*": "ask",
-      "aws-login exec * -- kubectl * scale*": "ask",
-      "aws-login exec * -- kubectl set*": "ask",
-      "aws-login exec * -- kubectl * set*": "ask",
-      "aws-login exec * -- kubectl rollout restart*": "ask",
-      "aws-login exec * -- kubectl * rollout restart*": "ask",
-      "aws-login exec * -- kubectl rollout undo*": "ask",
-      "aws-login exec * -- kubectl * rollout undo*": "ask",
-      "aws-login exec * -- kubectl drain*": "ask",
-      "aws-login exec * -- kubectl * drain*": "ask",
-      "aws-login exec * -- kubectl cordon*": "ask",
-      "aws-login exec * -- kubectl * cordon*": "ask",
-      "aws-login exec * -- kubectl uncordon*": "ask",
-      "aws-login exec * -- kubectl * uncordon*": "ask",
-      "aws-login exec * -- kubectl taint*": "ask",
-      "aws-login exec * -- kubectl * taint*": "ask",
-      "aws-login exec * -- kubectl annotate*": "ask",
-      "aws-login exec * -- kubectl * annotate*": "ask",
-      "aws-login exec * -- kubectl label*": "ask",
-      "aws-login exec * -- kubectl * label*": "ask",
-      "aws-login exec * -- kubectl edit*": "ask",
-      "aws-login exec * -- kubectl * edit*": "ask",
-      "helm install*": "ask",
-      "helm * install*": "ask",
-      "helm upgrade*": "ask",
-      "helm * upgrade*": "ask",
-      "helm uninstall*": "ask",
-      "helm * uninstall*": "ask",
-      "helm delete*": "ask",
-      "helm * delete*": "ask",
-      "helm rollback*": "ask",
-      "helm * rollback*": "ask",
-      "aws-login exec * -- helm install*": "ask",
-      "aws-login exec * -- helm * install*": "ask",
-      "aws-login exec * -- helm upgrade*": "ask",
-      "aws-login exec * -- helm * upgrade*": "ask",
-      "aws-login exec * -- helm uninstall*": "ask",
-      "aws-login exec * -- helm * uninstall*": "ask",
-      "aws-login exec * -- helm delete*": "ask",
-      "aws-login exec * -- helm * delete*": "ask",
-      "aws-login exec * -- helm rollback*": "ask",
-      "aws-login exec * -- helm * rollback*": "ask",
-      "terraform apply*": "ask",
-      "terraform * apply*": "ask",
-      "terraform destroy*": "ask",
-      "terraform * destroy*": "ask",
-      "terraform state*": "ask",
-      "terraform * state*": "ask",
-      "terraform import*": "ask",
-      "terraform * import*": "ask",
-      "tofu apply*": "ask",
-      "tofu * apply*": "ask",
-      "tofu destroy*": "ask",
-      "tofu * destroy*": "ask",
-      "tofu state*": "ask",
-      "tofu * state*": "ask",
-      "tofu import*": "ask",
-      "tofu * import*": "ask",
-    },
-  },
-  "mcp": {
-    "pocketsmith": {
-      "type": "remote",
-      "url": "https://mcp.pocketsmith.com/mcp",
-      "enabled": false,
-    },
-    "telecontext": {
-      "type": "remote",
-      "url": "https://telecontext.trap.ng.telekom.net/mcp",
-      "enabled": false,
-    },
-  },
-  "plugin": [
-    "./plugins/tmux-session-state.js",
-    "./plugins/clickable-notifier.js",
-    "./plugins/descendant-skills.js",
-  ],
-  "instructions": [],
+      "env": [
+        "OPENCODE_API_KEY"
+      ]
+    }
+  }
 }

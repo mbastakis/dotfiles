@@ -1,7 +1,6 @@
 ---
 description: Export and analyze a previous OpenCode session by ID
 agent: general
-subtask: true
 ---
 
 # Session Analysis

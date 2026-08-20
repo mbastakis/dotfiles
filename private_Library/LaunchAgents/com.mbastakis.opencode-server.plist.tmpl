@@ -5,9 +5,15 @@
     <key>Label</key>
     <string>com.mbastakis.opencode-server</string>
 
+    <!-- The opencode2 background service manages its own process; this job
+         only ensures it is running at login and re-checks periodically.
+         `service start` is idempotent: it exits immediately when a healthy
+         service already exists. -->
     <key>ProgramArguments</key>
     <array>
-        <string>{{ printf "%s/bin/opencode-server" .chezmoi.homeDir }}</string>
+        <string>{{ printf "%s/.opencode/bin/opencode2" .chezmoi.homeDir }}</string>
+        <string>service</string>
+        <string>start</string>
     </array>
 
     <key>WorkingDirectory</key>
@@ -16,11 +22,8 @@
     <key>RunAtLoad</key>
     <true/>
 
-    <key>KeepAlive</key>
-    <true/>
-
-    <key>ThrottleInterval</key>
-    <integer>10</integer>
+    <key>StartInterval</key>
+    <integer>300</integer>
 
     <key>StandardOutPath</key>
     <string>{{ printf "%s/Library/Logs/opencode-server.log" .chezmoi.homeDir }}</string>

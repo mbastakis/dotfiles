@@ -1,0 +1,145 @@
+#!/bin/bash
+set -euo pipefail
+
+# opencode-server — remote-access stack control for the OpenCode v2 service.
+#
+# The OpenCode backend itself is the opencode2 background service: it manages
+# its own lifecycle, hot-reloads config and skills, and is auto-started by any
+# local client. This script only wires up what v2 does not own: the oauth2-proxy
+# LaunchAgent and the Tailscale Serve route for phone/browser access.
+
+export PATH="${OPENCODE_SERVER_PATH:-$HOME/.opencode/bin:$HOME/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin}"
+
+DOMAIN="gui/$(id -u)"
+PROXY_LABEL="com.mbastakis.opencode-oauth2-proxy"
+SERVER_URL="{{ .opencode.remote.server.scheme }}://{{ .opencode.remote.server.host }}:{{ .opencode.remote.server.port }}"
+PROXY_URL="{{ .opencode.remote.oauth2_proxy.scheme }}://{{ .opencode.remote.oauth2_proxy.host }}:{{ .opencode.remote.oauth2_proxy.port }}"
+
+usage() {
+    cat <<EOF
+Usage: opencode-server COMMAND [COMPONENT]
+
+Commands:
+  status            Show service, proxy, and Tailscale Serve state
+  start             Ensure service, proxy, and Serve route are up
+  stop              Stop the stack and withdraw the Serve route
+  restart [server|proxy|all]
+  logs              Follow proxy logs (service logs: ~/.local/share/opencode/log/)
+
+The OpenCode backend is the opencode2 background service; use
+\`opencode2 service\` directly for service-only operations.
+EOF
+}
+
+proxy_is_healthy() {
+    curl --fail --silent --max-time 2 "$PROXY_URL/ping" >/dev/null 2>&1
+}
+
+proxy_start() {
+    if proxy_is_healthy; then
+        return 0
+    fi
+    launchctl bootout "$DOMAIN/$PROXY_LABEL" 2>/dev/null || true
+    launchctl bootstrap "$DOMAIN" "$HOME/Library/LaunchAgents/${PROXY_LABEL}.plist"
+    for _ in {1..20}; do
+        proxy_is_healthy && return 0
+        sleep 0.5
+    done
+    echo "Error: oauth2-proxy did not become healthy at $PROXY_URL" >&2
+    return 1
+}
+
+proxy_stop() {
+    launchctl bootout "$DOMAIN/$PROXY_LABEL" 2>/dev/null || true
+}
+
+# Tailscale Serve: converge to "route / -> oauth2-proxy", but never touch
+# routes this stack does not own.
+serve_is_absent() {
+    jq -e '((.TCP // {}) == {}) and ((.Web // {}) == {}) and ((.AllowFunnel // {}) == {})' >/dev/null
+}
+
+serve_is_owned() {
+    jq -e --arg proxy "$PROXY_URL" '
+        (.TCP == {"443": {"HTTPS": true}})
+        and ((.Web // {}) | length == 1)
+        and ([.Web[] | .Handlers] == [{"/": {"Proxy": $proxy}}])
+        and ((.AllowFunnel // {}) == {})
+    ' >/dev/null
+}
+
+serve_converge() {
+    local config
+    config="$(tailscale serve status --json)"
+    if serve_is_owned <<< "$config"; then
+        return 0
+    fi
+    if ! serve_is_absent <<< "$config"; then
+        echo "Error: refusing to replace Tailscale Serve routes not owned by OpenCode" >&2
+        tailscale serve status >&2 || true
+        return 1
+    fi
+    tailscale serve --bg --yes "$PROXY_URL" >/dev/null
+}
+
+serve_withdraw() {
+    local config
+    config="$(tailscale serve status --json)"
+    if serve_is_absent <<< "$config"; then
+        return 0
+    fi
+    if ! serve_is_owned <<< "$config"; then
+        echo "Error: refusing to reset Tailscale Serve routes not owned by OpenCode" >&2
+        tailscale serve status >&2 || true
+        return 1
+    fi
+    tailscale serve reset >/dev/null
+}
+
+serve_status() {
+    local config
+    config="$(tailscale serve status --json 2>/dev/null || true)"
+    if serve_is_owned <<< "$config"; then
+        printf 'configured'
+    elif serve_is_absent <<< "$config"; then
+        printf 'absent'
+    else
+        printf 'drifted'
+    fi
+}
+
+print_status() {
+    printf 'OpenCode service:  %s (expected %s)\n' "$(opencode2 service status 2>/dev/null || echo unknown)" "$SERVER_URL"
+    printf 'oauth2-proxy:      %s\n' "$(proxy_is_healthy && echo healthy || echo down)"
+    printf 'Tailscale Serve:   %s -> %s\n' "$(serve_status)" "$PROXY_URL"
+}
+
+case "${1:-status}" in
+    status) print_status ;;
+    start)
+        opencode2 service start
+        proxy_start
+        serve_converge
+        ;;
+    stop)
+        serve_withdraw
+        proxy_stop
+        opencode2 service stop
+        ;;
+    restart)
+        case "${2:-all}" in
+            server) opencode2 service restart ;;
+            proxy) proxy_stop; proxy_start ;;
+            all)
+                opencode2 service restart
+                proxy_stop
+                proxy_start
+                serve_converge
+                ;;
+            *) usage >&2; exit 2 ;;
+        esac
+        ;;
+    logs) /usr/bin/tail -n 50 -F "$HOME/Library/Logs/opencode-oauth2-proxy.log" "$HOME/Library/Logs/opencode-oauth2-proxy.error.log" ;;
+    help|--help|-h) usage ;;
+    *) usage >&2; exit 2 ;;
+esac

@@ -1,110 +1,40 @@
 #!/bin/bash
-# Keep the OpenCode server and authenticated proxy loaded, then expose only the
-# proxy through tailnet-only Tailscale Serve.
-# hash-server-plist: {{ include "private_Library/LaunchAgents/com.mbastakis.opencode-server.plist.tmpl" | sha256sum }}
-# hash-proxy-plist: {{ include "private_Library/LaunchAgents/com.mbastakis.opencode-oauth2-proxy.plist.tmpl" | sha256sum }}
-# hash-server-wrapper: {{ include "literal_bin/executable_opencode-server" | sha256sum }}
-# hash-proxy-wrapper: {{ include "literal_bin/executable_opencode-oauth2-proxy" | sha256sum }}
-# hash-proxy-config: {{ include "private_dot_config/oauth2-proxy/private_oauth2-proxy.cfg.tmpl" | sha256sum }}
-# hash-opencode-config: {{ include "private_dot_config/opencode/private_opencode.jsonc" | sha256sum }}
-# hash-oidc-secret: {{ (bitwardenSecrets .opencode.remote.oidc_client_secret_id).value | sha256sum }}
-# hash-cookie-secret: {{ (bitwardenSecrets .opencode.remote.cookie_secret_id).value | sha256sum }}
-# external-url: {{ .opencode.remote.external_url }}
-# proxy-port: {{ .opencode.remote.proxy_port }}
-
+# Reconcile the OpenCode v2 remote-access stack on the designated Mac.
+#
+# The opencode2 background service hot-reloads config, agents, commands, and
+# skills on its own; this script only handles what lives outside the service:
+# provider credentials in the service environment, the two LaunchAgents, and
+# stack convergence via opencode-server.
 {{- if or (ne .chezmoi.os "darwin") (ne .chezmoi.hostname .opencode.remote.host) }}
 exit 0
-{{- end }}
+{{- else }}
+# hash-launch-agents: {{ includeTemplate "private_Library/LaunchAgents/com.mbastakis.opencode-server.plist.tmpl" . | sha256sum }} {{ includeTemplate "private_Library/LaunchAgents/com.mbastakis.opencode-oauth2-proxy.plist.tmpl" . | sha256sum }}
+# hash-controller: {{ includeTemplate "literal_bin/executable_opencode-server.tmpl" . | sha256sum }}
+# hash-proxy-config: {{ includeTemplate "private_dot_config/oauth2-proxy/private_oauth2-proxy.cfg.tmpl" . | sha256sum }}
+# hash-provider-environment: {{ includeTemplate "private_dot_config/zsh/exports.zsh.tmpl" . | sha256sum }}
 
 set -euo pipefail
+export PATH="$HOME/.opencode/bin:$HOME/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
-export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 domain="gui/$(id -u)"
 
-if ! launchctl print "$domain" >/dev/null 2>&1; then
-    exit 0
+# Provider credentials for the background service (it has no zsh environment).
+if [[ -f "$HOME/.config/zsh/exports.zsh" ]]; then
+    /bin/zsh -c '
+        source "$HOME/.config/zsh/exports.zsh"
+        for var in WCS_API_KEY WCS_DEV_API_KEY SELFHOSTED_LLM_API_KEY OPENCODE_API_KEY; do
+            [[ -n "${(P)var:-}" ]] && opencode2 service set env "$var" "${(P)var}" >/dev/null
+        done
+        exit 0
+    '
 fi
 
-if ! command -v curl >/dev/null 2>&1; then
-    echo "Error: curl is required to verify OpenCode remote access" >&2
-    exit 1
-fi
+# Reload the ensure-service LaunchAgent; the proxy is reloaded by
+# opencode-server start only when it is unhealthy, and restarted explicitly
+# when its config changed (this script re-ran, so replace it).
+launchctl bootout "$domain/com.mbastakis.opencode-server" 2>/dev/null || true
+launchctl bootstrap "$domain" "$HOME/Library/LaunchAgents/com.mbastakis.opencode-server.plist"
+launchctl bootout "$domain/com.mbastakis.opencode-oauth2-proxy" 2>/dev/null || true
 
-unload_launch_agent() {
-    local label="$1"
-    local old_pid="" state
-
-    if state="$(launchctl print "$domain/$label" 2>/dev/null)"; then
-        if [[ "$state" =~ pid[[:space:]]*=[[:space:]]*([0-9]+) ]]; then
-            old_pid="${BASH_REMATCH[1]}"
-        fi
-        launchctl bootout "$domain/$label"
-    fi
-
-    for _ in {1..100}; do
-        if ! launchctl print "$domain/$label" >/dev/null 2>&1 \
-            && { [[ -z "$old_pid" ]] || ! kill -0 "$old_pid" 2>/dev/null; }; then
-            return 0
-        fi
-        sleep 0.1
-    done
-
-    echo "Error: LaunchAgent did not finish unloading: $label" >&2
-    return 1
-}
-
-reload_launch_agent() {
-    local label="$1"
-    local plist="$HOME/Library/LaunchAgents/${label}.plist"
-
-    if [[ ! -f "$plist" ]]; then
-        echo "Error: LaunchAgent is missing: $plist" >&2
-        return 1
-    fi
-
-    unload_launch_agent "$label"
-
-    for _ in 1 2 3; do
-        launchctl bootstrap "$domain" "$plist" >/dev/null 2>&1 || true
-        sleep 1
-        if launchctl print "$domain/$label" >/dev/null 2>&1; then
-            return 0
-        fi
-        unload_launch_agent "$label"
-    done
-
-    echo "Error: Failed to load LaunchAgent after 3 attempts: $label" >&2
-    return 1
-}
-
-wait_for_http() {
-    local name="$1"
-    local url="$2"
-
-    for _ in {1..60}; do
-        if curl --fail --silent --show-error --max-time 2 "$url" >/dev/null 2>&1; then
-            return 0
-        fi
-        sleep 0.5
-    done
-
-    echo "Error: $name did not become healthy: $url" >&2
-    return 1
-}
-
-reload_launch_agent com.mbastakis.opencode-server
-wait_for_http "OpenCode server" "{{ .opencode.remote.server_url }}/global/health"
-
-reload_launch_agent com.mbastakis.opencode-oauth2-proxy
-wait_for_http "OpenCode oauth2-proxy" "http://127.0.0.1:{{ .opencode.remote.proxy_port }}/ping"
-
-if command -v tmux >/dev/null 2>&1 && tmux info >/dev/null 2>&1; then
-    tmux set-environment -g OPENCODE_SERVER_URL "{{ .opencode.remote.server_url }}"
-fi
-
-if ! command -v tailscale >/dev/null 2>&1; then
-    echo "Error: tailscale is required for OpenCode remote access" >&2
-    exit 1
-fi
-
-tailscale serve --bg --yes "http://127.0.0.1:{{ .opencode.remote.proxy_port }}"
+exec "$HOME/bin/opencode-server" start
+{{- end }}

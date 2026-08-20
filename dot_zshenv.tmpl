@@ -85,8 +85,7 @@ export GOBIN="$HOME/bin"
 # without prompting (applies to the current source directory and nested configs)
 export MISE_TRUSTED_CONFIG_PATHS="$DOTFILES_PATH"
 
-# Terraform
-export TF_CLI_CONFIG_FILE="$XDG_CONFIG_HOME/terraform/terraform.rc"
+# Terraform provider cache
 export TF_PLUGIN_CACHE_DIR="$XDG_CACHE_HOME/terraform/plugins"
 [[ -d "$TF_PLUGIN_CACHE_DIR" ]] || mkdir -p "$TF_PLUGIN_CACHE_DIR"
 
@@ -110,6 +109,8 @@ export HOMEBREW_NO_ENV_HINTS=1
 export HOMEBREW_AUTO_UPDATE_SECS=86400
 [[ -d "/opt/homebrew/bin" ]] && PATH="/opt/homebrew/bin:$PATH"
 [[ -d "/opt/homebrew/sbin" ]] && PATH="/opt/homebrew/sbin:$PATH"
+# OpenCode v2 beta installs outside Homebrew
+[[ -d "$HOME/.opencode/bin" ]] && PATH="$HOME/.opencode/bin:$PATH"
 {{- else if eq .chezmoi.os "linux" }}
 # Linuxbrew (if present)
 [[ -d "/home/linuxbrew/.linuxbrew/bin" ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"

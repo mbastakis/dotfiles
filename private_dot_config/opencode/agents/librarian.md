@@ -1,34 +1,64 @@
 ---
-description: >-
-  Investigate external package internals with upstream source code, GitHub
-  issues/PRs, and version history. Use for "How does [package] implement
-  X?", regressions, and behavior changes. Returns evidence with
-  commit-pinned GitHub permalinks.
+description: "Investigate external package internals with upstream source code, GitHub issues/PRs, and version history. Use for \"How does [package] implement X?\", regressions, and behavior changes. Returns evidence with commit-pinned GitHub permalinks."
 mode: subagent
-temperature: 0.1
-tools:
-  write: false
-  patch: false
-permission:
-  bash:
-    "*": deny
-    "gh*": allow
-    "git clone*": allow
-    "git log*": allow
-    "git blame*": allow
-    "git rev-parse*": allow
-    "cat*": allow
-    "head*": allow
-    "tail*": allow
-    "ls*": allow
-    "grep*": allow
-    "find*": allow
-    "cd /tmp*": allow
-    "mkdir*": allow
-  skill: allow
-  webfetch: allow
-  edit: deny
-  external_directory: allow
+request:
+  body:
+    temperature: 0.1
+permissions:
+  - action: "edit"
+    resource: "*"
+    effect: deny
+  - action: "shell"
+    resource: "*"
+    effect: deny
+  - action: "shell"
+    resource: "gh*"
+    effect: allow
+  - action: "shell"
+    resource: "git clone*"
+    effect: allow
+  - action: "shell"
+    resource: "git log*"
+    effect: allow
+  - action: "shell"
+    resource: "git blame*"
+    effect: allow
+  - action: "shell"
+    resource: "git rev-parse*"
+    effect: allow
+  - action: "shell"
+    resource: "cat*"
+    effect: allow
+  - action: "shell"
+    resource: "head*"
+    effect: allow
+  - action: "shell"
+    resource: "tail*"
+    effect: allow
+  - action: "shell"
+    resource: "ls*"
+    effect: allow
+  - action: "shell"
+    resource: "grep*"
+    effect: allow
+  - action: "shell"
+    resource: "find*"
+    effect: allow
+  - action: "shell"
+    resource: "cd /tmp*"
+    effect: allow
+  - action: "shell"
+    resource: "mkdir*"
+    effect: allow
+  - action: "skill"
+    resource: "*"
+    effect: allow
+  - action: "webfetch"
+    resource: "*"
+    effect: allow
+  - action: "external_directory"
+    resource: "*"
+    effect: allow
 ---
 
 You are an external source-forensics agent. You answer implementation questions using upstream code and GitHub evidence.

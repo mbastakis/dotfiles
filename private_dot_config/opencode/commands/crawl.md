@@ -1,7 +1,6 @@
 ---
 description: Persist website crawl artifacts to ai-docs/ using crawl4ai
 agent: crawl
-subtask: true
 ---
 
 Crawl web pages and persist content to `ai-docs/`. Use this command for archival or reusable crawl artifacts, not ordinary single-page reading or summarization.

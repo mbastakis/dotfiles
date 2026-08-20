@@ -1,4 +1,4 @@
-http_address = "127.0.0.1:{{ .opencode.remote.proxy_port }}"
+http_address = "{{ .opencode.remote.oauth2_proxy.host }}:{{ .opencode.remote.oauth2_proxy.port }}"
 reverse_proxy = true
 trusted_proxy_ips = ["127.0.0.1/32", "::1/128"]
 
@@ -8,7 +8,7 @@ oidc_issuer_url = "{{ .opencode.remote.oidc_issuer_url }}"
 client_id = "{{ .opencode.remote.oidc_client_id }}"
 client_secret = "{{ (bitwardenSecrets .opencode.remote.oidc_client_secret_id).value | trim }}"
 redirect_url = "{{ .opencode.remote.external_url }}/oauth2/callback"
-scope = "openid profile email groups"
+scope = "openid profile email groups offline_access"
 code_challenge_method = "S256"
 oidc_groups_claim = "groups"
 allowed_groups = ["{{ .opencode.remote.allowed_group }}"]
@@ -18,7 +18,9 @@ insecure_oidc_skip_issuer_verification = false
 insecure_oidc_skip_nonce = false
 ssl_insecure_skip_verify = false
 
-upstreams = ["{{ .opencode.remote.server_url }}/"]
+upstreams = [
+  "{{ .opencode.remote.server.scheme }}://{{ .opencode.remote.server.host }}:{{ .opencode.remote.server.port }}/"
+]
 proxy_websockets = true
 flush_interval = "100ms"
 pass_access_token = false
