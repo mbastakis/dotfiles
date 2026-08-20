@@ -1,4 +1,0 @@
-% kubernetes, k8s
-
-# Get cpu and memory of a node
-kubectl get nodes --context <context> -o="jsonpath={range .items[*]}{.metadata.name}{'\t'}{.status.capacity.cpu}{'\t'}{.status.capacity.memory}{'\n'}{end}"

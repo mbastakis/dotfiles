@@ -123,3 +123,9 @@ function reset_internet() {
   sudo pfctl -f /etc/pf.conf
   sudo ifconfig en0 down && sudo ifconfig en0 up
 }
+
+function reset_work_network() {
+  tailscale set --accept-dns=false &&
+    networksetup -setwebproxystate "AX88179A" off &&
+    networksetup -setsecurewebproxystate "AX88179A" off
+}

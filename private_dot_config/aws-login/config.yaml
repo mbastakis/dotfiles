@@ -5,10 +5,6 @@ defaults:
   region: eu-central-1
   cache_ttl_buffer: 300      # Refresh if expiring within 5 min
 
-starship:
-  enabled: true
-  timer_prefix: aws-session-
-
 bitwarden:
   enabled: true
 

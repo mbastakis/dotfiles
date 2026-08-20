@@ -12,10 +12,6 @@ defaults:
 # cache:
 #   directory: ~/.cache/aws-login
 
-starship:
-  enabled: true
-  timer_prefix: aws-session-
-
 bitwarden:
   enabled: true
 

@@ -41,10 +41,6 @@ reveal = [
   { run = 'exiftool %s; echo "Press enter to exit"; read _', block = true, desc = "Show EXIF" },
 ]
 
-render_markdown = [
-  { run = 'glow %s', block = true, desc = "Render Markdown" },
-]
-
 terminal = [
   { run = 'open -na "Ghostty" --args --working-directory=%d', orphan = true, desc = "Open Ghostty here", for = "macos" },
   { run = 'xdg-terminal-exec sh -c "cd %d && exec $SHELL"', orphan = true, desc = "Open terminal here", for = "linux" },
@@ -63,14 +59,12 @@ rules = [
     "edit",
     "open",
     "reveal",
-    "render_markdown",
     "terminal",
   ] },
   # Text
   { mime = "text/*", use = [
     "edit",
     "reveal",
-    "render_markdown",
   ] },
   # Image
   { mime = "image/*", use = [
@@ -105,7 +99,6 @@ rules = [
   { mime = "text/markdown", use = [
     "edit",
     "reveal",
-    "render_markdown",
   ] },
   # Data binary
   { mime = "application/octet-stream", use = [

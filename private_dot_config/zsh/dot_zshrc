@@ -14,7 +14,6 @@ setopt HIST_IGNORE_SPACE # Don't record commands starting with space
 # History configuration
 # HISTFILE, HISTSIZE, SAVEHIST are set in .zshenv
 # Atuin manages interactive history search (see fzf.zsh)
-# nix-darwin's /etc/zshrc resets these for interactive shells, so restore them here.
 export HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
 export HISTSIZE=10000
 export SAVEHIST=10000

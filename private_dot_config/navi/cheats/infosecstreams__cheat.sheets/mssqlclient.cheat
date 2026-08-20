@@ -1,8 +1,0 @@
-% Impacket MSSQL Client
-
-;$ ip: $ip
-;$ username: ''
-;$ password:  ''
-
-# MSSQLClient connect with username/password
-mssqlclient.py -show '<username>':'<password>'@<ip> -windows-auth

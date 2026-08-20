@@ -2,6 +2,7 @@ tap "anomalyco/tap"
 tap "charmbracelet/tap"
 tap "dlvhdr/formulae"
 tap "libsql/sqld", trusted: { formulae: ["sqld"] }
+tap "mach-kernel/pkgs"
 tap "mbastakis/tap", "git@github.com:mbastakis/homebrew-tap.git"
 tap "nikitabobko/tap"
 tap "oven-sh/bun"
@@ -84,8 +85,6 @@ brew "git-filter-repo"
 brew "git-lfs"
 # Open-source GitLab command-line tool
 brew "glab"
-# Render markdown on the CLI
-brew "glow"
 # GNU Privacy Guard (OpenPGP)
 brew "gnupg"
 # GNU implementation of the famous stream editor
@@ -96,8 +95,6 @@ brew "go"
 brew "graphicsmagick"
 # GNU grep, egrep and fgrep
 brew "grep"
-# Tool for glamorous shell scripts
-brew "gum"
 # Smarter Dockerfile linter to validate best practices
 brew "hadolint"
 # Kubernetes package manager
@@ -144,8 +141,6 @@ brew "mr"
 brew "msmtp"
 # Open source relational database management system
 brew "mysql"
-# Interactive cheatsheet tool for the command-line
-brew "navi"
 # Thread-based email index, search, and tagging
 brew "notmuch"
 # E-mail reader with support for Notmuch, NNTP and much more
@@ -188,6 +183,8 @@ brew "rust"
 brew "serie"
 # Smart session manager for the terminal
 brew "sesh"
+# Git worktree lifecycle, hooks, and interactive picker
+brew "worktrunk"
 # Static analysis and lint tool, for (ba)sh scripts
 brew "shellcheck"
 # Editor of encrypted files
@@ -202,9 +199,13 @@ brew "starship"
 brew "statix"
 # Open source continuous file synchronization application
 brew "syncthing", restart_service: :changed
-# Feature-rich console based todo list manager
+# Feature-rich console based todo list manager (Taskwarrior). Homebrew's
+# `task` formula, but reached as `tw` — see literal_bin/executable_tw — since
+# the global `task` command is go-task (private_dot_config/mise/config.toml).
 brew "task"
-# Terminal user interface for taskwarrior
+# Terminal user interface for taskwarrior. Run through
+# literal_bin/executable_taskwarrior-tui so its internal `task` calls still
+# reach Taskwarrior instead of go-task.
 brew "taskwarrior-tui"
 # Very fast implementation of tldr in Rust
 brew "tealdeer"
@@ -240,10 +241,13 @@ brew "yq"
 brew "zinit"
 # Shell extension to navigate your filesystem faster
 brew "zoxide"
-# The AI coding agent built for the terminal.
+# OpenCode v1, kept only as the `opencode` escape hatch. The primary
+# opencode2 v2 beta is installed separately in ~/.opencode/bin.
 brew "anomalyco/tap/opencode", trusted: true
 # Git diff pager based on delta but with a file tree, à la GitHub
 brew "dlvhdr/formulae/diffnav", trusted: true
+# Rust Cursive TUI that helps manage launchd jobs on macOS
+brew "mach-kernel/pkgs/launchk", trusted: true
 # AWS profile switcher with MFA, SSO, and CloudShepherd support
 brew "mbastakis/tap/aws-login", trusted: true
 # Incredibly fast JavaScript runtime, bundler, transpiler and package manager - all in one.
@@ -313,6 +317,7 @@ mas "Bitwarden", id: 1352778147
 mas "Hidden Bar", id: 1452453066
 mas "Mark And Scribble", id: 1635403801
 mas "Say No to Notch", id: 1639306886
+# Mesh VPN used by the OpenCode remote-access stack
 mas "Tailscale", id: 1475387142
 mas "WireGuard", id: 1451685025
 mas "Xcode", id: 497799835
