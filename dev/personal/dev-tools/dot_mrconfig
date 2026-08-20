@@ -1,6 +1,7 @@
 # Personal repositories
-[aws-login]
-checkout = git clone git@github.com:mbastakis/aws-login.git aws-login
+# Container layout: main checkout at <repo>/<repo>_main, worktrunk worktrees at <repo>/<repo>_<branch>.
+[aws-login/aws-login_main]
+checkout = git clone git@github.com:mbastakis/aws-login.git aws-login_main
 
-[homebrew-tap]
-checkout = git clone git@github.com:mbastakis/homebrew-tap.git homebrew-tap
+[homebrew-tap/homebrew-tap_main]
+checkout = git clone git@github.com:mbastakis/homebrew-tap.git homebrew-tap_main

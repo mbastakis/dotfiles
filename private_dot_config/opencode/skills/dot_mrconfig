@@ -1,3 +1,4 @@
 # OpenCode skills (external repos)
-[obsidian-skills]
-checkout = git clone https://github.com/kepano/obsidian-skills.git obsidian-skills
+# Main checkout at <repo>/<repo>_main; worktrunk worktrees at <repo>/<repo>_<branch>.
+[obsidian-skills/obsidian-skills_main]
+checkout = git clone https://github.com/kepano/obsidian-skills.git obsidian-skills_main

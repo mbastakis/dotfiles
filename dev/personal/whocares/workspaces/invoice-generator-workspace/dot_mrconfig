@@ -1,3 +1,4 @@
 # Personal repositories
-[InvoiceGenerator]
-checkout = git clone git@github.com:WhoCaresSoftware/WhoCaresInvoiceGenerator.git InvoiceGenerator
+# Container layout: main checkout at <repo>/<repo>_main, worktrunk worktrees at <repo>/<repo>_<branch>.
+[InvoiceGenerator/InvoiceGenerator_main]
+checkout = git clone git@github.com:WhoCaresSoftware/WhoCaresInvoiceGenerator.git InvoiceGenerator_main

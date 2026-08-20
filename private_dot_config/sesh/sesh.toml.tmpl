@@ -5,9 +5,6 @@ strict_mode = true
 dir_length = 1
 separator_aware = true
 sort_order = ["config", "tmux", "zoxide"]
-{{- if .dtWork }}
-import = ["~/.config/sesh/work.toml"]
-{{- end }}
 
 [default_session]
 preview_command = "eza --all --git --icons --color=always {}"
@@ -16,15 +13,6 @@ windows = []
 [[session]]
 name = "main"
 path = "~"
-
-[[session]]
-name = "dotfiles"
-path = "{{ .chezmoi.sourceDir }}"
-
-[[session]]
-name = "notes"
-path = "~/Documents/notes"
-disable_startup_command = true
 
 [[window]]
 name = "opencode"

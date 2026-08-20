@@ -7,7 +7,7 @@
 theme = Catppuccin Mocha
 background-opacity = 0.85
 background-blur = 16
-background-image = ~/.config/ghostty/background.png
+# background-image = ~/.config/ghostty/background.png
 background-image-opacity = 0.45
 background-image-fit = contain
 custom-shader = ~/.config/ghostty/shader.glsl
@@ -66,7 +66,6 @@ command = /bin/zsh -c "tmux new -A -s main"
 # ============================================================================
 
 # Tmux window/pane management (prefix = Ctrl+a = \x01).
-# Cmd+B toggles the OpenCode session sidebar; Cmd+O toggles its focus.
 keybind = cmd+t=text:\x01\x63
 keybind = cmd+w=text:\x01\x78
 keybind = cmd+d=text:\x01\x68
@@ -78,8 +77,6 @@ keybind = cmd+l=text:\x01\x6e
 keybind = cmd+r=text:\x01\x2c
 keybind = cmd+shift+r=text:\x01\x52
 keybind = cmd+z=text:\x01\x7a
-keybind = cmd+b=text:\x01\x62
-keybind = cmd+o=text:\x01\x6f
 keybind = cmd+g=text:\x01\x47
 
 # Ghostty OS-level window management
@@ -91,6 +88,9 @@ keybind = cmd+backspace=text:\x15
 
 # Send Ctrl+Shift+T to terminal (zsh fzf directory picker)
 keybind = ctrl+shift+t=text:\x1b[202~
+
+# Send Cmd+B to terminal (zsh Worktrunk worktree picker)
+keybind = cmd+b=text:\x1b[203~
 
 # Send Ctrl+Tab / Ctrl+Shift+Tab to terminal (for tmux)
 keybind = ctrl+tab=text:\x1b[27;5;9~

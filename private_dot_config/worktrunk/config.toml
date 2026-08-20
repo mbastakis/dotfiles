@@ -1,0 +1,6 @@
+# Keep every checkout searchable by repository and branch in zoxide.
+# Inside each repo container, use <repo>_main and <repo>_<branch>.
+worktree-path = "{{ repo_path }}/../{{ remote_repo }}_{{ branch | sanitize }}"
+
+[list]
+json-schema = 2

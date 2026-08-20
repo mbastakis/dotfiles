@@ -1,3 +1,4 @@
 # Personal repositories
-[whocaressoftware]
-checkout = git clone git@github.com:WhoCaresSoftware/whocaressoftware.git whocaressoftware
+# Container layout: main checkout at <repo>/<repo>_main, worktrunk worktrees at <repo>/<repo>_<branch>.
+[whocaressoftware/whocaressoftware_main]
+checkout = git clone git@github.com:WhoCaresSoftware/whocaressoftware.git whocaressoftware_main

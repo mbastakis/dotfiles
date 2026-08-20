@@ -1,3 +1,4 @@
 # Personal repositories
-[mbastakis]
-checkout = git clone git@github.com:mbastakis/mbastakis.git
+# Container layout: main checkout at <repo>/<repo>_main, worktrunk worktrees at <repo>/<repo>_<branch>.
+[mbastakis/mbastakis_main]
+checkout = git clone git@github.com:mbastakis/mbastakis.git mbastakis_main

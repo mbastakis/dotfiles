@@ -18,39 +18,31 @@ Host github.com github-personal
     IdentityFile ~/.ssh/github-personal
     IdentitiesOnly yes
 
-Host atlas atlas-lan atlas-tailscale
+Host atlas-lan
+    HostName 192.168.1.19
     User mbastakis
     IdentityFile ~/.ssh/id_ed25519
     IdentitiesOnly yes
-
-Host atlas
-    HostName 192.168.1.19
-    HostKeyAlias 192.168.1.19
-    ProxyCommand {{ .chezmoi.homeDir }}/bin/homeserver-route connect atlas %p
-
-Host atlas-lan
-    HostName 192.168.1.19
 
 Host atlas-tailscale
     HostName 100.101.208.110
     HostKeyAlias 192.168.1.19
-
-Host truenas truenas-lan truenas-tailscale
     User mbastakis
     IdentityFile ~/.ssh/id_ed25519
     IdentitiesOnly yes
 
-Host truenas
+Host truenas-lan
     HostName 192.168.1.74
-    HostKeyAlias 192.168.1.74
-    ProxyCommand {{ .chezmoi.homeDir }}/bin/homeserver-route connect truenas %p
-
-Host truenas-lan 192.168.1.74
-    HostName 192.168.1.74
+    User mbastakis
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
 
 Host truenas-tailscale
     HostName 100.122.166.74
     HostKeyAlias 192.168.1.74
+    User mbastakis
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
 
 Host atlas-via-openwrt
     HostName 192.168.1.19
@@ -70,19 +62,37 @@ Host truenas-via-openwrt
     ProxyJump openwrt-tailscale
     ForwardAgent no
 
-Host openwrt openwrt-tailscale
+Host openwrt
     HostName 100.99.174.123
+    HostKeyAlias 192.168.1.1
     Port 2222
+    User root
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
+    UserKnownHostsFile {{ .chezmoi.homeDir }}/dev/personal/workspaces/home-workspace/kavouki/kavouki_main/.local/openwrt/known_hosts
+    StrictHostKeyChecking yes
+    UpdateHostKeys no
+    ForwardAgent no
 
-Host openwrt-lan 192.168.1.1
+Host openwrt-lan
     HostName 192.168.1.1
-
-Host openwrt openwrt-lan openwrt-tailscale 192.168.1.1
     HostKeyAlias 192.168.1.1
     User root
     IdentityFile ~/.ssh/id_ed25519
     IdentitiesOnly yes
-    UserKnownHostsFile {{ .chezmoi.homeDir }}/dev/personal/workspaces/home-workspace/kavouki/.local/openwrt/known_hosts
+    UserKnownHostsFile {{ .chezmoi.homeDir }}/dev/personal/workspaces/home-workspace/kavouki/kavouki_main/.local/openwrt/known_hosts
+    StrictHostKeyChecking yes
+    UpdateHostKeys no
+    ForwardAgent no
+
+Host openwrt-tailscale
+    HostName 100.99.174.123
+    HostKeyAlias 192.168.1.1
+    Port 2222
+    User root
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
+    UserKnownHostsFile {{ .chezmoi.homeDir }}/dev/personal/workspaces/home-workspace/kavouki/kavouki_main/.local/openwrt/known_hosts
     StrictHostKeyChecking yes
     UpdateHostKeys no
     ForwardAgent no

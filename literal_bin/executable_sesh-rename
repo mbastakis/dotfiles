@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if ! command -v gum >/dev/null 2>&1; then
-    tmux display-message "gum is not installed"
-    exit 1
-fi
-
 target="${1:-session}"
 
 case "$target" in
@@ -21,18 +16,10 @@ case "$target" in
         ;;
 esac
 
-set +e
-new_name="$(gum input \
-    --value "$current" \
-    --placeholder "New $target name" \
-    --prompt 'rename> ' \
-    --header "Rename $target: $current" \
-    --width 40 \
-    --char-limit 80)"
-status=$?
-set -e
+printf 'Current %s: %s\n\n' "$target" "$current"
+IFS= read -r -e -i "$current" -p 'rename> ' new_name || exit 0
 
-if [[ $status -ne 0 || -z "$new_name" ]]; then
+if [[ -z "$new_name" ]]; then
     exit 0
 fi
 

@@ -1,5 +1,7 @@
 # Personal repositories
-[dotfiles]
-checkout = git clone git@github.com:mbastakis/dotfiles.git
-[kavouki]
-checkout = git clone git@github.com:mbastakis/kavouki.git
+# Container layout: main checkout at <repo>/<repo>_main, worktrunk worktrees at <repo>/<repo>_<branch>.
+
+[dotfiles/dotfiles_main]
+checkout = git clone git@github.com:mbastakis/dotfiles.git dotfiles_main
+[kavouki/kavouki_main]
+checkout = git clone git@github.com:mbastakis/kavouki.git kavouki_main

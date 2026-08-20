@@ -6,8 +6,8 @@ if ! command -v sesh >/dev/null 2>&1; then
     exit 1
 fi
 
-if ! command -v gum >/dev/null 2>&1; then
-    tmux display-message "gum is not installed"
+if ! command -v fzf >/dev/null 2>&1; then
+    tmux display-message "fzf is not installed"
     exit 1
 fi
 
@@ -52,17 +52,14 @@ if [[ -z "$list" ]]; then
     exit 0
 fi
 
-# Only relax errexit around gum filter: a non-zero exit is expected when
+# Only relax errexit around fzf: a non-zero exit is expected when
 # the user cancels (Esc/Ctrl-C), and we want to handle it gracefully.
 set +e
-selection="$(printf '%s\n' "$list" | gum filter \
-    --limit 1 \
+selection="$(printf '%s\n' "$list" | fzf \
+    --ansi \
     --no-sort \
-    --fuzzy \
-    --no-strip-ansi \
-    --placeholder 'Pick a sesh' \
-    --height 50 \
-    --prompt='sesh> ' )"
+    --prompt='sesh> ' \
+    --header='Pick a session')"
 status=$?
 set -e
 

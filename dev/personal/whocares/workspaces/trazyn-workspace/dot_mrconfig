@@ -1,3 +1,4 @@
 # Personal repositories
-[trazyn]
-checkout = git clone git@github.com:WhoCaresSoftware/trazyn.git trazyn
+# Container layout: main checkout at <repo>/<repo>_main, worktrunk worktrees at <repo>/<repo>_<branch>.
+[trazyn/trazyn_main]
+checkout = git clone git@github.com:WhoCaresSoftware/trazyn.git trazyn_main

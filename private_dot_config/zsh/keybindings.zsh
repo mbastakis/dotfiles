@@ -14,22 +14,6 @@ for _map in "${_widget_bind_maps[@]}"; do
   bindkey -M "$_map" '^J' insert-literal-newline
 done
 
-# Navi cheatsheet widget (Ctrl-G)
-if command -v navi &>/dev/null; then
-  function navi_widget() {
-    local result
-    result="$(navi --print)"
-    if [[ -n "$result" ]]; then
-      LBUFFER="$result"
-    fi
-    zle reset-prompt
-  }
-  zle -N navi_widget
-  for _map in "${_widget_bind_maps[@]}"; do
-    bindkey -M "$_map" '^G' navi_widget
-  done
-fi
-
 # ftext - ripgrep search with fzf preview (Ctrl-F)
 # Requires ftext function from functions.zsh
 zle -N ftext-widget
@@ -63,6 +47,19 @@ zle -N run_zoxide_interactive
 for _map in "${_widget_bind_maps[@]}"; do
   bindkey -M "$_map" '^Z' run_zoxide_interactive
 done
+
+# Worktrunk worktree picker (Cmd-B via Ghostty ESC[203~ passthrough).
+# Runs in the invoking shell so wt's shell integration can cd to the selection.
+if command -v wt &>/dev/null; then
+  function wt-switch-widget() {
+    BUFFER="wt switch"
+    zle accept-line
+  }
+  zle -N wt-switch-widget
+  for _map in "${_widget_bind_maps[@]}"; do
+    bindkey -M "$_map" '^[[203~' wt-switch-widget
+  done
+fi
 
 # Accept autosuggestion one word at a time.
 # zsh-autosuggestions already treats forward-word as partial accept.
@@ -113,3 +110,10 @@ unset _seq _map _word_fwd_keys _word_back_keys _line_home_keys _line_end_keys _w
 
 # Keep line editor in emacs mode and disable Esc -> vi-cmd-mode switching.
 bindkey -e
+
+# Atuin installs the AI widget in the active map during init. Rebind it after
+# selecting emacs mode so ? opens AI and Tab can return a command to LBUFFER.
+if (( $+widgets[self-atuin-ai-question-mark] )); then
+  bindkey -M emacs '?' self-atuin-ai-question-mark
+  bindkey -M viins '?' self-atuin-ai-question-mark
+fi
