@@ -152,6 +152,6 @@ fi
 # ATUIN: Shell history + AI (loaded after fzf so it binds Ctrl+R)
 # =============================================================================
 if command -v atuin &>/dev/null; then
+  unset ATUIN_TMUX_POPUP
   eval "$(atuin init zsh)"
-  eval "$(atuin ai init zsh)"
 fi
