@@ -1,1 +1,13 @@
+# Global mise config (chezmoi-managed) - ~/.config/mise/config.toml
+#
+# Installs go-task globally under its native `task` command name. mise's
+# `activate` PATH manipulation takes priority over Homebrew's, so this makes
+# `task` resolve to go-task in every shell, in every repo, not just this one.
+#
+# Taskwarrior is still installed (via Homebrew's `task` formula) but is
+# reached through the `tw` wrapper in ~/bin instead — see
+# literal_bin/executable_tw. That keeps both tools installed at once without
+# the Homebrew name collision that started this: Homebrew's `task` formula
+# is Taskwarrior, and go-task never goes through Homebrew here at all.
 [tools]
+task = "3.52.0"

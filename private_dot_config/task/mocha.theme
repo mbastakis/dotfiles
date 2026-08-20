@@ -24,7 +24,10 @@
 #   include ~/.config/task/mocha.theme
 ###############################################################################
 
-rule.precedence.color=deleted,completed,active,keyword.,tag.,project.,overdue,scheduled,due.today,due,blocked,blocking,recurring,tagged,uda.
+# Pick one clear semantic color per row. Merging rules can combine a foreground
+# from one match with the same background from another, producing solid blocks.
+rule.color.merge=no
+rule.precedence.color=deleted,completed,active,overdue,due.today,due,blocked,blocking,recurring,scheduled,keyword.,tag.,project.,tagged,uda.
 
 # General decoration
 color.label=color183
@@ -41,12 +44,12 @@ color.debug=color111
 # Task state
 color.completed=color102
 color.deleted=color60
-color.active=color235 on color117
+color.active=bold color117
 color.recurring=color115
-color.scheduled=on color236
+color.scheduled=color147
 color.until=color223
-color.blocked=color60 on color234
-color.blocking=color235 on color223
+color.blocked=color60
+color.blocking=bold color223
 
 # Project
 # Leave project.none unset so tasks without a Linear project aren't muted —
@@ -59,18 +62,16 @@ color.uda.priority.M=color216
 color.uda.priority.L=color150
 
 # Tags
-# color.tag.X takes precedence over project, overdue, due, and priority
-# (see rule.precedence.color above), so explicit tag colors are the most
-# reliable way to make a row stand out regardless of other attributes.
 color.tag.urgent=bold color211
-color.tag.next=color223
+color.tag.next=color111
+color.tag.waiting=color102
 color.tag.none=
 color.tagged=color147
 
 # Due
-color.due.today=color216
+color.due.today=bold color216
 color.due=color223
-color.overdue=color211
+color.overdue=bold color211
 
 # Report: burndown
 color.burndown.done=on color150

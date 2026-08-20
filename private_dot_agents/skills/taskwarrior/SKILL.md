@@ -1,11 +1,13 @@
 ---
 name: taskwarrior
-description: Use this skill for Taskwarrior (`task` CLI) workflows: creating, querying, reranking, triaging, housekeeping, and completing tasks for the user's life and projects. Trigger whenever the user mentions Taskwarrior or `task`, recurring tasks, task triage, housekeeping, reranking, or asks to update life/project tasks in this environment; do not use for ordinary software-development "tasks" unless the local Taskwarrior system is implied.
+description: Use this skill for Taskwarrior (`tw` CLI) workflows: creating, querying, reranking, triaging, housekeeping, and completing tasks for the user's life and projects. Trigger whenever the user mentions Taskwarrior or `tw`, recurring tasks, task triage, housekeeping, reranking, or asks to update life/project tasks in this environment; do not use for ordinary software-development "tasks" unless the local Taskwarrior system is implied.
 ---
 
 # Taskwarrior
 
 Use this workflow when working with the user's local Taskwarrior data. Taskwarrior tracks tasks across their life and projects, so safety and exact identity matter more than speed.
+
+Invoke it as `tw`, not `task` — the global `task` command is go-task (a build-tool runner), and Taskwarrior is reached through the `tw` wrapper instead. Never run a bare `task` command for this skill.
 
 The core discipline is _discover_ before _mutate_: read the current state, classify what you find, _propose_ exact changes, then execute the smallest safe command.
 
@@ -36,14 +38,14 @@ Treat the Kanban columns as a commitment workflow, not four equivalent task cate
 |---|---|---|
 | Backlog | An idea or possible task worth retaining, but not prioritized or committed for the current week. | Pending, not active, without `+next`, `+waiting`, or an unfinished dependency |
 | Ready | Prioritized work committed for the current week and available to start. Keep this list intentionally small and realistic. | Pending with `+next`, not active or blocked |
-| Doing | Work currently being executed. | Started with `task <uuid> start` |
+| Doing | Work currently being executed. | Started with `tw <uuid> start` |
 | Waiting | Work that was being pursued but cannot progress because it is blocked by a person, event, prerequisite, or external condition. Record the blocker. | `+waiting`, native waiting state, or an unfinished dependency |
 
 Apply these transitions consistently:
 
 - New ideas and unprioritized tasks enter Backlog by default; do not add `+next` merely because a task is actionable.
 - Promote Backlog to Ready with `+next` only when the user prioritizes it for the current week.
-- Move Ready to Doing with `task <uuid> start`; keep `+next` so stopping an unblocked task returns it to Ready.
+- Move Ready to Doing with `tw <uuid> start`; keep `+next` so stopping an unblocked task returns it to Ready.
 - Move Doing to Waiting when blocked: stop it, preserve `+next`, add `+waiting` or the blocking dependency, and annotate what is blocking progress and the next follow-up when known.
 - When a blocker clears, remove the waiting state and return the task to Ready; start it only when work actually resumes.
 - During weekly planning, remove `+next` from unfinished tasks that are no longer a current-week commitment so they return to Backlog.
@@ -56,8 +58,8 @@ Taskwarrior UUIDs are stable. Numeric task IDs are temporary UI handles that can
 **For any mutation, target the UUID, not the numeric ID** — unless the user just supplied or confirmed a displayed numeric ID.
 
 ```bash
-task <uuid> modify project:Work +next    # safe
-task 12 modify project:Work +next        # risky unless 12 was just displayed
+tw <uuid> modify project:Work +next    # safe
+tw 12 modify project:Work +next        # risky unless 12 was just displayed
 ```
 
 When explaining a mutation plan, say plainly: _numeric IDs are temporary; use UUIDs for mutations._
@@ -69,15 +71,15 @@ Create tasks with enough structure to make later querying useful, but do not inv
 Use `--` before a literal description that could be parsed as attributes:
 
 ```bash
-task add project:Finance +admin due:friday -- "Pay credit card"
-task add project:Work +next wait:tomorrow -- "Draft launch checklist"
-task add -- "project:Home needs scheduling"
+tw add project:Finance +admin due:friday -- "Pay credit card"
+tw add project:Work +next wait:tomorrow -- "Draft launch checklist"
+tw add -- "project:Home needs scheduling"
 ```
 
-Use `task log` to record already-completed work as a completed task:
+Use `tw log` to record already-completed work as a completed task:
 
 ```bash
-task log project:Work -- "Submitted monthly report"
+tw log project:Work -- "Submitted monthly report"
 ```
 
 Ask one short question before adding when the answer materially changes the durable task shape:
@@ -100,15 +102,15 @@ Use recurring tasks for durable obligations, not vague intentions. Before creati
 Safe creation pattern:
 
 ```bash
-task add "Pay rent" due:1st recur:monthly
-task add "Take out trash" due:fri recur:weekly
-task add "Water plants" due:saturday wait:thursday recur:weekly
-task add "Submit expense report" due:eom recur:monthly until:2026-12-31
+tw add "Pay rent" due:1st recur:monthly
+tw add "Take out trash" due:fri recur:weekly
+tw add "Water plants" due:saturday wait:thursday recur:weekly
+tw add "Submit expense report" due:eom recur:monthly until:2026-12-31
 ```
 
 Rules:
 
-- `recur:` requires `due:`. Do not create `task add "Thing" recur:daily`.
+- `recur:` requires `due:`. Do not create `tw add "Thing" recur:daily`.
 - `due:` + `recur:` creates a hidden recurring template; visible work appears as child instances.
 - Completing an instance updates the template state; future instances are generated by recurrence processing.
 - Use `until:` to stop future generation after a cutoff.
@@ -121,17 +123,17 @@ Rules:
 Inspect recurring templates intentionally:
 
 ```bash
-task recurring
-task all +TEMPLATE
-task all +INSTANCE
+tw recurring
+tw all +TEMPLATE
+tw all +INSTANCE
 ```
 
 For recurring series edits, target the template intentionally. Ask before changing or deleting a series.
 
 ```bash
-task <template-uuid> modify project:Finance
-task <template-uuid> modify until:2026-12-31
-task <template-uuid> delete
+tw <template-uuid> modify project:Finance
+tw <template-uuid> modify until:2026-12-31
+tw <template-uuid> delete
 ```
 
 ## Reads
@@ -139,12 +141,12 @@ task <template-uuid> delete
 Prefer machine-readable `export` for analysis and `information` for detail on a single task:
 
 ```bash
-task rc.color=off <narrow-filter> export
-task rc.color=off <uuid> information
-task rc.color=off _projects
-task rc.color=off _tags
-task rc.color=off _unique project
-task rc.color=off summary
+tw rc.color=off <narrow-filter> export
+tw rc.color=off <uuid> information
+tw rc.color=off _projects
+tw rc.color=off _tags
+tw rc.color=off _unique project
+tw rc.color=off summary
 ```
 
 Use the narrowest useful date range, project, tag, status, or UUID. Avoid dumping all tasks unless the user asks for a broad review.
@@ -152,7 +154,7 @@ Use the narrowest useful date range, project, tag, status, or UUID. Avoid dumpin
 Current Taskwarrior context can filter results and affect `add` or `log`. If results look surprisingly empty, inspect context before concluding there are no tasks:
 
 ```bash
-task context
+tw context
 ```
 
 ## Mutations
@@ -160,13 +162,13 @@ task context
 For `modify`, `annotate`, `append`, `prepend`, `start`, `stop`, and `done`, use a UUID and verify after the command.
 
 ```bash
-task <uuid> annotate "Waiting for Alex reply"
-task <uuid> done
-task <uuid> start
-task <uuid> stop
+tw <uuid> annotate "Waiting for Alex reply"
+tw <uuid> done
+tw <uuid> start
+tw <uuid> stop
 ```
 
-`task start` and `task stop` mark active work; there is no time-tracking integration.
+`tw start` and `tw stop` mark active work; there is no time-tracking integration.
 
 Require explicit confirmation before:
 
@@ -174,24 +176,24 @@ Require explicit confirmation before:
 - Mutating by broad filter, for example `project:Work modify ...`.
 - Marking ambiguous candidates done.
 - Changing contexts or Taskwarrior config.
-- Running `task import`, because matching UUIDs can update existing tasks.
-- Running `task delete`.
-- Running `task purge`.
+- Running `tw import`, because matching UUIDs can update existing tasks.
+- Running `tw delete`.
+- Running `tw purge`.
 
-Treat `task purge` as break-glass only. It permanently removes already-deleted tasks, is local-only, and is not a normal cleanup command.
+Treat `tw purge` as break-glass only. It permanently removes already-deleted tasks, is local-only, and is not a normal cleanup command.
 
 ## Query, Triage, And Rerank
 
 Use queries to _discover_ the system before changing it:
 
 ```bash
-task rc.color=off ready
-task rc.color=off next
-task rc.color=off waiting
-task rc.color=off overdue
-task rc.color=off status:pending project.none: export
-task rc.color=off status:pending due.none: export
-task rc.color=off status:pending +next export
+tw rc.color=off ready
+tw rc.color=off next
+tw rc.color=off waiting
+tw rc.color=off overdue
+tw rc.color=off status:pending project.none: export
+tw rc.color=off status:pending due.none: export
+tw rc.color=off status:pending +next export
 ```
 
 For triage, classify each task as:
@@ -206,10 +208,10 @@ For triage, classify each task as:
 For reranking, _propose_ exact field changes rather than vague priority advice:
 
 ```bash
-task <uuid> modify priority:H +next due:friday
-task <uuid> modify wait:monday -next
-task <uuid> modify project:Finance +admin
-task <uuid> modify depends:<blocking-uuid>
+tw <uuid> modify priority:H +next due:friday
+tw <uuid> modify wait:monday -next
+tw <uuid> modify project:Finance +admin
+tw <uuid> modify depends:<blocking-uuid>
 ```
 
 Use `priority` sparingly. Prefer `due`, `wait`, `+next`, and dependencies when those better express reality.
@@ -221,13 +223,13 @@ Housekeeping is a review workflow, not a blind cleanup. Start read-only, group c
 Useful inspections:
 
 ```bash
-task rc.color=off overdue
-task rc.color=off waiting
-task rc.color=off blocked
-task rc.color=off blocking
-task rc.color=off recurring
-task rc.color=off completed end.after:today-30d
-task rc.color=off status:deleted export
+tw rc.color=off overdue
+tw rc.color=off waiting
+tw rc.color=off blocked
+tw rc.color=off blocking
+tw rc.color=off recurring
+tw rc.color=off completed end.after:today-30d
+tw rc.color=off status:deleted export
 ```
 
 Good housekeeping outputs:
@@ -242,17 +244,17 @@ Do not purge as housekeeping. Only propose `purge` when the user explicitly asks
 
 ## Sync
 
-The user's Taskwarrior replicas sync against a TaskChampion sync server. After writes that the user wants visible on other devices, run `task sync` to push changes. Sync conflicts are resolved by TaskChampion's operational transformation; the agent does not need to resolve them manually.
+The user's Taskwarrior replicas sync against a TaskChampion sync server. After writes that the user wants visible on other devices, run `tw sync` to push changes. Sync conflicts are resolved by TaskChampion's operational transformation; the agent does not need to resolve them manually.
 
 ## After Writes
 
 After a write, verify with a narrow read:
 
 ```bash
-task rc.color=off <uuid> information
+tw rc.color=off <uuid> information
 ```
 
-Report the result and include: _Undo with `task undo` if this was wrong. Do not run undo twice without checking, because undo is itself not reversible._
+Report the result and include: _Undo with `tw undo` if this was wrong. Do not run undo twice without checking, because undo is itself not reversible._
 
 ## Response Pattern
 

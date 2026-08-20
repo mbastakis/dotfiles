@@ -9,14 +9,13 @@ Modular zsh config lives at `~/.config/zsh/`, sourced by `~/.config/zsh/.zshrc`.
 | ------------------------------- | ------------------------------------ |
 | `exports.zsh`                   | Interactive variables and secrets    |
 | `plugins.zsh`                   | Zinit plugin manager, compinit       |
-| `completions.zsh`               | Native and generated completions      |
-| `completions/_*`                | Repo-owned native Zsh definitions     |
+| `completions.zsh`               | Tool-provided and cached completions   |
 | `tools.zsh`                     | atuin, zoxide, starship              |
 | `aliases.zsh`                   | Command shortcuts                    |
 | `functions.zsh`                 | Custom shell functions               |
 | `fzf.zsh`                       | FZF configuration                    |
 | `fzf-tab.zsh`                   | FZF completion menu                  |
-| `keybindings.zsh`               | Ctrl-F, Ctrl-G, Alt-C bindings       |
+| `keybindings.zsh`               | Custom ZLE widgets and bindings      |
 | `direnv.zsh`                    | Direnv hook                          |
 | `shift-select-enhancements.zsh` | Clipboard integration for selections |
 
@@ -70,7 +69,7 @@ bindkey '^X' widget_name
 | Aliases           | `aliases.zsh`     | Simple command shortcuts       |
 | Functions         | `functions.zsh`   | Complex multi-line logic       |
 | Tool integrations | `tools.zsh`       | `eval "$(tool init zsh)"`      |
-| Completions       | `completions/_*`  | Native `_arguments` definitions |
+| Completions       | `completions.zsh` | Tool-provided or cache-generated definitions |
 | Keybindings       | `keybindings.zsh` | ZLE widgets + bindkey          |
 | Environment       | `exports.zsh`     | API keys, interactive variables, profile PATH |
 
@@ -107,4 +106,4 @@ fi
 source "$_cache"
 ```
 
-Used for: `brew shellenv`, `opencode completion`, `sesh completion zsh`, and other generated completion scripts. The `-nt` (newer than) operator invalidates cache when a binary updates.
+Generated completion scripts are centralized in `completions.zsh` and stored under `$ZSH_COMPLETION_CACHE_DIR`; package-managed native definitions come from each tool's installation. The `-nt` (newer than) operator invalidates cache when a binary updates.

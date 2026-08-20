@@ -13,6 +13,7 @@ export SUPABASE_SERVICE_KEY='{{ (bitwardenSecrets "0c3c1659-6b45-4d6a-b850-b49e0
 
 # WCS and self-hosted LLMs
 export WCS_API_KEY='{{ (bitwardenSecrets "cb9fc79d-aee2-47ec-bd20-b49e00a2601e").value | trim }}'
+export WCS_DEV_API_KEY='{{ (bitwardenSecrets "98de7dd1-bca8-4672-b9dd-b4a40097b2d7").value | trim }}'
 export SELFHOSTED_LLM_API_KEY='local-wireguard-only'
 
 {{- if or (eq .profile "dt-work") (eq .profile "work") }}
@@ -49,19 +50,9 @@ export LESS_TERMCAP_se=$'\E[0m'        # reset reverse video
 export LESS_TERMCAP_us=$'\E[1;32m'     # begin underline
 export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
 
-# Native zsh completion function files. fpath must be updated before compinit.
-export ZSH_COMPLETION_DIR="${ZSH_COMPLETION_DIR:-$ZDOTDIR/completions}"
+# Runtime-generated completion scripts live outside the managed config directory.
 export ZSH_COMPLETION_CACHE_DIR="${ZSH_COMPLETION_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/zsh/completions}"
-mkdir -p "$ZSH_COMPLETION_DIR" "$ZSH_COMPLETION_CACHE_DIR"
-fpath=(${fpath:#$ZSH_COMPLETION_DIR})
-fpath=("$ZSH_COMPLETION_DIR" $fpath)
+mkdir -p "$ZSH_COMPLETION_CACHE_DIR"
 
 # Zoxide echo (show directory after cd)
 export _ZO_ECHO=1
-
-# OpenCode
-export OPENCODE_CONFIG="$HOME/.config/opencode/opencode.jsonc"
-export OPENCODE_CONFIG_DIR="$HOME/.config/opencode"
-{{- if eq .chezmoi.hostname .opencode.remote.host }}
-export OPENCODE_SERVER_URL="{{ .opencode.remote.server.scheme }}://{{ .opencode.remote.server.host }}:{{ .opencode.remote.server.port }}"
-{{- end }}

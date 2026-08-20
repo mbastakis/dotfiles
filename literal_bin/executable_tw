@@ -1,0 +1,17 @@
+#!/bin/bash
+# tw - Taskwarrior, kept off the global `task` name (owned by go-task; see
+# ~/.config/mise/config.toml) so both tools can be installed and used at
+# once. Resolves straight to the Homebrew-installed Taskwarrior binary via
+# its stable `opt` symlink so it can't be shadowed by mise's `task` shim.
+
+set -euo pipefail
+
+for prefix in /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew; do
+    candidate="$prefix/opt/task/bin/task"
+    if [[ -x "$candidate" ]]; then
+        exec "$candidate" "$@"
+    fi
+done
+
+echo "tw: Taskwarrior binary not found (expected via Homebrew's \`task\` formula)." >&2
+exit 127

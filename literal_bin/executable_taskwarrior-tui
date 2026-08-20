@@ -1,0 +1,25 @@
+#!/bin/bash
+# taskwarrior-tui wrapper. The real TUI shells out to a `task` binary
+# internally, but the global `task` name resolves to go-task (see
+# ~/.config/mise/config.toml). This prepends Taskwarrior's Homebrew `opt` bin
+# dir to PATH before exec'ing the real TUI, so its internal `task` calls
+# still land on Taskwarrior regardless of what `task` resolves to outside.
+#
+# ~/bin is NOT reliably ahead of Homebrew's bin dir in PATH (.zshrc re-runs
+# `brew shellenv`, re-prepending /opt/homebrew/bin after .zshenv already
+# placed ~/bin), so this script can't shadow the Homebrew `taskwarrior-tui`
+# by name alone. `taskwarrior-tui` is aliased to this script's full path in
+# private_dot_config/zsh/aliases.zsh for interactive use.
+
+set -euo pipefail
+
+for prefix in /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew; do
+    tui="$prefix/opt/taskwarrior-tui/bin/taskwarrior-tui"
+    task_dir="$prefix/opt/task/bin"
+    if [[ -x "$tui" && -d "$task_dir" ]]; then
+        PATH="$task_dir:$PATH" exec "$tui" "$@"
+    fi
+done
+
+echo "taskwarrior-tui: Homebrew installation not found." >&2
+exit 127

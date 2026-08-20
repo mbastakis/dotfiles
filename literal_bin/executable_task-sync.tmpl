@@ -113,8 +113,8 @@ if ! acquire_lock; then
     exit 0
 fi
 
-if ! command -v task >/dev/null 2>&1; then
-    log_line "WARN" "Taskwarrior binary not found in PATH."
+if ! command -v tw >/dev/null 2>&1; then
+    log_line "WARN" "Taskwarrior wrapper (tw) not found in PATH."
     [[ "$strict" == "true" ]] && exit 1
     exit 0
 fi
@@ -128,7 +128,7 @@ fi
 log_line "INFO" "Running task sync"
 
 set +e
-sync_output="$(task rc.color=off sync 2>&1)"
+sync_output="$(tw rc.color=off sync 2>&1)"
 sync_rc=$?
 set -e
 
