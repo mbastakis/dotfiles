@@ -2,7 +2,6 @@
 # Install packages from Brewfile
 # Runs when Brewfile content changes
 # Brewfile hash: {{ include "private_dot_config/brew/Brewfile" | sha256sum }}
-# Trust file hash: {{ include "private_dot_config/homebrew/private_trust.json" | sha256sum }}
 
 {{- if ne .chezmoi.os "darwin" }}
 exit 0
@@ -11,28 +10,43 @@ exit 0
 set -euo pipefail
 
 BREWFILE_PATH="{{ .chezmoi.sourceDir }}/private_dot_config/brew/Brewfile"
-TRUST_FILE_PATH="{{ .chezmoi.sourceDir }}/private_dot_config/homebrew/private_trust.json"
-HOMEBREW_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/homebrew"
 
 echo "Installing packages from Brewfile..."
 
 if ! command -v brew &>/dev/null; then
-    echo "Installing Homebrew..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
+    case "$(uname -m)" in
+        arm64) brew_bin="/opt/homebrew/bin/brew" ;;
+        x86_64) brew_bin="/usr/local/bin/brew" ;;
+        *)
+            echo "Error: unsupported macOS architecture: $(uname -m)" >&2
+            exit 1
+            ;;
+    esac
 
-# Before scripts run before chezmoi deploys managed files, so trust must be
-# staged explicitly before Homebrew reads third-party formulae from Brewfile.
-install -d -m 700 "$HOMEBREW_CONFIG_DIR"
-install -m 600 "$TRUST_FILE_PATH" "$HOMEBREW_CONFIG_DIR/trust.json"
+    echo "Installing Homebrew..."
+    if [[ ! -t 0 ]]; then
+        echo "Warning: Homebrew is missing and its installer may require interactive sudo access." >&2
+        echo "Install Homebrew from https://brew.sh in an interactive terminal, then retry chezmoi." >&2
+        exit 1
+    fi
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+    if [[ ! -x "$brew_bin" ]]; then
+        echo "Error: Homebrew installer completed but brew was not found at ${brew_bin}." >&2
+        exit 1
+    fi
+    eval "$("$brew_bin" shellenv)"
+fi
 
 if [[ -t 0 && -t 1 ]]; then
     brew bundle --file="$BREWFILE_PATH"
 else
     echo "Non-interactive shell detected. Skipping Mac App Store installs during chezmoi apply."
-    # Skip all MAS app IDs in Brewfile to avoid interactive App Store password prompts.
-    export HOMEBREW_BUNDLE_MAS_SKIP="${HOMEBREW_BUNDLE_MAS_SKIP:-937984704 1352778147 1452453066 1635403801 1639306886}"
+    # shellcheck disable=SC2016 # $1 belongs to the single-quoted Ruby program.
+    mas_ids="$(ruby -ne 'puts $1 if /^\s*mas\s+.*\bid:\s*(\d+)/' "$BREWFILE_PATH")"
+    if [[ -n "$mas_ids" ]]; then
+        export HOMEBREW_BUNDLE_MAS_SKIP="${HOMEBREW_BUNDLE_MAS_SKIP:+${HOMEBREW_BUNDLE_MAS_SKIP} }${mas_ids//$'\n'/ }"
+    fi
     brew bundle --file="$BREWFILE_PATH"
     echo "To install Mac App Store apps later, run this in an interactive terminal:"
     echo "  brew bundle --file=\$HOME/.config/brew/Brewfile"

@@ -57,13 +57,11 @@ Pre-push: `chezmoi apply --dry-run --force`.
    03-bat-cache            → rebuilds the bat theme cache (run_onchange)
    03-yazi-packages        → installs declared Yazi packages (run_onchange)
    04-install-gh-extensions → installs pinned gh extensions (run_onchange)
-   06-ghostty-hide-shortcut → removes exact legacy overrides and remaps Ghostty hide (run_once)
    07-mail-runtime-dirs    → creates shared and per-account mail directories (run_onchange)
-   08-mail-sync-launchagent → validates and reloads mail sync (run_onchange)
-   08-task-sync-launchagent → validates and reloads Taskwarrior sync (run_onchange)
-   10-opencode-remote      → invokes the unified OpenCode server reconciler (run_onchange)
-   macos-app-settings      → optional application defaults (run_once)
-   macos-settings          → core macOS defaults (run_once)
+
+   10-opencode-remote      → applies files, removes retired OpenCode runtime artifacts, then non-disruptively reconciles backend + oauth2-proxy; generation drift remains pending until explicit restart (run_onchange)
+   macos-settings-migration → removes retired global Ghostty shortcuts (run_once)
+   macos-settings           → invokes the reusable macOS defaults command (run_onchange)
 ```
 
 ## Encryption
@@ -95,7 +93,7 @@ key.txt.age (in repo, passphrase-encrypted)
 | `literal_bin/`                                                  | `~/bin/`                             | Shell utility scripts                                                |
 | `private_dot_ssh/`                                              | `~/.ssh/`                            | SSH keys (encrypted) and host aliases                                |
 | `private_dot_config/`                                           | `~/.config/`                         | App configs                                                          |
-| `private_dot_config/oauth2-proxy/`                              | `~/.config/oauth2-proxy/`            | Authentik OIDC frontend for tailnet-only OpenCode mobile access       |
+| `private_dot_config/oauth2-proxy/`                              | `~/.config/oauth2-proxy/`            | Authentik OIDC frontend for tailnet-only OpenCode access             |
 | `private_dot_config/abook/`                                     | `~/.config/abook/`                   | Abook config                                                         |
 | `private_dot_config/zsh/`                                       | `~/.config/zsh/`                     | Zsh config via `ZDOTDIR`                                             |
 | `private_dot_local/private_share/abook/`                        | `~/.local/share/abook/`              | Abook data                                                           |
@@ -124,6 +122,9 @@ Supports chezmoi template conditionals for OS-specific ignores.
 - Kubeconfig and Colima files are bootstrap seeds after first creation; existing live files are preserved because `kubectl`, `aws`, `kind`, and Colima rewrite runtime state.
 - Any new repo-only directory (like `docs/`) must be added to `.chezmoiignore` or chezmoi will deploy it to `~/`. The ignore file uses target-state paths, so `docs/` not `literal_docs/`.
 - External infrastructure automation belongs in the sibling Kavouki repository, not this chezmoi source.
+- OpenCode `reconcile` and `start` must not replace healthy backend or proxy
+  processes. Apply pending desired generations only with explicit `restart
+  server|proxy|all`.
 
 ## Shell Script Conventions
 
@@ -250,21 +251,16 @@ Source lives in `docs/`; served as a zero-build SPA via `docs/index.html`.
 
 ### Docs Maintenance Rule
 
-**When modifying any config file, check if the corresponding doc in `docs/` needs updating.** Key mappings:
+Docs hold only insight the code can't express: cross-tool aggregations, design rationale, runbooks. They never enumerate what the code already lists (packages, plugins, aliases, options, routes) — inventory changes never require a doc edit. Cite source files by path only, never by line number.
 
-| Config change                                              | Doc to update                                                             |
-| ---------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `.chezmoiscripts/`, `.chezmoi.toml.tmpl`, `.chezmoiignore` | `docs/architecture/chezmoi-lifecycle.md`, `docs/architecture/overview.md` |
-| `private_dot_config/zsh/`, `dot_zshenv.tmpl`               | `docs/components/zsh.md`                                                  |
-| `private_dot_config/nvim/`                                 | `docs/components/nvim.md`                                                 |
-| `private_dot_config/opencode/`                             | `docs/components/opencode.md`                                             |
-| `private_dot_config/private_karabiner/`                    | `docs/components/karabiner.md`                                            |
-| Any custom keymap/keybinding change                        | `docs/shortcuts.md`                                                       |
-| New `private_dot_config/` component                        | `docs/components/config-overview.md`                                      |
-| `dev/*/dot_mrconfig`                                       | `docs/workspaces/mrconfig.md`                                             |
-| `mise.toml`, `Taskfile.yml`                                | `docs/components/config-overview.md`                                      |
+Update a doc only when its insight changes:
 
-See `docs/maintenance.md` for the full update checklist.
+| Change                                                         | Doc to update             |
+| -------------------------------------------------------------- | ------------------------- |
+| Any custom keymap/keybinding (Karabiner, Ghostty, tmux, zsh, NeoMutt, Neovim) | `docs/shortcuts.md`       |
+| Chezmoi lifecycle behavior, encryption/secrets flow, bootstrap procedure       | `docs/architecture.md`    |
+| Email stack procedures or troubleshooting                                     | `docs/email.md`           |
+| Non-obvious per-tool design behavior (zsh startup, LSP layering, mrconfig discovery) | `docs/tool-notes.md` |
 
 When using taskfile task tool run it using mise:
 

@@ -5,6 +5,14 @@
 
 set -euo pipefail
 
-mkdir -p "${HOME}/.config/chezmoi"
-chezmoi age decrypt --output "${HOME}/.config/chezmoi/key.txt" --passphrase "{{ .chezmoi.sourceDir }}/key.txt.age"
-chmod 600 "${HOME}/.config/chezmoi/key.txt"
+key_dir="${HOME}/.config/chezmoi"
+key_path="${key_dir}/key.txt"
+
+mkdir -p "$key_dir"
+temporary_key=$(mktemp "${key_dir}/.key.txt.XXXXXX")
+trap 'rm -f "$temporary_key"' EXIT
+
+chezmoi age decrypt --output "$temporary_key" --passphrase "{{ .chezmoi.sourceDir }}/key.txt.age"
+chmod 600 "$temporary_key"
+mv -f "$temporary_key" "$key_path"
+trap - EXIT

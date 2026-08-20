@@ -12,6 +12,7 @@ docs/
 # Source-only directories (kept in repo, not deployed by chezmoi)
 ai-docs/
 .task/
+tests/
 
 # Repo-local tooling (go-task via mise, used inside this repo only)
 mise.toml
@@ -40,12 +41,7 @@ __pycache__/
 .ruff_cache/
 bun.lock
 package-lock.json
-!.config/opencode/pwa-push/package-lock.json
 Cargo.lock
-
-# Nix (removed)
-.config/nix/
-.config/nix-darwin/
 
 # Caches and runtime-generated files
 .cache/
@@ -58,7 +54,6 @@ Cargo.lock
 .config/nvim/lazy-lock.json
 .config/opencode/package.json
 .config/opencode/bun.lock
-.config/opencode/pwa-push/node_modules/
 .config/opencode/skills/*-workspace/
 .local/share/go/
 .local/share/task/
@@ -123,8 +118,6 @@ bin/switch-input-source
 .config/oauth2-proxy/
 Library/LaunchAgents/com.mbastakis.opencode-server.plist
 Library/LaunchAgents/com.mbastakis.opencode-oauth2-proxy.plist
-Library/LaunchAgents/com.mbastakis.opencode-pwa-push.plist
 bin/opencode-server
 .local/libexec/opencode-server/
-.config/opencode/pwa-push/
 {{- end }}

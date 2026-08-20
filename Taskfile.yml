@@ -20,6 +20,7 @@ tasks:
         msg: "pre-commit not found; run: mise install"
     cmds:
       - pre-commit run --all-files
+      - git diff --check
 
   brewfile:refresh:
     desc: Rewrite the source Brewfile from installed packages

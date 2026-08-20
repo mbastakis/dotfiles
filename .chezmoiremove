@@ -7,3 +7,33 @@ bin/opencode-remote
 
 # Secrets moved into the managed interactive exports file
 .config/zsh/local.zsh
+
+# Retired shell-owned commands and completions
+bin/add-zoxide-tree
+.config/zsh/completions
+
+# Unpinned sesh work sessions
+.config/sesh/work.toml
+
+# Retired Worktrunk skill customization
+.config/opencode/skills/worktrunk
+
+# Retired Navi cheatsheets
+.config/navi
+
+# Retired Terraform global config
+.config/terraform
+
+# OpenCode v2 migration: retired v1 server stack, plugin, and TUI config
+.config/opencode/plugins/descendant-skills.js
+.config/opencode/tui.json
+.config/opencode/package.json
+.config/opencode/package-lock.json
+.config/opencode/bun.lock
+.config/opencode/opencode-notifier-state.json
+.local/libexec/opencode-server/server
+.local/state/opencode-server
+
+# OpenCode v2 native migration: v1 singular agent/command dirs renamed to plural
+.config/opencode/agent
+.config/opencode/command

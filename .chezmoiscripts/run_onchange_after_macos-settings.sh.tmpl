@@ -1,0 +1,10 @@
+#!/bin/bash
+# Reapply macOS defaults whenever the managed settings command changes.
+{{- if ne .chezmoi.os "darwin" }}
+exit 0
+{{- end }}
+# hash-settings: {{ includeTemplate "literal_bin/executable_macos-settings.tmpl" . | sha256sum }}
+
+set -euo pipefail
+
+exec "$HOME/bin/macos-settings"

@@ -1,0 +1,16 @@
+#!/bin/bash
+# Install the Yazi packages declared by package.toml.
+# package-hash: {{ include "private_dot_config/yazi/package.toml" | sha256sum }}
+
+{{- if ne .chezmoi.os "darwin" }}
+exit 0
+{{- end }}
+
+set -euo pipefail
+
+if ! command -v ya &>/dev/null; then
+    echo "Warning: Yazi is not installed; run 'chezmoi apply' after installing packages." >&2
+    exit 0
+fi
+
+ya pkg install
