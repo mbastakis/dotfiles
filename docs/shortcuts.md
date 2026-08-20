@@ -1,6 +1,6 @@
 # Shortcuts
 
-Unified index of custom keymaps and shortcuts across all input layers. **Custom mappings only** -- plugin-default keymaps (e.g., blink.cmp completion defaults, origami fold defaults) are excluded.
+Unified index of custom keymaps across all input layers. **Custom mappings only** — plugin-default keymaps are excluded (see [Excluded Mappings](#excluded-mappings)).
 
 ## Input Flow
 
@@ -10,359 +10,403 @@ flowchart LR
   G --> T["tmux<br/>(multiplexer layer)"]
   G --> Z["zsh<br/>(shell layer)"]
   T --> Z
-  Z --> P["Pi<br/>(agent TUI layer)"]
   Z --> M["NeoMutt<br/>(mail layer)"]
   Z --> N["Neovim<br/>(editor layer)"]
 ```
 
 A keystroke passes through each layer in sequence. Karabiner processes physical key events first (home row mods, hyper key), Ghostty handles terminal-level bindings, tmux intercepts its prefix and pass-through sequences, zsh processes shell keybindings, and then app-level bindings apply in NeoMutt or Neovim.
 
-## Karabiner (Keyboard Layer)
+## Karabiner
+
+### Build Pipeline
+
+`karabiner.json` is **fully generated** — never edit it directly. `build.sh` assembles it from modular sources and validates the output with `jq` before writing:
+
+```mermaid
+flowchart TD
+  A[src/base.json<br/>profile + devices] --> E[build.sh]
+  B["src/rules/00-02<br/>anti-misfire rules"] --> E
+  C["src/templates/hrm.json<br/>HRM template"] --> E
+  D["src/rules/11-15<br/>feature rules"] --> E
+  E -->|"HRM_CONFIG array<br/>generates rules 03-10"| F[karabiner.json]
+```
+
+To rebuild after editing any source file:
+
+```bash
+"$(chezmoi source-path)"/private_dot_config/private_karabiner/build.sh
+```
 
 ### Home Row Mods (GASC)
 
-| Key | Tap | Hold    |
-| --- | --- | ------- |
-| `a` | a   | Ctrl    |
-| `s` | s   | Option  |
-| `d` | d   | Command |
-| `f` | f   | Shift   |
-| `j` | j   | Shift   |
-| `k` | k   | Command |
-| `l` | l   | Option  |
-| `;` | ;   | Ctrl    |
+Dual-function keys: tap for the letter, hold for a modifier. Timing lives in the `HRM_CONFIG` array in `private_dot_config/private_karabiner/executable_build.sh`.
 
-_Reference: `private_dot_config/private_karabiner/executable_build.sh:20`_
+| Key | Tap | Hold    | Finger | Streak window |
+| --- | --- | ------- | ------ | ------------- |
+| `a` | a   | Ctrl    | left pinky   | 160ms |
+| `s` | s   | Option  | left ring    | 160ms |
+| `d` | d   | Command | left middle  | 160ms |
+| `f` | f   | Shift   | left index   | 50ms  |
+| `j` | j   | Shift   | right index  | 50ms  |
+| `k` | k   | Command | right middle | 160ms |
+| `l` | l   | Option  | right ring   | 160ms |
+| `;` | ;   | Ctrl    | right pinky  | 160ms |
 
-### Hyper Key Navigation
+The streak window is how recently you must have typed for the key to output a letter instead of arming a modifier. Index fingers get a much shorter window (50ms, with shorter hold/alone thresholds too) because they are the fastest typists — a longer window would swallow deliberate Shift holds.
 
-See rule file for hyper+key combinations (navigation, window management).
+### Anti-Misfire Protection
 
-_Reference: `private_dot_config/private_karabiner/src/rules/15-hyper-navigation.json:1`_
+Five layers prevent accidental modifier activation during normal typing:
 
-## Ghostty (Terminal Layer)
+```mermaid
+flowchart LR
+  A[Keystroke] --> B[Layer 1<br/>Common Words]
+  B --> C[Layer 2<br/>Bilateral Cancel]
+  C --> D[Layer 3<br/>Crossover Timing]
+  D --> E[Layer 4<br/>Streak Detection]
+  E --> F[Layer 5<br/>Typing Mode]
+  F --> G{Modifier<br/>or Letter?}
+```
 
-| Key              | Action                               | Source                                  |
-| ---------------- | ------------------------------------ | --------------------------------------- |
-| `Cmd+T`          | New tmux window (`prefix`, `c`)      | `private_dot_config/ghostty/config:70`  |
-| `Cmd+W`          | Kill tmux pane (`prefix`, `x`)       | `private_dot_config/ghostty/config:71`  |
-| `Cmd+D`          | Split horizontal (`prefix`, `h`)     | `private_dot_config/ghostty/config:72`  |
-| `Cmd+Shift+D`    | Split vertical (`prefix`, `v`)       | `private_dot_config/ghostty/config:73`  |
-| `Cmd+P`          | Floax/floating window (`prefix`, `P`) | `private_dot_config/ghostty/config:74` |
-| `Cmd+S`          | Sesh session picker (`prefix`, `s`)  | `private_dot_config/ghostty/config:75`  |
-| `Cmd+H`          | Previous tmux window (`prefix`, `p`) | `private_dot_config/ghostty/config:76` |
-| `Cmd+L`          | Next tmux window (`prefix`, `n`)     | `private_dot_config/ghostty/config:77`  |
-| `Cmd+R`          | Rename tmux window (`prefix`, `,`)   | `private_dot_config/ghostty/config:78`  |
-| `Cmd+Shift+R`    | Rename tmux session (`prefix`, `R`)  | `private_dot_config/ghostty/config:79`  |
-| `Cmd+O`          | OpenCode split (`prefix`, `o`)       | `private_dot_config/ghostty/config:81`  |
-| `Cmd+Shift+O`    | Toggle OpenCode session sidebar (`prefix`, `O`) | `private_dot_config/ghostty/config:82` |
-| `Cmd+G`          | Lazygit popup (`prefix`, `G`)        | `private_dot_config/ghostty/config:83`  |
-| `Cmd+Shift+T`    | New Ghostty OS window                | `private_dot_config/ghostty/config:86`  |
-| `Cmd+Shift+W`    | Close Ghostty OS window              | `private_dot_config/ghostty/config:87`  |
-| `Cmd+Backspace`  | Delete to start of line (Ctrl+U)     | `private_dot_config/ghostty/config:90`  |
-| `Ctrl+Shift+T`   | Send `ESC[202~` to zsh               | `private_dot_config/ghostty/config:93`  |
-| `Ctrl+Tab`       | _(pass-through to tmux)_             | `private_dot_config/ghostty/config:96`  |
-| `Ctrl+Shift+Tab` | _(pass-through to tmux)_             | `private_dot_config/ghostty/config:97`  |
-| `Cmd+Left`       | Home (line start)                    | `private_dot_config/ghostty/config:100` |
-| `Cmd+Right`      | End (line end)                       | `private_dot_config/ghostty/config:101` |
-| `Cmd+Shift+E`    | Write screen to file + open          | `private_dot_config/ghostty/config:104` |
-| `Shift+Enter`    | CSI 13;2u                            | `private_dot_config/ghostty/config:107` |
-| `Super+0`        | Reset font size                      | `private_dot_config/ghostty/config:110` |
-| `Super+Shift+]`  | Increase font size                   | `private_dot_config/ghostty/config:111` |
-| `Super+-`        | Decrease font size                   | `private_dot_config/ghostty/config:112` |
+| Layer | Rule file (under `private_dot_config/private_karabiner/src/rules/`) | Purpose |
+| --- | --- | --- |
+| 1. Common Words | `00-common-words.json` | Fast cross-hand word patterns produce letters, not mods |
+| 2. Bilateral Cancellation | `01-bilateral-cancellation.json` | Same-hand combos always produce letters |
+| 3. Crossover Timing | `02-crossover-timing.json` | Cross-hand timing enforcement |
+| 4. Streak Detection | _(generated rules 03-10)_ | Recent typing disables mod behavior, per-finger timeouts |
+| 5. Typing Mode Toggle | `11-typing-mode-toggle.json` | `Right Cmd + Space` manually toggles all HRM off/on (with on-screen notification) |
 
-Ghostty remaps `Hide Ghostty` to `Ctrl+Option+Cmd+H` via `.chezmoiscripts/run_once_after_06-ghostty-hide-shortcut.sh.tmpl` so `Cmd+H` reaches tmux navigation while other apps keep the macOS default hide shortcut.
+### Hyper Key
 
-## tmux (Multiplexer Layer)
+| Key | Action | Source |
+| --- | --- | --- |
+| `Caps Lock` (hold) | Hyper mode (sets `hyper_caps_lock` while held) | `private_dot_config/private_karabiner/src/rules/13-hyper-key.json` |
+| `Caps Lock` (tap) | Escape | `private_dot_config/private_karabiner/src/rules/13-hyper-key.json` |
+| `Right Shift` (double-tap) | Caps Lock toggle | `private_dot_config/private_karabiner/src/rules/14-double-tap-caps.json` |
 
-Prefix: **`Ctrl-a`** everywhere. In a local tmux pane attached to remote tmux over SSH, use **`Ctrl-a a`** to forward one prefix to the remote tmux, then press the remote command key. Example: `Ctrl-a h` splits locally; `Ctrl-a a h` splits the remote tmux.
+### Hyper Navigation (hold Caps Lock)
 
-| Key                  | Action                 | Source                                 |
-| -------------------- | ---------------------- | -------------------------------------- |
-| `prefix + h`         | Split horizontal       | `private_dot_config/tmux/tmux.conf:24` |
-| `prefix + v`         | Split vertical         | `private_dot_config/tmux/tmux.conf:25` |
-| `prefix + c`         | New window             | `private_dot_config/tmux/tmux.conf:26` |
-| `prefix + x`         | Kill pane (no confirm) | `private_dot_config/tmux/tmux.conf:27` |
-| `prefix + p`         | Previous window        | `private_dot_config/tmux/tmux.conf:28` |
-| `prefix + o`         | OpenCode split (auth-aware launcher)   | `private_dot_config/tmux/tmux.conf:32` |
-| `prefix + O`         | Toggle OpenCode session sidebar | `private_dot_config/tmux/tmux.conf:95` |
-| `prefix + G`         | Lazygit popup (90% overlay) | `private_dot_config/tmux/tmux.conf:33` |
-| `prefix + ,`         | Rename window (gum input popup) | `private_dot_config/tmux/tmux.conf:98` |
-| `Ctrl+Tab`           | Next window            | `private_dot_config/tmux/tmux.conf:11` |
-| `Ctrl+Shift+Tab`     | Previous window        | `private_dot_config/tmux/tmux.conf:12` |
-| `PageUp` / `PageDown` | Half-page tmux scrollback in shell; forwarded to fullscreen pane apps | `private_dot_config/tmux/tmux.conf:35-38` |
-| Double-click URL     | Open URL in browser    | `private_dot_config/tmux/tmux.conf:45` |
-| `v` (copy mode)      | Begin selection  | `private_dot_config/tmux/tmux.conf:30` |
-| `y` (copy mode)      | Copy selection   | `private_dot_config/tmux/tmux.conf:32` |
-| `Escape` (copy mode) | Cancel           | `private_dot_config/tmux/tmux.conf:29` |
-| Arrow keys           | Resize pane      | `private_dot_config/tmux/tmux.conf:38` |
+Source: `private_dot_config/private_karabiner/src/rules/15-hyper-navigation.json`
 
-The OpenCode sidebar starts collapsed on a fresh tmux server. Opening it focuses the sidebar. While open, click a session row or select it with `j`/`k` and `Enter`; press `q` or `Escape` to hide it. Closing preserves the currently focused application pane, or returns to the pre-sidebar pane when the sidebar itself is still focused, while restoring the exact pre-sidebar layout. If the last application pane in a window closes, its sidebar closes too instead of remaining fullscreen.
+| Hyper + | Action |
+| --- | --- |
+| `j` / `;` | Left / Right arrow |
+| `k` / `l` | Down / Up arrow |
+| `h` | Escape |
+| `d` / `f` | Cmd+Left / Cmd+Right (line start / end) |
+| `y` / `o` | Home / End |
+| `u` / `.` | Page Up |
+| `n` / `,` | Page Down |
+| `m` | Backspace |
+| `a` | Left Option (combine with arrows for word movement) |
+
+## Ghostty
+
+Source: `private_dot_config/ghostty/config`. Most `Cmd` bindings inject tmux prefix sequences (`Ctrl+a` + key), so window management feels native while tmux does the work.
+
+| Key | Action |
+| --- | --- |
+| `Cmd+T` | New tmux window (`prefix c`) |
+| `Cmd+W` | Kill tmux pane (`prefix x`) |
+| `Cmd+D` | Split horizontal (`prefix h`) |
+| `Cmd+Shift+D` | Split vertical (`prefix v`) |
+| `Cmd+P` | FloaX floating window (`prefix P`) |
+| `Cmd+S` | Sesh session picker (`prefix s`) |
+| `Cmd+H` | Previous tmux window (`prefix p`) |
+| `Cmd+L` | Next tmux window (`prefix n`) |
+| `Cmd+R` | Rename tmux window (`prefix ,`) |
+| `Cmd+Shift+R` | Rename tmux session (`prefix R`) |
+| `Cmd+Z` | Toggle tmux pane zoom (`prefix z`) |
+| `Cmd+G` | Lazygit popup (`prefix G`) |
+| `Cmd+Shift+T` | New Ghostty OS window |
+| `Cmd+Shift+W` | Close Ghostty OS window |
+| `Cmd+Backspace` | Delete to start of line (sends Ctrl+U) |
+| `Ctrl+Shift+T` | Send `ESC[202~` to zsh (directory picker) |
+| `Cmd+B` | Send `ESC[203~` to zsh (Worktrunk worktree picker) |
+| `Ctrl+Tab` / `Ctrl+Shift+Tab` | Pass through to tmux (next/previous window) |
+| `Cmd+Left` / `Cmd+Right` | Home / End |
+| `Cmd+Shift+E` | Write screen to file and open it |
+| `Shift+Enter` | CSI `13;2u` (literal newline for TUIs) |
+| `Super+0` | Reset font size |
+| `Super+Shift+]` / `Super+-` | Increase / decrease font size |
+
+Ghostty's macOS `Hide Ghostty` menu shortcut is remapped to `Ctrl+Option+Cmd+H` via `~/bin/macos-settings`, so `Cmd+H` reaches tmux window navigation while other apps keep the default hide shortcut.
+
+## tmux
+
+Source: `private_dot_config/tmux/tmux.conf`. Prefix: **`Ctrl-a`** everywhere. In a local pane attached to remote tmux over SSH, `Ctrl-a a` forwards one prefix to the remote tmux: `Ctrl-a h` splits locally, `Ctrl-a a h` splits the remote.
+
+| Key | Action |
+| --- | --- |
+| `prefix h` / `prefix v` | Split horizontal / vertical (keeps current path) |
+| `prefix H` / `prefix V` / `prefix T` | Arrange panes side-by-side / stacked / tiled grid |
+| `prefix c` | New window (keeps current path) |
+| `prefix x` | Kill pane (no confirm) |
+| `prefix p` | Previous window |
+| `prefix G` | Lazygit popup (90% overlay) |
+| `prefix s` | Sesh session picker popup |
+| `prefix ,` / `prefix R` | Rename window / session (popup prompts) |
+| `prefix P` | FloaX floating window (`Alt+Shift+P` opens the FloaX menu) |
+| `prefix r` | Reload tmux.conf |
+| `prefix d` | Detach client |
+| `prefix Arrow` | Resize pane (repeatable, 5 cells) |
+| `Ctrl+Tab` / `Ctrl+Shift+Tab` | Next / previous window (no prefix) |
+| `Ctrl+Shift+Arrow` | Resize pane (no prefix) |
+| `PageUp` / `PageDown` | Half-page scrollback in shell panes; forwarded to fullscreen apps |
+| Double-click URL | Open URL in browser (non-URLs keep default word copy) |
+| `v` / `Ctrl+V` (copy mode) | Begin selection / rectangle toggle |
+| `y` (copy mode) | Copy selection and cancel |
+| `Escape` (copy mode) | Cancel |
 
 ### Harpoon (tmux-harpoon)
 
-| Key                | Action              | Source                                  |
-| ------------------ | ------------------- | --------------------------------------- |
-| `Ctrl+Cmd+a`       | Jump to slot 1      | `private_dot_config/tmux/tmux.conf:113` |
-| `Ctrl+Cmd+o`       | Jump to slot 2      | `private_dot_config/tmux/tmux.conf:114` |
-| `Ctrl+Cmd+e`       | Jump to slot 3      | `private_dot_config/tmux/tmux.conf:115` |
-| `Ctrl+Cmd+u`       | Jump to slot 4      | `private_dot_config/tmux/tmux.conf:116` |
-| `Ctrl+Cmd+Shift+a` | Overwrite slot 1    | `private_dot_config/tmux/tmux.conf:119` |
-| `Ctrl+Cmd+Shift+o` | Overwrite slot 2    | `private_dot_config/tmux/tmux.conf:120` |
-| `Ctrl+Cmd+Shift+e` | Overwrite slot 3    | `private_dot_config/tmux/tmux.conf:121` |
-| `Ctrl+Cmd+Shift+u` | Overwrite slot 4    | `private_dot_config/tmux/tmux.conf:122` |
-| `prefix + A`       | Add pane to harpoon | `private_dot_config/tmux/tmux.conf:132` |
-| `prefix + D`       | Delete from harpoon | `private_dot_config/tmux/tmux.conf:133` |
-| `prefix + g`       | List harpoon slots  | `private_dot_config/tmux/tmux.conf:134` |
-| `prefix + e`       | Edit harpoon        | `private_dot_config/tmux/tmux.conf:135` |
+| Key | Action |
+| --- | --- |
+| `Ctrl+Cmd+A/O/E/U` | Jump to slot 1-4 |
+| `Ctrl+Cmd+Shift+A/O/E/U` | Overwrite slot 1-4 with current pane |
+| `prefix A` | Add pane to harpoon |
+| `prefix D` | Delete from harpoon |
+| `prefix g` | List harpoon slots |
+| `prefix e` | Edit harpoon list |
 
-### Plugins
+## Zsh
 
-| Key          | Action                                        |
-| ------------ | --------------------------------------------- |
-| `prefix + s` | Session picker (sesh + gum popup)             |
-| `prefix + R` | Rename session (gum input popup)              |
-| `prefix + O` | Toggle the mouse-aware OpenCode session sidebar |
+Workstation configuration; server-side terminal configuration is owned by Kavouki.
 
-## Zsh (Shell Layer)
+### Custom Widgets
 
-These bindings describe the workstation configuration. Server-side terminal configuration is owned by Kavouki.
+Sources: `private_dot_config/zsh/keybindings.zsh`, `private_dot_config/zsh/fzf.zsh`, `private_dot_config/zsh/functions.zsh`.
 
-### Custom Widget Keybindings
+| Key | Action |
+| --- | --- |
+| `Ctrl+F` | Interactive ripgrep search (`ftext`); `Enter` opens in editor, `Tab` inserts the filename |
+| `Ctrl+J` | Insert literal newline (multiline editing) |
+| `Ctrl+T` | FZF file picker (fd-based, bat preview) |
+| `Ctrl+Shift+T` | FZF directory picker (via Ghostty `ESC[202~` passthrough) |
+| `Ctrl+Z` | Zoxide interactive directory jump (`cdi`) |
+| `Cmd+B` | Worktrunk worktree picker (`wt switch`, via Ghostty `ESC[203~` passthrough) |
+| `Ctrl+R` | Atuin history search (fzf's binding is removed) |
+| `?` | Atuin AI widget; `Tab` inserts the generated command |
 
-| Key            | Action                                                | Source                       |
-| -------------- | ----------------------------------------------------- | ---------------------------- |
-| `Ctrl+F`       | Interactive ripgrep search (ftext-widget)             | `private_dot_config/zsh/keybindings.zsh:33` |
-| `Ctrl+G`       | Navi cheatsheet browser                               | `private_dot_config/zsh/keybindings.zsh:17` |
-| `Ctrl+J`       | Insert literal newline (multiline editing)            | `private_dot_config/zsh/keybindings.zsh:8`  |
-| `Ctrl+Shift+T` | FZF directory picker (Ghostty `ESC[202~` passthrough) | `private_dot_config/zsh/keybindings.zsh:40` |
-| `Ctrl+Z`       | Zoxide interactive directory jump                     | `private_dot_config/zsh/keybindings.zsh:57` |
-| `Ctrl+R`       | Atuin history search (replaces fzf)                   | `private_dot_config/zsh/fzf.zsh:154`       |
-| `Ctrl+T`       | FZF file picker (fd-based, bat preview)               | `private_dot_config/zsh/fzf.zsh:66`        |
+### Word and Line Movement
 
-### Shift-Select (Ghostty CSI Integration)
+Source: `private_dot_config/zsh/keybindings.zsh`. Multiple escape sequences are bound so Alt, Ctrl, and Cmd arrow variants all work.
 
-| Key                    | Action                      | Source                                     |
-| ---------------------- | --------------------------- | ------------------------------------------ |
-| `Cmd+C` (via CSI)      | Copy selection to clipboard | `private_dot_config/zsh/shift-select-enhancements.zsh:71` |
-| `Cmd+X` (via CSI)      | Cut selection to clipboard  | `private_dot_config/zsh/shift-select-enhancements.zsh:72` |
-| `Shift+Cmd+Left/Right` | Select entire line          | `private_dot_config/zsh/shift-select-enhancements.zsh:79` |
+| Key | Action |
+| --- | --- |
+| `Alt+F` / `Ctrl+Right` | Forward word (also accepts one autosuggestion word) |
+| `Alt+B` / `Ctrl+Left` | Backward word |
+| `Home` / `Cmd+Left` | Beginning of line |
+| `End` / `Cmd+Right` | End of line |
 
-### Command Aliases
+### Shift-Select
 
-| Alias | Action | Source |
-| ----- | ------ | ------ |
-| `oc-sub` | OpenCode with the shared configured default model | `private_dot_config/zsh/aliases.zsh:60` |
-| `oc-oauth` | OpenCode with the shared configured default model | `private_dot_config/zsh/aliases.zsh:61` |
+Source: `private_dot_config/zsh/shift-select-enhancements.zsh` (extends the zsh-shift-select plugin).
 
-### Word Movement
+| Key | Action |
+| --- | --- |
+| `Shift+Cmd+Left/Right` | Select entire line |
+| `ESC[200~` / `ESC[201~` | Copy / cut active selection to clipboard (custom CSI sequences; the Ghostty config does not currently emit them) |
 
-| Key                    | Action            | Source                       |
-| ---------------------- | ----------------- | ---------------------------- |
-| `Alt+F` / `Ctrl+Right` | Forward word      | `private_dot_config/zsh/keybindings.zsh:75` |
-| `Alt+B` / `Ctrl+Left`  | Backward word     | `private_dot_config/zsh/keybindings.zsh:76` |
-| `Home`                 | Beginning of line | `private_dot_config/zsh/keybindings.zsh:79` |
-| `End`                  | End of line       | `private_dot_config/zsh/keybindings.zsh:80` |
+### FZF Internal Bindings (inside any fzf)
 
-### FZF Internal Keybindings (inside fzf)
+Source: `private_dot_config/zsh/fzf.zsh` (`FZF_DEFAULT_OPTS`).
 
-| Key      | Action                     | Source               |
-| -------- | -------------------------- | -------------------- |
-| `Ctrl+/` | Toggle preview             | `private_dot_config/zsh/fzf.zsh:21` |
-| `Ctrl+D` | Preview page down          | `private_dot_config/zsh/fzf.zsh:22` |
-| `Ctrl+U` | Preview page up            | `private_dot_config/zsh/fzf.zsh:23` |
-| `Ctrl+Y` | Copy to clipboard (pbcopy) | `private_dot_config/zsh/fzf.zsh:24` |
-| `Ctrl+A` | Toggle all selections      | `private_dot_config/zsh/fzf.zsh:25` |
-| `Ctrl+S` | Toggle sort                | `private_dot_config/zsh/fzf.zsh:26` |
+| Key | Action |
+| --- | --- |
+| `Ctrl+/` | Toggle preview |
+| `Ctrl+D` / `Ctrl+U` | Preview page down / up |
+| `Ctrl+Y` | Copy entry to clipboard |
+| `Ctrl+A` | Toggle all selections |
+| `Ctrl+S` | Toggle sort |
 
 ### FZF-Tab (inside completion menu)
 
-| Key              | Action                                | Source                      |
-| ---------------- | ------------------------------------- | --------------------------- |
-| `<` / `>`        | Switch completion group               | `private_dot_config/zsh/fzf-tab.zsh:20`   |
-| `/`              | Accept and continue into subdirectory | `private_dot_config/zsh/fzf-tab.zsh:53`   |
-| `Tab` (in ftext) | Insert filename (instead of opening)  | `private_dot_config/zsh/functions.zsh:81`  |
+Source: `private_dot_config/zsh/fzf-tab.zsh`.
 
-## Pi (Agent TUI Layer)
+| Key | Action |
+| --- | --- |
+| `<` / `>` | Switch completion group |
+| `/` | Accept and continue into subdirectory |
 
-Global Pi keybindings and powerline extension shortcuts are managed under `private_dot_config/pi/`.
+### Command Aliases
 
-| Key | Action | Source |
+Source: `private_dot_config/zsh/aliases.zsh` (selection; see the file for listing/eza variants).
+
+| Alias | Expands to |
+| --- | --- |
+| `v`, `vi`, `vim` | `nvim` |
+| `lg` | `lazygit` |
+| `nm` / `msync` | `neomutt` / `mail-sync` |
+| `oc` / `occ` / `ocserve` | `opencode-launch` / `opencode-launch --continue` / `opencode-server` |
+| `cz` | `chezmoi` |
+| `ta` / `td` / `tls` | `tmux attach` / `tmux detach` / `tmux ls` |
+| `k` / `ctx` / `ns` | `kubectl` / `kubectx` / `kubens` |
+| `grt` | `cd` to git repo root |
+| `r`, `reload` | Replace shell with fresh instance |
+| `lssh` | `lazyssh` |
+
+## NeoMutt
+
+Source: `private_dot_config/neomutt/bindings.muttrc.tmpl` (the only bindings file; rendered per enabled mail account). `i` and `g` are unbound (`noop`) so they act purely as prefixes.
+
+| Key | Action |
+| --- | --- |
+| `u` | Open unified inbox virtual mailbox |
+| `gg` | Top of index; in pager, top of current mail |
+| `G` | Bottom of index; in pager, bottom of current mail |
+| `gT` | Limit index to current thread (`l all` restores full view) |
+| `j` / `k` (pager) | Scroll current mail down / up one line |
+| `Up` / `Down` (pager) | Previous / next undeleted mail |
+| `Left` / `Right` (pager) | Previous / next undeleted mail |
+| `i1`..`i9` | Open per-account inbox by account `order` (enabled accounts, order 1-9) |
+| `gi` / `gs` / `gd` / `gp` / `gt` | Open current-account inbox / sent / drafts / spam / trash |
+| `gb` | Toggle sidebar visibility |
+| `gf` | Search sidebar mailboxes |
+| `gj` / `gk` | Highlight next / previous sidebar mailbox |
+| `gn` / `gN` | Highlight next / previous sidebar mailbox with new mail |
+| `go` | Open highlighted sidebar mailbox |
+| `gl` | Edit notmuch labels on current message |
+| `gL` | Edit notmuch labels, then hide/requery if needed |
+| `gU` | Unsubscribe via `List-Unsubscribe` header |
+| `gr` | Sync current account (`mail-sync`) and reopen current mailbox |
+| `gq` | Prompt for notmuch query virtual folder |
+| `gu` | Open message URLs via `urlscan` |
+
+## Neovim
+
+### Global
+
+Source: `private_dot_config/nvim/lua/config/keymaps.lua`.
+
+| Key | Mode | Action |
 | --- | --- | --- |
-| `Ctrl+T` | Cycle thinking level | `private_dot_config/pi/keybindings.json:2` |
-| `Shift+Tab` | Toggle thinking level | `private_dot_config/pi/keybindings.json:3` |
-| `Ctrl+Shift+B` | Toggle powerline sticky bash mode | `private_dot_config/pi/settings.json:41` |
-| `Alt+S` | Stash/restore the full editor draft | `private_dot_config/pi/extensions/powerline-footer/index.ts:1926` |
-| `Ctrl+Alt+H` | Open powerline prompt/stash history | `private_dot_config/pi/settings.json:46` |
-| `Ctrl+Alt+C` | Copy full Pi editor text | `private_dot_config/pi/settings.json:46` |
-| `Ctrl+Alt+X` | Cut full Pi editor text | `private_dot_config/pi/settings.json:46` |
-| `Ctrl+Shift+U` / `Ctrl+Shift+I` | Jump to previous/next user message in fixed-editor mode | `private_dot_config/pi/settings.json:46` |
-| `Ctrl+Alt+,` / `Ctrl+Alt+.` | Jump to previous/next assistant message in fixed-editor mode | `private_dot_config/pi/settings.json:46` |
-| `Ctrl+Shift+G` | Jump fixed-editor chat viewport to bottom | `private_dot_config/pi/settings.json:46` |
-| `Super+Up` / `Super+Down` | Scroll fixed-editor chat viewport | `private_dot_config/pi/settings.json:46` |
-| `Super+Shift+Up` / `Super+Shift+Down` | Move Pi editor cursor to start/end | `private_dot_config/pi/settings.json:46` |
-
-Fixed-editor mode is disabled by default in `settings.json`; enable it per session with `/powerline fixed-editor on` to use the viewport jump/scroll shortcuts.
-
-## NeoMutt (Mail Layer)
-
-Custom NeoMutt bindings are defined in the template layer and rendered for enabled mail accounts.
-
-| Key | Action | Source |
-| --- | --- | --- |
-| `u` | Open unified inbox virtual mailbox | `private_dot_config/neomutt/bindings.muttrc.tmpl:15` |
-| `gg` | Jump to top of index; in pager, jump to top of current mail | `private_dot_config/neomutt/bindings.muttrc.tmpl:16` |
-| `G` | Jump to bottom of index; in pager, jump to bottom of current mail | `private_dot_config/neomutt/bindings.muttrc.tmpl:6` |
-| `gT` | Limit the index to the current thread (`l all` restores full view) | `private_dot_config/neomutt/bindings.muttrc.tmpl:18` |
-| `j` / `k` | In pager, scroll the current mail down/up by one line | `private_dot_config/neomutt/bindings.muttrc.tmpl:8` |
-| `Up` / `Down` | In pager, jump to previous/next undeleted mail | `private_dot_config/neomutt/bindings.muttrc.tmpl:10` |
-| `i1`..`i9` | Open per-account inbox by account `order` (enabled accounts with `order` 1..9) | `private_dot_config/neomutt/bindings.muttrc.tmpl:22` |
-| `gb` | Toggle sidebar visibility | `private_dot_config/neomutt/bindings.muttrc.tmpl:32` |
-| `gf` | Search sidebar mailboxes | `private_dot_config/neomutt/bindings.muttrc.tmpl:33` |
-| `gj` | Highlight next sidebar mailbox | `private_dot_config/neomutt/bindings.muttrc.tmpl:34` |
-| `gk` | Highlight previous sidebar mailbox | `private_dot_config/neomutt/bindings.muttrc.tmpl:35` |
-| `gl` | Edit notmuch labels on the current message | `private_dot_config/neomutt/bindings.muttrc.tmpl:36` |
-| `gL` | Edit notmuch labels, then hide/requery if needed | `private_dot_config/neomutt/bindings.muttrc.tmpl:37` |
-| `gn` | Highlight next sidebar mailbox with new mail | `private_dot_config/neomutt/bindings.muttrc.tmpl:38` |
-| `gN` | Highlight previous sidebar mailbox with new mail | `private_dot_config/neomutt/bindings.muttrc.tmpl:39` |
-| `go` | Open highlighted sidebar mailbox | `private_dot_config/neomutt/bindings.muttrc.tmpl:40` |
-| `gi` | Open current-account inbox | `private_dot_config/neomutt/bindings.muttrc.tmpl:27` |
-| `gs` | Open current-account sent | `private_dot_config/neomutt/bindings.muttrc.tmpl:28` |
-| `gd` | Open current-account drafts | `private_dot_config/neomutt/bindings.muttrc.tmpl:29` |
-| `gp` | Open current-account spam | `private_dot_config/neomutt/bindings.muttrc.tmpl:30` |
-| `gt` | Open current-account trash | `private_dot_config/neomutt/bindings.muttrc.tmpl:31` |
-| `gU` | Use the message's `List-Unsubscribe` header when available | `private_dot_config/neomutt/bindings.muttrc.tmpl:41` |
-| `gr` | Sync current account and reopen current mailbox | `private_dot_config/neomutt/bindings.muttrc.tmpl:42` |
-| `gq` | Prompt for notmuch query virtual folder | `private_dot_config/neomutt/bindings.muttrc.tmpl:43` |
-| `gu` | Open message URLs via compact `urlscan` view | `private_dot_config/neomutt/bindings.muttrc.tmpl:44` |
-
-## Neovim (Editor Layer)
-
-### Global Keymaps
-
-| Key            | Mode | Action                         | Source                                              |
-| -------------- | ---- | ------------------------------ | --------------------------------------------------- |
-| `Ctrl+H/J/K/L` | n    | Window navigation              | `private_dot_config/nvim/lua/config/keymaps.lua:5`  |
-| `Ctrl+S`       | n, i | Save file                      | `private_dot_config/nvim/lua/config/keymaps.lua:15` |
-| `<leader>fm`   | n    | Format buffer (conform, async) | `private_dot_config/nvim/lua/config/keymaps.lua:19` |
-
-### Markdown Preview
-
-| Key         | Mode | Action                  | Source                                                         |
-| ----------- | ---- | ----------------------- | -------------------------------------------------------------- |
-| `<leader>m` | n    | Toggle Markdown preview | `private_dot_config/nvim/lua/plugins/markdown-preview.lua:7`   |
+| `Ctrl+H/J/K/L` | n | Window navigation (vim-tmux-navigator compatible) |
+| `Ctrl+W h` / `Ctrl+W v` | n | Split side-by-side / stacked (remapped since `Ctrl+H/J/K/L` handle navigation) |
+| `Ctrl+S` | n, i | Save file |
+| `<leader>fm` | n | Format buffer (conform, async) |
 
 ### Diffview
 
-| Key          | Mode | Action                            | Source                                               |
-| ------------ | ---- | --------------------------------- | ---------------------------------------------------- |
-| `<leader>gd` | n    | Diff branch vs base               | `private_dot_config/nvim/lua/config/keymaps.lua:121` |
-| `<leader>gD` | n    | Diff pick branch (Telescope)      | `private_dot_config/nvim/lua/config/keymaps.lua:122` |
-| `<leader>gm` | n    | Open index/merge                  | `private_dot_config/nvim/lua/config/keymaps.lua:123` |
-| `<leader>gq` | n    | Close Diffview                    | `private_dot_config/nvim/lua/config/keymaps.lua:126` |
-| `Ctrl+/`     | n    | Toggle files panel (diffview buf) | `private_dot_config/nvim/lua/config/keymaps.lua:130` |
+Source: `private_dot_config/nvim/lua/config/keymaps.lua`.
+
+| Key | Action |
+| --- | --- |
+| `<leader>gd` | Diff branch vs base (auto-detects `main`/`master`/origin HEAD) |
+| `<leader>gD` | Diff vs picked branch (Telescope) |
+| `<leader>gm` | Open Diffview (index/merge) |
+| `<leader>gq` | Close Diffview |
+| `Ctrl+/` | Toggle files panel (buffer-local in Diffview) |
 
 ### LSP (buffer-local on LspAttach)
 
-| Key          | Action                | Source                                                  |
-| ------------ | --------------------- | ------------------------------------------------------- |
-| `gd`         | Go to definition      | `private_dot_config/nvim/lua/plugins/lsp/config.lua:16` |
-| `gD`         | Go to declaration     | `private_dot_config/nvim/lua/plugins/lsp/config.lua:17` |
-| `gr`         | Go to references      | `private_dot_config/nvim/lua/plugins/lsp/config.lua:18` |
-| `gI`         | Go to implementation  | `private_dot_config/nvim/lua/plugins/lsp/config.lua:19` |
-| `gy`         | Go to type definition | `private_dot_config/nvim/lua/plugins/lsp/config.lua:20` |
-| `K`          | Hover documentation   | `private_dot_config/nvim/lua/plugins/lsp/config.lua:23` |
-| `<leader>ca` | Code action           | `private_dot_config/nvim/lua/plugins/lsp/config.lua:28` |
-| `<leader>rn` | Rename symbol         | `private_dot_config/nvim/lua/plugins/lsp/config.lua:29` |
-| `<leader>d`  | Show line diagnostics | `private_dot_config/nvim/lua/plugins/lsp/config.lua:32` |
-| `<leader>q`  | Open diagnostics list | `private_dot_config/nvim/lua/plugins/lsp/config.lua:33` |
+Source: `private_dot_config/nvim/lua/plugins/lsp/config.lua`.
+
+| Key | Action |
+| --- | --- |
+| `gd` / `gD` | Go to definition / declaration |
+| `gr` / `gI` / `gy` | Go to references / implementation / type definition |
+| `K` | Hover documentation |
+| `<leader>ca` | Code action |
+| `<leader>rn` | Rename symbol |
+| `<leader>d` | Show line diagnostics |
+| `<leader>q` | Open diagnostics list |
 
 ### Telescope
 
-| Key          | Action                         | Source                                                  |
-| ------------ | ------------------------------ | ------------------------------------------------------- |
-| `<leader>ff` | Find files (filtered, hidden)  | `private_dot_config/nvim/lua/plugins/telescope.lua:110` |
-| `<leader>fF` | Find files (show all)          | `private_dot_config/nvim/lua/plugins/telescope.lua:120` |
-| `<leader>fg` | Live grep (filtered)           | `private_dot_config/nvim/lua/plugins/telescope.lua:129` |
-| `<leader>fG` | Live grep (show all)           | `private_dot_config/nvim/lua/plugins/telescope.lua:138` |
-| `<leader>fh` | Help tags                      | `private_dot_config/nvim/lua/plugins/telescope.lua:146` |
-| `<leader>fp` | Zoxide projects (cd on select) | `private_dot_config/nvim/lua/plugins/telescope.lua:149` |
+Source: `private_dot_config/nvim/lua/plugins/telescope.lua`.
+
+| Key | Action |
+| --- | --- |
+| `<leader>ff` / `<leader>fF` | Find files (filtered / show all) |
+| `<leader>fg` / `<leader>fG` | Live grep (filtered / show all) |
+| `<leader>fh` | Help tags |
+| `<leader>fp` | Zoxide projects (cd on select) |
 
 ### Oil (File Explorer)
 
-| Key         | Action   | Source                                            |
-| ----------- | -------- | ------------------------------------------------- |
-| `<leader>e` | Open Oil | `private_dot_config/nvim/lua/plugins/oil.lua:208` |
+Source: `private_dot_config/nvim/lua/plugins/oil.lua`. Defaults are disabled (`use_default_keymaps = false`); the buffer-local set is declared explicitly.
+
+| Key | Action |
+| --- | --- |
+| `<leader>e` | Open Oil (global); close it from inside an Oil buffer |
+| `Enter` / `Ctrl+T` / `Ctrl+P` | Select / select in new tab / preview |
+| `Ctrl+C` | Close |
+| `Ctrl+L` | Refresh |
+| `-` / `_` | Parent directory / open cwd |
+| `` ` `` / `~` | `cd` (global / tab scope) |
+| `gs` / `gx` | Change sort / open external |
+| `g.` / `g\` | Toggle hidden / toggle trash |
+| `g?` | Show help |
+
+### Bufferline
+
+Source: `private_dot_config/nvim/lua/plugins/bufferline.lua`.
+
+| Key | Action |
+| --- | --- |
+| `Shift+H` / `Shift+L` | Previous / next buffer |
+| `[b` / `]b` | Previous / next buffer |
+| `<leader>bp` / `<leader>bP` | Toggle pin / close non-pinned |
+| `<leader>bo` | Close other buffers |
+| `<leader>bl` / `<leader>bh` | Close buffers to the right / left |
+| `<leader>bd` | Delete current buffer |
 
 ### Snacks
 
-| Key          | Mode | Action                       | Source                                               |
-| ------------ | ---- | ---------------------------- | ---------------------------------------------------- |
-| `<leader>h`  | n    | Dashboard                    | `private_dot_config/nvim/lua/plugins/snacks.lua:79`  |
-| `<leader>n`  | n    | Notification history         | `private_dot_config/nvim/lua/plugins/snacks.lua:86`  |
-| `<leader>gB` | n    | Git browse                   | `private_dot_config/nvim/lua/plugins/snacks.lua:93`  |
-| `<leader>gb` | n    | Git blame line               | `private_dot_config/nvim/lua/plugins/snacks.lua:100` |
-| `<leader>gf` | n    | Lazygit current file history | `private_dot_config/nvim/lua/plugins/snacks.lua:107` |
-| `<leader>gg` | n    | Lazygit                      | `private_dot_config/nvim/lua/plugins/snacks.lua:114` |
-| `<leader>gl` | n    | Lazygit log (cwd)            | `private_dot_config/nvim/lua/plugins/snacks.lua:121` |
-| `Ctrl+/`     | n, t | Toggle terminal              | `private_dot_config/nvim/lua/plugins/snacks.lua:128` |
+Source: `private_dot_config/nvim/lua/plugins/snacks.lua`.
+
+| Key | Mode | Action |
+| --- | --- | --- |
+| `<leader>h` | n | Dashboard |
+| `<leader>n` | n | Notification history |
+| `<leader>gB` | n | Git browse |
+| `<leader>gb` | n | Git blame line |
+| `<leader>gf` | n | Lazygit current file history |
+| `<leader>gg` | n | Lazygit |
+| `<leader>gl` | n | Lazygit log (cwd) |
+| `Ctrl+/` | n, t | Toggle terminal |
 
 ### Snacks Toggles
 
-| Key          | Toggle                  | Source                                               |
-| ------------ | ----------------------- | ---------------------------------------------------- |
-| `<leader>uL` | Relative number         | `private_dot_config/nvim/lua/plugins/snacks.lua:142` |
-| `<leader>ul` | Line number             | `private_dot_config/nvim/lua/plugins/snacks.lua:143` |
-| `<leader>uc` | Conceal level           | `private_dot_config/nvim/lua/plugins/snacks.lua:144` |
-| `<leader>uh` | Inlay hints             | `private_dot_config/nvim/lua/plugins/snacks.lua:147` |
-| `<leader>ug` | Indent guides           | `private_dot_config/nvim/lua/plugins/snacks.lua:148` |
-| `<leader>uD` | Dim mode                | `private_dot_config/nvim/lua/plugins/snacks.lua:149` |
-| `<leader>uw` | Wrap + linebreak        | `private_dot_config/nvim/lua/plugins/snacks.lua:150` |
-| `<leader>uv` | Diagnostics             | `private_dot_config/nvim/lua/plugins/snacks.lua:162` |
-| `<leader>uV` | Diagnostic virtual text | `private_dot_config/nvim/lua/plugins/snacks.lua:163` |
-| `<leader>ux` | Diagnostic underlines   | `private_dot_config/nvim/lua/plugins/snacks.lua:174` |
-| `<leader>ua` | Supermaven on/off       | `private_dot_config/nvim/lua/plugins/snacks.lua:185` |
-| `<leader>ub` | Bufferline              | `private_dot_config/nvim/lua/plugins/snacks.lua:201` |
+Source: `private_dot_config/nvim/lua/plugins/snacks.lua`.
+
+| Key | Toggle |
+| --- | --- |
+| `<leader>uL` / `<leader>ul` | Relative number / line number |
+| `<leader>uc` | Conceal level |
+| `<leader>uh` | Inlay hints |
+| `<leader>ug` | Indent guides |
+| `<leader>uD` | Dim mode |
+| `<leader>uw` | Wrap + linebreak |
+| `<leader>uv` / `<leader>uV` / `<leader>ux` | Diagnostics / virtual text / underlines |
+| `<leader>ua` | Supermaven on/off |
+| `<leader>ub` | Bufferline |
 
 ### AI
 
-| Key          | Mode | Action                | Source                                                      |
-| ------------ | ---- | --------------------- | ----------------------------------------------------------- |
-| `<leader>ap` | n, v | CodeCompanion actions | `private_dot_config/nvim/lua/plugins/codecompanion.lua:100` |
-| `<leader>ac` | n, v | Toggle AI chat        | `private_dot_config/nvim/lua/plugins/codecompanion.lua:101` |
-
-### Obsidian
-
-| Key          | Action            | Source                                                |
-| ------------ | ----------------- | ----------------------------------------------------- |
-| `<leader>on` | New note          | `private_dot_config/nvim/lua/plugins/obsidian.lua:17` |
-| `<leader>os` | Search notes      | `private_dot_config/nvim/lua/plugins/obsidian.lua:18` |
-| `<leader>ot` | Open today's note | `private_dot_config/nvim/lua/plugins/obsidian.lua:19` |
+| Key | Mode | Action | Source |
+| --- | --- | --- | --- |
+| `<leader>ap` | n, v | CodeCompanion actions | `private_dot_config/nvim/lua/plugins/codecompanion.lua` |
+| `<leader>ac` | n, v | Toggle AI chat | `private_dot_config/nvim/lua/plugins/codecompanion.lua` |
+| `Tab` | i | Accept Supermaven suggestion | `private_dot_config/nvim/lua/plugins/supermaven.lua` |
+| `Ctrl+G` | i | Accept Supermaven suggestion word | `private_dot_config/nvim/lua/plugins/supermaven.lua` |
+| `Ctrl+]` | i | Clear Supermaven suggestion | `private_dot_config/nvim/lua/plugins/supermaven.lua` |
 
 ### Other
 
-| Key          | Action                               | Source                                               |
-| ------------ | ------------------------------------ | ---------------------------------------------------- |
-| `<leader>uu` | Toggle undotree                      | `private_dot_config/nvim/lua/plugins/undotree.lua:4` |
-| `Escape`     | Clear search + dismiss notifications | `private_dot_config/nvim/lua/plugins/noice.lua:34`   |
+| Key | Action | Source |
+| --- | --- | --- |
+| `<leader>m` | Toggle Markdown preview | `private_dot_config/nvim/lua/plugins/markdown-preview.lua` |
+| `<leader>on` / `<leader>os` / `<leader>ot` | Obsidian new note / search / today | `private_dot_config/nvim/lua/plugins/obsidian.lua` |
+| `<leader>uu` | Toggle undotree | `private_dot_config/nvim/lua/plugins/undotree.lua` |
+| `Escape` | Clear search highlight + dismiss notifications | `private_dot_config/nvim/lua/plugins/noice.lua` |
 
 ## Excluded Mappings
 
 The following use plugin-default keymaps and are intentionally excluded from this index:
 
-- **blink.cmp** -- default completion keymaps (preset: `default`). See `private_dot_config/nvim/lua/plugins/blink.lua:16`.
-- **origami** -- default fold keymaps (fold setup enabled). See `private_dot_config/nvim/lua/plugins/origami.lua:27`.
-- **supermaven** -- keymaps disabled (`disable_keymaps = true`); completions handled via blink.cmp source. See `private_dot_config/nvim/lua/plugins/supermaven.lua:11`.
-- **Oil buffer-local** -- standard oil navigation keymaps (help, select, parent, etc.).
-- **vim-tmux-navigator** -- standard Ctrl+H/J/K/L cross-pane navigation.
-
-## References
-
-- Zsh keybindings: `private_dot_config/zsh/keybindings.zsh:1`
-- Zsh shift-select: `private_dot_config/zsh/shift-select-enhancements.zsh:1`
-- FZF config: `private_dot_config/zsh/fzf.zsh:1`
-- tmux config: `private_dot_config/tmux/tmux.conf:1`
-- Ghostty config: `private_dot_config/ghostty/config:65`
-- NeoMutt bindings: `private_dot_config/neomutt/bindings.muttrc.tmpl:1`
-- Neovim keymaps: `private_dot_config/nvim/lua/config/keymaps.lua:1`
-- Karabiner rules: `private_dot_config/private_karabiner/src/rules/`
+- **blink.cmp** — default completion keymaps (`keymap = { preset = "default" }`). See `private_dot_config/nvim/lua/plugins/blink.lua`.
+- **origami** — default fold keymaps (`foldKeymaps.setup = true`). See `private_dot_config/nvim/lua/plugins/origami.lua`.
+- **vim-tmux-navigator** — standard `Ctrl+H/J/K/L` cross-pane navigation.
+- **fzf defaults** — stock fzf/fzf-tab behavior beyond the overrides listed above.
