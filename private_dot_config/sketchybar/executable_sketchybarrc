@@ -22,14 +22,14 @@ sketchybar --bar \
   position=top \
   sticky=on \
   topmost=window \
-  shadow=off \
+  shadow=on \
   color="$BAR_COLOR" \
   border_width=0 \
-  corner_radius=0 \
+  corner_radius=12 \
   padding_left=8 \
   padding_right=8 \
-  margin=0 \
-  y_offset=0 \
+  margin=8 \
+  y_offset=6 \
   notch_width=188 \
   display=all
 
@@ -54,7 +54,7 @@ sketchybar --add event aerospace_workspace_change \
   --add event system_stats \
   --add event gpu_stats
 
-workspace_ids=(a o e u j 1)
+workspace_ids=(a o e u j)
 for workspace_id in "${workspace_ids[@]}"; do
   sketchybar --add item "space.$workspace_id" left \
     --set "space.$workspace_id" \
@@ -79,8 +79,47 @@ sketchybar --add item clock right \
     script="$PLUGIN_DIR/clock.sh" \
   --subscribe clock system_woke
 
+sketchybar --add item display_mode right \
+  --set display_mode \
+    icon="󰍹" \
+    icon.color="$GREEN" \
+    label="----" \
+    label.font="$FONT:Bold:13.0" \
+    update_freq=10 \
+    script="$PLUGIN_DIR/display_mode.sh" \
+    click_script="$PLUGIN_DIR/display_mode.sh toggle" \
+  --subscribe display_mode system_woke
+
+sketchybar --add item input_source right \
+  --set input_source \
+    icon="󰌌" \
+    icon.color="$MAUVE" \
+    label="--" \
+    label.font="$FONT:Bold:13.0" \
+    update_freq=1 \
+    script="$PLUGIN_DIR/input_source.sh" \
+    click_script="$HOME/bin/switch-input-source; $PLUGIN_DIR/input_source.sh" \
+  --subscribe input_source system_woke
+
+sketchybar --add item stats right \
+  --set stats \
+    width=32 \
+    icon="󰍛" \
+    icon.color="$PEACH" \
+    icon.align=center \
+    icon.width=32 \
+    icon.padding_left=0 \
+    icon.padding_right=0 \
+    label.drawing=off \
+    padding_left=8 \
+    padding_right=8 \
+    click_script="$PLUGIN_DIR/stats_toggle.sh"
+
 sketchybar --add item network right \
   --set network \
+    drawing=off \
+    padding_left=5 \
+    padding_right=5 \
     icon="󰛳" \
     icon.color="$BLUE" \
     label="↓ --  ↑ --" \
@@ -89,6 +128,9 @@ sketchybar --add item network right \
 
 sketchybar --add item cpu right \
   --set cpu \
+    drawing=off \
+    padding_left=5 \
+    padding_right=5 \
     icon="󰍛" \
     icon.color="$PEACH" \
     label="CPU --" \
@@ -97,6 +139,9 @@ sketchybar --add item cpu right \
 
 sketchybar --add item gpu right \
   --set gpu \
+    drawing=off \
+    padding_left=5 \
+    padding_right=5 \
     icon="󰢮" \
     icon.color="$MAUVE" \
     label="GPU --" \
@@ -105,11 +150,79 @@ sketchybar --add item gpu right \
 
 sketchybar --add item ram right \
   --set ram \
+    drawing=off \
+    padding_left=5 \
+    padding_right=5 \
     icon="󰘚" \
     icon.color="$GREEN" \
     label="RAM --" \
     script="$PLUGIN_DIR/system_stats.sh" \
   --subscribe ram system_stats
+
+sketchybar --add item disk right \
+  --set disk \
+    drawing=off \
+    padding_left=5 \
+    padding_right=5 \
+    icon="󰋊" \
+    icon.color="$BLUE" \
+    label="DISK --" \
+    update_freq=60 \
+    script="$PLUGIN_DIR/system_stats.sh" \
+  --subscribe disk system_woke
+
+sketchybar --add item utility_gap right \
+  --set utility_gap \
+    width=6 \
+    icon.drawing=off \
+    label.drawing=off \
+    background.drawing=off
+
+sketchybar --add item vpn right \
+  --set vpn \
+    width=32 \
+    icon="󰦝" \
+    icon.color="$GREEN" \
+    icon.align=center \
+    icon.width=32 \
+    icon.padding_left=0 \
+    icon.padding_right=0 \
+    label.drawing=off \
+    padding_left=8 \
+    padding_right=8 \
+    click_script='sketchybar --set vpn popup.drawing=toggle' \
+    popup.horizontal=on \
+    popup.align=center \
+    popup.y_offset=6 \
+    popup.blur_radius=20 \
+    popup.background.color="$BAR_COLOR" \
+    popup.background.corner_radius=10 \
+    popup.background.border_width=1 \
+    popup.background.border_color="$ITEM_COLOR"
+
+sketchybar --add item vpn.tailscale popup.vpn \
+  --set vpn.tailscale \
+    background.image=app.io.tailscale.ipn.macos \
+    background.image.scale=0.65 \
+    background.image.padding_left=8 \
+    background.image.padding_right=8 \
+    click_script='open -a Tailscale'
+
+sketchybar --add item vpn.harmony popup.vpn \
+  --set vpn.harmony \
+    background.image=app.com.safervpn.osx.smb \
+    background.image.scale=0.65 \
+    background.image.padding_left=8 \
+    background.image.padding_right=8 \
+    click_script='open -a "Harmony SASE"'
+
+sketchybar --add item vpn.wireguard popup.vpn \
+  --set vpn.wireguard \
+    background.image=app.com.wireguard.macos \
+    background.image.scale=0.65 \
+    background.image.padding_left=8 \
+    background.image.padding_right=8 \
+    click_script='open -a WireGuard'
 
 killall stats_provider >/dev/null 2>&1 || true
 if command -v stats_provider >/dev/null 2>&1; then

@@ -8,6 +8,10 @@ case "$NAME" in
   ram)
     sketchybar --set "$NAME" label="RAM ${RAM_USAGE:---}"
     ;;
+  disk)
+    disk_usage="$(df -H /System/Volumes/Data | awk 'NR == 2 {print $5}')"
+    sketchybar --set "$NAME" label="DISK ${disk_usage:---}"
+    ;;
   network)
     network_interface="$(route -n get default 2>/dev/null | awk '/interface:/{print $2; exit}')"
     interface_key="$(printf '%s' "$network_interface" | tr '.-' '__')"

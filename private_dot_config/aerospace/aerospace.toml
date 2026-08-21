@@ -8,7 +8,7 @@ auto-reload-config = true
 after-startup-command = ['exec-and-forget borders']
 
 # Version 2 requires persistent workspaces to be declared explicitly.
-persistent-workspaces = ['1', 'a', 'o', 'e', 'u', 'j']
+persistent-workspaces = ['a', 'o', 'e', 'u', 'j']
 
 # Keep SketchyBar's workspace state synchronized with AeroSpace.
 exec-on-workspace-change = [
@@ -66,12 +66,12 @@ on-window-detected = [
 ]
 
 [gaps]
-inner.horizontal = 0
-inner.vertical = 0
+inner.horizontal = 10
+inner.vertical = 10
 outer.left = 10
-# outer.bottom = 10
-# Reserve the 40px SketchyBar plus a small visual gap.
-outer.top = 48
+outer.bottom = 10
+# Reserve the floating 40px SketchyBar plus the same 10px outer gap.
+outer.top = 56
 outer.right = 10
 
 
@@ -106,14 +106,12 @@ alt-o = 'workspace o'
 alt-e = 'workspace e'
 alt-u = 'workspace u'
 alt-j = 'workspace j'
-alt-1 = 'workspace 1'
 
 alt-shift-a = 'move-node-to-workspace a --focus-follows-window'
 alt-shift-o = 'move-node-to-workspace o --focus-follows-window'
 alt-shift-e = 'move-node-to-workspace e --focus-follows-window'
 alt-shift-u = 'move-node-to-workspace u --focus-follows-window'
 alt-shift-j = 'move-node-to-workspace j --focus-follows-window'
-alt-shift-1 = 'move-node-to-workspace 1 --focus-follows-window'
 
 alt-tab = 'workspace-back-and-forth'
 alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
