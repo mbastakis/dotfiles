@@ -1,6 +1,6 @@
 # Architecture
 
-How `chezmoi apply` turns this source tree into a working machine: script ordering, the encryption chain, profiles, and the gotchas that are not obvious from reading any single file. For the file-by-file inventory, read the source tree itself — `chezmoi managed` and `.chezmoiscripts/` are authoritative.
+How `chezmoi apply` turns this source tree into a working machine: script ordering, the encryption chain, unified configuration, and the gotchas that are not obvious from reading any single file. For the file-by-file inventory, read the source tree itself — `chezmoi managed` and `.chezmoiscripts/` are authoritative.
 
 ## Component Interaction Model
 
@@ -74,11 +74,11 @@ Some managed files are bootstrap seeds: chezmoi deploys them once, then defers t
 
 `textconv` rules in `.chezmoi.toml.tmpl` normalize these so `chezmoi diff` shows semantic changes instead of re-serialization noise. Note that `textconv` patterns match **absolute target paths**, not the relative paths shown in diff headers.
 
-## Profile System
+## Unified Configuration
 
-`.chezmoi.toml.tmpl` resolves the profile at `chezmoi init` time: `CHEZMOI_PROFILE` (`dt-work`, `work`, or `personal`) wins if set; otherwise `promptChoiceOnce` asks once and caches. The result is exactly two stored states — `profile` of `personal` or `dt-work`, plus the `dtWork` boolean — which drive conditional ignores and template rendering.
+Personal and work settings share one target state. There is no profile selector or profile-scoped rendering: work configuration is always deployed, while Git and Jujutsu identities remain scoped by remote URL or repository path where appropriate.
 
-On DT work machines, if Tailscale, Harmony, macOS, or an operator flips DNS or proxy state on the `AX88179A` Ethernet service, run the `reset_work_network` zsh function (defined in `private_dot_config/zsh/functions.zsh`) to disable Tailscale DNS and the HTTP/HTTPS proxies again. This is a manual repair command; the lifecycle no longer applies network policy itself.
+If Tailscale, Harmony, macOS, or an operator flips DNS or proxy state on the `AX88179A` Ethernet service, run the `reset_work_network` zsh function (defined in `private_dot_config/zsh/functions.zsh`) to disable Tailscale DNS and the HTTP/HTTPS proxies again. This is a manual repair command; the lifecycle no longer applies network policy itself.
 
 ## Ignored Artifacts
 
@@ -87,7 +87,7 @@ On DT work machines, if Tailscale, Harmony, macOS, or an operator flips DNS or p
 - Any repo-only directory (`docs/`, `ai-docs/`, `tests/`) must be listed or chezmoi deploys it into `~/`.
 - Obsidian: only volatile state (`workspace.json`, caches, auto-downloaded plugin code) is ignored — settings JSONs and plugin `data.json` files stay managed.
 - Karabiner: the build system (`build.sh`, `src/`) stays source-only; only the generated `karabiner.json` deploys.
-- Conditional blocks scope DT work configs by profile and the OpenCode backend/credential-bridge stack by hostname; the remote stack deploys only to the designated Mac.
+- Work configuration is always in the target state. The OpenCode backend and credential-bridge stack remain hostname-scoped and deploy only to the designated Mac.
 
 ## Operational Notes
 

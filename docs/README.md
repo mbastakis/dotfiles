@@ -7,7 +7,7 @@ Topic-based documentation for the chezmoi-managed dotfiles in this repository.
 ## Topics
 
 - [Shortcuts](shortcuts.md) — every custom keybinding across all layers (Karabiner → Ghostty → tmux → zsh → NeoMutt → Neovim), plus the input-flow model
-- [Architecture](architecture.md) — chezmoi apply lifecycle, fresh-machine bootstrap, encryption/secrets chain, profiles, operational gotchas
+- [Architecture](architecture.md) — chezmoi apply lifecycle, fresh-machine bootstrap, encryption/secrets chain, unified workstation configuration, operational gotchas
 - [Email](email.md) — NeoMutt Gmail stack runbook: setup, troubleshooting, tuning rationale
 - [Tool Notes](tool-notes.md) — non-obvious per-tool design notes (zsh startup order, Neovim LSP layering, `tw` vs go-task collision, mrconfig dynamic discovery)
 

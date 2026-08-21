@@ -84,7 +84,7 @@ key.txt.age (in repo, passphrase-encrypted)
 
 | Source (chezmoi)                                                | Target                               | Notes                                                                |
 | --------------------------------------------------------------- | ------------------------------------ | -------------------------------------------------------------------- |
-| `.chezmoi.toml.tmpl`                                            | `~/.config/chezmoi/chezmoi.toml`     | Config, profile, encryption                                          |
+| `.chezmoi.toml.tmpl`                                            | `~/.config/chezmoi/chezmoi.toml`     | Config and encryption                                                |
 | `key.txt.age`                                                   | _(ignored, source-only)_             | Passphrase-encrypted age key                                         |
 | `mise.toml`                                                     | _(ignored, source-only)_             | Repo-local Node, go-task, pre-commit, ShellCheck, and yamllint tools  |
 | `Taskfile.yml`                                                  | _(ignored, source-only)_             | go-task runner for dotfiles workflows                                |
@@ -111,7 +111,7 @@ Uses **target-state paths** (not source-state):
 ### Operational Gotchas
 
 - `.chezmoiignore` is rendered as a template for many commands (`add`, `status`, `apply`); missing data keys in conditions can break unrelated commands.
-- When adding new data keys in `.chezmoi.toml.tmpl`, keep templates compatible with existing keys (for example `.profile`) until `chezmoi init` has been run everywhere.
+- When removing data keys from `.chezmoi.toml.tmpl`, remove all template and ignore consumers in the same change; existing rendered configs may retain unused keys until `chezmoi init` regenerates them.
 - For non-interactive checks, prefer `chezmoi apply --dry-run --force`; without `--force`, changed files may trigger TTY prompts and fail in headless shells.
 - In this repo, `chezmoi diff` is most reliable with absolute target paths (for example `/Users/mbastakis/.config/git/config`) when diffing a single file.
 - `Documents/notes/.obsidian/workspace.json` is volatile UI state (recent files/workspace layout) and should stay ignored to avoid noisy churn and accidental overwrite.
@@ -177,13 +177,9 @@ done
 | Function                            | Purpose                                |
 | ----------------------------------- | -------------------------------------- |
 | `{{ .chezmoi.sourceDir }}`          | Chezmoi source directory path          |
-| `{{ .profile }}`                    | `personal` or `dt-work`                |
-| `{{ .dtWork }}`                     | Toggle DT work-only config             |
 | `{{ .email }}`, `{{ .name }}`       | User data from config                  |
 | `{{ bitwardenSecrets "uuid" }}`     | Fetch secret from BWS                  |
 | `{{ include "file" \| sha256sum }}` | File content hash for change detection |
-| `{{ env "VAR" }}`                   | Read environment variable              |
-| `{{ promptChoiceOnce ... }}`        | Interactive prompt (cached)            |
 | `{{ value \| quote }}`              | Quote for TOML output                  |
 | `{{ value \| trim }}`               | Trim whitespace from secrets           |
 

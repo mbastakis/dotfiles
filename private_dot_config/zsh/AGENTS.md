@@ -71,7 +71,7 @@ bindkey '^X' widget_name
 | Tool integrations | `tools.zsh`       | `eval "$(tool init zsh)"`      |
 | Completions       | `completions.zsh` | Tool-provided or cache-generated definitions |
 | Keybindings       | `keybindings.zsh` | ZLE widgets + bindkey          |
-| Environment       | `exports.zsh`     | API keys, interactive variables, profile PATH |
+| Environment       | `exports.zsh`     | API keys, interactive variables, PATH additions |
 
 ## Zsh Shell Types and File Loading
 
