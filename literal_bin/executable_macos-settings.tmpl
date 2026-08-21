@@ -6,17 +6,6 @@ echo "Configuring macOS settings..."
 # Ghostty
 defaults write com.mitchellh.ghostty NSUserKeyEquivalents -dict-add "Hide Ghostty" "@~^h"
 
-# Stats (menubar system monitor)
-defaults write eu.exelban.Stats "CPU_state" -bool true
-defaults write eu.exelban.Stats "GPU_state" -bool true
-defaults write eu.exelban.Stats "RAM_state" -bool true
-defaults write eu.exelban.Stats "Network_state" -bool true
-defaults write eu.exelban.Stats "Clock_state" -bool true
-defaults write eu.exelban.Stats "Disk_state" -bool false
-defaults write eu.exelban.Stats "Battery_state" -bool false
-defaults write eu.exelban.Stats telemetry -int 0
-defaults write eu.exelban.Stats LaunchAtLoginNext -int 1
-
 # KeyClu (shortcut cheatsheet overlay)
 defaults write com.0804Team.KeyClu launchAtLogin -bool true
 defaults write com.0804Team.KeyClu hideMenuIcon -bool true
@@ -52,7 +41,10 @@ defaults write com.apple.screencapture type -string "png"
 # Screen Saver
 defaults write com.apple.screensaver askForPasswordDelay -int 10
 
-# Global Domain
+# Native menu bar: always auto-hide on the desktop and in full screen.
+defaults write NSGlobalDomain _HIHideMenuBar -bool true
+defaults write NSGlobalDomain AppleMenuBarVisibleInFullscreen -bool false
+defaults write com.apple.controlcenter AutoHideMenuBarOption -int 0
 defaults write NSGlobalDomain AppleICUForce24HourTime -bool true
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 defaults write NSGlobalDomain AppleShowAllFiles -bool true

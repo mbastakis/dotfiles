@@ -75,6 +75,12 @@ Two unrelated tools both ship a binary named `task`: go-task (the repo's Taskfil
 
 Third-party package trust is declared in the Brewfile itself (`private_dot_config/brew/Brewfile`) with narrow formula- and cask-level `trusted:` entries; `brew bundle` persists them to Homebrew's trust store before installing. `aws-login` is installed from the private tap `mbastakis/tap` (tapped over SSH from `git@github.com:mbastakis/homebrew-tap.git`) rather than compiled from dotfiles source.
 
+## SketchyBar
+
+SketchyBar replaces the native menu bar rather than layering another set of status items beside it: `literal_bin/executable_macos-settings.tmpl` keeps the macOS menu bar hidden, and the retired Stats and Hidden Bar packages are absent from `private_dot_config/brew/Brewfile`. Homebrew owns SketchyBar's login service; AeroSpace only publishes workspace-change events through `private_dot_config/aerospace/aerospace.toml`, so neither process is responsible for restarting the other.
+
+The bar uses checked-in shell plugins under `private_dot_config/sketchybar/`. `sketchybar-system-stats` supplies CPU, RAM, and network updates as one event stream, while `macmon` supplies Apple Silicon GPU utilization through a small local event-forwarding process. This keeps all visual and integration logic in chezmoi while third-party binaries remain package-managed.
+
 ## Myrepos (mr)
 
 Workspace `.mrconfig` files live under `dev/` in the chezmoi source and deploy to the matching `~/dev/...` paths. Each repository keeps a container directory, while every checkout basename includes its repository so zoxide searches remain unambiguous: the primary checkout is `<repo>/<repo>_main` and worktrunk places linked worktrees beside it as `<repo>/<repo>_<branch>`. Branches whose names require sanitization receive Worktrunk's short `sanitize_hash` suffix, keeping the resulting paths unique. The home workspace therefore keeps this source at `~/dev/personal/workspaces/home-workspace/dotfiles/dotfiles_main`, matching its own `[dotfiles/dotfiles_main]` section. The shared rule is managed at `private_dot_config/worktrunk/config.toml`.

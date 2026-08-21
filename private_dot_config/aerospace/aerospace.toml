@@ -10,6 +10,13 @@ after-startup-command = ['exec-and-forget borders']
 # Version 2 requires persistent workspaces to be declared explicitly.
 persistent-workspaces = ['1', 'a', 'o', 'e', 'u', 'j']
 
+# Keep SketchyBar's workspace state synchronized with AeroSpace.
+exec-on-workspace-change = [
+  '/bin/bash',
+  '-c',
+  'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
+]
+
 enable-normalization-flatten-containers = true
 enable-normalization-opposite-orientation-for-nested-containers = true
 default-root-container-layout = 'tiles'
@@ -58,12 +65,13 @@ on-window-detected = [
 ]
 
 [gaps]
-inner.horizontal = 5
-inner.vertical = 5
-# outer.left = 10
+inner.horizontal = 0
+inner.vertical = 0
+outer.left = 10
 # outer.bottom = 10
-# outer.top = 10
-# outer.right = 10
+# Reserve the 40px SketchyBar plus a small visual gap.
+outer.top = 48
+outer.right = 10
 
 
 [mode.main.binding]

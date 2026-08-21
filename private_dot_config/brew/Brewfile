@@ -1,7 +1,8 @@
 tap "anomalyco/tap"
 tap "charmbracelet/tap"
 tap "dlvhdr/formulae"
-tap "felixkratz/formulae"
+tap "felixkratz/formulae", trusted: { formulae: ["borders", "sketchybar"] }
+tap "joncrangle/tap", trusted: { formulae: ["sketchybar-system-stats"] }
 tap "libsql/sqld", trusted: { formulae: ["sqld"] }
 tap "mach-kernel/pkgs"
 tap "mbastakis/tap", "git@github.com:mbastakis/homebrew-tap.git"
@@ -181,6 +182,12 @@ brew "ripgrep"
 brew "rust"
 # Rich git commit graph in your terminal
 brew "serie"
+# Custom macOS status bar
+brew "felixkratz/formulae/sketchybar", restart_service: :changed, trusted: true
+# System metrics event provider for SketchyBar
+brew "joncrangle/tap/sketchybar-system-stats", trusted: true
+# Sudoless Apple Silicon performance monitor used for GPU metrics
+brew "macmon"
 # Smart session manager for the terminal
 brew "sesh"
 # Git worktree lifecycle, hooks, and interactive picker
@@ -286,8 +293,6 @@ cask "ghostty"
 cask "gimp"
 # Speech to text application
 cask "handy"
-# Utility to hide menu bar items
-cask "hiddenbar"
 # Keyboard customiser
 cask "karabiner-elements"
 # Find shortcuts for any installed application
@@ -304,8 +309,6 @@ cask "slack"
 cask "soundsource"
 # Music streaming service
 cask "spotify"
-# System monitor for the menu bar
-cask "stats"
 # Video game digital distribution service
 cask "steam"
 # Customise mouse buttons, wheels and cursor speed
@@ -316,9 +319,7 @@ cask "vivaldi"
 cask "whatsapp"
 mas "Amphetamine", id: 937984704
 mas "Bitwarden", id: 1352778147
-mas "Hidden Bar", id: 1452453066
 mas "Mark And Scribble", id: 1635403801
-mas "Say No to Notch", id: 1639306886
 # Mesh VPN used by the OpenCode remote-access stack
 mas "Tailscale", id: 1475387142
 mas "WireGuard", id: 1451685025
