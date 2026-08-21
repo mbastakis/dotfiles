@@ -1,71 +1,96 @@
 #!/bin/bash
 set -euo pipefail
 
-# opencode-server — remote-access stack control for the OpenCode v2 service.
-#
-# The OpenCode backend itself is the opencode2 background service: it manages
-# its own lifecycle, hot-reloads config and skills, and is auto-started by any
-# local client. This script only wires up what v2 does not own: the oauth2-proxy
-# LaunchAgent and the Tailscale Serve route for phone/browser access.
+# opencode-server - remote-access control for the OpenCode v2 service.
+# Atlas owns browser authentication; Tailscale Serve marks authorized Atlas
+# traffic with an app capability before forwarding it to the loopback bridge.
 
 export PATH="${OPENCODE_SERVER_PATH:-$HOME/.opencode/bin:$HOME/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin}"
 
 DOMAIN="gui/$(id -u)"
-PROXY_LABEL="com.mbastakis.opencode-oauth2-proxy"
+BRIDGE_LABEL="com.mbastakis.opencode-auth-bridge"
 SERVER_URL="{{ .opencode.remote.server.scheme }}://{{ .opencode.remote.server.host }}:{{ .opencode.remote.server.port }}"
-PROXY_URL="{{ .opencode.remote.oauth2_proxy.scheme }}://{{ .opencode.remote.oauth2_proxy.host }}:{{ .opencode.remote.oauth2_proxy.port }}"
+BRIDGE_URL="{{ .opencode.remote.bridge.scheme }}://{{ .opencode.remote.bridge.host }}:{{ .opencode.remote.bridge.port }}"
+INGRESS_CAPABILITY="{{ .opencode.remote.bridge.ingress_capability }}"
+LEGACY_SOCKET_TARGET="unix:$HOME/.local/state/opencode-remote/auth-bridge.sock"
+LEGACY_PROXY_URL="http://127.0.0.1:4180"
 
 usage() {
     cat <<EOF
 Usage: opencode-server COMMAND [COMPONENT]
 
 Commands:
-  status            Show service, proxy, and Tailscale Serve state
-  start             Ensure service, proxy, and Serve route are up
+  status            Show service, bridge, and Tailscale Serve state
+  start             Ensure service, bridge, and Serve route are up
   stop              Stop the stack and withdraw the Serve route
-  restart [server|proxy|all]
-  logs              Follow proxy logs (service logs: ~/.local/share/opencode/log/)
+  restart [server|bridge|all]
+  logs              Follow bridge logs (service logs: ~/.local/share/opencode/log/)
 
-The OpenCode backend is the opencode2 background service; use
-\`opencode2 service\` directly for service-only operations.
+Atlas Traefik and Authentik own browser authentication. The OpenCode backend is
+the opencode2 background service; use \`opencode2 service\` for service-only
+operations.
 EOF
 }
 
-proxy_is_healthy() {
-    curl --fail --silent --max-time 2 "$PROXY_URL/ping" >/dev/null 2>&1
+bridge_is_healthy() {
+    curl --fail --silent --max-time 2 \
+        "$BRIDGE_URL/.well-known/opencode-bridge-health" >/dev/null 2>&1
 }
 
-proxy_start() {
-    if proxy_is_healthy; then
+bridge_start() {
+    if bridge_is_healthy; then
         return 0
     fi
-    launchctl bootout "$DOMAIN/$PROXY_LABEL" 2>/dev/null || true
-    launchctl bootstrap "$DOMAIN" "$HOME/Library/LaunchAgents/${PROXY_LABEL}.plist"
+    launchctl bootout "$DOMAIN/$BRIDGE_LABEL" 2>/dev/null || true
+    launchctl bootstrap "$DOMAIN" "$HOME/Library/LaunchAgents/${BRIDGE_LABEL}.plist"
     for _ in {1..20}; do
-        proxy_is_healthy && return 0
+        bridge_is_healthy && return 0
         sleep 0.5
     done
-    echo "Error: oauth2-proxy did not become healthy at $PROXY_URL" >&2
+    echo "Error: OpenCode auth bridge did not become healthy at $BRIDGE_URL" >&2
     return 1
 }
 
-proxy_stop() {
-    launchctl bootout "$DOMAIN/$PROXY_LABEL" 2>/dev/null || true
+bridge_stop() {
+    launchctl bootout "$DOMAIN/$BRIDGE_LABEL" 2>/dev/null || true
 }
 
-# Tailscale Serve: converge to "route / -> oauth2-proxy", but never touch
-# routes this stack does not own.
+# Tailscale Serve strips client-supplied capability headers and injects the
+# Atlas-only capability granted by tailnet policy.
 serve_is_absent() {
     jq -e '((.TCP // {}) == {}) and ((.Web // {}) == {}) and ((.AllowFunnel // {}) == {})' >/dev/null
 }
 
-serve_is_owned() {
-    jq -e --arg proxy "$PROXY_URL" '
+serve_targets() {
+    local target="$1"
+    jq -e --arg target "$target" --arg capability "$INGRESS_CAPABILITY" '
         (.TCP == {"443": {"HTTPS": true}})
         and ((.Web // {}) | length == 1)
-        and ([.Web[] | .Handlers] == [{"/": {"Proxy": $proxy}}])
+        and ([.Web[] | .Handlers] == [{"/": {"Proxy": $target, "AcceptAppCaps": [$capability]}}])
         and ((.AllowFunnel // {}) == {})
     ' >/dev/null
+}
+
+serve_targets_without_capability() {
+    local target="$1"
+    jq -e --arg target "$target" '
+        (.TCP == {"443": {"HTTPS": true}})
+        and ((.Web // {}) | length == 1)
+        and ([.Web[] | .Handlers] == [{"/": {"Proxy": $target}}])
+        and ((.AllowFunnel // {}) == {})
+    ' >/dev/null
+}
+
+serve_is_owned() {
+    serve_targets "$BRIDGE_URL"
+}
+
+serve_is_legacy() {
+    local config
+    config="$(cat)"
+    serve_targets_without_capability "$BRIDGE_URL" <<< "$config" ||
+        serve_targets_without_capability "$LEGACY_SOCKET_TARGET" <<< "$config" ||
+        serve_targets_without_capability "$LEGACY_PROXY_URL" <<< "$config"
 }
 
 serve_converge() {
@@ -74,12 +99,14 @@ serve_converge() {
     if serve_is_owned <<< "$config"; then
         return 0
     fi
-    if ! serve_is_absent <<< "$config"; then
+    if serve_is_legacy <<< "$config"; then
+        tailscale serve reset >/dev/null
+    elif ! serve_is_absent <<< "$config"; then
         echo "Error: refusing to replace Tailscale Serve routes not owned by OpenCode" >&2
         tailscale serve status >&2 || true
         return 1
     fi
-    tailscale serve --bg --yes "$PROXY_URL" >/dev/null
+    tailscale serve --bg --yes --accept-app-caps "$INGRESS_CAPABILITY" "$BRIDGE_URL" >/dev/null
 }
 
 serve_withdraw() {
@@ -88,7 +115,7 @@ serve_withdraw() {
     if serve_is_absent <<< "$config"; then
         return 0
     fi
-    if ! serve_is_owned <<< "$config"; then
+    if ! serve_is_owned <<< "$config" && ! serve_is_legacy <<< "$config"; then
         echo "Error: refusing to reset Tailscale Serve routes not owned by OpenCode" >&2
         tailscale serve status >&2 || true
         return 1
@@ -109,37 +136,41 @@ serve_status() {
 }
 
 print_status() {
-    printf 'OpenCode service:  %s (expected %s)\n' "$(opencode2 service status 2>/dev/null || echo unknown)" "$SERVER_URL"
-    printf 'oauth2-proxy:      %s\n' "$(proxy_is_healthy && echo healthy || echo down)"
-    printf 'Tailscale Serve:   %s -> %s\n' "$(serve_status)" "$PROXY_URL"
+    printf 'OpenCode service: %s (expected %s)\n' "$(opencode2 service status 2>/dev/null || echo unknown)" "$SERVER_URL"
+    printf 'auth bridge:      %s\n' "$(bridge_is_healthy && echo healthy || echo down)"
+    printf 'Tailscale Serve:  %s -> %s\n' "$(serve_status)" "$BRIDGE_URL"
 }
 
 case "${1:-status}" in
     status) print_status ;;
     start)
         opencode2 service start
-        proxy_start
+        bridge_start
         serve_converge
         ;;
     stop)
         serve_withdraw
-        proxy_stop
+        bridge_stop
         opencode2 service stop
         ;;
     restart)
         case "${2:-all}" in
             server) opencode2 service restart ;;
-            proxy) proxy_stop; proxy_start ;;
+            bridge)
+                bridge_stop
+                bridge_start
+                serve_converge
+                ;;
             all)
                 opencode2 service restart
-                proxy_stop
-                proxy_start
+                bridge_stop
+                bridge_start
                 serve_converge
                 ;;
             *) usage >&2; exit 2 ;;
         esac
         ;;
-    logs) /usr/bin/tail -n 50 -F "$HOME/Library/Logs/opencode-oauth2-proxy.log" "$HOME/Library/Logs/opencode-oauth2-proxy.error.log" ;;
+    logs) /usr/bin/tail -n 50 -F "$HOME/Library/Logs/opencode-auth-bridge.log" "$HOME/Library/Logs/opencode-auth-bridge.error.log" ;;
     help|--help|-h) usage ;;
     *) usage >&2; exit 2 ;;
 esac

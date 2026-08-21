@@ -27,7 +27,7 @@ encryption = "age"
     name = "Michail Bastakis"
 
 [bitwardenSecrets]
-    command = "bws"
+    command = {{ printf "%s/scripts/bws-auth" .chezmoi.sourceDir | quote }}
 
 [diff]
     pager = "smart-diffnav"

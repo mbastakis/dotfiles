@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.mbastakis.opencode-auth-bridge</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/env</string>
+        <string>node</string>
+        <string>{{ printf "%s/.local/libexec/opencode-server/auth-bridge" .chezmoi.homeDir }}</string>
+        <string>--listen-host</string>
+        <string>{{ .opencode.remote.bridge.host }}</string>
+        <string>--listen-port</string>
+        <string>{{ .opencode.remote.bridge.port }}</string>
+        <string>--upstream-host</string>
+        <string>{{ .opencode.remote.server.host }}</string>
+        <string>--upstream-port</string>
+        <string>{{ .opencode.remote.server.port }}</string>
+        <string>--allowed-host</string>
+        <string>{{ get (urlParse .opencode.remote.external_url) "host" }}</string>
+        <string>--allowed-origin</string>
+        <string>{{ .opencode.remote.external_url }}</string>
+        <string>--ingress-capability</string>
+        <string>{{ .opencode.remote.bridge.ingress_capability }}</string>
+        <string>--auth-check-url</string>
+        <string>{{ .opencode.remote.auth_check_url }}</string>
+    </array>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>{{ printf "%s/.opencode/bin:%s/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin" .chezmoi.homeDir .chezmoi.homeDir }}</string>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>ThrottleInterval</key>
+    <integer>10</integer>
+
+    <key>StandardOutPath</key>
+    <string>{{ printf "%s/Library/Logs/opencode-auth-bridge.log" .chezmoi.homeDir }}</string>
+
+    <key>StandardErrorPath</key>
+    <string>{{ printf "%s/Library/Logs/opencode-auth-bridge.error.log" .chezmoi.homeDir }}</string>
+
+    <key>LimitLoadToSessionType</key>
+    <array>
+        <string>Aqua</string>
+    </array>
+</dict>
+</plist>

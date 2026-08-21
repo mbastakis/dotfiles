@@ -11,12 +11,8 @@ setopt SHARE_HISTORY     # Share history between sessions
 setopt HIST_IGNORE_DUPS  # Don't record duplicates
 setopt HIST_IGNORE_SPACE # Don't record commands starting with space
 
-# History configuration
-# HISTFILE, HISTSIZE, SAVEHIST are set in .zshenv
-# Atuin manages interactive history search (see fzf.zsh)
-export HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
-export HISTSIZE=10000
-export SAVEHIST=10000
+# History location and limits are set in .zshenv.
+# Atuin manages interactive history search (see fzf.zsh).
 
 # ----------------------------------------------------
 # Tool initialization (order matters!)

@@ -13,7 +13,7 @@
 
 set -euo pipefail
 
-for prefix in /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew; do
+for prefix in /opt/homebrew /usr/local; do
     tui="$prefix/opt/taskwarrior-tui/bin/taskwarrior-tui"
     task_dir="$prefix/opt/task/bin"
     if [[ -x "$tui" && -d "$task_dir" ]]; then

@@ -26,7 +26,7 @@ Keybindings are documented in [shortcuts.md](shortcuts.md#neomutt) — not here.
 
 1. Enable 2-Step Verification for each Gmail account and create one app password per account (not blocked by Advanced Protection or org policy).
 2. Store each app password as a Bitwarden secret; record its UUID in `.chezmoidata.yaml` under `mail.accounts[].secrets.app_password_uuid`.
-3. Ensure BWS auth works: `bws` CLI is installed by `.chezmoiscripts/run_onchange_before_01-install-bws.sh.tmpl`, and `BWS_ACCESS_TOKEN` is exported from `~/.local/share/bws/token` (see `dot_zshenv.tmpl`).
+3. Ensure BWS auth works: `bws` CLI is installed by `.chezmoiscripts/run_onchange_before_01-install-bws.sh`, and chezmoi's `scripts/bws-auth` wrapper reads `~/.local/share/bws/token` only for each `bws` invocation.
 4. In Gmail web settings, keep IMAP enabled and the required folders visible (`INBOX`, `[Gmail]/Sent Mail`, `[Gmail]/Drafts`, `[Gmail]/Spam`, `[Gmail]/Trash`).
 5. Apply and validate:
 
@@ -90,7 +90,7 @@ Each option below exists in `private_dot_config/neomutt/base.muttrc` (or `neomut
 |---|---|
 | Missing tool/config/path errors | `chezmoi apply --dry-run --force`, then `neomutt -n -F "$HOME/.config/neomutt/neomuttrc" -D` |
 | IMAP auth failures | Recreate the Gmail app password, update the Bitwarden secret, then **re-run `chezmoi apply`** — passwords are baked into rendered configs at apply time |
-| `bitwardenSecrets` errors during apply | Verify `bws` is on PATH and `BWS_ACCESS_TOKEN` is set (sourced from `~/.local/share/bws/token`) |
+| `bitwardenSecrets` errors during apply | Verify `bws` is on PATH and `~/.local/share/bws/token` is readable by `scripts/bws-auth` |
 | SMTP failures | `msmtp --serverinfo --account=<id>` |
 | Unified inbox empty/stale | Run `mail-sync`; verify `notmuch config list` and `notmuch new` |
 | `notmuch new` prints `.uidvalidity` notices | Safe Maildir metadata; `new.ignore=.uidvalidity` in the notmuch config suppresses it |

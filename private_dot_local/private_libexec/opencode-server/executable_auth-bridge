@@ -1,0 +1,191 @@
+#!/usr/bin/env node
+
+const fs = require("node:fs")
+const http = require("node:http")
+const https = require("node:https")
+const net = require("node:net")
+const os = require("node:os")
+const path = require("node:path")
+
+function option(name) {
+  const index = process.argv.indexOf(name)
+  if (index === -1 || !process.argv[index + 1]) {
+    throw new Error(`Missing required option: ${name}`)
+  }
+  return process.argv[index + 1]
+}
+
+const listenHost = option("--listen-host")
+const listenPort = Number(option("--listen-port"))
+const upstreamHost = option("--upstream-host")
+const upstreamPort = Number(option("--upstream-port"))
+const allowedHost = option("--allowed-host")
+const allowedOrigin = option("--allowed-origin")
+const ingressCapability = option("--ingress-capability")
+const authCheckUrl = new URL(option("--auth-check-url"))
+const serviceConfig = path.join(os.homedir(), ".config/opencode/service.json")
+
+function authorization() {
+  const config = JSON.parse(fs.readFileSync(serviceConfig, "utf8"))
+  const username = config.username || "opencode"
+  if (!config.password) {
+    throw new Error(`OpenCode service password is missing from ${serviceConfig}`)
+  }
+  return `Basic ${Buffer.from(`${username}:${config.password}`).toString("base64")}`
+}
+
+function hasIngressCapability(request) {
+  try {
+    const capabilities = JSON.parse(request.headers["tailscale-app-capabilities"] || "{}")
+    return Array.isArray(capabilities[ingressCapability]) && capabilities[ingressCapability].length > 0
+  } catch {
+    return false
+  }
+}
+
+function requestHasValidIngress(request) {
+  const host = request.headers.host?.split(":", 1)[0]
+  const origin = request.headers.origin
+  return hasIngressCapability(request) && host === allowedHost && (!origin || origin === allowedOrigin)
+}
+
+function authenticate(request) {
+  return new Promise((resolve, reject) => {
+    const client = authCheckUrl.protocol === "https:" ? https : http
+    const check = client.request(
+      authCheckUrl,
+      {
+        method: "GET",
+        headers: {
+          cookie: request.headers.cookie || "",
+          "x-forwarded-host": allowedHost,
+          "x-forwarded-method": request.method,
+          "x-forwarded-proto": "https",
+          "x-forwarded-uri": request.url,
+        },
+      },
+      (response) => {
+        response.resume()
+        response.on("end", () => resolve(response.statusCode === 200))
+      },
+    )
+    check.on("error", reject)
+    check.end()
+  })
+}
+
+function upstreamHeaders(headers) {
+  const sanitized = { ...headers }
+  delete sanitized["tailscale-app-capabilities"]
+  for (const name of Object.keys(sanitized)) {
+    if (name.startsWith("x-authentik-")) delete sanitized[name]
+  }
+  return {
+    ...sanitized,
+    authorization: authorization(),
+    host: `${upstreamHost}:${upstreamPort}`,
+  }
+}
+
+const server = http.createServer(async (request, response) => {
+  if (request.url === "/.well-known/opencode-bridge-health") {
+    response.writeHead(204)
+    response.end()
+    return
+  }
+  if (!requestHasValidIngress(request)) {
+    response.writeHead(403)
+    response.end("Forbidden\n")
+    return
+  }
+
+  try {
+    if (!(await authenticate(request))) {
+      response.writeHead(401)
+      response.end("Unauthorized\n")
+      return
+    }
+  } catch (error) {
+    response.writeHead(503)
+    response.end("Authentication service unavailable\n")
+    console.error(error.message)
+    return
+  }
+
+  let headers
+  try {
+    headers = upstreamHeaders(request.headers)
+  } catch (error) {
+    response.writeHead(503)
+    response.end("OpenCode service credential unavailable\n")
+    console.error(error.message)
+    return
+  }
+
+  const upstream = http.request(
+    {
+      host: upstreamHost,
+      port: upstreamPort,
+      method: request.method,
+      path: request.url,
+      headers,
+    },
+    (upstreamResponse) => {
+      response.writeHead(upstreamResponse.statusCode, upstreamResponse.headers)
+      upstreamResponse.pipe(response)
+    },
+  )
+
+  upstream.on("error", (error) => {
+    if (!response.headersSent) response.writeHead(502)
+    response.end("OpenCode backend unavailable\n")
+    console.error(error.message)
+  })
+  request.pipe(upstream)
+})
+
+server.on("upgrade", async (request, socket, head) => {
+  if (!requestHasValidIngress(request)) {
+    socket.end("HTTP/1.1 403 Forbidden\r\nConnection: close\r\n\r\n")
+    return
+  }
+
+  try {
+    if (!(await authenticate(request))) {
+      socket.end("HTTP/1.1 401 Unauthorized\r\nConnection: close\r\n\r\n")
+      return
+    }
+  } catch (error) {
+    socket.end("HTTP/1.1 503 Service Unavailable\r\nConnection: close\r\n\r\n")
+    console.error(error.message)
+    return
+  }
+
+  let headers
+  try {
+    headers = upstreamHeaders(request.headers)
+  } catch (error) {
+    socket.end("HTTP/1.1 503 Service Unavailable\r\nConnection: close\r\n\r\n")
+    console.error(error.message)
+    return
+  }
+
+  const upstream = net.connect(upstreamPort, upstreamHost, () => {
+    const lines = [`${request.method} ${request.url} HTTP/${request.httpVersion}`]
+    for (const [name, value] of Object.entries(headers)) {
+      if (Array.isArray(value)) {
+        for (const item of value) lines.push(`${name}: ${item}`)
+      } else if (value !== undefined) {
+        lines.push(`${name}: ${value}`)
+      }
+    }
+    upstream.write(`${lines.join("\r\n")}\r\n\r\n`)
+    if (head.length) upstream.write(head)
+    socket.pipe(upstream).pipe(socket)
+  })
+
+  upstream.on("error", () => socket.destroy())
+  socket.on("error", () => upstream.destroy())
+})
+
+server.listen(listenPort, listenHost)

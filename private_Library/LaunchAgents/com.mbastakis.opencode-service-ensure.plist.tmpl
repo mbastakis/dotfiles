@@ -3,12 +3,11 @@
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.mbastakis.opencode-server</string>
+    <string>com.mbastakis.opencode-service-ensure</string>
 
-    <!-- The opencode2 background service manages its own process; this job
-         only ensures it is running at login and re-checks periodically.
-         `service start` is idempotent: it exits immediately when a healthy
-         service already exists. -->
+    <!-- OpenCode owns the background service process. This short-lived job
+         makes the unattended remote backend available after login and repairs
+         an unexpectedly stopped service. `service start` is idempotent. -->
     <key>ProgramArguments</key>
     <array>
         <string>{{ printf "%s/.opencode/bin/opencode2" .chezmoi.homeDir }}</string>
@@ -26,10 +25,10 @@
     <integer>300</integer>
 
     <key>StandardOutPath</key>
-    <string>{{ printf "%s/Library/Logs/opencode-server.log" .chezmoi.homeDir }}</string>
+    <string>{{ printf "%s/Library/Logs/opencode-service-ensure.log" .chezmoi.homeDir }}</string>
 
     <key>StandardErrorPath</key>
-    <string>{{ printf "%s/Library/Logs/opencode-server.error.log" .chezmoi.homeDir }}</string>
+    <string>{{ printf "%s/Library/Logs/opencode-service-ensure.error.log" .chezmoi.homeDir }}</string>
 
     <key>LimitLoadToSessionType</key>
     <array>

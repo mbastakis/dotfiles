@@ -1,16 +1,15 @@
 #!/bin/bash
 # Reconcile the OpenCode v2 remote-access stack on the designated Mac.
 #
-# The opencode2 background service hot-reloads config, agents, commands, and
-# skills on its own; this script only handles what lives outside the service:
-# provider credentials in the service environment, the two LaunchAgents, and
-# stack convergence via opencode-server.
-{{- if or (ne .chezmoi.os "darwin") (ne .chezmoi.hostname .opencode.remote.host) }}
+# Atlas owns browser authentication. This script pushes provider credentials to
+# the service, reloads the service and credential-bridge LaunchAgents, removes
+# retired oauth2-proxy artifacts, and converges Tailscale Serve to the bridge.
+{{- if ne .chezmoi.hostname .opencode.remote.host }}
 exit 0
 {{- else }}
-# hash-launch-agents: {{ includeTemplate "private_Library/LaunchAgents/com.mbastakis.opencode-server.plist.tmpl" . | sha256sum }} {{ includeTemplate "private_Library/LaunchAgents/com.mbastakis.opencode-oauth2-proxy.plist.tmpl" . | sha256sum }}
+# hash-launch-agents: {{ includeTemplate "private_Library/LaunchAgents/com.mbastakis.opencode-service-ensure.plist.tmpl" . | sha256sum }} {{ includeTemplate "private_Library/LaunchAgents/com.mbastakis.opencode-auth-bridge.plist.tmpl" . | sha256sum }}
 # hash-controller: {{ includeTemplate "literal_bin/executable_opencode-server.tmpl" . | sha256sum }}
-# hash-proxy-config: {{ includeTemplate "private_dot_config/oauth2-proxy/private_oauth2-proxy.cfg.tmpl" . | sha256sum }}
+# hash-bridge-runtime: {{ include "private_dot_local/private_libexec/opencode-server/executable_auth-bridge" | sha256sum }}
 # hash-provider-environment: {{ includeTemplate "private_dot_config/zsh/exports.zsh.tmpl" . | sha256sum }}
 
 set -euo pipefail
@@ -29,12 +28,18 @@ if [[ -f "$HOME/.config/zsh/exports.zsh" ]]; then
     '
 fi
 
-# Reload the ensure-service LaunchAgent; the proxy is reloaded by
-# opencode-server start only when it is unhealthy, and restarted explicitly
-# when its config changed (this script re-ran, so replace it).
-launchctl bootout "$domain/com.mbastakis.opencode-server" 2>/dev/null || true
-launchctl bootstrap "$domain" "$HOME/Library/LaunchAgents/com.mbastakis.opencode-server.plist"
+# Remove the retired Mac-local OIDC layer before starting the bridge.
 launchctl bootout "$domain/com.mbastakis.opencode-oauth2-proxy" 2>/dev/null || true
+rm -f \
+    "$HOME/Library/LaunchAgents/com.mbastakis.opencode-oauth2-proxy.plist" \
+    "$HOME/.local/libexec/opencode-server/oauth2-proxy"
+rm -rf "$HOME/.config/oauth2-proxy" "$HOME/.local/state/opencode-remote"
 
-exec "$HOME/bin/opencode-server" start
+# Migrate the old misleading ensure-job name, then load the focused replacement.
+launchctl bootout "$domain/com.mbastakis.opencode-server" 2>/dev/null || true
+rm -f "$HOME/Library/LaunchAgents/com.mbastakis.opencode-server.plist"
+launchctl bootout "$domain/com.mbastakis.opencode-service-ensure" 2>/dev/null || true
+launchctl bootstrap "$domain" "$HOME/Library/LaunchAgents/com.mbastakis.opencode-service-ensure.plist"
+
+exec "$HOME/bin/opencode-server" restart bridge
 {{- end }}

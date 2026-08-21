@@ -1,6 +1,9 @@
 # Keep every checkout searchable by repository and branch in zoxide.
 # Inside each repo container, use <repo>_main and <repo>_<branch>.
-worktree-path = "{{ repo_path }}/../{{ remote_repo }}_{{ branch | sanitize }}"
+worktree-path = "{{ repo_path }}/../{{ remote_repo }}_{{ branch | sanitize_hash }}"
+
+[commit.generation]
+command = "cd \"$HOME\" && opencode2 run --agent worktrunk-commit --model wcs/gpt-5.6-luna#low --title worktrunk-commit"
 
 [list]
 json-schema = 2

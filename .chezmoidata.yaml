@@ -126,16 +126,13 @@ opencode:
   remote:
     host: T0020e0132
     external_url: "https://code.mbastakis.com"
+    auth_check_url: "https://code.mbastakis.com/outpost.goauthentik.io/auth/traefik"
     server:
       scheme: http
       host: 127.0.0.1
       port: 4097
-    oauth2_proxy:
+    bridge:
       scheme: http
       host: 127.0.0.1
-      port: 4180
-    oidc_issuer_url: "https://auth.mbastakis.com/application/o/opencode/"
-    oidc_client_id: opencode-mobile
-    allowed_group: opencode-users
-    oidc_client_secret_id: e933b77c-80b7-44d9-b84d-b49e00a283a1
-    cookie_secret_id: 731b9b0a-c77f-4f8d-b883-b49e00a28442
+      port: 4098
+      ingress_capability: mbastakis.com/cap/opencode-ingress

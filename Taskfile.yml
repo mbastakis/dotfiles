@@ -22,6 +22,11 @@ tasks:
       - pre-commit run --all-files
       - git diff --check
 
+  clean:
+    desc: Remove repository caches and generated local artifacts
+    cmds:
+      - git clean -Xdff
+
   brewfile:refresh:
     desc: Rewrite the source Brewfile from installed packages
     preconditions:

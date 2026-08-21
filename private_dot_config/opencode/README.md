@@ -10,7 +10,7 @@ read this config (git history holds the last v1-syntax version).
 |---|---|
 | `opencode.jsonc` | Shared engine config (native v2): providers, permissions rules, MCP, agents, references |
 | `cli.json` | Terminal-client config (chezmoi-managed): theme, sidebar/tabs, attention, full explicit keybind map |
-| `service.json` | v2 service config: port 4097, basic-auth password, provider env (runtime-owned, NOT chezmoi-managed) |
+| `service.json` | v2 service config: port 4097, backend credential, provider env (runtime-owned, NOT chezmoi-managed) |
 | `commands/*.md` | Custom slash commands (v2 plural layout) |
 | `agents/*.md` | Agents with native v2 frontmatter (`permissions` rule arrays, `request.body` overlays) |
 | `skills/*/SKILL.md` | OpenCode-only skills |
@@ -24,7 +24,7 @@ read this config (git history holds the last v1-syntax version).
 | `oc` / `occ` | New session / continue — thin wrappers around `opencode2` |
 | `opencode2 service status\|start\|stop\|restart` | Background service lifecycle |
 | `opencode2 pair` | Service URL, password, and pairing QR |
-| `ocserve` (`opencode-server`) | Service + oauth2-proxy + Tailscale Serve stack |
+| `ocserve` (`opencode-server`) | Service + credential bridge + Tailscale Serve stack |
 | `opencode` | v1 escape hatch (binary only; cannot read this config anymore) |
 
 ## Providers
@@ -45,16 +45,22 @@ literal keys in the config.
 
 ## Remote Stack (designated Mac)
 
-- opencode2 background service on loopback port `4097` (basic auth; serves
-  the HTTP API and the built-in web UI)
-- oauth2-proxy (Authentik OIDC) on loopback port `4180`
-- Tailscale Serve routes `https://code.mbastakis.com` → proxy → service
+- opencode2 background service on loopback port `4097` serves the HTTP API and
+  built-in web UI with its generated service credential
+- a credential bridge on loopback port `4098` reads that runtime-owned
+  credential per request and authenticates requests to OpenCode
+- Tailscale Serve exposes only the bridge; tailnet policy permits Atlas alone to
+  reach port `443` and grants it an OpenCode ingress application capability
+- Serve strips spoofed capability headers and injects the authorized marker;
+  the bridge requires that marker and the external OpenCode Host/Origin, then
+  revalidates the browser cookie against Authentik before proxying to the backend
 
-The launchd unit `com.mbastakis.opencode-server` only runs the idempotent
-`opencode2 service start` at login and every 5 minutes; the service manages
-its own process and hot-reloads config, agents, commands, and skills. Restarts
-are needed only for binary updates: `opencode2 service restart`. Clients
-rediscover the service and resume their sessions from the shared SQLite DB.
+The short-lived launchd unit `com.mbastakis.opencode-service-ensure` runs the
+idempotent `opencode2 service start` at login and every 5 minutes so unattended
+remote access survives login and unexpected service exits. OpenCode still owns
+the background process and hot-reloads config, agents, commands, and skills.
+Restarts are needed only for binary updates: `opencode2 service restart`.
+Clients rediscover the service and resume sessions from the shared SQLite DB.
 
 ## Permissions
 

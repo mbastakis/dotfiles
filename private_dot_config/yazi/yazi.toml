@@ -31,19 +31,14 @@ ueberzug_offset = [0, 0, 0, 0]
 
 [opener]
 edit = [{ run = 'nvim %s', block = true, desc = "Neovim" }]
-open = [
-  { run = 'xdg-open %s', desc = "Open", for = "linux" },
-  { run = 'open %s', desc = "Open", for = "macos" },
-]
+open = [{ run = 'open %s', desc = "Open" }]
 reveal = [
-  { run = 'xdg-open %d', desc = "Reveal", for = "linux" },
-  { run = 'open -R %s', desc = "Reveal", for = "macos" },
+  { run = 'open -R %s', desc = "Reveal" },
   { run = 'exiftool %s; echo "Press enter to exit"; read _', block = true, desc = "Show EXIF" },
 ]
 
 terminal = [
-  { run = 'open -na "Ghostty" --args --working-directory=%d', orphan = true, desc = "Open Ghostty here", for = "macos" },
-  { run = 'xdg-terminal-exec sh -c "cd %d && exec $SHELL"', orphan = true, desc = "Open terminal here", for = "linux" },
+  { run = 'open -na "Ghostty" --args --working-directory=%d', orphan = true, desc = "Open Ghostty here" },
 ]
 
 extract = [{ run = 'ya pub extract --list %s', desc = "Extract here" }]

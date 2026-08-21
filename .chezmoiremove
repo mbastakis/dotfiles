@@ -24,7 +24,12 @@ bin/add-zoxide-tree
 # Retired Terraform global config
 .config/terraform
 
-# OpenCode v2 migration: retired v1 server stack, plugin, and TUI config
+# OpenCode v2 migration: retired server/proxy stack, plugin, and TUI config
+Library/LaunchAgents/com.mbastakis.opencode-server.plist
+Library/LaunchAgents/com.mbastakis.opencode-oauth2-proxy.plist
+.config/oauth2-proxy
+.local/libexec/opencode-server/oauth2-proxy
+.local/state/opencode-remote
 .config/opencode/plugins/descendant-skills.js
 .config/opencode/tui.json
 .config/opencode/package.json

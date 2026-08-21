@@ -56,16 +56,14 @@ function formatReport(report) {
   return lines.join("\n").trimEnd();
 }
 
-async function showUsage(api, dialog) {
+async function showUsage(context) {
   const token = process.env.WCS_API_KEY;
   if (!token) {
-    dialog.replace(() =>
-      api.ui.DialogAlert({
-        title: "WCS Usage",
-        message: "WCS_API_KEY is not set in the OpenCode environment.",
-        onConfirm: () => dialog.clear(),
-      }),
-    );
+    context.ui.dialog.set({ size: "medium" });
+    await context.ui.dialog.alert({
+      title: "WCS Usage",
+      message: "WCS_API_KEY is not set in the OpenCode environment.",
+    });
     return;
   }
 
@@ -90,42 +88,45 @@ async function showUsage(api, dialog) {
     if (!Array.isArray(body.gpt) || !Array.isArray(body.opencode_go)) {
       throw new Error("The WCS usage endpoint returned an invalid report.");
     }
-    dialog.setSize("large");
-    dialog.replace(() =>
-      api.ui.DialogAlert({
-        title: "WCS Provider Usage",
-        message: formatReport(body),
-        onConfirm: () => dialog.clear(),
-      }),
-    );
+    context.ui.dialog.set({ size: "large" });
+    await context.ui.dialog.alert({
+      title: "WCS Provider Usage",
+      message: formatReport(body),
+    });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
-    dialog.replace(() =>
-      api.ui.DialogAlert({
-        title: "WCS Usage Unavailable",
-        message,
-        onConfirm: () => dialog.clear(),
-      }),
-    );
+    context.ui.dialog.set({ size: "medium" });
+    await context.ui.dialog.alert({
+      title: "WCS Usage Unavailable",
+      message,
+    });
   }
 }
 
-async function tui(api) {
-  if (!api.command) return;
-  const dispose = api.command.register(() => [
-    {
-      title: "Show WCS provider usage",
-      value: "wcs.usage",
-      description: "Fetch all WCS provider quotas without using an LLM",
-      category: "WCS",
-      slash: { name: "usage" },
-      onSelect: async (dialog = api.ui.dialog) => showUsage(api, dialog),
-    },
-  ]);
-  api.lifecycle.onDispose(dispose);
+function mountCommands(context) {
+  context.keymap.layer(() => ({
+    mode: "global",
+    commands: [
+      {
+        id: "wcs.usage",
+        title: "Show WCS provider usage",
+        description: "Fetch all WCS provider quotas without using an LLM",
+        group: "WCS",
+        palette: true,
+        slash: { name: "usage" },
+        run: () => showUsage(context),
+      },
+    ],
+  }));
+  return null;
 }
 
 export default {
   id: "local.wcs-usage",
-  tui,
+  setup(context) {
+    context.ui.slot({
+      append: "app",
+      render: () => mountCommands(context),
+    });
+  },
 };

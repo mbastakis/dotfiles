@@ -1,4 +1,4 @@
 # Personal repositories
-# Main checkout at <repo>/<repo>_main; worktrunk worktrees at <repo>/<repo>_<branch>.
-[notes/notes_main]
-checkout = git clone git@github.com:mbastakis/notes.git notes_main
+# Notes is a direct main checkout; do not manage it with Worktrunk worktrees.
+[notes]
+checkout = git clone git@github.com:mbastakis/notes.git notes

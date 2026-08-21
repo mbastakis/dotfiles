@@ -80,18 +80,8 @@ open_url() {
         message="${message:0:97}..."
     fi
 
-    if [[ "$(uname)" == "Darwin" ]]; then
-        if ! open "$url" >/dev/null 2>&1; then
-            tmux display-message "Failed to open $message" || true
-            return 1
-        fi
-    elif command -v xdg-open &>/dev/null; then
-        if ! xdg-open "$url" >/dev/null 2>&1; then
-            tmux display-message "Failed to open $message" || true
-            return 1
-        fi
-    else
-        tmux display-message "No browser opener found for $message" || true
+    if ! open "$url" >/dev/null 2>&1; then
+        tmux display-message "Failed to open $message" || true
         return 1
     fi
 

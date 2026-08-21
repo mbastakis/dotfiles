@@ -1,9 +1,5 @@
 #!/bin/bash
 # Remove global shortcuts created by the retired Ghostty Cmd-H configuration.
-{{- if ne .chezmoi.os "darwin" }}
-exit 0
-{{- end }}
-
 set -euo pipefail
 
 global_preferences="$HOME/Library/Preferences/.GlobalPreferences.plist"

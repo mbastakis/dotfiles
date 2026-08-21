@@ -62,7 +62,7 @@
       "description": "Chezmoi dotfiles source: workstation config, docs, scripts. Read here for how this machine is set up; edit only via the dotfiles skill workflow."
     },
     "notes": {
-      "path": "~/Documents/notes/notes_main",
+      "path": "~/Documents/notes",
       "description": "Personal PARA notes vault (projects, areas, resources, archive, daily notes)."
     }
   },

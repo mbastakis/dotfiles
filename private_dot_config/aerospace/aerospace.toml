@@ -112,8 +112,8 @@ if.app-name-regex-substring = 'GIMP'
 run = 'layout floating'
 
 [gaps]
-# inner.horizontal = 10
-# inner.vertical = 10
+inner.horizontal = 5
+inner.vertical = 5
 # outer.left = 10
 # outer.bottom = 10
 # outer.top = 10

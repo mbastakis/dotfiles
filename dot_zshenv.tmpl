@@ -13,16 +13,12 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_STATE_HOME="$HOME/.local/state"
 
-# BWS authenticates from the age-decrypted bootstrap token when available.
-[[ -r "$XDG_DATA_HOME/bws/token" ]] && export BWS_ACCESS_TOKEN="$(<"$XDG_DATA_HOME/bws/token")"
-
-# Neovim checks VIMINIT before init.lua, so scrub inherited values here.
+# Scrub sensitive or config-bypassing values inherited from parent shells.
+unset BWS_ACCESS_TOKEN
 unset VIMINIT
 
-{{- if eq .chezmoi.os "darwin" }}
 # macOS provides a per-user runtime directory via TMPDIR.
 [[ -n "${TMPDIR:-}" ]] && export XDG_RUNTIME_DIR="${TMPDIR%/}"
-{{- end }}
 
 # Zsh config directory (zsh reads .zshrc/.zprofile from here instead of $HOME)
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
@@ -31,9 +27,9 @@ export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export SHELL_SESSIONS_DISABLE=1
 
 # History file (explicit - HISTFILE does not follow ZDOTDIR)
-export HISTFILE="$XDG_STATE_HOME/zsh/history"
-export HISTSIZE=10000
-export SAVEHIST=10000
+HISTFILE="$XDG_STATE_HOME/zsh/history"
+HISTSIZE=10000
+SAVEHIST=10000
 
 ## Tool home directories (XDG-compliant overrides)
 
@@ -54,7 +50,9 @@ export GEM_SPEC_CACHE="$XDG_CACHE_HOME/gem"
 export NPM_CONFIG_CACHE="$XDG_CACHE_HOME/npm"
 
 # Maven
-export MAVEN_OPTS="-Dmaven.repo.local=$XDG_CACHE_HOME/maven/repository"
+_maven_repo_opt="-Dmaven.repo.local=$XDG_CACHE_HOME/maven/repository"
+[[ " ${MAVEN_OPTS:-} " == *" $_maven_repo_opt "* ]] || export MAVEN_OPTS="${MAVEN_OPTS:+$MAVEN_OPTS }$_maven_repo_opt"
+unset _maven_repo_opt
 
 # Docker
 export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
@@ -87,7 +85,6 @@ export MISE_TRUSTED_CONFIG_PATHS="$DOTFILES_PATH"
 
 # Terraform provider cache
 export TF_PLUGIN_CACHE_DIR="$XDG_CACHE_HOME/terraform/plugins"
-[[ -d "$TF_PLUGIN_CACHE_DIR" ]] || mkdir -p "$TF_PLUGIN_CACHE_DIR"
 
 # Taskwarrior (XDG-compliant override of ~/.taskrc and ~/.task/)
 export TASKRC="$XDG_CONFIG_HOME/task/taskrc"
@@ -103,33 +100,16 @@ export LC_ALL="en_US.UTF-8"
 
 ## PATH configuration
 
-{{- if eq .chezmoi.os "darwin" }}
-# Homebrew (macOS - Apple Silicon)
+# Keep repeated .zshenv loads from growing PATH in nested shells.
+typeset -U path PATH
+
+# Homebrew (Apple Silicon)
 export HOMEBREW_NO_ENV_HINTS=1
 export HOMEBREW_AUTO_UPDATE_SECS=86400
 [[ -d "/opt/homebrew/bin" ]] && PATH="/opt/homebrew/bin:$PATH"
 [[ -d "/opt/homebrew/sbin" ]] && PATH="/opt/homebrew/sbin:$PATH"
 # OpenCode v2 beta installs outside Homebrew
 [[ -d "$HOME/.opencode/bin" ]] && PATH="$HOME/.opencode/bin:$PATH"
-{{- else if eq .chezmoi.os "linux" }}
-# Linuxbrew (if present)
-[[ -d "/home/linuxbrew/.linuxbrew/bin" ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-{{- end }}
-
-# Ensure user-level bin directories exist
-[[ ! -d "$HOME/bin" ]] && mkdir -p "$HOME/bin"
-[[ ! -d "$HOME/.local/bin" ]] && mkdir -p "$HOME/.local/bin"
-[[ ! -d "$XDG_STATE_HOME/zsh" ]] && mkdir -p "$XDG_STATE_HOME/zsh"
-[[ ! -d "$XDG_STATE_HOME/atuin/logs" ]] && mkdir -p "$XDG_STATE_HOME/atuin/logs"
-[[ ! -d "$BUN_INSTALL_CACHE_DIR" ]] && mkdir -p "$BUN_INSTALL_CACHE_DIR"
-[[ ! -d "$GNUPGHOME" ]] && mkdir -p "$GNUPGHOME" && chmod 700 "$GNUPGHOME"
-[[ ! -d "$XDG_CONFIG_HOME/kube" ]] && mkdir -p "$XDG_CONFIG_HOME/kube"
-[[ ! -d "$KUBECACHEDIR" ]] && mkdir -p "$KUBECACHEDIR"
-[[ ! -d "$COLIMA_HOME" ]] && mkdir -p "$COLIMA_HOME"
-[[ ! -d "$CDK_HOME" ]] && mkdir -p "$CDK_HOME"
-[[ ! -d "$MCP_REMOTE_CONFIG_DIR" ]] && mkdir -p "$MCP_REMOTE_CONFIG_DIR"
-[[ ! -d "$GOPATH" ]] && mkdir -p "$GOPATH"
-[[ ! -d "$TASKDATA" ]] && mkdir -p "$TASKDATA"
 
 # Drop legacy tool paths inherited from older shells before re-adding XDG ones.
 path=(${path:#$HOME/.cargo/bin})
@@ -145,17 +125,18 @@ path=(${path:#$HOME/.bun/bin})
 # Bun (BUN_INSTALL set above in tool home directories)
 [[ -d "$BUN_INSTALL/bin" ]] && PATH="$BUN_INSTALL/bin:$PATH"
 
-{{- if eq .chezmoi.os "darwin" }}
-# PostgreSQL (macOS)
+# PostgreSQL
 if [[ -d "/opt/homebrew/opt/postgresql@17/bin" ]]; then
   PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
-  export LDFLAGS="-L/opt/homebrew/opt/postgresql@17/lib"
-  export CPPFLAGS="-I/opt/homebrew/opt/postgresql@17/include"
+  _postgres_ldflag="-L/opt/homebrew/opt/postgresql@17/lib"
+  _postgres_cppflag="-I/opt/homebrew/opt/postgresql@17/include"
+  [[ " ${LDFLAGS:-} " == *" $_postgres_ldflag "* ]] || export LDFLAGS="$_postgres_ldflag${LDFLAGS:+ $LDFLAGS}"
+  [[ " ${CPPFLAGS:-} " == *" $_postgres_cppflag "* ]] || export CPPFLAGS="$_postgres_cppflag${CPPFLAGS:+ $CPPFLAGS}"
+  unset _postgres_ldflag _postgres_cppflag
 fi
 
 # Obsidian CLI (official, requires Obsidian 1.12+)
 [[ -d "/Applications/Obsidian.app/Contents/MacOS" ]] && PATH="$PATH:/Applications/Obsidian.app/Contents/MacOS"
-{{- end }}
 
 ## Programming language settings
 

@@ -57,9 +57,10 @@ Pre-push: `chezmoi apply --dry-run --force`.
    03-bat-cache            → rebuilds the bat theme cache (run_onchange)
    03-yazi-packages        → installs declared Yazi packages (run_onchange)
    04-install-gh-extensions → installs pinned gh extensions (run_onchange)
+   06-runtime-dirs         → creates shell-configured runtime directories and enforces GnuPG permissions
    07-mail-runtime-dirs    → creates shared and per-account mail directories (run_onchange)
 
-   10-opencode-remote      → applies files, removes retired OpenCode runtime artifacts, then non-disruptively reconciles backend + oauth2-proxy; generation drift remains pending until explicit restart (run_onchange)
+   10-opencode-remote      → removes retired OpenCode proxy artifacts, then reconciles backend + credential bridge + Tailscale Serve (run_onchange)
    macos-settings-migration → removes retired global Ghostty shortcuts (run_once)
    macos-settings           → invokes the reusable macOS defaults command (run_onchange)
 ```
@@ -75,7 +76,7 @@ key.txt.age (in repo, passphrase-encrypted)
     ↓ used by chezmoi builtin age (no further prompts)
     ├── ~/.ssh/id_ed25519
     ├── ~/.supermaven/config.json
-    └── ~/.local/share/bws/token → BWS_ACCESS_TOKEN exported by ~/.zshenv
+    └── ~/.local/share/bws/token → scripts/bws-auth scopes BWS_ACCESS_TOKEN to bws
                                       └── bws renders API keys into ~/.config/zsh/exports.zsh
 ```
 
@@ -93,7 +94,6 @@ key.txt.age (in repo, passphrase-encrypted)
 | `literal_bin/`                                                  | `~/bin/`                             | Shell utility scripts                                                |
 | `private_dot_ssh/`                                              | `~/.ssh/`                            | SSH keys (encrypted) and host aliases                                |
 | `private_dot_config/`                                           | `~/.config/`                         | App configs                                                          |
-| `private_dot_config/oauth2-proxy/`                              | `~/.config/oauth2-proxy/`            | Authentik OIDC frontend for tailnet-only OpenCode access             |
 | `private_dot_config/abook/`                                     | `~/.config/abook/`                   | Abook config                                                         |
 | `private_dot_config/zsh/`                                       | `~/.config/zsh/`                     | Zsh config via `ZDOTDIR`                                             |
 | `private_dot_local/private_share/abook/`                        | `~/.local/share/abook/`              | Abook data                                                           |
@@ -107,8 +107,6 @@ Uses **target-state paths** (not source-state):
 
 - Correct: `.config/foo/bar`
 - Wrong: `private_dot_config/foo/bar`
-
-Supports chezmoi template conditionals for OS-specific ignores.
 
 ### Operational Gotchas
 
@@ -166,27 +164,7 @@ while [[ $# -gt 0 ]]; do
 done
 ```
 
-### Cross-platform
-
-```bash
-if [[ "$(uname)" == "Darwin" ]]; then
-    # macOS-specific
-else
-    # Linux-specific
-fi
-```
-
 ## Chezmoi Template Conventions
-
-### OS guards (macOS-specific .chezmoiscripts/\*.tmpl)
-
-```
-{{- if ne .chezmoi.os "darwin" }}
-exit 0
-{{- end }}
-```
-
-The age identity bootstrap is intentionally platform-neutral because encrypted targets may be rendered on any supported OS.
 
 ### Change detection (run_onchange scripts)
 
@@ -198,7 +176,6 @@ The age identity bootstrap is intentionally platform-neutral because encrypted t
 
 | Function                            | Purpose                                |
 | ----------------------------------- | -------------------------------------- |
-| `{{ .chezmoi.os }}`                 | OS detection (`darwin`/`linux`)        |
 | `{{ .chezmoi.sourceDir }}`          | Chezmoi source directory path          |
 | `{{ .profile }}`                    | `personal` or `dt-work`                |
 | `{{ .dtWork }}`                     | Toggle DT work-only config             |

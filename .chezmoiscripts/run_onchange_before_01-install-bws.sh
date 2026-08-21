@@ -2,11 +2,6 @@
 # Install the Bitwarden Secrets Manager CLI before templates need it.
 # Desired version: 2.1.0
 
-{{- if ne .chezmoi.os "darwin" }}
-# Different installation method for Linux
-exit 0
-{{- end }}
-
 set -euo pipefail
 
 BWS_VERSION="2.1.0"

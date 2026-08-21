@@ -152,7 +152,6 @@ brew "nixfmt"
 # Port scanning utility for large networks
 brew "nmap"
 # Reverse proxy for authenticating users via OAuth 2 providers
-brew "oauth2_proxy"
 # Create, run, and share large language models (LLMs)
 brew "ollama"
 # Development kit for the Java programming language

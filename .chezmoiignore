@@ -12,6 +12,7 @@ docs/
 # Source-only directories (kept in repo, not deployed by chezmoi)
 ai-docs/
 .task/
+scripts/
 tests/
 
 # Repo-local tooling (go-task via mise, used inside this repo only)
@@ -103,21 +104,10 @@ Documents/notes/.trash/
 .ssh/gitlab-telekom.pub
 {{- end }}
 
-{{- if ne .chezmoi.os "darwin" }}
-# macOS-only configs (skip on Linux)
-.config/aerospace/
-.config/karabiner/
-.config/finicky/
-Library/LaunchAgents/com.mbastakis.mail-sync.plist
-Library/LaunchAgents/com.mbastakis.task-sync.plist
-bin/switch-input-source
-{{- end }}
-
 {{- if ne .chezmoi.hostname .opencode.remote.host }}
 # OpenCode remote control runs only on its designated Mac.
-.config/oauth2-proxy/
-Library/LaunchAgents/com.mbastakis.opencode-server.plist
-Library/LaunchAgents/com.mbastakis.opencode-oauth2-proxy.plist
+Library/LaunchAgents/com.mbastakis.opencode-service-ensure.plist
+Library/LaunchAgents/com.mbastakis.opencode-auth-bridge.plist
 bin/opencode-server
 .local/libexec/opencode-server/
 {{- end }}
