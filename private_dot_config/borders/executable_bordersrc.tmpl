@@ -1,0 +1,12 @@
+#!/bin/bash
+set -euo pipefail
+
+options=(
+    style=round
+    width=6.0
+    hidpi=off
+    active_color=0xff{{ trimPrefix "#" .colors.mauve }}
+    inactive_color=0xff{{ trimPrefix "#" .colors.surface1 }}
+)
+
+borders "${options[@]}"

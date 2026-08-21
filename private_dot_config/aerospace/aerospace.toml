@@ -1,5 +1,14 @@
-# Start AeroSpace at login
+config-version = 2
+
+# Start AeroSpace at login and reload this file when it changes.
 start-at-login = true
+auto-reload-config = true
+
+# AeroSpace owns the borders process lifecycle; bordersrc owns its appearance.
+after-startup-command = ['exec-and-forget borders']
+
+# Version 2 requires persistent workspaces to be declared explicitly.
+persistent-workspaces = ['1', 'a', 'o', 'e', 'u', 'j']
 
 enable-normalization-flatten-containers = true
 enable-normalization-opposite-orientation-for-nested-containers = true
@@ -10,106 +19,43 @@ on-focus-changed = [
   'move-mouse window-lazy-center',
 ] # Mouse lazily follows any focus (window or workspace)
 
-[key-mapping]
-preset = 'dvorak'
+key-mapping.preset = 'dvorak'
 
-# Workspace A
-[[on-window-detected]]
-if.app-name-regex-substring = 'Microsoft Edge'
-run = 'move-node-to-workspace a'
+on-window-detected = [
+  # Workspace A
+  { if = 'test %{app-name} ~= "Microsoft Edge"', run = 'move-node-to-workspace a' },
+  { if = 'test %{app-name} ~= Chrome', run = 'move-node-to-workspace a' },
+  { if = 'test %{app-name} ~= Comet', run = 'move-node-to-workspace a' },
 
-[[on-window-detected]]
-if.app-name-regex-substring = 'Chrome'
-run = 'move-node-to-workspace a'
+  # Workspace O
+  { if = 'test %{app-name} ~= "Code - Insiders"', run = 'move-node-to-workspace o' },
+  { if = 'test %{app-name} ~= OpenCode', run = 'move-node-to-workspace o' },
+  { if = 'test %{app-name} ~= Code', run = 'move-node-to-workspace o' },
+  { if = 'test %{app-name} ~= Warp', run = 'move-node-to-workspace o' },
+  { if = 'test %{app-name} ~= Ghostty', run = 'move-node-to-workspace o' },
+  { if = 'test %{app-name} ~= Vivaldi', run = 'move-node-to-workspace o' },
 
-[[on-window-detected]]
-if.app-name-regex-substring = 'Comet'
-run = 'move-node-to-workspace a'
+  # Workspace E
+  { if = 'test %{app-name} ~= Linear', run = 'move-node-to-workspace e' },
+  { if = 'test %{app-name} ~= Obsidian', run = 'move-node-to-workspace e' },
+  { if = 'test %{app-name} ~= "Google Calendar"', run = 'move-node-to-workspace e' },
 
-# Workspace O
-[[on-window-detected]]
-if.app-name-regex-substring = 'Code - Insiders'
-run = 'move-node-to-workspace o'
+  # Workspace U
+  { if = 'test %{app-name} ~= Slack', run = 'move-node-to-workspace u' },
+  { if = 'test %{app-name} ~= "Microsoft Teams"', run = 'move-node-to-workspace u' },
+  { if = 'test %{app-name} ~= Outlook', run = 'move-node-to-workspace u' },
 
-[[on-window-detected]]
-if.app-name-regex-substring = 'OpenCode'
-run = 'move-node-to-workspace o'
+  # Workspace J
+  { if = 'test %{app-name} ~= Discord', run = 'move-node-to-workspace j' },
+  { if = 'test %{app-name} ~= Bitwarden', run = 'move-node-to-workspace j' },
+  { if = 'test %{app-name} ~= Spotify', run = 'move-node-to-workspace j' },
 
-[[on-window-detected]]
-if.app-name-regex-substring = 'Code'
-run = 'move-node-to-workspace o'
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'Warp'
-run = 'move-node-to-workspace o'
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'Ghostty'
-run = ["move-node-to-workspace o"]
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'Vivaldi'
-run = 'move-node-to-workspace o'
-
-# Workspace E
-[[on-window-detected]]
-if.app-name-regex-substring = 'Linear'
-run = 'move-node-to-workspace e'
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'Obsidian'
-run = 'move-node-to-workspace e'
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'Google Calendar'
-run = 'move-node-to-workspace e'
-
-# Workspace U
-
-# Communication & Work Tools (highest priority)
-[[on-window-detected]]
-if.app-name-regex-substring = 'Slack'
-run = 'move-node-to-workspace u'
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'Microsoft Teams'
-run = 'move-node-to-workspace u'
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'Outlook'
-run = 'move-node-to-workspace u'
-
-# Workspace J
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'Discord'
-run = 'move-node-to-workspace j'
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'Bitwarden'
-run = 'move-node-to-workspace j'
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'Spotify'
-run = 'move-node-to-workspace j'
-
-# Floating windows
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'finder'
-run = 'layout floating'
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'AppCleaner'
-run = 'layout floating'
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'System Preferences'
-run = 'layout floating'
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'GIMP'
-run = 'layout floating'
+  # Floating windows
+  { if = 'test %{app-name} ~= Finder', run = 'layout floating' },
+  { if = 'test %{app-name} ~= AppCleaner', run = 'layout floating' },
+  { if = 'test %{app-name} ~= "System Preferences"', run = 'layout floating' },
+  { if = 'test %{app-name} ~= GIMP', run = 'layout floating' },
+]
 
 [gaps]
 inner.horizontal = 5
@@ -152,9 +98,6 @@ alt-e = 'workspace e'
 alt-u = 'workspace u'
 alt-j = 'workspace j'
 alt-1 = 'workspace 1'
-alt-2 = 'workspace 2'
-alt-3 = 'workspace 3'
-alt-4 = 'workspace 4'
 
 alt-shift-a = 'move-node-to-workspace a --focus-follows-window'
 alt-shift-o = 'move-node-to-workspace o --focus-follows-window'
@@ -162,9 +105,6 @@ alt-shift-e = 'move-node-to-workspace e --focus-follows-window'
 alt-shift-u = 'move-node-to-workspace u --focus-follows-window'
 alt-shift-j = 'move-node-to-workspace j --focus-follows-window'
 alt-shift-1 = 'move-node-to-workspace 1 --focus-follows-window'
-alt-shift-2 = 'move-node-to-workspace 2 --focus-follows-window'
-alt-shift-3 = 'move-node-to-workspace 3 --focus-follows-window'
-alt-shift-4 = 'move-node-to-workspace 4 --focus-follows-window'
 
 alt-tab = 'workspace-back-and-forth'
 alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'

@@ -16,6 +16,15 @@ flowchart LR
 
 A keystroke passes through each layer in sequence. Karabiner processes physical key events first (home row mods, hyper key), Ghostty handles terminal-level bindings, tmux intercepts its prefix and pass-through sequences, zsh processes shell keybindings, and then app-level bindings apply in NeoMutt or Neovim.
 
+## AeroSpace
+
+Source: `private_dot_config/aerospace/aerospace.toml`. Workspace bindings intentionally expose only workspaces `1`, `a`, `o`, `e`, `u`, and `j`.
+
+| Key | Action |
+| --- | --- |
+| `Alt+1/A/O/E/U/J` | Switch to the corresponding workspace |
+| `Alt+Shift+1/A/O/E/U/J` | Move the focused window to the corresponding workspace and follow it |
+
 ## Karabiner
 
 ### Build Pipeline

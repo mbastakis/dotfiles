@@ -1,6 +1,7 @@
 tap "anomalyco/tap"
 tap "charmbracelet/tap"
 tap "dlvhdr/formulae"
+tap "felixkratz/formulae"
 tap "libsql/sqld", trusted: { formulae: ["sqld"] }
 tap "mach-kernel/pkgs"
 tap "mbastakis/tap", "git@github.com:mbastakis/homebrew-tap.git"
@@ -245,6 +246,8 @@ brew "zoxide"
 brew "anomalyco/tap/opencode", trusted: true
 # Git diff pager based on delta but with a file tree, à la GitHub
 brew "dlvhdr/formulae/diffnav", trusted: true
+# Window border system for macOS
+brew "felixkratz/formulae/borders", trusted: true
 # Rust Cursive TUI that helps manage launchd jobs on macOS
 brew "mach-kernel/pkgs/launchk", trusted: true
 # AWS profile switcher with MFA, SSO, and CloudShepherd support

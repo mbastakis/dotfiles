@@ -15,8 +15,7 @@ export WCS_API_KEY='{{ (bitwardenSecrets "cb9fc79d-aee2-47ec-bd20-b49e00a2601e")
 export WCS_DEV_API_KEY='{{ (bitwardenSecrets "98de7dd1-bca8-4672-b9dd-b4a40097b2d7").value | trim }}'
 export SELFHOSTED_LLM_API_KEY='local-wireguard-only'
 
-{{- if or (eq .profile "dt-work") (eq .profile "work") }}
-# DT work-specific PATH additions and secrets
+# Work PATH additions and secrets
 export PATH="/Users/mbastakis/dev/work/scripts/:$PATH"
 export OPENAI_API_KEY='{{ (bitwardenSecrets "e884a9c6-2ee8-4c1b-a281-b49e00a264c8").value | trim }}'
 export GITHUB_TOKEN='{{ (bitwardenSecrets "0eba061f-6de8-4715-b064-b49e00a26548").value | trim }}'
@@ -24,7 +23,6 @@ export GITLAB_TOKEN='{{ (bitwardenSecrets "1d6d9f0f-ac45-405a-a3b4-b49e00a265bb"
 export GITLAB_ACCESS_TOKEN='{{ (bitwardenSecrets "1d6d9f0f-ac45-405a-a3b4-b49e00a265bb").value | trim }}'
 export GITLAB_USERNAME="michail.bastakis"
 export GITLAB_HOST="gitlab.devops.telekom.de"
-{{- end }}
 
 # Pager — disable rich pagers in agent/non-TTY contexts.
 # OpenCode sets OPENCODE=1; its Bash tool uses piped stdout (no PTY).

@@ -1,4 +1,3 @@
-{{- if or (eq .profile "dt-work") (eq .profile "work") }}
 Host otc_n8n
     HostName 80.158.109.121
     User ubuntu
@@ -10,7 +9,6 @@ Host gitlab.devops.telekom.de
     User git
     IdentityFile ~/.ssh/gitlab-telekom
     IdentitiesOnly yes
-{{- end }}
 
 Host github.com github-personal
     HostName github.com

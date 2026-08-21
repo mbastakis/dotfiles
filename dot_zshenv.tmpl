@@ -61,9 +61,7 @@ export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 
 # Kubernetes
-{{- if or (eq .profile "dt-work") (eq .profile "work") }}
 export KUBECONFIG="$XDG_CONFIG_HOME/kube/config-dev:$XDG_CONFIG_HOME/kube/config-playground:$XDG_CONFIG_HOME/kube/config-prod"
-{{- end }}
 export KUBECACHEDIR="$XDG_CACHE_HOME/kube"
 
 # Colima (container runtime)

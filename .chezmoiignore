@@ -95,15 +95,6 @@ Documents/notes/.trash/
 .ssh/known_hosts
 .ssh/known_hosts.old
 
-{{- if and (ne .profile "dt-work") (ne .profile "work") }}
-# DT work-specific config
-.config/glab-cli/
-.config/git/.gitconfig-work
-.config/sesh/work.toml
-.ssh/gitlab-telekom
-.ssh/gitlab-telekom.pub
-{{- end }}
-
 {{- if ne .chezmoi.hostname .opencode.remote.host }}
 # OpenCode remote control runs only on its designated Mac.
 Library/LaunchAgents/com.mbastakis.opencode-service-ensure.plist
