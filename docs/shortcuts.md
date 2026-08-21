@@ -105,6 +105,7 @@ flowchart LR
 | `Caps Lock` (hold) | Hyper mode (sets `hyper_caps_lock` while held) | `private_dot_config/private_karabiner/src/rules/13-hyper-key.json` |
 | `Caps Lock` (tap) | Escape | `private_dot_config/private_karabiner/src/rules/13-hyper-key.json` |
 | `Right Shift` (double-tap) | Caps Lock toggle | `private_dot_config/private_karabiner/src/rules/14-double-tap-caps.json` |
+| `Ctrl+Option+Space` | Cycle Qwerty, Dvorak, and Greek Dvorak input sources | `private_dot_config/private_karabiner/src/rules/16-input-source-cycle.json` |
 
 ### Hyper Navigation (hold Caps Lock)
 

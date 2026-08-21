@@ -43,14 +43,6 @@ func selectInputSource(withID targetID: String) -> Bool {
     return false
 }
 
-func notify(_ name: String) {
-    let script = "display notification \"\(name)\" with title \"Input Source\" sound name \"Pop\""
-    let process = Process()
-    process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
-    process.arguments = ["-e", script]
-    try? process.run()
-}
-
 let args = Array(CommandLine.arguments.dropFirst())
 let targetAlias: String?
 
@@ -98,4 +90,3 @@ guard selectInputSource(withID: targetSource.id) else {
 }
 
 print("Switched to \(targetSource.name)")
-notify(targetSource.name)

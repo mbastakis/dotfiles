@@ -12,7 +12,9 @@ OUTPUT_FILE="$SCRIPT_DIR/private_karabiner.json"
 HRM_TEMPLATE="$SRC_DIR/templates/hrm.json"
 
 # Rules that work on ALL devices (not just built-in keyboard)
-ALL_DEVICES_RULES=()
+ALL_DEVICES_RULES=(
+    "16-input-source-cycle.json"
+)
 
 # ============================================================================
 # HRM Configuration: key|modifier|finger|hand|streak|held|alone|stack|hyper

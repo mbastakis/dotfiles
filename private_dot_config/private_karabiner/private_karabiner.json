@@ -6661,6 +6661,29 @@
                 "type": "basic"
               }
             ]
+          },
+          {
+            "description": "Cycle input source with Ctrl + Option + Space",
+            "manipulators": [
+              {
+                "description": "Cycle Qwerty, Dvorak, and Greek Dvorak",
+                "from": {
+                  "key_code": "spacebar",
+                  "modifiers": {
+                    "mandatory": [
+                      "control",
+                      "option"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "shell_command": "$HOME/bin/switch-input-source"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
           }
         ]
       },
