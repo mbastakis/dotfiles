@@ -31,7 +31,6 @@ shell:*.{sh,bash,zsh,fish}
 
 # Version control
 --glob=!**/.git/**
---glob=!**/.jj/**
 
 # Package managers / dependencies
 --glob=!**/node_modules/**
