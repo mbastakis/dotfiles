@@ -6,6 +6,11 @@
   "close_on_focus_loss": true,
   "escape_key_behavior": "navigate_back",
   "pop_to_root_on_close": false,
+  "font": {
+    "normal": {
+      "family": "JetBrainsMono Nerd Font Mono"
+    }
+  },
   "theme": {
     "light": {
       "name": "catppuccin-mocha",

@@ -1,9 +1,9 @@
 git:
   log:
     showGraph: always
-  pagers:
+  diffRenderers:
     - colorArg: always
-      pager: delta --dark --paging=never
+      command: delta --dark --paging=never
 gui:
   showBottomLine: false
   showIcons: true
