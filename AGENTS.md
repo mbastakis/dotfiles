@@ -95,9 +95,11 @@ key.txt.age (in repo, passphrase-encrypted)
 | `private_dot_ssh/`                                              | `~/.ssh/`                            | SSH keys (encrypted) and host aliases                                |
 | `private_dot_config/`                                           | `~/.config/`                         | App configs                                                          |
 | `private_dot_config/abook/`                                     | `~/.config/abook/`                   | Abook config                                                         |
+| `private_dot_config/vicinae/`                                   | `~/.config/vicinae/`                 | Fully managed Vicinae settings                                      |
 | `private_dot_config/zsh/`                                       | `~/.config/zsh/`                     | Zsh config via `ZDOTDIR`                                             |
 | `private_dot_local/private_share/abook/`                        | `~/.local/share/abook/`              | Abook data                                                           |
 | `private_dot_local/private_share/colima/`                       | `~/.local/share/colima/`             | Colima config + state                                                |
+| `private_dot_local/private_share/vicinae/`                      | `~/.local/share/vicinae/`            | Managed Vicinae themes, scripts, and extensions                      |
 | `.chezmoiscripts/`                                              | _(lifecycle scripts, not deployed)_  | Before/after scripts                                                 |
 | `.chezmoidata.yaml`                                             | _(template data)_                    | Colors plus mail, Taskwarrior, and OpenCode host settings            |
 

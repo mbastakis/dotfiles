@@ -301,8 +301,8 @@ cask "keyclu"
 cask "obsidian"
 # AI coding agent desktop client
 cask "opencode-desktop"
-# Control your tools with a few keystrokes
-cask "raycast"
+# Native application launcher and command palette
+cask "vicinae"
 # Team communication and collaboration software
 cask "slack"
 # Sound and audio controller

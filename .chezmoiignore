@@ -87,9 +87,16 @@ Documents/notes/.trash/
 .config/karabiner/research/**
 .config/karabiner/README.md
 
-# Raycast (user-specific)
-.config/raycast/extensions/
-.config/raycast/config.json
+# Vicinae runtime state; settings, themes, scripts, and extensions stay managed.
+.local/share/vicinae/clipboard-data/
+.local/share/vicinae/clipboard.db*
+.local/share/vicinae/snippets/
+.local/share/vicinae/support/
+.local/share/vicinae/vicinae.db*
+.local/state/vicinae/onboarding.json
+.local/state/vicinae/recent-files.json
+.local/state/vicinae/login-item-registered
+.local/state/vicinae/*.log
 
 # SSH (machine-generated)
 .ssh/known_hosts

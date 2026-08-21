@@ -6,6 +6,10 @@ echo "Configuring macOS settings..."
 # Ghostty
 defaults write com.mitchellh.ghostty NSUserKeyEquivalents -dict-add "Hide Ghostty" "@~^h"
 
+# Spotlight (Cmd+Space is managed by Vicinae)
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 '{ enabled = 0; value = { parameters = (32, 49, 1048576); type = standard; }; }'
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 '{ enabled = 0; value = { parameters = (32, 49, 1572864); type = standard; }; }'
+
 # KeyClu (shortcut cheatsheet overlay)
 defaults write com.0804Team.KeyClu launchAtLogin -bool true
 defaults write com.0804Team.KeyClu hideMenuIcon -bool true

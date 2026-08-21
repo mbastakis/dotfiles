@@ -1,0 +1,30 @@
+[meta]
+version = 1
+name = "Catppuccin Mocha"
+description = "Dotfiles-managed Catppuccin Mocha theme."
+variant = "dark"
+inherits = "vicinae-dark"
+
+[colors.core]
+background = "{{ .colors.base }}"
+foreground = "{{ .colors.text }}"
+secondary_background = "{{ .colors.mantle }}"
+border = "{{ .colors.surface0 }}"
+accent = "{{ .colors.blue }}"
+
+[colors.accents]
+blue = "{{ .colors.blue }}"
+green = "{{ .colors.green }}"
+magenta = "{{ .colors.pink }}"
+orange = "{{ .colors.peach }}"
+purple = "{{ .colors.mauve }}"
+red = "{{ .colors.red }}"
+yellow = "{{ .colors.yellow }}"
+cyan = "{{ .colors.teal }}"
+
+[colors.list.item.selection]
+background = "{{ .colors.surface0 }}"
+secondary_background = "{{ .colors.mantle }}"
+
+[colors.grid.item]
+background = "{{ .colors.surface0 }}"

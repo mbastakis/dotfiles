@@ -1,3 +1,10 @@
+# Retired Raycast configuration
+.config/raycast
+
+# Retired Vicinae migration artifacts
+.config/vicinae/managed.json
+Library/LaunchAgents/com.mbastakis.vicinae.plist
+
 # Replaced commands
 bin/opencode-serverctl
 bin/opencode-pwa-push

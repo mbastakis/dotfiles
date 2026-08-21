@@ -16,6 +16,17 @@ flowchart LR
 
 A keystroke passes through each layer in sequence. Karabiner processes physical key events first (home row mods, hyper key), Ghostty handles terminal-level bindings, tmux intercepts its prefix and pass-through sequences, zsh processes shell keybindings, and then app-level bindings apply in NeoMutt or Neovim.
 
+## Vicinae
+
+Source: `private_dot_config/vicinae/settings.json`. Spotlight's matching shortcuts are disabled by `literal_bin/executable_macos-settings.tmpl` so Vicinae owns the launcher chord.
+
+| Key | Action |
+| --- | --- |
+| `Cmd+Space` | Toggle Vicinae |
+| `Cmd+Shift+V` | Open Clipboard History |
+| `Cmd+Shift+S` | Capture a selected region, equivalent to `Cmd+Shift+4` |
+| `Cmd+Option+Space` | Cycle Qwerty, Dvorak, and Greek Dvorak input sources |
+
 ## AeroSpace
 
 Source: `private_dot_config/aerospace/aerospace.toml`. Workspace bindings intentionally expose only workspaces `1`, `a`, `o`, `e`, `u`, and `j`.
@@ -24,6 +35,8 @@ Source: `private_dot_config/aerospace/aerospace.toml`. Workspace bindings intent
 | --- | --- |
 | `Alt+1/A/O/E/U/J` | Switch to the corresponding workspace |
 | `Alt+Shift+1/A/O/E/U/J` | Move the focused window to the corresponding workspace and follow it |
+
+Vicinae is matched by bundle ID and forced to floating layout.
 
 ## Karabiner
 

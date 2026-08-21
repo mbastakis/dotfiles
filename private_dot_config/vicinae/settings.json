@@ -1,0 +1,56 @@
+{
+  "$schema": "https://vicinae.com/schemas/config.json",
+  "telemetry": {
+    "system_info": false
+  },
+  "close_on_focus_loss": true,
+  "escape_key_behavior": "navigate_back",
+  "pop_to_root_on_close": false,
+  "theme": {
+    "light": {
+      "name": "catppuccin-mocha",
+      "icon_theme": "auto"
+    },
+    "dark": {
+      "name": "catppuccin-mocha",
+      "icon_theme": "auto"
+    }
+  },
+  "launcher_window": {
+    "opacity": 0.85,
+    "material": "liquid_glass",
+    "compact_mode": {
+      "enabled": true
+    }
+  },
+  "global_shortcuts": {
+    "toggle": "control+space",
+    "inhibit_apps": []
+  },
+  "providers": {
+    "clipboard": {
+      "preferences": {
+        "monitoring": true,
+        "eraseOnStartup": false
+      },
+      "entrypoints": {
+        "history": {
+          "enabled": true,
+          "shortcut": "control+shift+V"
+        }
+      }
+    },
+    "scripts": {
+      "entrypoints": {
+        "cycle-input-source.sh": {
+          "enabled": true,
+          "shortcut": "ctrl+alt+space"
+        },
+        "screenshot-region.sh": {
+          "enabled": true,
+          "shortcut": "control+shift+S"
+        }
+      }
+    }
+  }
+}

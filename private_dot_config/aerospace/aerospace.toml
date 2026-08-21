@@ -58,6 +58,7 @@ on-window-detected = [
   { if = 'test %{app-name} ~= Spotify', run = 'move-node-to-workspace j' },
 
   # Floating windows
+  { if = 'test %{app-bundle-id} = "com.vicinaehq.Vicinae"', run = 'layout floating' },
   { if = 'test %{app-name} ~= Finder', run = 'layout floating' },
   { if = 'test %{app-name} ~= AppCleaner', run = 'layout floating' },
   { if = 'test %{app-name} ~= "System Preferences"', run = 'layout floating' },

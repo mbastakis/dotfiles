@@ -81,6 +81,12 @@ SketchyBar replaces the native menu bar rather than layering another set of stat
 
 The bar uses checked-in shell plugins under `private_dot_config/sketchybar/`. `sketchybar-system-stats` supplies CPU, RAM, and network updates as one event stream, while `macmon` supplies Apple Silicon GPU utilization through a small local event-forwarding process. This keeps all visual and integration logic in chezmoi while third-party binaries remain package-managed.
 
+## Vicinae
+
+Dotfiles fully own `~/.config/vicinae/settings.json`. Vicinae may rewrite it after GUI changes, creating local drift; retain an intentional GUI change by updating the chezmoi source, or discard it with a targeted apply. Themes, script commands, and future source-managed extensions live under `~/.local/share/vicinae`; history databases, extension support data, snippets, logs, and onboarding state remain runtime-owned and ignored.
+
+Vicinae's native macOS login item owns startup, so no custom LaunchAgent or restart hook is needed. Vicinae watches `settings.json` and reloads changes after chezmoi applies it. AeroSpace matches Vicinae by bundle ID and keeps its launcher window floating.
+
 ## Myrepos (mr)
 
 Workspace `.mrconfig` files live under `dev/` in the chezmoi source and deploy to the matching `~/dev/...` paths. Each repository keeps a container directory, while every checkout basename includes its repository so zoxide searches remain unambiguous: the primary checkout is `<repo>/<repo>_main` and worktrunk places linked worktrees beside it as `<repo>/<repo>_<branch>`. Branches whose names require sanitization receive Worktrunk's short `sanitize_hash` suffix, keeping the resulting paths unique. The home workspace therefore keeps this source at `~/dev/personal/workspaces/home-workspace/dotfiles/dotfiles_main`, matching its own `[dotfiles/dotfiles_main]` section. The shared rule is managed at `private_dot_config/worktrunk/config.toml`.
