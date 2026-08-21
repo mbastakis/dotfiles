@@ -257,7 +257,8 @@ Source: `private_dot_config/zsh/aliases.zsh` (selection; see the file for listin
 
 | Alias | Expands to |
 | --- | --- |
-| `v`, `vi`, `vim` | `nvim` |
+| `v` | `NVIM_APPNAME=nvim-native nvim` |
+| `vi`, `vim` | `nvim` |
 | `lg` | `lazygit` |
 | `nm` / `msync` | `neomutt` / `mail-sync` |
 | `oc` / `occ` / `ocserve` | `opencode-launch` / `opencode-launch --continue` / `opencode-server` |
@@ -344,6 +345,16 @@ Source: `private_dot_config/nvim/lua/plugins/telescope.lua`.
 | `<leader>fg` / `<leader>fG` | Live grep (filtered / show all) |
 | `<leader>fh` | Help tags |
 | `<leader>fp` | Zoxide projects (cd on select) |
+
+### Native Config
+
+Source: `private_dot_config/nvim-native/lua/config/keymaps.lua`.
+
+| Key | Action |
+| --- | --- |
+| `-` | Open the current file's parent directory with Oil |
+| `<leader>ff` | Find files with mini.pick |
+| `<leader>fg` | Find text with mini.pick and ripgrep |
 
 ### Oil (File Explorer)
 
