@@ -21,6 +21,9 @@ defaults write com.0804Team.KeyClu activationKeyType -int 1
 
 # Dock
 defaults write com.apple.dock autohide -bool true
+defaults write com.apple.dock autohide-delay -float 1000
+defaults write com.apple.dock autohide-time-modifier -float 0
+defaults write com.apple.dock tilesize -float 1
 defaults write com.apple.dock orientation -string "down"
 defaults write com.apple.dock mru-spaces -bool false
 defaults write com.apple.dock mineffect -string "scale"
@@ -67,6 +70,12 @@ defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 # Keyboard
 defaults write NSGlobalDomain KeyRepeat -int 2
 defaults write NSGlobalDomain InitialKeyRepeat -int 15
+
+{{ $theme := index .theme.catalog .theme.active -}}
+# Appearance: align the native accent/highlight with the {{ $theme.display_name }} rose
+# so system menus, buttons, and selections stop speaking Apple-blue.
+defaults write NSGlobalDomain AppleAccentColor -int 6
+defaults write NSGlobalDomain AppleHighlightColor -string "{{ range $i, $c := splitList ", " (index .theme.catalog .theme.active).rgb.rose }}{{ if $i }} {{ end }}{{ printf "%.6f" (divf (float64 $c) 255.0) }}{{ end }} Pink"
 
 echo "Restarting affected services..."
 for app in "Dock" "Finder" "SystemUIServer" "cfprefsd"; do

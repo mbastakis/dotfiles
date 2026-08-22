@@ -1,0 +1,389 @@
+#!/bin/bash
+set -euo pipefail
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+
+CONFIG_DIR="${CONFIG_DIR:-$HOME/.config/sketchybar}"
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+FONT="JetBrainsMono Nerd Font Mono"
+
+# shellcheck source=/dev/null
+source "$CONFIG_DIR/colors.sh"
+
+# Type scale: icons Bold:16, labels Regular:13, informational labels Bold:13,
+# workspace letters Bold:14. Spacing grid: 4 / 8 / 12.
+
+sketchybar --bar \
+  height=40 \
+  position=top \
+  sticky=on \
+  topmost=window \
+  shadow=on \
+  color="$BAR_COLOR" \
+  border_width=0 \
+  corner_radius=12 \
+  padding_left=8 \
+  padding_right=8 \
+  margin=8 \
+  y_offset=6 \
+  notch_width=188 \
+  display=all
+
+sketchybar --default \
+  updates=when_shown \
+  icon.font="$FONT:Bold:16.0" \
+  icon.color="$SUBTEXT_COLOR" \
+  icon.padding_left=8 \
+  icon.padding_right=4 \
+  label.font="$FONT:Regular:13.0" \
+  label.color="$TEXT_COLOR" \
+  label.padding_left=4 \
+  label.padding_right=8 \
+  background.color="$ITEM_COLOR" \
+  background.height=30 \
+  background.corner_radius=8 \
+  background.drawing=off \
+  padding_left=4 \
+  padding_right=4
+
+sketchybar --add event aerospace_workspace_change \
+  --add event aerospace_focus_change \
+  --add event system_stats \
+  --add event gpu_stats
+
+workspace_ids=(a o e u j)
+for workspace_id in "${workspace_ids[@]}"; do
+  sketchybar --add item "space.$workspace_id" left \
+    --set "space.$workspace_id" \
+      icon.drawing=off \
+      icon.padding_left=0 \
+      icon.padding_right=0 \
+      label="$workspace_id" \
+      label.font="$FONT:Bold:14.0" \
+      label.color="$SUBTEXT_COLOR" \
+      label.padding_left=12 \
+      label.padding_right=12 \
+      background.drawing=on \
+      background.color="$ACCENT_CHIP_OFF" \
+      background.corner_radius=6 \
+      background.height=22 \
+      click_script="aerospace workspace $workspace_id" \
+      script="FOCUSED_WORKSPACE=\$(aerospace list-workspaces --focused 2>/dev/null) $PLUGIN_DIR/aerospace.sh $workspace_id" \
+    --subscribe "space.$workspace_id" aerospace_workspace_change system_woke mouse.entered mouse.exited
+done
+
+sketchybar --add bracket workspaces space.a space.o space.e space.u space.j \
+  --set workspaces \
+    background.drawing=on \
+    background.color="$ITEM_COLOR" \
+    background.height=30 \
+    background.corner_radius=8 \
+    background.border_width=1 \
+    background.border_color="$BORDER_COLOR"
+
+sketchybar --add item focused_window center \
+  --set focused_window \
+    width=dynamic \
+    icon="" \
+    icon.width=24 \
+    icon.padding_left=0 \
+    icon.padding_right=8 \
+    icon.background.image.scale=0.7 \
+    label="" \
+    label.align=center \
+    label.max_chars=0 \
+    background.drawing=off \
+    update_freq=5 \
+    script="$PLUGIN_DIR/focused_window.sh" \
+  --subscribe focused_window aerospace_focus_change system_woke
+
+# Battery: quiet at rest; pill + colored border appear only for
+# low / critical / charging states (handled in battery.sh).
+sketchybar --add item battery right \
+  --set battery \
+    icon="󰁹" \
+    icon.color="$SUBTEXT_COLOR" \
+    label="--%" \
+    label.font="$FONT:Bold:13.0" \
+    update_freq=120 \
+    script="$PLUGIN_DIR/battery.sh" \
+    click_script="open 'x-apple.systempreferences:com.apple.preference.battery'" \
+    background.drawing=off \
+    background.border_width=0 \
+    background.border_color="$BORDER_COLOR" \
+  --subscribe battery power_source_change system_woke
+
+# Clock: the time captions itself — no icon.
+sketchybar --add item clock right \
+  --set clock \
+    icon.drawing=off \
+    label="--:--" \
+    label.font="$FONT:Bold:13.0" \
+    label.color="$TEXT_COLOR" \
+    label.padding_left=8 \
+    background.drawing=off \
+    update_freq=30 \
+    script="$PLUGIN_DIR/clock.sh" \
+    click_script='sketchybar --set clock popup.drawing=toggle' \
+    popup.align=right \
+    popup.y_offset=6 \
+    popup.blur_radius=20 \
+    popup.background.color="$BAR_COLOR" \
+    popup.background.corner_radius=10 \
+    popup.background.border_width=1 \
+    popup.background.border_color="$BORDER_COLOR" \
+  --subscribe clock system_woke
+
+sketchybar --add item calendar popup.clock \
+  --set calendar \
+    width=280 \
+    icon.drawing=off \
+    label.drawing=off \
+    background.drawing=on \
+    background.color=0x00000000 \
+    background.height=300 \
+    background.image.scale=0.5
+
+# Display mode: dim toggle; label only appears in the non-default mode
+# (handled in display_mode.sh).
+sketchybar --add item display_mode right \
+  --set display_mode \
+    icon="󰍹" \
+    icon.color="$MUTED_COLOR" \
+    icon.padding_left=8 \
+    icon.padding_right=4 \
+    label.drawing=off \
+    label.font="$FONT:Bold:13.0" \
+    label.color="$SUBTEXT_COLOR" \
+    label.padding_left=0 \
+    label.padding_right=8 \
+    update_freq=10 \
+    script="$PLUGIN_DIR/display_mode.sh" \
+    click_script="$PLUGIN_DIR/display_mode.sh toggle" \
+  --subscribe display_mode system_woke display_change
+
+# Input source: the label is the information — no icon.
+sketchybar --add item input_source right \
+  --set input_source \
+    icon.drawing=off \
+    label="--" \
+    label.font="$FONT:Bold:13.0" \
+    label.color="$SUBTEXT_COLOR" \
+    label.padding_left=8 \
+    label.padding_right=8 \
+    update_freq=1 \
+    script="$PLUGIN_DIR/input_source.sh" \
+    click_script="$HOME/bin/switch-input-source; $PLUGIN_DIR/input_source.sh" \
+  --subscribe input_source system_woke
+
+# Amphetamine: dim icon at rest; label + amber border only while active
+# (handled in amphetamine.sh).
+sketchybar --add item amphetamine right \
+  --set amphetamine \
+    icon="󰒲" \
+    icon.color="$MUTED_COLOR" \
+    icon.padding_left=8 \
+    icon.padding_right=4 \
+    label.drawing=off \
+    label.font="$FONT:Bold:13.0" \
+    label.padding_left=0 \
+    label.padding_right=8 \
+    background.drawing=off \
+    background.border_width=0 \
+    update_freq=30 \
+    script="$PLUGIN_DIR/amphetamine.sh" \
+    click_script="$PLUGIN_DIR/amphetamine.sh click" \
+  --subscribe amphetamine system_woke
+
+sketchybar --add item stats right \
+  --set stats \
+    width=36 \
+    icon="󰍛" \
+    icon.color="$MUTED_COLOR" \
+    icon.align=center \
+    icon.width=36 \
+    icon.padding_left=0 \
+    icon.padding_right=0 \
+    icon.background.drawing=off \
+    label.drawing=off \
+    background.drawing=off \
+    padding_left=0 \
+    padding_right=0 \
+    script="$PLUGIN_DIR/hover.sh" \
+    click_script="$PLUGIN_DIR/stats_toggle.sh" \
+  --subscribe stats mouse.entered mouse.exited
+
+sketchybar --add item network right \
+  --set network \
+    drawing=off \
+    padding_left=4 \
+    padding_right=4 \
+    background.drawing=off \
+    icon="󰛳" \
+    label="↓ --  ↑ --" \
+    label.color="$SUBTEXT_COLOR" \
+    script="$PLUGIN_DIR/system_stats.sh" \
+  --subscribe network system_stats
+
+sketchybar --add item cpu right \
+  --set cpu \
+    drawing=off \
+    padding_left=4 \
+    padding_right=4 \
+    background.drawing=off \
+    icon="󰍛" \
+    label="CPU --" \
+    label.color="$SUBTEXT_COLOR" \
+    script="$PLUGIN_DIR/system_stats.sh" \
+  --subscribe cpu system_stats
+
+sketchybar --add item gpu right \
+  --set gpu \
+    drawing=off \
+    padding_left=4 \
+    padding_right=4 \
+    background.drawing=off \
+    icon="󰢮" \
+    label="GPU --" \
+    label.color="$SUBTEXT_COLOR" \
+    script="$PLUGIN_DIR/gpu.sh" \
+  --subscribe gpu gpu_stats
+
+sketchybar --add item ram right \
+  --set ram \
+    drawing=off \
+    padding_left=4 \
+    padding_right=4 \
+    background.drawing=off \
+    icon="󰘚" \
+    label="RAM --" \
+    label.color="$SUBTEXT_COLOR" \
+    script="$PLUGIN_DIR/system_stats.sh" \
+  --subscribe ram system_stats
+
+sketchybar --add item disk right \
+  --set disk \
+    drawing=off \
+    padding_left=4 \
+    padding_right=4 \
+    background.drawing=off \
+    icon="󰋊" \
+    label="DISK --" \
+    label.color="$SUBTEXT_COLOR" \
+    update_freq=60 \
+    script="$PLUGIN_DIR/system_stats.sh" \
+  --subscribe disk system_woke
+
+sketchybar --add bracket stats_container network cpu gpu ram disk \
+  --set stats_container \
+    drawing=off \
+    background.color="$ITEM_COLOR" \
+    background.corner_radius=8 \
+    background.height=30 \
+    background.border_width=1 \
+    background.border_color="$BORDER_COLOR"
+
+sketchybar --add item stats_left_gap right \
+  --set stats_left_gap \
+    drawing=off \
+    width=8 \
+    padding_left=0 \
+    padding_right=0 \
+    icon=" " \
+    icon.width=8 \
+    icon.color=0x00000000 \
+    icon.padding_left=0 \
+    icon.padding_right=0 \
+    label.drawing=off \
+    background.drawing=off
+
+sketchybar --add item vpn right \
+  --set vpn \
+    width=36 \
+    icon="󰦝" \
+    icon.color="$MUTED_COLOR" \
+    icon.align=center \
+    icon.width=36 \
+    icon.padding_left=0 \
+    icon.padding_right=0 \
+    icon.background.drawing=off \
+    label.drawing=off \
+    background.drawing=off \
+    padding_left=0 \
+    padding_right=0 \
+    script="$PLUGIN_DIR/hover.sh" \
+    click_script='sketchybar --set vpn popup.drawing=toggle' \
+    popup.horizontal=on \
+    popup.align=center \
+    popup.y_offset=6 \
+    popup.blur_radius=20 \
+    popup.background.color="$BAR_COLOR" \
+    popup.background.corner_radius=10 \
+    popup.background.border_width=1 \
+    popup.background.border_color="$BORDER_COLOR" \
+  --subscribe vpn mouse.entered mouse.exited
+
+sketchybar --add bracket controls display_mode input_source amphetamine stats vpn \
+  --set controls \
+    background.drawing=on \
+    background.color="$ITEM_COLOR" \
+    background.height=30 \
+    background.corner_radius=8 \
+    background.border_width=1 \
+    background.border_color="$BORDER_COLOR"
+
+sketchybar --add item vpn.tailscale popup.vpn \
+  --set vpn.tailscale \
+    background.drawing=on \
+    background.color=0x00000000 \
+    background.image=app.io.tailscale.ipn.macos \
+    background.image.scale=0.65 \
+    background.image.padding_left=8 \
+    background.image.padding_right=8 \
+    click_script="$PLUGIN_DIR/vpn_menu.sh Tailscale"
+
+sketchybar --add item vpn.harmony popup.vpn \
+  --set vpn.harmony \
+    background.drawing=on \
+    background.color=0x00000000 \
+    background.image=app.com.safervpn.osx.smb \
+    background.image.scale=0.65 \
+    background.image.padding_left=8 \
+    background.image.padding_right=8 \
+    click_script="$PLUGIN_DIR/vpn_menu.sh 'Harmony SASE'"
+
+sketchybar --add item vpn.wireguard popup.vpn \
+  --set vpn.wireguard \
+    background.drawing=on \
+    background.color=0x00000000 \
+    background.image=app.com.wireguard.macos \
+    background.image.scale=0.65 \
+    background.image.padding_left=8 \
+    background.image.padding_right=8 \
+    click_script="$PLUGIN_DIR/vpn_menu.sh WireGuard"
+
+killall stats_provider >/dev/null 2>&1 || true
+if command -v stats_provider >/dev/null 2>&1; then
+  network_interface="$(route -n get default 2>/dev/null | awk '/interface:/{print $2; exit}')"
+  if [[ -n "$network_interface" ]]; then
+    stats_provider --cpu usage --memory ram_usage --network "$network_interface" --interval 3 --network-refresh-rate 10 &
+  else
+    stats_provider --cpu usage --memory ram_usage --interval 3 &
+  fi
+fi
+
+pkill -f '[m]acmon pipe --interval 3000' >/dev/null 2>&1 || true
+if command -v macmon >/dev/null 2>&1 && command -v jq >/dev/null 2>&1; then
+  "$PLUGIN_DIR/gpu_provider.sh" &
+fi
+
+if command -v aerospace >/dev/null 2>&1; then
+  focused_workspace="$(aerospace list-workspaces --focused 2>/dev/null || true)"
+  if [[ -n "$focused_workspace" ]]; then
+    sketchybar --trigger aerospace_workspace_change "FOCUSED_WORKSPACE=$focused_workspace"
+  fi
+  focused_window_id="$(aerospace list-windows --focused --format '%{window-id}' 2>/dev/null || true)"
+  sketchybar --trigger aerospace_focus_change "WINDOW_ID=$focused_window_id"
+fi
+
+sketchybar --update

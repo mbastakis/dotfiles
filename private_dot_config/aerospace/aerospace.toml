@@ -24,7 +24,8 @@ default-root-container-orientation = 'auto'
 
 on-focus-changed = [
   'move-mouse window-lazy-center',
-] # Mouse lazily follows any focus (window or workspace)
+  'exec-and-forget /bin/bash -c "sketchybar --trigger aerospace_focus_change WINDOW_ID=${AEROSPACE_WINDOW_ID:-}"',
+] # Mouse and SketchyBar follow any focus (window or workspace)
 
 key-mapping.preset = 'dvorak'
 

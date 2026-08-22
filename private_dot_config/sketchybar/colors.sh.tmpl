@@ -1,0 +1,28 @@
+{{- $theme := index .theme.catalog .theme.active -}}
+{{- $palette := $theme.palette -}}
+# Generated from theme.active ({{ .theme.active }}).
+# Structure
+BAR_COLOR=0xf0{{ trimPrefix "#" $palette.mantle }}
+ITEM_COLOR=0xff{{ trimPrefix "#" $palette.surface }}
+BORDER_COLOR=0xff{{ trimPrefix "#" $palette.overlay_high }}
+SURFACE_COLOR=0xff{{ trimPrefix "#" $palette.overlay }}
+# Text hierarchy mirrors the palette tiers: TEXT (primary) > SUBTEXT
+# (secondary) > MUTED (resting toggles)
+TEXT_COLOR=0xff{{ trimPrefix "#" $palette.text }}
+SUBTEXT_COLOR=0xff{{ trimPrefix "#" $palette.subtext }}
+MUTED_COLOR=0xff{{ trimPrefix "#" $palette.muted }}
+ACTIVE_TEXT_COLOR=0xff{{ trimPrefix "#" $palette.black }}
+# Semantic
+ACCENT_COLOR=0xff{{ trimPrefix "#" $palette.rose }}
+ACCENT_CHIP=0x2e{{ trimPrefix "#" $palette.rose }}
+ACCENT_CHIP_HOVER=0x14{{ trimPrefix "#" $palette.rose }}
+ACCENT_CHIP_OFF=0x00{{ trimPrefix "#" $palette.rose }}
+SUCCESS_COLOR=0xff{{ trimPrefix "#" $palette.green }}
+WARNING_COLOR=0xff{{ trimPrefix "#" $palette.amber }}
+ERROR_COLOR=0xff{{ trimPrefix "#" $palette.red }}
+INFO_COLOR=0xff{{ trimPrefix "#" $palette.blue }}
+# Legacy aliases (kept for compatibility)
+BLUE="$INFO_COLOR"
+MAUVE=0xff{{ trimPrefix "#" $palette.orchid }}
+GREEN="$SUCCESS_COLOR"
+PEACH="$WARNING_COLOR"
