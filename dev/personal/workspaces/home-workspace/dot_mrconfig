@@ -5,3 +5,11 @@
 checkout = git clone git@github.com:mbastakis/dotfiles.git dotfiles_main
 [kavouki/kavouki_main]
 checkout = git clone git@github.com:mbastakis/kavouki.git kavouki_main
+
+# OpenTofu module repositories consumed by kavouki (WhoCaresSoftware org)
+[modules/terraform-aws-hardened-s3-bucket/terraform-aws-hardened-s3-bucket_main]
+checkout = git clone git@github.com:WhoCaresSoftware/terraform-aws-hardened-s3-bucket.git terraform-aws-hardened-s3-bucket_main
+[modules/terraform-aws-iam-user/terraform-aws-iam-user_main]
+checkout = git clone git@github.com:WhoCaresSoftware/terraform-aws-iam-user.git terraform-aws-iam-user_main
+[modules/terraform-aws-route53-private-services/terraform-aws-route53-private-services_main]
+checkout = git clone git@github.com:WhoCaresSoftware/terraform-aws-route53-private-services.git terraform-aws-route53-private-services_main
