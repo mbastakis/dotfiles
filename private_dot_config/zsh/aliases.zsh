@@ -50,21 +50,15 @@ alias ghostty-settings="nvim ~/.config/ghostty/config"
 # Chezmoi
 alias cz="chezmoi"
 
-# Taskwarrior — `taskwarrior-tui` shells out to a `task` binary internally,
-# and Homebrew re-prepends /opt/homebrew/bin ahead of ~/bin in .zshrc, so
-# name-shadowing via PATH order alone isn't reliable. Alias to the ~/bin
-# wrapper explicitly so it always wins for interactive use.
-alias taskwarrior-tui="$HOME/bin/taskwarrior-tui"
-
 # Tmux
 alias ta="tmux attach"
 alias td="tmux detach"
 alias tls="tmux ls"
 
 # Opencode
-alias oc="opencode-launch"
-alias ocm="opencode-launch mini"
-alias occ="opencode-launch --continue"
+alias oc="opencode2"
+alias ocm="opencode2 mini"
+alias occ="opencode2 --continue"
 alias ocserve="opencode-server"
 
 # Lazyssh

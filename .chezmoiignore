@@ -1,7 +1,6 @@
 # Documentation
 README.md
 AGENTS.md
-CONTEXT.md
 docs/
 
 # Git
@@ -30,19 +29,14 @@ node_modules/
 .tflint.d/
 .terraform/
 **/.terraform/**
-*.tfstate
-*.tfstate.*
-*.tfplan
-*.tfvars
-*.tfvars.json
+**/*.tfstate
+**/*.tfstate.*
+**/*.tfplan
 **/target/**
 *.pyc
 __pycache__/
 **/__pycache__/
 .ruff_cache/
-bun.lock
-package-lock.json
-Cargo.lock
 
 # Caches and runtime-generated files
 .cache/
@@ -56,6 +50,8 @@ Cargo.lock
 .config/opencode/bun.lock
 .config/opencode/skills/*-workspace/
 .local/share/go/
+.local/share/nvim/
+.local/share/opencode/
 .local/share/task/
 .local/state/atuin/logs/
 .local/state/mcp-auth/
@@ -86,15 +82,25 @@ Documents/notes/.trash/
 .config/karabiner/research/**
 .config/karabiner/README.md
 
-# Vicinae runtime state; settings, themes, scripts, and extensions stay managed.
+# Vicinae runtime state; settings, themes, and scripts stay managed.
 .local/share/vicinae/clipboard-data/
+.local/share/vicinae/extensions/
 .local/share/vicinae/clipboard.db*
+.local/share/vicinae/emojis/
+.local/share/vicinae/favicon
+.local/share/vicinae/favicon-data/
+.local/share/vicinae/metadata.json
+.local/share/vicinae/node/
+.local/share/vicinae/script-metadata.json
+.local/share/vicinae/search-history.json
+.local/share/vicinae/shortcuts/
 .local/share/vicinae/snippets/
 .local/share/vicinae/support/
 .local/share/vicinae/vicinae.db*
 .local/state/vicinae/onboarding.json
 .local/state/vicinae/recent-files.json
 .local/state/vicinae/login-item-registered
+.local/state/vicinae/telemetry.json
 .local/state/vicinae/*.log
 
 # SSH (machine-generated)

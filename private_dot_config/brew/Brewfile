@@ -120,8 +120,6 @@ brew "imagemagick"
 brew "iproute2mac"
 # Synchronize a maildir with an IMAP server
 brew "isync"
-# Git-compatible distributed version control system
-brew "jj"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
 # Kubernetes CLI To Manage Your Clusters In Style!
@@ -136,8 +134,6 @@ brew "kubernetes-cli"
 brew "lazydocker"
 # Simple terminal UI for git commands
 brew "lazygit"
-# TUI for Jujutsu/jj
-brew "lazyjj"
 # Terminal-based SSH manager
 brew "lazyssh"
 # Powerful, lightweight programming language
@@ -233,10 +229,6 @@ brew "syncthing", restart_service: :changed
 # `task` formula, but reached as `tw` — see literal_bin/executable_tw — since
 # the global `task` command is go-task (private_dot_config/mise/config.toml).
 brew "task"
-# Terminal user interface for taskwarrior. Run through
-# literal_bin/executable_taskwarrior-tui so its internal `task` calls still
-# reach Taskwarrior instead of go-task.
-brew "taskwarrior-tui"
 # Very fast implementation of tldr in Rust
 brew "tealdeer"
 # Send macOS User Notifications from the command-line
@@ -362,4 +354,3 @@ mas "WireGuard", id: 1451685025
 mas "Xcode", id: 497799835
 go "golang.org/x/tools/gopls"
 go "honnef.co/go/tools/cmd/staticcheck"
-cargo "starship-jj"

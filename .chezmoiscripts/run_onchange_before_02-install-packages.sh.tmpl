@@ -7,6 +7,9 @@ set -euo pipefail
 
 BREWFILE_PATH="{{ .chezmoi.sourceDir }}/private_dot_config/brew/Brewfile"
 
+# Package updates are explicit through the brew_update shell function.
+export HOMEBREW_NO_AUTO_UPDATE=1
+
 echo "Installing packages from Brewfile..."
 
 if ! command -v brew &>/dev/null; then
@@ -35,7 +38,7 @@ if ! command -v brew &>/dev/null; then
 fi
 
 if [[ -t 0 && -t 1 ]]; then
-    brew bundle --file="$BREWFILE_PATH"
+    brew bundle --file="$BREWFILE_PATH" --no-upgrade
 else
     echo "Non-interactive shell detected. Skipping Mac App Store installs during chezmoi apply."
     # shellcheck disable=SC2016 # $1 belongs to the single-quoted Ruby program.
@@ -43,9 +46,9 @@ else
     if [[ -n "$mas_ids" ]]; then
         export HOMEBREW_BUNDLE_MAS_SKIP="${HOMEBREW_BUNDLE_MAS_SKIP:+${HOMEBREW_BUNDLE_MAS_SKIP} }${mas_ids//$'\n'/ }"
     fi
-    brew bundle --file="$BREWFILE_PATH"
+    brew bundle --file="$BREWFILE_PATH" --no-upgrade
     echo "To install Mac App Store apps later, run this in an interactive terminal:"
-    echo "  brew bundle --file=\$HOME/.config/brew/Brewfile"
+    echo "  HOMEBREW_NO_AUTO_UPDATE=1 brew bundle --file=\$HOME/.config/brew/Brewfile --no-upgrade"
 fi
 
 echo "Package installation complete!"

@@ -16,7 +16,7 @@ path = "~"
 
 [[window]]
 name = "opencode"
-startup_script = "opencode-launch"
+startup_script = "opencode2"
 
 [[window]]
 name = "lazygit"

@@ -24,16 +24,8 @@ export GITLAB_ACCESS_TOKEN='{{ (bitwardenSecrets "1d6d9f0f-ac45-405a-a3b4-b49e00
 export GITLAB_USERNAME="michail.bastakis"
 export GITLAB_HOST="gitlab.devops.telekom.de"
 
-# Pager — disable rich pagers in agent/non-TTY contexts.
-# OpenCode sets OPENCODE=1; its Bash tool uses piped stdout (no PTY).
-if [[ -n "${OPENCODE:-}" ]] || [[ ! -t 1 ]]; then
-    export PAGER="cat"
-    export GIT_PAGER="cat"
-    export BAT_PAGER=""
-    export MANPAGER="cat"
-else
-    export PAGER="bat"
-fi
+# Applications decide whether to invoke a pager from their runtime TTY state.
+export PAGER="bat"
 
 # Less settings and colors
 export LESS="-R"

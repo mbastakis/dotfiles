@@ -13,8 +13,9 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_STATE_HOME="$HOME/.local/state"
 
-# Scrub sensitive or config-bypassing values inherited from parent shells.
+# Scrub sensitive values inherited from parent shells.
 unset BWS_ACCESS_TOKEN
+# Neovim evaluates VIMINIT instead of ~/.config/nvim/init.lua when it is set.
 unset VIMINIT
 
 # macOS provides a per-user runtime directory via TMPDIR.
@@ -28,6 +29,7 @@ export SHELL_SESSIONS_DISABLE=1
 
 # History file (explicit - HISTFILE does not follow ZDOTDIR)
 HISTFILE="$XDG_STATE_HOME/zsh/history"
+[[ -d "${HISTFILE:h}" ]] || mkdir -p "${HISTFILE:h}"
 HISTSIZE=10000
 SAVEHIST=10000
 
@@ -59,6 +61,7 @@ export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
 
 # GnuPG (keyrings + config live together, DATA_HOME is more appropriate)
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
+[[ -d "$GNUPGHOME" ]] || mkdir -m 700 "$GNUPGHOME"
 
 # Kubernetes
 export KUBECONFIG="$XDG_CONFIG_HOME/kube/config-dev:$XDG_CONFIG_HOME/kube/config-playground:$XDG_CONFIG_HOME/kube/config-prod"
@@ -81,8 +84,9 @@ export GOBIN="$HOME/bin"
 # without prompting (applies to the current source directory and nested configs)
 export MISE_TRUSTED_CONFIG_PATHS="$DOTFILES_PATH"
 
-# Terraform provider cache
+# Shared OpenTofu/Terraform provider cache
 export TF_PLUGIN_CACHE_DIR="$XDG_CACHE_HOME/terraform/plugins"
+[[ -d "$TF_PLUGIN_CACHE_DIR" ]] || mkdir -p "$TF_PLUGIN_CACHE_DIR"
 
 # Taskwarrior (XDG-compliant override of ~/.taskrc and ~/.task/)
 export TASKRC="$XDG_CONFIG_HOME/task/taskrc"
