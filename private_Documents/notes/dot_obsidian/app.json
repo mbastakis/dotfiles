@@ -1,4 +1,5 @@
 {
+  "baseTheme": "dark",
   "readableLineLength": false,
   "showLineNumber": true,
   "rightToLeft": false,

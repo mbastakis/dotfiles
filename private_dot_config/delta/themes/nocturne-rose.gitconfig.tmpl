@@ -1,0 +1,28 @@
+{{- $theme := index .theme.catalog .theme.active -}}
+{{- $palette := $theme.palette -}}
+[delta "{{ .theme.active }}"]
+	blame-palette = "{{ $palette.base }} {{ $palette.mantle }} {{ $palette.black }} {{ $palette.surface }} {{ $palette.overlay }}"
+	commit-decoration-style = "{{ $palette.muted }}" bold box ul
+	dark = true
+	file-decoration-style = "{{ $palette.muted }}"
+	file-style = "{{ $palette.text }}"
+	hunk-header-decoration-style = "{{ $palette.muted }}" box ul
+	hunk-header-file-style = bold
+	hunk-header-line-number-style = bold "{{ $palette.subtext }}"
+	hunk-header-style = file line-number syntax
+	line-numbers-left-style = "{{ $palette.muted }}"
+	line-numbers-minus-style = bold "{{ $palette.red }}"
+	line-numbers-plus-style = bold "{{ $palette.green }}"
+	line-numbers-right-style = "{{ $palette.muted }}"
+	line-numbers-zero-style = "{{ $palette.muted }}"
+	minus-emph-style = bold syntax "{{ $palette.diff_text }}"
+	minus-style = syntax "{{ $palette.diff_delete }}"
+	plus-emph-style = bold syntax "{{ $palette.diff_text }}"
+	plus-style = syntax "{{ $palette.diff_add }}"
+	map-styles = \
+		bold purple => syntax "{{ $palette.orchid }}", \
+		bold blue => syntax "{{ $palette.blue }}", \
+		bold cyan => syntax "{{ $palette.aqua }}", \
+		bold yellow => syntax "{{ $palette.yellow }}"
+	# Must match the rendered bat theme name.
+	syntax-theme = {{ $theme.display_name }}

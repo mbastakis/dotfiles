@@ -1,3 +1,5 @@
+{{- $theme := index .theme.catalog .theme.active -}}
+{{- $palette := $theme.palette }}
 # ================================
 # Input and key bindings
 # ================================
@@ -46,9 +48,6 @@ bind-key -T copy-mode-vi v send-keys -X begin-selection
 bind-key -T copy-mode-vi C-v send-keys -X rectangle-toggle
 bind-key -T copy-mode-vi y send-keys -X copy-selection-and-cancel
 
-# Double-click URLs to open them; non-URL double-clicks keep tmux's default word copy.
-if-shell 'test -x "$HOME/bin/tmux-open-url-at-mouse"' 'bind-key -n DoubleClick1Pane select-pane -t = \; if-shell -F "#{||:#{pane_in_mode},#{mouse_any_flag}}" "send-keys -M" "if-shell '\''TMUX_URL_HYPERLINK=#{q:mouse_hyperlink} TMUX_URL_WORD=#{q:mouse_word} TMUX_URL_LINE=#{q:mouse_line} TMUX_URL_X=#{mouse_x} TMUX_PANE_LEFT=#{pane_left} ~/bin/tmux-open-url-at-mouse'\'' '\'''\'' '\''copy-mode -H ; send-keys -X select-word ; run-shell -d 0.3 ; send-keys -X copy-pipe-and-cancel'\''"'
-
 # Reload config
 bind r source-file ~/.config/tmux/tmux.conf \; display-message "tmux.conf reloaded"
 
@@ -74,13 +73,40 @@ set -g @plugin 'tmux-plugins/tmux-yank'
 set -g @plugin 'tmux-plugins/tmux-resurrect'
 set -g @plugin 'tmux-plugins/tmux-continuum'
 set -g @plugin 'omerxx/tmux-floax'
-set -g @plugin 'Chaitanyabsprip/tmux-harpoon'
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'tmux-plugins/tmux-sensible'
 
 # ================================
 # Plugin options
 # ================================
+
+# Supply the active palette to Catppuccin's tmux formatting engine.
+set -g @thm_bg {{ $palette.base | quote }}
+set -g @thm_fg {{ $palette.text | quote }}
+set -g @thm_crust {{ $palette.black | quote }}
+set -g @thm_mantle {{ $palette.mantle | quote }}
+set -g @thm_surface_0 {{ $palette.surface | quote }}
+set -g @thm_surface_1 {{ $palette.overlay | quote }}
+set -g @thm_surface_2 {{ $palette.overlay_high | quote }}
+set -g @thm_overlay_0 {{ $palette.muted | quote }}
+set -g @thm_overlay_1 {{ $palette.subtext | quote }}
+set -g @thm_overlay_2 {{ $palette.subtext | quote }}
+set -g @thm_subtext_0 {{ $palette.subtext | quote }}
+set -g @thm_subtext_1 {{ $palette.subtext | quote }}
+set -g @thm_rosewater {{ $palette.text | quote }}
+set -g @thm_flamingo {{ $palette.rose | quote }}
+set -g @thm_pink {{ $palette.rose | quote }}
+set -g @thm_mauve {{ $palette.rose | quote }}
+set -g @thm_red {{ $palette.red | quote }}
+set -g @thm_maroon {{ $palette.red | quote }}
+set -g @thm_peach {{ $palette.amber | quote }}
+set -g @thm_yellow {{ $palette.yellow | quote }}
+set -g @thm_green {{ $palette.green | quote }}
+set -g @thm_teal {{ $palette.aqua | quote }}
+set -g @thm_sky {{ $palette.aqua | quote }}
+set -g @thm_sapphire {{ $palette.blue | quote }}
+set -g @thm_blue {{ $palette.blue | quote }}
+set -g @thm_lavender {{ $palette.orchid | quote }}
 
 # Catppuccin: show window names (manual rename friendly).
 set -g @catppuccin_window_text " #W"
@@ -92,76 +118,43 @@ set -g @catppuccin_date_time_text " %H:%M "
 set -g @catppuccin_status_right_separator ""
 
 # Sesh session picker on prefix+s.
-if-shell 'test -x "$HOME/bin/sesh-picker"' 'bind-key s display-popup -E -w 45% -h 80% -d "#{pane_current_path}" -T "sesh" "~/bin/sesh-picker"'
+bind-key s display-popup -E -w 45% -h 80% -d "#{pane_current_path}" -T "sesh" "sesh picker --hide-attached --hide-duplicates --icons"
 
-# Rename the current tmux window/session in popups so prompts do not cover the status line.
-if-shell 'test -x "$HOME/bin/sesh-rename"' 'bind-key , display-popup -E -w 45% -h 8 -T "rename window" "~/bin/sesh-rename window"'
-if-shell 'test -x "$HOME/bin/sesh-rename"' 'bind-key R display-popup -E -w 45% -h 8 -T "rename session" "~/bin/sesh-rename"'
+# Rename the current tmux window/session with native editable prompts.
+bind-key , command-prompt -I "#W" -p "rename window> " { rename-window "%%" }
+bind-key R command-prompt -I "#S" -p "rename session> " { rename-session "%%" }
 
 # Floax on prefix+P; keep prefix+p for previous-window.
 set -g @floax-bind 'P'
 set -g @floax-bind-menu 'M-P'
 
-# Oasis-style mode indicator (icon + mode label).
+# Mode indicator, collapsed to four learnable states: prefix = rose (it is
+# a focus state), copy/view = amber, zoom = teal, everything else (incl.
+# transient menus) = quiet normal.
 set -g @mode_indicator_color "\
-#{?client_prefix,#{@thm_red},\
-#{?#{==:#{pane_mode},copy-mode},#{@thm_peach},\
-#{?#{==:#{pane_mode},view-mode},#{@thm_yellow},\
-#{?#{||:#{==:#{pane_mode},tree-mode},#{==:#{pane_mode},client-mode}},#{@thm_green},\
-#{?#{==:#{pane_mode},options-mode},#{@thm_mauve},\
-#{?#{==:#{pane_mode},clock-mode},#{@thm_sky},\
+#{?client_prefix,#{@thm_pink},\
+#{?#{||:#{==:#{pane_mode},copy-mode},#{==:#{pane_mode},view-mode}},#{@thm_peach},\
 #{?window_zoomed_flag,#{@thm_teal},\
-#{@thm_lavender}\
-}}}}}}}"
+#{@thm_overlay_1}\
+}}}"
 
 set -g @mode_indicator_icon "\
-#{?client_prefix,,\
-#{?#{==:#{pane_mode},copy-mode},,\
-#{?#{==:#{pane_mode},view-mode},,\
-#{?#{||:#{==:#{pane_mode},tree-mode},#{==:#{pane_mode},client-mode}},,\
-#{?#{==:#{pane_mode},options-mode},,\
-#{?#{==:#{pane_mode},clock-mode},,\
+#{?client_prefix,,\
+#{?#{||:#{==:#{pane_mode},copy-mode},#{==:#{pane_mode},view-mode}},,\
 #{?window_zoomed_flag,,\
 \
-}}}}}}}"
+}}}"
 
 set -g @mode_indicator_label "\
 #{?client_prefix,COMMAND ,\
-#{?#{==:#{pane_mode},copy-mode},COPY ,\
-#{?#{==:#{pane_mode},view-mode},VIEW ,\
-#{?#{||:#{==:#{pane_mode},tree-mode},#{==:#{pane_mode},client-mode}},CHOOSE ,\
-#{?#{==:#{pane_mode},options-mode},OPTIONS ,\
-#{?#{==:#{pane_mode},clock-mode},CLOCK ,\
-#{?window_zoomed_flag,ZOOM,\
+#{?#{||:#{==:#{pane_mode},copy-mode},#{==:#{pane_mode},view-mode}},COPY ,\
+#{?window_zoomed_flag,ZOOM ,\
 NORMAL \
-}}}}}}}"
+}}}"
 
-set -g @session_right_segment "#[fg=#{@thm_blue},bold]󰍹 #{session_name}#[default]"
+set -g @session_right_segment "#[fg=#{@thm_overlay_1}]󰍹 #[fg=#{@thm_mauve},bold]#{session_name}#[default]"
 set -g @mode_indicator_segment "#[fg=#{E:@mode_indicator_color}]#{E:@mode_indicator_icon} #[fg=#{E:@mode_indicator_color},bold]#{E:@mode_indicator_label}#[default]"
 
-# Harpoon quick slots (Ctrl+Command + a/o/e/u) for jumping.
-set -g @harpoon_key_append1 'C-M-a'
-set -g @harpoon_key_append2 'C-M-o'
-set -g @harpoon_key_append3 'C-M-e'
-set -g @harpoon_key_append4 'C-M-u'
-
-# Harpoon slot overwrite (Ctrl+Command+Shift + a/o/e/u) for current pane.
-if-shell 'test -x "$HOME/bin/harpoon-replace-pane"' 'bind-key -n C-M-S-a run-shell "~/bin/harpoon-replace-pane 1"'
-if-shell 'test -x "$HOME/bin/harpoon-replace-pane"' 'bind-key -n C-M-S-o run-shell "~/bin/harpoon-replace-pane 2"'
-if-shell 'test -x "$HOME/bin/harpoon-replace-pane"' 'bind-key -n C-M-S-e run-shell "~/bin/harpoon-replace-pane 3"'
-if-shell 'test -x "$HOME/bin/harpoon-replace-pane"' 'bind-key -n C-M-S-u run-shell "~/bin/harpoon-replace-pane 4"'
-
-# Compatibility aliases for terminals that emit uppercase key names.
-if-shell 'test -x "$HOME/bin/harpoon-replace-pane"' 'bind-key -n C-M-A run-shell "~/bin/harpoon-replace-pane 1"'
-if-shell 'test -x "$HOME/bin/harpoon-replace-pane"' 'bind-key -n C-M-O run-shell "~/bin/harpoon-replace-pane 2"'
-if-shell 'test -x "$HOME/bin/harpoon-replace-pane"' 'bind-key -n C-M-E run-shell "~/bin/harpoon-replace-pane 3"'
-if-shell 'test -x "$HOME/bin/harpoon-replace-pane"' 'bind-key -n C-M-U run-shell "~/bin/harpoon-replace-pane 4"'
-
-# Harpoon management keys.
-if-shell 'test -x "$HOME/.config/tmux/plugins/tmux-harpoon/harpoon"' 'bind-key A run-shell "~/.config/tmux/plugins/tmux-harpoon/harpoon -a"'
-if-shell 'test -x "$HOME/.config/tmux/plugins/tmux-harpoon/harpoon"' 'bind-key D run-shell "~/.config/tmux/plugins/tmux-harpoon/harpoon -d"'
-if-shell 'test -x "$HOME/.config/tmux/plugins/tmux-harpoon/harpoon"' 'bind-key g run-shell "~/.config/tmux/plugins/tmux-harpoon/harpoon -l"'
-if-shell 'test -x "$HOME/.config/tmux/plugins/tmux-harpoon/harpoon"' 'bind-key e run-shell "EDITOR=\${EDITOR:-vi} ~/.config/tmux/plugins/tmux-harpoon/harpoon -e"'
 bind-key d detach-client
 
 # Continuum + Resurrect
@@ -173,7 +166,7 @@ set -g @continuum-restore 'off'
 set -g @continuum-save-interval '15'
 set -g @continuum-boot 'off'
 set -g @resurrect-dir '~/.local/share/tmux/resurrect'
-set -g @resurrect-processes '"~opencode-restore-session" "~opencode-launch->opencode-launch --continue"'
+set -g @resurrect-processes '"~opencode2->opencode2 --continue"'
 set -g @resurrect-capture-pane-contents 'on'
 set -g @resurrect-pane-contents-area 'full'
 
@@ -205,7 +198,7 @@ set -g status-left-length 1
 %if "#{||:#{!=:#{E:SSH_CONNECTION},},#{||:#{!=:#{E:SSH_CLIENT},},#{!=:#{E:SSH_TTY},}}}"
 set -g status-right "#[fg=colour39,bold]#S#[default] #[fg=colour244]#H %H:%M "
 %else
-set -g status-right "#{E:@mode_indicator_segment} #[fg=#{@thm_overlay0}]#[default] #{E:@session_right_segment} "
+set -g status-right "#{E:@mode_indicator_segment} #[fg=#{@thm_overlay_0}]#[default] #{E:@session_right_segment} "
 %endif
 set -g status-right-length 120
 
@@ -215,12 +208,18 @@ if "test ! -d ~/.config/tmux/plugins/tpm" "run 'mkdir -p ~/.config/tmux/plugins 
 run '~/.config/tmux/plugins/tpm/tpm'
 %endif
 
+# Let prompts and messages temporarily replace the themed window list instead
+# of drawing over it. The normal status content returns when they close.
+set -g status-style "bg={{ $palette.base }},fg={{ $palette.text }}"
+set -g message-style "bg={{ $palette.base }},fg={{ $palette.text }},fill={{ $palette.base }},width=100%,align=left"
+set -g message-command-style "bg={{ $palette.base }},fg={{ $palette.text }},fill={{ $palette.base }},width=100%,align=left"
+
 # Pane borders: tmux draws shared separator cells, not independent pane boxes.
 # Use thin colored separators and pane labels for a boxed-pane approximation.
 set -g pane-border-indicators off
 set -g pane-border-lines single
-set -g pane-border-style "fg=#313244,bg=default"
-set -g pane-active-border-style "fg=#89b4fa,bg=default"
+set -g pane-border-style "fg={{ $palette.overlay_high }},bg=default"
+set -g pane-active-border-style "fg={{ $palette.rose }},bg=default"
 set -g pane-border-status top
 set -g pane-border-format "#[align=centre]"
 

@@ -1,0 +1,61 @@
+{{- $theme := index .theme.catalog .theme.active -}}
+{{- $palette := $theme.palette -}}
+# Nocturne Rose theme, generated from theme.active ({{ .theme.active }}).
+
+# Core surfaces and text
+theme[main_bg]={{ $theme.semantic.background | quote }}
+theme[main_fg]={{ $theme.semantic.foreground | quote }}
+theme[title]={{ $palette.text | quote }}
+theme[hi_fg]={{ $palette.rose | quote }}
+theme[selected_bg]={{ $theme.semantic.selection_background | quote }}
+theme[selected_fg]={{ $theme.semantic.selection_foreground | quote }}
+theme[inactive_fg]={{ $palette.muted | quote }}
+theme[graph_text]={{ $palette.subtext | quote }}
+theme[meter_bg]={{ $palette.overlay | quote }}
+theme[proc_misc]={{ $palette.orchid | quote }}
+
+# Restrained rose/orchid structure
+theme[cpu_box]={{ $palette.rose | quote }}
+theme[mem_box]={{ $palette.orchid | quote }}
+theme[net_box]={{ $palette.rose | quote }}
+theme[proc_box]={{ $palette.orchid | quote }}
+theme[div_line]={{ $palette.overlay_high | quote }}
+
+# Temperature keeps conventional severity colors
+theme[temp_start]={{ $palette.green | quote }}
+theme[temp_mid]={{ $palette.yellow | quote }}
+theme[temp_end]={{ $palette.red | quote }}
+
+# Primary activity gradients
+theme[cpu_start]={{ $palette.orchid | quote }}
+theme[cpu_mid]={{ $palette.rose | quote }}
+theme[cpu_end]={{ $palette.text | quote }}
+
+theme[free_start]={{ $palette.orchid | quote }}
+theme[free_mid]={{ $palette.rose | quote }}
+theme[free_end]={{ $palette.text | quote }}
+
+theme[cached_start]={{ $palette.muted | quote }}
+theme[cached_mid]={{ $palette.orchid | quote }}
+theme[cached_end]={{ $palette.rose | quote }}
+
+theme[available_start]={{ $palette.muted | quote }}
+theme[available_mid]={{ $palette.orchid | quote }}
+theme[available_end]={{ $palette.text | quote }}
+
+theme[used_start]={{ $palette.orchid | quote }}
+theme[used_mid]={{ $palette.rose | quote }}
+theme[used_end]={{ $palette.red | quote }}
+
+# Network direction uses semantic blue for download and green for upload
+theme[download_start]={{ $palette.muted | quote }}
+theme[download_mid]={{ $palette.blue | quote }}
+theme[download_end]={{ $palette.text | quote }}
+
+theme[upload_start]={{ $palette.muted | quote }}
+theme[upload_mid]={{ $palette.green | quote }}
+theme[upload_end]={{ $palette.text | quote }}
+
+theme[process_start]={{ $palette.muted | quote }}
+theme[process_mid]={{ $palette.orchid | quote }}
+theme[process_end]={{ $palette.rose | quote }}

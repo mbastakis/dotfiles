@@ -1,12 +1,13 @@
 #!/bin/bash
 set -euo pipefail
+{{- $theme := index .theme.catalog .theme.active }}
 
 options=(
     style=round
-    width=6.0
+    width=4.0
     hidpi=off
-    active_color=0xff{{ trimPrefix "#" .colors.mauve }}
-    inactive_color=0xff{{ trimPrefix "#" .colors.surface1 }}
+    active_color=0xff{{ trimPrefix "#" $theme.palette.rose }}
+    inactive_color=0xff{{ trimPrefix "#" $theme.palette.overlay_high }}
 )
 
 borders "${options[@]}"

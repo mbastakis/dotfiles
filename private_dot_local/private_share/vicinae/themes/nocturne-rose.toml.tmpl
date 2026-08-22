@@ -1,0 +1,48 @@
+{{- $theme := index .theme.catalog .theme.active -}}
+{{- $palette := $theme.palette -}}
+{{- $semantic := $theme.semantic -}}
+[meta]
+version = 1
+name = {{ $theme.display_name | quote }}
+description = "Dotfiles-managed theme selected by theme.active."
+variant = {{ $theme.variant | quote }}
+inherits = "vicinae-dark"
+
+[colors.core]
+background = {{ $semantic.background | quote }}
+foreground = {{ $semantic.foreground | quote }}
+secondary_background = {{ $palette.mantle | quote }}
+border = {{ $palette.overlay_high | quote }}
+accent = {{ $palette.rose | quote }}
+accent_foreground = {{ $palette.black | quote }}
+
+[colors.accents]
+blue = {{ $palette.blue | quote }}
+green = {{ $palette.green | quote }}
+magenta = {{ $palette.rose | quote }}
+orange = {{ $palette.amber | quote }}
+purple = {{ $palette.orchid | quote }}
+red = {{ $palette.red | quote }}
+yellow = {{ $palette.yellow | quote }}
+cyan = {{ $palette.aqua | quote }}
+
+[colors.text]
+muted = {{ $palette.muted | quote }}
+danger = {{ $palette.red | quote }}
+success = {{ $palette.green | quote }}
+placeholder = {{ $palette.disabled | quote }}
+selection = { background = {{ $semantic.selection_background | quote }}, foreground = {{ $semantic.selection_foreground | quote }} }
+
+[colors.input]
+border = {{ $palette.overlay_high | quote }}
+border_focus = {{ $palette.rose | quote }}
+border_error = {{ $palette.red | quote }}
+
+[colors.list.item.selection]
+background = {{ $palette.surface | quote }}
+secondary_background = {{ $palette.mantle | quote }}
+
+[colors.grid.item]
+background = {{ $palette.surface | quote }}
+hover = { outline = {{ $palette.rose | quote }} }
+selection = { outline = {{ $palette.orchid | quote }} }

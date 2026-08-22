@@ -46,7 +46,7 @@ nmap zo :foldLess<CR>
 nmap zM :foldAll<CR>
 nmap zR :unfoldAll<CR>
 
-" Fold-aware j/k navigation (fixes Anuppuccin theme unfolding on move)
+" Fold-aware j/k navigation (prevents theme-driven unfolding on move)
 exmap downSkipFold jsfile .obsidian/mdHelpers.js {moveDownSkipFold()}
 exmap upSkipFold jsfile .obsidian/mdHelpers.js {moveUpSkipFold()}
 nmap j :downSkipFold<CR>

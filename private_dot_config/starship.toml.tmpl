@@ -1,6 +1,8 @@
+{{- $theme := index .theme.catalog .theme.active -}}
+{{- $palette := $theme.palette }}
 "$schema" = 'https://starship.rs/config-schema.json'
 
-palette = "catppuccin_mocha"
+palette = {{ .theme.active | replace "-" "_" | quote }}
 command_timeout = 1500
 add_newline = true
 
@@ -19,7 +21,7 @@ $character\
 
 [os]
 disabled = true
-style = "bg:red fg:crust"
+style = "bg:error fg:background"
 format = "[ $symbol ]($style)"
 
 [os.symbols]
@@ -75,15 +77,15 @@ Zorin = " "
 
 # [username]
 # show_always = true
-# style_user = "bg:red fg:crust"
-# style_root = "bg:red fg:crust"
+# style_user = "bg:error fg:background"
+# style_root = "bg:error fg:background"
 # format = '[ $user ]($style)'
 
 [directory]
-style = "lavender"
+style = "accent"
 format = "[$path]($style)[$read_only]($read_only_style) "
 read_only = " 󰌾"
-read_only_style = "subtext1"
+read_only_style = "subtext"
 truncation_length = 3
 truncation_symbol = "…/"
 
@@ -97,7 +99,7 @@ Developer = "󰲋 "
 # [kubernetes]
 # disabled = false
 # symbol = "󱃾 "
-# style = "bg:teal fg:crust"
+# style = "bg:info fg:background"
 # format = '[ $symbol$context ]($style)'
 #
 # [[kubernetes.contexts]]
@@ -118,15 +120,15 @@ Developer = "󰲋 "
 
 [git_branch]
 format = "[$branch]($style) "
-style = "overlay1"
+style = "muted"
 
 [git_state]
 format = '\([$state( $progress_current/$progress_total)]($style)\) '
-style = "overlay1"
+style = "muted"
 
 [git_status]
 format = "[$all_status$ahead_behind]($style) "
-style = "overlay2"
+style = "subtext"
 conflicted = ":${count} "
 ahead = "⇡:${count} "
 behind = "⇣:${count} "
@@ -140,7 +142,7 @@ untracked = ":${count} "
 
 # [aws]
 # symbol = " "
-# style = "bg:teal fg:crust"
+# style = "bg:info fg:background"
 # format = '[ $symbol$profile ]($style)'
 
 [buf]
@@ -151,8 +153,8 @@ symbol = " "
 
 [c]
 symbol = " "
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+style = "muted"
+format = '[[ $symbol( $version) ](muted)]($style)'
 
 [cpp]
 symbol = " "
@@ -162,7 +164,7 @@ symbol = " "
 
 [conda]
 symbol = " "
-style = "fg:crust bg:sapphire"
+style = "fg:background bg:info"
 format = '[ $symbol$environment ]($style)'
 ignore_base = false
 
@@ -201,8 +203,8 @@ tag_symbol = "  "
 
 [golang]
 symbol = " "
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+style = "muted"
+format = '[[ $symbol( $version) ](muted)]($style)'
 
 [gradle]
 symbol = " "
@@ -212,8 +214,8 @@ symbol = " "
 
 [haskell]
 symbol = " "
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+style = "muted"
+format = '[[ $symbol( $version) ](muted)]($style)'
 
 [haxe]
 symbol = " "
@@ -226,16 +228,16 @@ ssh_symbol = " "
 
 [java]
 symbol = " "
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+style = "muted"
+format = '[[ $symbol( $version) ](muted)]($style)'
 
 [julia]
 symbol = " "
 
 [kotlin]
 symbol = " "
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+style = "muted"
+format = '[[ $symbol( $version) ](muted)]($style)'
 
 [lua]
 symbol = " "
@@ -254,8 +256,8 @@ symbol = " "
 
 [nodejs]
 symbol = " "
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+style = "muted"
+format = '[[ $symbol( $version) ](muted)]($style)'
 
 [ocaml]
 symbol = " "
@@ -268,8 +270,8 @@ symbol = " "
 
 [php]
 symbol = " "
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+style = "muted"
+format = '[[ $symbol( $version) ](muted)]($style)'
 
 [pijul_channel]
 symbol = " "
@@ -280,7 +282,7 @@ symbol = "󰏗 "
 [python]
 symbol = " "
 format = "[$virtualenv]($style) "
-style = "overlay1"
+style = "muted"
 detect_extensions = []
 detect_files = []
 
@@ -292,8 +294,8 @@ symbol = " "
 
 [rust]
 symbol = "󱘗 "
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+style = "muted"
+format = '[[ $symbol( $version) ](muted)]($style)'
 
 [scala]
 symbol = " "
@@ -307,8 +309,8 @@ symbol = " "
 [time]
 disabled = true
 time_format = "%R"
-style = "bg:lavender"
-format = '[[  $time ](fg:crust bg:lavender)]($style)'
+style = "bg:accent"
+format = '[[  $time ](fg:background bg:accent)]($style)'
 
 [xmake]
 symbol = " "
@@ -321,45 +323,31 @@ disabled = false
 
 [character]
 disabled = false
-success_symbol = '[❯](subtext1)'
-error_symbol = '[❯](red)'
-vimcmd_symbol = '[❮](subtext1)'
-vimcmd_replace_one_symbol = '[❮](subtext1)'
-vimcmd_replace_symbol = '[❮](subtext1)'
-vimcmd_visual_symbol = '[❮](subtext1)'
+success_symbol = '[❯](accent)'
+error_symbol = '[❯](error)'
+vimcmd_symbol = '[❮](accent_secondary)'
+vimcmd_replace_one_symbol = '[❮](accent_secondary)'
+vimcmd_replace_symbol = '[❮](accent_secondary)'
+vimcmd_visual_symbol = '[❮](accent_secondary)'
 
 [cmd_duration]
-show_milliseconds = true
+show_milliseconds = false
 format = "[$duration]($style) "
-style = "subtext0"
+style = "muted"
 disabled = false
 show_notifications = true
 min_time_to_notify = 45000
 
-[palettes.catppuccin_mocha]
-rosewater = "#f5e0dc"
-flamingo = "#f2cdcd"
-pink = "#f5c2e7"
-mauve = "#cba6f7"
-red = "#f38ba8"
-maroon = "#eba0ac"
-peach = "#fab387"
-yellow = "#f9e2af"
-green = "#a6e3a1"
-teal = "#94e2d5"
-sky = "#89dceb"
-sapphire = "#74c7ec"
-blue = "#89b4fa"
-lavender = "#b4befe"
-text = "#cdd6f4"
-subtext1 = "#bac2de"
-subtext0 = "#a6adc8"
-overlay2 = "#9399b2"
-overlay1 = "#7f849c"
-overlay0 = "#6c7086"
-surface2 = "#585b70"
-surface1 = "#45475a"
-surface0 = "#313244"
-base = "#1e1e2e"
-mantle = "#181825"
-crust = "#11111b"
+[palettes.{{ .theme.active | replace "-" "_" }}]
+background = {{ $palette.base | quote }}
+surface = {{ $palette.surface | quote }}
+overlay = {{ $palette.overlay | quote }}
+text = {{ $palette.text | quote }}
+subtext = {{ $palette.subtext | quote }}
+muted = {{ $palette.muted | quote }}
+accent = {{ $palette.rose | quote }}
+accent_secondary = {{ $palette.orchid | quote }}
+success = {{ $palette.green | quote }}
+warning = {{ $palette.amber | quote }}
+info = {{ $palette.blue | quote }}
+error = {{ $palette.red | quote }}

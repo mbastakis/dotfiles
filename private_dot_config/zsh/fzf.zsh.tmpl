@@ -1,3 +1,5 @@
+{{- $theme := index .theme.catalog .theme.active -}}
+{{- $palette := $theme.palette -}}
 #!/usr/bin/env zsh
 # fzf.zsh - Consolidated fzf configuration
 #
@@ -8,13 +10,13 @@
 # BASE CONFIGURATION (applied to ALL fzf invocations automatically)
 # =============================================================================
 
-# Catppuccin Mocha colors
+# Colors from the active global theme
 FZF_COLORS="\
---color=bg+:#313244,bg:#1E1E2E,spinner:#F5E0DC,hl:#F38BA8 \
---color=fg:#CDD6F4,header:#F38BA8,info:#CBA6F7,pointer:#F5E0DC \
---color=marker:#B4BEFE,fg+:#CDD6F4,prompt:#CBA6F7,hl+:#F38BA8 \
---color=selected-bg:#45475A \
---color=border:#6C7086,label:#CDD6F4"
+--color=bg+:{{ $palette.surface }},bg:{{ $palette.base }},spinner:{{ $palette.muted }},hl:{{ $palette.rose }} \
+--color=fg:{{ $palette.text }},header:{{ $palette.muted }},info:{{ $palette.blue }},pointer:{{ $palette.rose }} \
+--color=marker:{{ $palette.orchid }},fg+:{{ $palette.text }},prompt:{{ $palette.orchid }},hl+:{{ $palette.rose }} \
+--color=selected-bg:{{ $palette.overlay }} \
+--color=border:{{ $palette.overlay_high }},label:{{ $palette.rose }}"
 
 # Keybindings
 FZF_BINDS="\

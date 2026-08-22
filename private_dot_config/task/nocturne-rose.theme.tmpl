@@ -1,0 +1,91 @@
+{{- $theme := index .theme.catalog .theme.active -}}
+{{- $x := $theme.xterm256 -}}
+###############################################################################
+# {{ $theme.display_name }} theme for Taskwarrior.
+# Taskwarrior does not support hex colors, so this adapter uses the catalog's
+# deterministic nearest xterm-256 values for reliable rendering under tmux.
+# Include from ~/.config/task/taskrc with:
+#   include ~/.config/task/nocturne-rose.theme
+###############################################################################
+
+# Pick one clear semantic color per row. Merging rules can combine a foreground
+# from one match with the same background from another, producing solid blocks.
+rule.color.merge=no
+rule.precedence.color=deleted,completed,active,overdue,due.today,due,blocked,blocking,recurring,scheduled,keyword.,tag.,project.,tagged,uda.
+
+# General decoration
+color.label={{ $x.orchid }}
+color.label.sort={{ $x.rose }}
+# No row-alternation — rows render on the terminal's default background so the
+# Ghostty transparency/opacity stays consistent across every row.
+color.alternate=
+color.header={{ $x.orchid }}
+color.footnote={{ $x.subtext }}
+color.warning={{ $x.yellow }}
+color.error={{ $x.base }} on {{ $x.red }}
+color.debug={{ $x.blue }}
+
+# Task state
+color.completed={{ $x.muted }}
+color.deleted={{ $x.disabled }}
+color.active=bold {{ $x.rose }}
+color.recurring={{ $x.aqua }}
+color.scheduled={{ $x.orchid }}
+color.until={{ $x.yellow }}
+color.blocked={{ $x.disabled }}
+color.blocking=bold {{ $x.yellow }}
+
+# Project
+# Leave project.none unset so tasks without a Linear project aren't muted —
+# let other rules (tag.*, overdue, priority) take over.
+color.project.none=
+
+# Priority (overrides the defaults in taskrc)
+color.uda.priority.H={{ $x.red }}
+color.uda.priority.M={{ $x.yellow }}
+color.uda.priority.L={{ $x.green }}
+
+# Tags
+color.tag.urgent=bold {{ $x.red }}
+color.tag.next={{ $x.blue }}
+color.tag.waiting={{ $x.muted }}
+color.tag.none=
+color.tagged={{ $x.orchid }}
+
+# Due
+color.due.today=bold {{ $x.yellow }}
+color.due={{ $x.yellow }}
+color.overdue=bold {{ $x.red }}
+
+# Report: burndown
+color.burndown.done=on {{ $x.green }}
+color.burndown.pending=on {{ $x.red }}
+color.burndown.started=on {{ $x.yellow }}
+
+# Report: history
+color.history.add={{ $x.base }} on {{ $x.green }}
+color.history.delete={{ $x.base }} on {{ $x.red }}
+color.history.done={{ $x.base }} on {{ $x.orchid }}
+
+# Report: summary
+color.summary.background={{ $x.text }} on {{ $x.surface }}
+color.summary.bar={{ $x.base }} on {{ $x.green }}
+
+# Command: calendar
+color.calendar.due.today={{ $x.base }} on {{ $x.yellow }}
+color.calendar.due={{ $x.base }} on {{ $x.yellow }}
+color.calendar.holiday={{ $x.base }} on {{ $x.aqua }}
+color.calendar.scheduled=
+color.calendar.overdue={{ $x.base }} on {{ $x.red }}
+color.calendar.today={{ $x.base }} on {{ $x.orchid }}
+color.calendar.weekend=on {{ $x.mantle }}
+color.calendar.weeknumber={{ $x.subtext }}
+
+# Command: sync
+color.sync.added={{ $x.green }}
+color.sync.changed={{ $x.yellow }}
+color.sync.rejected={{ $x.red }}
+
+# Command: undo
+color.undo.after={{ $x.green }}
+color.undo.before={{ $x.red }}

@@ -45,6 +45,8 @@ if [[ -f "${HOME}/.local/share/zinit/zinit.git/zinit.zsh" ]]; then
     zinit load zsh-users/zsh-autosuggestions
 
     # Load syntax highlighting (must be last for proper highlighting)
-    zinit ice wait lucid
+    # Paths in typed commands stay default-colored (F-Sy-H defaults them to
+    # ANSI magenta, which the theme renders as rose — reserved for focus).
+    zinit ice wait lucid atload'FAST_HIGHLIGHT_STYLES[path]=fg=default; FAST_HIGHLIGHT_STYLES[path-to-dir]=fg=default,underline; FAST_HIGHLIGHT_STYLES[path_pathseparator]=fg=default; FAST_HIGHLIGHT_STYLES[path-to-dir_pathseparator]=fg=default,underline'
     zinit load zdharma-continuum/fast-syntax-highlighting
 fi

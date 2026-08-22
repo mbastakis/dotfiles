@@ -10,11 +10,12 @@
 --max-columns=150
 --max-columns-preview
 
-# === CATPPUCCIN MOCHA COLORS ===
---colors=path:fg:blue
+# === ACTIVE TERMINAL PALETTE COLORS ===
+# ANSI 13 = bright magenta/orchid, 8 = bright black/disabled, 5 = magenta/rose.
+--colors=path:fg:13
 --colors=path:style:bold
---colors=line:fg:243
---colors=match:fg:208
+--colors=line:fg:8
+--colors=match:fg:5
 --colors=match:style:bold
 
 # === CUSTOM FILE TYPES ===

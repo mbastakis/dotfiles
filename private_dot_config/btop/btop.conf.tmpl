@@ -1,8 +1,9 @@
+{{- $theme := index .theme.catalog .theme.active -}}
 #? Config file for btop v.1.4.7
 
 #* Name of a btop++/bpytop/bashtop formatted ".theme" file, "Default" and "TTY" for builtin themes.
 #* Themes should be placed in "../share/btop/themes" relative to binary or "$HOME/.config/btop/themes"
-color_theme = "mocha.theme"
+color_theme = "{{ .theme.active }}.theme"
 
 #* If the theme set background should be shown, set to False if you want terminal background transparency.
 theme_background = true

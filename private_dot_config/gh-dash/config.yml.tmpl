@@ -1,0 +1,43 @@
+{{- $theme := index .theme.catalog .theme.active -}}
+# Chezmoi does not install extensions; after adding one, run: gh extension install OWNER/REPO
+# yaml-language-server: $schema=https://gh-dash.dev/schema.json
+
+prSections:
+  - title: My PRs
+    filters: is:open author:@me
+  - title: Needs Review
+    filters: is:open review-requested:@me
+  - title: Involved
+    filters: is:open involves:@me -author:@me
+
+issuesSections:
+  - title: My Issues
+    filters: is:open author:@me
+  - title: Assigned
+    filters: is:open assignee:@me
+  - title: Involved
+    filters: is:open involves:@me -author:@me
+
+defaults:
+  preview:
+    open: true
+  prsLimit: 20
+  issuesLimit: 20
+  refetchIntervalMinutes: 5
+
+theme:
+  colors:
+    text:
+      primary: {{ $theme.palette.text | quote }}
+      secondary: {{ $theme.palette.orchid | quote }}
+      inverted: {{ $theme.palette.black | quote }}
+      faint: {{ $theme.palette.subtext | quote }}
+      warning: {{ $theme.palette.yellow | quote }}
+      success: {{ $theme.palette.green | quote }}
+      error: {{ $theme.palette.red | quote }}
+    background:
+      selected: {{ $theme.palette.overlay | quote }}
+    border:
+      primary: {{ $theme.palette.rose | quote }}
+      secondary: {{ $theme.palette.overlay_high | quote }}
+      faint: {{ $theme.palette.overlay | quote }}

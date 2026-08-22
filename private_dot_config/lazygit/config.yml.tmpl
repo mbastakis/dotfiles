@@ -1,3 +1,4 @@
+{{- $theme := index .theme.catalog .theme.active -}}
 git:
   log:
     showGraph: always
@@ -11,24 +12,24 @@ gui:
   nerdFontsVersion: "3"
   theme:
     activeBorderColor:
-      - "#f2cdcd"
+      - {{ $theme.palette.rose | quote }}
       - bold
     inactiveBorderColor:
-      - "#a6adc8"
+      - {{ $theme.palette.subtext | quote }}
     optionsTextColor:
-      - "#89b4fa"
+      - {{ $theme.palette.orchid | quote }}
     selectedLineBgColor:
-      - "#313244"
+      - {{ $theme.palette.overlay | quote }}
     cherryPickedCommitBgColor:
-      - "#45475a"
+      - {{ $theme.palette.overlay_high | quote }}
     cherryPickedCommitFgColor:
-      - "#f2cdcd"
+      - {{ $theme.palette.rose | quote }}
     unstagedChangesColor:
-      - "#f38ba8"
+      - {{ $theme.palette.red | quote }}
     defaultFgColor:
-      - "#cdd6f4"
+      - {{ $theme.palette.text | quote }}
     searchingActiveBorderColor:
-      - "#f9e2af"
+      - {{ $theme.palette.yellow | quote }}
   authorColors:
-    "*": "#b4befe"
+    "*": {{ $theme.palette.orchid | quote }}
   showCommandLog: false
