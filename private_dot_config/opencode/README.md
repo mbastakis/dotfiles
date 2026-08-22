@@ -21,7 +21,7 @@ read this config (git history holds the last v1-syntax version).
 
 | Command | Purpose |
 |---|---|
-| `oc` / `occ` | New session / continue — thin wrappers around `opencode2` |
+| `oc` / `occ` | New session / continue (`opencode2` / `opencode2 --continue`) |
 | `opencode2 service status\|start\|stop\|restart` | Background service lifecycle |
 | `opencode2 pair` | Service URL, password, and pairing QR |
 | `ocserve` (`opencode-server`) | Service + credential bridge + Tailscale Serve stack |
@@ -74,8 +74,9 @@ frontmatter are appended after these (so they override).
 
 ## cli.json
 
-Chezmoi-managed since 2026-08-20. Notable choices: catppuccin theme,
-sidebar `auto`, tabs `vertical` + `global` scope, attention fully enabled
+Chezmoi-managed since 2026-08-20. Notable choices: the generated
+Nocturne Rose theme in forced dark mode, sidebar `auto`, tabs `vertical` +
+`global` scope, attention fully enabled
 (notifications + sounds, volume 0.4), mouse capture, compact paste, split
 diff view with file tree, and a **full explicit keybind map** (all 217
 actions of beta-17728, defaults pinned) with leader `ctrl+x` and custom

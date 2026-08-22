@@ -17,6 +17,11 @@
   "username": "mbastakis",
   "share": "manual",
   "autoupdate": true,
+  // Server plugin: strips the parent-session ID that GPT-via-WCS fabricates
+  // into the optional subagent `sessionID` argument (see file for details).
+  "plugin": [
+    "./server-plugins/strip-fabricated-subagent-session.js"
+  ],
   "experimental": {
     "policies": [
       {

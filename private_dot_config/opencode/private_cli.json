@@ -1,6 +1,7 @@
 {
   "theme": {
-    "name": "catppuccin"
+    "name": "nocturne-rose",
+    "mode": "dark"
   },
   "plugins": [
     "./tui-plugins/wcs-usage.js"

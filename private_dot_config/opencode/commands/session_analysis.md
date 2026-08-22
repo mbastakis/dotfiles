@@ -44,9 +44,9 @@ critical issues, stuck points, and preventions.
 
 ### Step 2: Export the complete session
 
-Run read-only shell commands. Prefer the user's `oc` command when available,
-but fall back to `opencode` because shell aliases may not exist in noninteractive
-tool shells.
+Run read-only shell commands with the native OpenCode v2 binary. Shell aliases
+are unavailable in noninteractive tool shells, and the v1 `opencode` binary
+cannot read the native v2 configuration.
 
 Use this pattern, replacing `<SESSION_ID>` with the parsed session ID:
 
@@ -55,30 +55,16 @@ set -euo pipefail
 
 SESSION_ID="<SESSION_ID>"
 
-if command -v oc >/dev/null 2>&1; then
-  OPENCODE_CLI="oc"
-elif command -v opencode >/dev/null 2>&1; then
-  OPENCODE_CLI="opencode"
-else
-  echo "Error: neither oc nor opencode was found in PATH" >&2
-  exit 127
-fi
-
 tmpdir="$(mktemp -d "${TMPDIR:-/tmp}/opencode-session-critique.XXXXXX")"
 export_file="$tmpdir/session-${SESSION_ID}.json"
 
-"$OPENCODE_CLI" export "$SESSION_ID" > "$export_file"
+opencode2 export "$SESSION_ID" > "$export_file"
 
-printf 'tmpdir=%s\nexport_file=%s\ncli=%s\n' "$tmpdir" "$export_file" "$OPENCODE_CLI"
+printf 'tmpdir=%s\nexport_file=%s\ncli=opencode2\n' "$tmpdir" "$export_file"
 wc -c "$export_file"
 ```
 
-If export fails, run this for diagnostics and return a concise error with the
-session ID and command output:
-
-```bash
-"$OPENCODE_CLI" session list --format json -n 50
-```
+If export fails, return a concise error with the session ID and command output.
 
 Important:
 
