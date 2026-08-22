@@ -1,8 +1,8 @@
 # Architecture
 
-How `chezmoi apply` turns this source tree into a working machine: script ordering, the encryption chain, unified configuration, and the gotchas that are not obvious from reading any single file. For the file-by-file inventory, read the source tree itself — `chezmoi managed` and `.chezmoiscripts/` are authoritative.
+How `chezmoi apply` turns this source tree into a working machine. For the file-by-file inventory, the source tree itself is authoritative (`chezmoi managed`, `.chezmoiscripts/`).
 
-## Component Interaction Model
+## Components
 
 ```mermaid
 flowchart LR
@@ -16,7 +16,29 @@ flowchart LR
   C[chezmoi lifecycle] -.manages.-> K & G & T & Z & N & M & O & OB & B
 ```
 
-Keyboard input flows Karabiner → Ghostty → tmux → zsh, and from zsh into Neovim, the mail stack, and OpenCode. Atlas Traefik applies Authentik forward-auth, then reaches the designated Mac through an Atlas-only Tailscale Serve route and a loopback credential bridge. Chezmoi manages the Mac layers; authoritative identity, network topology, and remote-host runbooks live in the sibling Kavouki repository.
+Atlas Traefik applies Authentik forward-auth, then reaches the designated Mac through an Atlas-only Tailscale Serve route and a loopback credential bridge. Chezmoi manages the Mac layers; identity, network topology, and remote-host runbooks live in the sibling Kavouki repository.
+
+## Shell Startup
+
+```mermaid
+flowchart TD
+  A[zsh starts] --> C["~/.zshenv<br/>PATH, XDG, ZDOTDIR, BWS token"]
+  C --> B{Interactive?}
+  B -->|No| X[Done]
+  B -->|Yes| D["$ZDOTDIR/.zshrc"]
+  D --> E["Homebrew shellenv<br/>cached"]
+  E --> F["exports.zsh<br/>interactive variables"]
+  F --> G["plugins.zsh<br/>zinit + compinit"]
+  G --> H["completions.zsh<br/>generated completions"]
+  H --> I[tools.zsh]
+  I --> J[aliases.zsh]
+  J --> K[functions.zsh]
+  K --> L[fzf.zsh]
+  L --> M[fzf-tab.zsh]
+  M --> N[keybindings.zsh]
+```
+
+`~/.zshenv` supplies the environment required by every shell, including background and non-interactive processes. Interactive configuration then loads in dependency order: completion initialization precedes generated completions, functions precede widgets that use them, and keybindings load last.
 
 ## Apply Phases
 
@@ -27,15 +49,14 @@ flowchart TD
   C --> D[After scripts]
 
   B --> B1[00 decrypt age key → 01 install bws → 02 brew bundle]
-  D --> D1[03–04 tool caches and extensions<br/>bat, Yazi, gh]
-  D1 --> D2[07 mail runtime dirs]
+  D --> D2[07 mail runtime dirs]
   D2 --> D4[10 OpenCode remote reconcile<br/>designated Mac only]
-  D --> D6[macOS settings migration + reconcile]
+  D --> D6[macOS settings reconcile]
 ```
 
 Scripts run alphabetically within each phase, so the numeric prefixes are the ordering mechanism. The before phase exists to satisfy file operations: the age identity must exist before `encrypted_` files can decrypt, and the `bws` CLI must exist before `bitwardenSecrets` template calls can render.
 
-Almost everything is `run_onchange`, triggered by `sha256sum` hashes of the inputs each script owns. The OpenCode hook hashes the LaunchAgents, controller, credential bridge, and provider environment; the opencode2 service hot-reloads config, agents, commands, and skills itself, so those no longer trigger reconciliation. When writing a new `run_onchange` script, embed only deterministic inputs the operation owns — never dates or unrelated aggregates.
+Almost everything is `run_onchange`, triggered by `sha256sum` hashes of the inputs each script owns. The OpenCode hook hashes the LaunchAgents, controller, credential bridge, and provider environment; the opencode2 service hot-reloads config, agents, commands, and skills itself, so those no longer trigger reconciliation. When writing a new `run_onchange` script, embed only deterministic inputs the operation owns - never dates or unrelated aggregates.
 
 ## Fresh-Machine Bootstrap
 
@@ -48,7 +69,7 @@ chezmoi apply --force
 
 The age passphrase is needed exactly once: the `00` before-script decrypts `key.txt.age` into `~/.config/chezmoi/key.txt` via a mode-restricted temp file and atomic rename, so a failed decryption never clobbers a working identity. On a machine without Homebrew, the `02` script installs it, and in non-interactive shells it skips Mac App Store installs by deriving `mas` IDs from the Brewfile itself rather than maintaining a second list.
 
-## Encryption Model
+## Encryption
 
 One age keypair protects every secret; everything downstream is derived without further prompts:
 
@@ -76,7 +97,7 @@ Some managed files are bootstrap seeds: chezmoi deploys them once, then defers t
 
 ## Unified Configuration
 
-Personal and work settings share one target state. There is no profile selector or profile-scoped rendering: work configuration is always deployed, while Git and Jujutsu identities remain scoped by remote URL or repository path where appropriate.
+Personal and work settings share one target state. There is no profile selector or profile-scoped rendering: work configuration is always deployed, while Git identities remain scoped by remote URL where appropriate.
 
 If Tailscale, Harmony, macOS, or an operator flips DNS or proxy state on the `AX88179A` Ethernet service, run the `reset_work_network` zsh function (defined in `private_dot_config/zsh/functions.zsh`) to disable Tailscale DNS and the HTTP/HTTPS proxies again. This is a manual repair command; the lifecycle no longer applies network policy itself.
 

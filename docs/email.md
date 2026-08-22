@@ -1,4 +1,4 @@
-# Email (NeoMutt Gmail Stack)
+# Email
 
 Terminal Gmail stack managed by chezmoi: `NeoMutt` + `mbsync` + `msmtp` + `notmuch` + `abook`. Accounts are rendered from `.chezmoidata.yaml` (`mail.accounts`); a launchd LaunchAgent syncs in the background.
 
@@ -82,7 +82,7 @@ Each option below exists in `private_dot_config/neomutt/base.muttrc` (or `neomut
 - `header_cache_compress_method="zlib"` level 1 — smaller header cache at negligible CPU cost.
 - `read_inc=1000` / `write_inc=1000` / `time_inc=500` — fewer progress redraws on large folders.
 - `query_command` points abook at explicit config/datafile paths so completion works regardless of cwd/env.
-- Wide sidebar (42 cols) with `unread/total` counts; Catppuccin-style 256-color palette for reliable rendering inside `tmux-256color`; mailcap opens images/PDFs via `/usr/bin/open`.
+- Wide sidebar (42 cols) with `unread/total` counts; the active shared theme supplies catalog-owned xterm-256 colors for reliable rendering inside `tmux-256color`; mailcap opens images/PDFs via `/usr/bin/open`.
 
 ## Troubleshooting
 

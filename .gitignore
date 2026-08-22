@@ -18,6 +18,13 @@ key.txt
 # Node
 node_modules/
 
+# Vicinae-installed extension bundles
+private_dot_local/private_share/vicinae/extensions/
+
+# Generated documentation assets
+docs/theme.css
+docs/showcase.md
+
 # Python
 __pycache__/
 *.pyc
@@ -26,14 +33,8 @@ __pycache__/
 .ruff_cache/
 .venv/
 
-# Rust build artifacts (nvim test fixtures)
-private_dot_config/nvim/test/rust/target/
-
 # Karabiner automatic backups (machine-generated)
 private_dot_config/private_karabiner/private_automatic_backups/
-
-# Lock files that are machine-specific
-private_dot_config/opencode/bun.lock
 
 # AWS login caches
 private_dot_config/aws-login/private_cache/

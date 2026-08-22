@@ -1,21 +1,19 @@
-# Dotfiles Documentation
+# Dotfiles
 
-Topic-based documentation for the chezmoi-managed dotfiles in this repository.
+Docs for the chezmoi-managed dotfiles in this repo. The config files are the source of truth; these pages only hold what the code can't show — cross-tool wiring, rationale, and runbooks.
 
-> **Source of truth:** Config files in the repo are authoritative. These docs never enumerate what the code already lists (packages, plugins, aliases, options) — they hold only what's hard to reconstruct from the code: cross-tool aggregations, design rationale, and runbooks.
+## Pages
 
-## Topics
+- [Nocturne Rose](showcase.md) — the shared workstation palette
+- [Shortcuts](shortcuts.md) — every custom keybinding, layer by layer
+- [Architecture](architecture.md) — how `chezmoi apply` builds a machine
+- [Email](email.md) — NeoMutt Gmail stack runbook
 
-- [Shortcuts](shortcuts.md) — every custom keybinding across all layers (Karabiner → Ghostty → tmux → zsh → NeoMutt → Neovim), plus the input-flow model
-- [Architecture](architecture.md) — chezmoi apply lifecycle, fresh-machine bootstrap, encryption/secrets chain, unified workstation configuration, operational gotchas
-- [Email](email.md) — NeoMutt Gmail stack runbook: setup, troubleshooting, tuning rationale
-- [Tool Notes](tool-notes.md) — non-obvious per-tool design notes (zsh startup order, Neovim LSP layering, `tw` vs go-task collision, mrconfig dynamic discovery)
-
-External homeserver infrastructure, its architecture decisions, and its runbooks live in the sibling [`kavouki`](https://github.com/mbastakis/kavouki) repository. Workstation-owned decisions are recorded here.
+Homeserver infrastructure lives in the sibling [`kavouki`](https://github.com/mbastakis/kavouki) repo; workstation-owned decisions are recorded here.
 
 ## Conventions
 
-- **Citations** reference source files by path only (e.g. `private_dot_config/zsh/keybindings.zsh`), never by line number — line numbers rot on every edit.
-- **Diagrams** are Mermaid fenced code blocks; they render on GitHub and in the Docsify site.
-- **Scope:** custom configuration only. Plugin-default keymaps are excluded unless a custom override is defined.
-- **Maintenance:** update a doc only when its *insight* changes — a new shortcut, a changed contract, a new gotcha. Inventory changes (new package, plugin, alias) never require a doc edit.
+- Cite source files by path, never by line number — line numbers rot.
+- Diagrams are Mermaid; they render on GitHub and in this site.
+- Custom configuration only. Plugin defaults are out of scope unless overridden.
+- Update a page when its *insight* changes, not when an inventory (package, plugin, alias) changes.

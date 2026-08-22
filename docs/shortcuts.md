@@ -1,6 +1,6 @@
 # Shortcuts
 
-Unified index of custom keymaps across all input layers. **Custom mappings only** — plugin-default keymaps are excluded (see [Excluded Mappings](#excluded-mappings)).
+Every custom keybinding, layer by layer. Plugin defaults are excluded (see [Excluded Mappings](#excluded-mappings)).
 
 ## Input Flow
 
@@ -14,7 +14,7 @@ flowchart LR
   Z --> N["Neovim<br/>(editor layer)"]
 ```
 
-A keystroke passes through each layer in sequence. Karabiner processes physical key events first (home row mods, hyper key), Ghostty handles terminal-level bindings, tmux intercepts its prefix and pass-through sequences, zsh processes shell keybindings, and then app-level bindings apply in NeoMutt or Neovim.
+Each layer consumes its own bindings and passes everything else down.
 
 ## Vicinae
 
@@ -167,8 +167,8 @@ Source: `private_dot_config/tmux/tmux.conf`. Prefix: **`Ctrl-a`** everywhere. In
 | `prefix x` | Kill pane (no confirm) |
 | `prefix p` | Previous window |
 | `prefix G` | Lazygit popup (90% overlay) |
-| `prefix s` | Sesh session picker popup |
-| `prefix ,` / `prefix R` | Rename window / session (popup prompts) |
+| `prefix s` | Native Sesh session picker popup |
+| `prefix ,` / `prefix R` | Rename window / session |
 | `prefix P` | FloaX floating window (`Alt+Shift+P` opens the FloaX menu) |
 | `prefix r` | Reload tmux.conf |
 | `prefix d` | Detach client |
@@ -176,21 +176,9 @@ Source: `private_dot_config/tmux/tmux.conf`. Prefix: **`Ctrl-a`** everywhere. In
 | `Ctrl+Tab` / `Ctrl+Shift+Tab` | Next / previous window (no prefix) |
 | `Ctrl+Shift+Arrow` | Resize pane (no prefix) |
 | `PageUp` / `PageDown` | Half-page scrollback in shell panes; forwarded to fullscreen apps |
-| Double-click URL | Open URL in browser (non-URLs keep default word copy) |
 | `v` / `Ctrl+V` (copy mode) | Begin selection / rectangle toggle |
 | `y` (copy mode) | Copy selection and cancel |
 | `Escape` (copy mode) | Cancel |
-
-### Harpoon (tmux-harpoon)
-
-| Key | Action |
-| --- | --- |
-| `Ctrl+Cmd+A/O/E/U` | Jump to slot 1-4 |
-| `Ctrl+Cmd+Shift+A/O/E/U` | Overwrite slot 1-4 with current pane |
-| `prefix A` | Add pane to harpoon |
-| `prefix D` | Delete from harpoon |
-| `prefix g` | List harpoon slots |
-| `prefix e` | Edit harpoon list |
 
 ## Zsh
 
@@ -261,7 +249,7 @@ Source: `private_dot_config/zsh/aliases.zsh` (selection; see the file for listin
 | `v`, `vi`, `vim` | `nvim` |
 | `lg` | `lazygit` |
 | `nm` / `msync` | `neomutt` / `mail-sync` |
-| `oc` / `occ` / `ocserve` | `opencode-launch` / `opencode-launch --continue` / `opencode-server` |
+| `oc` / `ocm` / `occ` / `ocserve` | `opencode2` / `opencode2 mini` / `opencode2 --continue` / `opencode-server` |
 | `cz` | `chezmoi` |
 | `ta` / `td` / `tls` | `tmux attach` / `tmux detach` / `tmux ls` |
 | `k` / `ctx` / `ns` | `kubectl` / `kubectx` / `kubens` |

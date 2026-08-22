@@ -35,8 +35,20 @@ tasks:
     cmds:
       - brew bundle dump --force --file=private_dot_config/brew/Brewfile
 
+  docs:theme:
+    internal: true
+    cmds:
+      - chezmoi execute-template --source . --file docs/theme.css.tmpl --output docs/theme.css
+      - chezmoi execute-template --source . --file docs/showcase.md.tmpl --output docs/showcase.md
+
+  docs:capture-theme:
+    desc: Refresh the theme showcase screenshots with the live workstation tools
+    cmds:
+      - scripts/capture-theme-showcase.sh
+
   docs:serve:
     desc: Serve the documentation on http://localhost:3000
+    deps: [docs:theme]
     preconditions:
       - sh: command -v npx
         msg: "npx not found; run: mise install"

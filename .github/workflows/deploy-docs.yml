@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
     paths:
+      - ".chezmoidata.yaml"
+      - ".github/workflows/deploy-docs.yml"
       - "docs/**"
   workflow_dispatch:
 
@@ -25,6 +27,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+
+      - name: Render shared theme
+        run: |
+          sh -c "$(curl -fsLS get.chezmoi.io)" -- -b "$RUNNER_TEMP/bin"
+          "$RUNNER_TEMP/bin/chezmoi" execute-template --source . --file docs/theme.css.tmpl --output docs/theme.css
+          "$RUNNER_TEMP/bin/chezmoi" execute-template --source . --file docs/showcase.md.tmpl --output docs/showcase.md
+          rm docs/theme.css.tmpl docs/showcase.md.tmpl
 
       - name: Setup Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6

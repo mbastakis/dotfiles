@@ -16,6 +16,7 @@ repos:
       - id: check-merge-conflict
       - id: check-added-large-files
         args: [--maxkb=500]
+        exclude: '^private_dot_local/private_share/vicinae/extensions/'
       - id: detect-private-key
         exclude: '\.age$'
 
