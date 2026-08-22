@@ -1,127 +1,15 @@
-vim.g.maplocalleader = " "
-vim.g.mapleader = " "
-
-vim.g.have_nerd_font = true
-
--- Compatibility for nvim-treesitter main on Neovim 0.11 builds that do not
--- expose vim.list yet, such as Ubuntu Server 26.04's packaged Neovim.
-vim.list = vim.list or {}
-vim.list.unique = vim.list.unique or function(list)
-  local seen = {}
-  local unique = {}
-  for _, item in ipairs(list) do
-    if not seen[item] then
-      seen[item] = true
-      unique[#unique + 1] = item
-    end
-  end
-  return unique
-end
-
-if vim.env.SSH_CONNECTION or vim.env.SSH_CLIENT or vim.env.SSH_TTY then
-  local ok, osc52 = pcall(require, "vim.ui.clipboard.osc52")
-  if ok then
-    vim.g.clipboard = {
-      name = "OSC52",
-      copy = {
-        ["+"] = osc52.copy("+"),
-        ["*"] = osc52.copy("*"),
-      },
-      paste = {
-        ["+"] = osc52.paste("+"),
-        ["*"] = osc52.paste("*"),
-      },
-    }
-  end
-end
-
-vim.o.number = true
-vim.o.relativenumber = true
-vim.o.winborder = "rounded"
-
-vim.o.mouse = "a"
-vim.o.showmode = false
-vim.o.wrap = false
-vim.o.textwidth = 0
-vim.o.showtabline = 2
-
-vim.schedule(function()
-  vim.o.clipboard = "unnamedplus"
-end)
-
-vim.o.undofile = true
-
-vim.o.ignorecase = true
-vim.o.smartcase = true
-
-vim.o.signcolumn = "yes"
-vim.o.updatetime = 250
-vim.o.timeoutlen = 300
-
--- Configure how new splits should be opened
-vim.o.splitright = true
-vim.o.splitbelow = true
-
-vim.o.list = true
-vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
-vim.o.inccommand = "split"
-vim.o.cursorline = true
-vim.o.scrolloff = 10
-vim.o.confirm = true
-vim.o.breakindent = true
-vim.o.expandtab = true
-vim.o.tabstop = 2
-vim.o.softtabstop = 2
-vim.o.shiftwidth = 2
-
--- Fold
-vim.o.foldlevel = 99
-vim.o.foldlevelstart = 99
-vim.o.foldcolumn = "0"
-vim.o.foldenable = true
-vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
-
--- Use bash treesitter parser for zsh files (no native zsh parser exists)
-vim.treesitter.language.register("bash", "zsh")
-
--- Register gotmpl treesitter parser for chezmoi template filetypes
-vim.treesitter.language.register("gotmpl", "gotmpl")
-
--- Custom filetype mappings
-vim.filetype.add({
-  filename = {
-    ["docker-compose.yml"] = "yaml.docker-compose",
-    ["docker-compose.yaml"] = "yaml.docker-compose",
-    ["compose.yml"] = "yaml.docker-compose",
-    ["compose.yaml"] = "yaml.docker-compose",
-    [".gitlab-ci.yml"] = "yaml.gitlab",
-    [".gitlab-ci.yaml"] = "yaml.gitlab",
-  },
-  pattern = {
-    [".*/git/config"] = "gitconfig", -- git/config files
-    ["docker%-compose%..*%.ya?ml"] = "yaml.docker-compose", -- docker-compose.*.yml or docker-compose.*.yaml
-    [".*%.gitlab%-ci%.ya?ml"] = "yaml.gitlab", -- *.gitlab-ci.yml or *.gitlab-ci.yaml
-    [".*/templates/.*%.ya?ml"] = function(path)
-      -- Check if we're in a Helm chart (has Chart.yaml in parent dirs)
-      if vim.fs.root(path, { "Chart.yaml" }) then
-        return "helm"
-      end
-      return "yaml"
-    end,
-    [".*/templates/.*%.tpl"] = function(path)
-      -- Check if we're in a Helm chart (has Chart.yaml in parent dirs)
-      if vim.fs.root(path, { "Chart.yaml" }) then
-        return "helm"
-      end
-    end,
-    -- Go template files (.tmpl) outside chezmoi source dir
-    -- chezmoi.vim handles .tmpl files inside the chezmoi source directory
-    -- by stripping prefixes and setting the base filetype automatically
-    [".*%.tmpl"] = function(path)
-      local chezmoi_source = vim.env.DOTFILES_PATH
-      if not chezmoi_source or not path:find(chezmoi_source, 1, true) then
-        return "gotmpl"
-      end
-    end,
-  },
-})
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.signcolumn = "yes"
+vim.opt.termguicolors = true
+vim.opt.mouse = "a"
+vim.opt.clipboard = "unnamedplus"
+vim.opt.undofile = true
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.opt.inccommand = "split"
+vim.opt.scrolloff = 8
+vim.opt.confirm = true
+vim.opt.updatetime = 250
+vim.opt.splitright = true
+vim.opt.splitbelow = true

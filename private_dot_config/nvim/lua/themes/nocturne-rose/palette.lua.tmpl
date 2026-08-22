@@ -1,0 +1,30 @@
+{{- $theme := index .theme.catalog .theme.active -}}
+{{- $palette := $theme.palette -}}
+return {
+  black = {{ $palette.black | quote }},
+  base = {{ $palette.base | quote }},
+  mantle = {{ $palette.mantle | quote }},
+  surface = {{ $palette.surface | quote }},
+  overlay = {{ $palette.overlay | quote }},
+  overlay_high = {{ $palette.overlay_high | quote }},
+
+  text = {{ $palette.text | quote }},
+  subtext = {{ $palette.subtext | quote }},
+  muted = {{ $palette.muted | quote }},
+  disabled = {{ $palette.disabled | quote }},
+
+  rose = {{ $palette.rose | quote }},
+  orchid = {{ $palette.orchid | quote }},
+  blue = {{ $palette.blue | quote }},
+  aqua = {{ $palette.aqua | quote }},
+  green = {{ $palette.green | quote }},
+  yellow = {{ $palette.yellow | quote }},
+  red = {{ $palette.red | quote }},
+
+  search = {{ $palette.search | quote }},
+  search_current = {{ $palette.search_current | quote }},
+  diff_add = {{ $palette.diff_add | quote }},
+  diff_delete = {{ $palette.diff_delete | quote }},
+  diff_change = {{ $palette.diff_change | quote }},
+  diff_text = {{ $palette.diff_text | quote }},
+}

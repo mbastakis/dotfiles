@@ -9,6 +9,7 @@ tap "mbastakis/tap", "git@github.com:mbastakis/homebrew-tap.git"
 tap "nikitabobko/tap"
 tap "oven-sh/bun"
 tap "tursodatabase/tap"
+tap "terraform-linters/tap", trusted: { casks: ["tflint"] }
 # Address book with mutt support
 brew "abook"
 # Simple, modern, secure file encryption
@@ -29,6 +30,10 @@ brew "awscli"
 brew "bat"
 # Open-source, cross-platform JavaScript runtime environment
 brew "node"
+# Bash language server
+brew "bash-language-server"
+# Persistent ESLint daemon
+brew "eslint_d"
 # Secure and free password manager for all of your devices
 brew "bitwarden-cli"
 # Resource monitor. C++ version and continuation of bashtop and bpytop
@@ -59,6 +64,8 @@ brew "docker-compose"
 brew "docker-credential-helper"
 # Dockerfile format and parser. a modern dockfmt
 brew "dockerfmt"
+# Language server for Dockerfiles, Compose files, and Bake files
+brew "docker-language-server"
 # View disk space usage and delete unwanted data, fast
 brew "dua-cli"
 # Select default apps for documents and URL schemes on macOS
@@ -93,6 +100,8 @@ brew "gnupg"
 brew "gnu-sed"
 # Open source programming language to build simple/reliable/efficient software
 brew "go"
+# Go language server
+brew "gopls"
 # Image processing tools collection
 brew "graphicsmagick"
 # GNU grep, egrep and fgrep
@@ -101,6 +110,8 @@ brew "grep"
 brew "hadolint"
 # Kubernetes package manager
 brew "helm"
+# Language server for Helm
+brew "helm-ls"
 # User-friendly cURL replacement (command-line HTTP client)
 brew "httpie"
 # Tools and libraries to manipulate images in select formats
@@ -131,6 +142,8 @@ brew "lazyjj"
 brew "lazyssh"
 # Powerful, lightweight programming language
 brew "lua"
+# Language server for Lua
+brew "lua-language-server"
 # Mac App Store command-line interface
 brew "mas"
 # Polyglot runtime manager (asdf rust clone)
@@ -172,8 +185,16 @@ brew "poppler"
 brew "postgresql@17"
 # Framework for managing multi-language pre-commit hooks
 brew "pre-commit"
+# JavaScript and TypeScript formatter
+brew "prettier"
+# Prettier daemon for fast editor formatting
+brew "prettierd"
+# Static type checker and language server for Python
+brew "pyright"
 # Python version management
 brew "pyenv"
+# Fast Python linter and formatter
+brew "ruff"
 # QR Code generation
 brew "qrencode"
 # Search tool like grep and The Silver Searcher
@@ -194,6 +215,8 @@ brew "sesh"
 brew "worktrunk"
 # Static analysis and lint tool, for (ba)sh scripts
 brew "shellcheck"
+# Shell script formatter
+brew "shfmt"
 # Editor of encrypted files
 brew "sops"
 # Non-interactive SSH password auth
@@ -220,16 +243,26 @@ brew "tealdeer"
 brew "terminal-notifier"
 # Terraform version manager inspired by rbenv
 brew "tfenv"
+# Terraform language server
+brew "terraform-ls"
+# Terraform security scanner
+brew "tfsec"
+# TOML toolkit and language server
+brew "taplo"
 # Terminal multiplexer
 brew "tmux"
 # Parser generator tool
 brew "tree-sitter-cli"
+# TypeScript compiler and native language server
+brew "typescript"
 # View/select the URLs in an email message or file
 brew "urlscan"
 # Extremely fast Python package installer and resolver, written in Rust
 brew "uv"
 # Vi 'workalike' with many additional features
 brew "vim"
+# VS Code language servers for JSON, HTML, and CSS
+brew "vscode-langservers-extracted"
 # Pager/text based browser
 brew "w3m"
 # Executes a program periodically, showing output fullscreen
@@ -240,6 +273,8 @@ brew "wget"
 brew "wireguard-tools"
 # Linter for YAML files
 brew "yamllint"
+# YAML language server
+brew "yaml-language-server"
 # Blazing fast terminal file manager written in Rust, based on async I/O
 brew "yazi"
 # Process YAML, JSON, XML, CSV and properties documents from the CLI
@@ -263,6 +298,7 @@ brew "mbastakis/tap/aws-login", trusted: true
 brew "oven-sh/bun/bun", trusted: true
 brew "tursodatabase/tap/turso", trusted: true
 # AeroSpace is an i3-like tiling window manager for macOS
+cask "terraform-linters/tap/tflint", trusted: true
 cask "nikitabobko/tap/aerospace", trusted: true
 # Enable Windows-like alt-tab
 cask "alt-tab"

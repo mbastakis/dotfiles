@@ -45,21 +45,18 @@ The order encodes hard constraints, not preference. Homebrew and other package-m
 ```mermaid
 flowchart TD
   A[init.lua] --> B[config/options.lua]
-  A --> C[config/keymaps.lua]
-  A --> D[config/autocmds.lua]
-  A --> E["config/lazy.lua<br/>bootstrap lazy.nvim from git"]
-  E --> F["import: plugins/*"]
-  E --> G["import: plugins/lsp/*"]
-  H["after/lsp/*.lua<br/>server overrides"] -.->|native runtimepath| G
+  A --> C[config/plugins.lua]
+  C --> D["vim.pack.add<br/>pinned by nvim-pack-lock.json"]
+  A --> E[config/lsp.lua]
+  A --> F[config/completion.lua]
+  A --> G[config/format.lua]
+  A --> H[config/lint.lua]
+  A --> I[config/treesitter.lua]
 ```
 
-This relies on Neovim's native config discovery at `~/.config/nvim/init.lua`. The shell config deliberately keeps `VIMINIT` unset (see the Zsh section) — Neovim checks `VIMINIT` before `init.lua` and would otherwise skip this config entirely.
+This relies on Neovim's native config discovery at `~/.config/nvim/init.lua`. The shell config deliberately keeps `VIMINIT` unset (see the Zsh section) because Neovim checks `VIMINIT` before `init.lua` and would otherwise skip this config entirely.
 
-**Three-layer LSP architecture**, later layers winning:
-
-1. **Mason** (`lua/plugins/lsp/mason.lua`) auto-installs servers and sets `automatic_enable = true`, so every installed server starts without a per-server `setup()` call.
-2. **LSP config** (`lua/plugins/lsp/config.lua`) supplies cross-server behavior: buffer-local keymaps on `LspAttach` and diagnostic presentation. It also manually enables servers Mason doesn't manage (e.g. `kdl_lsp`, gated on the binary existing).
-3. **Server overrides** (`after/lsp/*.lua`) use Neovim's native `after/lsp` runtimepath mechanism: each file returns a config table that Neovim merges over the defaults when `vim.lsp.enable()` activates the server. This layer has the highest precedence — when defaults and an override disagree, `after/lsp` wins. Per-server tweaks (extra filetypes, schema wiring, filetype restrictions) belong here, never in the Mason layer.
+The profile is native-first: `vim.pack.add()` owns plugins, `nvim-pack-lock.json` pins revisions, and `vim.lsp.config()` defines server behavior. Language servers, formatters, and linters are installed through the managed Homebrew toolchain; each LSP is enabled only when its executable exists. Neovim itself installs only Tree-sitter parsers, which are editor runtime artifacts rather than general-purpose CLIs.
 
 ## Git
 

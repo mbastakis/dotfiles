@@ -258,8 +258,7 @@ Source: `private_dot_config/zsh/aliases.zsh` (selection; see the file for listin
 
 | Alias | Expands to |
 | --- | --- |
-| `v` | `NVIM_APPNAME=nvim-native nvim` |
-| `vi`, `vim` | `nvim` |
+| `v`, `vi`, `vim` | `nvim` |
 | `lg` | `lazygit` |
 | `nm` / `msync` | `neomutt` / `mail-sync` |
 | `oc` / `occ` / `ocserve` | `opencode-launch` / `opencode-launch --continue` / `opencode-server` |
@@ -299,32 +298,25 @@ Source: `private_dot_config/neomutt/bindings.muttrc.tmpl` (the only bindings fil
 
 ## Neovim
 
-### Global
+Sources: `private_dot_config/nvim/lua/config/keymaps.lua`, `private_dot_config/nvim/lua/config/lsp.lua`, and plugin setup under `private_dot_config/nvim/lua/`.
 
-Source: `private_dot_config/nvim/lua/config/keymaps.lua`.
+Leader is `Space`.
 
-| Key | Mode | Action |
-| --- | --- | --- |
-| `Ctrl+H/J/K/L` | n | Window navigation (vim-tmux-navigator compatible) |
-| `Ctrl+W h` / `Ctrl+W v` | n | Split side-by-side / stacked (remapped since `Ctrl+H/J/K/L` handle navigation) |
-| `Ctrl+S` | n, i | Save file |
-| `<leader>fm` | n | Format buffer (conform, async) |
-
-### Diffview
-
-Source: `private_dot_config/nvim/lua/config/keymaps.lua`.
+### Navigation And Files
 
 | Key | Action |
 | --- | --- |
-| `<leader>gd` | Diff branch vs base (auto-detects `main`/`master`/origin HEAD) |
-| `<leader>gD` | Diff vs picked branch (Telescope) |
-| `<leader>gm` | Open Diffview (index/merge) |
-| `<leader>gq` | Close Diffview |
-| `Ctrl+/` | Toggle files panel (buffer-local in Diffview) |
+| `Ctrl+H/J/K/L` | Navigate across Neovim windows and tmux panes |
+| `Ctrl+W h` / `Ctrl+W v` | Split side-by-side / stacked |
+| `-` / `<leader>e` | Open the current file\x27s parent directory with Oil |
+| `<leader>uw` | Toggle line wrapping in the current window |
+| `<leader>ff` | Find files with mini.pick |
+| `<leader>fg` | Find text with mini.pick and ripgrep |
+| `<leader>uu` | Toggle the native undotree |
 
-### LSP (buffer-local on LspAttach)
+### LSP And Formatting
 
-Source: `private_dot_config/nvim/lua/plugins/lsp/config.lua`.
+The LSP mappings are buffer-local and appear after a language server attaches.
 
 | Key | Action |
 | --- | --- |
@@ -335,112 +327,49 @@ Source: `private_dot_config/nvim/lua/plugins/lsp/config.lua`.
 | `<leader>rn` | Rename symbol |
 | `<leader>d` | Show line diagnostics |
 | `<leader>q` | Open diagnostics list |
+| `<leader>fm` | Format with Conform, falling back to LSP |
+| `Ctrl+Space` / `Ctrl+Y` | Trigger / accept Blink completion |
 
-### Telescope
-
-Source: `private_dot_config/nvim/lua/plugins/telescope.lua`.
-
-| Key | Action |
-| --- | --- |
-| `<leader>ff` / `<leader>fF` | Find files (filtered / show all) |
-| `<leader>fg` / `<leader>fG` | Live grep (filtered / show all) |
-| `<leader>fh` | Help tags |
-| `<leader>fp` | Zoxide projects (cd on select) |
-
-### Native Config
-
-Source: `private_dot_config/nvim-native/lua/config/keymaps.lua`.
+### Git
 
 | Key | Action |
 | --- | --- |
-| `-` | Open the current file's parent directory with Oil |
-| `<leader>ff` | Find files with mini.pick |
-| `<leader>fg` | Find text with mini.pick and ripgrep |
+| `[h` / `]h` | Previous / next Git hunk |
+| `<leader>gp` | Preview Git hunk |
+| `<leader>gb` | Show full blame for the current line |
+| `<leader>gB` | Toggle current-line blame |
 
-### Oil (File Explorer)
-
-Source: `private_dot_config/nvim/lua/plugins/oil.lua`. Defaults are disabled (`use_default_keymaps = false`); the buffer-local set is declared explicitly.
-
-| Key | Action |
-| --- | --- |
-| `<leader>e` | Open Oil (global); close it from inside an Oil buffer |
-| `Enter` / `Ctrl+T` / `Ctrl+P` | Select / select in new tab / preview |
-| `Ctrl+C` | Close |
-| `Ctrl+L` | Refresh |
-| `-` / `_` | Parent directory / open cwd |
-| `` ` `` / `~` | `cd` (global / tab scope) |
-| `gs` / `gx` | Change sort / open external |
-| `g.` / `g\` | Toggle hidden / toggle trash |
-| `g?` | Show help |
-
-### Bufferline
-
-Source: `private_dot_config/nvim/lua/plugins/bufferline.lua`.
-
-| Key | Action |
-| --- | --- |
-| `Shift+H` / `Shift+L` | Previous / next buffer |
-| `[b` / `]b` | Previous / next buffer |
-| `<leader>bp` / `<leader>bP` | Toggle pin / close non-pinned |
-| `<leader>bo` | Close other buffers |
-| `<leader>bl` / `<leader>bh` | Close buffers to the right / left |
-| `<leader>bd` | Delete current buffer |
-
-### Snacks
-
-Source: `private_dot_config/nvim/lua/plugins/snacks.lua`.
+### Supermaven
 
 | Key | Mode | Action |
 | --- | --- | --- |
-| `<leader>h` | n | Dashboard |
-| `<leader>n` | n | Notification history |
-| `<leader>gB` | n | Git browse |
-| `<leader>gb` | n | Git blame line |
-| `<leader>gf` | n | Lazygit current file history |
-| `<leader>gg` | n | Lazygit |
-| `<leader>gl` | n | Lazygit log (cwd) |
-| `Ctrl+/` | n, t | Toggle terminal |
+| `Tab` | i | Accept suggestion |
+| `Ctrl+G` | i | Accept suggestion word |
+| `Ctrl+]` | i | Clear suggestion |
+| `<leader>ua` | n | Toggle Supermaven |
 
-### Snacks Toggles
+### Surround
 
-Source: `private_dot_config/nvim/lua/plugins/snacks.lua`.
-
-| Key | Toggle |
+| Key | Action |
 | --- | --- |
-| `<leader>uL` / `<leader>ul` | Relative number / line number |
-| `<leader>uc` | Conceal level |
-| `<leader>uh` | Inlay hints |
-| `<leader>ug` | Indent guides |
-| `<leader>uD` | Dim mode |
-| `<leader>uw` | Wrap + linebreak |
-| `<leader>uv` / `<leader>uV` / `<leader>ux` | Diagnostics / virtual text / underlines |
-| `<leader>ua` | Supermaven on/off |
-| `<leader>ub` | Bufferline |
+| `ys{motion}{char}` | Add surroundings |
+| `ds{char}` | Delete surroundings |
+| `cs{target}{replacement}` | Change surroundings |
 
-### AI
+### Oil
 
-| Key | Mode | Action | Source |
-| --- | --- | --- | --- |
-| `<leader>ap` | n, v | CodeCompanion actions | `private_dot_config/nvim/lua/plugins/codecompanion.lua` |
-| `<leader>ac` | n, v | Toggle AI chat | `private_dot_config/nvim/lua/plugins/codecompanion.lua` |
-| `Tab` | i | Accept Supermaven suggestion | `private_dot_config/nvim/lua/plugins/supermaven.lua` |
-| `Ctrl+G` | i | Accept Supermaven suggestion word | `private_dot_config/nvim/lua/plugins/supermaven.lua` |
-| `Ctrl+]` | i | Clear Supermaven suggestion | `private_dot_config/nvim/lua/plugins/supermaven.lua` |
+Oil keeps its default buffer-local mappings. Custom additions are:
 
-### Other
-
-| Key | Action | Source |
-| --- | --- | --- |
-| `<leader>m` | Toggle Markdown preview | `private_dot_config/nvim/lua/plugins/markdown-preview.lua` |
-| `<leader>on` / `<leader>os` / `<leader>ot` | Obsidian new note / search / today | `private_dot_config/nvim/lua/plugins/obsidian.lua` |
-| `<leader>uu` | Toggle undotree | `private_dot_config/nvim/lua/plugins/undotree.lua` |
-| `Escape` | Clear search highlight + dismiss notifications | `private_dot_config/nvim/lua/plugins/noice.lua` |
+| Key | Action |
+| --- | --- |
+| `Ctrl+P` | Preview entry |
+| `gx` | Open entry externally |
 
 ## Excluded Mappings
 
 The following use plugin-default keymaps and are intentionally excluded from this index:
 
-- **blink.cmp** — default completion keymaps (`keymap = { preset = "default" }`). See `private_dot_config/nvim/lua/plugins/blink.lua`.
-- **origami** — default fold keymaps (`foldKeymaps.setup = true`). See `private_dot_config/nvim/lua/plugins/origami.lua`.
-- **vim-tmux-navigator** — standard `Ctrl+H/J/K/L` cross-pane navigation.
-- **fzf defaults** — stock fzf/fzf-tab behavior beyond the overrides listed above.
+- **blink.cmp** - default completion keymaps (`keymap = { preset = "default" }`).
+- **Oil** - default file-explorer mappings beyond the custom additions listed above.
+- **vim-tmux-navigator** - standard `Ctrl+H/J/K/L` cross-pane navigation.
+- **fzf defaults** - stock fzf/fzf-tab behavior beyond the overrides listed above.

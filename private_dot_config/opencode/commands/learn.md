@@ -57,8 +57,8 @@ AGENTS.md files can exist at any directory level. When an agent reads a file, an
 **Good** (non-obvious, actionable):
 ```
 ## Neovim LSP
-- `after/lsp/*.lua` files auto-loaded by nvim-lspconfig - don't require explicit imports
-- Mason installs to ~/.local/share/nvim/mason/bin - add to PATH for CLI usage
+- `vim.lsp.config()` holds server overrides; `vim.lsp.enable()` is gated on package-managed executables
+- Language servers, formatters, and linters come from Homebrew rather than editor-local installers
 ```
 
 **Bad** (obvious or verbose):

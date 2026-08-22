@@ -192,10 +192,11 @@ Always use `{{-` and `-}}` to trim surrounding whitespace in template tags.
 ## Neovim Config (private_dot_config/nvim/)
 
 - **2-space indent**, double quotes, trailing commas
-- Plugin specs: `return { "author/plugin", opts = { ... } }` (lazy.nvim)
+- Plugins are declared centrally with native `vim.pack.add()` in `lua/config/plugins.lua`
+- Pin plugin revisions in `nvim-pack-lock.json`
 - Keymaps: `vim.keymap.set("n", "<leader>key", func, { desc = "Category: Action" })`
-- LSP configs: `after/lsp/<server>.lua` with `vim.lsp.config()`
-- Formatter: stylua. Linter: selene (permissive, `std = "lua51"`)
+- Configure LSPs with `vim.lsp.config()` and enable them only when their executable exists
+- External language tools are package-managed; Neovim installs only Tree-sitter parsers
 
 ## Zsh Config (private_dot_config/zsh/)
 

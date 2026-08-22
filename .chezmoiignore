@@ -52,7 +52,6 @@ Cargo.lock
 .config/glab-cli/recover/**
 .kube/
 .config/navi/navi.log
-.config/nvim/lazy-lock.json
 .config/opencode/package.json
 .config/opencode/bun.lock
 .config/opencode/skills/*-workspace/
