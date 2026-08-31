@@ -125,7 +125,7 @@ function reset_internet() {
 }
 
 function reset_work_network() {
-  tailscale set --accept-dns=false &&
+  tailscale set --accept-dns=false --accept-routes=false &&
     networksetup -setwebproxystate "AX88179A" off &&
     networksetup -setsecurewebproxystate "AX88179A" off
 }
