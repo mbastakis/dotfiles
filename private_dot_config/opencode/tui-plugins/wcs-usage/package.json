@@ -1,0 +1,8 @@
+{
+  "name": "local-wcs-usage",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./tui": "./tui.js"
+  }
+}

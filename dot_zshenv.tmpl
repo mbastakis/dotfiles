@@ -13,8 +13,9 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_STATE_HOME="$HOME/.local/state"
 
-# Scrub sensitive values inherited from parent shells.
-unset BWS_ACCESS_TOKEN
+# Bitwarden Secrets Manager authentication
+[[ -r "$XDG_DATA_HOME/bws/token" ]] && export BWS_ACCESS_TOKEN="$(<"$XDG_DATA_HOME/bws/token")"
+
 # Neovim evaluates VIMINIT instead of ~/.config/nvim/init.lua when it is set.
 unset VIMINIT
 

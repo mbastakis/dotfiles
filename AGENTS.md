@@ -24,7 +24,7 @@ key.txt.age (in repo, passphrase-encrypted)
     ↓ used by chezmoi builtin age (no further prompts)
     ├── ~/.ssh/id_ed25519
     ├── ~/.supermaven/config.json
-    └── ~/.local/share/bws/token → scripts/bws-auth scopes BWS_ACCESS_TOKEN to bws
+    └── ~/.local/share/bws/token → ~/.zshenv exports BWS_ACCESS_TOKEN globally
                                       └── bws renders API keys into ~/.config/zsh/exports.zsh
 ```
 

@@ -10,11 +10,12 @@ read this config (git history holds the last v1-syntax version).
 |---|---|
 | `opencode.jsonc` | Shared engine config (native v2): providers, permissions rules, MCP, agents, references |
 | `cli.json` | Terminal-client config (chezmoi-managed): theme, sidebar/tabs, attention, full explicit keybind map |
+| `tui.json` | TUI plugin config (chezmoi-managed) |
 | `service.json` | v2 service config: port 4097, backend credential, provider env (runtime-owned, NOT chezmoi-managed) |
 | `commands/*.md` | Custom slash commands (v2 plural layout) |
 | `agents/*.md` | Agents with native v2 frontmatter (`permissions` rule arrays, `request.body` overlays) |
 | `skills/*/SKILL.md` | OpenCode-only skills |
-| `tui-plugins/wcs-usage.js` | v2 client plugin: WCS quota display, loaded via `cli.json` `plugins` |
+| `tui-plugins/wcs-usage/` | v2 client plugin: WCS quota display, loaded via `tui.json` `plugin` |
 | `~/.agents/skills/*/SKILL.md` | Shared harness-agnostic skills managed from `private_dot_agents/skills/` |
 
 ## Commands

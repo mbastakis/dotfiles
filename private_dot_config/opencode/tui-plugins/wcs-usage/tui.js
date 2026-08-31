@@ -59,10 +59,10 @@ function formatReport(report) {
 async function showUsage(context) {
   const token = process.env.WCS_API_KEY;
   if (!token) {
-    context.ui.dialog.set({ size: "medium" });
-    await context.ui.dialog.alert({
+    context.ui.toast({
       title: "WCS Usage",
       message: "WCS_API_KEY is not set in the OpenCode environment.",
+      variant: "warning",
     });
     return;
   }
@@ -88,45 +88,40 @@ async function showUsage(context) {
     if (!Array.isArray(body.gpt) || !Array.isArray(body.opencode_go)) {
       throw new Error("The WCS usage endpoint returned an invalid report.");
     }
-    context.ui.dialog.set({ size: "large" });
-    await context.ui.dialog.alert({
+    context.ui.toast({
       title: "WCS Provider Usage",
       message: formatReport(body),
+      variant: "success",
+      duration: 15000,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
-    context.ui.dialog.set({ size: "medium" });
-    await context.ui.dialog.alert({
+    context.ui.toast({
       title: "WCS Usage Unavailable",
       message,
+      variant: "error",
     });
   }
 }
 
-function mountCommands(context) {
-  context.keymap.layer(() => ({
-    mode: "global",
+function tui(context) {
+  context.keymap.registerLayer({
+    mode: "base",
     commands: [
       {
-        id: "wcs.usage",
+        name: "wcs.usage",
         title: "Show WCS provider usage",
-        description: "Fetch all WCS provider quotas without using an LLM",
-        group: "WCS",
-        palette: true,
-        slash: { name: "usage" },
+        desc: "Fetch all WCS provider quotas without using an LLM",
+        category: "WCS",
+        namespace: "palette",
+        slashName: "usage",
         run: () => showUsage(context),
       },
     ],
-  }));
-  return null;
+  });
 }
 
 export default {
   id: "local.wcs-usage",
-  setup(context) {
-    context.ui.slot({
-      append: "app",
-      render: () => mountCommands(context),
-    });
-  },
+  tui,
 };

@@ -5,7 +5,6 @@
 set -euo pipefail
 
 BWS_VERSION="2.1.0"
-TOKEN_FILE="${XDG_DATA_HOME:-$HOME/.local/share}/bws/token"
 
 if command -v bws &>/dev/null && [[ "$(bws --version 2>/dev/null)" == "bws ${BWS_VERSION}" ]]; then
     echo "BWS CLI ${BWS_VERSION} is already installed."
@@ -31,4 +30,3 @@ if [[ "$(bws --version 2>/dev/null)" != "bws ${BWS_VERSION}" ]]; then
 fi
 
 echo "BWS CLI ${BWS_VERSION} installed successfully."
-echo "BWS token will be deployed to ${TOKEN_FILE}."

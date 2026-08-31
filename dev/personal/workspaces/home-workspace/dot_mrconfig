@@ -5,6 +5,8 @@
 checkout = git clone git@github.com:mbastakis/dotfiles.git dotfiles_main
 [kavouki/kavouki_main]
 checkout = git clone git@github.com:mbastakis/kavouki.git kavouki_main
+[sisyphus/sisyphus_main]
+checkout = git clone git@github.com:mbastakis/sisyphus.git sisyphus_main
 
 # OpenTofu module repositories consumed by kavouki (WhoCaresSoftware org)
 [modules/terraform-aws-hardened-s3-bucket/terraform-aws-hardened-s3-bucket_main]
