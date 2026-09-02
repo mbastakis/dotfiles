@@ -15,5 +15,9 @@
   },
   "newFileLocation": "folder",
   "newFileFolderPath": "0-Inbox",
-  "settingsPopoutWindow": true
+  "settingsPopoutWindow": false,
+  "userIgnoreFilters": [
+    "/node_modules/",
+    "/tools/"
+  ]
 }

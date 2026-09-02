@@ -1,6 +1,6 @@
 {
   "collapse-filter": true,
-  "search": "",
+  "search": "-path:\"Extras/Templates\"",
   "showTags": false,
   "showAttachments": false,
   "hideUnresolved": false,
@@ -13,10 +13,10 @@
   "nodeSizeMultiplier": 1,
   "lineSizeMultiplier": 1,
   "collapse-forces": false,
-  "centerStrength": 0.225813234013156,
-  "repelStrength": 10.7193704382303,
+  "centerStrength": 0.390107724645297,
+  "repelStrength": 20,
   "linkStrength": 1,
   "linkDistance": 461,
-  "scale": 0.0899953032360321,
+  "scale": 0.5850125054534653,
   "close": true
 }

@@ -1,3 +1,6 @@
+Include {{ .chezmoi.homeDir }}/.local/share/colima/ssh_config
+Include {{ .chezmoi.homeDir }}/.colima/ssh_config
+
 Host otc_n8n
     HostName 80.158.109.121
     User ubuntu
@@ -122,5 +125,3 @@ Host octoprint
 # Default key
 Host *
     AddKeysToAgent yes
-
-Include {{ .chezmoi.homeDir }}/.local/share/colima/ssh_config

@@ -252,6 +252,7 @@ Source: `private_dot_config/zsh/aliases.zsh` (selection; see the file for listin
 | `oc` / `ocm` / `occ` / `ocserve` | `opencode2` / `opencode2 mini` / `opencode2 --continue` / `opencode-server` |
 | `cz` | `chezmoi` |
 | `ta` / `td` / `tls` | `tmux attach` / `tmux detach` / `tmux ls` |
+| `tmux-restart` | Save Resurrect state, then stop all user-owned tmux servers; reopen Ghostty to restore |
 | `k` / `ctx` / `ns` | `kubectl` / `kubectx` / `kubens` |
 | `grt` | `cd` to git repo root |
 | `r`, `reload` | Replace shell with fresh instance |

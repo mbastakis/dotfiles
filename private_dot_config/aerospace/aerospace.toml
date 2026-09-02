@@ -8,7 +8,7 @@ auto-reload-config = true
 after-startup-command = ['exec-and-forget borders']
 
 # Version 2 requires persistent workspaces to be declared explicitly.
-persistent-workspaces = ['a', 'o', 'e', 'u', 'j']
+persistent-workspaces = ['a', 'o', 'e', 'u']
 
 # Keep SketchyBar's workspace state synchronized with AeroSpace.
 exec-on-workspace-change = [
@@ -31,32 +31,22 @@ key-mapping.preset = 'dvorak'
 
 on-window-detected = [
   # Workspace A
-  { if = 'test %{app-name} ~= "Microsoft Edge"', run = 'move-node-to-workspace a' },
-  { if = 'test %{app-name} ~= Chrome', run = 'move-node-to-workspace a' },
   { if = 'test %{app-name} ~= Comet', run = 'move-node-to-workspace a' },
+  { if = 'test %{app-name} ~= Chrome', run = 'move-node-to-workspace a' },
 
   # Workspace O
-  { if = 'test %{app-name} ~= "Code - Insiders"', run = 'move-node-to-workspace o' },
-  { if = 'test %{app-name} ~= OpenCode', run = 'move-node-to-workspace o' },
-  { if = 'test %{app-name} ~= Code', run = 'move-node-to-workspace o' },
-  { if = 'test %{app-name} ~= Warp', run = 'move-node-to-workspace o' },
-  { if = 'test %{app-name} ~= Ghostty', run = 'move-node-to-workspace o' },
   { if = 'test %{app-name} ~= Vivaldi', run = 'move-node-to-workspace o' },
+  { if = 'test %{app-name} ~= Ghostty', run = 'move-node-to-workspace o' },
+  { if = 'test %{app-name} ~= Obsidian', run = 'move-node-to-workspace o' },
 
   # Workspace E
-  { if = 'test %{app-name} ~= Linear', run = 'move-node-to-workspace e' },
-  { if = 'test %{app-name} ~= Obsidian', run = 'move-node-to-workspace e' },
-  { if = 'test %{app-name} ~= "Google Calendar"', run = 'move-node-to-workspace e' },
+  { if = 'test %{app-name} ~= Spotify', run = 'move-node-to-workspace e' },
+  { if = 'test %{app-name} ~= Discord', run = 'move-node-to-workspace e' },
 
   # Workspace U
-  { if = 'test %{app-name} ~= Slack', run = 'move-node-to-workspace u' },
   { if = 'test %{app-name} ~= "Microsoft Teams"', run = 'move-node-to-workspace u' },
   { if = 'test %{app-name} ~= Outlook', run = 'move-node-to-workspace u' },
-
-  # Workspace J
-  { if = 'test %{app-name} ~= Discord', run = 'move-node-to-workspace j' },
-  { if = 'test %{app-name} ~= Bitwarden', run = 'move-node-to-workspace j' },
-  { if = 'test %{app-name} ~= Spotify', run = 'move-node-to-workspace j' },
+  { if = 'test %{app-name} ~= Slack', run = 'move-node-to-workspace u' },
 
   # Floating windows
   { if = 'test %{app-bundle-id} = "com.vicinaehq.Vicinae"', run = 'layout floating' },
@@ -106,13 +96,11 @@ alt-a = 'workspace a'
 alt-o = 'workspace o'
 alt-e = 'workspace e'
 alt-u = 'workspace u'
-alt-j = 'workspace j'
 
 alt-shift-a = 'move-node-to-workspace a --focus-follows-window'
 alt-shift-o = 'move-node-to-workspace o --focus-follows-window'
 alt-shift-e = 'move-node-to-workspace e --focus-follows-window'
 alt-shift-u = 'move-node-to-workspace u --focus-follows-window'
-alt-shift-j = 'move-node-to-workspace j --focus-follows-window'
 
 alt-tab = 'workspace-back-and-forth'
 alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'

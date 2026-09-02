@@ -51,7 +51,7 @@ sketchybar --add event aerospace_workspace_change \
   --add event system_stats \
   --add event gpu_stats
 
-workspace_ids=(a o e u j)
+workspace_ids=(a o e u)
 for workspace_id in "${workspace_ids[@]}"; do
   sketchybar --add item "space.$workspace_id" left \
     --set "space.$workspace_id" \
@@ -72,7 +72,7 @@ for workspace_id in "${workspace_ids[@]}"; do
     --subscribe "space.$workspace_id" aerospace_workspace_change system_woke mouse.entered mouse.exited
 done
 
-sketchybar --add bracket workspaces space.a space.o space.e space.u space.j \
+sketchybar --add bracket workspaces space.a space.o space.e space.u \
   --set workspaces \
     background.drawing=on \
     background.color="$ITEM_COLOR" \

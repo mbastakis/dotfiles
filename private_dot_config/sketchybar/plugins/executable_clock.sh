@@ -14,7 +14,7 @@ sketchybar --set clock label="$(date '+%H:%M')"
 
 mkdir -p "$CACHE_DIR"
 today="$(date '+%Y-%m-%d')"
-render_version=3
+render_version=4
 if [[ -f "$CALENDAR_IMAGE" && "$(cat "$CALENDAR_STAMP" 2>/dev/null || true)" == "$today:$render_version" ]]; then
   sketchybar --set calendar background.image="$CALENDAR_IMAGE"
   exit 0
@@ -32,7 +32,7 @@ month_label="$(date '+%B %Y')"
 font_file="$(fc-match 'JetBrainsMono Nerd Font Mono' -f '%{file}' | head -1)"
 current_day="$((10#$(date '+%d')))"
 first_weekday="$(date -j -f '%Y-%m-%d' "$(date '+%Y-%m')-01" '+%w')"
-days_in_month="$(cal | awk 'NF {line=$0} END {print $NF}')"
+days_in_month="$((10#$(date -j -v1d -v+1m -v-1d '+%d')))"
 
 # Render at Retina resolution, then let SketchyBar display it at 280x300 points.
 command=(magick -size 560x600 xc:none -font "$font_file")

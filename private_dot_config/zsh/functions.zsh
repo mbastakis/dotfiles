@@ -118,6 +118,21 @@ function brew_update() {
   echo "Homebrew update complete."
 }
 
+# Save the default tmux server, then stop every tmux server owned by this user.
+function tmux-restart() {
+  local save_script
+  save_script="$(tmux show-option -gqv '@resurrect-save-script-path' 2>/dev/null)"
+
+  if [[ -z "$save_script" || ! -x "$save_script" ]]; then
+    echo "tmux-restart: tmux-resurrect save script not found" >&2
+    return 1
+  fi
+
+  "$save_script" || return
+  echo "tmux state saved; stopping all tmux servers..."
+  pkill -x -u "$(id -u)" tmux
+}
+
 function reset_internet() {
   sudo killall -HUP mDNSResponder && echo macOS DNS Cache Reset
   sudo pfctl -f /etc/pf.conf
