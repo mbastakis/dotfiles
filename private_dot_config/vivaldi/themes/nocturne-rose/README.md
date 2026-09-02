@@ -8,7 +8,7 @@ zip nocturne-rose.zip settings.json
 ```
 
 Then in Vivaldi: Settings → Themes → Import Theme → pick `nocturne-rose.zip`.
-Regenerate after any palette change (`chezmoi apply` re-renders settings.json).
+Refresh after a palette release with `mise exec task -- task theme:sync`, then apply the updated files with chezmoi.
 
 The `engineVersion` and `id` fields are required — Vivaldi silently ignores
 imports without them. The id is fixed so re-imports update the same theme.

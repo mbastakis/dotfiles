@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - ".chezmoidata.yaml"
+      - ".chezmoidata/**"
       - ".github/workflows/deploy-docs.yml"
       - "docs/**"
   workflow_dispatch:

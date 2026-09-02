@@ -19,6 +19,7 @@ tasks:
       - sh: command -v pre-commit
         msg: "pre-commit not found; run: mise install"
     cmds:
+      - task: theme:check
       - pre-commit run --all-files
       - git diff --check
 
@@ -34,6 +35,16 @@ tasks:
         msg: "Homebrew not found; install it from https://brew.sh"
     cmds:
       - brew bundle dump --force --file=private_dot_config/brew/Brewfile
+
+  theme:sync:
+    desc: Refresh generated Nocturne Rose snapshots from the sibling repository
+    cmds:
+      - scripts/sync-nocturne-rose.sh
+
+  theme:check:
+    desc: Verify generated Nocturne Rose snapshots are current
+    cmds:
+      - scripts/sync-nocturne-rose.sh --check
 
   docs:theme:
     internal: true
