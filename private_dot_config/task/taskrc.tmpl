@@ -78,8 +78,9 @@ report.long.sort=urgency-
 
 # Context helpers — quickly filter by Linear origin.
 # Activate with `task context linear`, clear with `task context none`.
-context.linear.read=+linear
-context.linear.write=+linear
+# Linear-backed tasks are identified by the linear_id UDA, not a tag
+# (tags are board-managed in Sisyphus; see sisyphus README "Projects and tags").
+context.linear.read=linear_id.any:
 
 # -----------------------------------------------------------------------------
 # User-Defined Attributes (UDAs) — mirror Linear metadata that has no

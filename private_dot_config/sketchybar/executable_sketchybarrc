@@ -1,0 +1,22 @@
+#!/opt/homebrew/bin/lua
+-- SketchyBar configuration (SbarLua). One long-lived Lua process owns every
+-- item: state lives in memory, events arrive as callbacks, and shell work
+-- goes through sbar.exec so nothing blocks the bar.
+--
+-- Layout: lua/bar.lua (bar + defaults), lua/events.lua (custom events),
+-- lua/items/* (one module per pill), lua/providers.lua (background feeds).
+
+local home = os.getenv("HOME")
+CONFIG_DIR = home .. "/.config/sketchybar"
+PLUGIN_DIR = CONFIG_DIR .. "/plugins"
+
+package.path = CONFIG_DIR .. "/lua/?.lua;" .. CONFIG_DIR .. "/lua/?/init.lua;" .. package.path
+
+sbar = require("sketchybar")
+
+sbar.begin_config()
+require("init")
+sbar.hotload(true)
+sbar.end_config()
+
+sbar.event_loop()

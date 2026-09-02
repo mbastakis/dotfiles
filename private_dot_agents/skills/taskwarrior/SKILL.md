@@ -28,7 +28,7 @@ For triage or reranking, produce a compact table before writing:
 | uuid | task | current state | proposed change | rationale | confidence |
 ```
 
-Taskwarrior urgency is derived, not editable. Rerank by changing explicit fields: `priority`, `due`, `wait`, `scheduled`, project, tags such as `+next`, or dependencies.
+Taskwarrior urgency is derived, not editable. Rerank by changing explicit fields: `priority`, `due`, `wait`, `scheduled`, project, `+next`, or dependencies. `+next` is the only tag in use; never add other tags.
 
 ## Board Contract
 
@@ -36,17 +36,17 @@ Treat the Kanban columns as a commitment workflow, not four equivalent task cate
 
 | Column | Meaning | Taskwarrior state |
 |---|---|---|
-| Backlog | An idea or possible task worth retaining, but not prioritized or committed for the current week. | Pending, not active, without `+next`, `+waiting`, or an unfinished dependency |
+| Backlog | An idea or possible task worth retaining, but not prioritized or committed for the current week. | Pending, not active, without `+next`, a `wait:` date, or an unfinished dependency |
 | Ready | Prioritized work committed for the current week and available to start. Keep this list intentionally small and realistic. | Pending with `+next`, not active or blocked |
 | Doing | Work currently being executed. | Started with `tw <uuid> start` |
-| Waiting | Work that was being pursued but cannot progress because it is blocked by a person, event, prerequisite, or external condition. Record the blocker. | `+waiting`, native waiting state, or an unfinished dependency |
+| Waiting | Work that was being pursued but cannot progress because it is blocked by a person, event, prerequisite, or external condition. Record the blocker. | A `wait:` date (native waiting state) or an unfinished dependency |
 
 Apply these transitions consistently:
 
 - New ideas and unprioritized tasks enter Backlog by default; do not add `+next` merely because a task is actionable.
 - Promote Backlog to Ready with `+next` only when the user prioritizes it for the current week.
 - Move Ready to Doing with `tw <uuid> start`; keep `+next` so stopping an unblocked task returns it to Ready.
-- Move Doing to Waiting when blocked: stop it, preserve `+next`, add `+waiting` or the blocking dependency, and annotate what is blocking progress and the next follow-up when known.
+- Move Doing to Waiting when blocked: stop it, preserve `+next`, set a `wait:` date or the blocking dependency, and annotate what is blocking progress and the next follow-up when known.
 - When a blocker clears, remove the waiting state and return the task to Ready; start it only when work actually resumes.
 - During weekly planning, remove `+next` from unfinished tasks that are no longer a current-week commitment so they return to Backlog.
 - Use `wait:` for work intentionally hidden until a future date. Do not use the Waiting column for ordinary deferral, lack of priority, or someday/maybe ideas.
@@ -66,12 +66,12 @@ When explaining a mutation plan, say plainly: _numeric IDs are temporary; use UU
 
 ## Creating Tasks
 
-Create tasks with enough structure to make later querying useful, but do not invent metadata. A good task has a clear verb, optional project, optional due/wait date, and only high-signal tags.
+Create tasks with enough structure to make later querying useful, but do not invent metadata. A good task has a clear verb, optional project, optional due/wait date, and no tags other than `+next`.
 
 Use `--` before a literal description that could be parsed as attributes:
 
 ```bash
-tw add project:Finance +admin due:friday -- "Pay credit card"
+tw add project:personal.finance due:friday -- "Pay credit card"
 tw add project:Work +next wait:tomorrow -- "Draft launch checklist"
 tw add -- "project:Home needs scheduling"
 ```
@@ -210,7 +210,7 @@ For reranking, _propose_ exact field changes rather than vague priority advice:
 ```bash
 tw <uuid> modify priority:H +next due:friday
 tw <uuid> modify wait:monday -next
-tw <uuid> modify project:Finance +admin
+tw <uuid> modify project:personal.finance
 tw <uuid> modify depends:<blocking-uuid>
 ```
 

@@ -36,6 +36,8 @@ brew "bash-language-server"
 brew "eslint_d"
 # Secure and free password manager for all of your devices
 brew "bitwarden-cli"
+# Bluetooth power/connect actions for the SketchyBar bluetooth popup
+brew "blueutil"
 # Resource monitor. C++ version and continuation of bashtop and bpytop
 brew "btop"
 # Manage your dotfiles across multiple diverse machines, securely
@@ -114,6 +116,8 @@ brew "helm"
 brew "helm-ls"
 # User-friendly cURL replacement (command-line HTTP client)
 brew "httpie"
+# Apple Calendar events for the SketchyBar calendar popup
+brew "ical-buddy"
 # Tools and libraries to manipulate images in select formats
 brew "imagemagick"
 # CLI wrapper for basic network utilities on macOS - ip command
@@ -205,6 +209,8 @@ brew "felixkratz/formulae/sketchybar", restart_service: :changed, trusted: true
 brew "joncrangle/tap/sketchybar-system-stats", trusted: true
 # Sudoless Apple Silicon performance monitor used for GPU metrics
 brew "macmon"
+# Lua API for SketchyBar; source is pinned in the private tap
+brew "mbastakis/tap/sbarlua", postinstall: "#{HOMEBREW_PREFIX}/bin/brew pin sbarlua", trusted: true
 # Smart session manager for the terminal
 brew "sesh"
 # Git worktree lifecycle, hooks, and interactive picker
@@ -314,6 +320,7 @@ cask "discord"
 cask "finicky"
 cask "font-jetbrains-mono"
 cask "font-jetbrains-mono-nerd-font"
+cask "font-sketchybar-app-font"
 cask "font-sf-pro"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
@@ -347,6 +354,8 @@ cask "vivaldi"
 cask "whatsapp"
 mas "Amphetamine", id: 937984704
 mas "Bitwarden", id: 1352778147
+# Pomodoro timer surfaced in SketchyBar
+mas "Flow", id: 1423210932
 mas "Mark And Scribble", id: 1635403801
 # Mesh VPN used by the OpenCode remote-access stack
 mas "Tailscale", id: 1475387142
