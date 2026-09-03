@@ -1,3 +1,4 @@
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlights" })
 vim.keymap.set("n", "<C-w>h", "<cmd>vsplit<CR>", { desc = "Split horizontal (side-by-side)" })
 vim.keymap.set("n", "<C-w>v", "<cmd>split<CR>", { desc = "Split vertical (stacked)" })
 

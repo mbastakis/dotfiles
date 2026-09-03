@@ -1,3 +1,5 @@
+import { Plugin } from "@opencode-ai/plugin/tui";
+
 const usageURL = "https://ai.whocaressoftware.com/wcs/usage";
 
 function percent(value) {
@@ -59,7 +61,7 @@ function formatReport(report) {
 async function showUsage(context) {
   const token = process.env.WCS_API_KEY;
   if (!token) {
-    context.ui.toast({
+    context.ui.toast.show({
       title: "WCS Usage",
       message: "WCS_API_KEY is not set in the OpenCode environment.",
       variant: "warning",
@@ -88,15 +90,15 @@ async function showUsage(context) {
     if (!Array.isArray(body.gpt) || !Array.isArray(body.opencode_go)) {
       throw new Error("The WCS usage endpoint returned an invalid report.");
     }
-    context.ui.toast({
+    context.ui.toast.show({
       title: "WCS Provider Usage",
       message: formatReport(body),
       variant: "success",
-      duration: 15000,
+      duration: 6000,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
-    context.ui.toast({
+    context.ui.toast.show({
       title: "WCS Usage Unavailable",
       message,
       variant: "error",
@@ -104,24 +106,30 @@ async function showUsage(context) {
   }
 }
 
-function tui(context) {
-  context.keymap.registerLayer({
-    mode: "base",
-    commands: [
-      {
-        name: "wcs.usage",
-        title: "Show WCS provider usage",
-        desc: "Fetch all WCS provider quotas without using an LLM",
-        category: "WCS",
-        namespace: "palette",
-        slashName: "usage",
-        run: () => showUsage(context),
-      },
-    ],
-  });
-}
-
-export default {
+export default Plugin.define({
   id: "local.wcs-usage",
-  tui,
-};
+  setup(context) {
+    function UsageCommand() {
+      context.keymap.layer(() => ({
+        mode: "global",
+        commands: [
+          {
+            id: "wcs.usage",
+            title: "Show WCS provider usage",
+            group: "WCS",
+            palette: true,
+            slash: { name: "usage" },
+            run: () => showUsage(context),
+          },
+        ],
+      }));
+
+      return null;
+    }
+
+    return context.ui.slot({
+      append: "app",
+      render: UsageCommand,
+    });
+  },
+});

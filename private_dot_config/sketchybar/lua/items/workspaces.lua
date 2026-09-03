@@ -46,6 +46,7 @@ for _, id in ipairs(IDS) do
       string = id,
       font = settings.bold(14),
       color = colors.SUBTEXT_COLOR,
+      y_offset = 2,
       padding_left = 10,
       padding_right = 10,
     },
@@ -122,12 +123,12 @@ local function update_apps()
       if #glyphs > 0 then
         spaces[id]:set({
           label = { string = table.concat(glyphs, " "), drawing = true },
-          icon = { padding_right = 4 },
+          icon = { string = id .. " ·", padding_right = 8 },
         })
       else
         spaces[id]:set({
           label = { string = "", drawing = false },
-          icon = { padding_right = 10 },
+          icon = { string = id, padding_right = 10 },
         })
       end
     end

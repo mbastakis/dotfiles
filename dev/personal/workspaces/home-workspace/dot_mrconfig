@@ -1,19 +1,29 @@
-# Personal repositories
-# Container layout: main checkout at <repo>/<repo>_main, worktrunk worktrees at <repo>/<repo>_<branch>.
-
+# dotfiles
 [dotfiles/dotfiles_main]
 checkout = git clone git@github.com:mbastakis/dotfiles.git dotfiles_main
-[kavouki/kavouki_main]
-checkout = git clone git@github.com:mbastakis/kavouki.git kavouki_main
-[nocturne-rose/nocturne-rose_main]
-checkout = git clone git@github.com:mbastakis/nocturne-rose.git nocturne-rose_main
-[sisyphus/sisyphus_main]
-checkout = git clone git@github.com:mbastakis/sisyphus.git sisyphus_main
 
-# OpenTofu module repositories consumed by kavouki (WhoCaresSoftware org)
-[modules/terraform-aws-hardened-s3-bucket/terraform-aws-hardened-s3-bucket_main]
+# server
+[server/kavouki/kavouki_main]
+checkout = git clone git@github.com:mbastakis/kavouki.git kavouki_main
+# apps
+[server/apps/sisyphus/sisyphus_main]
+checkout = git clone git@github.com:mbastakis/sisyphus.git sisyphus_main
+# iac modules
+[server/iac-modules/terraform-aws-hardened-s3-bucket/terraform-aws-hardened-s3-bucket_main]
 checkout = git clone git@github.com:WhoCaresSoftware/terraform-aws-hardened-s3-bucket.git terraform-aws-hardened-s3-bucket_main
-[modules/terraform-aws-iam-user/terraform-aws-iam-user_main]
+[server/iac-modules/terraform-aws-iam-user/terraform-aws-iam-user_main]
 checkout = git clone git@github.com:WhoCaresSoftware/terraform-aws-iam-user.git terraform-aws-iam-user_main
-[modules/terraform-aws-route53-private-services/terraform-aws-route53-private-services_main]
+[server/iac-modules/terraform-aws-route53-private-services/terraform-aws-route53-private-services_main]
 checkout = git clone git@github.com:WhoCaresSoftware/terraform-aws-route53-private-services.git terraform-aws-route53-private-services_main
+
+# themes
+[themes/nocturne-rose/nocturne-rose_main]
+checkout = git clone git@github.com:mbastakis/nocturne-rose.git nocturne-rose_main
+
+# tools
+[tools/aws-login/aws-login_main]
+checkout = git clone git@github.com:mbastakis/aws-login.git aws-login_main
+[tools/EchoZ/EchoZ_main]
+checkout = git clone git@github.com:mbastakis/EchoZ.git EchoZ_main
+[tools/homebrew-tap/homebrew-tap_main]
+checkout = git clone git@github.com:mbastakis/homebrew-tap.git homebrew-tap_main
