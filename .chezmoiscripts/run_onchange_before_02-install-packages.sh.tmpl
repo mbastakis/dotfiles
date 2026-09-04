@@ -51,4 +51,14 @@ else
     echo "  HOMEBREW_NO_AUTO_UPDATE=1 brew bundle --file=\$HOME/.config/brew/Brewfile --no-upgrade"
 fi
 
+# OpenCode v2 is not available through Homebrew during the beta. Install it
+# separately for the managed config, LaunchAgents, and post-apply reconciliation.
+export PATH="$HOME/.opencode/bin:$PATH"
+curl -fsSL https://opencode.ai/v2/install | /bin/bash -s -- --no-modify-path
+
+if ! command -v opencode2 >/dev/null 2>&1; then
+    echo "Error: OpenCode v2 installer completed but opencode2 was not found." >&2
+    exit 1
+fi
+
 echo "Package installation complete!"

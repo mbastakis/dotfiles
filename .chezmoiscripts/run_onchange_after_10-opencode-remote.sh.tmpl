@@ -20,6 +20,7 @@ domain="gui/$(id -u)"
 # Provider credentials for the background service (it has no zsh environment).
 if [[ -f "$HOME/.config/zsh/exports.zsh" ]]; then
     /bin/zsh -c '
+        export PATH="$HOME/.opencode/bin:$HOME/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
         source "$HOME/.config/zsh/exports.zsh"
         for var in WCS_API_KEY WCS_DEV_API_KEY SELFHOSTED_LLM_API_KEY OPENCODE_API_KEY; do
             [[ -n "${(P)var:-}" ]] && opencode2 service set env "$var" "${(P)var}" >/dev/null

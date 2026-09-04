@@ -281,8 +281,8 @@ brew "yq"
 brew "zinit"
 # Shell extension to navigate your filesystem faster
 brew "zoxide"
-# OpenCode v1, kept only as the `opencode` escape hatch. The primary
-# opencode2 v2 beta is installed separately in ~/.opencode/bin.
+# OpenCode v1, kept only as the `opencode` escape hatch. The package bootstrap
+# installs the primary opencode2 v2 beta separately in ~/.opencode/bin.
 brew "anomalyco/tap/opencode", trusted: true
 # Git diff pager based on delta but with a file tree, à la GitHub
 brew "dlvhdr/formulae/diffnav", trusted: true
