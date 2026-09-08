@@ -1,9 +1,0 @@
-{{- $theme := index .theme.catalog .theme.active -}}
-local M = {}
-
-function M.setup()
-  require("themes.{{ .theme.active }}").apply()
-  vim.g.active_theme = {{ $theme.display_name | quote }}
-end
-
-return M

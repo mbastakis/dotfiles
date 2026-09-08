@@ -1,5 +1,4 @@
-{{- $theme := index .theme.catalog .theme.active -}}
-{{- $palette := $theme.palette }}
+
 # ================================
 # Input and key bindings
 # ================================
@@ -80,33 +79,7 @@ set -g @plugin 'tmux-plugins/tmux-sensible'
 # Plugin options
 # ================================
 
-# Supply the active palette to Catppuccin's tmux formatting engine.
-set -g @thm_bg {{ $palette.base | quote }}
-set -g @thm_fg {{ $palette.text | quote }}
-set -g @thm_crust {{ $palette.black | quote }}
-set -g @thm_mantle {{ $palette.mantle | quote }}
-set -g @thm_surface_0 {{ $palette.surface | quote }}
-set -g @thm_surface_1 {{ $palette.overlay | quote }}
-set -g @thm_surface_2 {{ $palette.overlay_high | quote }}
-set -g @thm_overlay_0 {{ $palette.muted | quote }}
-set -g @thm_overlay_1 {{ $palette.subtext | quote }}
-set -g @thm_overlay_2 {{ $palette.subtext | quote }}
-set -g @thm_subtext_0 {{ $palette.subtext | quote }}
-set -g @thm_subtext_1 {{ $palette.subtext | quote }}
-set -g @thm_rosewater {{ $palette.text | quote }}
-set -g @thm_flamingo {{ $palette.rose | quote }}
-set -g @thm_pink {{ $palette.rose | quote }}
-set -g @thm_mauve {{ $palette.rose | quote }}
-set -g @thm_red {{ $palette.red | quote }}
-set -g @thm_maroon {{ $palette.red | quote }}
-set -g @thm_peach {{ $palette.amber | quote }}
-set -g @thm_yellow {{ $palette.yellow | quote }}
-set -g @thm_green {{ $palette.green | quote }}
-set -g @thm_teal {{ $palette.aqua | quote }}
-set -g @thm_sky {{ $palette.aqua | quote }}
-set -g @thm_sapphire {{ $palette.blue | quote }}
-set -g @thm_blue {{ $palette.blue | quote }}
-set -g @thm_lavender {{ $palette.orchid | quote }}
+{{ include "theme-fragments/tmux/nocturne-rose-palette.conf" | trimSuffix "\n" }}
 
 # Catppuccin: show window names (manual rename friendly).
 set -g @catppuccin_window_text " #W"
@@ -208,20 +181,7 @@ if "test ! -d ~/.config/tmux/plugins/tpm" "run 'mkdir -p ~/.config/tmux/plugins 
 run '~/.config/tmux/plugins/tpm/tpm'
 %endif
 
-# Let prompts and messages temporarily replace the themed window list instead
-# of drawing over it. The normal status content returns when they close.
-set -g status-style "bg={{ $palette.base }},fg={{ $palette.text }}"
-set -g message-style "bg={{ $palette.base }},fg={{ $palette.text }},fill={{ $palette.base }},width=100%,align=left"
-set -g message-command-style "bg={{ $palette.base }},fg={{ $palette.text }},fill={{ $palette.base }},width=100%,align=left"
-
-# Pane borders: tmux draws shared separator cells, not independent pane boxes.
-# Use thin colored separators and pane labels for a boxed-pane approximation.
-set -g pane-border-indicators off
-set -g pane-border-lines single
-set -g pane-border-style "fg={{ $palette.overlay_high }},bg=default"
-set -g pane-active-border-style "fg={{ $palette.rose }},bg=default"
-set -g pane-border-status top
-set -g pane-border-format "#[align=centre]"
+{{ include "theme-fragments/tmux/nocturne-rose-styles.conf" | trimSuffix "\n" }}
 
 # ================================
 # Post-TPM: restore & save hooks

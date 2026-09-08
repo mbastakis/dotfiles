@@ -1,4 +1,3 @@
-{{- $theme := index .theme.catalog .theme.active -}}
 {
   "$schema": "https://vicinae.com/schemas/config.json",
   "telemetry": {
@@ -14,11 +13,11 @@
   },
   "theme": {
     "light": {
-      "name": {{ .theme.active | quote }},
+      "name": "nocturne-rose",
       "icon_theme": "auto"
     },
     "dark": {
-      "name": {{ .theme.active | quote }},
+      "name": "nocturne-rose",
       "icon_theme": "auto"
     }
   },

@@ -1,0 +1,45 @@
+[meta]
+version = 1
+name = "Nocturne Rose"
+description = "Nocturne Rose dark theme."
+variant = "dark"
+inherits = "vicinae-dark"
+
+[colors.core]
+background = "#0d0d10"
+foreground = "#ebe7ed"
+secondary_background = "#121217"
+border = "#30303d"
+accent = "#d48aa4"
+accent_foreground = "#09090b"
+
+[colors.accents]
+blue = "#88a8bd"
+green = "#8aa47f"
+magenta = "#d48aa4"
+orange = "#d3b069"
+purple = "#b69acb"
+red = "#cc655c"
+yellow = "#b7aa7d"
+cyan = "#94b3ae"
+
+[colors.text]
+muted = "#77727f"
+danger = "#cc655c"
+success = "#8aa47f"
+placeholder = "#504c57"
+selection = { background = "#30303d", foreground = "#ebe7ed" }
+
+[colors.input]
+border = "#30303d"
+border_focus = "#d48aa4"
+border_error = "#cc655c"
+
+[colors.list.item.selection]
+background = "#18181f"
+secondary_background = "#121217"
+
+[colors.grid.item]
+background = "#18181f"
+hover = { outline = "#d48aa4" }
+selection = { outline = "#b69acb" }

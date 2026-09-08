@@ -1,5 +1,3 @@
-{{- $theme := index .theme.catalog .theme.active -}}
-{{- $palette := $theme.palette -}}
 #!/usr/bin/env zsh
 # fzf.zsh - Consolidated fzf configuration
 #
@@ -10,13 +8,7 @@
 # BASE CONFIGURATION (applied to ALL fzf invocations automatically)
 # =============================================================================
 
-# Colors from the active global theme
-FZF_COLORS="\
---color=bg+:{{ $palette.surface }},bg:{{ $palette.base }},spinner:{{ $palette.muted }},hl:{{ $palette.rose }} \
---color=fg:{{ $palette.text }},header:{{ $palette.muted }},info:{{ $palette.blue }},pointer:{{ $palette.rose }} \
---color=marker:{{ $palette.orchid }},fg+:{{ $palette.text }},prompt:{{ $palette.orchid }},hl+:{{ $palette.rose }} \
---color=selected-bg:{{ $palette.overlay }} \
---color=border:{{ $palette.overlay_high }},label:{{ $palette.rose }}"
+{{ include "theme-fragments/fzf/nocturne-rose.zsh" | trimSuffix "\n" }}
 
 # Keybindings
 FZF_BINDS="\

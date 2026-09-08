@@ -21,10 +21,6 @@ node_modules/
 # Vicinae-installed extension bundles
 private_dot_local/private_share/vicinae/extensions/
 
-# Generated documentation assets
-docs/theme.css
-docs/showcase.md
-
 # Python
 __pycache__/
 *.pyc

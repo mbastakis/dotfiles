@@ -1,0 +1,89 @@
+###############################################################################
+# Nocturne Rose theme for Taskwarrior.
+# Taskwarrior does not support hex colors, so this adapter uses the catalog's
+# deterministic nearest xterm-256 values for reliable rendering under tmux.
+# Include from ~/.config/task/taskrc with:
+#   include ~/.config/task/nocturne-rose.theme
+###############################################################################
+
+# Pick one clear semantic color per row. Merging rules can combine a foreground
+# from one match with the same background from another, producing solid blocks.
+rule.color.merge=no
+rule.precedence.color=deleted,completed,active,overdue,due.today,due,blocked,blocking,recurring,scheduled,keyword.,tag.,project.,tagged,uda.
+
+# General decoration
+color.label=color140
+color.label.sort=color175
+# No row-alternation — rows render on the terminal's default background so the
+# Ghostty transparency/opacity stays consistent across every row.
+color.alternate=
+color.header=color140
+color.footnote=color248
+color.warning=color144
+color.error=color233 on color167
+color.debug=color110
+
+# Task state
+color.completed=color243
+color.deleted=color239
+color.active=bold color175
+color.recurring=color109
+color.scheduled=color140
+color.until=color144
+color.blocked=color239
+color.blocking=bold color144
+
+# Project
+# Leave project.none unset so tasks without a Linear project aren't muted —
+# let other rules (tag.*, overdue, priority) take over.
+color.project.none=
+
+# Priority (overrides the defaults in taskrc)
+color.uda.priority.H=color167
+color.uda.priority.M=color144
+color.uda.priority.L=color108
+
+# Tags
+color.tag.urgent=bold color167
+color.tag.next=color110
+color.tag.waiting=color243
+color.tag.none=
+color.tagged=color140
+
+# Due
+color.due.today=bold color144
+color.due=color144
+color.overdue=bold color167
+
+# Report: burndown
+color.burndown.done=on color108
+color.burndown.pending=on color167
+color.burndown.started=on color144
+
+# Report: history
+color.history.add=color233 on color108
+color.history.delete=color233 on color167
+color.history.done=color233 on color140
+
+# Report: summary
+color.summary.background=color255 on color234
+color.summary.bar=color233 on color108
+
+# Command: calendar
+color.calendar.due.today=color233 on color144
+color.calendar.due=color233 on color144
+color.calendar.holiday=color233 on color109
+color.calendar.scheduled=
+color.calendar.overdue=color233 on color167
+color.calendar.today=color233 on color140
+color.calendar.weekend=on color233
+color.calendar.weeknumber=color248
+
+# Command: sync
+color.sync.added=color108
+color.sync.changed=color144
+color.sync.rejected=color167
+
+# Command: undo
+color.undo.after=color108
+color.undo.before=color167

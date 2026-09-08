@@ -13,6 +13,7 @@ ai-docs/
 .task/
 scripts/
 tests/
+theme-fragments/
 
 # Repo-local tooling (go-task via mise, used inside this repo only)
 mise.toml

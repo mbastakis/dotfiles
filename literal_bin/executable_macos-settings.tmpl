@@ -71,11 +71,7 @@ defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 defaults write NSGlobalDomain KeyRepeat -int 2
 defaults write NSGlobalDomain InitialKeyRepeat -int 15
 
-{{ $theme := index .theme.catalog .theme.active -}}
-# Appearance: align the native accent/highlight with the {{ $theme.display_name }} rose
-# so system menus, buttons, and selections stop speaking Apple-blue.
-defaults write NSGlobalDomain AppleAccentColor -int 6
-defaults write NSGlobalDomain AppleHighlightColor -string "{{ range $i, $c := splitList ", " (index .theme.catalog .theme.active).rgb.rose }}{{ if $i }} {{ end }}{{ printf "%.6f" (divf (float64 $c) 255.0) }}{{ end }} Pink"
+{{ include "theme-fragments/macos/nocturne-rose.sh" | trimSuffix "\n" }}
 
 echo "Restarting affected services..."
 for app in "Dock" "Finder" "SystemUIServer" "cfprefsd"; do

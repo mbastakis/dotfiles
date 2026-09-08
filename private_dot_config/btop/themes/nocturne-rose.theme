@@ -1,0 +1,59 @@
+# Nocturne Rose native btop theme (nocturne-rose).
+
+# Core surfaces and text
+theme[main_bg]="#0d0d10"
+theme[main_fg]="#ebe7ed"
+theme[title]="#ebe7ed"
+theme[hi_fg]="#d48aa4"
+theme[selected_bg]="#30303d"
+theme[selected_fg]="#ebe7ed"
+theme[inactive_fg]="#77727f"
+theme[graph_text]="#aaa5b0"
+theme[meter_bg]="#22222c"
+theme[proc_misc]="#b69acb"
+
+# Restrained rose/orchid structure
+theme[cpu_box]="#d48aa4"
+theme[mem_box]="#b69acb"
+theme[net_box]="#d48aa4"
+theme[proc_box]="#b69acb"
+theme[div_line]="#30303d"
+
+# Temperature keeps conventional severity colors
+theme[temp_start]="#8aa47f"
+theme[temp_mid]="#b7aa7d"
+theme[temp_end]="#cc655c"
+
+# Primary activity gradients
+theme[cpu_start]="#b69acb"
+theme[cpu_mid]="#d48aa4"
+theme[cpu_end]="#ebe7ed"
+
+theme[free_start]="#b69acb"
+theme[free_mid]="#d48aa4"
+theme[free_end]="#ebe7ed"
+
+theme[cached_start]="#77727f"
+theme[cached_mid]="#b69acb"
+theme[cached_end]="#d48aa4"
+
+theme[available_start]="#77727f"
+theme[available_mid]="#b69acb"
+theme[available_end]="#ebe7ed"
+
+theme[used_start]="#b69acb"
+theme[used_mid]="#d48aa4"
+theme[used_end]="#cc655c"
+
+# Network direction uses semantic blue for download and green for upload
+theme[download_start]="#77727f"
+theme[download_mid]="#88a8bd"
+theme[download_end]="#ebe7ed"
+
+theme[upload_start]="#77727f"
+theme[upload_mid]="#8aa47f"
+theme[upload_end]="#ebe7ed"
+
+theme[process_start]="#77727f"
+theme[process_mid]="#b69acb"
+theme[process_end]="#d48aa4"

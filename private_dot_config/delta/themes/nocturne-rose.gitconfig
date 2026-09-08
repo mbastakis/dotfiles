@@ -1,0 +1,26 @@
+[delta "nocturne-rose"]
+	blame-palette = "#0d0d10 #121217 #09090b #18181f #22222c"
+	commit-decoration-style = "#77727f" bold box ul
+	dark = true
+	file-decoration-style = "#77727f"
+	file-style = "#ebe7ed"
+	hunk-header-decoration-style = "#77727f" box ul
+	hunk-header-file-style = bold
+	hunk-header-line-number-style = bold "#aaa5b0"
+	hunk-header-style = file line-number syntax
+	line-numbers-left-style = "#77727f"
+	line-numbers-minus-style = bold "#cc655c"
+	line-numbers-plus-style = bold "#8aa47f"
+	line-numbers-right-style = "#77727f"
+	line-numbers-zero-style = "#77727f"
+	minus-emph-style = bold syntax "#2c2633"
+	minus-style = syntax "#29191d"
+	plus-emph-style = bold syntax "#2c2633"
+	plus-style = syntax "#17231c"
+	map-styles = \
+		bold purple => syntax "#b69acb", \
+		bold blue => syntax "#88a8bd", \
+		bold cyan => syntax "#94b3ae", \
+		bold yellow => syntax "#b7aa7d"
+	# Must match the rendered bat theme name.
+	syntax-theme = Nocturne Rose

@@ -1,0 +1,13 @@
+[palettes.nocturne-rose]
+background = "#0d0d10"
+surface = "#18181f"
+overlay = "#22222c"
+text = "#ebe7ed"
+subtext = "#aaa5b0"
+muted = "#77727f"
+accent = "#d48aa4"
+accent_secondary = "#b69acb"
+success = "#8aa47f"
+warning = "#d3b069"
+info = "#88a8bd"
+error = "#cc655c"

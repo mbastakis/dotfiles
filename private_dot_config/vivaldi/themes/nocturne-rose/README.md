@@ -1,14 +1,11 @@
 # Nocturne Rose — Vivaldi theme
 
-Vivaldi imports themes as a zip archive, not from disk. To install or update:
+Copy the ready-made `dist/vivaldi/settings.json` and `dist/vivaldi/nocturne-rose.zip`
+from the Nocturne Rose theme repository into this source directory, then apply
+those two managed targets with chezmoi.
 
-```sh
-cd ~/.config/vivaldi/themes/nocturne-rose
-zip nocturne-rose.zip settings.json
-```
-
-Then in Vivaldi: Settings → Themes → Import Theme → pick `nocturne-rose.zip`.
-Refresh after a palette release with `mise exec task -- task theme:sync`, then apply the updated files with chezmoi.
+In Vivaldi: Settings → Themes → Import Theme → pick
+`~/.config/vivaldi/themes/nocturne-rose/nocturne-rose.zip`.
 
 The `engineVersion` and `id` fields are required — Vivaldi silently ignores
 imports without them. The id is fixed so re-imports update the same theme.

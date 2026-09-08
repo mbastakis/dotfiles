@@ -1,8 +1,7 @@
-{{- $theme := index .theme.catalog .theme.active -}}
-{{- $palette := $theme.palette }}
+
 "$schema" = 'https://starship.rs/config-schema.json'
 
-palette = {{ .theme.active | replace "-" "_" | quote }}
+palette = "nocturne-rose"
 command_timeout = 1500
 add_newline = true
 
@@ -338,16 +337,4 @@ disabled = false
 show_notifications = true
 min_time_to_notify = 45000
 
-[palettes.{{ .theme.active | replace "-" "_" }}]
-background = {{ $palette.base | quote }}
-surface = {{ $palette.surface | quote }}
-overlay = {{ $palette.overlay | quote }}
-text = {{ $palette.text | quote }}
-subtext = {{ $palette.subtext | quote }}
-muted = {{ $palette.muted | quote }}
-accent = {{ $palette.rose | quote }}
-accent_secondary = {{ $palette.orchid | quote }}
-success = {{ $palette.green | quote }}
-warning = {{ $palette.amber | quote }}
-info = {{ $palette.blue | quote }}
-error = {{ $palette.red | quote }}
+{{ include "theme-fragments/starship/nocturne-rose.toml" | trimSuffix "\n" }}

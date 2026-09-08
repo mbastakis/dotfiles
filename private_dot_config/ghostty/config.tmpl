@@ -1,33 +1,9 @@
 # Ghostty Terminal Configuration
 # https://ghostty.org/docs/config/reference
-
-{{- $theme := index .theme.catalog .theme.active -}}
-{{- $semantic := $theme.semantic -}}
-{{- $normal := $theme.terminal.normal -}}
-{{- $bright := $theme.terminal.bright }}
 # ============================================================================
 # Appearance & Theming
 # ============================================================================
-background = {{ trimPrefix "#" $semantic.background }}
-foreground = {{ trimPrefix "#" $semantic.foreground }}
-selection-background = {{ trimPrefix "#" $semantic.selection_background }}
-selection-foreground = {{ trimPrefix "#" $semantic.selection_foreground }}
-palette = 0={{ trimPrefix "#" $normal.black }}
-palette = 1={{ trimPrefix "#" $normal.red }}
-palette = 2={{ trimPrefix "#" $normal.green }}
-palette = 3={{ trimPrefix "#" $normal.yellow }}
-palette = 4={{ trimPrefix "#" $normal.blue }}
-palette = 5={{ trimPrefix "#" $normal.magenta }}
-palette = 6={{ trimPrefix "#" $normal.cyan }}
-palette = 7={{ trimPrefix "#" $normal.white }}
-palette = 8={{ trimPrefix "#" $bright.black }}
-palette = 9={{ trimPrefix "#" $bright.red }}
-palette = 10={{ trimPrefix "#" $bright.green }}
-palette = 11={{ trimPrefix "#" $bright.yellow }}
-palette = 12={{ trimPrefix "#" $bright.blue }}
-palette = 13={{ trimPrefix "#" $bright.magenta }}
-palette = 14={{ trimPrefix "#" $bright.cyan }}
-palette = 15={{ trimPrefix "#" $bright.white }}
+{{ include "theme-fragments/ghostty/nocturne-rose-colors" | trimSuffix "\n" }}
 # Keep translucency mild: the muted palette has little contrast to spare.
 background-opacity = 0.97
 background-blur = 8
@@ -57,7 +33,7 @@ window-padding-color = extend-always
 # Cursor & Mouse
 # ============================================================================
 cursor-style = block
-cursor-color = {{ trimPrefix "#" $semantic.cursor }}
+{{ include "theme-fragments/ghostty/nocturne-rose-cursor" | trimSuffix "\n" }}
 mouse-hide-while-typing = true
 mouse-shift-capture = true
 copy-on-select = true

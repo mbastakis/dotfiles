@@ -1,13 +1,11 @@
 #!/bin/bash
 set -euo pipefail
-{{- $theme := index .theme.catalog .theme.active }}
 
 options=(
     style=round
     width=4.0
     hidpi=off
-    active_color=0xff{{ trimPrefix "#" $theme.palette.rose }}
-    inactive_color=0xff{{ trimPrefix "#" $theme.palette.overlay_high }}
+{{ include "theme-fragments/borders/nocturne-rose.sh" | trimSuffix "\n" }}
 )
 
 borders "${options[@]}"

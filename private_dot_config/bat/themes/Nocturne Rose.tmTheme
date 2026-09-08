@@ -1,15 +1,11 @@
-{{- /* Run `bat cache --build` after changing this theme. */ -}}
-{{- $theme := index .theme.catalog .theme.active -}}
-{{- $palette := $theme.palette -}}
-{{- $semantic := $theme.semantic -}}
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
   <dict>
     <key>name</key>
-    <string>{{ $theme.display_name }}</string>
+    <string>Nocturne Rose</string>
     <key>semanticClass</key>
-    <string>theme.{{ $theme.variant }}.{{ .theme.active }}</string>
+    <string>theme.dark.nocturne-rose</string>
     <key>uuid</key>
     <string>49a8594e-cfb6-42f9-bfd9-e290eeccbea6</string>
     <key>author</key>
@@ -22,25 +18,25 @@
         <key>settings</key>
         <dict>
           <key>background</key>
-          <string>{{ $palette.base }}</string>
+          <string>#0d0d10</string>
           <key>foreground</key>
-          <string>{{ $palette.text }}</string>
+          <string>#ebe7ed</string>
           <key>caret</key>
-          <string>{{ $palette.rose }}</string>
+          <string>#d48aa4</string>
           <key>lineHighlight</key>
-          <string>{{ $palette.surface }}</string>
+          <string>#18181f</string>
           <key>misspelling</key>
-          <string>{{ $palette.red }}</string>
+          <string>#cc655c</string>
           <key>accent</key>
-          <string>{{ $palette.orchid }}</string>
+          <string>#b69acb</string>
           <key>selection</key>
-          <string>{{ $semantic.selection_background }}</string>
+          <string>#30303d</string>
           <key>activeGuide</key>
-          <string>{{ $palette.overlay }}</string>
+          <string>#22222c</string>
           <key>findHighlight</key>
-          <string>{{ $palette.search }}</string>
+          <string>#30263a</string>
           <key>gutterForeground</key>
-          <string>{{ $palette.muted }}</string>
+          <string>#77727f</string>
         </dict>
       </dict>
       <dict>
@@ -51,7 +47,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.text }}</string>
+          <string>#ebe7ed</string>
         </dict>
       </dict>
       <dict>
@@ -62,7 +58,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.muted }}</string>
+          <string>#77727f</string>
           <key>fontStyle</key>
           <string/>
         </dict>
@@ -75,7 +71,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.muted }}</string>
+          <string>#77727f</string>
           <key>fontStyle</key>
           <string>italic</string>
         </dict>
@@ -86,7 +82,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.green }}</string>
+          <string>#8aa47f</string>
         </dict>
       </dict>
       <dict>
@@ -95,7 +91,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.rose }}</string>
+          <string>#d48aa4</string>
         </dict>
       </dict>
       <dict>
@@ -106,7 +102,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -115,7 +111,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.orchid }}</string>
+          <string>#b69acb</string>
           <key>fontStyle</key>
           <string/>
         </dict>
@@ -126,7 +122,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.orchid }}</string>
+          <string>#b69acb</string>
         </dict>
       </dict>
       <dict>
@@ -137,7 +133,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
         </dict>
       </dict>
       <dict>
@@ -146,7 +142,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.blue }}</string>
+          <string>#88a8bd</string>
           <key>fontStyle</key>
           <string>italic</string>
         </dict>
@@ -159,7 +155,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
           <key>fontStyle</key>
           <string>italic</string>
         </dict>
@@ -172,7 +168,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
           <key>fontStyle</key>
           <string>italic</string>
         </dict>
@@ -185,7 +181,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
         </dict>
       </dict>
       <dict>
@@ -196,7 +192,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
         </dict>
       </dict>
       <dict>
@@ -207,7 +203,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
           <key>fontStyle</key>
           <string>italic</string>
         </dict>
@@ -220,7 +216,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -229,7 +225,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.red }}</string>
+          <string>#cc655c</string>
           <key>fontStyle</key>
           <string>italic</string>
         </dict>
@@ -242,7 +238,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.red }}</string>
+          <string>#cc655c</string>
         </dict>
       </dict>
       <dict>
@@ -251,7 +247,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.red }}</string>
+          <string>#cc655c</string>
         </dict>
       </dict>
       <dict>
@@ -262,7 +258,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -273,7 +269,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
         </dict>
       </dict>
       <dict>
@@ -284,7 +280,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -295,7 +291,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.blue }}</string>
+          <string>#88a8bd</string>
           <key>fontStyle</key>
           <string/>
         </dict>
@@ -308,7 +304,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.red }}</string>
+          <string>#cc655c</string>
         </dict>
       </dict>
       <dict>
@@ -319,7 +315,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.text }}</string>
+          <string>#ebe7ed</string>
         </dict>
       </dict>
       <dict>
@@ -330,7 +326,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.text }}</string>
+          <string>#ebe7ed</string>
         </dict>
       </dict>
       <dict>
@@ -352,7 +348,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.orchid }}</string>
+          <string>#b69acb</string>
         </dict>
       </dict>
       <dict>
@@ -363,7 +359,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -385,7 +381,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
         </dict>
       </dict>
       <dict>
@@ -396,7 +392,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.text }}</string>
+          <string>#ebe7ed</string>
         </dict>
       </dict>
       <dict>
@@ -407,7 +403,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.text }}</string>
+          <string>#ebe7ed</string>
         </dict>
       </dict>
       <dict>
@@ -418,7 +414,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -429,7 +425,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
         </dict>
       </dict>
       <dict>
@@ -440,7 +436,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
         </dict>
       </dict>
       <dict>
@@ -449,7 +445,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -458,7 +454,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.green }}</string>
+          <string>#8aa47f</string>
           <key>fontStyle</key>
           <string/>
         </dict>
@@ -471,7 +467,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
         </dict>
       </dict>
       <dict>
@@ -482,7 +478,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.red }}</string>
+          <string>#cc655c</string>
         </dict>
       </dict>
       <dict>
@@ -493,7 +489,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.blue }}</string>
+          <string>#88a8bd</string>
         </dict>
       </dict>
       <dict>
@@ -504,7 +500,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -515,7 +511,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.green }}</string>
+          <string>#8aa47f</string>
         </dict>
       </dict>
       <dict>
@@ -526,7 +522,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.blue }}</string>
+          <string>#88a8bd</string>
           <key>fontStyle</key>
           <string/>
         </dict>
@@ -539,7 +535,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -550,7 +546,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
           <key>fontStyle</key>
           <string/>
         </dict>
@@ -563,7 +559,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -574,7 +570,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.rose }}</string>
+          <string>#d48aa4</string>
         </dict>
       </dict>
       <dict>
@@ -585,7 +581,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.rose }}</string>
+          <string>#d48aa4</string>
         </dict>
       </dict>
       <dict>
@@ -596,7 +592,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.rose }}</string>
+          <string>#d48aa4</string>
         </dict>
       </dict>
       <dict>
@@ -607,7 +603,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -618,7 +614,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.blue }}</string>
+          <string>#88a8bd</string>
         </dict>
       </dict>
       <dict>
@@ -629,7 +625,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.green }}</string>
+          <string>#8aa47f</string>
         </dict>
       </dict>
       <dict>
@@ -640,7 +636,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.red }}</string>
+          <string>#cc655c</string>
         </dict>
       </dict>
       <dict>
@@ -651,7 +647,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.blue }}</string>
+          <string>#88a8bd</string>
         </dict>
       </dict>
       <dict>
@@ -662,7 +658,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.text }}</string>
+          <string>#ebe7ed</string>
         </dict>
       </dict>
       <dict>
@@ -673,7 +669,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.blue }}</string>
+          <string>#88a8bd</string>
         </dict>
       </dict>
       <dict>
@@ -684,7 +680,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -695,7 +691,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.red }}</string>
+          <string>#cc655c</string>
         </dict>
       </dict>
       <dict>
@@ -706,7 +702,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -717,7 +713,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -728,7 +724,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.text }}</string>
+          <string>#ebe7ed</string>
         </dict>
       </dict>
       <dict>
@@ -739,7 +735,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.rose }}</string>
+          <string>#d48aa4</string>
         </dict>
       </dict>
       <dict>
@@ -750,7 +746,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
         </dict>
       </dict>
       <dict>
@@ -761,7 +757,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.rose }}</string>
+          <string>#d48aa4</string>
         </dict>
       </dict>
       <dict>
@@ -772,7 +768,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.orchid }}</string>
+          <string>#b69acb</string>
         </dict>
       </dict>
       <dict>
@@ -783,7 +779,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.blue }}</string>
+          <string>#88a8bd</string>
           <key>fontStyle</key>
           <string/>
         </dict>
@@ -796,7 +792,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.red }}</string>
+          <string>#cc655c</string>
         </dict>
       </dict>
       <dict>
@@ -807,7 +803,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -818,7 +814,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.rose }}</string>
+          <string>#d48aa4</string>
           <key>fontStyle</key>
           <string/>
         </dict>
@@ -831,7 +827,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -842,7 +838,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
         </dict>
       </dict>
       <dict>
@@ -853,7 +849,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.text }}</string>
+          <string>#ebe7ed</string>
         </dict>
       </dict>
       <dict>
@@ -875,7 +871,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.red }}</string>
+          <string>#cc655c</string>
         </dict>
       </dict>
       <dict>
@@ -886,7 +882,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.text }}</string>
+          <string>#ebe7ed</string>
         </dict>
       </dict>
       <dict>
@@ -897,7 +893,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.red }}</string>
+          <string>#cc655c</string>
           <key>fontStyle</key>
           <string/>
         </dict>
@@ -919,7 +915,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.text }}</string>
+          <string>#ebe7ed</string>
         </dict>
       </dict>
       <dict>
@@ -930,7 +926,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.orchid }}</string>
+          <string>#b69acb</string>
         </dict>
       </dict>
       <dict>
@@ -941,7 +937,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.orchid }}</string>
+          <string>#b69acb</string>
         </dict>
       </dict>
       <dict>
@@ -952,7 +948,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.orchid }}</string>
+          <string>#b69acb</string>
         </dict>
       </dict>
       <dict>
@@ -961,7 +957,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -972,7 +968,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
         </dict>
       </dict>
       <dict>
@@ -983,7 +979,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.blue }}</string>
+          <string>#88a8bd</string>
           <key>fontStyle</key>
           <string>italic</string>
         </dict>
@@ -996,7 +992,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.orchid }}</string>
+          <string>#b69acb</string>
         </dict>
       </dict>
       <dict>
@@ -1007,7 +1003,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
           <key>fontStyle</key>
           <string>italic</string>
         </dict>
@@ -1020,7 +1016,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -1031,7 +1027,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.red }}</string>
+          <string>#cc655c</string>
         </dict>
       </dict>
       <dict>
@@ -1042,7 +1038,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
         </dict>
       </dict>
       <dict>
@@ -1053,7 +1049,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
         </dict>
       </dict>
       <dict>
@@ -1064,7 +1060,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.rose }}</string>
+          <string>#d48aa4</string>
         </dict>
       </dict>
       <dict>
@@ -1075,7 +1071,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.rose }}</string>
+          <string>#d48aa4</string>
         </dict>
       </dict>
       <dict>
@@ -1086,7 +1082,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.orchid }}</string>
+          <string>#b69acb</string>
           <key>fontStyle</key>
           <string/>
         </dict>
@@ -1099,7 +1095,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.text }}</string>
+          <string>#ebe7ed</string>
         </dict>
       </dict>
       <dict>
@@ -1108,7 +1104,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.red }}</string>
+          <string>#cc655c</string>
         </dict>
       </dict>
       <dict>
@@ -1117,7 +1113,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -1126,7 +1122,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -1135,7 +1131,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.green }}</string>
+          <string>#8aa47f</string>
         </dict>
       </dict>
       <dict>
@@ -1144,7 +1140,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.blue }}</string>
+          <string>#88a8bd</string>
         </dict>
       </dict>
       <dict>
@@ -1153,7 +1149,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.orchid }}</string>
+          <string>#b69acb</string>
         </dict>
       </dict>
       <dict>
@@ -1162,7 +1158,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.red }}</string>
+          <string>#cc655c</string>
           <key>fontStyle</key>
           <string>bold</string>
         </dict>
@@ -1173,7 +1169,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.red }}</string>
+          <string>#cc655c</string>
           <key>fontStyle</key>
           <string>italic</string>
         </dict>
@@ -1184,7 +1180,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.subtext }}</string>
+          <string>#aaa5b0</string>
           <key>fontStyle</key>
           <string>strikethrough</string>
         </dict>
@@ -1197,7 +1193,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.blue }}</string>
+          <string>#88a8bd</string>
         </dict>
       </dict>
       <dict>
@@ -1208,7 +1204,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.orchid }}</string>
+          <string>#b69acb</string>
         </dict>
       </dict>
       <dict>
@@ -1219,7 +1215,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.green }}</string>
+          <string>#8aa47f</string>
         </dict>
       </dict>
       <dict>
@@ -1230,7 +1226,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
         </dict>
       </dict>
       <dict>
@@ -1241,7 +1237,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.muted }}</string>
+          <string>#77727f</string>
         </dict>
       </dict>
       <dict>
@@ -1252,7 +1248,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.rose }}</string>
+          <string>#d48aa4</string>
         </dict>
       </dict>
       <dict>
@@ -1263,7 +1259,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
         </dict>
       </dict>
       <dict>
@@ -1274,7 +1270,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
         </dict>
       </dict>
       <dict>
@@ -1296,7 +1292,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.blue }}</string>
+          <string>#88a8bd</string>
         </dict>
       </dict>
       <dict>
@@ -1307,7 +1303,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.text }}</string>
+          <string>#ebe7ed</string>
           <key>fontStyle</key>
           <string/>
         </dict>
@@ -1320,7 +1316,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.orchid }}</string>
+          <string>#b69acb</string>
           <key>fontStyle</key>
           <string/>
         </dict>
@@ -1333,7 +1329,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.rose }}</string>
+          <string>#d48aa4</string>
           <key>fontStyle</key>
           <string/>
         </dict>
@@ -1346,7 +1342,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -1357,7 +1353,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.red }}</string>
+          <string>#cc655c</string>
         </dict>
       </dict>
       <dict>
@@ -1368,7 +1364,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.orchid }}</string>
+          <string>#b69acb</string>
         </dict>
       </dict>
       <dict>
@@ -1379,7 +1375,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
         </dict>
       </dict>
       <dict>
@@ -1401,7 +1397,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.text }}</string>
+          <string>#ebe7ed</string>
         </dict>
       </dict>
       <dict>
@@ -1412,7 +1408,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
           <key>fontStyle</key>
           <string>italic</string>
         </dict>
@@ -1425,7 +1421,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.red }}</string>
+          <string>#cc655c</string>
           <key>fontStyle</key>
           <string>italic</string>
         </dict>
@@ -1438,7 +1434,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.orchid }}</string>
+          <string>#b69acb</string>
         </dict>
       </dict>
       <dict>
@@ -1449,7 +1445,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.orchid }}</string>
+          <string>#b69acb</string>
         </dict>
       </dict>
       <dict>
@@ -1460,7 +1456,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
         </dict>
       </dict>
       <dict>
@@ -1471,7 +1467,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.blue }}</string>
+          <string>#88a8bd</string>
         </dict>
       </dict>
       <dict>
@@ -1482,7 +1478,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
           <key>fontStyle</key>
           <string>italic</string>
         </dict>
@@ -1495,7 +1491,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.rose }}</string>
+          <string>#d48aa4</string>
         </dict>
       </dict>
       <dict>
@@ -1506,7 +1502,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -1517,7 +1513,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.orchid }}</string>
+          <string>#b69acb</string>
         </dict>
       </dict>
       <dict>
@@ -1528,7 +1524,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -1539,7 +1535,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.red }}</string>
+          <string>#cc655c</string>
           <key>fontStyle</key>
           <string>italic</string>
         </dict>
@@ -1552,7 +1548,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.green }}</string>
+          <string>#8aa47f</string>
           <key>fontStyle</key>
           <string>italic</string>
         </dict>
@@ -1576,7 +1572,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.rose }}</string>
+          <string>#d48aa4</string>
         </dict>
       </dict>
       <dict>
@@ -1587,7 +1583,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.orchid }}</string>
+          <string>#b69acb</string>
         </dict>
       </dict>
       <dict>
@@ -1598,7 +1594,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.text }}</string>
+          <string>#ebe7ed</string>
         </dict>
       </dict>
       <dict>
@@ -1609,7 +1605,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.green }}</string>
+          <string>#8aa47f</string>
         </dict>
       </dict>
       <dict>
@@ -1620,7 +1616,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -1631,7 +1627,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.rose }}</string>
+          <string>#d48aa4</string>
         </dict>
       </dict>
       <dict>
@@ -1642,7 +1638,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.rose }}</string>
+          <string>#d48aa4</string>
         </dict>
       </dict>
       <dict>
@@ -1653,7 +1649,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
         </dict>
       </dict>
       <dict>
@@ -1664,7 +1660,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -1675,7 +1671,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.blue }}</string>
+          <string>#88a8bd</string>
         </dict>
       </dict>
       <dict>
@@ -1686,7 +1682,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
           <key>fontStyle</key>
           <string>italic</string>
         </dict>
@@ -1710,7 +1706,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.orchid }}</string>
+          <string>#b69acb</string>
           <key>fontStyle</key>
           <string/>
         </dict>
@@ -1723,7 +1719,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.orchid }}</string>
+          <string>#b69acb</string>
           <key>fontStyle</key>
           <string/>
         </dict>
@@ -1736,7 +1732,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -1747,7 +1743,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
           <key>fontStyle</key>
           <string>italic</string>
         </dict>
@@ -1760,7 +1756,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -1771,7 +1767,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
           <key>fontStyle</key>
           <string>italic</string>
         </dict>
@@ -1784,7 +1780,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -1795,7 +1791,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -1806,7 +1802,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
         </dict>
       </dict>
       <dict>
@@ -1817,7 +1813,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.blue }}</string>
+          <string>#88a8bd</string>
           <key>fontStyle</key>
           <string>italic</string>
         </dict>
@@ -1830,7 +1826,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.blue }}</string>
+          <string>#88a8bd</string>
           <key>fontStyle</key>
           <string>italic</string>
         </dict>
@@ -1843,7 +1839,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.rose }}</string>
+          <string>#d48aa4</string>
         </dict>
       </dict>
       <dict>
@@ -1854,7 +1850,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.text }}</string>
+          <string>#ebe7ed</string>
         </dict>
       </dict>
       <dict>
@@ -1865,7 +1861,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.blue }}</string>
+          <string>#88a8bd</string>
         </dict>
       </dict>
       <dict>
@@ -1876,7 +1872,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
         </dict>
       </dict>
       <dict>
@@ -1887,7 +1883,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -1898,7 +1894,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.red }}</string>
+          <string>#cc655c</string>
         </dict>
       </dict>
       <dict>
@@ -1909,7 +1905,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.text }}</string>
+          <string>#ebe7ed</string>
         </dict>
       </dict>
       <dict>
@@ -1920,7 +1916,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.red }}</string>
+          <string>#cc655c</string>
         </dict>
       </dict>
       <dict>
@@ -1931,7 +1927,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.rose }}</string>
+          <string>#d48aa4</string>
         </dict>
       </dict>
       <dict>
@@ -1942,7 +1938,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.rose }}</string>
+          <string>#d48aa4</string>
           <key>fontStyle</key>
           <string>italic</string>
         </dict>
@@ -1955,7 +1951,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
           <key>fontStyle</key>
           <string>italic</string>
         </dict>
@@ -1968,7 +1964,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.red }}</string>
+          <string>#cc655c</string>
         </dict>
       </dict>
       <dict>
@@ -1979,7 +1975,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
           <key>fontStyle</key>
           <string>italic</string>
         </dict>
@@ -1990,7 +1986,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
         </dict>
       </dict>
       <dict>
@@ -2001,7 +1997,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.orchid }}</string>
+          <string>#b69acb</string>
         </dict>
       </dict>
       <dict>
@@ -2012,7 +2008,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.text }}</string>
+          <string>#ebe7ed</string>
         </dict>
       </dict>
       <dict>
@@ -2021,7 +2017,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.red }}</string>
+          <string>#cc655c</string>
         </dict>
       </dict>
       <dict>
@@ -2032,7 +2028,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.blue }}</string>
+          <string>#88a8bd</string>
         </dict>
       </dict>
       <dict>
@@ -2043,7 +2039,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.muted }}</string>
+          <string>#77727f</string>
         </dict>
       </dict>
       <dict>
@@ -2052,7 +2048,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.orchid }}</string>
+          <string>#b69acb</string>
         </dict>
       </dict>
       <dict>
@@ -2061,7 +2057,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.blue }}</string>
+          <string>#88a8bd</string>
         </dict>
       </dict>
       <dict>
@@ -2070,7 +2066,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.rose }}</string>
+          <string>#d48aa4</string>
         </dict>
       </dict>
       <dict>
@@ -2081,7 +2077,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.aqua }}</string>
+          <string>#94b3ae</string>
         </dict>
       </dict>
       <dict>
@@ -2090,7 +2086,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.red }}</string>
+          <string>#cc655c</string>
         </dict>
       </dict>
       <dict>
@@ -2099,7 +2095,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
       <dict>
@@ -2108,7 +2104,7 @@
         <key>settings</key>
         <dict>
           <key>foreground</key>
-          <string>{{ $palette.yellow }}</string>
+          <string>#b7aa7d</string>
         </dict>
       </dict>
     </array>

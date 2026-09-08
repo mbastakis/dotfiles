@@ -1,0 +1,87 @@
+# Nocturne Rose palette using catalog-owned xterm-256 indices.
+# Use 256-color values by default so NeoMutt works reliably under `tmux-256color`.
+
+set color_directcolor=no
+
+color normal              color255 color233
+color error         bold  color167 color233
+color warning            color144 color233
+color message            color108 color233
+color prompt        bold  color175 color233
+color options            color110 color233
+color status             color255 color235
+color indicator    bold   color233 color175
+color progress           color233 color175
+color markers            color239  color233
+color tree               color239  color233
+color tilde              color239  color233
+color search             color233 color175
+color attachment         color175 color233
+color signature          color243 color233
+color compose_header bold color110 color233
+color bold               color175 color233
+color underline          color110 color233
+
+color sidebar_background color255 color233
+color sidebar_divider    color236 color233
+color sidebar_ordinary   color243 color233
+color sidebar_unread     color110 color233
+color sidebar_new   bold color108 color233
+color sidebar_flagged    color144 color233
+color sidebar_spool_file color175 color233
+color sidebar_highlight  color233 color175
+color sidebar_indicator  color233 color140
+
+color index              color255 color233
+color index_number       color239  color233
+color index_date         color243 color233
+color index_author       color140 color233
+color index_flags        color144 color233
+color index_size         color175 color233
+color index_subject      color255 color233
+color index_author  bold color110 color233 ~N
+color index_subject bold color255 color233 ~N
+color index_date         color175 color233 ~N
+color index_flags   bold color144 color233 ~F
+color index_subject      color175 color233 ~F
+color index              color140 color233 ~T
+color index              color167 color233 ~D
+color index_tags         color108 color233
+color index_tag          color175 color233 "attachment"
+color index_tag          color108 color233 "todo"
+color index_tag          color110 color233 "github"
+color index_tag          color109 color233 "calendar"
+color index_tag          color144 color233 "newsletter"
+
+color hdrdefault         color255 color233
+color header             color140 color233 "^From: .*"
+color header             color110 color233 "^To: .*"
+color header             color108 color233 "^Cc: .*"
+color header             color109 color233 "^Reply-To: .*"
+color header             color255 color233 "^Subject: .*"
+color header             color175 color233 "^Date: .*"
+color header       bold  color110 color233 "^From:"
+color header       bold  color109 color233 "^To:"
+color header       bold  color108 color233 "^Cc:"
+color header       bold  color109 color233 "^Reply-To:"
+color header       bold  color175 color233 "^Subject:"
+color header       bold  color175 color233 "^Date:"
+
+color quoted             color243 color233
+color quoted1            color110 color233
+color quoted2            color109 color233
+color quoted3            color108 color233
+color quoted4            color175 color233
+color quoted5            color144 color233
+color body               color109 color233 "[\\-\\.+_a-zA-Z0-9]+@[\\-\\.a-zA-Z0-9]+"
+color body underline     color110 color233 "(https?|ftp)://[\\-\\.,/%~_:?&=\\#a-zA-Z0-9]+"
+color body         bold  color175 color233 "(^|[[:space:]])\\*[^[:space:]]+\\*([[:space:]]|$)"
+color body               color140 color233 "(^|[[:space:]])_[^[:space:]]+_([[:space:]]|$)"
+color body               color140 color233 "(^|[[:space:]])/[^[:space:]]+/([[:space:]]|$)"
+
+color attach_headers     color175 color233 "^\\[--"
+color attach_headers     color108 color233 "Type: [A-Za-z0-9.+-]+/[A-Za-z0-9.+-]+"
+color attach_headers     color175 color233 "Size: [0-9.]+[KMGT]?"
+color status       bold  color110 color235 "NeoMutt: ([^ ]+)" 1
+color status             color108 color235 "Msgs:[0-9/]+"
+color status             color144 color235 "Flag:[0-9]+"

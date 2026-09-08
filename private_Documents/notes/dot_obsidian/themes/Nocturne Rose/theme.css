@@ -31,7 +31,7 @@ settings:
 -
     id: nocturne-rose-identity
     title: Nocturne Rose
-    description: Fixed dusty rose and orchid palette derived from AnuPpuccin's GPL-3.0 structure. Palette selection is managed centrally by chezmoi.
+    description: Fixed dusty rose and orchid palette derived from AnuPpuccin's GPL-3.0 structure. Palette colors come from the Nocturne Rose repository's ready-made theme files.
     type: info-text
     markdown: true
 
@@ -2349,33 +2349,33 @@ settings:
 /*------------------Nocturne Rose Palette-------------------*/
 .theme-dark,
 .theme-light {
-  --nr-rosewater: {{ index .theme.catalog .theme.active "rgb" "rose" }};
-  --nr-flamingo: {{ index .theme.catalog .theme.active "rgb" "rose" }};
-  --nr-pink: {{ index .theme.catalog .theme.active "rgb" "rose" }};
-  --nr-mauve: {{ index .theme.catalog .theme.active "rgb" "orchid" }};
-  --nr-red: {{ index .theme.catalog .theme.active "rgb" "red" }};
-  --nr-maroon: {{ index .theme.catalog .theme.active "rgb" "red" }};
-  --nr-peach: {{ index .theme.catalog .theme.active "rgb" "yellow" }};
-  --nr-yellow: {{ index .theme.catalog .theme.active "rgb" "yellow" }};
-  --nr-green: {{ index .theme.catalog .theme.active "rgb" "green" }};
-  --nr-teal: {{ index .theme.catalog .theme.active "rgb" "aqua" }};
-  --nr-sky: {{ index .theme.catalog .theme.active "rgb" "aqua" }};
-  --nr-sapphire: {{ index .theme.catalog .theme.active "rgb" "blue" }};
-  --nr-blue: {{ index .theme.catalog .theme.active "rgb" "blue" }};
-  --nr-lavender: {{ index .theme.catalog .theme.active "rgb" "orchid" }};
-  --nr-text: {{ index .theme.catalog .theme.active "rgb" "text" }};
-  --nr-subtext1: {{ index .theme.catalog .theme.active "rgb" "subtext" }};
-  --nr-subtext0: {{ index .theme.catalog .theme.active "rgb" "muted" }};
-  --nr-overlay2: {{ index .theme.catalog .theme.active "rgb" "muted" }};
-  --nr-overlay1: {{ index .theme.catalog .theme.active "rgb" "disabled" }};
-  --nr-overlay0: {{ index .theme.catalog .theme.active "rgb" "disabled" }};
-  --nr-surface2: {{ index .theme.catalog .theme.active "rgb" "overlay_high" }};
-  --nr-surface1: {{ index .theme.catalog .theme.active "rgb" "overlay" }};
-  --nr-surface0: {{ index .theme.catalog .theme.active "rgb" "surface" }};
-  --nr-base: {{ index .theme.catalog .theme.active "rgb" "base" }};
-  --nr-mantle: {{ index .theme.catalog .theme.active "rgb" "mantle" }};
-  --nr-crust: {{ index .theme.catalog .theme.active "rgb" "black" }};
-  --nr-accent: {{ index .theme.catalog .theme.active "rgb" "rose" }};
+  --nr-rosewater: 212, 138, 164;
+  --nr-flamingo: 212, 138, 164;
+  --nr-pink: 212, 138, 164;
+  --nr-mauve: 182, 154, 203;
+  --nr-red: 204, 101, 92;
+  --nr-maroon: 204, 101, 92;
+  --nr-peach: 183, 170, 125;
+  --nr-yellow: 183, 170, 125;
+  --nr-green: 138, 164, 127;
+  --nr-teal: 148, 179, 174;
+  --nr-sky: 148, 179, 174;
+  --nr-sapphire: 136, 168, 189;
+  --nr-blue: 136, 168, 189;
+  --nr-lavender: 182, 154, 203;
+  --nr-text: 235, 231, 237;
+  --nr-subtext1: 170, 165, 176;
+  --nr-subtext0: 119, 114, 127;
+  --nr-overlay2: 119, 114, 127;
+  --nr-overlay1: 80, 76, 87;
+  --nr-overlay0: 80, 76, 87;
+  --nr-surface2: 48, 48, 61;
+  --nr-surface1: 34, 34, 44;
+  --nr-surface0: 24, 24, 31;
+  --nr-base: 13, 13, 16;
+  --nr-mantle: 18, 18, 23;
+  --nr-crust: 9, 9, 11;
+  --nr-accent: 212, 138, 164;
   --color-accent-hsl: 338, 46%, 69%;
   --color-accent: rgb(var(--nr-accent));
   --color-accent-1: rgb(var(--nr-accent));

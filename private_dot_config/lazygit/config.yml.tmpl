@@ -1,4 +1,3 @@
-{{- $theme := index .theme.catalog .theme.active -}}
 notARepository: skip
 git:
   log:
@@ -11,26 +10,5 @@ gui:
   showIcons: true
   showFileIcons: true
   nerdFontsVersion: "3"
-  theme:
-    activeBorderColor:
-      - {{ $theme.palette.rose | quote }}
-      - bold
-    inactiveBorderColor:
-      - {{ $theme.palette.subtext | quote }}
-    optionsTextColor:
-      - {{ $theme.palette.orchid | quote }}
-    selectedLineBgColor:
-      - {{ $theme.palette.overlay | quote }}
-    cherryPickedCommitBgColor:
-      - {{ $theme.palette.overlay_high | quote }}
-    cherryPickedCommitFgColor:
-      - {{ $theme.palette.rose | quote }}
-    unstagedChangesColor:
-      - {{ $theme.palette.red | quote }}
-    defaultFgColor:
-      - {{ $theme.palette.text | quote }}
-    searchingActiveBorderColor:
-      - {{ $theme.palette.yellow | quote }}
-  authorColors:
-    "*": {{ $theme.palette.orchid | quote }}
+{{ include "theme-fragments/lazygit/nocturne-rose.yml" | trimSuffix "\n" }}
   showCommandLog: false
