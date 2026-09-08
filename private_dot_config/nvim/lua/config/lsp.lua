@@ -33,11 +33,32 @@ vim.lsp.config("*", {
   capabilities = require("blink.cmp").get_lsp_capabilities(),
 })
 
+-- Display hints by default for every server that supports them.
+vim.lsp.inlay_hint.enable(true)
+
+vim.lsp.config("lua_ls", {
+  settings = {
+    Lua = {
+      hint = { enable = true },
+    },
+  },
+})
+
 vim.lsp.config("gopls", {
   settings = {
     gopls = {
       analyses = { unusedparams = true },
       staticcheck = true,
+      hints = {
+        assignVariableTypes = true,
+        compositeLiteralFields = true,
+        compositeLiteralTypes = true,
+        constantValues = true,
+        functionTypeParameters = true,
+        ignoredError = true,
+        parameterNames = true,
+        rangeVariableTypes = true,
+      },
     },
   },
 })
@@ -92,6 +113,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("<leader>rn", vim.lsp.buf.rename, "Rename symbol")
     map("<leader>d", vim.diagnostic.open_float, "Show line diagnostics")
     map("<leader>q", vim.diagnostic.setloclist, "Open diagnostics list")
+    map("<leader>h", function()
+      local filter = { bufnr = event.buf }
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(filter), filter)
+    end, "Toggle inlay hints")
   end,
 })
 

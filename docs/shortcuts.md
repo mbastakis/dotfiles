@@ -316,6 +316,7 @@ The LSP mappings are buffer-local and appear after a language server attaches.
 | `<leader>rn` | Rename symbol |
 | `<leader>d` | Show line diagnostics |
 | `<leader>q` | Open diagnostics list |
+| `<leader>h` | Toggle inlay hints in the current buffer (enabled by default where supported) |
 | `<leader>fm` | Format with Conform, falling back to LSP |
 | `Ctrl+Space` / `Ctrl+Y` | Trigger / accept Blink completion |
 
