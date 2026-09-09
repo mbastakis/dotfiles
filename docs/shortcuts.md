@@ -38,6 +38,8 @@ Source: `private_dot_config/aerospace/aerospace.toml`. Workspace bindings intent
 
 Vicinae is matched by bundle ID and forced to floating layout.
 
+When AeroSpace starts, it launches and natively routes Vivaldi, Ghostty, Sisyphus, and Obsidian to workspace `o`. The `~/bin/aerospace-startup-layout` helper only constructs the three-column tree—with Sisyphus and Obsidian in a vertical accordion—then focuses Ghostty.
+
 ## Karabiner
 
 ### Build Pipeline
@@ -146,6 +148,7 @@ Source: `private_dot_config/ghostty/config`. Most `Cmd` bindings inject tmux pre
 | `Cmd+Backspace` | Delete to start of line (sends Ctrl+U) |
 | `Ctrl+Shift+T` | Send `ESC[202~` to zsh (directory picker) |
 | `Cmd+B` | Send `ESC[203~` to zsh (Worktrunk worktree picker) |
+| `Cmd+U` | Send `ESC[204~` to zsh (tuicr review picker) |
 | `Ctrl+Tab` / `Ctrl+Shift+Tab` | Pass through to tmux (next/previous window) |
 | `Cmd+Left` / `Cmd+Right` | Home / End |
 | `Cmd+Shift+E` | Write screen to file and open it |
@@ -196,6 +199,7 @@ Sources: `private_dot_config/zsh/keybindings.zsh`, `private_dot_config/zsh/fzf.z
 | `Ctrl+Shift+T` | FZF directory picker (via Ghostty `ESC[202~` passthrough) |
 | `Ctrl+Z` | Zoxide interactive directory jump (`cdi`) |
 | `Cmd+B` | Worktrunk worktree picker (`wt switch`, via Ghostty `ESC[203~` passthrough) |
+| `Cmd+U` | tuicr review picker in the current directory (via Ghostty `ESC[204~` passthrough) |
 | `Ctrl+R` | Atuin history search (fzf's binding is removed) |
 | `?` | Atuin AI widget; `Tab` inserts the generated command |
 

@@ -5,7 +5,15 @@ start-at-login = true
 auto-reload-config = true
 
 # AeroSpace owns the borders process lifecycle; bordersrc owns its appearance.
-after-startup-command = ['exec-and-forget borders']
+# Launch the primary apps and let the helper construct their nested layout.
+after-startup-command = [
+  'exec-and-forget borders',
+  'exec-and-forget /usr/bin/open -a Vivaldi',
+  'exec-and-forget /usr/bin/open -a Ghostty',
+  "exec-and-forget /bin/bash -lc 'open \"$HOME/Applications/Vivaldi Apps.localized/Sisyphus.app\"'",
+  'exec-and-forget /usr/bin/open -a Obsidian',
+  "exec-and-forget /bin/bash -lc '$HOME/bin/aerospace-startup-layout'",
+]
 
 # Version 2 requires persistent workspaces to be declared explicitly.
 persistent-workspaces = ['a', 'o', 'e', 'u']
@@ -35,9 +43,10 @@ on-window-detected = [
   { if = 'test %{app-name} ~= Chrome', run = 'move-node-to-workspace a' },
 
   # Workspace O
-  { if = 'test %{app-name} ~= Vivaldi', run = 'move-node-to-workspace o' },
-  { if = 'test %{app-name} ~= Ghostty', run = 'move-node-to-workspace o' },
-  { if = 'test %{app-name} ~= Obsidian', run = 'move-node-to-workspace o' },
+  { if = 'test %{app-bundle-id} = "com.vivaldi.Vivaldi"', run = 'move-node-to-workspace o' },
+  { if = 'test %{app-bundle-id} = "com.mitchellh.ghostty"', run = 'move-node-to-workspace o' },
+  { if = 'test %{app-bundle-id} = "com.vivaldi.Vivaldi.app.hempoeacjmlcffkchdampdabegkfjoeo"', run = 'move-node-to-workspace o' },
+  { if = 'test %{app-bundle-id} = "md.obsidian"', run = 'move-node-to-workspace o' },
 
   # Workspace E
   { if = 'test %{app-name} ~= Spotify', run = 'move-node-to-workspace e' },
@@ -49,6 +58,7 @@ on-window-detected = [
   { if = 'test %{app-name} ~= Slack', run = 'move-node-to-workspace u' },
 
   # Floating windows
+  { if = 'test %{app-bundle-id} = "com.vivaldi.Vivaldi.app.gnfignpbnagdlnhkkammeaimojkedben"', run = 'layout floating' },
   { if = 'test %{app-bundle-id} = "com.vicinaehq.Vicinae"', run = 'layout floating' },
   { if = 'test %{app-name} ~= Finder', run = 'layout floating' },
   { if = 'test %{app-name} ~= AppCleaner', run = 'layout floating' },

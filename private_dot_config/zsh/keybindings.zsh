@@ -61,6 +61,18 @@ if command -v wt &>/dev/null; then
   done
 fi
 
+# tuicr review picker (Cmd-U via Ghostty ESC[204~ passthrough).
+if command -v tuicr &>/dev/null; then
+  function tuicr-review-widget() {
+    BUFFER="tuicr"
+    zle accept-line
+  }
+  zle -N tuicr-review-widget
+  for _map in "${_widget_bind_maps[@]}"; do
+    bindkey -M "$_map" '^[[204~' tuicr-review-widget
+  done
+fi
+
 # Accept autosuggestion one word at a time.
 # zsh-autosuggestions already treats forward-word as partial accept.
 

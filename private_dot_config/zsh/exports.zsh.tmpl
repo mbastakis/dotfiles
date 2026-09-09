@@ -5,6 +5,8 @@
 # API keys from Bitwarden Secrets Manager
 export OPENROUTER_API_KEY='{{ (bitwardenSecrets "3b14fed8-dfa9-4617-92b9-b49e00a25e2b").value | trim }}'
 export OPENCODE_API_KEY='{{ (bitwardenSecrets "9ec9dc0f-7f8e-4e81-afed-b49e00a25e97").value | trim }}'
+export RCLONE_CONFIG_HOMESERVER_PERSONAL_PASS='{{ (bitwardenSecrets "9d33270e-04c2-4592-8bd8-b4ba00f126df").value | trim }}'
+export RCLONE_CONFIG_HOMESERVER_HOUSEHOLD_PASS="$RCLONE_CONFIG_HOMESERVER_PERSONAL_PASS"
 
 # Supabase
 export SUPABASE_URL='{{ (bitwardenSecrets "e9542789-a030-4599-9a75-b49e00a25f3d").value | trim }}'

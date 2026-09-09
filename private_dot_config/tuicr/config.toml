@@ -1,0 +1,4 @@
+theme = "nocturne-rose"
+transparent_background = false
+diff_view = "side-by-side"
+comment_vim = true

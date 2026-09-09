@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# Arrange the primary workspace after AeroSpace's login commands launch its apps.
+# App windows appear asynchronously, so wait for native routing before arranging them.
+
+set -u
+
+readonly workspace="o"
+readonly staging_workspace="__o_startup"
+
+window_id_for_bundle() {
+  local bundle_id="$1"
+
+  aerospace list-windows --workspace "$workspace" \
+    --format '%{window-id}|%{app-bundle-id}' 2>/dev/null \
+    | awk -F '|' -v bundle_id="$bundle_id" '$2 == bundle_id { print $1; exit }'
+}
+
+wait_for_window() {
+  local bundle_id="$1"
+  local window_id=""
+  local attempt
+
+  for ((attempt = 0; attempt < 60; attempt++)); do
+    window_id="$(window_id_for_bundle "$bundle_id")"
+    if [[ -n "$window_id" ]]; then
+      printf '%s\n' "$window_id"
+      return 0
+    fi
+    sleep 1
+  done
+
+  return 1
+}
+
+vivaldi_id="$(wait_for_window 'com.vivaldi.Vivaldi')" || exit 0
+ghostty_id="$(wait_for_window 'com.mitchellh.ghostty')" || exit 0
+sisyphus_id="$(wait_for_window 'com.vivaldi.Vivaldi.app.hempoeacjmlcffkchdampdabegkfjoeo')" || exit 0
+obsidian_id="$(wait_for_window 'md.obsidian')" || exit 0
+
+# Stage and reinsert the windows in left-to-right order so the result is:
+# Vivaldi | Ghostty | (Sisyphus + Obsidian accordion).
+for window_id in "$vivaldi_id" "$ghostty_id" "$sisyphus_id" "$obsidian_id"; do
+  aerospace move-node-to-workspace --window-id "$window_id" "$staging_workspace" >/dev/null 2>&1 || true
+done
+
+aerospace flatten-workspace-tree --workspace "$staging_workspace" >/dev/null 2>&1 || true
+aerospace layout --workspace "$staging_workspace" --root tiles horizontal >/dev/null 2>&1 || true
+
+for window_id in "$vivaldi_id" "$ghostty_id" "$sisyphus_id" "$obsidian_id"; do
+  aerospace move-node-to-workspace --window-id "$window_id" "$workspace" >/dev/null 2>&1 || true
+done
+
+aerospace layout --workspace "$workspace" --root tiles horizontal >/dev/null 2>&1 || true
+# Moving Obsidian right makes it adjacent to Sisyphus regardless of AeroSpace's
+# insertion direction, then joining left creates their shared container.
+aerospace move --window-id "$obsidian_id" right >/dev/null 2>&1 || true
+aerospace join-with --window-id "$obsidian_id" left >/dev/null 2>&1 || true
+aerospace layout --window-id "$obsidian_id" accordion vertical >/dev/null 2>&1 || true
+
+# Give slower login items time to finish routing their own windows before making
+# workspace O the final visible workspace.
+sleep 5
+aerospace workspace "$workspace" >/dev/null 2>&1 || true
+aerospace focus --window-id "$ghostty_id" >/dev/null 2>&1 || true

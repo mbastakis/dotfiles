@@ -4,9 +4,8 @@ sbar.add("event", "aerospace_workspace_change")
 sbar.add("event", "aerospace_focus_change")
 sbar.add("event", "bluetooth_change", "com.apple.bluetooth.status")
 sbar.add("event", "input_source_change", "com.apple.Carbon.TISNotifySelectedKeyboardInputSourceChanged")
-sbar.add("event", "task_change")
--- `sketchybar --trigger popup_toggle ITEM=<clock|bluetooth|tasks|flow|vpn>`
--- toggles that item's popup, e.g. from an aerospace or Karabiner binding.
 sbar.add("event", "popup_toggle")
+-- `sketchybar --trigger popup_toggle ITEM=<clock|bluetooth|vpn>`
+-- toggles that item's popup, e.g. from an aerospace or Karabiner binding.
 sbar.add("event", "system_stats")
 sbar.add("event", "gpu_stats")

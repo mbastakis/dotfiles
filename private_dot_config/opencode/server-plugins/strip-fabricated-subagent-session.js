@@ -1,5 +1,5 @@
 // TODO(remove): This plugin is a temporary workaround — delete it (and its
-// entry in the top-level "plugin" array of opencode.jsonc) once wcs/gpt no
+// entry in the top-level "plugins" array of opencode.jsonc) once wcs/gpt no
 // longer fabricates the subagent `sessionID` argument. Added 2026-08-21 on
 // opencode2 beta-17823, right after the subagent-resume feature (PR #43172)
 // added the optional `sessionID` field and GPT via the WCS/LiteLLM gateway
@@ -38,7 +38,7 @@ export default {
       const sid = args.sessionID
       if (typeof sid !== "string" || sid.length === 0) return
       if (sid !== call.sessionID) {
-        const existing = await Promise.resolve(context.session.get(sid)).catch(() => undefined)
+        const existing = await Promise.resolve(context.session.get({ sessionID: sid })).catch(() => undefined)
         if (existing) return
       }
       delete args.sessionID

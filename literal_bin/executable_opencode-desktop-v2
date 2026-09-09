@@ -1,0 +1,31 @@
+#!/bin/bash
+# Start Desktop's bundled V1 backend in isolation, then use the saved V2 server.
+# Workaround for Desktop reading V2-only settings before selecting a server.
+
+set -euo pipefail
+
+app="/Applications/OpenCode.app/Contents/MacOS/OpenCode"
+if [[ ! -x "$app" ]]; then
+    echo "opencode-desktop-v2: install Desktop with brew install --cask opencode-desktop." >&2
+    exit 127
+fi
+
+sandbox="$(mktemp -d "${TMPDIR:-/tmp}/opencode-desktop-v1.XXXXXX")"
+
+nohup env \
+    -u OPENCODE_CONFIG \
+    -u OPENCODE_CONFIG_DIR \
+    -u OPENCODE_CONFIG_CONTENT \
+    -u OPENCODE_DB \
+    -u OPENCODE_PORT \
+    SHELL=/usr/bin/false \
+    XDG_CONFIG_HOME="$sandbox/config" \
+    XDG_DATA_HOME="$sandbox/data" \
+    XDG_CACHE_HOME="$sandbox/cache" \
+    XDG_STATE_HOME="$sandbox/state" \
+    OPENCODE_TEST_HOME="$sandbox" \
+    OPENCODE_DISABLE_PROJECT_CONFIG=true \
+    OPENCODE_SIDECAR_V2=0 \
+    "$app" "$@" >"$sandbox/desktop.log" 2>&1 </dev/null &
+
+echo "Launching OpenCode Desktop. Log: $sandbox/desktop.log"

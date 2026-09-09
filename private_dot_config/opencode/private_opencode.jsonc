@@ -1,8 +1,7 @@
 // OpenCode v2 native configuration (migrated from v1 syntax 2026-08-20).
 //
 // - Written in native v2 syntax: `providers`/`permissions` array/`mcp.servers`/
-//   `agents`. The v1 escape-hatch binary can NO longer read this file
-//   (git history has the last v1-syntax version).
+//   `agents`. V1 CLI and desktop are retired; use `opencode2`.
 // - permissions: ordered rules, LAST matching rule wins - broad allow first,
 //   destructive-operation asks after. v2 `*` crosses spaces, so single rules
 //   like "kubectl* apply*" replace the v1 "kubectl apply*" + "kubectl * apply*"
@@ -16,10 +15,10 @@
   "model": "wcs/gpt",
   "username": "mbastakis",
   "share": "manual",
-  "autoupdate": true,
+  "update": "auto",
   // Server plugin: strips the parent-session ID that GPT-via-WCS fabricates
   // into the optional subagent `sessionID` argument (see file for details).
-  "plugin": [
+  "plugins": [
     "./server-plugins/strip-fabricated-subagent-session.js"
   ],
   "experimental": {
@@ -1884,6 +1883,70 @@
         "apiKey": "{env:WCS_DEV_API_KEY}"
       },
       "models": {
+        "gpt-6-astra": {
+          "modelID": "gpt-6-astra",
+          "family": "gpt",
+          "name": "GPT-6 Astra",
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": [
+            {
+              "id": "none",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "minimal",
+              "settings": {
+                "disabled": true
+              }
+            },
+            {
+              "id": "low",
+              "settings": {
+                "reasoningEffort": "low"
+              }
+            },
+            {
+              "id": "medium",
+              "settings": {
+                "reasoningEffort": "medium"
+              }
+            },
+            {
+              "id": "high",
+              "settings": {
+                "reasoningEffort": "high"
+              }
+            },
+            {
+              "id": "xhigh",
+              "settings": {
+                "reasoningEffort": "xhigh"
+              }
+            },
+            {
+              "id": "max",
+              "settings": {
+                "reasoningEffort": "max"
+              }
+            }
+          ],
+          "limit": {
+            "context": 1050000,
+            "input": 922000,
+            "output": 128000
+          }
+        },
         "gpt": {
           "modelID": "gpt",
           "family": "gpt-sol",

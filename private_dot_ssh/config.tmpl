@@ -53,6 +53,8 @@ Host atlas-via-openwrt
     IdentitiesOnly yes
     ProxyJump openwrt-tailscale
     ForwardAgent no
+    StrictHostKeyChecking yes
+    UpdateHostKeys no
 
 Host truenas-via-openwrt
     HostName 192.168.1.74
@@ -62,6 +64,8 @@ Host truenas-via-openwrt
     IdentitiesOnly yes
     ProxyJump openwrt-tailscale
     ForwardAgent no
+    StrictHostKeyChecking yes
+    UpdateHostKeys no
 
 Host openwrt
     HostName 100.99.174.123
@@ -70,7 +74,7 @@ Host openwrt
     User root
     IdentityFile ~/.ssh/id_ed25519
     IdentitiesOnly yes
-    UserKnownHostsFile {{ .chezmoi.homeDir }}/dev/personal/workspaces/home-workspace/kavouki/kavouki_main/.local/openwrt/known_hosts
+    UserKnownHostsFile {{ .chezmoi.homeDir }}/dev/personal/workspaces/home-workspace/server/kavouki/kavouki_main/.local/openwrt/known_hosts
     StrictHostKeyChecking yes
     UpdateHostKeys no
     ForwardAgent no
@@ -81,7 +85,7 @@ Host openwrt-lan
     User root
     IdentityFile ~/.ssh/id_ed25519
     IdentitiesOnly yes
-    UserKnownHostsFile {{ .chezmoi.homeDir }}/dev/personal/workspaces/home-workspace/kavouki/kavouki_main/.local/openwrt/known_hosts
+    UserKnownHostsFile {{ .chezmoi.homeDir }}/dev/personal/workspaces/home-workspace/server/kavouki/kavouki_main/.local/openwrt/known_hosts
     StrictHostKeyChecking yes
     UpdateHostKeys no
     ForwardAgent no
@@ -93,7 +97,7 @@ Host openwrt-tailscale
     User root
     IdentityFile ~/.ssh/id_ed25519
     IdentitiesOnly yes
-    UserKnownHostsFile {{ .chezmoi.homeDir }}/dev/personal/workspaces/home-workspace/kavouki/kavouki_main/.local/openwrt/known_hosts
+    UserKnownHostsFile {{ .chezmoi.homeDir }}/dev/personal/workspaces/home-workspace/server/kavouki/kavouki_main/.local/openwrt/known_hosts
     StrictHostKeyChecking yes
     UpdateHostKeys no
     ForwardAgent no

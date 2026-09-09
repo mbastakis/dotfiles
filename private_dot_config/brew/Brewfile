@@ -251,6 +251,8 @@ brew "taplo"
 brew "tmux"
 # Parser generator tool
 brew "tree-sitter-cli"
+# Code review TUI with Vim keybindings
+brew "tuicr"
 # TypeScript compiler and native language server
 brew "typescript"
 # View/select the URLs in an email message or file
@@ -281,9 +283,7 @@ brew "yq"
 brew "zinit"
 # Shell extension to navigate your filesystem faster
 brew "zoxide"
-# OpenCode v1, kept only as the `opencode` escape hatch. The package bootstrap
-# installs the primary opencode2 v2 beta separately in ~/.opencode/bin.
-brew "anomalyco/tap/opencode", trusted: true
+# OpenCode V2 is installed separately by package bootstrap in ~/.opencode/bin.
 # Git diff pager based on delta but with a file tree, à la GitHub
 brew "dlvhdr/formulae/diffnav", trusted: true
 # Window border system for macOS
@@ -334,7 +334,7 @@ cask "karabiner-elements"
 cask "keyclu"
 # Knowledge base that works on top of a local folder of plain text Markdown files
 cask "obsidian"
-# AI coding agent desktop client
+# OpenCode desktop app
 cask "opencode-desktop"
 # Native application launcher and command palette
 cask "vicinae"

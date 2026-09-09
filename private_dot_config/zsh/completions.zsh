@@ -103,8 +103,8 @@ if command -v aws_completer &>/dev/null; then
 fi
 
 # Cache OpenCode's native completion output until the binary changes.
-if command -v opencode &>/dev/null; then
-  _generate_completion_cache "$ZSH_COMPLETION_CACHE_DIR/opencode-completion.zsh" "$(command -v opencode)" opencode completion
+if command -v opencode2 &>/dev/null; then
+  _generate_completion_cache "$ZSH_COMPLETION_CACHE_DIR/opencode2-completion.zsh" "$(command -v opencode2)" opencode2 --completions zsh
 fi
 
 # Cache sesh's native completion output until the binary changes.

@@ -1,0 +1,51 @@
+# Generated from Nocturne Rose tokens. Copy with dist/bat/Nocturne Rose.tmTheme.
+panel_bg = "#0d0d10"
+bg_highlight = "#30303d"
+fg_primary = "#ebe7ed"
+fg_secondary = "#aaa5b0"
+fg_dim = "#77727f"
+
+diff_add = "#8aa47f"
+diff_add_bg = "#17231c"
+diff_del = "#cc655c"
+diff_del_bg = "#29191d"
+diff_context = "#ebe7ed"
+diff_hunk_header = "#b69acb"
+expanded_context_fg = "#77727f"
+
+syntax_add_bg = "#17231c"
+syntax_del_bg = "#29191d"
+syntax_theme = "Nocturne Rose.tmTheme"
+
+file_added = "#8aa47f"
+file_modified = "#d3b069"
+file_deleted = "#cc655c"
+file_renamed = "#b69acb"
+
+reviewed = "#8aa47f"
+pending = "#d3b069"
+
+comment_note = "#88a8bd"
+comment_suggestion = "#94b3ae"
+comment_issue = "#cc655c"
+comment_praise = "#8aa47f"
+
+border_focused = "#d48aa4"
+border_unfocused = "#30303d"
+status_bar_bg = "#121217"
+cursor_color = "#e3a0b8"
+cursor_line_bg = "#18181f"
+branch_name = "#b69acb"
+help_indicator = "#77727f"
+
+message_info_fg = "#09090b"
+message_info_bg = "#88a8bd"
+message_warning_fg = "#09090b"
+message_warning_bg = "#d3b069"
+message_error_fg = "#09090b"
+message_error_bg = "#cc655c"
+update_badge_fg = "#09090b"
+update_badge_bg = "#d3b069"
+
+mode_fg = "#09090b"
+mode_bg = "#d48aa4"

@@ -1,8 +1,8 @@
 # OpenCode Configuration
 
 Config for OpenCode v2 (`opencode2`), written in **native v2 syntax** since
-2026-08-20. The v1 `opencode` binary stays brew-installed but can no longer
-read this config (git history holds the last v1-syntax version).
+2026-08-20. V1 CLI and desktop are retired; launch `opencode2` (or `oc`).
+The shared config, credentials, and session data belong to the active V2 setup.
 
 ## Structure
 
@@ -26,7 +26,6 @@ read this config (git history holds the last v1-syntax version).
 | `opencode2 service status\|start\|stop\|restart` | Background service lifecycle |
 | `opencode2 pair` | Service URL, password, and pairing QR |
 | `ocserve` (`opencode-server`) | Service + credential bridge + Tailscale Serve stack |
-| `opencode` | v1 escape hatch (binary only; cannot read this config anymore) |
 
 ## Providers
 
