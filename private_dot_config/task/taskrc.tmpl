@@ -114,6 +114,18 @@ uda.linear_project.label=Linear Project
 #   task <id> info       # all fields incl. UDAs
 #   task +LINEAR list    # only Linear-origin tasks
 
+# Sisyphus task meaning — shared agent contract: ~/.agents/skills/taskwarrior/contract.md
+# Native due=deadline, wait=deferral, start=in progress, depends=prerequisite.
+# +next is commitment, not a weekly expiry or categorization tag.
+# Planned/follow-up dates represent local days; follow-up never clears a blocker.
+# These declarations configure this workstation; the container owns its config.
+uda.sisyphus_plan.type=date
+uda.sisyphus_plan.label=Planned day
+uda.sisyphus_blocker.type=string
+uda.sisyphus_blocker.label=Blocker
+uda.sisyphus_followup.type=date
+uda.sisyphus_followup.label=Follow-up
+
 # TaskChampion sync — server on atlas, reached over Tailscale
 sync.server.url=https://tasks.mbastakis.com
 sync.server.client_id=24e1b420-97ae-4847-9fae-cf15c096706b
