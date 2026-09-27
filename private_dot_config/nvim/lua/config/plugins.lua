@@ -1,3 +1,14 @@
+vim.api.nvim_create_autocmd("PackChanged", {
+  group = vim.api.nvim_create_augroup("build-telescope-fzf", { clear = true }),
+  callback = function(event)
+    local data = event.data
+    if data.spec.name == "telescope-fzf-native.nvim" and (data.kind == "install" or data.kind == "update") then
+      local result = vim.system({ "make" }, { cwd = data.path, text = true }):wait()
+      assert(result.code == 0, result.stderr or result.stdout)
+    end
+  end,
+})
+
 vim.pack.add({
   { src = "https://github.com/christoomey/vim-tmux-navigator" },
   { src = "https://github.com/folke/snacks.nvim" },
@@ -6,7 +17,17 @@ vim.pack.add({
   { src = "https://github.com/mfussenegger/nvim-lint" },
   { src = "https://github.com/neovim/nvim-lspconfig" },
   { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
-  { src = "https://github.com/nvim-mini/mini.pick", version = "stable" },
+  { src = "https://github.com/nvim-lua/plenary.nvim" },
+  { src = "https://github.com/nvim-telescope/telescope.nvim" },
+  { src = "https://github.com/nvim-telescope/telescope-fzf-native.nvim" },
+  { src = "https://github.com/kevinhwang91/nvim-hlslens" },
+  { src = "https://github.com/nvim-lualine/lualine.nvim" },
+  { src = "https://github.com/mason-org/mason.nvim" },
+  { src = "https://github.com/mason-org/mason-lspconfig.nvim" },
+  { src = "https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim" },
+  { src = "https://github.com/mikavilpas/blink-ripgrep.nvim", version = vim.version.range("2.x") },
+  { src = "https://github.com/rachartier/tiny-inline-diagnostic.nvim" },
+  { src = "https://github.com/refractalize/oil-git-status.nvim" },
   { src = "https://github.com/rafamadriz/friendly-snippets" },
   { src = "https://github.com/saghen/blink.cmp", version = "v1" },
   { src = "https://github.com/stevearc/conform.nvim" },

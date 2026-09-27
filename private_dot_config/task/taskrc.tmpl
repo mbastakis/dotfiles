@@ -19,6 +19,10 @@ confirmation=yes
 bulk=3
 news.version=3.4.2
 
+# Sisyphus on Atlas is the sole recurring-instance generator.
+# This client can create/edit templates and complete instances through sync.
+recurrence=off
+
 # Verbosity — default list minus `override` so the "TASKRC override: ..."
 # and "TASKDATA override: ..." banner doesn't print on every invocation
 # (we intentionally set those via env vars in .zshenv).
@@ -42,19 +46,9 @@ weekstart=Monday
 journal.info=on
 journal.time=off
 
-# Urgency tuning. Note: `urgency.user.tag.next.coefficient` boosts tasks that
-# carry the literal `+next` tag (standard Taskwarrior idiom for "pin this to
-# the top"). It does NOT boost items in the `next` report.
-urgency.user.tag.next.coefficient=15.0
-urgency.due.coefficient=12.0
-urgency.blocking.coefficient=8.0
-urgency.priority.coefficient=6.0
-urgency.active.coefficient=4.0
-urgency.project.coefficient=1.0
-urgency.tags.coefficient=1.0
-urgency.annotations.coefficient=1.0
-urgency.age.coefficient=2.0
-urgency.age.max=365
+# Use native urgency defaults, matching the Sisyphus container's policy.
+# Literal +next is an urgency tag, not application state or the `next` report.
+# Urgency settings are replica-local; matching versions/settings keeps ordering aligned.
 
 # Reports — tweak defaults so `task` shows useful columns at a glance.
 # Use `description.count` instead of bare `description` so long Linear
@@ -78,8 +72,7 @@ report.long.sort=urgency-
 
 # Context helpers — quickly filter by Linear origin.
 # Activate with `task context linear`, clear with `task context none`.
-# Linear-backed tasks are identified by the linear_id UDA, not a tag
-# (tags are board-managed in Sisyphus; see sisyphus README "Projects and tags").
+# Linear-backed tasks are identified by the linear_id UDA, not a tag.
 context.linear.read=linear_id.any:
 
 # -----------------------------------------------------------------------------
@@ -112,19 +105,11 @@ uda.linear_project.label=Linear Project
 # Make the Linear ID searchable / filterable in the default `next` report via
 # the column definitions above. To see the full set, use:
 #   task <id> info       # all fields incl. UDAs
-#   task +LINEAR list    # only Linear-origin tasks
+#   task linear_id.any: list    # only Linear-origin tasks
 
 # Sisyphus task meaning — shared agent contract: ~/.agents/skills/taskwarrior/contract.md
-# Native due=deadline, wait=deferral, start=in progress, depends=prerequisite.
-# +next is commitment, not a weekly expiry or categorization tag.
-# Planned/follow-up dates represent local days; follow-up never clears a blocker.
-# These declarations configure this workstation; the container owns its config.
-uda.sisyphus_plan.type=date
-uda.sisyphus_plan.label=Planned day
-uda.sisyphus_blocker.type=string
-uda.sisyphus_blocker.label=Blocker
-uda.sisyphus_followup.type=date
-uda.sisyphus_followup.label=Follow-up
+# Native due=deadline, scheduled=earliest opportunity, wait=return date,
+# start=activity, depends=prerequisite. No application-specific UDAs or ranks.
 
 # TaskChampion sync — server on atlas, reached over Tailscale
 sync.server.url=https://tasks.mbastakis.com

@@ -1,5 +1,6 @@
 require("oil").setup({
   columns = {},
+  win_options = { signcolumn = "yes:2" },
   constrain_cursor = "editable",
   lsp_file_methods = {
     enabled = true,
@@ -20,3 +21,5 @@ require("oil").setup({
     },
   },
 })
+
+require("oil-git-status").setup({})

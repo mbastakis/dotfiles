@@ -303,13 +303,17 @@ Leader is `Space`.
 | `Ctrl+W h` / `Ctrl+W v` | Split side-by-side / stacked |
 | `-` / `<leader>e` | Open the current file\x27s parent directory with Oil |
 | `<leader>uw` | Toggle line wrapping in the current window |
-| `<leader>ff` | Find files with mini.pick |
-| `<leader>fg` | Find text with mini.pick and ripgrep |
+| `<leader>ff` | Find files with Telescope and fzf-native |
+| `<leader>fg` | Find text with Telescope and ripgrep |
 | `<leader>uu` | Toggle the native undotree |
+
+Searches with `n` / `N`, `*` / `#`, and `g*` / `g#` show hlslens match counts. `Esc` clears search highlights and lenses.
 
 ### LSP And Formatting
 
 The LSP mappings are buffer-local and appear after a language server attaches.
+
+`:Mason` opens the language-server/tool manager; `:MasonToolsInstall` installs configured formatters and linters. Blink completion includes a ripgrep source for project words. Diagnostics use tiny-inline-diagnostic.
 
 | Key | Action |
 | --- | --- |
@@ -353,6 +357,8 @@ The LSP mappings are buffer-local and appear after a language server attaches.
 ### Oil
 
 Oil keeps its default buffer-local mappings. Custom additions are:
+
+Two Git sign columns show index status (left) and working-tree status (right).
 
 | Key | Action |
 | --- | --- |

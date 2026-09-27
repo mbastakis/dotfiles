@@ -1,0 +1,76 @@
+:root {
+  --tabs-collapsed-width: 40px;     /* Width when collapsed (matches your default) */
+  --tabs-expanded-width: 250px;     /* Width when expanded on hover */
+  --tabs-transition-speed: 0.25s;   /* Animation speed for smooth transition */
+}
+
+/* Base styling for tab container */
+#tabs-tabbar-container.left {
+  width: var(--tabs-collapsed-width) !important;
+  transition: width var(--tabs-transition-speed) ease !important;
+  overflow: hidden;
+  position: absolute !important;
+  z-index: 100;
+  height: 100% !important;
+  background-color: var(--colorBg, #ffffff);
+  border-right: 1px solid var(--colorBorder, rgba(0, 0, 0, 0.1));
+}
+
+/* Expand on hover */
+#tabs-tabbar-container.left:hover {
+  width: var(--tabs-expanded-width) !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 1px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Hide tab titles when collapsed */
+.tab-position .tab .title {
+  opacity: 0;
+  transition: opacity var(--tabs-transition-speed) ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Show tab titles on hover */
+#tabs-tabbar-container.left:hover .tab-position .tab .title {
+  opacity: 1;
+}
+
+/* Hide close button when collapsed */
+.tab-position .tab .close {
+  opacity: 0;
+  transition: opacity var(--tabs-transition-speed) ease;
+}
+
+/* Show close button on hover */
+#tabs-tabbar-container.left:hover .tab-position .tab .close {
+  opacity: 1;
+}
+
+/* Fix webview container to prevent resizing */
+#webview-container {
+  margin-left: var(--tabs-collapsed-width) !important;
+  width: calc(100% - var(--tabs-collapsed-width)) !important;
+}
+
+/* Ensure tab bar doesn't shift page content */
+.tabbar-wrapper {
+  position: relative !important;
+}
+
+/* Increase contrast for tabs when hovering over container */
+#tabs-tabbar-container.left:hover .tab-position .tab {
+  background-color: var(--colorBgIntense, rgba(0, 0, 0, 0.05));
+}
+
+#tabs-tabbar-container.left:hover .tab-position .tab.active {
+  background-color: var(--colorAccentBgAlpha, rgba(26, 115, 232, 0.1));
+}
+
+/* Fix for any potential z-index issues */
+#main .inner {
+  position: relative;
+  z-index: 1;
+}

@@ -19,5 +19,6 @@
   "userIgnoreFilters": [
     "/node_modules/",
     "/tools/"
-  ]
+  ],
+  "alwaysUpdateLinks": true
 }

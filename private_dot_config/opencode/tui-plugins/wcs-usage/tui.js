@@ -1,4 +1,4 @@
-import { Plugin } from "@opencode-ai/plugin/tui";
+import { Plugin } from "@opencode/plugin/tui";
 
 const usageURL = "https://ai.whocaressoftware.com/wcs/usage";
 

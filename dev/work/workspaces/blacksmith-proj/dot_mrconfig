@@ -1,0 +1,51 @@
+[DEFAULT]
+jobs = 8
+git_update = git pull --rebase --autostash "$@"
+
+
+# =============================================================================
+# The Forge (aicc/the-forge)
+# =============================================================================
+
+[the-forge/blacksmith/blacksmith_main]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/the-forge/blacksmith.git' 'blacksmith_main'
+
+# =============================================================================
+# Infrastructure - ArgoCD Root App-of-Apps (aicc/infrastructure/argocd/root-app-of-apps)
+# =============================================================================
+
+[infrastructure/argocd/root-app-of-apps/dev-root-app-of-apps/dev-root-app-of-apps_main]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/root-app-of-apps/dev-root-app-of-apps.git' 'dev-root-app-of-apps_main'
+
+# =============================================================================
+# Infrastructure - ArgoCD Core Infra Apps (aicc/infrastructure/argocd)
+# =============================================================================
+
+[infrastructure/argocd/dev-core-kubernetes-infra-app-of-apps/dev-core-kubernetes-infra-app-of-apps_main]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/dev-core-kubernetes-infra-app-of-apps.git' 'dev-core-kubernetes-infra-app-of-apps_main'
+
+# =============================================================================
+# Infrastructure - ArgoCD Helm Charts
+# =============================================================================
+
+[infrastructure/argocd/helm-charts/keycloak-helm/keycloak-helm_main]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/keycloak-helm.git' 'keycloak-helm_main'
+
+[infrastructure/argocd/helm-charts/coder-helm/coder-helm_main]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/coder-helm.git' 'coder-helm_main'
+
+[infrastructure/argocd/helm-charts/istio-helm/istio-helm_main]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/istio-helm.git' 'istio-helm_main'
+
+# =============================================================================
+# Infrastructure - AWS Terraform
+# =============================================================================
+
+[infrastructure/iac/aws/iac-dev/iac-dev_main]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/iac/aws/iac-dev.git' 'iac-dev_main'
+
+[infrastructure/iac/aws/aicc-aws-cluster/aicc-aws-cluster_main]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/iac/aws/aicc-aws-cluster.git' 'aicc-aws-cluster_main'
+
+[infrastructure/iac/aws/bootstrap-aws-account/bootstrap-aws-account_main]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/iac/aws/bootstrap-aws-account.git' 'bootstrap-aws-account_main'

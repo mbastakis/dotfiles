@@ -8,7 +8,8 @@
   "showRibbon": false,
   "translucency": true,
   "enabledCssSnippets": [
-    "hide-development-folders"
+    "hide-development-folders",
+    "aicc-presentation"
   ],
   "nativeMenus": true
 }

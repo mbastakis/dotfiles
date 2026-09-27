@@ -6,4 +6,8 @@ worktree-path = "{{ repo_path }}/../{{ remote_repo }}_{{ branch | sanitize_hash 
 command = "cd \"$HOME\" && opencode2 run --agent worktrunk-commit --model wcs/gpt-5.6-luna#low --title worktrunk-commit"
 
 [list]
+# Include existing branches in the switch picker so typing filters to them;
+# press Enter to create a worktree, reserving Alt-C for genuinely new branches.
+branches = true
+remotes = true
 json-schema = 2

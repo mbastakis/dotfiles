@@ -19,16 +19,15 @@ tw add due:2026-09-12T23:59:59 wait:2026-09-10T00:00:00 recur:weekly -- "Water p
 - `recur` requires `due`; it creates a hidden template and generated child
   instances. Completing an instance updates series state; recurrence processing
   generates future instances. Never edit internal `mask`, `parent`, or `imask`.
-- `until` cuts off future generation. Confirm before changing/deleting a series;
-  distinguish the requested instance from its template deliberately.
+- `until` cuts off future generation. Establish whether the request targets an
+  instance or the series before changing/deleting it; ask when scope is unclear.
 - `wait` is deferral lead time; children preserve its offset from `due`.
   Inspect existing template/instance timestamps and their offset before changing
   either field in an offset-sensitive series; do not normalize an existing series
   to day boundaries without checking the requested effect on future instances.
 - Avoid `scheduled` on recurring Tasks: Taskwarrior 3.4.2 copies the absolute
   value rather than recalculating its offset. Explain this when relevant to
-  scheduling a series. Do not put daily-plan or current-blocker UDAs on templates
-  expecting them to advance or reset automatically; inspect instance inheritance.
+  scheduling a series; inspect instance inheritance before changing it.
 - Flag monthly anchors on the 29th–31st: invalid calendar dates can clamp and
   drift. Check the actual generated dates when those boundaries matter.
 - Prefer `daily`, `weekdays`, `weekly`, `biweekly`, `monthly`, `quarterly`,

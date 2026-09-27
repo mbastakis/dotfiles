@@ -1,0 +1,217 @@
+/* Common variables */
+:root {
+  --scrollbar-width: 10px;
+  --tab-bar-width: 45px;
+}
+
+#browser {
+
+  .mainbar,
+  #header,
+  #footer,
+  #panels-container,
+  .bookmark-bar {
+    border: none !important;
+  }
+
+  .mainbar,
+  #header,
+  #footer,
+  .bookmark-bar {
+    background-color: var(--colorBgAlphaBlur) !important;
+  }
+
+  #main,
+  #header,
+  #footer,
+  .panel-group {
+    backdrop-filter: var(--backgroundBlur);
+  }
+
+  &:not(.is-fullscreen) {
+    button[name='WorkspaceButton'] {
+      margin: 10px;
+
+      .button-icon {
+        margin-right: 9px !important;
+      }
+    }
+
+    #panel_switch {
+      background-color: unset;
+    }
+
+    #switch {
+      backdrop-filter: unset;
+    }
+
+    #webview-container {
+      margin-left: var(--tab-bar-width);
+      background-color: var(--colorBgAlphaBlur);
+    }
+
+    #webpage-stack,
+    .tiled.webpageview {
+      border-radius: var(--radius) !important;
+    }
+
+    .color-behind-tabs-on .bookmark-bar button,
+    .bookmark-bar .observer {
+      background-color: unset;
+    }
+
+
+    .tabbar-workspace-button+#tabs-tabbar-container.left,
+    .tabbar-workspace-button+#tabs-tabbar-container.right {
+      padding-top: 10;
+    }
+
+
+    .inner>.tabbar-wrapper {
+      position: absolute;
+      overflow: hidden;
+      z-index: 1;
+      background: unset;
+
+      .tabbar-wrapper {
+        background: var(--colorBgAlphaBlur);
+
+        >div:not(.tabbar-wrapper) {
+          padding-top: 0;
+        }
+      }
+
+      &:not(.alt-tabs) #tabs-container .favicon,
+      &:not(.alt-tabs) #tabs-container .tab.pinned:not(.active) .favicon .tab .favicon {
+        margin-left: 0px;
+        margin-right: 20px;
+        transition: margin-right 0.25s, transform 100ms 50ms ease-in;
+      }
+
+      .tab-wrapper {
+        transition: padding 0.25s, background-color 0.25s;
+        width: 35px;
+        overflow: hidden;
+
+        &:has(.tab.active) {
+          transition: padding 0.25s, background-color 0.25s, width 0.5s;
+        }
+      }
+
+      #tabs-tabbar-container {
+        max-width: var(--tab-bar-width);
+        overflow: hidden;
+        transition: max-width 0.25s;
+
+        >.separator.separator-wsbutton {
+          display: block;
+        }
+
+        /* Tabs scrollbar */
+
+        .tab-strip {
+          &::-webkit-scrollbar {
+            padding: 0 2px !important;
+            width: var(--scrollbar-width) !important;
+            border: 1px solid var(--scrollbar-border-color) !important;
+            border-radius: var(--radiusHalf) !important;
+            display: none;
+            color: var(--colorFg);
+          }
+
+          &::-webkit-scrollbar-track {
+            background: transparent;
+          }
+
+          &::-webkit-scrollbar-button {
+            display: none !important;
+          }
+
+          &::-webkit-scrollbar-thumb {
+            border: 2px solid transparent !important;
+            border-radius: var(--radiusHalf) !important;
+          }
+        }
+
+        .tab-position:not(.accordion-toggle-arrow) {
+          padding-left: 4px !important;
+          padding-right: 4px !important;
+        }
+
+        #tabs-container:is(.left, .right) {
+          background-color: unset;
+          backdrop-filter: unset;
+          transition: background-color 0.25s;
+
+          .toolbar.toolbar-tabbar-after {
+            display: none;
+          }
+
+          .resize {
+            margin-bottom: var(--densityGap);
+          }
+
+
+        }
+      }
+    }
+
+    .inner:has(#tabs-tabbar-container.right) {
+      #webview-container {
+        margin-left: 0;
+        margin-right: var(--tab-bar-width);
+      }
+
+      .tabbar-wrapper {
+        top: 0;
+        right: 0;
+        background-color: var(--colorBgAlphaBlur);
+
+        #tabs-tabbar-container {
+          padding: 0;
+        }
+      }
+
+      #panels-container {
+        right: var(--tab-bar-width);
+        z-index: 0;
+      }
+    }
+
+  }
+
+
+  /* Hovered tabs */
+  &:has(button[name='WorkspaceButton'].button-pressed) #main .tabbar-wrapper,
+  &:has(button[name='SyncedTabs'].button-pressed) #main .tabbar-wrapper,
+  &:has(div.button-popup) #main .tabbar-wrapper,
+  & .tabbar-wrapper:hover {
+
+    #tabs-tabbar-container:is(.left, .right) {
+      max-width: 400px;
+
+      .tab-strip::-webkit-scrollbar {
+        display: block;
+      }
+
+      #tabs-container {
+        background-color: var(--colorAccentBgAlpha);
+        backdrop-filter: var(--backgroundBlur);
+
+        .toolbar.toolbar-tabbar-after {
+          display: flex;
+        }
+
+        .tab-wrapper {
+          width: 100%;
+          padding-left: 5px !important;
+          padding-right: 5px !important;
+
+          .tab .favicon {
+            margin-right: 4px;
+          }
+        }
+      }
+    }
+  }
+}

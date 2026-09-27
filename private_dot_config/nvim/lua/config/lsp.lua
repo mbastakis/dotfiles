@@ -25,7 +25,7 @@ vim.treesitter.language.register("gotmpl", "helm")
 vim.diagnostic.config({
   severity_sort = true,
   update_in_insert = false,
-  virtual_text = true,
+  virtual_text = false,
   float = { border = "rounded", source = true },
 })
 
@@ -120,6 +120,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end,
 })
 
+require("mason").setup({})
+
 local servers = {
   bashls = "bash-language-server",
   docker_language_server = "docker-language-server",
@@ -133,6 +135,23 @@ local servers = {
   tsc = "tsc",
   yamlls = "yaml-language-server",
 }
+
+-- tsc is supplied by the workstation; Mason manages the other language servers.
+local mason_servers = vim.tbl_filter(function(server)
+  return server ~= "tsc"
+end, vim.tbl_keys(servers))
+table.sort(mason_servers)
+require("mason-lspconfig").setup({
+  ensure_installed = mason_servers,
+  automatic_enable = mason_servers,
+})
+require("mason-tool-installer").setup({
+  ensure_installed = {
+    "dockerfmt", "prettierd", "ruff", "shellcheck", "hadolint",
+    "eslint_d", "tflint", "tfsec", "yamllint",
+  },
+  auto_update = false,
+})
 
 for server, executable in pairs(servers) do
   if vim.fn.executable(executable) == 1 then
