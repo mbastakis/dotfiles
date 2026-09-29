@@ -295,6 +295,8 @@ Sources: `private_dot_config/nvim/lua/config/keymaps.lua`, `private_dot_config/n
 
 Leader is `Space`.
 
+Pause for 300 ms after `Space` or another mapping prefix to show available next keys with which-key. The menu uses existing mapping descriptions, including buffer-local LSP and Git actions when available. `Space ?` explicitly shows buffer-local keymaps; `Esc` dismisses the menu.
+
 ### Navigation And Files
 
 | Key | Action |

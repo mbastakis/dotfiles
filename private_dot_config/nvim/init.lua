@@ -21,3 +21,20 @@ require("plugins.hlslens")
 require("plugins.lualine")
 require("plugins.surround")
 require("config.keymaps")
+
+local which_key = require("which-key")
+which_key.setup({
+  delay = 300,
+  preset = "classic",
+})
+which_key.add({
+  { "<leader>c", group = "Code" },
+  { "<leader>f", group = "Find / format" },
+  { "<leader>g", group = "Git" },
+  { "<leader>i", group = "Images" },
+  { "<leader>r", group = "Rename" },
+  { "<leader>u", group = "UI / toggles" },
+})
+vim.keymap.set("n", "<leader>?", function()
+  which_key.show({ global = false })
+end, { desc = "Show buffer keymaps" })

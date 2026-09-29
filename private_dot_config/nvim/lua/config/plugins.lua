@@ -12,6 +12,7 @@ vim.api.nvim_create_autocmd("PackChanged", {
 vim.pack.add({
   { src = "https://github.com/christoomey/vim-tmux-navigator" },
   { src = "https://github.com/folke/snacks.nvim" },
+  { src = "https://github.com/folke/which-key.nvim" },
   { src = "https://github.com/kylechui/nvim-surround", version = vim.version.range("4.x") },
   { src = "https://github.com/lewis6991/gitsigns.nvim" },
   { src = "https://github.com/mfussenegger/nvim-lint" },
