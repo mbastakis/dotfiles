@@ -10,5 +10,5 @@
 # the Homebrew name collision that started this: Homebrew's `task` formula
 # is Taskwarrior, and go-task never goes through Homebrew here at all.
 [tools]
-task = "3.52.0"
+task = "3.54.0"
 "npm:@mermaid-js/mermaid-cli" = "11.17.0"
