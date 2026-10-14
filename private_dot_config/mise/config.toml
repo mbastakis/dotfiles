@@ -6,5 +6,5 @@
 #
 # go-task is managed by mise rather than Homebrew.
 [tools]
-task = "3.52.0"
+task = "3.54.0"
 "npm:@mermaid-js/mermaid-cli" = "11.17.0"
