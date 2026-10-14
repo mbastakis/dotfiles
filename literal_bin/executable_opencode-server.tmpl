@@ -12,8 +12,6 @@ BRIDGE_LABEL="com.mbastakis.opencode-auth-bridge"
 SERVER_URL="{{ .opencode.remote.server.scheme }}://{{ .opencode.remote.server.host }}:{{ .opencode.remote.server.port }}"
 BRIDGE_URL="{{ .opencode.remote.bridge.scheme }}://{{ .opencode.remote.bridge.host }}:{{ .opencode.remote.bridge.port }}"
 INGRESS_CAPABILITY="{{ .opencode.remote.bridge.ingress_capability }}"
-LEGACY_SOCKET_TARGET="unix:$HOME/.local/state/opencode-remote/auth-bridge.sock"
-LEGACY_PROXY_URL="http://127.0.0.1:4180"
 
 usage() {
     cat <<EOF
@@ -71,26 +69,8 @@ serve_targets() {
     ' >/dev/null
 }
 
-serve_targets_without_capability() {
-    local target="$1"
-    jq -e --arg target "$target" '
-        (.TCP == {"443": {"HTTPS": true}})
-        and ((.Web // {}) | length == 1)
-        and ([.Web[] | .Handlers] == [{"/": {"Proxy": $target}}])
-        and ((.AllowFunnel // {}) == {})
-    ' >/dev/null
-}
-
 serve_is_owned() {
     serve_targets "$BRIDGE_URL"
-}
-
-serve_is_legacy() {
-    local config
-    config="$(cat)"
-    serve_targets_without_capability "$BRIDGE_URL" <<< "$config" ||
-        serve_targets_without_capability "$LEGACY_SOCKET_TARGET" <<< "$config" ||
-        serve_targets_without_capability "$LEGACY_PROXY_URL" <<< "$config"
 }
 
 serve_converge() {
@@ -99,9 +79,7 @@ serve_converge() {
     if serve_is_owned <<< "$config"; then
         return 0
     fi
-    if serve_is_legacy <<< "$config"; then
-        tailscale serve reset >/dev/null
-    elif ! serve_is_absent <<< "$config"; then
+    if ! serve_is_absent <<< "$config"; then
         echo "Error: refusing to replace Tailscale Serve routes not owned by OpenCode" >&2
         tailscale serve status >&2 || true
         return 1
@@ -115,7 +93,7 @@ serve_withdraw() {
     if serve_is_absent <<< "$config"; then
         return 0
     fi
-    if ! serve_is_owned <<< "$config" && ! serve_is_legacy <<< "$config"; then
+    if ! serve_is_owned <<< "$config"; then
         echo "Error: refusing to reset Tailscale Serve routes not owned by OpenCode" >&2
         tailscale serve status >&2 || true
         return 1

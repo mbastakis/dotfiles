@@ -104,6 +104,8 @@ brew "gnu-sed"
 brew "go"
 # Go language server
 brew "gopls"
+# Go static analysis suite
+brew "staticcheck"
 # Image processing tools collection
 brew "graphicsmagick"
 # GNU grep, egrep and fgrep
@@ -361,5 +363,3 @@ mas "Mark And Scribble", id: 1635403801
 mas "Tailscale", id: 1475387142
 mas "WireGuard", id: 1451685025
 mas "Xcode", id: 497799835
-go "golang.org/x/tools/gopls"
-go "honnef.co/go/tools/cmd/staticcheck"
