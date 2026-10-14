@@ -26,7 +26,8 @@
     "thinking": "show",
     "markdown": "rendered",
     "image_preview": true,
-    "new_location": "inherit"
+    "new_location": "inherit",
+    "permissions": "autoaccept"
   },
   "tabs": {
     "layout": "vertical",

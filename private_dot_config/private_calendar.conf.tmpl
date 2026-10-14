@@ -1,0 +1,15 @@
+{
+  "default": {
+    "inherits": "personal"
+  },
+  "personal": {
+    "caldav_url": "https://calendar.mbastakis.com",
+    "caldav_user": "michail",
+    "caldav_pass": {{ (bitwardenSecrets "6ea9941c-f36f-4b92-b15d-b4da00c99ae3").value | toJson }},
+    "calendar_url": "/michail/personal/"
+  },
+  "focus": {
+    "inherits": "personal",
+    "calendar_url": "/michail/focus/"
+  }
+}

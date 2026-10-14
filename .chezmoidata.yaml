@@ -89,10 +89,6 @@ mail:
       secrets:
         app_password_uuid: "eea6c0f4-010d-4a3b-bf24-b49e00a2681a"
 
-taskwarrior:
-  sync:
-    interval_minutes: 2
-    log_root: "~/.local/state/task/log"
 
 opencode:
   remote:

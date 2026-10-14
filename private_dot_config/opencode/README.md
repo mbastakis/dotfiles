@@ -43,6 +43,40 @@ Provider credentials reach the background service via
 in `opencode.jsonc` resolve against that service environment — never put
 literal keys in the config.
 
+## Grafana MCP (dev)
+
+`grafana-mcp` runs the official `mcp-grafana==1.6.1` package through `uvx`
+over stdio against `https://grafana.dev.aicc.pix.t-internal.com`.
+Enabled categories cover dashboards, folders, search, datasource discovery,
+Prometheus queries, navigation, and panel query execution.
+
+Connection setup:
+
+1. In dev Grafana, open **Administration → Users and access → Service accounts**.
+   Use the existing `mcp-dashboard-scratch` account or create one with Viewer
+   access and Edit permission on the `dashboard-scratch` folder. It needs
+   datasource read/query access and dashboard read access; scratch editing should
+   be limited to that folder.
+2. Generate a service-account token. This local stdio integration uses that
+   token, not the browser's Keycloak session or OpenCode OAuth.
+3. Store it in the Bitwarden Secrets Manager `dotfiles` project as
+   `GRAFANA_SERVICE_ACCOUNT_TOKEN`. `private_dot_config/zsh/exports.zsh.tmpl`
+   references only its Bitwarden ID; chezmoi renders the value into the local
+   `~/.config/zsh/exports.zsh`, following the other secrets. The MCP launch command
+   sources that file with `/bin/zsh` before executing `uvx`, so it works without
+   injecting the token into the background service environment. After rotating
+   the Bitwarden value, apply only `exports.zsh` and reconnect the MCP.
+   No separate `grafana-mcp.env` file is needed. Never put the token in the
+   source repository.
+4. In OpenCode run `/mcps`, select `grafana-mcp`, and connect (or reconnect
+   after replacing the token). Check `opencode2 mcp list` for connection status.
+5. Ask the agent to list Grafana datasources to verify API authentication;
+   a connected stdio process alone does not prove the token is valid.
+
+Remote dashboard writes belong only in `dashboard-scratch`. Production dashboard
+changes go through repository JSON and ArgoCD. Delete scratch dashboards manually
+in Grafana after review.
+
 ## Remote Stack (designated Mac)
 
 - opencode2 background service on loopback port `4097` serves the HTTP API and

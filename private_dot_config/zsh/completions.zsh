@@ -22,7 +22,7 @@ if command -v mise &>/dev/null; then
   _generate_completion_cache "$ZSH_COMPLETION_CACHE_DIR/mise-completion.zsh" "$(command -v mise)" mise completion zsh
 fi
 
-# go-task shares the `task` name with Taskwarrior. Generate through mise when
+# Generate go-task completion through mise when
 # necessary, then keep the compdef synchronized with whichever command wins PATH.
 if command -v mise &>/dev/null; then
   _mise_cache_go_task_completion() {

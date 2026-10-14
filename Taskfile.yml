@@ -1,7 +1,6 @@
 # go-task runner for the chezmoi dotfiles repo.
 # Source-only: excluded from chezmoi apply via .chezmoiignore.
 # Invoked as `mise exec -- task <name>` (go-task; see mise.toml).
-# Outside this repo, `task` resolves to Taskwarrior (brew).
 # Docs: https://taskfile.dev/
 
 version: "3"

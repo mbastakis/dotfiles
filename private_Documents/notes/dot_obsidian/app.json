@@ -4,7 +4,7 @@
   "showLineNumber": true,
   "rightToLeft": false,
   "vimMode": true,
-  "propertiesInDocument": "source",
+  "propertiesInDocument": "visible",
   "showInlineTitle": true,
   "pdfExportSettings": {
     "includeName": true,

@@ -37,6 +37,9 @@ checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argoc
 [infrastructure/argocd/helm-charts/istio-helm/istio-helm_main]
 checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/istio-helm.git' 'istio-helm_main'
 
+[infrastructure/argocd/helm-charts/temporal-helm/temporal-helm_main]
+checkout = git clone 'https://gitlab.devops.telekom.de/aicc/infrastructure/argocd/helm-charts/temporal-helm.git' 'temporal-helm_main'
+
 # =============================================================================
 # Infrastructure - AWS Terraform
 # =============================================================================

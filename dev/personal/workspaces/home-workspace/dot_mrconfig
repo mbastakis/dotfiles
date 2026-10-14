@@ -5,9 +5,6 @@ checkout = git clone git@github.com:mbastakis/dotfiles.git dotfiles_main
 # server
 [server/kavouki/kavouki_main]
 checkout = git clone git@github.com:mbastakis/kavouki.git kavouki_main
-# apps
-[server/apps/sisyphus/sisyphus_main]
-checkout = git clone git@github.com:mbastakis/sisyphus.git sisyphus_main
 # iac modules
 [server/iac-modules/terraform-aws-hardened-s3-bucket/terraform-aws-hardened-s3-bucket_main]
 checkout = git clone git@github.com:WhoCaresSoftware/terraform-aws-hardened-s3-bucket.git terraform-aws-hardened-s3-bucket_main

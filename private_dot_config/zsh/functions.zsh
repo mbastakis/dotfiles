@@ -105,6 +105,90 @@ ftext-widget() {
   fi
 }
 
+# Clear downloaded Python packages; installed environments remain intact.
+function clean_uv() {
+  uv cache clean
+}
+
+# Clear npm downloads and installed npx environments. Run when npx tools are idle.
+function clean_npm() {
+  local cache
+  cache=$(npm config get cache) || return
+  [[ "$cache" == /* && "$cache" != / ]] || return 1
+  npm cache clean --force || return
+  rm -rf -- "$cache/_npx"
+}
+
+# Clear Homebrew's downloaded packages, retaining installed packages.
+function clean_homebrew() {
+  local cache
+  cache=$(brew --cache) || return
+  [[ "$cache" == /* && "$cache" != / ]] || return 1
+  local -a entries=("$cache"/*(DN))
+  (( ${#entries} )) || return 0
+  rm -rf -- "${entries[@]}"
+}
+
+# Clear Xcode build outputs and indexes. Run when builds are idle.
+function clean_xcode() {
+  local cache="$HOME/Library/Developer/Xcode/DerivedData"
+  local -a entries=("$cache"/*(DN))
+  (( ${#entries} )) || return 0
+  rm -rf -- "${entries[@]}"
+}
+
+# Clear downloaded Colima images in current and legacy cache locations.
+# VM disks, containers, and volumes live elsewhere and are retained.
+function clean_colima() {
+  rm -rf -- "${XDG_CACHE_HOME:-$HOME/.cache}/colima/caches" \
+    "$HOME/Library/Caches/colima/caches"
+}
+
+# Quit Spotify before clearing its cache; retain application support/downloads.
+function clean_spotify() {
+  osascript -e 'if application "Spotify" is running then tell application "Spotify" to quit' || return
+  local attempt
+  for attempt in {1..30}; do
+    pgrep -f '/Spotify.app/Contents/' >/dev/null || break
+    sleep 1
+  done
+  if pgrep -f '/Spotify.app/Contents/' >/dev/null; then
+    echo "Spotify is still running; quit it and retry clean_spotify." >&2
+    return 1
+  fi
+  local cache="$HOME/Library/Caches/com.spotify.client"
+  local -a entries=("$cache"/*(DN))
+  (( ${#entries} )) || return 0
+  rm -rf -- "${entries[@]}"
+}
+
+# Clear the shared Terraform/OpenTofu provider cache, retaining its directory.
+# Projects using cached-provider symlinks may need terraform/tofu init again.
+function clean_tf() {
+  local cache="${XDG_CACHE_HOME:-$HOME/.cache}/terraform/plugins"
+  [[ -d "$cache" ]] || return 0
+  local -a entries=("$cache"/*(DN))
+  (( ${#entries} )) || return 0
+  rm -rf -- "${entries[@]}"
+}
+
+# Stop/remove ALL containers and clear ALL images/build cache; preserve volumes.
+# Explicitly target this Mac's Colima daemon, regardless of the current context.
+function clean_docker() {
+  local output
+  local -a containers
+  output=$(docker --context colima ps -aq) || return
+  containers=( ${(f)output} )
+  if (( ${#containers} )); then
+    docker --context colima stop "${containers[@]}" || return
+    docker --context colima rm "${containers[@]}" || return
+  fi
+  docker --context colima builder prune --all --force || return
+  docker --context colima image prune --all --force || return
+  colima ssh -- sudo fstrim -av || return
+  docker --context colima system df
+}
+
 # Update brew
 function brew_update() {
   brew update

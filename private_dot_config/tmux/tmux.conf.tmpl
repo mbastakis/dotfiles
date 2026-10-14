@@ -91,7 +91,7 @@ set -g @catppuccin_date_time_text " %H:%M "
 set -g @catppuccin_status_right_separator ""
 
 # Sesh session picker on prefix+s.
-bind-key s display-popup -E -w 45% -h 80% -d "#{pane_current_path}" -T "sesh" "sesh picker --hide-attached --hide-duplicates --icons"
+bind-key s display-popup -E -w 70% -h 80% -d "#{pane_current_path}" -T "sesh" "sesh picker --hide-attached --hide-duplicates --icons"
 
 # Rename the current tmux window/session with native editable prompts.
 bind-key , command-prompt -I "#W" -p "rename window> " { rename-window "%%" }

@@ -4,9 +4,7 @@
 # Pins go-task (registry key: `task`, aqua:go-task/task) to an exact version
 # for this repo's Taskfile.yml workflows, independent of whatever version the
 # global mise config (private_dot_config/mise/config.toml) currently installs.
-# go-task is also global via that config, so `task` resolves to it everywhere,
-# not just here; Taskwarrior is reached via `tw` instead — see
-# literal_bin/executable_tw.
+# go-task is also installed globally via that config.
 #
 # Trust: this directory is pre-trusted via MISE_TRUSTED_CONFIG_PATHS in
 # dot_zshenv.tmpl (resolves to $DOTFILES_PATH / chezmoi sourceDir).

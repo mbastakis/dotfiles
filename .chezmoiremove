@@ -1,0 +1,7 @@
+.agents/skills/calendar/config.json
+.agents/skills/taskwarrior
+.config/task
+bin/tw
+bin/task-sync
+Library/LaunchAgents/com.mbastakis.task-sync.plist
+Documents/notes/.obsidian/plugins/taskwarrior-notes

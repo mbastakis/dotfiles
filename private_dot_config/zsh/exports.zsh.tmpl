@@ -15,6 +15,7 @@ export SUPABASE_SERVICE_KEY='{{ (bitwardenSecrets "0c3c1659-6b45-4d6a-b850-b49e0
 # WCS and self-hosted LLMs
 export WCS_API_KEY='{{ (bitwardenSecrets "cb9fc79d-aee2-47ec-bd20-b49e00a2601e").value | trim }}'
 export WCS_DEV_API_KEY='{{ (bitwardenSecrets "98de7dd1-bca8-4672-b9dd-b4a40097b2d7").value | trim }}'
+export GRAFANA_SERVICE_ACCOUNT_TOKEN='{{ (bitwardenSecrets "f1fc882a-beda-43fe-b2c6-b4d4008f6d9a").value | trim }}'
 export SELFHOSTED_LLM_API_KEY='local-wireguard-only'
 
 # Work PATH additions and secrets

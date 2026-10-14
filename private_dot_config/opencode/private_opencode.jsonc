@@ -22,6 +22,7 @@
     "./server-plugins/strip-fabricated-subagent-session.js"
   ],
   "experimental": {
+    "subagent_depth": 2,
     "policies": [
       {
         "action": "provider.use",
@@ -399,6 +400,18 @@
   ],
   "mcp": {
     "servers": {
+      "grafana-mcp": {
+        "type": "local",
+        "disabled": true,
+        "command": [
+          "/bin/zsh",
+          "-c",
+          "source \"$HOME/.config/zsh/exports.zsh\" && exec uvx mcp-grafana==1.6.1 --enabled-tools search,datasource,prometheus,dashboard,folder,navigation,runpanelquery"
+        ],
+        "environment": {
+          "GRAFANA_URL": "https://grafana.dev.aicc.pix.t-internal.com"
+        }
+      },
       "pocketsmith": {
         "type": "remote",
         "url": "https://mcp.pocketsmith.com/mcp",
